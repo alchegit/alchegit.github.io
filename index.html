@@ -1,4 +1,6 @@
 <script>
+  console.log("window.location.href", window.location.href);
+  
   const lang = navigator.language || navigator.userLanguage;
   if (lang.startsWith('ko')) {
     window.location.href = '/app-server/ko/';
