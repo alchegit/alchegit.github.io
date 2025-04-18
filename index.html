@@ -1,10 +1,11 @@
 <script>
+  const base = 'https://alchegit.github.io/app-server/';
   const lang = navigator.language || navigator.userLanguage;
   if (lang.startsWith('ko')) {
-    window.location.href = 'https://alchegit.github.io/app-server/ko/';
+    window.location.href = base + 'ko/';
   } else if (lang.startsWith('ja')) {
-    window.location.href = 'https://alchegit.github.io/app-server/ja/';
+    window.location.href = base + 'ja/';
   } else {
-    window.location.href = 'https://alchegit.github.io/app-server/en/';
+    window.location.href = base + 'en/';
   }
 </script>
