@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>앱 소개 페이지 | GitHub Pages</title>
+  <script>
+    const lang = navigator.language || navigator.userLanguage;
+    if (lang.startsWith('ja')) {
+      window.location.href = '/ja/';
+    } else if (lang.startsWith('en')) {
+      window.location.href = '/en/';
+    } else {
+      window.location.href = '/';
+    }
+  </script>
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
