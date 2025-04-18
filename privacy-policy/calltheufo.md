@@ -8,15 +8,15 @@ _최종 업데이트: 2025년 3월 25일_ (_Last updated: March 25, 2025_)
 
 # 개인정보처리방침
 
-**Call the UFO** 앱(이하 ‘본 앱’)은 사용자의 개인정보 보호를 매우 중요하게 생각하며, 관련 법령을 준수하고 있습니다. 본 방침은 본 앱이 어떤 정보를 수집하고, 이를 어떻게 사용하며, 어떠한 보호조치를 취하는지 설명합니다.
+Call the UFO 앱(이하 ‘본 앱’)은 사용자의 개인정보 보호를 매우 중요하게 생각하며, 관련 법령을 준수하고 있습니다. 본 방침은 본 앱이 어떤 정보를 수집하고, 이를 어떻게 사용하며, 어떠한 보호조치를 취하는지 설명합니다.
 
 ---
 
 ## 1. 수집하는 개인정보 항목
 
-본 앱은 서버와의 통신 없이 작동하며, **사용자의 이름, 연락처, 위치 등의 개인정보를 수집하지 않습니다.**
+본 앱은 서버와의 통신 없이 작동하며, 사용자의 이름, 연락처, 위치 등의 개인정보를 수집하지 않습니다.
 
-단, 광고 표시를 위해 **Google AdMob** 서비스를 사용하며, 이 과정에서 다음과 같은 정보가 자동으로 수집될 수 있습니다:
+단, 광고 표시를 위해 Google AdMob 서비스를 사용하며, 이 과정에서 다음과 같은 정보가 자동으로 수집될 수 있습니다:
 
 - 디바이스 정보 (광고 ID, 모델, 운영체제 버전 등)
 - 앱 사용 통계 및 성능 데이터
@@ -61,7 +61,7 @@ _최종 업데이트: 2025년 3월 25일_ (_Last updated: March 25, 2025_)
 
 개인정보 보호 관련 문의사항이 있으시면 아래 이메일로 연락주시기 바랍니다.
 
-- **이메일:** wlgnsl14@gmail.com
+- 이메일: wlgnsl14@gmail.com
 
 ---
 
@@ -79,13 +79,13 @@ _최종 업데이트: 2025년 3월 25일_ (_Last updated: March 25, 2025_)
 
 # Privacy Policy
 
-**Call the UFO** (hereinafter referred to as “the app”) values your privacy and complies with relevant data protection laws. This policy explains what data we collect, how it is used, and what rights you have regarding your information.
+Call the UFO (hereinafter referred to as “the app”) values your privacy and complies with relevant data protection laws. This policy explains what data we collect, how it is used, and what rights you have regarding your information.
 
 ---
 
 ## 1. Information We Collect
 
-This app operates **without a server** and does **not collect any personally identifiable information** such as your name, contact details, or location.
+This app operates without a server and does not collect any personally identifiable information such as your name, contact details, or location.
 
 However, to display ads, the app uses **Google AdMob**, which may automatically collect the following non-personal data:
 
@@ -93,7 +93,7 @@ However, to display ads, the app uses **Google AdMob**, which may automatically 
 - Usage statistics and performance data
 - General location (approximate, not precise)
 
-This data is collected and managed in accordance with Google’s own privacy policy. The app developer does **not** access this information directly.
+This data is collected and managed in accordance with Google’s own privacy policy. The app developer does not access this information directly.
 
 ---
 
@@ -110,13 +110,13 @@ Information collected by third-party services such as Google AdMob may be used f
 
 ## 3. Data Retention and Deletion
 
-Since this app does **not collect or store personal information**, there is no data retention or deletion process required on our part.
+Since this app does not collect or store personal information, there is no data retention or deletion process required on our part.
 
 ---
 
 ## 4. Third-Party Sharing
 
-This app does **not share any personal data** with third parties.  
+This app does not share any personal data with third parties.  
 However, the app integrates Google AdMob, which may collect user data according to its own policies:
 
 - [Google Privacy Policy](https://policies.google.com/privacy)
@@ -127,7 +127,7 @@ However, the app integrates Google AdMob, which may collect user data according 
 
 You can reset or limit ad tracking at any time through your device settings:
 
-- Android: **Settings > Google > Ads > Reset advertising ID** or **Opt out of Ads Personalization**
+- Android: Settings > Google > Ads > Reset advertising ID or Opt out of Ads Personalization
 
 ---
 
@@ -135,7 +135,7 @@ You can reset or limit ad tracking at any time through your device settings:
 
 If you have any questions about this policy or the app’s data practices, please contact us at:
 
-- **Email:** wlgnsl14@gmail.com
+- Email: wlgnsl14@gmail.com
 
 ---
 
@@ -143,5 +143,5 @@ If you have any questions about this policy or the app’s data practices, pleas
 
 We may update this policy from time to time without prior notice due to legal or service-related reasons. Any updates will be posted within the app or on the GitHub repository.
 
-- Effective Date: **March 24, 2025**
+- Effective Date: March 24, 2025
 
