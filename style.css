@@ -22,7 +22,7 @@
 body {
 	background-color: #000;
 	color: #0fa;
-	overflow-x: hidden;
+	overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 .cyber-background {
@@ -30,7 +30,28 @@ body {
 	background-color: #050505;
 	min-height: 100vh;
 	overflow: hidden;
-	padding: 2rem 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.row.min-vh-100 {
+	flex: 1;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow: hidden; /* 가로 스크롤 방지 */
+}
+
+.col-md-8 {
+	width: 100%;
+	max-width: 100%;
+	padding: 0;
+	margin: 0;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 .noise-overlay {
@@ -76,16 +97,60 @@ body {
 	}
 }
 
+/* Terminal Header/Footer */
 .terminal-header,
 .terminal-footer {
 	background-color: var(--terminal-bg);
 	border: 1px solid var(--primary-glow);
-	border-radius: 5px;
-	padding: 10px 15px;
 	color: #0fa;
-	position: relative;
-	z-index: 2;
+	width: calc(100% - 60px); /* 좌우 30px 마진 */
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 100;
+	padding: 10px 20px;
 	box-shadow: 0 0 15px var(--primary-glow);
+	border-radius: 5px; /* 모서리 둥글게 */
+}
+
+.terminal-header {
+	top: 30px;
+}
+
+.terminal-footer {
+	bottom: 30px;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+	.terminal-header,
+	.terminal-footer {
+		width: calc(100% - 40px); /* 모바일에서는 좌우 20px 마진 */
+		padding: 8px 15px;
+	}
+
+	.terminal-header {
+		top: 20px;
+	}
+
+	.terminal-footer {
+		bottom: 20px;
+	}
+}
+
+@media (max-width: 360px) {
+	.terminal-header,
+	.terminal-footer {
+		width: calc(100% - 30px); /* 작은 화면에서는 좌우 15px 마진 */
+	}
+
+	.terminal-header {
+		top: 15px;
+	}
+
+	.terminal-footer {
+		bottom: 15px;
+	}
 }
 
 .terminal-title {
@@ -144,10 +209,14 @@ body {
 
 /* Card Container and Deck */
 .card-container {
-	perspective: 1000px;
-	margin: 2rem 0;
+	flex: 1;
+	margin: calc(30px + 60px) 0; /* 상단 마진 + 헤더 높이 */
 	position: relative;
 	z-index: 2;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	width: 100%; /* 컨테이너 너비 제한 */
 }
 
 .card-deck {
@@ -155,6 +224,46 @@ body {
 	flex-wrap: wrap;
 	justify-content: center;
 	gap: 2rem;
+	padding: 2rem;
+	overflow-y: auto;
+	max-height: calc(100vh - 200px);
+	margin: 0;
+	width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	margin-right: calc(-50vw + 50%);
+    padding: 40px;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+	.card-deck {
+		padding: 1rem;
+		gap: 1rem;
+	}
+}
+
+@media (max-width: 360px) {
+	.card-deck {
+		padding: 0.5rem;
+	}
+}
+
+/* 스크롤바 스타일링 */
+.card-deck::-webkit-scrollbar {
+	width: 8px;
+}
+
+.card-deck::-webkit-scrollbar-track {
+	background: rgba(0, 255, 170, 0.1);
+}
+
+.card-deck::-webkit-scrollbar-thumb {
+	background: var(--primary-glow);
+	border-radius: 4px;
+}
+
+.card-deck::-webkit-scrollbar-thumb:hover {
+	background: rgba(0, 255, 170, 0.9);
 }
 
 /* Card Styling */
@@ -304,7 +413,7 @@ body {
 	letter-spacing: 1px;
 	position: relative;
 	z-index: 1;
-    align-self: center;
+	align-self: center;
 }
 
 .card-symbol {
@@ -393,21 +502,34 @@ body {
 	.card-deck {
 		gap: 1.5rem;
 	}
+}
+
+@media (max-width: 768px) {
+	.terminal-header,
+	.terminal-footer {
+		padding: 8px 15px;
+	}
+
+	.terminal-header {
+		top: 20px;
+	}
+
+	.terminal-footer {
+		bottom: 20px;
+	}
+
+	.card-container {
+		margin: calc(20px + 50px) 0;
+	}
+
+	.card-deck {
+		gap: 1rem;
+		padding: 1rem;
+	}
 
 	.cyber-card {
 		width: 250px;
 		height: 350px;
-	}
-}
-
-@media (max-width: 768px) {
-	.card-deck {
-		gap: 1rem;
-	}
-
-	.cyber-card {
-		width: 220px;
-		height: 320px;
 	}
 
 	.card-title {
@@ -429,6 +551,20 @@ body {
 		width: 280px;
 		height: 400px;
 		margin-bottom: 1.5rem;
+	}
+}
+
+@media (max-width: 360px) {
+	.terminal-header {
+		top: 15px;
+	}
+
+	.terminal-footer {
+		bottom: 15px;
+	}
+
+	.card-deck {
+		padding: 10px;
 	}
 }
 
@@ -523,115 +659,115 @@ body {
 
 /* Modal Styling */
 .cyber-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	z-index: 1000;
+	backdrop-filter: blur(5px);
 }
 
 .cyber-modal .modal-content {
-    background-color: var(--card-bg);
-    border: 1px solid var(--primary-glow);
-    box-shadow: 0 0 20px var(--primary-glow);
-    padding: 30px;
+	background-color: var(--card-bg);
+	border: 1px solid var(--primary-glow);
+	box-shadow: 0 0 20px var(--primary-glow);
+	padding: 30px;
 }
 
 .cyber-modal-content {
-    position: relative;
-    animation: modalAppear 0.3s ease-out;
+	position: relative;
+	animation: modalAppear 0.3s ease-out;
 }
 
 .modal-dialog {
-    margin-top: 5vh;
+	margin-top: 5vh;
 }
 
 @keyframes modalAppear {
-    from {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+	from {
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
 
 .cyber-modal-header {
-    position: relative;
-    margin-bottom: 20px;
-    border-bottom: none;
+	position: relative;
+	margin-bottom: 20px;
+	border-bottom: none;
 }
 
 .modal-glitch {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--card-bg);
-    z-index: -1;
-    border-radius: 5px;
-    animation: glitch-1 3s infinite linear alternate-reverse;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--card-bg);
+	z-index: -1;
+	border-radius: 5px;
+	animation: glitch-1 3s infinite linear alternate-reverse;
 }
 
 .modal-glow {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: 15px;
-    z-index: -2;
-    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-    opacity: 0.7;
-    filter: blur(15px);
+	position: absolute;
+	top: -5px;
+	left: -5px;
+	right: -5px;
+	bottom: -5px;
+	border-radius: 15px;
+	z-index: -2;
+	background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+	opacity: 0.7;
+	filter: blur(15px);
 }
 
 .cyber-modal-body {
-    margin: 20px 0;
+	margin: 20px 0;
 }
 
 .cyber-text {
-    font-size: 1.5rem;
-    color: var(--primary-glow);
-    margin-bottom: 15px;
-    text-shadow: 0 0 5px var(--primary-glow);
+	font-size: 1.5rem;
+	color: var(--primary-glow);
+	margin-bottom: 15px;
+	text-shadow: 0 0 5px var(--primary-glow);
 }
 
 .cyber-subtext {
-    font-size: 1.1rem;
-    color: #fff;
-    margin-bottom: 15px;
-    line-height: 1.5;
+	font-size: 1.1rem;
+	color: #fff;
+	margin-bottom: 15px;
+	line-height: 1.5;
 }
 
 .cyber-highlight {
-    font-size: 1.2rem;
-    color: var(--warning-glow);
-    text-shadow: 0 0 5px var(--warning-glow);
-    margin-top: 20px;
+	font-size: 1.2rem;
+	color: var(--warning-glow);
+	text-shadow: 0 0 5px var(--warning-glow);
+	margin-top: 20px;
 }
 
 .cyber-button {
-    background-color: transparent;
-    border: 1px solid var(--primary-glow);
-    color: var(--primary-glow);
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: "Share Tech Mono", monospace;
-    transition: all 0.3s ease;
-    margin-top: 20px;
-    width: 100%;
+	background-color: transparent;
+	border: 1px solid var(--primary-glow);
+	color: var(--primary-glow);
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-family: "Share Tech Mono", monospace;
+	transition: all 0.3s ease;
+	margin-top: 20px;
+	width: 100%;
 }
 
 .cyber-button:hover {
-    background-color: var(--primary-glow);
-    color: #000;
-    box-shadow: 0 0 15px var(--primary-glow);
+	background-color: var(--primary-glow);
+	color: #000;
+	box-shadow: 0 0 15px var(--primary-glow);
 }
