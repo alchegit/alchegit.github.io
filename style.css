@@ -515,7 +515,7 @@ body {
 }
 
 .card-title {
-	font-size: 1.5rem;
+	font-size: 2rem;
 	margin-bottom: 10px;
 	color: var(--bs-card-title-color) !important;
 	text-shadow: 0 0 5px var(--primary-glow);
