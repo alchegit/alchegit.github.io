@@ -136,6 +136,59 @@ body {
 	.terminal-footer {
 		bottom: 20px;
 	}
+
+	.cyber-card {
+		width: 420px !important; /* 280px * 1.5 */
+		height: 600px !important; /* 400px * 1.5 */
+		margin-bottom: 2rem;
+	}
+
+	.card-title {
+		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
+	}
+
+	.card-symbol img {
+		width: 120px !important; /* 80px * 1.5 */
+		height: 120px !important; /* 80px * 1.5 */
+	}
+
+	.card-description {
+		font-size: 1.35rem !important; /* 0.9rem * 1.5 */
+		margin: 15px 0 !important; /* 10px * 1.5 */
+	}
+
+	.card-header-area {
+		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
+		margin-bottom: 22px !important; /* 15px * 1.5 */
+	}
+
+	.card-footer-area {
+		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
+	}
+
+	.card-content {
+		padding: 30px !important; /* 20px * 1.5 */
+	}
+}
+
+@media (max-width: 576px) {
+	.card-deck {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.cyber-card {
+		width: 420px; /* 280px * 1.5 */
+		height: 600px; /* 400px * 1.5 */
+		margin-bottom: 2.25rem; /* 1.5rem * 1.5 */
+	}
+}
+
+@media (max-width: 480px) {
+	.cyber-card {
+		width: calc(100vw - 40px) !important; /* 화면 너비에 맞춤 */
+		height: calc((100vw - 40px) * 1.43) !important; /* 가로:세로 비율 유지 */
+	}
 }
 
 @media (max-width: 360px) {
@@ -150,6 +203,10 @@ body {
 
 	.terminal-footer {
 		bottom: 15px;
+	}
+
+	.card-deck {
+		padding: 10px;
 	}
 }
 
@@ -528,16 +585,40 @@ body {
 	}
 
 	.cyber-card {
-		width: 250px;
-		height: 350px;
+		width: 420px !important; /* 280px * 1.5 */
+		height: 600px !important; /* 400px * 1.5 */
+		margin-bottom: 2rem;
 	}
 
 	.card-title {
-		font-size: 1.2rem;
+		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
 	}
 
 	.card-symbol {
 		font-size: 3rem;
+	}
+
+	.card-symbol img {
+		width: 120px !important; /* 80px * 1.5 */
+		height: 120px !important; /* 80px * 1.5 */
+	}
+
+	.card-description {
+		font-size: 1.35rem !important; /* 0.9rem * 1.5 */
+		margin: 15px 0 !important; /* 10px * 1.5 */
+	}
+
+	.card-header-area {
+		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
+		margin-bottom: 22px !important; /* 15px * 1.5 */
+	}
+
+	.card-footer-area {
+		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
+	}
+
+	.card-content {
+		padding: 30px !important; /* 20px * 1.5 */
 	}
 }
 
@@ -548,9 +629,16 @@ body {
 	}
 
 	.cyber-card {
-		width: 280px;
-		height: 400px;
-		margin-bottom: 1.5rem;
+		width: 420px; /* 280px * 1.5 */
+		height: 600px; /* 400px * 1.5 */
+		margin-bottom: 2.25rem; /* 1.5rem * 1.5 */
+	}
+}
+
+@media (max-width: 480px) {
+	.cyber-card {
+		width: calc(100vw - 40px) !important; /* 화면 너비에 맞춤 */
+		height: calc((100vw - 40px) * 1.43) !important; /* 가로:세로 비율 유지 */
 	}
 }
 
