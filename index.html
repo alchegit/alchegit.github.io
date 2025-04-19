@@ -9,7 +9,29 @@
         <script src="script.js"></script>
     </head>
     <body>
-                <div class="container-fluid cyber-background">
+        <!-- 팝업 모달 추가 -->
+        <div class="cyber-modal" id="welcomeModal">
+            <div class="cyber-modal-content">
+                <div class="cyber-modal-header">
+                    <div class="modal-glitch"></div>
+                    <div class="modal-glow"></div>
+                    <div class="card-header-area">
+                        <div class="card-id">#INFO001</div>
+                        <div class="card-security">LEVEL: RESTRICTED</div>
+                    </div>
+                </div>
+                <div class="cyber-modal-body">
+                    <div class="cyber-text" data-lang-ko="비공개 테스터 모집 중..." data-lang-en="Recruiting Private Testers..."></div>
+                    <div class="cyber-subtext" data-lang-ko="비공개 테스트 앱을 다운 받으려면 비공개 테스터로 등록을 해야 합니다." 
+                         data-lang-en="To download the private test app, you need to register as a private tester."></div>
+                    <div class="cyber-highlight" data-lang-ko="구글스토어 가입계정 이메일을 카톡으로 주시면 감사드리겠습니다!" 
+                         data-lang-en="Please send your Google Store account email via KakaoTalk!"></div>
+                </div>
+                <button class="cyber-button modal-close" data-lang-ko="CLOSE" data-lang-en="CLOSE">CLOSE</button>
+            </div>
+        </div>
+
+        <div class="container-fluid cyber-background">
             <div class="noise-overlay"></div>
             <div class="grid-overlay"></div>
         

@@ -520,3 +520,114 @@ body {
 		opacity: 0.1;
 	}
 }
+
+/* Modal Styling */
+.cyber-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.cyber-modal-content {
+    position: relative;
+    background-color: var(--card-bg);
+    margin: 15% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    border: 1px solid var(--primary-glow);
+    box-shadow: 0 0 20px var(--primary-glow);
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cyber-modal-header {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.modal-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--card-bg);
+    z-index: -1;
+    border-radius: 5px;
+    animation: glitch-1 3s infinite linear alternate-reverse;
+}
+
+.modal-glow {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 15px;
+    z-index: -2;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    opacity: 0.7;
+    filter: blur(15px);
+}
+
+.cyber-modal-body {
+    margin: 20px 0;
+}
+
+.cyber-text {
+    font-size: 1.5rem;
+    color: var(--primary-glow);
+    margin-bottom: 15px;
+    text-shadow: 0 0 5px var(--primary-glow);
+}
+
+.cyber-subtext {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.cyber-highlight {
+    font-size: 1.2rem;
+    color: var(--warning-glow);
+    text-shadow: 0 0 5px var(--warning-glow);
+    margin-top: 20px;
+}
+
+.cyber-button {
+    background-color: transparent;
+    border: 1px solid var(--primary-glow);
+    color: var(--primary-glow);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Share Tech Mono", monospace;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.cyber-button:hover {
+    background-color: var(--primary-glow);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
