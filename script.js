@@ -30,34 +30,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 브라우저 언어 감지 및 설정
     function detectLanguage() {
-        const userLang = navigator.language || navigator.userLanguage;
-        const preferredLang = userLang.toLowerCase().startsWith('ko') ? 'ko' : 'en';
-        document.documentElement.lang = preferredLang;
-        return preferredLang;
+        // 브라우저의 선호 언어 목록 가져오기
+        const languages = navigator.languages || [navigator.language || navigator.userLanguage];
+        console.log('Browser languages:', languages); // 디버깅용
+        
+        // 첫 번째로 선호하는 언어가 한국어인지 확인
+        const preferredLang = languages[0].toLowerCase();
+        return preferredLang.startsWith('ko') ? 'ko' : 'en';
     }
 
-    // Language handling
+    // 언어 변경 함수
     function updateLanguage() {
         const lang = detectLanguage();
+        console.log('Selected language:', lang); // 디버깅용
         
-        // Update title
-        document.title = document.querySelector('title').getAttribute(`data-lang-${lang}`);
+        // HTML lang 속성 변경
+        document.documentElement.lang = lang;
+        
+        // 타이틀 업데이트
+        const title = document.querySelector('title');
+        if (title) {
+            const newTitle = title.getAttribute(`data-lang-${lang}`);
+            if (newTitle) title.textContent = newTitle;
+        }
 
-        // Update all elements with data-lang attributes
+        // 모든 다국어 요소 업데이트
         document.querySelectorAll(`[data-lang-${lang}]`).forEach(element => {
-            element.textContent = element.getAttribute(`data-lang-${lang}`);
+            const text = element.getAttribute(`data-lang-${lang}`);
+            if (text) element.textContent = text;
         });
-
-        // Update image alt texts
+        
+        // 이미지 alt 텍스트 업데이트
         document.querySelectorAll('img').forEach(img => {
             const altText = img.getAttribute(`data-lang-${lang}-alt`);
-            if (altText) {
-                img.alt = altText;
-            }
+            if (altText) img.alt = altText;
         });
     }
 
-    // Initial language update
+    // 초기 언어 설정
     updateLanguage();
 
 	const cards = document.querySelectorAll(".cyber-card");
