@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About app page</title>
+
+  <!-- ✅ Open Graph 메타 태그 (SNS 미리보기용) -->
+  <meta property="og:title" content="앱 소개 페이지">
+  <meta property="og:description" content="UFO 호출기 / 은하코드 / 컬러 마스터 앱을 만나보세요!">
+  <meta property="og:image" content="https://alchegit.github.io/app-server/og-thumbnail.png">
+  <meta property="og:url" content="https://alchegit.github.io/app-server/">
+  <meta property="og:type" content="website">
+
+  <!-- 선택: 트위터 카드용 (확장 미리보기 지원) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="앱 소개 페이지">
+  <meta name="twitter:description" content="UFO 호출기 / 은하코드 / 컬러 마스터 앱을 만나보세요!">
+  <meta name="twitter:image" content="https://alchegit.github.io/app-server/og-thumbnail.png">
+</head>
+
+<body>
+  <noscript>
+    <p>JavaScript was disabled and did not auto-move.<br>Hit the link below to go directly to it.</p>
+    <p><a href="https://alchegit.github.io/app-server/en/">Go to the About app page</a></p>
+  </noscript>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const lang = navigator.language || navigator.userLanguage;
+      const base = "https://alchegit.github.io/app-server/";
+      if (lang.startsWith("ko")) {
+        window.location.href = base + "ko/";
+      } else if (lang.startsWith("ja")) {
+        window.location.href = base + "ja/";
+      } else {
+        window.location.href = base + "en/";
+      }
+    });
+  </script>
+</body>
+</html>

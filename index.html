@@ -1,42 +1,167 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About app page</title>
+    <head>
+        <meta charset="utf-8">
+        <title data-lang-ko="앱 컬렉션 | App Collection" data-lang-en="App Collection | NeoKIM"></title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="script.js"></script>
+    </head>
+    <body>
+                <div class="container-fluid cyber-background">
+            <div class="noise-overlay"></div>
+            <div class="grid-overlay"></div>
+        
+            <div class="row min-vh-100 justify-content-center align-items-center">
+                <div class="col-md-8">
+                    <div class="terminal-header mb-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="terminal-title">/app-server</div>
+                            <div class="terminal-status">
+                                <span class="status-dot"></span>
+                                <span class="status-text">ANOMALY DETECTED</span>
+                                <span id="instability-counter" class="ms-3">0%</span>
+                            </div>
+                        </div>
+                        <div class="terminal-line"></div>
+                    </div>
+        
+                    <div class="card-container">
+                        <div class="card-deck">
 
-  <!-- ✅ Open Graph 메타 태그 (SNS 미리보기용) -->
-  <meta property="og:title" content="앱 소개 페이지">
-  <meta property="og:description" content="UFO 호출기 / 은하코드 / 컬러 마스터 앱을 만나보세요!">
-  <meta property="og:image" content="https://alchegit.github.io/app-server/og-thumbnail.png">
-  <meta property="og:url" content="https://alchegit.github.io/app-server/">
-  <meta property="og:type" content="website">
-
-  <!-- 선택: 트위터 카드용 (확장 미리보기 지원) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="앱 소개 페이지">
-  <meta name="twitter:description" content="UFO 호출기 / 은하코드 / 컬러 마스터 앱을 만나보세요!">
-  <meta name="twitter:image" content="https://alchegit.github.io/app-server/og-thumbnail.png">
-</head>
-
-<body>
-  <noscript>
-    <p>JavaScript was disabled and did not auto-move.<br>Hit the link below to go directly to it.</p>
-    <p><a href="https://alchegit.github.io/app-server/en/">Go to the About app page</a></p>
-  </noscript>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const lang = navigator.language || navigator.userLanguage;
-      const base = "https://alchegit.github.io/app-server/";
-      if (lang.startsWith("ko")) {
-        window.location.href = base + "ko/";
-      } else if (lang.startsWith("ja")) {
-        window.location.href = base + "ja/";
-      } else {
-        window.location.href = base + "en/";
-      }
-    });
-  </script>
-</body>
+                            <!-- Card 1 -->
+                            <a href="https://play.google.com/store/apps/details?id=com.call_the_ufo" target="_blank" class="card-link">
+                                <div class="cyber-card" data-card-id="1">
+                                    <div class="card-glitch-container">
+                                        <div class="card-glitch"></div>
+                                        <div class="card-glow"></div>
+                                        <div class="card-content">
+                                            <div class="card-header-area">
+                                                <div class="card-id">
+                                                    <span data-lang-ko="#안드로이드001" data-lang-en="#ANDROID001"></span>
+                                                </div>
+                                            </div>
+                                            <div class="card-title">
+                                                <span data-lang-ko="UFO 호출기" data-lang-en="Call the UFO"></span>
+                                            </div>
+                                            <div class="card-symbol">
+                                                <img src="assets/icon_calltheufo.png" 
+                                                    data-lang-ko-alt="UFO 호출기 아이콘" 
+                                                    data-lang-en-alt="Call the UFO Icon">
+                                            </div>
+                                            <div class="card-description">
+                                                <span data-lang-ko="우주에 신호를 보내고 UFO를 기다리는 몰입형 체험 앱!" 
+                                                      data-lang-en="An immersive experience app that sends signals to space and waits for UFOs!"></span>
+                                            </div>
+                                            <div class="card-description">
+                                                <span data-lang-ko="👽 그들이 응답할지는 아무도 모릅니다..." 
+                                                      data-lang-en="👽 No one knows if they'll respond..."></span>
+                                            </div>
+                                            <div class="card-footer-area">
+                                                <div class="card-power">&nbsp;</div>
+                                                <div class="card-status">
+                                                    <span data-lang-ko="상태: 비공개 테스트중" 
+                                                          data-lang-en="STATUS: Private Testing"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+        
+                            <!-- Card 2 -->
+                            <a href="https://play.google.com/store/apps/details?id=com.galactic.speak" target="_blank" class="card-link">
+                                <div class="cyber-card" data-card-id="2">
+                                    <div class="card-glitch-container">
+                                        <div class="card-glitch"></div>
+                                        <div class="card-glow"></div>
+                                        <div class="card-content">
+                                            <div class="card-header-area">
+                                                <div class="card-id">
+                                                    <span data-lang-ko="#안드로이드002" data-lang-en="#ANDROID002"></span>
+                                                </div>
+                                            </div>
+                                            <div class="card-title">
+                                                <span data-lang-ko="은하코드" data-lang-en="Galacticode"></span>
+                                            </div>
+                                            <div class="card-symbol">
+                                                <img src="assets/icon_galacticode.png" 
+                                                    data-lang-ko-alt="은하코드 아이콘" 
+                                                    data-lang-en-alt="Galacticode Icon">
+                                            </div>
+                                            <div class="card-description">
+                                                <span data-lang-ko="마치 외계어처럼 보이는 자신만의 문자 규칙을 만들어주는 앱!" 
+                                                      data-lang-en="Create your own unique script that looks like an alien language!"></span>
+                                            </div>
+                                            <div class="card-description">
+                                                <span data-lang-ko="고대 문자 기반, 나만의 비밀 외계어 만들기. 친구와 공유도 가능!" 
+                                                      data-lang-en="Based on ancient scripts, create your secret alien language. Share with friends!"></span>
+                                            </div>
+                                            <div class="card-footer-area">
+                                                <div class="card-power">&nbsp;</div>
+                                                <div class="card-status">
+                                                    <span data-lang-ko="상태: 비공개 테스트중" 
+                                                          data-lang-en="STATUS: Private Testing"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+        
+                            <!-- Card 3 -->
+                            <a href="https://play.google.com/store/apps/details?id=com.neokim.colormaster" target="_blank" class="card-link">
+                                <div class="cyber-card" data-card-id="3">
+                                    <div class="card-glitch-container">
+                                        <div class="card-glitch"></div>
+                                        <div class="card-glow"></div>
+                                        <div class="card-content">
+                                            <div class="card-header-area">
+                                                <div class="card-id">
+                                                    <span data-lang-ko="#안드로이드003" data-lang-en="#ANDROID003"></span>
+                                                </div>
+                                            </div>
+                                            <div class="card-title">
+                                                <span data-lang-ko="컬러 마스터" data-lang-en="Color Master"></span>
+                                            </div>
+                                            <div class="card-symbol">
+                                                <img src="assets/icon_colormaster.png" 
+                                                    data-lang-ko-alt="컬러 마스터 아이콘" 
+                                                    data-lang-en-alt="Color Master Icon">
+                                            </div>
+                                            <div class="card-description">
+                                                <span data-lang-ko="비슷한 색상 속에서 정답을 골라내는 색감 집중력 테스트 게임!" 
+                                                      data-lang-en="A color perception game where you pick the correct color among similar ones!"></span>
+                                            </div>
+                                            <div class="card-description">
+                                                <span data-lang-ko="누구나 연습을 통해 컬러 마스터가 될 수 있습니다." 
+                                                      data-lang-en="Anyone can become a Color Master through practice."></span>
+                                            </div>
+                                            <div class="card-footer-area">
+                                                <div class="card-power">&nbsp;</div>
+                                                <div class="card-status">
+                                                    <span data-lang-ko="상태: 비공개 테스트중" 
+                                                          data-lang-en="STATUS: Private Testing"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                        </div>
+                    </div>
+        
+                    <div class="terminal-footer mt-4">
+                        <div class="terminal-line"></div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <div class="terminal-info">App developer NeoKIM</div>
+                            <div class="terminal-warning blink">LAST UPDATE: 2025.04.19</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
