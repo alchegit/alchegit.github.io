@@ -534,17 +534,20 @@ body {
     backdrop-filter: blur(5px);
 }
 
-.cyber-modal-content {
-    position: relative;
+.cyber-modal .modal-content {
     background-color: var(--card-bg);
-    margin: 15% auto;
-    padding: 20px;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 10px;
     border: 1px solid var(--primary-glow);
     box-shadow: 0 0 20px var(--primary-glow);
+    padding: 30px;
+}
+
+.cyber-modal-content {
+    position: relative;
     animation: modalAppear 0.3s ease-out;
+}
+
+.modal-dialog {
+    margin-top: 5vh;
 }
 
 @keyframes modalAppear {
@@ -561,6 +564,7 @@ body {
 .cyber-modal-header {
     position: relative;
     margin-bottom: 20px;
+    border-bottom: none;
 }
 
 .modal-glitch {

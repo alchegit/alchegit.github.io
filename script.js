@@ -1,24 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Show modal on page load
-    const welcomeModal = document.getElementById('welcomeModal');
-    if (welcomeModal) {
-        welcomeModal.style.display = 'block';
-    }
-
-    // Close modal on button click
-    const closeButton = document.querySelector('.modal-close');
-    if (closeButton) {
-        closeButton.addEventListener('click', () => {
-            welcomeModal.style.display = 'none';
-        });
-    }
-
-    // Close modal when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === welcomeModal) {
-            welcomeModal.style.display = 'none';
-        }
+    // Show modal on page load using Bootstrap
+    const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'), {
+        backdrop: 'static',
+        keyboard: false
     });
+    welcomeModal.show();
 
     // Language handling
     function updateLanguage() {
