@@ -306,25 +306,44 @@ body {
 
 /* Card Container and Deck */
 .card-container {
-	flex: 1;
-	margin: calc(30px + 60px) 0; /* 상단 마진 + 헤더 높이 */
-	position: relative;
-	z-index: 2;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-	width: 100%; /* 컨테이너 너비 제한 */
+    flex: 1;
+    margin: 110px 30px; /* 상단 터미널과 하단 터미널 여유 공간 확보 */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 60px); /* 좌우 마진 30px씩 */
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card-deck {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: 2rem;
-	padding: 2rem;
-	margin: 0 auto;
-	width: 100%;
-	max-width: 1200px;  /* 최대 너비 제한 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    overflow-y: auto; /* 세로 스크롤만 활성화 */
+    overflow-x: hidden; /* 가로 스크롤 비활성화 */
+    max-height: calc(100vh - 210px); /* 터미널 헤더/푸터 고려한 높이 */
+}
+
+/* 모바일 스타일 수정 */
+@media screen and (max-width: 768px) {
+    .card-container {
+        margin: 100px 15px; /* 모바일에서는 좌우 여백 줄임 */
+        width: calc(100% - 30px);
+    }
+
+    .card-deck {
+        padding: 1rem;
+        gap: 1rem;
+        max-height: calc(100vh - 190px); /* 모바일에서 터미널 높이 고려 */
+    }
 }
 
 /* 반응형 조정 */
