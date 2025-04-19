@@ -1,3 +1,12 @@
+/* 
+ * 스타일 출처: NeoKIM의 사이버펑크 테마 기반
+ * 스타일 복사일: 2025년 4월 19일
+ * 원본 링크: https://codepen.io/Marcus-Moen-the-builder/pen/vEEBRZY
+ * 
+ * 이 스타일시트의 디자인은 위 링크의 작업물을 기반으로 하고 있습니다.
+ * 모든 저작권은 원 저작자에게 있습니다.
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
     // Show modal on page load using Bootstrap
     const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'), {

@@ -1,3 +1,12 @@
+/* 
+ * 스타일 출처: NeoKIM의 사이버펑크 테마 기반
+ * 스타일 복사일: 2025년 4월 19일
+ * 원본 링크: https://codepen.io/Marcus-Moen-the-builder/pen/vEEBRZY
+ * 
+ * 이 스타일시트의 디자인은 위 링크의 작업물을 기반으로 하고 있습니다.
+ * 모든 저작권은 원 저작자에게 있습니다.
+ */
+
 @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
 
 :root {
@@ -169,6 +178,47 @@ body {
 	.card-content {
 		padding: 30px !important; /* 20px * 1.5 */
 	}
+
+	/* Modal styles for mobile */
+	.cyber-modal .modal-content {
+		padding: 45px !important; /* 30px * 1.5 */
+	}
+
+	.cyber-text {
+		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
+		margin-bottom: 22px !important; /* 15px * 1.5 */
+	}
+
+	.cyber-subtext {
+		font-size: 1.65rem !important; /* 1.1rem * 1.5 */
+		margin-bottom: 22px !important; /* 15px * 1.5 */
+		line-height: 1.5;
+	}
+
+	.cyber-highlight {
+		font-size: 1.8rem !important; /* 1.2rem * 1.5 */
+		margin-top: 30px !important; /* 20px * 1.5 */
+	}
+
+	.cyber-button {
+		padding: 15px 30px !important; /* 10px 20px * 1.5 */
+		font-size: 1.2rem !important;
+		margin-top: 30px !important; /* 20px * 1.5 */
+	}
+
+	.cyber-modal-header {
+		margin-bottom: 30px !important; /* 20px * 1.5 */
+	}
+
+	.modal-dialog {
+		margin: 7.5vh auto !important; /* 5vh * 1.5 */
+		max-width: 750px !important; /* 500px * 1.5 */
+	}
+
+	.modal-glitch,
+	.modal-glow {
+		border-radius: 7.5px !important; /* 5px * 1.5 */
+	}
 }
 
 @media (max-width: 576px) {
@@ -188,6 +238,11 @@ body {
 	.cyber-card {
 		width: calc(100vw - 40px) !important; /* 화면 너비에 맞춤 */
 		height: calc((100vw - 40px) * 1.43) !important; /* 가로:세로 비율 유지 */
+	}
+
+	.modal-dialog {
+		margin: 5vh auto !important;
+		max-width: calc(100vw - 30px) !important;
 	}
 }
 
@@ -620,6 +675,47 @@ body {
 	.card-content {
 		padding: 30px !important; /* 20px * 1.5 */
 	}
+
+	/* Modal styles for mobile */
+	.cyber-modal .modal-content {
+		padding: 45px !important; /* 30px * 1.5 */
+	}
+
+	.cyber-text {
+		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
+		margin-bottom: 22px !important; /* 15px * 1.5 */
+	}
+
+	.cyber-subtext {
+		font-size: 1.65rem !important; /* 1.1rem * 1.5 */
+		margin-bottom: 22px !important; /* 15px * 1.5 */
+		line-height: 1.5;
+	}
+
+	.cyber-highlight {
+		font-size: 1.8rem !important; /* 1.2rem * 1.5 */
+		margin-top: 30px !important; /* 20px * 1.5 */
+	}
+
+	.cyber-button {
+		padding: 15px 30px !important; /* 10px 20px * 1.5 */
+		font-size: 1.2rem !important;
+		margin-top: 30px !important; /* 20px * 1.5 */
+	}
+
+	.cyber-modal-header {
+		margin-bottom: 30px !important; /* 20px * 1.5 */
+	}
+
+	.modal-dialog {
+		margin: 7.5vh auto !important; /* 5vh * 1.5 */
+		max-width: 750px !important; /* 500px * 1.5 */
+	}
+
+	.modal-glitch,
+	.modal-glow {
+		border-radius: 7.5px !important; /* 5px * 1.5 */
+	}
 }
 
 @media (max-width: 576px) {
@@ -639,6 +735,11 @@ body {
 	.cyber-card {
 		width: calc(100vw - 40px) !important; /* 화면 너비에 맞춤 */
 		height: calc((100vw - 40px) * 1.43) !important; /* 가로:세로 비율 유지 */
+	}
+
+	.modal-dialog {
+		margin: 5vh auto !important;
+		max-width: calc(100vw - 30px) !important;
 	}
 }
 
