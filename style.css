@@ -182,7 +182,7 @@ body {
     }
 
     html body .card-title {
-        font-size: 3.2vw !important;
+        font-size: 4vw !important;
         margin-bottom: 1.8vw !important;
         line-height: 1.2 !important;
     }
@@ -217,7 +217,7 @@ body {
             margin: 1.5vw 0 !important;
         }
         .card-id {
-            font-size: 4vw !important;
+            font-size: 2vw !important;
         }
         .card-security {
             font-size: 4vw !important;
