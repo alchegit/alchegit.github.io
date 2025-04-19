@@ -130,158 +130,100 @@ body {
 	bottom: 30px;
 }
 
-/* 모바일 환경 스타일 (768px 이하) */
+/* 모바일 스타일 (768px 이하) */
 @media screen and (max-width: 768px) {
-    /* Terminal Header/Footer */
-    .terminal-header,
-    .terminal-footer {
-        padding: 15px 30px;
-        width: calc(100% - 40px);
+    /* 카드 컨테이너 */
+    html body .card-container {
+        margin: 100px auto !important;  /* 상하 여백 증가 */
+        width: 94vw !important;  /* 전체 너비 살짝 줄임 */
     }
 
-    .terminal-title {
-        font-size: 1.8rem;
+    /* 카드 덱 */
+    html body .card-deck {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2.5vw !important;  /* 카드 사이 간격 늘림 */
+        padding: 3vw !important;  /* 덱의 패딩 늘림 */
+        margin: 0 auto !important;
+        width: 94vw !important;
+        justify-content: center !important;
     }
 
-    .terminal-info,
-    .terminal-warning {
-        font-size: 1.35rem;
+    /* 카드 */
+    html body .cyber-card {
+        width: 42.5vw !important;  /* 카드 너비 10% 줄임 */
+        height: 60.5vw !important;  /* 비율 유지하며 줄임 */
+        margin: 0 !important;
     }
 
-    .status-dot {
-        width: 15px;
-        height: 15px;
-        margin-right: 12px;
+    /* 카드 내용 비율 유지를 위한 조정 */
+    html body .card-content {
+        padding: 2.8vw !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
     }
 
-    /* Card */
-    .cyber-card {
-        width: 420px;
-        height: 600px;
+    html body .card-header-area {
+        font-size: 2.2vw !important;  /* 폰트 크기도 비례해서 줄임 */
+        margin-bottom: 1.8vw !important;
     }
 
-    .card-content {
-        padding: 30px;
+    html body .card-title {
+        font-size: 3.2vw !important;
+        margin-bottom: 1.8vw !important;
+        line-height: 1.2 !important;
     }
 
-    .card-header-area {
-        font-size: 1.2rem;
-        margin-bottom: 22px;
+    html body .card-symbol {
+        margin: 1.8vw 0 !important;
+        height: 14vw !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
-    .card-title {
-        font-size: 2.25rem;
+    html body .card-symbol img {
+        width: 14vw !important;  /* 이미지 크기도 비례해서 줄임 */
+        height: 14vw !important;
     }
 
-    .card-symbol img {
-        width: 120px;
-        height: 120px;
+    html body .card-description {
+        font-size: 2.2vw !important;
+        line-height: 1.3 !important;
+        margin-top: 1.8vw !important;
+        flex-grow: 1 !important;
     }
 
-    .card-description {
-        font-size: 1.35rem;
+    html body .card-footer-area {
+        font-size: 2.2vw !important;
+        margin-top: 1.8vw !important;
     }
 
-    .card-footer-area {
-        font-size: 1.2rem;
+    /* 터미널 헤더/푸터 */
+    html body .terminal-header,
+    html body .terminal-footer {
+        width: 94vw !important;
+        padding: 2vw !important;
+        margin: 0 auto !important;
     }
 
-    /* Modal */
-    .modal-dialog {
-        max-width: 750px;
-        margin: 7.5vh auto;
+    /* 컨테이너와 터미널 사이 여백 */
+    html body .terminal-header {
+        top: 20px !important;
     }
 
-    .cyber-modal .modal-content {
-        padding: 45px;
-    }
-
-    .cyber-text {
-        font-size: 2.25rem;
-    }
-
-    .cyber-subtext {
-        font-size: 1.65rem;
-    }
-
-    .cyber-highlight {
-        font-size: 1.8rem;
-    }
-
-    .cyber-button {
-        padding: 15px 30px;
-        font-size: 1.8rem;
+    html body .terminal-footer {
+        bottom: 20px !important;
     }
 }
 
-/* 작은 화면 (480px 이하) */
+/* 작은 화면 대응 (480px 이하) */
 @media screen and (max-width: 480px) {
-    .cyber-card {
-        width: calc(100vw - 40px);
-        height: calc((100vw - 40px) * 1.43);
+    html body .card-description {
+        font-size: 2.5vw !important;
     }
-
-    .modal-dialog {
-        width: calc(100vw - 40px);
-        margin: 5vh auto;
-    }
-}
-
-@media (max-width: 576px) {
-	.card-deck {
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.cyber-card {
-		width: 420px; /* 280px * 1.5 */
-		height: 600px; /* 400px * 1.5 */
-		margin-bottom: 2.25rem; /* 1.5rem * 1.5 */
-	}
-}
-
-/* 작은 화면 대응 */
-@media screen and (max-width: 480px) {
-    html body .cyber-background .cyber-card {
-        width: calc(100vw - 40px) !important;
-        height: calc((100vw - 40px) * 1.43) !important;
-    }
-
-    html body .modal-dialog {
-        width: calc(100vw - 45px) !important;
-        margin: 5vh auto !important;
-    }
-}
-
-@media (max-width: 480px) {
-	.cyber-card {
-		width: calc(100vw - 40px) !important; /* 화면 너비에 맞춤 */
-		height: calc((100vw - 40px) * 1.43) !important; /* 가로:세로 비율 유지 */
-	}
-
-	.modal-dialog {
-		margin: 5vh auto !important;
-		max-width: calc(100vw - 30px) !important;
-	}
-}
-
-@media (max-width: 360px) {
-	.terminal-header,
-	.terminal-footer {
-		width: calc(100% - 30px); /* 작은 화면에서는 좌우 15px 마진 */
-	}
-
-	.terminal-header {
-		top: 15px;
-	}
-
-	.terminal-footer {
-		bottom: 15px;
-	}
-
-	.card-deck {
-		padding: 10px;
-	}
 }
 
 .terminal-title {
@@ -356,13 +298,9 @@ body {
 	justify-content: center;
 	gap: 2rem;
 	padding: 2rem;
-	overflow-y: auto;
-	max-height: calc(100vh - 200px);
-	margin: 0;
-	width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	margin-right: calc(-50vw + 50%);
-    padding: 40px;
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1200px;  /* 최대 너비 제한 */
 }
 
 /* 반응형 조정 */
@@ -632,45 +570,6 @@ body {
 @media (max-width: 992px) {
 	.card-deck {
 		gap: 1.5rem;
-	}
-}
-
-@media (max-width: 576px) {
-	.card-deck {
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.cyber-card {
-		width: 420px; /* 280px * 1.5 */
-		height: 600px; /* 400px * 1.5 */
-		margin-bottom: 2.25rem; /* 1.5rem * 1.5 */
-	}
-}
-
-@media (max-width: 480px) {
-	.cyber-card {
-		width: calc(100vw - 40px) !important; /* 화면 너비에 맞춤 */
-		height: calc((100vw - 40px) * 1.43) !important; /* 가로:세로 비율 유지 */
-	}
-
-	.modal-dialog {
-		margin: 5vh auto !important;
-		max-width: calc(100vw - 30px) !important;
-	}
-}
-
-@media (max-width: 360px) {
-	.terminal-header {
-		top: 15px;
-	}
-
-	.terminal-footer {
-		bottom: 15px;
-	}
-
-	.card-deck {
-		padding: 10px;
 	}
 }
 
