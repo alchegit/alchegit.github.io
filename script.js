@@ -8,6 +8,19 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+    // 모바일 환경 감지 및 클래스 추가
+    function checkMobile() {
+        if (window.innerWidth <= 768) {
+            document.documentElement.classList.add('mobile-view');
+        } else {
+            document.documentElement.classList.remove('mobile-view');
+        }
+    }
+
+    // 초기 체크 및 리사이즈 이벤트에 바인딩
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     // Show modal on page load using Bootstrap
     const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'), {
         backdrop: 'static',

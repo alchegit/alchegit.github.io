@@ -130,95 +130,101 @@ body {
 	bottom: 30px;
 }
 
-/* 모바일 최적화 */
-@media (max-width: 768px) {
-	.terminal-header,
-	.terminal-footer {
-		width: calc(100% - 40px); /* 모바일에서는 좌우 20px 마진 */
-		padding: 8px 15px;
-	}
+/* 모바일 환경 스타일 (768px 이하) */
+@media screen and (max-width: 768px) {
+    /* Terminal Header/Footer */
+    .terminal-header,
+    .terminal-footer {
+        padding: 15px 30px;
+        width: calc(100% - 40px);
+    }
 
-	.terminal-header {
-		top: 20px;
-	}
+    .terminal-title {
+        font-size: 1.8rem;
+    }
 
-	.terminal-footer {
-		bottom: 20px;
-	}
+    .terminal-info,
+    .terminal-warning {
+        font-size: 1.35rem;
+    }
 
-	.cyber-card {
-		width: 420px !important; /* 280px * 1.5 */
-		height: 600px !important; /* 400px * 1.5 */
-		margin-bottom: 2rem;
-	}
+    .status-dot {
+        width: 15px;
+        height: 15px;
+        margin-right: 12px;
+    }
 
-	.card-title {
-		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
-	}
+    /* Card */
+    .cyber-card {
+        width: 420px;
+        height: 600px;
+    }
 
-	.card-symbol img {
-		width: 120px !important; /* 80px * 1.5 */
-		height: 120px !important; /* 80px * 1.5 */
-	}
+    .card-content {
+        padding: 30px;
+    }
 
-	.card-description {
-		font-size: 1.35rem !important; /* 0.9rem * 1.5 */
-		margin: 15px 0 !important; /* 10px * 1.5 */
-	}
+    .card-header-area {
+        font-size: 1.2rem;
+        margin-bottom: 22px;
+    }
 
-	.card-header-area {
-		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
-		margin-bottom: 22px !important; /* 15px * 1.5 */
-	}
+    .card-title {
+        font-size: 2.25rem;
+    }
 
-	.card-footer-area {
-		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
-	}
+    .card-symbol img {
+        width: 120px;
+        height: 120px;
+    }
 
-	.card-content {
-		padding: 30px !important; /* 20px * 1.5 */
-	}
+    .card-description {
+        font-size: 1.35rem;
+    }
 
-	/* Modal styles for mobile */
-	.cyber-modal .modal-content {
-		padding: 45px !important; /* 30px * 1.5 */
-	}
+    .card-footer-area {
+        font-size: 1.2rem;
+    }
 
-	.cyber-text {
-		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
-		margin-bottom: 22px !important; /* 15px * 1.5 */
-	}
+    /* Modal */
+    .modal-dialog {
+        max-width: 750px;
+        margin: 7.5vh auto;
+    }
 
-	.cyber-subtext {
-		font-size: 1.65rem !important; /* 1.1rem * 1.5 */
-		margin-bottom: 22px !important; /* 15px * 1.5 */
-		line-height: 1.5;
-	}
+    .cyber-modal .modal-content {
+        padding: 45px;
+    }
 
-	.cyber-highlight {
-		font-size: 1.8rem !important; /* 1.2rem * 1.5 */
-		margin-top: 30px !important; /* 20px * 1.5 */
-	}
+    .cyber-text {
+        font-size: 2.25rem;
+    }
 
-	.cyber-button {
-		padding: 15px 30px !important; /* 10px 20px * 1.5 */
-		font-size: 1.2rem !important;
-		margin-top: 30px !important; /* 20px * 1.5 */
-	}
+    .cyber-subtext {
+        font-size: 1.65rem;
+    }
 
-	.cyber-modal-header {
-		margin-bottom: 30px !important; /* 20px * 1.5 */
-	}
+    .cyber-highlight {
+        font-size: 1.8rem;
+    }
 
-	.modal-dialog {
-		margin: 7.5vh auto !important; /* 5vh * 1.5 */
-		max-width: 750px !important; /* 500px * 1.5 */
-	}
+    .cyber-button {
+        padding: 15px 30px;
+        font-size: 1.8rem;
+    }
+}
 
-	.modal-glitch,
-	.modal-glow {
-		border-radius: 7.5px !important; /* 5px * 1.5 */
-	}
+/* 작은 화면 (480px 이하) */
+@media screen and (max-width: 480px) {
+    .cyber-card {
+        width: calc(100vw - 40px);
+        height: calc((100vw - 40px) * 1.43);
+    }
+
+    .modal-dialog {
+        width: calc(100vw - 40px);
+        margin: 5vh auto;
+    }
 }
 
 @media (max-width: 576px) {
@@ -232,6 +238,19 @@ body {
 		height: 600px; /* 400px * 1.5 */
 		margin-bottom: 2.25rem; /* 1.5rem * 1.5 */
 	}
+}
+
+/* 작은 화면 대응 */
+@media screen and (max-width: 480px) {
+    html body .cyber-background .cyber-card {
+        width: calc(100vw - 40px) !important;
+        height: calc((100vw - 40px) * 1.43) !important;
+    }
+
+    html body .modal-dialog {
+        width: calc(100vw - 45px) !important;
+        margin: 5vh auto !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -613,108 +632,6 @@ body {
 @media (max-width: 992px) {
 	.card-deck {
 		gap: 1.5rem;
-	}
-}
-
-@media (max-width: 768px) {
-	.terminal-header,
-	.terminal-footer {
-		padding: 8px 15px;
-	}
-
-	.terminal-header {
-		top: 20px;
-	}
-
-	.terminal-footer {
-		bottom: 20px;
-	}
-
-	.card-container {
-		margin: calc(20px + 50px) 0;
-	}
-
-	.card-deck {
-		gap: 1rem;
-		padding: 1rem;
-	}
-
-	.cyber-card {
-		width: 420px !important; /* 280px * 1.5 */
-		height: 600px !important; /* 400px * 1.5 */
-		margin-bottom: 2rem;
-	}
-
-	.card-title {
-		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
-	}
-
-	.card-symbol {
-		font-size: 3rem;
-	}
-
-	.card-symbol img {
-		width: 120px !important; /* 80px * 1.5 */
-		height: 120px !important; /* 80px * 1.5 */
-	}
-
-	.card-description {
-		font-size: 1.35rem !important; /* 0.9rem * 1.5 */
-		margin: 15px 0 !important; /* 10px * 1.5 */
-	}
-
-	.card-header-area {
-		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
-		margin-bottom: 22px !important; /* 15px * 1.5 */
-	}
-
-	.card-footer-area {
-		font-size: 1.2rem !important; /* 0.8rem * 1.5 */
-	}
-
-	.card-content {
-		padding: 30px !important; /* 20px * 1.5 */
-	}
-
-	/* Modal styles for mobile */
-	.cyber-modal .modal-content {
-		padding: 45px !important; /* 30px * 1.5 */
-	}
-
-	.cyber-text {
-		font-size: 2.25rem !important; /* 1.5rem * 1.5 */
-		margin-bottom: 22px !important; /* 15px * 1.5 */
-	}
-
-	.cyber-subtext {
-		font-size: 1.65rem !important; /* 1.1rem * 1.5 */
-		margin-bottom: 22px !important; /* 15px * 1.5 */
-		line-height: 1.5;
-	}
-
-	.cyber-highlight {
-		font-size: 1.8rem !important; /* 1.2rem * 1.5 */
-		margin-top: 30px !important; /* 20px * 1.5 */
-	}
-
-	.cyber-button {
-		padding: 15px 30px !important; /* 10px 20px * 1.5 */
-		font-size: 1.2rem !important;
-		margin-top: 30px !important; /* 20px * 1.5 */
-	}
-
-	.cyber-modal-header {
-		margin-bottom: 30px !important; /* 20px * 1.5 */
-	}
-
-	.modal-dialog {
-		margin: 7.5vh auto !important; /* 5vh * 1.5 */
-		max-width: 750px !important; /* 500px * 1.5 */
-	}
-
-	.modal-glitch,
-	.modal-glow {
-		border-radius: 7.5px !important; /* 5px * 1.5 */
 	}
 }
 
