@@ -182,7 +182,7 @@ body {
     }
 
     html body .card-title {
-        font-size: 4vw !important;
+        font-size: 5vw !important;
         margin-bottom: 1.8vw !important;
         line-height: 1.2 !important;
     }
@@ -213,14 +213,15 @@ body {
             font-size: 2.5vw !important;
         }
         .card-title {
-            font-size: 5vw !important;
             margin: 1.5vw 0 !important;
         }
-        .card-id {
-            font-size: 2vw !important;
+        .popup-card-id {
+            font-size: 3vw !important;
+			color: #0fa;
         }
-        .card-security {
-            font-size: 4vw !important;
+        .popup-card-security {
+            font-size: 3vw !important;
+			color: #f55;
         }
         .modal-content.cyber-modal-content {
             margin: 0 5vw !important;
@@ -511,10 +512,6 @@ body {
 
 .card-id {
 	color: #0fa;
-}
-
-.card-security {
-	color: #f55;
 }
 
 .card-title {
