@@ -28,9 +28,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     welcomeModal.show();
 
+    // 브라우저 언어 감지 및 설정
+    function detectLanguage() {
+        const userLang = navigator.language || navigator.userLanguage;
+        const preferredLang = userLang.toLowerCase().startsWith('ko') ? 'ko' : 'en';
+        document.documentElement.lang = preferredLang;
+        return preferredLang;
+    }
+
     // Language handling
     function updateLanguage() {
-        const lang = document.documentElement.lang || 'ko';
+        const lang = detectLanguage();
         
         // Update title
         document.title = document.querySelector('title').getAttribute(`data-lang-${lang}`);
