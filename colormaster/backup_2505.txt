@@ -1,21 +1,21 @@
-last_updated:2025-05-10 10:19:55
-Document_ID	elapsedMillis	language	mode	score	updatedAt	userId
-2OmS6VnPodxCKRedo2cS_normal	28210	"ko"	"normal"	8	2025년 5월 5일 오전 11시 50분 2초 UTC+9	"2OmS6VnPodxCKRedo2cS"
-4zRmTyC1z9jggcyIyrn4_normal	16930	"ko"	"normal"	7	2025년 5월 6일 오전 3시 44분 56초 UTC+9	"4zRmTyC1z9jggcyIyrn4"
-BG56irATklQbBWltXLWd_normal	7080	"en"	"normal"	5	2025년 5월 1일 오전 4시 57분 47초 UTC+9	"BG56irATklQbBWltXLWd"
-BQLOQRjmqOdXO7GFRQWI_normal	17250	"ko"	"normal"	8	2025년 5월 7일 오전 9시 44분 41초 UTC+9	"BQLOQRjmqOdXO7GFRQWI"
-GgKJVTL2MgkPgO0vAxeL_normal	43690	"ko"	"normal"	6	2025년 5월 1일 오후 11시 57분 40초 UTC+9	"GgKJVTL2MgkPgO0vAxeL"
-JbNc2iozV6S7o5yusxLg_normal	42480	"ko"	"normal"	9	2025년 5월 7일 오후 2시 3분 59초 UTC+9	"JbNc2iozV6S7o5yusxLg"
-KeuywF0w2DH6j3X1Unxn_normal	27090	"ko"	"normal"	8	2025년 5월 6일 오후 5시 13분 39초 UTC+9	"KeuywF0w2DH6j3X1Unxn"
-MJi4aomPuI7CVBZsNsIn_normal	32160	"ko"	"normal"	7	2025년 5월 5일 오후 0시 29분 49초 UTC+9	"MJi4aomPuI7CVBZsNsIn"
-OY5osZpagrJVgkV3z5uf_normal	17000	"ko"	"normal"	9	2025년 5월 10일 오전 2시 11분 2초 UTC+9	"OY5osZpagrJVgkV3z5uf"
-PM1q51ysm4WMDKAgijTq_normal	34240	"ko"	"normal"	6	2025년 5월 5일 오전 11시 29분 56초 UTC+9	"PM1q51ysm4WMDKAgijTq"
-Xg5ILbbxDNYrDElx2G4v_normal	47560	"ko"	"normal"	8	2025년 5월 5일 오후 1시 31분 36초 UTC+9	"Xg5ILbbxDNYrDElx2G4v"
-dbxpp2hn8wqeTIBGvP7c_normal	19270	"ko"	"normal"	8	2025년 5월 6일 오후 4시 52분 19초 UTC+9	"dbxpp2hn8wqeTIBGvP7c"
-l0wyODHAlO93oYPnaZbF_normal	22510	"ko"	"normal"	8	2025년 5월 6일 오후 3시 25분 54초 UTC+9	"l0wyODHAlO93oYPnaZbF"
-mvtcW0QlXMsUKQPQcqos_normal	17010	"ko"	"normal"	8	2025년 5월 7일 오전 2시 2분 14초 UTC+9	"mvtcW0QlXMsUKQPQcqos"
-rgwnvuD6UMmL8Onbx2ZC_normal	21630	"ko"	"normal"	8	2025년 5월 6일 오후 11시 8분 32초 UTC+9	"rgwnvuD6UMmL8Onbx2ZC"
-t8ofnf18qmzCQICpewMv_normal	24950	"ko"	"normal"	9	2025년 5월 10일 오전 6시 3분 50초 UTC+9	"t8ofnf18qmzCQICpewMv"
-xHYfyCqscmQFyD2lRTFP_normal	21140	"ko"	"normal"	7	2025년 5월 6일 오전 4시 36분 14초 UTC+9	"xHYfyCqscmQFyD2lRTFP"
-yT2x445TaOlhxjOEb0mE_normal	24270	"ko"	"normal"	8	2025년 5월 8일 오전 2시 14분 11초 UTC+9	"yT2x445TaOlhxjOEb0mE"
-zfFnJTLNy3FkRfTV2SFt_normal	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9	"zfFnJTLNy3FkRfTV2SFt"
+last_updated:2025-05-10 10:47:18
+Document_ID	elapsedMillis	language	mode	score	updatedAt
+2OmS6	28210	"ko"	"normal"	8	2025년 5월 5일 오전 11시 50분 2초 UTC+9
+4zRmT	16930	"ko"	"normal"	7	2025년 5월 6일 오전 3시 44분 56초 UTC+9
+BG56i	7080	"en"	"normal"	5	2025년 5월 1일 오전 4시 57분 47초 UTC+9
+BQLOQ	17250	"ko"	"normal"	8	2025년 5월 7일 오전 9시 44분 41초 UTC+9
+GgKJV	43690	"ko"	"normal"	6	2025년 5월 1일 오후 11시 57분 40초 UTC+9
+JbNc2	42480	"ko"	"normal"	9	2025년 5월 7일 오후 2시 3분 59초 UTC+9
+Keuyw	27090	"ko"	"normal"	8	2025년 5월 6일 오후 5시 13분 39초 UTC+9
+MJi4a	32160	"ko"	"normal"	7	2025년 5월 5일 오후 0시 29분 49초 UTC+9
+OY5os	17000	"ko"	"normal"	9	2025년 5월 10일 오전 2시 11분 2초 UTC+9
+PM1q5	34240	"ko"	"normal"	6	2025년 5월 5일 오전 11시 29분 56초 UTC+9
+Xg5IL	47560	"ko"	"normal"	8	2025년 5월 5일 오후 1시 31분 36초 UTC+9
+dbxpp	19270	"ko"	"normal"	8	2025년 5월 6일 오후 4시 52분 19초 UTC+9
+l0wyO	22510	"ko"	"normal"	8	2025년 5월 6일 오후 3시 25분 54초 UTC+9
+mvtcW	17010	"ko"	"normal"	8	2025년 5월 7일 오전 2시 2분 14초 UTC+9
+rgwnv	21630	"ko"	"normal"	8	2025년 5월 6일 오후 11시 8분 32초 UTC+9
+t8ofn	24950	"ko"	"normal"	9	2025년 5월 10일 오전 6시 3분 50초 UTC+9
+xHYfy	21140	"ko"	"normal"	7	2025년 5월 6일 오전 4시 36분 14초 UTC+9
+yT2x4	24270	"ko"	"normal"	8	2025년 5월 8일 오전 2시 14분 11초 UTC+9
+zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9
