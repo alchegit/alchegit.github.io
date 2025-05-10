@@ -54,40 +54,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 하드코딩된 데이터 사용 (모든 로드 방법이 실패할 경우)
   function useHardcodedData() {
-    console.log("하드코딩된 데이터를 사용합니다.");
+    console.log("데이터를 불러올 수 없습니다.");
     statusText.textContent =
+      detectLanguage() === "ko" ? "데이터 로드 실패" : "DATA LOAD FAILED";
+    statusText.style.color = "#f55";
+
+    // 랭킹 목록에 데이터 없음 메시지 표시
+    rankingsList.innerHTML = `<div class="error-message">${
       detectLanguage() === "ko"
-        ? "하드코딩 데이터 사용"
-        : "USING HARDCODED DATA";
-    statusText.style.color = "#f90";
+        ? "랭킹 데이터를 불러올 수 없습니다. 나중에 다시 시도해주세요."
+        : "Unable to load ranking data. Please try again later."
+    }</div>`;
 
-    // backup_2505.txt의 데이터 직접 사용
-    const sampleData = `last_updated:2025-05-10 10:47:18
-Document_ID	elapsedMillis	language	mode	score	updatedAt
-2OmS6	28210	"ko"	"normal"	8	2025년 5월 5일 오전 11시 50분 2초 UTC+9
-4zRmT	16930	"ko"	"normal"	7	2025년 5월 6일 오전 3시 44분 56초 UTC+9
-BG56i	7080	"en"	"normal"	5	2025년 5월 1일 오전 4시 57분 47초 UTC+9
-BQLOQ	17250	"ko"	"normal"	8	2025년 5월 7일 오전 9시 44분 41초 UTC+9
-GgKJV	43690	"ko"	"normal"	6	2025년 5월 1일 오후 11시 57분 40초 UTC+9
-JbNc2	42480	"ko"	"normal"	9	2025년 5월 7일 오후 2시 3분 59초 UTC+9
-Keuyw	27090	"ko"	"normal"	8	2025년 5월 6일 오후 5시 13분 39초 UTC+9
-MJi4a	32160	"ko"	"normal"	7	2025년 5월 5일 오후 0시 29분 49초 UTC+9
-OY5os	17000	"ko"	"normal"	9	2025년 5월 10일 오전 2시 11분 2초 UTC+9
-PM1q5	34240	"ko"	"normal"	6	2025년 5월 5일 오전 11시 29분 56초 UTC+9
-Xg5IL	47560	"ko"	"normal"	8	2025년 5월 5일 오후 1시 31분 36초 UTC+9
-dbxpp	19270	"ko"	"normal"	8	2025년 5월 6일 오후 4시 52분 19초 UTC+9
-l0wyO	22510	"ko"	"normal"	8	2025년 5월 6일 오후 3시 25분 54초 UTC+9
-mvtcW	17010	"ko"	"normal"	8	2025년 5월 7일 오전 2시 2분 14초 UTC+9
-rgwnv	21630	"ko"	"normal"	8	2025년 5월 6일 오후 11시 8분 32초 UTC+9
-t8ofn	24950	"ko"	"normal"	9	2025년 5월 10일 오전 6시 3분 50초 UTC+9
-xHYfy	21140	"ko"	"normal"	7	2025년 5월 6일 오전 4시 36분 14초 UTC+9
-yT2x4	24270	"ko"	"normal"	8	2025년 5월 8일 오전 2시 14분 11초 UTC+9
-zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
+    // 빈 월별 버튼 생성 (데이터 없음 표시)
+    monthSlider.innerHTML = "";
+    const noDataTag = document.createElement("div");
+    noDataTag.className = "month-tag active";
+    noDataTag.textContent =
+      detectLanguage() === "ko" ? "데이터 없음" : "No Data";
+    monthSlider.appendChild(noDataTag);
 
-    processRankingData(sampleData, "2505");
+    // 마지막 업데이트 시간 표시 삭제
+    lastUpdate.textContent = "";
   }
 
-  // 데이터 처리 함수
+  // 데이터 처리 함수 수정
   function processRankingData(text, fileName) {
     try {
       // 텍스트 파싱 (줄 단위로 분리)
@@ -99,8 +90,10 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
 
       // 첫 번째 줄: last_updated 정보 추출 및 표시
       const lastUpdatedMatch = lines[0].match(/last_updated:(.+)/);
+      let lastUpdatedValue = "";
+
       if (lastUpdatedMatch && lastUpdatedMatch[1]) {
-        const lastUpdatedValue = lastUpdatedMatch[1].trim();
+        lastUpdatedValue = lastUpdatedMatch[1].trim();
         lastUpdate.textContent = `LAST UPDATE: ${lastUpdatedValue}`;
         console.log(`마지막 업데이트 시간: ${lastUpdatedValue}`);
       }
@@ -145,6 +138,11 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
           entry.userId = entry.Document_ID;
         }
 
+        // 파일의 last_updated 정보를 각 엔트리에 저장
+        if (lastUpdatedValue) {
+          entry._lastUpdated = lastUpdatedValue;
+        }
+
         // 모든 필수 필드가 있는 경우만 추가
         if (
           entry.score !== undefined &&
@@ -184,7 +182,17 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
   // 사용 가능한 월별 파일 목록 로딩
   function loadAvailableMonths() {
     // 백업 파일 목록 - 최신 순으로 정렬 (필요할 때마다 여기에 추가)
-    const backupFiles = ["2504", "2505", "2506", "2507", "2508", "2509", "2510", "2511", "2512"];
+    const backupFiles = [
+      "2504",
+      "2505",
+      "2506",
+      "2507",
+      "2508",
+      "2509",
+      "2510",
+      "2511",
+      "2512",
+    ];
 
     // 실제 로드된 파일 목록
     const loadedFiles = [];
@@ -240,7 +248,7 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
         });
     }
 
-    // 추가 데이터 처리 함수 (기존 데이터 유지하면서 추가)
+    // 추가 데이터 처리 함수도 수정
     function processAdditionalData(text, fileName) {
       try {
         // 텍스트 파싱 (줄 단위로 분리)
@@ -248,6 +256,14 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
 
         if (lines.length < 3) {
           throw new Error("파일에 충분한 데이터가 없습니다.");
+        }
+
+        // 첫 번째 줄: last_updated 정보 추출
+        const lastUpdatedMatch = lines[0].match(/last_updated:(.+)/);
+        let lastUpdatedValue = "";
+
+        if (lastUpdatedMatch && lastUpdatedMatch[1]) {
+          lastUpdatedValue = lastUpdatedMatch[1].trim();
         }
 
         // 두 번째 줄: 헤더
@@ -287,6 +303,11 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
           // ID 정보 추출
           if (headers.includes("Document_ID")) {
             entry.userId = entry.Document_ID;
+          }
+
+          // 파일의 last_updated 정보를 각 엔트리에 저장
+          if (lastUpdatedValue) {
+            entry._lastUpdated = lastUpdatedValue;
           }
 
           // 모든 필수 필드가 있는 경우만 추가
@@ -454,16 +475,34 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
     return monthlyData;
   }
 
-  // 월별 버튼 생성
+  // 월별 버튼 생성 함수 수정
   function createMonthButtons(monthlyData) {
     // 기존 버튼 제거
     monthSlider.innerHTML = "";
 
-    const months = Object.keys(monthlyData).sort().reverse(); // 최신 월이 먼저 오도록
+    // 월 정렬 - 과거 월이 왼쪽, 최신 월이 오른쪽에 오도록 정렬 (오름차순)
+    const months = Object.keys(monthlyData).sort(); // 오름차순 정렬 (2025.04, 2025.05, ...)
+
+    // lastUpdatedInfo를 저장할 객체
+    const monthUpdates = {};
+
+    // 각 월별 last_updated 정보 저장
+    rankingData.forEach((entry) => {
+      if (entry._lastUpdated) {
+        // 파일에서 추출한 last_updated 정보
+        const dateInfo = parseDate(entry.updatedAt);
+        if (dateInfo) {
+          const monthKey = `${dateInfo.year}.${dateInfo.month}`;
+          monthUpdates[monthKey] = entry._lastUpdated;
+        }
+      }
+    });
 
     months.forEach((month, index) => {
       const monthTag = document.createElement("div");
-      monthTag.className = "month-tag" + (index === 0 ? " active" : "");
+      // 마지막 항목(최신 월)이 기본 활성화
+      monthTag.className =
+        "month-tag" + (index === months.length - 1 ? " active" : "");
       monthTag.textContent = month;
       monthTag.dataset.month = month;
 
@@ -476,14 +515,25 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
         monthTag.classList.add("active");
         // 해당 월 랭킹 표시
         displayRankings(monthlyData[month]);
+
+        // 선택한 월의 last_updated 정보 표시
+        if (monthUpdates[month]) {
+          lastUpdate.textContent = `LAST UPDATE: ${monthUpdates[month]}`;
+        }
       });
 
       monthSlider.appendChild(monthTag);
     });
 
-    // 첫 번째 월 데이터 표시 (최신 월)
+    // 마지막 월(최신 월) 데이터 표시
     if (months.length > 0) {
-      displayRankings(monthlyData[months[0]]);
+      const latestMonth = months[months.length - 1]; // 마지막 항목(최신 월)
+      displayRankings(monthlyData[latestMonth]);
+
+      // 최신 월의 last_updated 정보 표시
+      if (monthUpdates[latestMonth]) {
+        lastUpdate.textContent = `LAST UPDATE: ${monthUpdates[latestMonth]}`;
+      }
     } else {
       rankingsList.innerHTML = `<div class="no-data-message">${
         detectLanguage() === "ko"
@@ -555,6 +605,201 @@ zfFnJ	30690	"ko"	"normal"	7	2025년 5월 6일 오전 1시 14분 14초 UTC+9`;
         detectLanguage() === "ko" ? "연결됨" : "CONNECTED";
       statusText.style.color = "#0fa";
     }, 500); // 로딩 효과를 위한 지연
+  }
+
+  // 월 슬라이더 개선 함수
+  function enhanceMonthSlider() {
+    const monthSlider = document.getElementById("month-slider");
+
+    // 스크롤 힌트 추가
+    const leftHint = document.createElement("div");
+    leftHint.className = "month-scroll-hint month-scroll-hint-left";
+
+    const rightHint = document.createElement("div");
+    rightHint.className = "month-scroll-hint month-scroll-hint-right";
+
+    monthSlider.appendChild(leftHint);
+    monthSlider.appendChild(rightHint);
+
+    // 스크롤 위치에 따른 힌트 표시/숨김
+    function updateScrollHints() {
+      // 스크롤이 가능한지 확인
+      const isScrollable = monthSlider.scrollWidth > monthSlider.clientWidth;
+
+      // 왼쪽/오른쪽 끝에 도달했는지 확인
+      const isAtStart = monthSlider.scrollLeft <= 10;
+      const isAtEnd =
+        monthSlider.scrollLeft >=
+        monthSlider.scrollWidth - monthSlider.clientWidth - 10;
+
+      // 힌트 표시/숨김
+      leftHint.style.opacity = isScrollable && !isAtStart ? "0.8" : "0";
+      rightHint.style.opacity = isScrollable && !isAtEnd ? "0.8" : "0";
+    }
+
+    // 초기 상태 설정
+    updateScrollHints();
+
+    // 스크롤 이벤트에 따른 힌트 업데이트
+    monthSlider.addEventListener("scroll", updateScrollHints);
+
+    // 윈도우 크기 변경 시 힌트 업데이트
+    window.addEventListener("resize", updateScrollHints);
+
+    // 터치/마우스 스크롤 보조 기능
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    // 터치/마우스 이벤트 핸들러
+    monthSlider.addEventListener("mousedown", (e) => {
+      isDown = true;
+      monthSlider.classList.add("active-drag");
+      startX = e.pageX - monthSlider.offsetLeft;
+      scrollLeft = monthSlider.scrollLeft;
+    });
+
+    monthSlider.addEventListener("mouseleave", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener("mouseup", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - monthSlider.offsetLeft;
+      const walk = (x - startX) * 2; // 스크롤 속도 조절
+      monthSlider.scrollLeft = scrollLeft - walk;
+      updateScrollHints();
+    });
+
+    // 터치 이벤트 지원 (모바일)
+    monthSlider.addEventListener(
+      "touchstart",
+      (e) => {
+        isDown = true;
+        monthSlider.classList.add("active-drag");
+        startX = e.touches[0].pageX - monthSlider.offsetLeft;
+        scrollLeft = monthSlider.scrollLeft;
+      },
+      { passive: true }
+    );
+
+    monthSlider.addEventListener("touchend", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener("touchcancel", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!isDown) return;
+        const x = e.touches[0].pageX - monthSlider.offsetLeft;
+        const walk = (x - startX) * 2;
+        monthSlider.scrollLeft = scrollLeft - walk;
+        updateScrollHints();
+      },
+      { passive: true }
+    );
+  }
+
+  // 월별 버튼 생성 함수 수정
+  function createMonthButtons(monthlyData) {
+    // 기존 버튼 제거
+    monthSlider.innerHTML = "";
+
+    // 월 정렬 - 과거 월이 왼쪽, 최신 월이 오른쪽에 오도록 정렬 (오름차순)
+    const months = Object.keys(monthlyData).sort(); // 오름차순 정렬 (2025.04, 2025.05, ...)
+
+    // lastUpdatedInfo를 저장할 객체
+    const monthUpdates = {};
+
+    // 각 월별 last_updated 정보 저장
+    rankingData.forEach((entry) => {
+      if (entry._lastUpdated) {
+        // 파일에서 추출한 last_updated 정보
+        const dateInfo = parseDate(entry.updatedAt);
+        if (dateInfo) {
+          const monthKey = `${dateInfo.year}.${dateInfo.month}`;
+          monthUpdates[monthKey] = entry._lastUpdated;
+        }
+      }
+    });
+
+    // 월별 버튼 생성
+    months.forEach((month, index) => {
+      const monthTag = document.createElement("div");
+      // 마지막 항목(최신 월)이 기본 활성화
+      monthTag.className =
+        "month-tag" + (index === months.length - 1 ? " active" : "");
+      monthTag.textContent = month;
+      monthTag.dataset.month = month;
+
+      monthTag.addEventListener("click", () => {
+        // 모든 월 태그 비활성화
+        document
+          .querySelectorAll(".month-tag")
+          .forEach((tag) => tag.classList.remove("active"));
+        // 현재 선택한 태그 활성화
+        monthTag.classList.add("active");
+        // 해당 월 랭킹 표시
+        displayRankings(monthlyData[month]);
+
+        // 선택한 월의 last_updated 정보 표시
+        if (monthUpdates[month]) {
+          lastUpdate.textContent = `LAST UPDATE: ${monthUpdates[month]}`;
+        }
+
+        // 선택한 항목이 보이도록 스크롤 조정
+        monthTag.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+        });
+      });
+
+      monthSlider.appendChild(monthTag);
+    });
+
+    // 스크롤 힌트와 드래그 기능 추가
+    enhanceMonthSlider();
+
+    // 마지막 월(최신 월) 데이터 표시 및 스크롤 위치 설정
+    if (months.length > 0) {
+      const latestMonth = months[months.length - 1]; // 마지막 항목(최신 월)
+      displayRankings(monthlyData[latestMonth]);
+
+      // 최신 월의 last_updated 정보 표시
+      if (monthUpdates[latestMonth]) {
+        lastUpdate.textContent = `LAST UPDATE: ${monthUpdates[latestMonth]}`;
+      }
+
+      // 마지막 월 버튼이 보이도록 스크롤 조정 (약간의 지연 후)
+      setTimeout(() => {
+        const activeTag = monthSlider.querySelector(".month-tag.active");
+        if (activeTag) {
+          activeTag.scrollIntoView({
+            behavior: "auto",
+            inline: "center",
+          });
+        }
+      }, 100);
+    } else {
+      rankingsList.innerHTML = `<div class="no-data-message">${
+        detectLanguage() === "ko"
+          ? "랭킹 데이터가 없습니다."
+          : "No ranking data available."
+      }</div>`;
+    }
   }
 
   // 데이터 로드 시작
