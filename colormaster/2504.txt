@@ -1,0 +1,9 @@
+Document_ID	elapsedMillis	language	mode	score	updatedAt	userId
+44uVRp7PcQyyowenKHT8_normal	13600	"en"	"normal"	8	2025년 4월 30일 오후 10시 44분 50초 UTC+9	"44uVRp7PcQyyowenKHT8"
+d9hkwVzQIpNSel1fqOQY_normal	41530	"ko"	"normal"	8	2025년 4월 30일 오전 1시 19분 58초 UTC+9	"d9hkwVzQIpNSel1fqOQY"
+HEBmp8RHgTs7hhR9LgSG_normal	14650	"ko"	"normal"	7	2025년 4월 30일 오후 11시 12분 30초 UTC+9	"HEBmp8RHgTs7hhR9LgSG"
+FTAyKyakGaVOskUy1U5x_normal	24000	"ko"	"normal"	6	2025년 4월 30일 오전 11시 54분 34초 UTC+9	"FTAyKyakGaVOskUy1U5x"
+6tadWvvdPzD5Ltcmkz5X_normal	19660	"ko"	"normal"	5	2025년 4월 30일 오전 8시 7분 17초 UTC+9	"6tadWvvdPzD5Ltcmkz5X"
+wO7RS1ngru6DQ5f9SJb8_normal	19900	"ko"	"normal"	5	2025년 4월 30일 오후 1시 51분 2초 UTC+9	"wO7RS1ngru6DQ5f9SJb8"
+IGt3gpcpSBVV2avnaHLB_normal	37740	"ko"	"normal"	4	2025년 4월 30일 오전 10시 49분 40초 UTC+9	"IGt3gpcpSBVV2avnaHLB"
+NH7KImwLLIgiXvksIH1y_normal	10990	"ko"	"normal"	2	2025년 4월 30일 오전 10시 48분 22초 UTC+9	"NH7KImwLLIgiXvksIH1y"
