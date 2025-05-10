@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     statusText.style.color = "#f55";
 
     // 랭킹 목록에 데이터 없음 메시지 표시
-    rankingsList.innerHTML = `<div class="error-message">${
+    rankingsList.innerHTML = `<div class="error-message" style="margin-top: 30px;">${
       detectLanguage() === "ko"
         ? "랭킹 데이터를 불러올 수 없습니다. 나중에 다시 시도해주세요."
         : "Unable to load ranking data. Please try again later."
@@ -475,6 +475,112 @@ document.addEventListener("DOMContentLoaded", () => {
     return monthlyData;
   }
 
+  // 월 슬라이더 개선 함수
+  function enhanceMonthSlider() {
+    const monthSlider = document.getElementById("month-slider");
+
+    // 스크롤 힌트 추가
+    const leftHint = document.createElement("div");
+    leftHint.className = "month-scroll-hint month-scroll-hint-left";
+
+    const rightHint = document.createElement("div");
+    rightHint.className = "month-scroll-hint month-scroll-hint-right";
+
+    monthSlider.appendChild(leftHint);
+    monthSlider.appendChild(rightHint);
+
+    // 스크롤 위치에 따른 힌트 표시/숨김
+    function updateScrollHints() {
+      // 스크롤이 가능한지 확인
+      const isScrollable = monthSlider.scrollWidth > monthSlider.clientWidth;
+
+      // 왼쪽/오른쪽 끝에 도달했는지 확인
+      const isAtStart = monthSlider.scrollLeft <= 10;
+      const isAtEnd =
+        monthSlider.scrollLeft >=
+        monthSlider.scrollWidth - monthSlider.clientWidth - 10;
+
+      // 힌트 표시/숨김
+      leftHint.style.opacity = isScrollable && !isAtStart ? "0.8" : "0";
+      rightHint.style.opacity = isScrollable && !isAtEnd ? "0.8" : "0";
+    }
+
+    // 초기 상태 설정
+    updateScrollHints();
+
+    // 스크롤 이벤트에 따른 힌트 업데이트
+    monthSlider.addEventListener("scroll", updateScrollHints);
+
+    // 윈도우 크기 변경 시 힌트 업데이트
+    window.addEventListener("resize", updateScrollHints);
+
+    // 터치/마우스 스크롤 보조 기능
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    // 터치/마우스 이벤트 핸들러
+    monthSlider.addEventListener("mousedown", (e) => {
+      isDown = true;
+      monthSlider.classList.add("active-drag");
+      startX = e.pageX - monthSlider.offsetLeft;
+      scrollLeft = monthSlider.scrollLeft;
+    });
+
+    monthSlider.addEventListener("mouseleave", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener("mouseup", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - monthSlider.offsetLeft;
+      const walk = (x - startX) * 2; // 스크롤 속도 조절
+      monthSlider.scrollLeft = scrollLeft - walk;
+      updateScrollHints();
+    });
+
+    // 터치 이벤트 지원 (모바일)
+    monthSlider.addEventListener(
+      "touchstart",
+      (e) => {
+        isDown = true;
+        monthSlider.classList.add("active-drag");
+        startX = e.touches[0].pageX - monthSlider.offsetLeft;
+        scrollLeft = monthSlider.scrollLeft;
+      },
+      { passive: true }
+    );
+
+    monthSlider.addEventListener("touchend", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener("touchcancel", () => {
+      isDown = false;
+      monthSlider.classList.remove("active-drag");
+    });
+
+    monthSlider.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!isDown) return;
+        const x = e.touches[0].pageX - monthSlider.offsetLeft;
+        const walk = (x - startX) * 2;
+        monthSlider.scrollLeft = scrollLeft - walk;
+        updateScrollHints();
+      },
+      { passive: true }
+    );
+  }
+
   // 월별 버튼 생성 함수 수정
   function createMonthButtons(monthlyData) {
     // 기존 버튼 제거
@@ -498,6 +604,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    // 월별 버튼 생성
     months.forEach((month, index) => {
       const monthTag = document.createElement("div");
       // 마지막 항목(최신 월)이 기본 활성화
@@ -520,12 +627,21 @@ document.addEventListener("DOMContentLoaded", () => {
         if (monthUpdates[month]) {
           lastUpdate.textContent = `LAST UPDATE: ${monthUpdates[month]}`;
         }
+
+        // 선택한 항목이 보이도록 스크롤 조정
+        monthTag.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+        });
       });
 
       monthSlider.appendChild(monthTag);
     });
 
-    // 마지막 월(최신 월) 데이터 표시
+    // 스크롤 힌트와 드래그 기능 추가
+    enhanceMonthSlider();
+
+    // 마지막 월(최신 월) 데이터 표시 및 스크롤 위치 설정
     if (months.length > 0) {
       const latestMonth = months[months.length - 1]; // 마지막 항목(최신 월)
       displayRankings(monthlyData[latestMonth]);
@@ -534,6 +650,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (monthUpdates[latestMonth]) {
         lastUpdate.textContent = `LAST UPDATE: ${monthUpdates[latestMonth]}`;
       }
+
+      // 마지막 월 버튼이 보이도록 스크롤 조정 (약간의 지연 후)
+      setTimeout(() => {
+        const activeTag = monthSlider.querySelector(".month-tag.active");
+        if (activeTag) {
+          activeTag.scrollIntoView({
+            behavior: "auto",
+            inline: "center",
+          });
+        }
+      }, 100);
     } else {
       rankingsList.innerHTML = `<div class="no-data-message">${
         detectLanguage() === "ko"
