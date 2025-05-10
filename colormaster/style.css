@@ -429,28 +429,14 @@ html {
   }
 }
 
-/* 스크롤 가능한 월별 버튼 컨테이너 추가 스타일 */
-#month-slider {
-  display: flex;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* 모바일 스크롤 부드럽게 */
-  scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
-  padding: 0.5rem 0;
-  margin: 0.5rem 0;
-  scrollbar-width: thin; /* Firefox */
-  white-space: nowrap;
-  gap: 0.5rem; /* 버튼 사이 간격 */
-  position: relative;
-}
-
 /* 월별 스크롤 관련 스타일 추가 */
 #month-slider {
   display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch; /* 모바일 스크롤 부드럽게 */
   scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
-  padding: 0.5rem 0;
-  margin: 0.5rem 0;
+  /* padding: 0.5rem 0; */
+  /* margin: 0.5rem 0; */
   scrollbar-width: thin; /* Firefox */
   white-space: nowrap;
   gap: 0.5rem; /* 버튼 사이 간격 */
