@@ -1,0 +1,10 @@
+last_updated:2025-04-31 23:00:00
+Document_ID	elapsedMillis	language	mode	score	updatedAt
+44uVR	13600	"en"	"normal"	8	2025년 4월 30일 오후 10시 44분 50초 UTC+9
+d9hkw	41530	"ko"	"normal"	8	2025년 4월 30일 오전 1시 19분 58초 UTC+9
+HEBm	14650	"ko"	"normal"	7	2025년 4월 30일 오후 11시 12분 30초 UTC+9
+FTAyK	24000	"ko"	"normal"	6	2025년 4월 30일 오전 11시 54분 34초 UTC+9
+6tadW	19660	"ko"	"normal"	5	2025년 4월 30일 오전 8시 7분 17초 UTC+9
+wO7RS	19900	"ko"	"normal"	5	2025년 4월 30일 오후 1시 51분 2초 UTC+9
+IGt3g	37740	"ko"	"normal"	4	2025년 4월 30일 오전 10시 49분 40초 UTC+9
+NH7KI	10990	"ko"	"normal"	2	2025년 4월 30일 오전 10시 48분 22초 UTC+9
