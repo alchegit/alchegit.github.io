@@ -21,53 +21,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // 이벤트 팝업 초기화 및 표시
   initializeEventPopup();
 
-  // 텍스트 파일에서 데이터 가져오기
-  function fetchRankingData(fileName = defaultFileName) {
-    statusText.textContent =
-      detectLanguage() === "ko" ? "데이터 로딩 중..." : "LOADING DATA...";
-    statusText.style.color = "#0fa";
-
-    // "backup_YYMM.txt" 형식의 파일명 생성
-    const filePath = `./backup_${fileName}.txt`;
-    console.log(`파일 로드 시도: ${filePath}`);
-
-    // XMLHttpRequest 사용 (로컬 환경에서 더 잘 작동)
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", filePath, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          console.log(`파일 내용 가져옴: ${xhr.responseText.length} 바이트`);
-          processRankingData(xhr.responseText, fileName);
-        } else {
-          console.error(`파일을 불러올 수 없습니다: ${xhr.status}`);
-          // 2505 파일이 아닌 경우 2505로 다시 시도
-          if (fileName !== "2505") {
-            console.log("기본 데이터(2505)로 다시 시도합니다.");
-            setTimeout(() => fetchRankingData("2505"), 1000);
-          } else {
-            // 2505도 실패하면 하드코딩된 데이터 사용
-            useHardcodedData();
-          }
-        }
-      }
-    };
-    xhr.send();
-  }
-
   // 이벤트 팝업 초기화 함수
   function initializeEventPopup() {
     console.log("팝업 초기화 시작");
-
+    
     // 팝업이 이전에 닫히지 않았다면 표시
     if (shouldShowPopup()) {
       setTimeout(() => {
+        console.log("팝업 표시 시도");
         const popup = document.getElementById("event-popup");
         if (popup) {
           // Bootstrap 모달 표시
           const modal = new bootstrap.Modal(popup);
           modal.show();
           console.log("팝업 표시됨");
+          
+          // 이메일 복사 기능 설정
+          setupEmailCopy();
         } else {
           console.log("팝업 요소를 찾을 수 없음");
         }
@@ -77,57 +47,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 닫기 버튼에 이벤트 리스너 추가
-    const closeButton = document.querySelector(".cyber-close");
+    const closeButton = document.querySelector("[data-bs-dismiss='modal']");
     if (closeButton) {
-      closeButton.addEventListener("click", function () {
-        const popup = document.getElementById("event-popup");
-        if (popup) {
-          const modal = bootstrap.Modal.getInstance(popup);
-          if (modal) modal.hide();
-
-          // 체크박스 상태 확인
-          const dontShowAgainToday =
-            document.getElementById("dontShowAgainToday");
-          if (dontShowAgainToday && dontShowAgainToday.checked) {
-            // 오늘 날짜를 저장
-            const today = new Date().toDateString();
-            localStorage.setItem("popupDismissedToday", today);
-          }
+      closeButton.addEventListener("click", function() {
+        // 체크박스 상태 확인
+        const dontShowAgainToday = document.getElementById("dontShowAgainToday");
+        if (dontShowAgainToday && dontShowAgainToday.checked) {
+          // 오늘 날짜를 저장
+          const today = new Date().toDateString();
+          localStorage.setItem("popupDismissedToday", today);
+          console.log("오늘 하루 다시 열지 않기 설정됨");
         }
       });
     }
-
-    // 이메일 복사 기능
-    const popupEmailElement = document.getElementById("popupDevEmail");
-    const popupCopyConfirmation = document.getElementById(
-      "popupCopyConfirmation"
-    );
-
-    if (popupEmailElement) {
-      popupEmailElement.addEventListener("click", function () {
-        const emailText = "wlgnsl14@gmail.com";
-
-        // 클립보드에 복사
-        navigator.clipboard
-          .writeText(emailText)
-          .then(() => {
-            // 성공 시 확인 메시지 표시
-            popupCopyConfirmation.classList.add("show");
-
-            // 3초 후 메시지 숨기기
-            setTimeout(() => {
-              popupCopyConfirmation.classList.remove("show");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.error("클립보드 복사 실패:", err);
-            // 대체 복사 방법 시도
-            fallbackCopyTextToClipboard(emailText);
-          });
-      });
-    }
     
-    // 모달이 닫힐 때 체크박스 상태 확인 (Bootstrap 모달 이벤트 활용)
+    // 모달이 닫힐 때 체크박스 상태 확인
     const popup = document.getElementById("event-popup");
     if (popup) {
       popup.addEventListener("hidden.bs.modal", function() {
@@ -141,35 +75,91 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+  
+  // 오늘 하루 다시 열지 않기 체크박스 설정
+  function setupDontShowAgainCheckbox() {
+    const popup = document.getElementById("event-popup");
+    const checkbox = document.getElementById("dontShowAgainToday");
 
-  // 모달이 닫힐 때 체크박스 상태 확인 (Bootstrap 모달 이벤트 활용)
-  const popup = document.getElementById("event-popup");
-  if (popup) {
-    popup.addEventListener("hidden.bs.modal", function () {
-      const dontShowAgainToday = document.getElementById("dontShowAgainToday");
-      if (dontShowAgainToday && dontShowAgainToday.checked) {
-        // 오늘 날짜를 저장
-        const today = new Date().toDateString();
-        localStorage.setItem("popupDismissedToday", today);
-        console.log("오늘 하루 다시 열지 않기 설정됨");
-      }
-    });
+    if (popup && checkbox) {
+      popup.addEventListener("hidden.bs.modal", function () {
+        if (checkbox.checked) {
+          // 오늘 날짜를 저장
+          const today = new Date().toDateString();
+          localStorage.setItem("popupDismissedToday", today);
+          console.log("오늘 하루 다시 열지 않기 설정됨");
+        }
+      });
+    }
   }
 
-  // 팝업을 표시할지 여부 결정 함수
-  function shouldShowPopup() {
-    // 영구적으로 닫음
-    const popupDismissed = localStorage.getItem("popupDismissed");
-    if (popupDismissed === "true") return false;
-
-    // 오늘 하루만 닫음
-    const todayDismissed = localStorage.getItem("popupDismissedToday");
-    if (todayDismissed) {
-      const today = new Date().toDateString();
-      if (todayDismissed === today) return false;
+  // 이메일 복사 기능 설정
+  function setupEmailCopy() {
+    const emailElement = document.getElementById("popupDevEmail");
+    const copyConfirmation = document.getElementById("popupCopyConfirmation");
+    
+    if (emailElement) {
+      // 이메일 텍스트 설정 - "개발자 이메일"로 표시되도록 유지
+      if (emailElement.textContent !== "개발자 이메일") {
+        emailElement.textContent = "개발자 이메일";
+      }
+      
+      emailElement.addEventListener("click", function() {
+        // 실제 개발자 이메일 주소를 클립보드에 복사
+        const realEmail = "wlgnsl14@gmail.com";
+        
+        navigator.clipboard.writeText(realEmail)
+          .then(() => {
+            // 성공 시 확인 메시지 표시
+            if (copyConfirmation) {
+              copyConfirmation.classList.add("show");
+              
+              // 3초 후 메시지 숨기기
+              setTimeout(() => {
+                copyConfirmation.classList.remove("show");
+              }, 3000);
+            }
+          })
+          .catch(err => {
+            console.error("클립보드 복사 실패:", err);
+            // 대체 복사 방법 시도
+            fallbackCopyTextToClipboard(realEmail);
+          });
+      });
     }
-
-    return true;
+  }
+  
+  // 구형 브라우저를 위한 대체 복사 메서드
+  function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    
+    // 화면 바깥에 위치시키기
+    textArea.style.position = "fixed";
+    textArea.style.top = "-999px";
+    textArea.style.left = "-999px";
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        const copyConfirmation = document.getElementById("popupCopyConfirmation");
+        if (copyConfirmation) {
+          copyConfirmation.classList.add("show");
+          
+          setTimeout(() => {
+            copyConfirmation.classList.remove("show");
+          }, 3000);
+        }
+      }
+    } catch (err) {
+      console.error("대체 클립보드 복사 실패:", err);
+    }
+    
+    document.body.removeChild(textArea);
   }
 
   // 하드코딩된 데이터 사용 (모든 로드 방법이 실패할 경우)
@@ -870,6 +860,6 @@ function shouldShowPopup() {
     const today = new Date().toDateString();
     if (todayDismissed === today) return false;
   }
-
+  
   return true;
 }

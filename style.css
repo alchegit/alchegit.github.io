@@ -900,64 +900,57 @@ body {
     font-weight: bold; /* 굵게 표시 */
 }
 
-/* 이메일 복사 기능 스타일 */
-.copy-email {
-	color: #00e5ff;
-	font-weight: bold;
-	cursor: pointer;
-	border-bottom: 1px dashed #00e5ff;
-	padding: 1px 3px; /* 패딩 최적화 */
-	transition: all 0.2s ease;
-	user-select: all; /* 전체 선택 가능 */
-    display: inline-block; /* 인라인 블록으로 표시 */
-    position: relative; /* 위치 설정 */
-}
-
-.copy-email:hover {
-	background-color: rgba(0, 229, 255, 0.15);
-	border-bottom: 1px solid #00e5ff;
-    transform: translateY(-1px); /* 호버 시 약간 위로 이동 */
-}
-
-.copy-email:active {
-	background-color: rgba(0, 229, 255, 0.3);
-    transform: translateY(0); /* 클릭 시 원래 위치로 */
-}
-
-.copy-message {
-	font-size: 0.75em; /* 폰트 크기 최적화 */
-	color: #aaa;
-	margin-left: 4px; /* 여백 최적화 */
-    transition: opacity 0.3s, color 0.3s; /* 전환 효과 추가 */
-    opacity: 0.7; /* 기본 투명도 설정 */
-}
-
-/* 복사 확인 메시지 스타일 개선 */
+/* 복사 확인 메시지 스타일 */
 .copy-confirmation {
 	visibility: hidden;
 	opacity: 0;
 	position: absolute;
-	background-color: rgba(0, 50, 80, 0.9);
-	color: #00e5ff;
-	padding: 6px 12px; /* 패딩 최적화 */
+	background-color: rgba(0, 20, 30, 0.9);
+	color: #0fa;
+	padding: 6px 12px;
 	border-radius: 4px;
-	font-size: 0.8em; /* 폰트 크기 최적화 */
-	bottom: -30px; /* 위치 조정 */
+	font-size: 0.85em;
 	left: 50%;
+	bottom: 80px;
 	transform: translateX(-50%);
 	transition: opacity 0.3s, visibility 0.3s;
-	box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-    border: 1px solid rgba(0, 229, 255, 0.5); /* 테두리 추가 */
-    z-index: 10; /* 겹침 순서 설정 */
-    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-}
-
+	box-shadow: 0 0 10px rgba(0, 255, 170, 0.3);
+	border: 1px solid rgba(0, 255, 170, 0.3);
+	z-index: 1000;
+  }
+  
 .copy-confirmation.show {
 	visibility: visible;
 	opacity: 1;
-    animation: fadeInUp 0.3s forwards; /* 애니메이션 적용 */
-}
-
+  }
+  
+/* 이메일 복사 관련 스타일 */
+.copy-email {
+	color: #0fa;
+	font-weight: bold;
+	cursor: pointer;
+	border-bottom: 1px dashed #0fa;
+	padding: 1px 3px;
+	transition: all 0.2s ease;
+	user-select: none;
+  }
+  
+  .copy-email:hover {
+	background-color: rgba(0, 255, 170, 0.15);
+	border-bottom: 1px solid #0fa;
+	text-shadow: 0 0 5px rgba(0, 255, 170, 0.7);
+  }
+  
+  .copy-email:active {
+	background-color: rgba(0, 255, 170, 0.3);
+  }
+  
+  .copy-message {
+	font-size: 0.75em;
+	color: #aaa;
+	margin-left: 3px;
+  }
+  
 /* 모달 푸터 스타일 개선 */
 .modal-footer {
 	padding: 8px 20px 15px; /* 패딩 최적화 */
