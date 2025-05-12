@@ -50,10 +50,21 @@
                     </div>
                     <div class="cyber-modal-body">
                         <div class="cyber-text" data-lang-ko="비공개 테스터 모집 중..." data-lang-en="Recruiting Private Testers..."></div>
-                        <div class="cyber-subtext" data-lang-ko="비공개 테스트 앱을 다운받으려면, 테스터로 등록을 해주셔야 합니다." 
-                             data-lang-en="To download the private test app, you need to register as a private tester."></div>
-                        <div class="cyber-highlight" data-lang-ko="참여하실 분은 구글스토어 가입하신 계정(이메일주소)을 [ wlgnsl14@gmail.com ]으로 보내주시면 감사드리겠습니다!" 
-                             data-lang-en="Please send your Google Store account email via KakaoTalk!"></div>
+                        <div class="cyber-subtext" data-lang-ko="비공개 테스트 참여 방법" data-lang-en="How to participate in private testing"></div>
+                        
+                        <!-- 순서대로 참여 방법 나열 -->
+                        <ol class="participation-steps">
+                            <li data-lang-ko="구글 플레이 스토어를 열기" data-lang-en="Open Google Play Store"></li>
+                            <li data-lang-ko="가입 계정(이메일 주소)를 확인하기" data-lang-en="Check your registered account (email address)"></li>
+                            <li data-lang-ko="확인한 주소를 개발자에게 이메일로 알려주기" data-lang-en="Send the email address to the developer"></li>
+                        </ol>
+                        
+                        <div class="cyber-highlight">
+                            <span data-lang-ko="개발자 이메일 주소: " data-lang-en="Developer email: "></span>
+                            <span id="developerEmail" class="copy-email" data-lang-ko="wlgnsl14@gmail.com" data-lang-en="wlgnsl14@gmail.com"></span>
+                            <span id="copyMessage" class="copy-message" data-lang-ko="(클릭하여 복사)" data-lang-en="(Click to copy)"></span>
+                        </div>
+                        <div id="copyConfirmation" class="copy-confirmation" data-lang-ko="이메일 주소가 복사되었습니다!" data-lang-en="Email address copied!"></div>
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="cyber-button" data-bs-dismiss="modal" data-lang-ko="CLOSE" data-lang-en="CLOSE">CLOSE</button>

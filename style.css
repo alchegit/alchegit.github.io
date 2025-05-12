@@ -823,3 +823,63 @@ body {
 	color: #000;
 	box-shadow: 0 0 15px var(--primary-glow);
 }
+
+/* 참여 방법 스타일 */
+.participation-steps {
+    text-align: left;
+    color: #cceeff;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.participation-steps li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+/* 이메일 복사 기능 스타일 */
+.copy-email {
+    color: #00e5ff;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 1px dashed #00e5ff;
+    padding: 2px 4px;
+    transition: all 0.2s ease;
+    user-select: all;
+}
+
+.copy-email:hover {
+    background-color: rgba(0, 229, 255, 0.1);
+    border-bottom: 1px solid #00e5ff;
+}
+
+.copy-email:active {
+    background-color: rgba(0, 229, 255, 0.2);
+}
+
+.copy-message {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-left: 5px;
+}
+
+.copy-confirmation {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    background-color: rgba(0, 50, 80, 0.9);
+    color: #00e5ff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s, visibility 0.3s;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.copy-confirmation.show {
+    visibility: visible;
+    opacity: 1;
+}

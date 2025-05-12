@@ -8,6 +8,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // 랭킹 데이터를 저장할 변수
   let rankingData = [];
 
+  // 웰컴 모달 초기화 - 상단에 추가
+  const welcomeModal = document.getElementById('welcomeModal');
+  if (welcomeModal) {
+    const modal = new bootstrap.Modal(welcomeModal, {
+      backdrop: 'static',
+      keyboard: false
+    });
+    
+    // 이벤트 팝업과 함께 사용하기 위한 설정
+    // 이벤트 팝업이 닫히면 웰컴 모달 표시
+    const eventPopupClosed = localStorage.getItem('popupDismissed');
+    if (eventPopupClosed) {
+      // 이벤트 팝업이 이미 닫혔다면 웰컴 모달 표시
+      setTimeout(() => {
+        modal.show();
+      }, 1000);
+    } else {
+      // 이벤트 팝업이 표시되어 있다면, 이벤트 팝업 닫힐 때 웰컴 모달 표시
+      const originalDismissPopup = window.dismissPopup;
+      window.dismissPopup = function() {
+        originalDismissPopup();
+        setTimeout(() => {
+          modal.show();
+        }, 500);
+      };
+    }
+  }
+
   // 현재 날짜 정보 (기본 데이터 로딩용)
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();

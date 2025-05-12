@@ -453,4 +453,61 @@ document.addEventListener("DOMContentLoaded", () => {
 		oscillator.start();
 		oscillator.stop(audioContext.currentTime + 0.2);
 	}
+	
+    // 이메일 클립보드 복사 기능
+    const emailElement = document.getElementById('developerEmail');
+    const copyConfirmation = document.getElementById('copyConfirmation');
+    
+    if (emailElement) {
+        emailElement.addEventListener('click', function() {
+            // 이메일 주소 텍스트 가져오기
+            const emailText = this.textContent;
+            
+            // 클립보드에 복사하기
+            navigator.clipboard.writeText(emailText)
+                .then(() => {
+                    // 성공 시 확인 메시지 표시
+                    copyConfirmation.classList.add('show');
+                    
+                    // 3초 후 메시지 숨기기
+                    setTimeout(() => {
+                        copyConfirmation.classList.remove('show');
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error('클립보드 복사 실패:', err);
+                    // 대체 복사 방법 시도 (구형 브라우저 대응)
+                    fallbackCopyTextToClipboard(emailText);
+                });
+        });
+    }
+    
+    // 구형 브라우저를 위한 대체 복사 메서드
+    function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // 화면 바깥에 위치시키기
+        textArea.style.position = "fixed";
+        textArea.style.top = "-999px";
+        textArea.style.left = "-999px";
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                copyConfirmation.classList.add('show');
+                setTimeout(() => {
+                    copyConfirmation.classList.remove('show');
+                }, 3000);
+            }
+        } catch (err) {
+            console.error('대체 클립보드 복사 실패:', err);
+        }
+        
+        document.body.removeChild(textArea);
+    }
 });
