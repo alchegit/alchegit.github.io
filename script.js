@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // welcomeModal.show(); // 비공개 테스트 모집 팝업 임시휴업
 
 	// 카드 2 클릭 이벤트 처리
-	document.getElementById('card-link2').addEventListener('click', function(e) {
+	document.getElementById('privateTestCard').addEventListener('click', function(e) {
 		e.preventDefault(); // 기본 링크 동작 방지
 		welcomeModal.show(); // 모달 표시
 	});
