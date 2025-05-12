@@ -734,6 +734,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500); // 로딩 효과를 위한 지연
   }
 
+	// 이벤트 팝업 스크립트
+	// localStorage에서 팝업 닫힘 상태 확인
+	const popupDismissed = localStorage.getItem('popupDismissed');
+	
+	// 팝업이 이전에 닫히지 않았다면 표시
+	if (!popupDismissed) {
+	  setTimeout(() => {
+		showEventPopup();
+	  }, 2000); // 2초 후 팝업 표시
+	}
+	
+	// 닫기 버튼에 이벤트 리스너 추가
+	const closeButton = document.querySelector('.popup-close');
+	if (closeButton) {
+	  closeButton.addEventListener('click', dismissPopup);
+	}
+	
+	// 오버레이 클릭 시 팝업 닫기
+	const popupOverlay = document.getElementById('event-popup');
+	if (popupOverlay) {
+	  popupOverlay.addEventListener('click', function(e) {
+		if (e.target === this) {
+		  dismissPopup();
+		}
+	  });
+	}
+	
+	// 팝업 표시 함수
+	function showEventPopup() {
+	  const popup = document.getElementById('event-popup');
+	  if (popup) {
+		popup.classList.add('active');
+	  }
+	}
+	
+	// 팝업 닫기 및 상태 저장 함수
+	function dismissPopup() {
+	  const popup = document.getElementById('event-popup');
+	  if (popup) {
+		popup.classList.remove('active');
+		
+		// localStorage에 닫힘 상태 저장
+		localStorage.setItem('popupDismissed', 'true');
+	  }
+	}
+
   // 데이터 로드 시작
   loadAvailableMonths();
 });

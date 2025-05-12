@@ -1,109 +1,181 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-    <title data-lang-ko="컬러 마스터 랭킹" data-lang-en="Color Master Rankings"></title>
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title
+      data-lang-ko="컬러 마스터 랭킹"
+      data-lang-en="Color Master Rankings"
+    ></title>
+
     <!-- Open Graph 메타 태그 (SNS 미리보기용) -->
-    <meta property="og:title" content="컬러 마스터 랭킹 페이지">
-    <meta property="og:description" content="5월 랭킹 1위에게 5만원 구글 기프트 카드를 드립니다! 당신이 진정한 컬러 마스터입니다. 지금 도전하세요.">
-    <meta property="og:image" content="https://alchegit.github.io/colormaster/og-thumbnail_250512.png?v=1">
-    <meta property="og:url" content="https://alchegit.github.io/colormaster/">
-    <meta property="og:type" content="website">
+    <meta property="og:title" content="컬러 마스터 랭킹 페이지" />
+    <meta
+      property="og:description"
+      content="5월 랭킹 1위에게 5만원 구글 기프트 카드를 드립니다! 당신이 진정한 컬러 마스터입니다. 지금 도전하세요."
+    />
+    <meta
+      property="og:image"
+      content="https://alchegit.github.io/colormaster/og-thumbnail_250512.png?v=1"
+    />
+    <meta property="og:url" content="https://alchegit.github.io/colormaster/" />
+    <meta property="og:type" content="website" />
 
     <!-- 트위터 카드 메타 태그 -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="컬러 마스터 랭킹 페이지">
-    <meta name="twitter:description" content="5월 랭킹 1위에게 5만원 구글 기프트 카드를 드립니다! 당신이 진정한 컬러 마스터입니다. 지금 도전하세요.">
-    <meta name="twitter:image" content="https://alchegit.github.io/colormaster/og-thumbnail_250512.png?v=1">
-    
-    <!-- 스타일 및 스크립트 -->
-    <link rel="stylesheet" type="text/css" href="../style.css?v=20250419">
-    <link rel="stylesheet" type="text/css" href="style.css?v=20250510"> <!-- 추가된 CSS 파일 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-    <div class="container-fluid cyber-background">
-        <div class="noise-overlay"></div>
-        <div class="grid-overlay"></div>
-        
-        <!-- 고정 헤더 -->
-        <div class="terminal-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="terminal-title">
-                    <span data-lang-ko="컬러 마스터 랭킹" data-lang-en="Color Master Ranking"></span>
-                </div>
-                <div class="terminal-status">
-                    <span class="status-dot"></span>
-                    <span class="status-text" data-lang-ko="연결됨" data-lang-en="CONNECTED"></span>
-                </div>
-            </div>
-            <div class="terminal-line"></div>
-            <div class="month-slider" id="month-slider">
-                <!-- 월별 태그는 JavaScript로 동적 생성됩니다 -->
-            </div>
-        </div>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="컬러 마스터 랭킹 페이지" />
+    <meta
+      name="twitter:description"
+      content="5월 랭킹 1위에게 5만원 구글 기프트 카드를 드립니다! 당신이 진정한 컬러 마스터입니다. 지금 도전하세요."
+    />
+    <meta
+      name="twitter:image"
+      content="https://alchegit.github.io/colormaster/og-thumbnail_250512.png?v=1"
+    />
 
-        <!-- 스크롤 영역과 헤더 전환 효과를 위한 마스크 -->
-        <div class="scroll-content-mask"></div>
-        
-        <div class="scroll-container">
-            <div class="content-inner">
-                <div class="card-container">
-                    <div id="content-area" class="p-3">
-                        <div class="ranking-container">
-                            <div class="grid-accent"></div>
-                            <div id="rankings-list">
-                                <!-- 랭킹 데이터는 JavaScript로 동적 로드됩니다 -->
-                                <div class="loading" data-lang-ko="랭킹 데이터 로딩 중" data-lang-en="Loading ranking data"></div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- 스타일 및 스크립트 -->
+    <link rel="stylesheet" type="text/css" href="../style.css?v=20250419" />
+    <link rel="stylesheet" type="text/css" href="style.css?v=20250510" />
+    <link rel="stylesheet" type="text/css" href="event_popup_style.css?v=20250512">
+    <!-- 추가된 CSS 파일 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid cyber-background">
+      <div class="noise-overlay"></div>
+      <div class="grid-overlay"></div>
+
+      <!-- 고정 헤더 -->
+      <div class="terminal-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="terminal-title">
+            <span
+              data-lang-ko="컬러 마스터 랭킹"
+              data-lang-en="Color Master Ranking"
+            ></span>
+          </div>
+          <div class="terminal-status">
+            <span class="status-dot"></span>
+            <span
+              class="status-text"
+              data-lang-ko="연결됨"
+              data-lang-en="CONNECTED"
+            ></span>
+          </div>
+        </div>
+        <div class="terminal-line"></div>
+        <div class="month-slider" id="month-slider">
+          <!-- 월별 태그는 JavaScript로 동적 생성됩니다 -->
+        </div>
+      </div>
+
+      <!-- 스크롤 영역과 헤더 전환 효과를 위한 마스크 -->
+      <div class="scroll-content-mask"></div>
+
+      <div class="scroll-container">
+        <div class="content-inner">
+          <div class="card-container">
+            <div id="content-area" class="p-3">
+              <div class="ranking-container">
+                <div class="grid-accent"></div>
+                <div id="rankings-list">
+                  <!-- 랭킹 데이터는 JavaScript로 동적 로드됩니다 -->
+                  <div
+                    class="loading"
+                    data-lang-ko="랭킹 데이터 로딩 중"
+                    data-lang-en="Loading ranking data"
+                  ></div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        
-        <!-- 최종 업데이트 정보 -->
-        <div class="last-update-info">
-            <span id="last-update">LAST UPDATE: 2025.05.10</span>
-        </div>
-        
-        <!-- 하단 네비게이션 바 -->
-        <div class="bottom-nav">
-            <a href="../" class="nav-btn">
-                <i class="bi bi-house-fill"></i>
-                <span data-lang-ko="홈" data-lang-en="Home"></span>
-            </a>
-            <a href="#" class="nav-btn active">
-                <i class="bi bi-trophy-fill"></i>
-                <span data-lang-ko="랭킹" data-lang-en="Ranking"></span>
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.neokim.colormaster" target="_blank" class="nav-btn">
-                <i class="bi bi-download"></i>
-                <span data-lang-ko="다운로드" data-lang-en="Download"></span>
-            </a>
-        </div>
+      </div>
+
+      <!-- 최종 업데이트 정보 -->
+      <div class="last-update-info">
+        <span id="last-update">LAST UPDATE: 2025.05.10</span>
+      </div>
+
+      <!-- 하단 네비게이션 바 -->
+      <div class="bottom-nav">
+        <a href="../" class="nav-btn">
+          <i class="bi bi-house-fill"></i>
+          <span data-lang-ko="홈" data-lang-en="Home"></span>
+        </a>
+        <a href="#" class="nav-btn active">
+          <i class="bi bi-trophy-fill"></i>
+          <span data-lang-ko="랭킹" data-lang-en="Ranking"></span>
+        </a>
+        <a
+          href="https://play.google.com/store/apps/details?id=com.neokim.colormaster"
+          target="_blank"
+          class="nav-btn"
+        >
+          <i class="bi bi-download"></i>
+          <span data-lang-ko="다운로드" data-lang-en="Download"></span>
+        </a>
+      </div>
     </div>
-    
+
     <!-- 아이콘 라이브러리 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+
     <!-- 랭킹 데이터 처리 스크립트 -->
     <script src="ranking.js"></script>
     <script>
-        // 현재 선택된 월을 상단 고정 바에 표시
-        document.addEventListener('DOMContentLoaded', function() {
-            // 월 태그 클릭 시 상단 고정 바 업데이트
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('month-tag')) {
-                    const monthValue = e.target.textContent;
-                    // current-month 요소가 현재 존재하지 않으므로 주석 처리
-                    // document.getElementById('current-month').textContent = monthValue;
-                }
-            });
+      // 현재 선택된 월을 상단 고정 바에 표시
+      document.addEventListener("DOMContentLoaded", function () {
+        // 월 태그 클릭 시 상단 고정 바 업데이트
+        document.addEventListener("click", function (e) {
+          if (e.target.classList.contains("month-tag")) {
+            const monthValue = e.target.textContent;
+            // current-month 요소가 현재 존재하지 않으므로 주석 처리
+            // document.getElementById('current-month').textContent = monthValue;
+          }
         });
+      });
     </script>
-</body>
+
+    <!-- 이벤트 팝업 HTML -->
+    <div id="event-popup" class="popup-overlay">
+      <div class="popup-card">
+        <button class="popup-close">&times;</button>
+        <div class="popup-content">
+          <h3>🎁 컬러 마스터 5월 랭킹 1위 이벤트!</h3>
+          <img
+            src="./colormaster/og-thumbnail_250512.png"
+            alt="랭킹 이벤트 배너"
+            class="popup-image"
+          />
+          <p>
+            5월 한 달 동안 랭킹 1위를 차지한 유저에게<br />
+            🎉 구글 기프트 카드 5만원 증정! 🎉<br />
+            1위는 실시간으로 확인가능합니다.<br />
+            랭킹 1위를 차지한 유저는<br />
+            유저 ID와 스크린샷을<br />
+            <a href="mailto:wlgnsl14@gmail.com" class="email-link"
+              >개발자 이메일</a
+            >로 보내주세요.
+          </p>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.neokim.colormaster"
+            class="download-btn"
+            target="_blank"
+            >다운로드</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
