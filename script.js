@@ -26,7 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
         backdrop: 'static',
         keyboard: false
     });
-    welcomeModal.show();
+    // welcomeModal.show(); // 비공개 테스트 모집 팝업 임시휴업
+
+	// 카드 2 클릭 이벤트 처리
+	document.getElementById('card-link2').addEventListener('click', function(e) {
+		e.preventDefault(); // 기본 링크 동작 방지
+		welcomeModal.show(); // 모달 표시
+	});
 
     // 브라우저 언어 감지 및 설정
     function detectLanguage() {
