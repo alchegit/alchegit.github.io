@@ -8,34 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 랭킹 데이터를 저장할 변수
   let rankingData = [];
 
-  // 웰컴 모달 초기화 - 상단에 추가
-  const welcomeModal = document.getElementById('welcomeModal');
-  if (welcomeModal) {
-    const modal = new bootstrap.Modal(welcomeModal, {
-      backdrop: 'static',
-      keyboard: false
-    });
-    
-    // 이벤트 팝업과 함께 사용하기 위한 설정
-    // 이벤트 팝업이 닫히면 웰컴 모달 표시
-    const eventPopupClosed = localStorage.getItem('popupDismissed');
-    if (eventPopupClosed) {
-      // 이벤트 팝업이 이미 닫혔다면 웰컴 모달 표시
-      setTimeout(() => {
-        modal.show();
-      }, 1000);
-    } else {
-      // 이벤트 팝업이 표시되어 있다면, 이벤트 팝업 닫힐 때 웰컴 모달 표시
-      const originalDismissPopup = window.dismissPopup;
-      window.dismissPopup = function() {
-        originalDismissPopup();
-        setTimeout(() => {
-          modal.show();
-        }, 500);
-      };
-    }
-  }
-
   // 현재 날짜 정보 (기본 데이터 로딩용)
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -45,6 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const defaultFileName = `${currentYear
     .toString()
     .substring(2)}${currentMonth}`;
+
+  // 이벤트 팝업 초기화 및 표시
+  initializeEventPopup();
 
   // 텍스트 파일에서 데이터 가져오기
   function fetchRankingData(fileName = defaultFileName) {
@@ -78,6 +53,123 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
     xhr.send();
+  }
+
+  // 이벤트 팝업 초기화 함수
+  function initializeEventPopup() {
+    console.log("팝업 초기화 시작");
+
+    // 팝업이 이전에 닫히지 않았다면 표시
+    if (shouldShowPopup()) {
+      setTimeout(() => {
+        const popup = document.getElementById("event-popup");
+        if (popup) {
+          // Bootstrap 모달 표시
+          const modal = new bootstrap.Modal(popup);
+          modal.show();
+          console.log("팝업 표시됨");
+        } else {
+          console.log("팝업 요소를 찾을 수 없음");
+        }
+      }, 1000); // 1초 후 팝업 표시
+    } else {
+      console.log("팝업 표시 조건이 충족되지 않음");
+    }
+
+    // 닫기 버튼에 이벤트 리스너 추가
+    const closeButton = document.querySelector(".cyber-close");
+    if (closeButton) {
+      closeButton.addEventListener("click", function () {
+        const popup = document.getElementById("event-popup");
+        if (popup) {
+          const modal = bootstrap.Modal.getInstance(popup);
+          if (modal) modal.hide();
+
+          // 체크박스 상태 확인
+          const dontShowAgainToday =
+            document.getElementById("dontShowAgainToday");
+          if (dontShowAgainToday && dontShowAgainToday.checked) {
+            // 오늘 날짜를 저장
+            const today = new Date().toDateString();
+            localStorage.setItem("popupDismissedToday", today);
+          }
+        }
+      });
+    }
+
+    // 이메일 복사 기능
+    const popupEmailElement = document.getElementById("popupDevEmail");
+    const popupCopyConfirmation = document.getElementById(
+      "popupCopyConfirmation"
+    );
+
+    if (popupEmailElement) {
+      popupEmailElement.addEventListener("click", function () {
+        const emailText = "wlgnsl14@gmail.com";
+
+        // 클립보드에 복사
+        navigator.clipboard
+          .writeText(emailText)
+          .then(() => {
+            // 성공 시 확인 메시지 표시
+            popupCopyConfirmation.classList.add("show");
+
+            // 3초 후 메시지 숨기기
+            setTimeout(() => {
+              popupCopyConfirmation.classList.remove("show");
+            }, 3000);
+          })
+          .catch((err) => {
+            console.error("클립보드 복사 실패:", err);
+            // 대체 복사 방법 시도
+            fallbackCopyTextToClipboard(emailText);
+          });
+      });
+    }
+    
+    // 모달이 닫힐 때 체크박스 상태 확인 (Bootstrap 모달 이벤트 활용)
+    const popup = document.getElementById("event-popup");
+    if (popup) {
+      popup.addEventListener("hidden.bs.modal", function() {
+        const dontShowAgainToday = document.getElementById("dontShowAgainToday");
+        if (dontShowAgainToday && dontShowAgainToday.checked) {
+          // 오늘 날짜를 저장
+          const today = new Date().toDateString();
+          localStorage.setItem("popupDismissedToday", today);
+          console.log("오늘 하루 다시 열지 않기 설정됨");
+        }
+      });
+    }
+  }
+
+  // 모달이 닫힐 때 체크박스 상태 확인 (Bootstrap 모달 이벤트 활용)
+  const popup = document.getElementById("event-popup");
+  if (popup) {
+    popup.addEventListener("hidden.bs.modal", function () {
+      const dontShowAgainToday = document.getElementById("dontShowAgainToday");
+      if (dontShowAgainToday && dontShowAgainToday.checked) {
+        // 오늘 날짜를 저장
+        const today = new Date().toDateString();
+        localStorage.setItem("popupDismissedToday", today);
+        console.log("오늘 하루 다시 열지 않기 설정됨");
+      }
+    });
+  }
+
+  // 팝업을 표시할지 여부 결정 함수
+  function shouldShowPopup() {
+    // 영구적으로 닫음
+    const popupDismissed = localStorage.getItem("popupDismissed");
+    if (popupDismissed === "true") return false;
+
+    // 오늘 하루만 닫음
+    const todayDismissed = localStorage.getItem("popupDismissedToday");
+    if (todayDismissed) {
+      const today = new Date().toDateString();
+      if (todayDismissed === today) return false;
+    }
+
+    return true;
   }
 
   // 하드코딩된 데이터 사용 (모든 로드 방법이 실패할 경우)
@@ -762,52 +854,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500); // 로딩 효과를 위한 지연
   }
 
-	// 이벤트 팝업 스크립트
-	// localStorage에서 팝업 닫힘 상태 확인
-	const popupDismissed = localStorage.getItem('popupDismissed');
-	
-	// 팝업이 이전에 닫히지 않았다면 표시
-	if (!popupDismissed) {
-	  setTimeout(() => {
-		showEventPopup();
-	  }, 2000); // 2초 후 팝업 표시
-	}
-	
-	// 닫기 버튼에 이벤트 리스너 추가
-	const closeButton = document.querySelector('.popup-close');
-	if (closeButton) {
-	  closeButton.addEventListener('click', dismissPopup);
-	}
-	
-	// 오버레이 클릭 시 팝업 닫기
-	const popupOverlay = document.getElementById('event-popup');
-	if (popupOverlay) {
-	  popupOverlay.addEventListener('click', function(e) {
-		if (e.target === this) {
-		  dismissPopup();
-		}
-	  });
-	}
-	
-	// 팝업 표시 함수
-	function showEventPopup() {
-	  const popup = document.getElementById('event-popup');
-	  if (popup) {
-		popup.classList.add('active');
-	  }
-	}
-	
-	// 팝업 닫기 및 상태 저장 함수
-	function dismissPopup() {
-	  const popup = document.getElementById('event-popup');
-	  if (popup) {
-		popup.classList.remove('active');
-		
-		// localStorage에 닫힘 상태 저장
-		localStorage.setItem('popupDismissed', 'true');
-	  }
-	}
-
   // 데이터 로드 시작
   loadAvailableMonths();
 });
+
+// 팝업을 표시할지 여부 결정 함수
+function shouldShowPopup() {
+  // 영구적으로 닫음
+  const popupDismissed = localStorage.getItem("popupDismissed");
+  if (popupDismissed === "true") return false;
+
+  // 오늘 하루만 닫음
+  const todayDismissed = localStorage.getItem("popupDismissedToday");
+  if (todayDismissed) {
+    const today = new Date().toDateString();
+    if (todayDismissed === today) return false;
+  }
+
+  return true;
+}

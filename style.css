@@ -726,16 +726,19 @@ body {
 	background-color: var(--card-bg);
 	border: 1px solid var(--primary-glow);
 	box-shadow: 0 0 20px var(--primary-glow);
-	padding: 30px;
 }
 
 .cyber-modal-content {
 	position: relative;
 	animation: modalAppear 0.3s ease-out;
+	padding: 0; /* 전체 패딩 제거하여 더 콤팩트하게 */
+	max-width: 450px; /* 모달 최대 너비 제한 */
+	margin: 0 auto; /* 가운데 정렬 */
+	overflow: hidden; /* 내용이 모달 밖으로 나가지 않도록 */
 }
 
 .modal-dialog {
-	margin-top: 5vh;
+	margin-top: 10vh; /* 모달 상단 위치 조정 */
 }
 
 @keyframes modalAppear {
@@ -749,10 +752,36 @@ body {
 	}
 }
 
+/* 새로운 애니메이션 추가 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
 .cyber-modal-header {
 	position: relative;
-	margin-bottom: 20px;
+	margin-bottom: 0; /* 하단 여백 제거 */
 	border-bottom: none;
+	padding: 10px 15px; /* 헤더 패딩 축소 */
+    background-color: rgba(0, 0, 0, 0.3); /* 약간 어두운 배경 */
+    border-bottom: 1px solid rgba(0, 255, 170, 0.3); /* 약한 구분선 */
 }
 
 .modal-glitch {
@@ -781,105 +810,209 @@ body {
 }
 
 .cyber-modal-body {
-	margin: 20px 0;
+	margin: 0; /* 여백 제거 */
+	padding: 15px 20px; /* 본문 패딩 최적화 */
+    color: #ddd; /* 텍스트 색상 밝게 조정 */
+    font-size: 0.95rem; /* 기본 폰트 크기 조정 */
+    line-height: 1.4; /* 줄 간격 최적화 */
 }
 
 .cyber-text {
-	font-size: 1.5rem;
+	font-size: 1.25rem; /* 폰트 크기 최적화 */
 	color: var(--primary-glow);
-	margin-bottom: 15px;
+	margin-bottom: 10px; /* 하단 여백 최적화 */
 	text-shadow: 0 0 5px var(--primary-glow);
+    font-weight: bold; /* 굵게 표시 */
+    letter-spacing: 0.5px; /* 자간 추가 */
 }
 
 .cyber-subtext {
-	font-size: 1.1rem;
+	font-size: 1rem; /* 폰트 크기 최적화 */
 	color: #fff;
-	margin-bottom: 15px;
-	line-height: 1.5;
+	margin-bottom: 8px; /* 하단 여백 최적화 */
+	line-height: 1.3; /* 줄 간격 최적화 */
+	margin-top: 12px; /* 상단 여백 최적화 */
+    border-left: 2px solid var(--primary-glow); /* 왼쪽 경계선 추가 */
+    padding-left: 8px; /* 왼쪽 패딩 추가 */
 }
 
 .cyber-highlight {
-	font-size: 1.2rem;
+	font-size: 1rem; /* 폰트 크기 최적화 */
 	color: var(--warning-glow);
 	text-shadow: 0 0 5px var(--warning-glow);
-	margin-top: 20px;
+	margin-top: 15px; /* 상단 여백 최적화 */
+    background-color: rgba(255, 255, 0, 0.05); /* 배경색 추가 */
+    padding: 8px 12px; /* 패딩 추가 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    border: 1px solid rgba(255, 255, 0, 0.2); /* 테두리 추가 */
 }
 
 .cyber-button {
 	background-color: transparent;
 	border: 1px solid var(--primary-glow);
 	color: var(--primary-glow);
-	padding: 10px 20px;
+	padding: 8px 15px; /* 패딩 최적화 */
 	border-radius: 5px;
 	cursor: pointer;
 	font-family: "Share Tech Mono", monospace;
 	transition: all 0.3s ease;
-	margin-top: 20px;
-	width: 100%;
+	margin-top: 5px; /* 상단 여백 최적화 */
+	margin-bottom: 5px; /* 하단 여백 추가 */
+	font-weight: bold; /* 굵게 표시 */
+    letter-spacing: 1px; /* 자간 추가 */
 }
 
 .cyber-button:hover {
 	background-color: var(--primary-glow);
 	color: #000;
 	box-shadow: 0 0 15px var(--primary-glow);
+    transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
+}
+
+.cyber-button:active {
+    transform: translateY(1px); /* 클릭 시 약간 아래로 이동 */
+    box-shadow: 0 0 8px var(--primary-glow); /* 그림자 약화 */
 }
 
 /* 참여 방법 스타일 */
 .participation-steps {
-    text-align: left;
-    color: #cceeff;
-    margin: 1rem 0;
-    padding-left: 1.5rem;
+	text-align: left;
+	color: #cceeff;
+	margin: 0.8rem 0 1rem; /* 여백 최적화 */
+	padding-left: 1.5rem; /* 패딩 최적화 */
+    counter-reset: step-counter; /* 카운터 초기화 */
+    list-style-type: none; /* 기본 리스트 스타일 제거 */
 }
 
 .participation-steps li {
-    margin-bottom: 0.5rem;
-    line-height: 1.4;
+	margin-bottom: 0.5rem; /* 항목 간 여백 최적화 */
+	line-height: 1.3; /* 줄 간격 최적화 */
+    position: relative; /* 위치 설정 */
+    padding-left: 8px; /* 왼쪽 패딩 추가 */
+}
+
+.participation-steps li::before {
+    content: counter(step-counter) "."; /* 숫자와 점 표시 */
+    counter-increment: step-counter; /* 카운터 증가 */
+    color: var(--primary-glow); /* 색상 설정 */
+    position: absolute; /* 절대 위치 */
+    left: -15px; /* 왼쪽으로 이동 */
+    font-weight: bold; /* 굵게 표시 */
 }
 
 /* 이메일 복사 기능 스타일 */
 .copy-email {
-    color: #00e5ff;
-    font-weight: bold;
-    cursor: pointer;
-    border-bottom: 1px dashed #00e5ff;
-    padding: 2px 4px;
-    transition: all 0.2s ease;
-    user-select: all;
+	color: #00e5ff;
+	font-weight: bold;
+	cursor: pointer;
+	border-bottom: 1px dashed #00e5ff;
+	padding: 1px 3px; /* 패딩 최적화 */
+	transition: all 0.2s ease;
+	user-select: all; /* 전체 선택 가능 */
+    display: inline-block; /* 인라인 블록으로 표시 */
+    position: relative; /* 위치 설정 */
 }
 
 .copy-email:hover {
-    background-color: rgba(0, 229, 255, 0.1);
-    border-bottom: 1px solid #00e5ff;
+	background-color: rgba(0, 229, 255, 0.15);
+	border-bottom: 1px solid #00e5ff;
+    transform: translateY(-1px); /* 호버 시 약간 위로 이동 */
 }
 
 .copy-email:active {
-    background-color: rgba(0, 229, 255, 0.2);
+	background-color: rgba(0, 229, 255, 0.3);
+    transform: translateY(0); /* 클릭 시 원래 위치로 */
 }
 
 .copy-message {
-    font-size: 0.8em;
-    color: #aaa;
-    margin-left: 5px;
+	font-size: 0.75em; /* 폰트 크기 최적화 */
+	color: #aaa;
+	margin-left: 4px; /* 여백 최적화 */
+    transition: opacity 0.3s, color 0.3s; /* 전환 효과 추가 */
+    opacity: 0.7; /* 기본 투명도 설정 */
 }
 
+/* 복사 확인 메시지 스타일 개선 */
 .copy-confirmation {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    background-color: rgba(0, 50, 80, 0.9);
-    color: #00e5ff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: opacity 0.3s, visibility 0.3s;
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+	visibility: hidden;
+	opacity: 0;
+	position: absolute;
+	background-color: rgba(0, 50, 80, 0.9);
+	color: #00e5ff;
+	padding: 6px 12px; /* 패딩 최적화 */
+	border-radius: 4px;
+	font-size: 0.8em; /* 폰트 크기 최적화 */
+	bottom: -30px; /* 위치 조정 */
+	left: 50%;
+	transform: translateX(-50%);
+	transition: opacity 0.3s, visibility 0.3s;
+	box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    border: 1px solid rgba(0, 229, 255, 0.5); /* 테두리 추가 */
+    z-index: 10; /* 겹침 순서 설정 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 
 .copy-confirmation.show {
-    visibility: visible;
-    opacity: 1;
+	visibility: visible;
+	opacity: 1;
+    animation: fadeInUp 0.3s forwards; /* 애니메이션 적용 */
+}
+
+/* 모달 푸터 스타일 개선 */
+.modal-footer {
+	padding: 8px 20px 15px; /* 패딩 최적화 */
+	border-top: none; /* 상단 테두리 제거 */
+    background-color: rgba(0, 0, 0, 0.2); /* 약간 어두운 배경 */
+}
+
+/* 모바일 최적화 */
+@media (max-width: 576px) {
+	.cyber-modal-content {
+	    max-width: 90%; /* 모바일에서 너비 조정 */
+	    margin: 0 15px; /* 좌우 여백 추가 */
+	}
+	
+	.modal-dialog {
+	    margin-top: 15vh; /* 모바일에서 상단 여백 증가 */
+	}
+	
+	.cyber-modal-body {
+		padding: 12px 15px; /* 모바일에서 패딩 조정 */
+	}
+	
+	.cyber-text {
+		font-size: 1.1rem; /* 모바일에서 폰트 크기 조정 */
+		margin-bottom: 8px;
+	}
+	
+	.cyber-subtext {
+		font-size: 0.9rem; /* 모바일에서 폰트 크기 조정 */
+		line-height: 1.3;
+		margin-top: 10px;
+	}
+	
+	.modal-footer {
+		padding: 5px 15px 12px; /* 모바일에서 패딩 조정 */
+	}
+	
+	.participation-steps {
+		padding-left: 1.2rem; /* 모바일에서 패딩 조정 */
+		margin: 0.6rem 0 0.8rem;
+	}
+	
+	.participation-steps li {
+		margin-bottom: 0.4rem;
+		font-size: 0.85rem;
+	}
+	
+	.cyber-highlight {
+		font-size: 0.9rem; /* 모바일에서 폰트 크기 조정 */
+		margin-top: 12px;
+		padding: 6px 10px; /* 모바일에서 패딩 조정 */
+	}
+	
+	.cyber-button {
+	    width: 100%; /* 모바일에서 버튼 너비 전체로 */
+	    padding: 10px; /* 모바일에서 버튼 패딩 증가 */
+	}
 }

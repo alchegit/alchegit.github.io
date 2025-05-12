@@ -7,507 +7,182 @@
  * 모든 저작권은 원 저작자에게 있습니다.
  */
 
-document.addEventListener("DOMContentLoaded", () => {
-    // 모바일 환경 감지 및 클래스 추가
-    function checkMobile() {
-        if (window.innerWidth <= 768) {
-            document.documentElement.classList.add('mobile-view');
+// 문서가 준비되면 실행할 함수
+document.addEventListener("DOMContentLoaded", function() {
+    // 변수 및 요소 초기화
+    let instabilityCounter = 0;
+    const instabilityCounterElement = document.getElementById("instability-counter");
+    const cards = document.querySelectorAll(".cyber-card");
+    const developerEmail = document.getElementById("developerEmail");
+    const copyMessage = document.getElementById("copyMessage");
+    const copyConfirmation = document.getElementById("copyConfirmation");
+    const privateTestCard = document.getElementById("privateTestCard");
+    
+    // 언어 전환 초기화
+    initLanguageToggle();
+    
+    // 사이버펑크 효과 - 불안정성 카운터 애니메이션
+    const instabilityInterval = setInterval(function() {
+        if (Math.random() > 0.7) {
+            instabilityCounter = Math.min(100, instabilityCounter + Math.floor(Math.random() * 5));
         } else {
-            document.documentElement.classList.remove('mobile-view');
+            instabilityCounter = Math.max(0, instabilityCounter - Math.floor(Math.random() * 3));
         }
-    }
-
-    // 초기 체크 및 리사이즈 이벤트에 바인딩
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    // Show modal on page load using Bootstrap
-    const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'), {
-        backdrop: 'static',
-        keyboard: false
+        
+        instabilityCounterElement.textContent = instabilityCounter + "%";
+        
+        // 불안정성이 높을 때 글리치 효과 증가
+        if (instabilityCounter > 70) {
+            document.querySelectorAll(".card-glitch").forEach(glitch => {
+                glitch.style.opacity = "0.7";
+            });
+        } else {
+            document.querySelectorAll(".card-glitch").forEach(glitch => {
+                glitch.style.opacity = "0.3";
+            });
+        }
+    }, 1500);
+    
+    // 카드 호버 효과
+    cards.forEach(card => {
+        card.addEventListener("mouseover", function() {
+            this.querySelectorAll(".card-glow").forEach(glow => {
+                glow.style.opacity = "1";
+            });
+        });
+        
+        card.addEventListener("mouseout", function() {
+            this.querySelectorAll(".card-glow").forEach(glow => {
+                glow.style.opacity = "0.5";
+            });
+        });
     });
-    // welcomeModal.show(); // 비공개 테스트 모집 팝업 임시휴업
-
-	// 카드 2 클릭 이벤트 처리
-	document.getElementById('privateTestCard').addEventListener('click', function(e) {
-		e.preventDefault(); // 기본 링크 동작 방지
-		welcomeModal.show(); // 모달 표시
-	});
-
-    // 브라우저 언어 감지 및 설정
-    function detectLanguage() {
-        // 브라우저의 선호 언어 목록 가져오기
-        const languages = navigator.languages || [navigator.language || navigator.userLanguage];
-        console.log('Browser languages:', languages); // 디버깅용
-        
-        // 첫 번째로 선호하는 언어가 한국어인지 확인
-        const preferredLang = languages[0].toLowerCase();
-        return preferredLang.startsWith('ko') ? 'ko' : 'en';
-    }
-
-    // 언어 변경 함수
-    function updateLanguage() {
-        const lang = detectLanguage();
-        console.log('Selected language:', lang); // 디버깅용
-        
-        // HTML lang 속성 변경
-        document.documentElement.lang = lang;
-        
-        // 타이틀 업데이트
-        const title = document.querySelector('title');
-        if (title) {
-            const newTitle = title.getAttribute(`data-lang-${lang}`);
-            if (newTitle) title.textContent = newTitle;
-        }
-
-        // 모든 다국어 요소 업데이트
-        document.querySelectorAll(`[data-lang-${lang}]`).forEach(element => {
-            const text = element.getAttribute(`data-lang-${lang}`);
-            if (text) element.textContent = text;
-        });
-        
-        // 이미지 alt 텍스트 업데이트
-        document.querySelectorAll('img').forEach(img => {
-            const altText = img.getAttribute(`data-lang-${lang}-alt`);
-            if (altText) img.alt = altText;
-        });
-    }
-
-    // 초기 언어 설정
-    updateLanguage();
-
-	const cards = document.querySelectorAll(".cyber-card");
-	const cardGlows = document.querySelectorAll(".card-glow");
-	const instabilityCounter = document.getElementById("instability-counter");
-
-	let instability = 0;
-	let hoverTime = 0;
-	let hoverInterval;
-	let glitchInterval;
-	let secretCode = "";
-	let secretTimeout;
-
-	// Color palettes for different cards
-	const glowColors = [
-		[
-			"rgba(0, 255, 170, 0.7)",
-			"rgba(0, 170, 255, 0.7)",
-			"rgba(170, 255, 0, 0.7)"
-		], // Card 1
-		[
-			"rgba(0, 170, 255, 0.7)",
-			"rgba(170, 0, 255, 0.7)",
-			"rgba(255, 170, 0, 0.7)"
-		], // Card 2
-		["rgba(255, 0, 0, 0.7)", "rgba(255, 0, 170, 0.7)", "rgba(255, 170, 0, 0.7)"] // Card 3
-	];
-
-	// Initialize random glitch effects
-	startRandomGlitches();
-
-	// Increase instability over time
-	if (instabilityCounter) {
-		setInterval(() => {
-			if (instability < 100) {
-				instability += 0.1;
-				updateInstability();
-			}
-
-			// Random system glitches at high instability
-			if (instability > 70 && Math.random() > 0.97) {
-				triggerSystemGlitch();
-			}
-		}, 1000);
-	}
-
-	// Mouse move effect for all cards
-	document.addEventListener("mousemove", (e) => {
-		cards.forEach((card, index) => {
-			const rect = card.getBoundingClientRect();
-			const x = e.clientX - rect.left;
-			const y = e.clientY - rect.top;
-
-			// Only apply effect if mouse is within 300px of the card
-			const distance = Math.sqrt(
-				Math.pow(x - rect.width / 2, 2) + Math.pow(y - rect.height / 2, 2)
-			);
-
-			if (distance < 300) {
-				const intensity = 1 - distance / 300;
-				updateCardGlow(card, x, y, intensity);
-			}
-		});
-	});
-
-	// Scroll effect
-	window.addEventListener("scroll", () => {
-		const scrollPercentage =
-			window.scrollY / (document.body.scrollHeight - window.innerHeight);
-
-		cards.forEach((card, index) => {
-			const cardGlow = card.querySelector(".card-glow");
-			const baseColor = glowColors[index % glowColors.length][0];
-			const scrollColor = glowColors[index % glowColors.length][1];
-
-			// Mix colors based on scroll position
-			const mixedColor = mixColors(baseColor, scrollColor, scrollPercentage);
-
-			// Apply the mixed color with increased intensity on scroll
-			cardGlow.style.background = `radial-gradient(circle, ${mixedColor} 0%, transparent ${
-				70 - scrollPercentage * 20
-			}%)`;
-
-			// Add slight rotation based on scroll
-			card.style.transform = `rotateX(${scrollPercentage * 5}deg) rotateY(${
-				scrollPercentage * 5
-			}deg)`;
-		});
-	});
-
-	// Card hover effects
-	cards.forEach((card, index) => {
-		card.addEventListener("mouseenter", () => {
-			// Reset hover timer
-			hoverTime = 0;
-
-			// Start hover timer
-			hoverInterval = setInterval(() => {
-				hoverTime += 100;
-			}, 100);
-
-			// Increase instability slightly on hover
-			instability += 1;
-			updateInstability();
-
-			// Enhance glow on hover
-			const cardGlow = card.querySelector(".card-glow");
-			const currentColor = glowColors[index % glowColors.length][0];
-			cardGlow.style.filter = "blur(20px)";
-			cardGlow.style.opacity = "0.9";
-
-			// Add glitch text effect to card title
-			const cardTitle = card.querySelector(".card-title");
-			cardTitle.classList.add("glitch-text");
-			cardTitle.setAttribute("data-text", cardTitle.textContent);
-		});
-
-		card.addEventListener("mouseleave", () => {
-			clearInterval(hoverInterval);
-
-			
-
-			// Reset glow
-			const cardGlow = card.querySelector(".card-glow");
-			cardGlow.style.filter = "blur(15px)";
-			cardGlow.style.opacity = "0.7";
-
-			// Remove glitch text effect
-			const cardTitle = card.querySelector(".card-title");
-			cardTitle.classList.remove("glitch-text");
-		});
-	});
-
-	// Secret keyboard combo detection
-	document.addEventListener("keydown", (e) => {
-		secretCode += e.key;
-
-		// Check for "cyber" sequence
-		if (secretCode.includes("cyber")) {
-			triggerSecretMode();
-			secretCode = "";
-		}
-
-		// Reset after 2 seconds of no input
-		clearTimeout(secretTimeout);
-		secretTimeout = setTimeout(() => {
-			secretCode = "";
-		}, 2000);
-	});
-
-	// Functions
-
-	function updateCardGlow(card, x, y, intensity) {
-		const cardIndex = parseInt(card.getAttribute("data-card-id")) - 1;
-		const cardGlow = card.querySelector(".card-glow");
-		const rect = card.getBoundingClientRect();
-
-		// Calculate position relative to card center
-		const centerX = rect.width / 2;
-		const centerY = rect.height / 2;
-
-		// Calculate angle from center to mouse
-		const angle = Math.atan2(y - centerY, x - centerX);
-
-		// Calculate distance from center (normalized)
-		const distance = Math.min(
-			1,
-			Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)) /
-				(rect.width / 2)
-		);
-
-		// Get colors based on card index
-		const colorPalette = glowColors[cardIndex % glowColors.length];
-
-		// Mix colors based on angle
-		const angleNormalized = (angle + Math.PI) / (2 * Math.PI);
-		const colorIndex1 = Math.floor(angleNormalized * colorPalette.length);
-		const colorIndex2 = (colorIndex1 + 1) % colorPalette.length;
-		const colorMixFactor = angleNormalized * colorPalette.length - colorIndex1;
-
-		const color1 = colorPalette[colorIndex1];
-		const color2 = colorPalette[colorIndex2];
-		const mixedColor = mixColors(color1, color2, colorMixFactor);
-
-		// Apply radial gradient with position based on mouse
-		const posX = (x / rect.width) * 100;
-		const posY = (y / rect.height) * 100;
-
-		// Adjust gradient size based on distance and intensity
-		const gradientSize = 70 - distance * 20 - intensity * 20;
-
-		cardGlow.style.background = `radial-gradient(circle at ${posX}% ${posY}%, ${mixedColor} 0%, transparent ${gradientSize}%)`;
-
-		// Add subtle transform based on mouse position
-		const rotateY = ((x - centerX) / centerX) * 5 * intensity;
-		const rotateX = ((y - centerY) / centerY) * 5 * intensity;
-
-		card.style.transform = `rotateY(${rotateY}deg) rotateX(${-rotateX}deg)`;
-	}
-
-	function mixColors(color1, color2, factor) {
-		// Parse rgba colors
-		const parseColor = (color) => {
-			const match = color.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
-			if (match) {
-				return {
-					r: parseInt(match[1]),
-					g: parseInt(match[2]),
-					b: parseInt(match[3]),
-					a: parseFloat(match[4])
-				};
-			}
-			return { r: 0, g: 0, b: 0, a: 0 };
-		};
-
-		const c1 = parseColor(color1);
-		const c2 = parseColor(color2);
-
-		// Mix the colors
-		const r = Math.round(c1.r + factor * (c2.r - c1.r));
-		const g = Math.round(c1.g + factor * (c2.g - c1.g));
-		const b = Math.round(c1.b + factor * (c2.b - c1.b));
-		const a = c1.a + factor * (c2.a - c1.a);
-
-		return `rgba(${r}, ${g}, ${b}, ${a})`;
-	}
-
-	function updateInstability() {
-		if (instabilityCounter) {
-			instabilityCounter.textContent = `${Math.min(100, Math.floor(instability))}%`;
-
-			// Visual effects based on instability
-			const warningElement = document.querySelector(".terminal-warning");
-			if (warningElement) {
-				if (instability > 80) {
-					warningElement.style.color = "#f00";
-					warningElement.style.textShadow = "0 0 5px #f00";
-				} else if (instability > 50) {
-					warningElement.style.color = "#ff0";
-					warningElement.style.textShadow = "0 0 5px #ff0";
-				}
-			}
-		}
-	}
-
-	function triggerOverload(card) {
-        // Play glitch sound
-        playGlitchSound();
-
-        // Visual glitch effect
-        const cardGlow = card.querySelector(".card-glow");
-        cardGlow.style.filter = "blur(25px)";
-        cardGlow.style.opacity = "1";
-
-        setTimeout(() => {
-            cardGlow.style.filter = "blur(15px)";
-            cardGlow.style.opacity = "0.7";
-        }, 500);
-    }
-
-	function triggerSystemGlitch() {
-		// Visual glitch effect on the entire page
-		const body = document.body;
-		body.style.filter = "hue-rotate(90deg) brightness(1.2)";
-
-		// Random card overloads
-		cards.forEach((card) => {
-			if (Math.random() > 0.7) {
-				triggerOverload(card);
-			}
-		});
-
-		// Reset after short delay
-		setTimeout(() => {
-			body.style.filter = "";
-		}, 500);
-	}
-
-	function triggerSecretMode() {
-		// Visual indication
-		document.querySelector(".cyber-background").style.backgroundColor = "#100510";
-		document.querySelector(".grid-overlay").style.backgroundImage =
-			"linear-gradient(to right, rgba(255, 0, 255, 0.1) 1px, transparent 1px), " +
-			"linear-gradient(to bottom, rgba(255, 0, 255, 0.1) 1px, transparent 1px)";
-
-		// Change all card glows to a secret color
-		cards.forEach((card) => {
-			const cardGlow = card.querySelector(".card-glow");
-			cardGlow.style.background =
-				"radial-gradient(circle, rgba(255, 0, 255, 0.7) 0%, transparent 50%)";
-			cardGlow.style.filter = "blur(25px)";
-			cardGlow.style.opacity = "1";
-
-			// Add special class for additional effects
-			card.classList.add("secret-mode");
-		});
-
-		// Update terminal
-		document.querySelector(".terminal-title").textContent =
-			"SYSTEM://ADMIN_MODE_UNLOCKED";
-		document.querySelector(".status-text").textContent = "SECURITY BYPASSED";
-
-		// Reset after 10 seconds
-		setTimeout(() => {
-			document.querySelector(".cyber-background").style.backgroundColor = "";
-			document.querySelector(".grid-overlay").style.backgroundImage = "";
-
-			cards.forEach((card) => {
-				card.classList.remove("secret-mode");
-			});
-
-			document.querySelector(".terminal-title").textContent =
-				"SYSTEM://UNSTABLE_ARTIFACTS";
-			document.querySelector(".status-text").textContent = "ANOMALY DETECTED";
-		}, 10000);
-	}
-
-	function startRandomGlitches() {
-		// Random glitch effects on cards
-		glitchInterval = setInterval(() => {
-			cards.forEach((card, index) => {
-				// Random chance to trigger glitch effect
-				if (Math.random() > 0.9) {
-					const cardGlow = card.querySelector(".card-glow");
-					const glitchDuration = 200 + Math.random() * 300;
-
-					// Random color from palette
-					const colorIndex = Math.floor(
-						Math.random() * glowColors[index % glowColors.length].length
-					);
-					const glitchColor = glowColors[index % glowColors.length][colorIndex];
-
-					// Apply glitch effect
-					cardGlow.style.background = `radial-gradient(circle, ${glitchColor} 0%, transparent 60%)`;
-					cardGlow.style.filter = "blur(25px)";
-					cardGlow.style.opacity = "1";
-
-					// Reset after short duration
-					setTimeout(() => {
-						const baseColor = glowColors[index % glowColors.length][0];
-						cardGlow.style.background = `radial-gradient(circle, ${baseColor} 0%, transparent 70%)`;
-						cardGlow.style.filter = "blur(15px)";
-						cardGlow.style.opacity = "0.7";
-					}, glitchDuration);
-				}
-			});
-		}, 2000);
-	}
-
-	function playGlitchSound() {
-		// Create audio context
-		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-		// Create oscillator
-		const oscillator = audioContext.createOscillator();
-		const gainNode = audioContext.createGain();
-
-		// Connect nodes
-		oscillator.connect(gainNode);
-		gainNode.connect(audioContext.destination);
-
-		// Set parameters
-		oscillator.type = "sawtooth";
-		oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-		oscillator.frequency.exponentialRampToValueAtTime(
-			880,
-			audioContext.currentTime + 0.1
-		);
-
-		gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-		gainNode.gain.exponentialRampToValueAtTime(
-			0.01,
-			audioContext.currentTime + 0.2
-		);
-
-		// Play and stop
-		oscillator.start();
-		oscillator.stop(audioContext.currentTime + 0.2);
-	}
-	
-    // 이메일 클립보드 복사 기능
-    const emailElement = document.getElementById('developerEmail');
-    const copyConfirmation = document.getElementById('copyConfirmation');
     
-    if (emailElement) {
-        emailElement.addEventListener('click', function() {
-            // 이메일 주소 텍스트 가져오기
-            const emailText = this.textContent;
-            
-            // 클립보드에 복사하기
-            navigator.clipboard.writeText(emailText)
-                .then(() => {
-                    // 성공 시 확인 메시지 표시
-                    copyConfirmation.classList.add('show');
-                    
-                    // 3초 후 메시지 숨기기
-                    setTimeout(() => {
-                        copyConfirmation.classList.remove('show');
-                    }, 3000);
-                })
-                .catch(err => {
-                    console.error('클립보드 복사 실패:', err);
-                    // 대체 복사 방법 시도 (구형 브라우저 대응)
-                    fallbackCopyTextToClipboard(emailText);
-                });
+    // 모달 초기화 및 표시
+    initializeModal();
+    
+    // 이메일 복사 기능
+    if (developerEmail) {
+        developerEmail.addEventListener("click", function() {
+            copyEmailToClipboard();
+        });
+        
+        // 호버 시 복사 메시지 강조
+        developerEmail.addEventListener("mouseover", function() {
+            if (copyMessage) {
+                copyMessage.style.opacity = "1";
+                copyMessage.style.color = "#fff";
+            }
+        });
+        
+        developerEmail.addEventListener("mouseout", function() {
+            if (copyMessage) {
+                copyMessage.style.opacity = "0.7";
+                copyMessage.style.color = "#aaa";
+            }
         });
     }
     
-    // 구형 브라우저를 위한 대체 복사 메서드
-    function fallbackCopyTextToClipboard(text) {
+    // 개인 테스트 카드 클릭 시 모달 표시
+    if (privateTestCard) {
+        privateTestCard.addEventListener("click", function(e) {
+            e.preventDefault();
+            showModal();
+        });
+    }
+    
+    // 모달 초기화 함수
+    function initializeModal() {
+        // 모달 요소
+        const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        
+        // 페이지 로드 시 3초 후 모달 표시 (최초 방문자 환영 효과)
+        setTimeout(function() {
+            if (Math.random() > 0.5 && !sessionStorage.getItem('modalShown')) {
+                welcomeModal.show();
+                sessionStorage.setItem('modalShown', 'true');
+            }
+        }, 3000);
+    }
+    
+    // 모달 표시 함수
+    function showModal() {
+        const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+        welcomeModal.show();
+    }
+    
+    // 이메일 복사 함수
+    function copyEmailToClipboard() {
+        const emailText = developerEmail.textContent;
         const textArea = document.createElement("textarea");
-        textArea.value = text;
-        
-        // 화면 바깥에 위치시키기
+        textArea.value = emailText;
         textArea.style.position = "fixed";
-        textArea.style.top = "-999px";
-        textArea.style.left = "-999px";
-        
+        textArea.style.opacity = "0";
         document.body.appendChild(textArea);
-        textArea.focus();
         textArea.select();
         
         try {
+            // 복사 명령 실행
             const successful = document.execCommand('copy');
+            
+            // 복사 알림 표시 및 애니메이션
             if (successful) {
-                copyConfirmation.classList.add('show');
+                copyConfirmation.classList.add("show");
+                
+                // 3초 후 알림 숨기기
                 setTimeout(() => {
-                    copyConfirmation.classList.remove('show');
+                    copyConfirmation.classList.remove("show");
+                    
+                    // 애니메이션 완료 후 완전히 숨기기
+                    setTimeout(() => {
+                        copyConfirmation.style.visibility = "hidden";
+                    }, 300);
                 }, 3000);
             }
         } catch (err) {
-            console.error('대체 클립보드 복사 실패:', err);
+            console.error('이메일 복사 중 오류 발생:', err);
         }
         
         document.body.removeChild(textArea);
+    }
+    
+    // 언어 전환 초기화 함수
+    function initLanguageToggle() {
+        // 브라우저 언어 감지
+        const userLang = navigator.language || navigator.userLanguage;
+        let currentLang = userLang.startsWith('ko') ? 'ko' : 'en';
+        
+        // 저장된 언어 설정이 있으면 사용
+        if (localStorage.getItem('preferredLanguage')) {
+            currentLang = localStorage.getItem('preferredLanguage');
+        }
+        
+        // 초기 언어 설정 적용
+        setLanguage(currentLang);
+        
+        // 언어 전환 버튼 추가 (아직 구현되지 않음 - 나중에 추가 예정)
+        // 언어 스위치 버튼을 만들려면 여기에 코드 추가
+    }
+    
+    // 언어 설정 적용 함수
+    function setLanguage(lang) {
+        // 타이틀 설정
+        document.title = document.querySelector(`title`).getAttribute(`data-lang-${lang}`);
+        
+        // 모든 다국어 요소 순회하면서 해당 언어 적용
+        document.querySelectorAll(`[data-lang-${lang}]`).forEach(elem => {
+            elem.textContent = elem.getAttribute(`data-lang-${lang}`);
+        });
+        
+        // 이미지 alt 텍스트 업데이트
+        document.querySelectorAll(`[data-lang-${lang}-alt]`).forEach(elem => {
+            elem.setAttribute('alt', elem.getAttribute(`data-lang-${lang}-alt`));
+        });
+        
+        // 현재 언어 저장
+        localStorage.setItem('preferredLanguage', lang);
     }
 });
