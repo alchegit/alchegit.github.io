@@ -1,4 +1,4 @@
-last_updated:2025-05-13 18:00:12
+last_updated:2025-05-13 19:00:10
 Document_ID	elapsedMillis	language	mode	score	updatedAt
 2OmS6	28210	"ko"	"normal"	8	2025년 5월 5일 오전 11시 50분 2초 UTC+9
 4zRmT	16930	"ko"	"normal"	7	2025년 5월 6일 오전 3시 44분 56초 UTC+9
@@ -7,7 +7,7 @@ BG56i	7080	"en"	"normal"	5	2025년 5월 1일 오전 4시 57분 47초 UTC+9
 BQLOQ	17250	"ko"	"normal"	8	2025년 5월 13일 오전 4시 12분 57초 UTC+9
 G1ngh	26750	"ko"	"normal"	6	2025년 5월 10일 오후 4시 35분 31초 UTC+9
 GgKJV	43690	"ko"	"normal"	6	2025년 5월 1일 오후 11시 57분 40초 UTC+9
-JbNc2	42480	"ko"	"normal"	9	2025년 5월 7일 오후 2시 3분 59초 UTC+9
+JbNc2	42480	"ko"	"normal"	9	2025년 5월 13일 오전 9시 49분 18초 UTC+9
 Keuyw	27090	"ko"	"normal"	8	2025년 5월 6일 오후 5시 13분 39초 UTC+9
 MJi4a	32160	"ko"	"normal"	7	2025년 5월 5일 오후 0시 29분 49초 UTC+9
 NgQsJ	20860	"ko"	"normal"	10	2025년 5월 10일 오후 4시 39분 49초 UTC+9
