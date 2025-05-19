@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .substring(2)}${currentMonth}`;
 
   // 이벤트 팝업 초기화 및 표시
-  initializeEventPopup();
+  // initializeEventPopup();
 
   // 이벤트 팝업 초기화 함수
   function initializeEventPopup() {
