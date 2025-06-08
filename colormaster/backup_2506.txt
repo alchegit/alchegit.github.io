@@ -1,4 +1,4 @@
-last_updated:2025-06-08 18:00:08
+last_updated:2025-06-08 19:00:06
 Document_ID	elapsedMillis	language	mode	score	updatedAt
 RMO6S	18420	"ko"	"normal"	6	2025년 6월 1일 오후 11시 19분 19초 UTC+9
 fTsj8	74240	"fr"	"normal"	5	2025년 6월 7일 오후 6시 10분 27초 UTC+9
