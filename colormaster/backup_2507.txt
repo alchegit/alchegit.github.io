@@ -1,4 +1,4 @@
-last_updated:2025-07-12 23:00:06
+last_updated:2025-07-13 00:00:07
 Document_ID	elapsedMillis	language	mode	score	updatedAt
 4zRmT	16260	"ko"	"normal"	9	2025년 7월 2일 오전 1시 17분 3초 UTC+9
 PZCTG	22960	"pt"	"normal"	5	2025년 7월 12일 오전 2시 7분 4초 UTC+9
