@@ -1,4 +1,4 @@
-last_updated:2025-07-27 05:00:11
+last_updated:2025-07-27 06:00:07
 Document_ID	elapsedMillis	language	mode	score	updatedAt
 4zRmT	24710	"ko"	"normal"	5	2025년 7월 17일 오전 11시 37분 39초 UTC+9
 BQLOQ	17250	"ko"	"normal"	8	2025년 7월 14일 오전 6시 32분 27초 UTC+9
