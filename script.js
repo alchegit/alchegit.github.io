@@ -180,13 +180,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (colorMaster2Card) {
     colorMaster2Card.addEventListener("click", function (e) {
+      e.preventDefault();
       const androidHref = this.getAttribute("data-android-href");
       const isAndroid = /Android/i.test(navigator.userAgent);
+      const targetHref = isAndroid && androidHref ? androidHref : this.href;
 
-      if (isAndroid && androidHref) {
-        e.preventDefault();
-        window.open(androidHref, "_blank", "noopener");
-      }
+      showModal(targetHref);
     });
   }
 
@@ -211,10 +210,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // 모달 표시 함수
-  function showModal() {
+  function showModal(redirectUrl) {
+    const modalElement = document.getElementById("welcomeModal");
     const welcomeModal = new bootstrap.Modal(
-      document.getElementById("welcomeModal")
+      modalElement
     );
+
+    if (redirectUrl) {
+      modalElement.addEventListener(
+        "hidden.bs.modal",
+        function () {
+          window.location.href = redirectUrl;
+        },
+        { once: true }
+      );
+    }
+
     welcomeModal.show();
   }
 
