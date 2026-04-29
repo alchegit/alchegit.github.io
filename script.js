@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const copyMessage = document.getElementById("copyMessage");
   const copyConfirmation = document.getElementById("copyConfirmation");
   const privateTestCard = document.getElementById("privateTestCard");
+  const colorMaster2Card = document.getElementById("colorMaster2Card");
 
   // 실제 개발자 이메일 주소 설정
   const developerEmail = "wlgnsl14@gmail.com";
@@ -174,6 +175,18 @@ document.addEventListener("DOMContentLoaded", function () {
     privateTestCard.addEventListener("click", function (e) {
       e.preventDefault();
       showModal();
+    });
+  }
+
+  if (colorMaster2Card) {
+    colorMaster2Card.addEventListener("click", function (e) {
+      const androidHref = this.getAttribute("data-android-href");
+      const isAndroid = /Android/i.test(navigator.userAgent);
+
+      if (isAndroid && androidHref) {
+        e.preventDefault();
+        window.open(androidHref, "_blank", "noopener");
+      }
     });
   }
 
