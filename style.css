@@ -590,6 +590,10 @@ body {
 	background: radial-gradient(circle, var(--warning-glow) 0%, transparent 70%);
 }
 
+.cyber-card[data-card-id="5"] .card-glow {
+	background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+}
+
 /* Hover Effects */
 .cyber-card:hover .card-glow {
 	filter: blur(20px);
