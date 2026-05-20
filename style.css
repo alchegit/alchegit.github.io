@@ -532,6 +532,12 @@ body {
 	align-self: center;
 }
 
+.app-title-krd {
+	font-size: 1.45rem;
+	line-height: 1.15;
+	text-align: center;
+}
+
 .card-symbol {
 	font-size: 4rem;
 	margin: 20px 0;
@@ -592,6 +598,17 @@ body {
 
 .cyber-card[data-card-id="5"] .card-glow {
 	background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+}
+
+.cyber-card[data-card-id="6"] .card-glow {
+	background: radial-gradient(circle, rgba(255, 185, 0, 0.75) 0%, transparent 70%);
+}
+
+@media screen and (max-width: 768px) {
+	html body .app-title-krd {
+		font-size: 4vw !important;
+		line-height: 1.15 !important;
+	}
 }
 
 /* Hover Effects */
