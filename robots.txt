@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alchegit.github.io/sitemap.xml

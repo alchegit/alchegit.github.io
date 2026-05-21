@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>외계어 생성기 | 공유키 비밀 메시지 만들기 - Galacticode</title>
-    <meta name="description" content="공유키가 있어야 같은 규칙으로 해독할 수 있는 외계어 비밀 메시지를 만들어보세요. Galacticode는 원문과 변환 규칙을 서버로 보내지 않는 무료 Android 앱입니다.">
+    <meta name="description" content="평범한 문장을 외계어처럼 보이는 비밀 메시지로 바꿔보세요. 웹에서 짧게 변환하고 앱에서 공유키 메시지를 만들 수 있습니다.">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alchegit.github.io/galacticode/">
     <meta property="og:title" content="외계어 생성기 | Galacticode">
     <meta property="og:description" content="공유키를 받은 사람만 같은 규칙으로 풀 수 있는 외계어 비밀 메시지를 만들어보세요.">
@@ -15,8 +16,8 @@
     <meta name="twitter:title" content="외계어 생성기 | Galacticode">
     <meta name="twitter:description" content="Share-key based alien-like secret messages. No original text upload.">
     <meta name="twitter:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
-    <link rel="stylesheet" href="../seo-page.css?v=20260521">
-    <script defer src="../seo-page.js?v=20260521"></script>
+    <link rel="stylesheet" href="../seo-page.css?v=20260521-v2">
+    <script defer src="../seo-page.js?v=20260521-v2"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -32,7 +33,8 @@
         },
         "description": "공유키로 같은 은하 언어 규칙을 재현해 외계어처럼 보이는 비밀 메시지를 만들고 해독하는 Android 앱입니다. 원문과 변환 규칙은 서버로 보내지 않습니다.",
         "url": "https://alchegit.github.io/galacticode/",
-        "image": "https://alchegit.github.io/assets/icon_galacticode.png"
+        "image": "https://alchegit.github.io/assets/icon_galacticode.png",
+        "sameAs": "https://play.google.com/store/apps/details?id=com.galactic.speak"
       }
     </script>
   </head>
@@ -55,12 +57,12 @@
           <h1>외계어 생성기: 공유키로만 풀 수 있는 비밀 메시지 만들기</h1>
           <p class="hero-lead">평범한 문장을 외계어처럼 보이는 코드로 변환합니다. 앱에서는 공유키를 받은 사람만 같은 은하 언어 규칙을 재현할 수 있고, 원문과 규칙은 서버로 보내지 않습니다.</p>
           <div class="hero-actions">
-            <a class="primary-cta" href="#" target="_blank" rel="noopener" data-play-target="galacticode">앱에서 공유키 메시지 만들기</a>
+            <a class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.galactic.speak&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dlanding%26utm_campaign%3Dgalacticode%26utm_content%3Dgalacticode_page_top" target="_blank" rel="noopener" data-app-id="galacticode" data-event="play_click" data-play-target="galacticode" data-utm-content="galacticode_page_top">앱에서 공유키 메시지 만들기</a>
             <a class="secondary-cta" href="#converter">웹에서 바로 변환</a>
           </div>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <img class="app-icon" src="../assets/icon_galacticode.png" alt="">
+        <div class="hero-visual">
+          <img class="app-icon" src="../assets/icon_galacticode.png" alt="은하코드 앱 아이콘" width="96" height="96" loading="eager">
         </div>
       </section>
 
@@ -74,7 +76,12 @@
           <div id="galacticOutput" class="alien-output" role="status" aria-live="polite"></div>
           <div class="tool-actions">
             <button id="galacticCopy" class="tool-button secondary" type="button">결과 복사</button>
-            <a class="tool-button primary" href="#" target="_blank" rel="noopener" data-play-target="galacticode">앱에서 공유키 메시지 만들기</a>
+            <a class="tool-button primary play-cta" href="https://play.google.com/store/apps/details?id=com.galactic.speak&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dlanding%26utm_campaign%3Dgalacticode%26utm_content%3Dgalacticode_page_converter" target="_blank" rel="noopener" data-app-id="galacticode" data-event="play_click" data-play-target="galacticode" data-utm-content="galacticode_page_converter">앱에서 공유키 메시지 만들기</a>
+          </div>
+          <div id="galacticInstallPrompt" class="install-result" hidden>
+            <strong>복사되었습니다.</strong>
+            <p>앱에서는 공유키로만 풀 수 있는 메시지를 더 길게 만들 수 있습니다.</p>
+            <a class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.galactic.speak&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dlanding%26utm_campaign%3Dgalacticode%26utm_content%3Dgalacticode_page_copy_result" target="_blank" rel="noopener" data-app-id="galacticode" data-event="play_click" data-play-target="galacticode" data-utm-content="galacticode_page_copy_result">은하코드 설치하고 비밀 메시지 만들기</a>
           </div>
         </div>
       </section>
@@ -108,6 +115,9 @@
             <p>원문과 변환 규칙을 개발자 서버로 보내지 않고 기기 안에서 다룹니다.</p>
           </article>
         </div>
+        <div class="section-actions">
+          <a class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.galactic.speak&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dlanding%26utm_campaign%3Dgalacticode%26utm_content%3Dgalacticode_page_preview" target="_blank" rel="noopener" data-app-id="galacticode" data-event="play_click" data-play-target="galacticode" data-utm-content="galacticode_page_preview">은하코드 설치</a>
+        </div>
       </section>
 
       <section class="section">
@@ -115,7 +125,7 @@
           <h2>외계어 번역기나 암호문 만들기를 찾고 있다면</h2>
           <p>Galacticode는 실제 언어 번역기라기보다, 나만의 규칙으로 외계어처럼 보이는 비밀 메시지를 만드는 앱입니다. 공유키가 없으면 같은 규칙을 재현할 수 없도록 설계되어, 친구에게만 풀 수 있는 장난성 암호문을 보내기 좋습니다.</p>
           <div class="section-actions">
-            <a class="primary-cta" href="#" target="_blank" rel="noopener" data-play-target="galacticode">은하코드 설치</a>
+            <a class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.galactic.speak&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dlanding%26utm_campaign%3Dgalacticode%26utm_content%3Dgalacticode_page_final" target="_blank" rel="noopener" data-app-id="galacticode" data-event="play_click" data-play-target="galacticode" data-utm-content="galacticode_page_final">은하코드 설치</a>
           </div>
         </div>
       </section>
@@ -152,9 +162,26 @@
 
     <footer class="site-footer">
       <div class="footer-inner">
-        <span>NeoKIM App Lab</span>
-        <a href="../privacy-policy/galacticode.html">Privacy Policy</a>
+        <div>
+          <strong>NeoKIM App Lab</strong>
+          <p>Made by NeoKIM</p>
+          <p>Last updated: 2026.05.21</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="https://play.google.com/store/apps/developer?id=NeoKIM&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dfooter%26utm_campaign%3Ddeveloper_profile%26utm_content%3Dfooter" target="_blank" rel="noopener">Google Play 앱 목록</a>
+          <a href="/color-master-2/">색감 테스트</a>
+          <a href="/galacticode/">외계어 생성기</a>
+          <a href="/call-the-ufo/">UFO 호출 앱</a>
+          <a href="/privacy-policy/galacticode.html">Privacy Policy</a>
+          <a href="/app-ads.txt">app-ads.txt</a>
+          <a href="mailto:wlgnsl14@gmail.com">Contact</a>
+        </nav>
       </div>
     </footer>
+    <div class="mobile-sticky-cta" data-mobile-sticky hidden>
+      <button class="mobile-sticky-close" type="button" data-mobile-sticky-close aria-label="하단 설치 배너 닫기">×</button>
+      <span>비밀 메시지 더 만들어보기</span>
+      <a class="mobile-sticky-link play-cta" href="https://play.google.com/store/apps/details?id=com.galactic.speak&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dlanding%26utm_campaign%3Dgalacticode%26utm_content%3Dgalacticode_mobile_sticky" target="_blank" rel="noopener" data-app-id="galacticode" data-event="play_click" data-play-target="galacticode" data-utm-content="galacticode_mobile_sticky">앱 설치</a>
+    </div>
   </body>
 </html>

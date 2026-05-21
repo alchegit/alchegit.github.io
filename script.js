@@ -6,7 +6,7 @@ const apps = [
     status: "live",
     priority: 1,
     code: "ANDROID004",
-    campaign: "color_master2_homepage",
+    campaign: "color_master2",
     recommended: true,
     titleKo: "컬러마스터2",
     titleEn: "Color Master 2",
@@ -31,7 +31,7 @@ const apps = [
     status: "live",
     priority: 2,
     code: "ANDROID002",
-    campaign: "galacticode_homepage",
+    campaign: "galacticode",
     titleKo: "은하코드",
     titleEn: "Galacticode",
     categoryKo: "비밀 메시지 생성기",
@@ -55,7 +55,7 @@ const apps = [
     status: "live",
     priority: 3,
     code: "ANDROID001",
-    campaign: "call_the_ufo_homepage",
+    campaign: "call_the_ufo",
     titleKo: "UFO 호출기",
     titleEn: "Call the UFO",
     categoryKo: "몰입형 체험 앱",
@@ -178,7 +178,8 @@ function renderFeaturedApp() {
   const heroPrimaryCta = document.getElementById("heroPrimaryCta");
 
   if (heroPrimaryCta) {
-    heroPrimaryCta.href = buildPlayUrl(app);
+    heroPrimaryCta.href = buildPlayUrl(app, "home_hero");
+    heroPrimaryCta.dataset.utmContent = "home_hero";
   }
 
   if (!featuredContainer) {
@@ -197,7 +198,7 @@ function renderFeaturedApp() {
         <p class="featured-description">${localizedText("한 번 틀리면 끝나는 원라이프 색상 판별 퍼즐입니다. 짧게 시작하지만, 기록을 깨고 싶어서 계속 다시 하게 되는 구조입니다.", "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.")}</p>
         ${renderHighlights(app, "highlight-list")}
         <div class="featured-actions">
-          <a class="card-cta is-primary play-cta" href="${buildPlayUrl(app)}" target="_blank" rel="noopener" data-app-id="${app.id}" data-event="play_click" ${localizedAria("컬러마스터2 Google Play에서 설치", "Install Color Master 2 on Google Play")}>${localizedText("Google Play에서 설치", "Install on Google Play")}</a>
+          <a class="card-cta is-primary play-cta" href="${buildPlayUrl(app, "home_featured")}" target="_blank" rel="noopener" data-app-id="${app.id}" data-event="play_click" data-utm-content="home_featured" ${localizedAria("컬러마스터2 Google Play에서 설치", "Install Color Master 2 on Google Play")}>${localizedText("Google Play에서 설치", "Install on Google Play")}</a>
           <a class="card-cta is-secondary" href="#apps">${localizedText("전체 앱 보기", "Browse Apps")}</a>
         </div>
       </div>
@@ -299,6 +300,7 @@ function bindTestContactModal() {
       return;
     }
 
+    event.preventDefault();
     const app = apps.find((item) => item.id === contactButton.dataset.appId);
     lastFocusedElement = contactButton;
 
@@ -347,7 +349,7 @@ function bindPlayClickTracking() {
     console.log("play_click", {
       appId: playLink.dataset.appId,
       href: playLink.href,
-      placement: playLink.closest(".hero-section") ? "hero" : playLink.closest(".featured-app") ? "featured" : "card"
+      placement: playLink.dataset.utmContent || (playLink.closest(".hero-section") ? "home_hero" : playLink.closest(".featured-app") ? "home_featured" : "home_card")
     });
   });
 }
@@ -433,7 +435,7 @@ function initLandingCounter() {
   }, 1000);
 }
 
-function buildPlayUrl(app) {
+function buildPlayUrl(app, placement = "home_card") {
   if (!app?.playUrl || app.status !== "live") {
     return app?.playUrl || "#";
   }
@@ -441,9 +443,10 @@ function buildPlayUrl(app) {
   try {
     const url = new URL(app.playUrl);
     const referrer = new URLSearchParams({
-      utm_source: "homepage",
+      utm_source: "neokim_site",
       utm_medium: "landing",
-      utm_campaign: app.campaign || `${app.id}_homepage`
+      utm_campaign: app.campaign || app.id.replaceAll("-", "_"),
+      utm_content: placement
     }).toString();
 
     url.searchParams.set("referrer", referrer);
@@ -453,16 +456,21 @@ function buildPlayUrl(app) {
   }
 }
 
+function buildMailto(app) {
+  const subject = encodeURIComponent(`Private test request - ${app?.titleEn || "NeoKIM App Lab"}`);
+  return `mailto:${developerEmail}?subject=${subject}`;
+}
+
 function renderAppCard(app) {
   const isLive = app.status === "live";
   const isTesting = app.status === "testing" || app.status === "coming-soon";
-  const href = isLive ? buildPlayUrl(app) : app.playUrl;
+  const href = isLive ? buildPlayUrl(app, "home_card") : app.playUrl;
   const detailLink = app.detailUrl
     ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}">${localizedText("웹에서 먼저 체험", "Try Web Demo")}</a>`
     : "";
   const cta = isTesting
-    ? `<button type="button" class="card-cta is-secondary" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</button>`
-    : `<a class="card-cta ${isLive ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${isLive ? 'target="_blank" rel="noopener" data-event="play_click"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
+    ? `<a class="card-cta is-secondary" href="${escapeAttr(buildMailto(app))}" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`
+    : `<a class="card-cta ${isLive ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${isLive ? 'target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_card"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
 
   return `
     <article class="cyber-card" data-card-id="${escapeAttr(app.code)}" data-app-id="${escapeAttr(app.id)}">
@@ -474,7 +482,7 @@ function renderAppCard(app) {
             ${renderStatusBadge(app.status)}
           </div>
         </div>
-        <img class="card-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(localize(app, "title"))} 아이콘" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
+        <img class="card-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(localize(app, "title"))} 아이콘" width="74" height="74" loading="lazy" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
         <h3 class="card-title">${localizedText(app.titleKo, app.titleEn)}</h3>
         <p class="card-category">${localizedText(app.categoryKo, app.categoryEn)}</p>
         <p class="card-tagline">${localizedText(app.taglineKo, app.taglineEn)}</p>
@@ -491,7 +499,7 @@ function renderPhoneMockup(app) {
     <div class="phone-shell">
       <div class="phone-speaker" aria-hidden="true"></div>
       <div class="phone-screen">
-        <img class="phone-app-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
+        <img class="phone-app-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(app.titleKo)} 아이콘" width="78" height="78" loading="lazy" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
         <div class="phone-title">${escapeHtml(app.titleEn)}</div>
         <div class="phone-timer">00:10</div>
         <div class="color-tile-grid" aria-hidden="true">
