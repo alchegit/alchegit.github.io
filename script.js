@@ -18,6 +18,7 @@ const apps = [
     descriptionEn: "One mistake ends the run. A short, addictive color perception challenge.",
     icon: "assets/icon_colormaster2.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.codexdev.color_master2",
+    detailUrl: "./color-master-2/",
     highlightsKo: ["10초 제한", "원라이프", "랭킹 지원", "색약 보조"],
     highlightsEn: ["10-second limit", "One-life run", "Leaderboard", "Colorblind aid"],
     primaryCtaKo: "컬러마스터2 설치",
@@ -35,14 +36,15 @@ const apps = [
     titleEn: "Galacticode",
     categoryKo: "비밀 메시지 생성기",
     categoryEn: "Secret message app",
-    taglineKo: "평범한 문장을 외계어처럼 보이는 비밀 메시지로 변환",
-    taglineEn: "Turn normal text into alien-like secret messages.",
-    descriptionKo: "친구와 공유할 수 있는 나만의 은하 언어를 만들고, SNS나 메신저에 신비한 암호문을 남겨보세요.",
-    descriptionEn: "Create your own galactic language and share mysterious messages with friends.",
+    taglineKo: "공유키 없이는 읽기 어려운 나만의 외계어 비밀 메시지",
+    taglineEn: "Create alien-like secret messages that need a share key to decode.",
+    descriptionKo: "나만의 은하 언어 규칙을 만들고, 공유키를 받은 사람만 같은 규칙으로 메시지를 해독할 수 있습니다. 원문과 변환 규칙은 서버로 보내지 않습니다.",
+    descriptionEn: "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
     icon: "assets/icon_galacticode.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.galactic.speak",
-    highlightsKo: ["비밀 언어 생성", "공유 키", "SNS 활용", "서버 연결 없음"],
-    highlightsEn: ["Secret language", "Share key", "SNS-ready", "No server needed"],
+    detailUrl: "./galacticode/",
+    highlightsKo: ["공유키 기반", "나만의 규칙", "SNS 활용", "서버 전송 없음"],
+    highlightsEn: ["Share-key based", "Personal rules", "SNS-ready", "No server upload"],
     primaryCtaKo: "비밀 메시지 만들기",
     primaryCtaEn: "Create Secret Messages",
     statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
@@ -64,6 +66,7 @@ const apps = [
     descriptionEn: "Press the button, hear the signal, and imagine something listening from space.",
     icon: "assets/icon_calltheufo.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.call_the_ufo",
+    detailUrl: "./call-the-ufo/",
     highlightsKo: ["인터랙티브 버튼", "미스터리 사운드", "애니메이션", "데이터 수집 없음"],
     highlightsEn: ["Interactive button", "Mystery sounds", "Animation", "No data collection"],
     primaryCtaKo: "UFO 호출해보기",
@@ -454,6 +457,9 @@ function renderAppCard(app) {
   const isLive = app.status === "live";
   const isTesting = app.status === "testing" || app.status === "coming-soon";
   const href = isLive ? buildPlayUrl(app) : app.playUrl;
+  const detailLink = app.detailUrl
+    ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}">${localizedText("웹에서 먼저 체험", "Try Web Demo")}</a>`
+    : "";
   const cta = isTesting
     ? `<button type="button" class="card-cta is-secondary" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</button>`
     : `<a class="card-cta ${isLive ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${isLive ? 'target="_blank" rel="noopener" data-event="play_click"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
@@ -474,7 +480,7 @@ function renderAppCard(app) {
         <p class="card-tagline">${localizedText(app.taglineKo, app.taglineEn)}</p>
         ${renderHighlights(app, "card-highlights", 4)}
         <p class="card-note">${localizedText(app.statusNoteKo, app.statusNoteEn)}</p>
-        <div class="card-actions">${cta}</div>
+        <div class="card-actions">${cta}${detailLink}</div>
       </div>
     </article>
   `;
