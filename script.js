@@ -1,305 +1,593 @@
-/*
- * 스타일 출처: NeoKIM의 사이버펑크 테마 기반
- * 스타일 복사일: 2025년 4월 19일
- * 원본 링크: https://codepen.io/Marcus-Moen-the-builder/pen/vEEBRZY
- *
- * 이 스타일시트의 디자인은 위 링크의 작업물을 기반으로 하고 있습니다.
- * 모든 저작권은 원 저작자에게 있습니다.
- */
+const developerEmail = "wlgnsl14@gmail.com";
 
-// 문서가 준비되면 실행할 함수
-document.addEventListener("DOMContentLoaded", function () {
-  // 변수 및 요소 초기화
-  let instabilityCounter = 0;
-  const instabilityCounterElement = document.getElementById(
-    "instability-counter"
-  );
-  const cards = document.querySelectorAll(".cyber-card");
-  const emailElement = document.getElementById("developerEmail");
-  const copyMessage = document.getElementById("copyMessage");
-  const copyConfirmation = document.getElementById("copyConfirmation");
-  const privateTestCard = document.getElementById("privateTestCard");
-  const colorMaster2Card = document.getElementById("colorMaster2Card");
+const apps = [
+  {
+    id: "color-master-2",
+    status: "live",
+    priority: 1,
+    code: "ANDROID004",
+    campaign: "color_master2_homepage",
+    recommended: true,
+    titleKo: "컬러마스터2",
+    titleEn: "Color Master 2",
+    categoryKo: "색상 판별 퍼즐",
+    categoryEn: "Color puzzle",
+    taglineKo: "10초 안에 다른 색을 찾는 원라이프 색감 챌린지",
+    taglineEn: "Find the different color in 10 seconds.",
+    descriptionKo: "한 번 틀리면 끝. 색감, 집중력, 순발력을 시험하는 짧고 중독성 있는 퍼즐 게임입니다.",
+    descriptionEn: "One mistake ends the run. A short, addictive color perception challenge.",
+    icon: "assets/icon_colormaster2.png",
+    playUrl: "https://play.google.com/store/apps/details?id=com.codexdev.color_master2",
+    highlightsKo: ["10초 제한", "원라이프", "랭킹 지원", "색약 보조"],
+    highlightsEn: ["10-second limit", "One-life run", "Leaderboard", "Colorblind aid"],
+    primaryCtaKo: "컬러마스터2 설치",
+    primaryCtaEn: "Install Color Master 2",
+    statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
+    statusNoteEn: "Available now on Google Play."
+  },
+  {
+    id: "galacticode",
+    status: "live",
+    priority: 2,
+    code: "ANDROID002",
+    campaign: "galacticode_homepage",
+    titleKo: "은하코드",
+    titleEn: "Galacticode",
+    categoryKo: "비밀 메시지 생성기",
+    categoryEn: "Secret message app",
+    taglineKo: "평범한 문장을 외계어처럼 보이는 비밀 메시지로 변환",
+    taglineEn: "Turn normal text into alien-like secret messages.",
+    descriptionKo: "친구와 공유할 수 있는 나만의 은하 언어를 만들고, SNS나 메신저에 신비한 암호문을 남겨보세요.",
+    descriptionEn: "Create your own galactic language and share mysterious messages with friends.",
+    icon: "assets/icon_galacticode.png",
+    playUrl: "https://play.google.com/store/apps/details?id=com.galactic.speak",
+    highlightsKo: ["비밀 언어 생성", "공유 키", "SNS 활용", "서버 연결 없음"],
+    highlightsEn: ["Secret language", "Share key", "SNS-ready", "No server needed"],
+    primaryCtaKo: "비밀 메시지 만들기",
+    primaryCtaEn: "Create Secret Messages",
+    statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
+    statusNoteEn: "Available now on Google Play."
+  },
+  {
+    id: "call-the-ufo",
+    status: "live",
+    priority: 3,
+    code: "ANDROID001",
+    campaign: "call_the_ufo_homepage",
+    titleKo: "UFO 호출기",
+    titleEn: "Call the UFO",
+    categoryKo: "몰입형 체험 앱",
+    categoryEn: "Immersive fun app",
+    taglineKo: "밤에 누르면 더 재밌는 미스터리 UFO 호출 체험",
+    taglineEn: "A mysterious UFO calling experience for fun.",
+    descriptionKo: "버튼, 사운드, 애니메이션으로 우주에 신호를 보내는 듯한 상상 체험을 제공합니다.",
+    descriptionEn: "Press the button, hear the signal, and imagine something listening from space.",
+    icon: "assets/icon_calltheufo.png",
+    playUrl: "https://play.google.com/store/apps/details?id=com.call_the_ufo",
+    highlightsKo: ["인터랙티브 버튼", "미스터리 사운드", "애니메이션", "데이터 수집 없음"],
+    highlightsEn: ["Interactive button", "Mystery sounds", "Animation", "No data collection"],
+    primaryCtaKo: "UFO 호출해보기",
+    primaryCtaEn: "Call the UFO",
+    statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
+    statusNoteEn: "Available now on Google Play."
+  },
+  {
+    id: "color-master-classic",
+    status: "legacy",
+    priority: 4,
+    code: "ANDROID003",
+    titleKo: "컬러 마스터",
+    titleEn: "Color Master",
+    categoryKo: "구버전 색상 테스트",
+    categoryEn: "Classic color test",
+    taglineKo: "비슷한 색상 속에서 정답을 찾는 색각 집중력 테스트",
+    taglineEn: "A classic color concentration test.",
+    descriptionKo: "컬러마스터2 이전 버전입니다. 가능하면 컬러마스터2를 먼저 추천하세요.",
+    descriptionEn: "Classic version. Recommend Color Master 2 first.",
+    icon: "assets/icon_colormaster.png",
+    playUrl: "./colormaster/",
+    highlightsKo: ["클래식 버전", "색상 집중력", "간단한 플레이"],
+    highlightsEn: ["Classic version", "Color focus", "Simple play"],
+    primaryCtaKo: "구버전 보기",
+    primaryCtaEn: "View Classic Version",
+    statusNoteKo: "새 버전인 컬러마스터2를 먼저 추천합니다.",
+    statusNoteEn: "Try Color Master 2 first if you are new."
+  },
+  {
+    id: "korean-random-defense",
+    status: "testing",
+    priority: 5,
+    code: "ANDROID006",
+    titleKo: "한국사 랜덤 디펜스: 수성전",
+    titleEn: "Korean Random Defense: Siege",
+    categoryKo: "비공개 테스트 전략 게임",
+    categoryEn: "Private test strategy game",
+    taglineKo: "한국사 속 수성전을 소재로 한 2D 랜덤 디펜스",
+    taglineEn: "A 2D random defense game inspired by Korean fortress battles.",
+    descriptionKo: "현재 비공개 테스트 중입니다. 공개 Play 링크가 열리지 않을 수 있어 테스트 참여 문의로 연결합니다.",
+    descriptionEn: "Currently in private testing. The public Play link may not open, so use the test contact button.",
+    icon: "assets/icon_korean_random_defense.png",
+    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.krd",
+    highlightsKo: ["비공개 테스트", "랜덤 디펜스", "한국사 소재", "테스트 문의"],
+    highlightsEn: ["Private test", "Random defense", "Korean history", "Contact to join"],
+    primaryCtaKo: "테스트 참여 문의",
+    primaryCtaEn: "Join Private Test",
+    statusNoteKo: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 문의하세요.",
+    statusNoteEn: "The public Google Play link may not open. Contact the developer to join the test."
+  },
+  {
+    id: "dark-maze",
+    status: "testing",
+    priority: 6,
+    code: "ANDROID005",
+    titleKo: "다크 메이즈",
+    titleEn: "Dark Maze",
+    categoryKo: "비공개 테스트 탈출 게임",
+    categoryEn: "Private test escape game",
+    taglineKo: "어둠 속 미로에서 출구를 찾는 실험쥐 탈출 게임",
+    taglineEn: "Find the exit in a dark maze as a lab rat escape challenge.",
+    descriptionKo: "현재 비공개 테스트 중입니다. 공개 Play 링크가 열리지 않을 수 있어 테스트 참여 문의로 연결합니다.",
+    descriptionEn: "Currently in private testing. The public Play link may not open, so use the test contact button.",
+    icon: "assets/icon_darkmaze.png",
+    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze",
+    highlightsKo: ["비공개 테스트", "미로 탈출", "아이템", "리더보드 예정"],
+    highlightsEn: ["Private test", "Maze escape", "Items", "Leaderboard planned"],
+    primaryCtaKo: "테스트 참여 문의",
+    primaryCtaEn: "Join Private Test",
+    statusNoteKo: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 문의하세요.",
+    statusNoteEn: "The public Google Play link may not open. Contact the developer to join the test."
+  }
+];
 
-  // 실제 개발자 이메일 주소 설정
-  const developerEmail = "wlgnsl14@gmail.com";
+let currentLanguage = "ko";
+let lastFocusedElement = null;
 
-  // 언어 전환 초기화
-  initLanguageToggle();
+const colorPreviewRounds = [
+  { base: "#38e2bd", answer: "#1fb797", answerIndex: 6 },
+  { base: "#5fa8ff", answer: "#4e8ee8", answerIndex: 11 },
+  { base: "#f26bd9", answer: "#d84fc0", answerIndex: 2 },
+  { base: "#ffe15c", answer: "#ebc949", answerIndex: 13 },
+  { base: "#a875ff", answer: "#9e6ef0", answerIndex: 8 }
+];
 
-  // 사이버펑크 효과 - 불안정성 카운터 애니메이션
-  const instabilityInterval = setInterval(function () {
-    if (Math.random() > 0.7) {
-      instabilityCounter = Math.min(
-        100,
-        instabilityCounter + Math.floor(Math.random() * 5)
-      );
-    } else {
-      instabilityCounter = Math.max(
-        0,
-        instabilityCounter - Math.floor(Math.random() * 3)
-      );
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  initLanguage();
+  renderFeaturedApp();
+  renderAppCards();
+  bindLanguageToggle();
+  bindSmoothScroll();
+  bindTestContactModal();
+  bindPlayClickTracking();
+  initColorPreviewLoop();
+  initLandingCounter();
+});
 
-    instabilityCounterElement.textContent = instabilityCounter + "%";
+function initLanguage() {
+  const storedLanguage = localStorage.getItem("preferredLanguage");
+  const browserLanguage = navigator.language || navigator.userLanguage || "ko";
+  currentLanguage = storedLanguage || (browserLanguage.startsWith("ko") ? "ko" : "en");
+  setLanguage(currentLanguage);
+}
 
-    // 불안정성이 높을 때 글리치 효과 증가
-    if (instabilityCounter > 70) {
-      document.querySelectorAll(".card-glitch").forEach((glitch) => {
-        glitch.style.opacity = "0.7";
-      });
-    } else {
-      document.querySelectorAll(".card-glitch").forEach((glitch) => {
-        glitch.style.opacity = "0.3";
-      });
-    }
-  }, 1500);
+function renderFeaturedApp() {
+  const app = apps.find((item) => item.id === "color-master-2") || apps[0];
+  const featuredContainer = document.getElementById("featuredApp");
+  const heroPrimaryCta = document.getElementById("heroPrimaryCta");
 
-  // 카드 호버 효과
-  cards.forEach((card) => {
-    card.addEventListener("mouseover", function () {
-      this.querySelectorAll(".card-glow").forEach((glow) => {
-        glow.style.opacity = "1";
-      });
-    });
+  if (heroPrimaryCta) {
+    heroPrimaryCta.href = buildPlayUrl(app);
+  }
 
-    card.addEventListener("mouseout", function () {
-      this.querySelectorAll(".card-glow").forEach((glow) => {
-        glow.style.opacity = "0.5";
-      });
-    });
+  if (!featuredContainer) {
+    return;
+  }
+
+  featuredContainer.innerHTML = `
+    <div class="featured-layout">
+      <div class="featured-visual" role="img" ${localizedAria("컬러마스터2 색상 타일 챌린지 휴대폰 목업", "Color Master 2 color tile challenge phone mockup")}>
+        ${renderPhoneMockup(app)}
+      </div>
+      <div class="featured-copy">
+        <span class="featured-badge">${localizedText("추천", "Featured")}</span>
+        <h3>${localizedText("컬러마스터2", "Color Master 2")}</h3>
+        <p class="featured-tagline">${localizedText("10초 안에 다른 색을 찾아보세요.", "Find the different color in 10 seconds.")}</p>
+        <p class="featured-description">${localizedText("한 번 틀리면 끝나는 원라이프 색상 판별 퍼즐입니다. 짧게 시작하지만, 기록을 깨고 싶어서 계속 다시 하게 되는 구조입니다.", "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.")}</p>
+        ${renderHighlights(app, "highlight-list")}
+        <div class="featured-actions">
+          <a class="card-cta is-primary play-cta" href="${buildPlayUrl(app)}" target="_blank" rel="noopener" data-app-id="${app.id}" data-event="play_click" ${localizedAria("컬러마스터2 Google Play에서 설치", "Install Color Master 2 on Google Play")}>${localizedText("Google Play에서 설치", "Install on Google Play")}</a>
+          <a class="card-cta is-secondary" href="#apps">${localizedText("전체 앱 보기", "Browse Apps")}</a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  setLanguage(currentLanguage);
+}
+
+function renderAppCards() {
+  const appGrid = document.getElementById("appGrid");
+
+  if (!appGrid) {
+    return;
+  }
+
+  appGrid.innerHTML = apps
+    .slice()
+    .sort((a, b) => a.priority - b.priority)
+    .map((app) => renderAppCard(app))
+    .join("");
+
+  setLanguage(currentLanguage);
+}
+
+function setLanguage(lang) {
+  const normalizedLanguage = lang === "en" ? "en" : "ko";
+  currentLanguage = normalizedLanguage;
+  document.documentElement.lang = normalizedLanguage;
+  localStorage.setItem("preferredLanguage", normalizedLanguage);
+
+  const title = document.querySelector("title");
+  if (title?.dataset[`lang${suffix(normalizedLanguage)}`]) {
+    document.title = title.dataset[`lang${suffix(normalizedLanguage)}`];
+  }
+
+  document.querySelectorAll(`[data-lang-${normalizedLanguage}]`).forEach((element) => {
+    element.textContent = element.getAttribute(`data-lang-${normalizedLanguage}`);
   });
 
-  // 모달 초기화 및 표시
-  initializeModal();
+  document.querySelectorAll(`[data-lang-${normalizedLanguage}-alt]`).forEach((element) => {
+    element.setAttribute("alt", element.getAttribute(`data-lang-${normalizedLanguage}-alt`));
+  });
 
-  if (emailElement) {
-    // 사용자 경험 개선을 위해 마우스 오버 시 힌트 표시
-    emailElement.addEventListener("mouseenter", function () {
-      if (copyMessage) copyMessage.style.opacity = "1";
+  document.querySelectorAll(`[data-lang-${normalizedLanguage}-aria]`).forEach((element) => {
+    element.setAttribute("aria-label", element.getAttribute(`data-lang-${normalizedLanguage}-aria`));
+  });
+
+  document.querySelectorAll(".lang-toggle").forEach((button) => {
+    const isActive = button.dataset.langTarget === normalizedLanguage;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function bindLanguageToggle() {
+  document.querySelectorAll(".lang-toggle").forEach((button) => {
+    button.addEventListener("click", () => {
+      setLanguage(button.dataset.langTarget);
     });
+  });
+}
 
-    emailElement.addEventListener("mouseleave", function () {
-      if (copyMessage) copyMessage.style.opacity = "0.7";
-    });
+function bindSmoothScroll() {
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href^="#"]');
 
-    emailElement.addEventListener("click", function () {
-      // 실제 이메일 주소를 클립보드에 복사
-      navigator.clipboard
-        .writeText(developerEmail)
-        .then(() => {
-          // 성공 시 확인 메시지 표시 및 애니메이션 적용
-          if (copyConfirmation) {
-            copyConfirmation.style.visibility = "visible";
-            copyConfirmation.classList.add("show");
-
-            // 복사 후 메시지 업데이트
-            if (copyMessage) {
-              const lang = document.documentElement.lang || "ko";
-              copyMessage.textContent =
-                lang === "ko" ? "(복사됨!)" : "(Copied!)";
-              copyMessage.style.color = "#00e5ff";
-            }
-
-            // 3초 후 메시지 숨기기 및 원래 상태로 복구
-            setTimeout(() => {
-              copyConfirmation.classList.remove("show");
-              setTimeout(() => {
-                copyConfirmation.style.visibility = "hidden";
-                if (copyMessage) {
-                  const lang = document.documentElement.lang || "ko";
-                  copyMessage.textContent =
-                    lang === "ko" ? "(클릭하여 복사)" : "(Click to copy)";
-                  copyMessage.style.color = "#aaa";
-                }
-              }, 300);
-            }, 3000);
-          }
-        })
-        .catch((err) => {
-          console.error("클립보드 복사 실패:", err);
-          // 대체 복사 방법 시도
-          fallbackCopyTextToClipboard(developerEmail);
-        });
-    });
-  }
-
-  // 구형 브라우저를 위한 대체 복사 메서드
-  function fallbackCopyTextToClipboard(text) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-
-    // 화면 바깥에 위치시키기
-    textArea.style.position = "fixed";
-    textArea.style.top = "-999px";
-    textArea.style.left = "-999px";
-
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const successful = document.execCommand("copy");
-      if (successful && copyConfirmation) {
-        copyConfirmation.style.visibility = "visible";
-        copyConfirmation.classList.add("show");
-
-        if (copyMessage) {
-          const lang = document.documentElement.lang || "ko";
-          copyMessage.textContent = lang === "ko" ? "(복사됨!)" : "(Copied!)";
-          copyMessage.style.color = "#00e5ff";
-        }
-
-        setTimeout(() => {
-          copyConfirmation.classList.remove("show");
-          setTimeout(() => {
-            copyConfirmation.style.visibility = "hidden";
-            if (copyMessage) {
-              const lang = document.documentElement.lang || "ko";
-              copyMessage.textContent =
-                lang === "ko" ? "(클릭하여 복사)" : "(Click to copy)";
-              copyMessage.style.color = "#aaa";
-            }
-          }, 300);
-        }, 3000);
-      }
-    } catch (err) {
-      console.error("대체 클립보드 복사 실패:", err);
+    if (!link) {
+      return;
     }
 
+    const targetId = link.getAttribute("href");
+    const target = targetId.length > 1 ? document.querySelector(targetId) : null;
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+    history.pushState(null, "", targetId);
+  });
+}
+
+function bindTestContactModal() {
+  const modal = document.getElementById("testContactModal");
+  const modalPanel = modal?.querySelector(".contact-modal__panel");
+  const modalAppName = document.getElementById("testContactApp");
+  const copyButton = document.getElementById("copyEmailButton");
+  const copyConfirmation = document.getElementById("copyConfirmation");
+
+  if (!modal || !modalPanel) {
+    return;
+  }
+
+  document.addEventListener("click", (event) => {
+    const contactButton = event.target.closest("[data-action='test-contact']");
+    if (!contactButton) {
+      return;
+    }
+
+    const app = apps.find((item) => item.id === contactButton.dataset.appId);
+    lastFocusedElement = contactButton;
+
+    if (modalAppName && app) {
+      modalAppName.textContent = localize(app, "title");
+    }
+
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    modalPanel.focus();
+  });
+
+  modal.addEventListener("click", (event) => {
+    if (event.target.closest("[data-modal-close]")) {
+      closeTestContactModal(modal);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) {
+      closeTestContactModal(modal);
+    }
+  });
+
+  copyButton?.addEventListener("click", () => {
+    copyTextToClipboard(developerEmail).then(() => {
+      if (!copyConfirmation) {
+        return;
+      }
+
+      copyConfirmation.classList.add("show");
+      window.setTimeout(() => copyConfirmation.classList.remove("show"), 2400);
+    });
+  });
+}
+
+function bindPlayClickTracking() {
+  document.addEventListener("click", (event) => {
+    const playLink = event.target.closest("[data-event='play_click']");
+
+    if (!playLink) {
+      return;
+    }
+
+    console.log("play_click", {
+      appId: playLink.dataset.appId,
+      href: playLink.href,
+      placement: playLink.closest(".hero-section") ? "hero" : playLink.closest(".featured-app") ? "featured" : "card"
+    });
+  });
+}
+
+function initColorPreviewLoop() {
+  const previewGrids = document.querySelectorAll(".color-tile-grid");
+
+  previewGrids.forEach((grid, previewIndex) => {
+    const tiles = Array.from(grid.children);
+    const phoneScreen = grid.closest(".phone-screen");
+    const timer = phoneScreen?.querySelector(".phone-timer");
+    let roundIndex = previewIndex % colorPreviewRounds.length;
+    let remainingSeconds = 10;
+    let resetTimerId = null;
+
+    if (tiles.length !== 16 || !timer) {
+      return;
+    }
+
+    const paintRound = () => {
+      const round = colorPreviewRounds[roundIndex];
+      timer.textContent = `00:${String(remainingSeconds).padStart(2, "0")}`;
+      phoneScreen?.classList.toggle("is-final-second", remainingSeconds <= 1);
+
+      tiles.forEach((tile, tileIndex) => {
+        const isAnswer = tileIndex === round.answerIndex;
+
+        tile.style.setProperty("--tile-color", isAnswer ? round.answer : round.base);
+        tile.classList.toggle("is-answer", isAnswer);
+        tile.classList.toggle("is-hinted", isAnswer && remainingSeconds <= 1);
+      });
+    };
+
+    paintRound();
+
+    if (prefersReducedMotion()) {
+      remainingSeconds = 1;
+      paintRound();
+      return;
+    }
+
+    window.setInterval(() => {
+      if (resetTimerId) {
+        return;
+      }
+
+      remainingSeconds -= 1;
+
+      if (remainingSeconds <= 0) {
+        remainingSeconds = 0;
+        paintRound();
+        phoneScreen?.classList.add("is-round-changing");
+
+        resetTimerId = window.setTimeout(() => {
+          roundIndex = (roundIndex + 1) % colorPreviewRounds.length;
+          remainingSeconds = 10;
+          phoneScreen?.classList.remove("is-round-changing");
+          resetTimerId = null;
+          paintRound();
+        }, 520);
+
+        return;
+      }
+
+      paintRound();
+    }, 1000);
+  });
+}
+
+function initLandingCounter() {
+  const counter = document.getElementById("instability-counter");
+  let count = 0;
+
+  if (!counter) {
+    return;
+  }
+
+  counter.textContent = `${count.toLocaleString("en-US")}%`;
+
+  window.setInterval(() => {
+    count += 1;
+    counter.textContent = `${count.toLocaleString("en-US")}%`;
+  }, 1000);
+}
+
+function buildPlayUrl(app) {
+  if (!app?.playUrl || app.status !== "live") {
+    return app?.playUrl || "#";
+  }
+
+  try {
+    const url = new URL(app.playUrl);
+    const referrer = new URLSearchParams({
+      utm_source: "homepage",
+      utm_medium: "landing",
+      utm_campaign: app.campaign || `${app.id}_homepage`
+    }).toString();
+
+    url.searchParams.set("referrer", referrer);
+    return url.toString();
+  } catch (error) {
+    return app.playUrl;
+  }
+}
+
+function renderAppCard(app) {
+  const isLive = app.status === "live";
+  const isTesting = app.status === "testing" || app.status === "coming-soon";
+  const href = isLive ? buildPlayUrl(app) : app.playUrl;
+  const cta = isTesting
+    ? `<button type="button" class="card-cta is-secondary" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</button>`
+    : `<a class="card-cta ${isLive ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${isLive ? 'target="_blank" rel="noopener" data-event="play_click"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
+
+  return `
+    <article class="cyber-card" data-card-id="${escapeAttr(app.code)}" data-app-id="${escapeAttr(app.id)}">
+      <div class="card-content">
+        <div class="card-header-area">
+          <span class="card-id">#${escapeHtml(app.code)}</span>
+          <div class="card-badges">
+            ${app.recommended ? `<span class="status-badge is-recommended">${localizedText("추천", "Recommended")}</span>` : ""}
+            ${renderStatusBadge(app.status)}
+          </div>
+        </div>
+        <img class="card-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(localize(app, "title"))} 아이콘" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
+        <h3 class="card-title">${localizedText(app.titleKo, app.titleEn)}</h3>
+        <p class="card-category">${localizedText(app.categoryKo, app.categoryEn)}</p>
+        <p class="card-tagline">${localizedText(app.taglineKo, app.taglineEn)}</p>
+        ${renderHighlights(app, "card-highlights", 4)}
+        <p class="card-note">${localizedText(app.statusNoteKo, app.statusNoteEn)}</p>
+        <div class="card-actions">${cta}</div>
+      </div>
+    </article>
+  `;
+}
+
+function renderPhoneMockup(app) {
+  return `
+    <div class="phone-shell">
+      <div class="phone-speaker" aria-hidden="true"></div>
+      <div class="phone-screen">
+        <img class="phone-app-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
+        <div class="phone-title">${escapeHtml(app.titleEn)}</div>
+        <div class="phone-timer">00:10</div>
+        <div class="color-tile-grid" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHighlights(app, className, maxItems) {
+  const koItems = app.highlightsKo.slice(0, maxItems || app.highlightsKo.length);
+  const enItems = app.highlightsEn.slice(0, maxItems || app.highlightsEn.length);
+
+  return `
+    <ul class="${className}">
+      ${koItems.map((item, index) => `<li>${localizedText(item, enItems[index])}</li>`).join("")}
+    </ul>
+  `;
+}
+
+function renderStatusBadge(status) {
+  const statusMap = {
+    live: { ko: "LIVE", en: "LIVE", className: "is-live" },
+    legacy: { ko: "구버전", en: "Legacy", className: "is-legacy" },
+    testing: { ko: "비공개 테스트", en: "Private Test", className: "is-testing" },
+    "coming-soon": { ko: "준비 중", en: "Coming Soon", className: "is-testing" }
+  };
+  const statusInfo = statusMap[status] || statusMap.live;
+
+  return `<span class="status-badge ${statusInfo.className}">${localizedText(statusInfo.ko, statusInfo.en)}</span>`;
+}
+
+function closeTestContactModal(modal) {
+  modal.hidden = true;
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
+}
+
+function copyTextToClipboard(text) {
+  if (navigator.clipboard?.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.setAttribute("readonly", "");
+  textArea.style.position = "fixed";
+  textArea.style.top = "-999px";
+  textArea.style.left = "-999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    document.execCommand("copy");
+  } finally {
     document.body.removeChild(textArea);
   }
 
-  // 개인 테스트 카드 클릭 시 모달 표시
-  if (privateTestCard) {
-    privateTestCard.addEventListener("click", function (e) {
-      e.preventDefault();
-      showModal();
-    });
-  }
+  return Promise.resolve();
+}
 
-  if (colorMaster2Card) {
-    colorMaster2Card.addEventListener("click", function (e) {
-      e.preventDefault();
-      const androidHref = this.getAttribute("data-android-href");
-      const isAndroid = /Android/i.test(navigator.userAgent);
-      const targetHref = isAndroid && androidHref ? androidHref : this.href;
+function localizedText(ko, en) {
+  const text = currentLanguage === "en" ? en : ko;
+  return `<span data-lang-ko="${escapeAttr(ko)}" data-lang-en="${escapeAttr(en)}">${escapeHtml(text)}</span>`;
+}
 
-      showModal(targetHref);
-    });
-  }
+function localizedAria(ko, en) {
+  const text = currentLanguage === "en" ? en : ko;
+  return `data-lang-ko-aria="${escapeAttr(ko)}" data-lang-en-aria="${escapeAttr(en)}" aria-label="${escapeAttr(text)}"`;
+}
 
-  // 모달 초기화 함수
-  function initializeModal() {
-    // 모달 요소
-    const welcomeModal = new bootstrap.Modal(
-      document.getElementById("welcomeModal"),
-      {
-        backdrop: "static",
-        keyboard: false,
-      }
-    );
+function localize(app, key) {
+  const languageSuffix = currentLanguage === "en" ? "En" : "Ko";
+  return app[`${key}${languageSuffix}`] || app[`${key}Ko`] || "";
+}
 
-    // 페이지 로드 시 3초 후 모달 표시 (최초 방문자 환영 효과)
-    setTimeout(function () {
-      if (Math.random() > 0.5 && !sessionStorage.getItem("modalShown")) {
-        welcomeModal.show();
-        sessionStorage.setItem("modalShown", "true");
-      }
-    }, 3000);
-  }
+function suffix(lang) {
+  return lang === "en" ? "En" : "Ko";
+}
 
-  // 모달 표시 함수
-  function showModal(redirectUrl) {
-    const modalElement = document.getElementById("welcomeModal");
-    const welcomeModal = new bootstrap.Modal(
-      modalElement
-    );
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
-    if (redirectUrl) {
-      modalElement.addEventListener(
-        "hidden.bs.modal",
-        function () {
-          window.location.href = redirectUrl;
-        },
-        { once: true }
-      );
-    }
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-    welcomeModal.show();
-  }
-
-  // 이메일 복사 함수
-  function copyEmailToClipboard() {
-    const emailText = developerEmail.textContent;
-    const textArea = document.createElement("textarea");
-    textArea.value = emailText;
-    textArea.style.position = "fixed";
-    textArea.style.opacity = "0";
-    document.body.appendChild(textArea);
-    textArea.select();
-
-    try {
-      // 복사 명령 실행
-      const successful = document.execCommand("copy");
-
-      // 복사 알림 표시 및 애니메이션
-      if (successful) {
-        copyConfirmation.classList.add("show");
-
-        // 3초 후 알림 숨기기
-        setTimeout(() => {
-          copyConfirmation.classList.remove("show");
-
-          // 애니메이션 완료 후 완전히 숨기기
-          setTimeout(() => {
-            copyConfirmation.style.visibility = "hidden";
-          }, 300);
-        }, 3000);
-      }
-    } catch (err) {
-      console.error("이메일 복사 중 오류 발생:", err);
-    }
-
-    document.body.removeChild(textArea);
-  }
-
-  // 언어 전환 초기화 함수
-  function initLanguageToggle() {
-    // 브라우저 언어 감지
-    const userLang = navigator.language || navigator.userLanguage;
-    let currentLang = userLang.startsWith("ko") ? "ko" : "en";
-
-    // 저장된 언어 설정이 있으면 사용
-    if (localStorage.getItem("preferredLanguage")) {
-      currentLang = localStorage.getItem("preferredLanguage");
-    }
-
-    // 초기 언어 설정 적용
-    setLanguage(currentLang);
-
-    // 언어 전환 버튼 추가 (아직 구현되지 않음 - 나중에 추가 예정)
-    // 언어 스위치 버튼을 만들려면 여기에 코드 추가
-  }
-
-  // 언어 설정 적용 함수
-  function setLanguage(lang) {
-    // 타이틀 설정
-    document.title = document
-      .querySelector(`title`)
-      .getAttribute(`data-lang-${lang}`);
-
-    // 모든 다국어 요소 순회하면서 해당 언어 적용
-    document.querySelectorAll(`[data-lang-${lang}]`).forEach((elem) => {
-      elem.textContent = elem.getAttribute(`data-lang-${lang}`);
-    });
-
-    // 이미지 alt 텍스트 업데이트
-    document.querySelectorAll(`[data-lang-${lang}-alt]`).forEach((elem) => {
-      elem.setAttribute("alt", elem.getAttribute(`data-lang-${lang}-alt`));
-    });
-
-    // 현재 언어 저장
-    localStorage.setItem("preferredLanguage", lang);
-  }
-});
+function escapeAttr(value) {
+  return escapeHtml(value);
+}

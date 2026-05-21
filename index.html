@@ -1,353 +1,222 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <!-- 
-            스타일 출처: NeoKIM의 사이버펑크 테마 기반
-            스타일 복사일: 2025년 4월 19일
-            원본 링크: https://codepen.io/Marcus-Moen-the-builder/pen/vEEBRZY
-            
-            이 페이지의 디자인과 스타일은 위 링크의 작업물을 기반으로 하고 있습니다.
-            모든 저작권은 원 저작자에게 있습니다.
-        -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="컬러마스터2, 은하코드, UFO 호출기 등 짧게 즐기고 바로 공유할 수 있는 NeoKIM의 무료 Android 앱 컬렉션입니다.">
 
-        <!-- ✅ Open Graph 메타 태그 (SNS 미리보기용) -->
-        <meta property="og:title" content="앱 소개 페이지">
-        <meta property="og:description" content="열심히 만들었어요! 재밌게 즐겨주세요.">
-        <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=2">
-        <meta property="og:url" content="https://alchegit.github.io/">
-        <meta property="og:type" content="website">
+    <meta property="og:title" content="NeoKIM App Lab | Android Mini Apps">
+    <meta property="og:description" content="색감 테스트, 외계어 메시지, UFO 호출 체험까지. 짧게 즐기는 무료 Android 앱 컬렉션.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
 
-        <!-- 선택: 트위터 카드용 (확장 미리보기 지원) -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="앱 소개 페이지">
-        <meta name="twitter:description" content="열심히 만들었어요! 재밌게 즐겨주세요.">
-        <meta name="twitter:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=2">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NeoKIM App Lab">
+    <meta name="twitter:description" content="Small Android apps for quick fun and sharing.">
+    <meta name="twitter:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
 
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-        <meta http-equiv="Pragma" content="no-cache">
-        <meta http-equiv="Expires" content="0">
-        
-        <title data-lang-ko="앱 컬렉션 | NeoKIM" data-lang-en="App Collection | NeoKIM"></title>
-        <link rel="stylesheet" type="text/css" href="style.css?v=20260520">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="script.js?v=20260429-2"></script>
-    </head>
-    <body>
-        <!-- Bootstrap Modal -->
-        <div class="modal fade cyber-modal" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content cyber-modal-content">
-                    <div class="cyber-modal-header">
-                        <div class="modal-glitch"></div>
-                        <div class="modal-glow"></div>
-                        <div class="card-header-area">
-                            <div class="popup-card-id">#INFO001</div>
-                            <div class="popup-card-security">LEVEL: RESTRICTED</div>
-                        </div>
-                    </div>
-                    <div class="cyber-modal-body">
-                        <div class="cyber-text" data-lang-ko="비공개 테스터 모집 중..." data-lang-en="Recruiting Private Testers..."></div>
-                        <div class="cyber-subtext" data-lang-ko="비공개 테스트 참여 방법" data-lang-en="How to participate in private testing"></div>
-                        
-                        <!-- 순서대로 참여 방법 나열 -->
-                        <ol class="participation-steps">
-                            <li data-lang-ko="구글 플레이 스토어를 열기" data-lang-en="Open Google Play Store"></li>
-                            <li data-lang-ko="가입 계정(이메일 주소)를 확인하기" data-lang-en="Check your registered account (email address)"></li>
-                            <li data-lang-ko="확인한 주소를 개발자에게 이메일로 알려주기" data-lang-en="Send the email address to the developer"></li>
-                        </ol>
-                        
-                        <div class="cyber-highlight">
-                            <span id="developerEmail" class="copy-email" data-lang-ko="개발자 이메일 주소" data-lang-en="Email Address"></span>
-                            <span id="copyMessage" class="copy-message" data-lang-ko="(클릭하여 복사)" data-lang-en="(Click to copy)"></span>
-                        </div>
-                        <div id="copyConfirmation" class="copy-confirmation" data-lang-ko="이메일 주소가 복사되었습니다!" data-lang-en="Email address copied!"></div>
-                    </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="cyber-button" data-bs-dismiss="modal" data-lang-ko="CLOSE" data-lang-en="CLOSE">CLOSE</button>
-                    </div>
-                </div>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title data-lang-ko="NeoKIM App Lab | 무료 Android 미니앱 컬렉션" data-lang-en="NeoKIM App Lab | Free Android Mini Apps">NeoKIM App Lab | 무료 Android 미니앱 컬렉션</title>
+    <link rel="stylesheet" href="style.css?v=20260521-preview">
+    <script defer src="script.js?v=20260521-preview"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#apps" data-lang-ko="앱 목록으로 이동" data-lang-en="Skip to app list">앱 목록으로 이동</a>
+
+    <div class="cyber-background">
+      <div class="noise-overlay" aria-hidden="true"></div>
+      <div class="grid-overlay" aria-hidden="true"></div>
+
+      <header class="terminal-header" aria-label="NeoKIM App Lab">
+        <div class="terminal-bar">
+          <a class="terminal-title" href="#top" aria-label="NeoKIM App Lab home">/app-server</a>
+
+          <div class="terminal-status" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text">LANDING MODE</span>
+            <span id="instability-counter" class="instability-counter">0%</span>
+          </div>
+
+          <nav class="terminal-actions" aria-label="Primary navigation">
+            <a href="#featured" data-lang-ko="추천 앱" data-lang-en="Featured">추천 앱</a>
+            <a href="#apps" data-lang-ko="전체 앱" data-lang-en="Apps">전체 앱</a>
+            <a href="#faq" data-lang-ko="FAQ" data-lang-en="FAQ">FAQ</a>
+            <div class="lang-switcher" aria-label="Language selector">
+              <button type="button" class="lang-toggle" data-lang-target="ko" aria-label="한국어로 보기">KO</button>
+              <button type="button" class="lang-toggle" data-lang-target="en" aria-label="View in English">EN</button>
             </div>
+          </nav>
         </div>
+        <div class="terminal-line" aria-hidden="true"></div>
+      </header>
 
-        <div class="container-fluid cyber-background">
-            <div class="noise-overlay"></div>
-            <div class="grid-overlay"></div>
-        
-            <div class="row min-vh-100 justify-content-center align-items-center">
-                <div class="col-md">
-                    <div class="terminal-header mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="terminal-title">/app-server</div>
-                            <div class="terminal-status">
-                                <span class="status-dot"></span>
-                                <span class="status-text">ANOMALY DETECTED</span>
-                                <span id="instability-counter" class="ms-3">0%</span>
-                            </div>
-                        </div>
-                        <div class="terminal-line"></div>
-                    </div>
-        
-                    <div class="card-container">
-                        <div class="card-deck">
+      <main id="top" class="site-shell">
+        <section class="hero-section" aria-labelledby="heroTitle">
+          <div class="hero-copy">
+            <p class="eyebrow" data-lang-ko="Android mini app collection" data-lang-en="Android mini app collection">Android mini app collection</p>
+            <h1 id="heroTitle" data-lang-ko="NeoKIM App Lab" data-lang-en="NeoKIM App Lab">NeoKIM App Lab</h1>
+            <p class="hero-lead" data-lang-ko="짧게 즐기고 바로 공유하는 안드로이드 미니앱 컬렉션" data-lang-en="Small Android apps made for quick fun and sharing">짧게 즐기고 바로 공유하는 안드로이드 미니앱 컬렉션</p>
+            <p class="hero-subcopy" data-lang-ko="색감 테스트, 외계어 메시지, UFO 호출 체험까지. 가볍게 설치하고 1분 안에 즐길 수 있는 앱들을 모았습니다." data-lang-en="Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.">색감 테스트, 외계어 메시지, UFO 호출 체험까지. 가볍게 설치하고 1분 안에 즐길 수 있는 앱들을 모았습니다.</p>
 
-
-
-                            <!-- Card 6 -->
-                            <a href="https://play.google.com/store/apps/details?id=com.neokim.krd"
-                               target="_blank"
-                               class="card-link">
-                                <div class="cyber-card" data-card-id="6">
-                                    <div class="card-glitch-container">
-                                        <div class="card-glitch"></div>
-                                        <div class="card-glow"></div>
-                                        <div class="card-content">
-                                            <div class="card-header-area">
-                                                <div class="card-id">
-                                                    <span data-lang-ko="#안드로이드006" data-lang-en="#ANDROID006"></span>
-                                                </div>
-                                            </div>
-                                            <div class="card-title app-title-krd">
-                                                <span data-lang-ko="한국사 랜덤" data-lang-en="Korean Random"></span><br>
-                                                <span data-lang-ko="디펜스: 수성전" data-lang-en="Defense: Siege"></span>
-                                            </div>
-                                            <div class="card-symbol">
-                                                <img src="assets/icon_korean_random_defense.png"
-                                                    data-lang-ko-alt="한국사 랜덤 디펜스: 수성전 아이콘"
-                                                    data-lang-en-alt="Korean Random Defense: Siege Icon">
-                                            </div>
-                                            <div class="card-description">
-                                                <span data-lang-ko="한국사 속 수성전을 소재로 한 2D 랜덤 디펜스 게임!"
-                                                      data-lang-en="A 2D random defense game based on Korean fortress battles!"></span>
-                                                </br>
-                                                <span data-lang-ko="비공개 테스트가 시작되었습니다."
-                                                      data-lang-en="Private testing has started."></span>
-                                            </div>
-                                            <div class="card-footer-area">
-                                                <div class="card-power">99.4%</div>
-                                                <div class="card-power">
-                                                    <span data-lang-ko="상태: 비공개 테스트 참여 가능"
-                                                          data-lang-en="STATUS: Private Test Open"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Card 5 -->
-                            <a href="https://play.google.com/store/apps/details?id=com.neokim.darkmaze"
-                               target="_blank"
-                               class="card-link">
-                                <div class="cyber-card" data-card-id="5">
-                                    <div class="card-glitch-container">
-                                        <div class="card-glitch"></div>
-                                        <div class="card-glow"></div>
-                                        <div class="card-content">
-                                            <div class="card-header-area">
-                                                <div class="card-id">
-                                                    <span data-lang-ko="#안드로이드005" data-lang-en="#ANDROID005"></span>
-                                                </div>
-                                            </div>
-                                            <div class="card-title">
-                                                <span data-lang-ko="다크 메이즈" data-lang-en="Dark Maze"></span>
-                                            </div>
-                                            <div class="card-symbol">
-                                                <img src="assets/icon_darkmaze.png"
-                                                    data-lang-ko-alt="다크 메이즈 아이콘"
-                                                    data-lang-en-alt="Dark Maze Icon">
-                                            </div>
-                                            <div class="card-description">
-                                                <span data-lang-ko="실험쥐 미로탈출: 어둠 속 미로에서 출구를 찾는 탈출 게임!"
-                                                      data-lang-en="Lab Rat Escape: find the exit in a dark maze!"></span>
-                                                </br>
-                                                <span data-lang-ko="아이템과 공식 리더보드가 포함된 비공개 테스트 신작입니다."
-                                                      data-lang-en="Private test build with items and official leaderboards."></span>
-                                            </div>
-                                            <div class="card-footer-area">
-                                                <div class="card-power">99.1%</div>
-                                                <div class="card-power">
-                                                    <span data-lang-ko="상태: 비공개 테스트 참여 가능"
-                                                          data-lang-en="STATUS: Private Test Open"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Card 4 -->
-                            <a href="https://play.google.com/store/apps/details?id=com.codexdev.color_master2"
-                               target="_blank"
-                               class="card-link">
-                                <div class="cyber-card" data-card-id="4">
-                                    <div class="card-glitch-container">
-                                        <div class="card-glitch"></div>
-                                        <div class="card-glow"></div>
-                                        <div class="card-content">
-                                            <div class="card-header-area">
-                                                <div class="card-id">
-                                                    <span data-lang-ko="#안드로이드004" data-lang-en="#ANDROID004"></span>
-                                                </div>
-                                            </div>
-                                            <div class="card-title">
-                                                <span data-lang-ko="컬러마스터2" data-lang-en="ColorMaster2"></span>
-                                            </div>
-                                            <div class="card-symbol">
-                                                <img src="assets/icon_colormaster2.png"
-                                                    data-lang-ko-alt="컬러마스터2 아이콘"
-                                                    data-lang-en-alt="ColorMaster2 Icon">
-                                            </div>
-                                            <div class="card-description">
-                                                <span data-lang-ko="한 번의 실수가 기록을 끝내는 원라이프 색상 판별 퍼즐!"
-                                                      data-lang-en="A one-life color difference puzzle where one mistake ends the run!"></span>
-                                                </br>
-                                                <span data-lang-ko="공식 리더보드가 포함된 신작입니다."
-                                                      data-lang-en="New version with official leaderboards and a bottom banner ad."></span>
-                                            </div>
-                                            <div class="card-footer-area">
-                                                <div class="card-power">98.6%</div>
-                                                <div class="card-power">
-                                                    <span data-lang-ko="출시: 2026.05.20"
-                                                          data-lang-en="Release: 05/20/2026"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Card 3 -->
-                            <a href="./colormaster/" class="card-link">
-                                <div class="cyber-card" data-card-id="3">
-                                    <div class="card-glitch-container">
-                                        <div class="card-glitch"></div>
-                                        <div class="card-glow"></div>
-                                        <div class="card-content">
-                                            <div class="card-header-area">
-                                                <div class="card-id">
-                                                    <span data-lang-ko="#안드로이드003" data-lang-en="#ANDROID003"></span>
-                                                </div>
-                                            </div>
-                                            <div class="card-title">
-                                                <span data-lang-ko="컬러 마스터" data-lang-en="Color Master"></span>
-                                            </div>
-                                            <div class="card-symbol">
-                                                <img src="assets/icon_colormaster.png"
-                                                    data-lang-ko-alt="컬러 마스터 아이콘"
-                                                    data-lang-en-alt="Color Master Icon">
-                                            </div>
-                                            <div class="card-description">
-                                                <span data-lang-ko="비슷한 색상 속에서 정답을 찾는 색각 집중력 테스트 게임!"
-                                                      data-lang-en="A game to test your color concentration!"></span>
-                                                </br>
-                                                <span data-lang-ko="누구나 연습을 통해 컬러 마스터가 될 수 있습니다."
-                                                      data-lang-en="Anyone can become a Color Master through practice."></span>
-                                            </div>
-                                            <div class="card-footer-area">
-                                                <div class="card-power">94.1%</div>
-                                                <div class="card-power">
-                                                    <span data-lang-ko="출시: 2025.05.05"
-                                                          data-lang-en="Release: 05/05/2025"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Card 2 -->
-                            <a href="https://play.google.com/store/apps/details?id=com.galactic.speak" target="_blank" class="card-link">
-                                <div class="cyber-card" data-card-id="2">
-                                    <div class="card-glitch-container">
-                                        <div class="card-glitch"></div>
-                                        <div class="card-glow"></div>
-                                        <div class="card-content">
-                                            <div class="card-header-area">
-                                                <div class="card-id">
-                                                    <span data-lang-ko="#안드로이드002" data-lang-en="#ANDROID002"></span>
-                                                </div>
-                                            </div>
-                                            <div class="card-title">
-                                                <span data-lang-ko="은하코드" data-lang-en="Galacticode"></span>
-                                            </div>
-                                            <div class="card-symbol">
-                                                <img src="assets/icon_galacticode.png"
-                                                    data-lang-ko-alt="은하코드 아이콘"
-                                                    data-lang-en-alt="Galacticode Icon">
-                                            </div>
-                                            <div class="card-description">
-                                                <span data-lang-ko="마치 외계어처럼 보이는 나만의 언어를 만들어주는 앱"
-                                                      data-lang-en="An app to create your own language!"></span>
-                                                </br>
-                                                <span data-lang-ko="고대 문자 기반, 나만의 비밀 은하어 만들기. 친구와 공유도 가능!"
-                                                      data-lang-en="Create your own secret galaxy. Share it with your friends!"></span>
-                                            </div>
-                                            <div class="card-footer-area">
-                                                <div class="card-power">62.8%</div>
-                                                <div class="card-power">
-                                                    <span data-lang-ko="출시: 2025.05.14"
-                                                          data-lang-en="Release: 05/14/2025"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Card 1 -->
-                            <a href="https://play.google.com/store/apps/details?id=com.call_the_ufo" target="_blank" class="card-link">
-                                <div class="cyber-card" data-card-id="1">
-                                    <div class="card-glitch-container">
-                                        <div class="card-glitch"></div>
-                                        <div class="card-glow"></div>
-                                        <div class="card-content">
-                                            <div class="card-header-area">
-                                                <div class="card-id">
-                                                    <span data-lang-ko="#안드로이드001" data-lang-en="#ANDROID001"></span>
-                                                </div>
-                                            </div>
-                                            <div class="card-title">
-                                                <span data-lang-ko="UFO 호출기" data-lang-en="Call the UFO"></span>
-                                            </div>
-                                            <div class="card-symbol">
-                                                <img src="assets/icon_calltheufo.png"
-                                                    data-lang-ko-alt="UFO 호출기 아이콘"
-                                                    data-lang-en-alt="Call the UFO Icon">
-                                            </div>
-                                            <div class="card-description">
-                                                <span data-lang-ko="우주에 신호를 보내고 UFO를 기다리는 몰입형 체험 앱"
-                                                      data-lang-en="A pseudo-experiential app that calls UFOs!"></span>
-                                                </br>
-                                                <span data-lang-ko="그들이 응답할지는 아무도 모릅니다..."
-                                                      data-lang-en="No one knows if they'll respond..."></span>
-                                            </div>
-                                            <div class="card-footer-area">
-                                                <div class="card-power">87.3%</div>
-                                                <div class="card-power">
-                                                    <span data-lang-ko="출시: 2025.05.11"
-                                                          data-lang-en="Release: 05/11/2025"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                        </div>
-                    </div>
-        
-                    <div class="terminal-footer mt-4">
-                        <div class="terminal-line"></div>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <div class="terminal-info">App developer NeoKIM</div>
-                            <div class="terminal-warning blink">LAST UPDATE: 2026.05.20</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="hero-actions">
+              <a id="heroPrimaryCta" class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.codexdev.color_master2" target="_blank" rel="noopener" data-app-id="color-master-2" data-event="play_click" data-lang-ko="추천 앱 설치하기" data-lang-en="Install Featured App" aria-label="컬러마스터2 Google Play에서 설치">추천 앱 설치하기</a>
+              <a class="secondary-cta" href="#apps" data-lang-ko="전체 앱 보기" data-lang-en="Browse Apps" aria-label="전체 앱 보기">전체 앱 보기</a>
             </div>
+
+            <ul class="hero-badges" aria-label="App badges">
+              <li data-lang-ko="Free Apps" data-lang-en="Free Apps">Free Apps</li>
+              <li data-lang-ko="Android" data-lang-en="Android">Android</li>
+              <li data-lang-ko="No Data Collection" data-lang-en="No Data Collection">No Data Collection</li>
+              <li data-lang-ko="Made by NeoKIM" data-lang-en="Made by NeoKIM">Made by NeoKIM</li>
+            </ul>
+          </div>
+
+          <div class="hero-visual" role="img" data-lang-ko-aria="컬러마스터2 앱 아이콘과 색상 타일로 구성된 휴대폰 목업" data-lang-en-aria="Phone mockup with Color Master 2 icon and color tiles" aria-label="컬러마스터2 앱 아이콘과 색상 타일로 구성된 휴대폰 목업">
+            <div class="phone-shell">
+              <div class="phone-speaker" aria-hidden="true"></div>
+              <div class="phone-screen">
+                <img class="phone-app-icon" src="assets/icon_colormaster2.png" alt="컬러마스터2 아이콘" data-lang-ko-alt="컬러마스터2 아이콘" data-lang-en-alt="Color Master 2 icon">
+                <div class="phone-title">Color Master 2</div>
+                <div class="phone-timer">00:10</div>
+                <div class="color-tile-grid" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="featured" class="section featured-section" aria-labelledby="featuredTitle">
+          <div class="section-heading">
+            <p class="section-kicker" data-lang-ko="FEATURED APP" data-lang-en="FEATURED APP">FEATURED APP</p>
+            <h2 id="featuredTitle" data-lang-ko="오늘 먼저 설치해볼 앱" data-lang-en="Install This First Today">오늘 먼저 설치해볼 앱</h2>
+          </div>
+          <div id="featuredApp" class="featured-app"></div>
+        </section>
+
+        <section id="apps" class="section apps-section" aria-labelledby="appsTitle">
+          <div class="section-heading">
+            <p class="section-kicker" data-lang-ko="APP CATALOG" data-lang-en="APP CATALOG">APP CATALOG</p>
+            <h2 id="appsTitle" data-lang-ko="전체 앱" data-lang-en="All Apps">전체 앱</h2>
+            <p class="section-description" data-lang-ko="공개 앱은 바로 설치하고, 비공개 테스트 앱은 문의 버튼으로 참여 요청을 보낼 수 있습니다." data-lang-en="Install public apps directly, or use the contact button for private test apps.">공개 앱은 바로 설치하고, 비공개 테스트 앱은 문의 버튼으로 참여 요청을 보낼 수 있습니다.</p>
+          </div>
+          <div id="appGrid" class="app-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="use-cases" class="section use-case-section" aria-labelledby="useCasesTitle">
+          <div class="section-heading">
+            <p class="section-kicker" data-lang-ko="SHORTS IDEAS" data-lang-en="SHORTS IDEAS">SHORTS IDEAS</p>
+            <h2 id="useCasesTitle" data-lang-ko="이렇게 즐겨보세요" data-lang-en="Try Them Like This">이렇게 즐겨보세요</h2>
+          </div>
+
+          <div class="idea-grid">
+            <article class="idea-card">
+              <img src="assets/icon_colormaster2.png" alt="컬러마스터2 아이콘" data-lang-ko-alt="컬러마스터2 아이콘" data-lang-en-alt="Color Master 2 icon">
+              <p class="idea-app" data-lang-ko="컬러마스터2" data-lang-en="Color Master 2">컬러마스터2</p>
+              <h3 data-lang-ko="“이 색 차이 보이면 눈 좋은 사람”" data-lang-en="“If you see this color difference, your eyes are sharp.”">“이 색 차이 보이면 눈 좋은 사람”</h3>
+              <p data-lang-ko="10초 챌린지로 친구와 기록 경쟁하기" data-lang-en="Compete with friends in a 10-second challenge.">10초 챌린지로 친구와 기록 경쟁하기</p>
+            </article>
+
+            <article class="idea-card">
+              <img src="assets/icon_galacticode.png" alt="은하코드 아이콘" data-lang-ko-alt="은하코드 아이콘" data-lang-en-alt="Galacticode icon">
+              <p class="idea-app" data-lang-ko="은하코드" data-lang-en="Galacticode">은하코드</p>
+              <h3 data-lang-ko="“친구에게 해독 못 하는 외계어 보내기”" data-lang-en="“Send your friend an alien message they cannot decode.”">“친구에게 해독 못 하는 외계어 보내기”</h3>
+              <p data-lang-ko="메신저나 SNS에 비밀 메시지 남기기" data-lang-en="Leave secret messages in chats or on social media.">메신저나 SNS에 비밀 메시지 남기기</p>
+            </article>
+
+            <article class="idea-card">
+              <img src="assets/icon_calltheufo.png" alt="UFO 호출기 아이콘" data-lang-ko-alt="UFO 호출기 아이콘" data-lang-en-alt="Call the UFO icon">
+              <p class="idea-app" data-lang-ko="UFO 호출기" data-lang-en="Call the UFO">UFO 호출기</p>
+              <h3 data-lang-ko="“새벽에 UFO 호출 버튼 누르면?”" data-lang-en="“What happens if you press the UFO button at dawn?”">“새벽에 UFO 호출 버튼 누르면?”</h3>
+              <p data-lang-ko="어두운 방에서 사운드와 애니메이션 즐기기" data-lang-en="Enjoy the sounds and animation in a dark room.">어두운 방에서 사운드와 애니메이션 즐기기</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="faq" class="section faq-section" aria-labelledby="faqTitle">
+          <div class="section-heading">
+            <p class="section-kicker" data-lang-ko="FAQ" data-lang-en="FAQ">FAQ</p>
+            <h2 id="faqTitle" data-lang-ko="자주 묻는 질문" data-lang-en="Frequently Asked Questions">자주 묻는 질문</h2>
+          </div>
+
+          <div class="faq-list">
+            <details>
+              <summary data-lang-ko="무료인가요?" data-lang-en="Are the apps free?">무료인가요?</summary>
+              <p data-lang-ko="네. 현재 소개된 앱들은 무료로 사용할 수 있으며, 일부 앱에는 광고가 포함될 수 있습니다." data-lang-en="Yes. The apps introduced here are currently free, and some apps may include ads.">네. 현재 소개된 앱들은 무료로 사용할 수 있으며, 일부 앱에는 광고가 포함될 수 있습니다.</p>
+            </details>
+
+            <details>
+              <summary data-lang-ko="개인정보를 수집하나요?" data-lang-en="Do the apps collect personal data?">개인정보를 수집하나요?</summary>
+              <p data-lang-ko="앱별 정책에 따라 다르지만, 가능한 한 데이터 수집을 최소화하는 방향으로 제작합니다. 자세한 내용은 각 앱의 개인정보 처리방침을 확인하세요." data-lang-en="It depends on each app policy, but the apps are built to minimize data collection where possible. Check each app privacy policy for details.">앱별 정책에 따라 다르지만, 가능한 한 데이터 수집을 최소화하는 방향으로 제작합니다. 자세한 내용은 각 앱의 개인정보 처리방침을 확인하세요.</p>
+            </details>
+
+            <details>
+              <summary data-lang-ko="어떤 앱을 먼저 설치하면 좋나요?" data-lang-en="Which app should I install first?">어떤 앱을 먼저 설치하면 좋나요?</summary>
+              <p data-lang-ko="처음 방문했다면 컬러마스터2를 추천합니다. 짧게 플레이할 수 있고 기록 경쟁이 가능하기 때문입니다." data-lang-en="If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score.">처음 방문했다면 컬러마스터2를 추천합니다. 짧게 플레이할 수 있고 기록 경쟁이 가능하기 때문입니다.</p>
+            </details>
+
+            <details>
+              <summary data-lang-ko="비공개 테스트 앱은 어떻게 참여하나요?" data-lang-en="How do I join private test apps?">비공개 테스트 앱은 어떻게 참여하나요?</summary>
+              <p data-lang-ko="테스트 참여 문의 버튼을 눌러 개발자 이메일로 문의하세요." data-lang-en="Use the Join Private Test button to contact the developer by email.">테스트 참여 문의 버튼을 눌러 개발자 이메일로 문의하세요.</p>
+            </details>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div>
+            <p class="footer-brand">NeoKIM App Lab</p>
+            <p data-lang-ko="Made by NeoKIM" data-lang-en="Made by NeoKIM">Made by NeoKIM</p>
+            <p class="last-updated" data-lang-ko="Last updated: 2026.05.20" data-lang-en="Last updated: 2026.05.20">Last updated: 2026.05.20</p>
+          </div>
+
+          <nav class="footer-links" aria-label="Footer links">
+            <a href="https://play.google.com/store/apps/developer?id=NeoKIM" target="_blank" rel="noopener" data-lang-ko="Google Play 앱 목록" data-lang-en="Google Play Apps">Google Play 앱 목록</a>
+            <a href="./privacy-policy/colormaster2.html" data-lang-ko="Privacy Policy" data-lang-en="Privacy Policy">Privacy Policy</a>
+            <a href="./app-ads.txt" data-lang-ko="app-ads.txt" data-lang-en="app-ads.txt">app-ads.txt</a>
+            <a href="mailto:wlgnsl14@gmail.com" data-lang-ko="Contact" data-lang-en="Contact">Contact</a>
+          </nav>
+
+          <address class="footer-contact">
+            <span data-lang-ko="Contact" data-lang-en="Contact">Contact</span>
+            <a href="mailto:wlgnsl14@gmail.com">wlgnsl14@gmail.com</a>
+          </address>
         </div>
-    </body>
+      </footer>
+    </div>
+
+    <div id="testContactModal" class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="testContactTitle" aria-hidden="true" hidden>
+      <div class="contact-modal__backdrop" data-modal-close></div>
+      <div class="contact-modal__panel" tabindex="-1">
+        <div class="contact-modal__header">
+          <p class="popup-card-id">#PRIVATE-TEST</p>
+          <button type="button" class="modal-close" data-modal-close aria-label="모달 닫기" data-lang-ko-aria="모달 닫기" data-lang-en-aria="Close modal">×</button>
+        </div>
+        <div class="contact-modal__body">
+          <h2 id="testContactTitle" data-lang-ko="비공개 테스터 모집" data-lang-en="Private Tester Signup">비공개 테스터 모집</h2>
+          <p id="testContactApp" class="modal-app-name"></p>
+          <p data-lang-ko="Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 문의하세요." data-lang-en="The public Google Play link may not open. Contact the developer if you want to join the test.">Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 문의하세요.</p>
+          <ol class="participation-steps">
+            <li data-lang-ko="Google Play 가입 계정 이메일을 확인하세요." data-lang-en="Check the email address used for your Google Play account.">Google Play 가입 계정 이메일을 확인하세요.</li>
+            <li data-lang-ko="아래 이메일로 테스트 참여 요청을 보내세요." data-lang-en="Send a private test request to the email below.">아래 이메일로 테스트 참여 요청을 보내세요.</li>
+            <li data-lang-ko="승인 후 테스트 링크를 다시 확인하세요." data-lang-en="After approval, check the test link again.">승인 후 테스트 링크를 다시 확인하세요.</li>
+          </ol>
+
+          <div class="developer-email">
+            <button type="button" id="copyEmailButton" class="copy-email" data-lang-ko="이메일 복사" data-lang-en="Copy Email" aria-label="개발자 이메일 주소 복사" data-lang-ko-aria="개발자 이메일 주소 복사" data-lang-en-aria="Copy developer email address">이메일 복사</button>
+            <a href="mailto:wlgnsl14@gmail.com" class="email-link">wlgnsl14@gmail.com</a>
+          </div>
+          <p id="copyConfirmation" class="copy-confirmation" role="status" aria-live="polite" data-lang-ko="이메일 주소가 복사되었습니다." data-lang-en="Email address copied.">이메일 주소가 복사되었습니다.</p>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
