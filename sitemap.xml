@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://alchegit.github.io/</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-26</lastmod>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://alchegit.github.io/colormaster/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://alchegit.github.io/color-master-2/</loc>
