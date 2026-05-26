@@ -76,25 +76,29 @@ const apps = [
   },
   {
     id: "color-master-classic",
-    status: "legacy",
+    status: "classic",
     priority: 4,
     code: "ANDROID003",
+    campaign: "colormaster",
     titleKo: "컬러 마스터",
     titleEn: "Color Master",
-    categoryKo: "구버전 색상 테스트",
-    categoryEn: "Classic color test",
-    taglineKo: "비슷한 색상 속에서 정답을 찾는 색각 집중력 테스트",
-    taglineEn: "A classic color concentration test.",
-    descriptionKo: "컬러마스터2 이전 버전입니다. 가능하면 컬러마스터2를 먼저 추천하세요.",
-    descriptionEn: "Classic version. Recommend Color Master 2 first.",
+    categoryKo: "클래식 색상 판별 게임",
+    categoryEn: "Classic color puzzle",
+    taglineKo: "비슷한 색상 속에서 정답을 찾는 원작 색감 집중력 테스트",
+    taglineEn: "The original color-focus challenge: find the answer among similar colors.",
+    descriptionKo: "컬러마스터2 이전에 만든 원작 버전입니다. 클래식한 색상 판별 플레이와 랭킹 페이지를 지금도 즐길 수 있습니다.",
+    descriptionEn: "The original version before Color Master 2. You can still play the classic color challenge and view its ranking page.",
     icon: "assets/icon_colormaster.png",
-    playUrl: "./colormaster/",
-    highlightsKo: ["클래식 버전", "색상 집중력", "간단한 플레이"],
-    highlightsEn: ["Classic version", "Color focus", "Simple play"],
-    primaryCtaKo: "구버전 보기",
-    primaryCtaEn: "View Classic Version",
-    statusNoteKo: "새 버전인 컬러마스터2를 먼저 추천합니다.",
-    statusNoteEn: "Try Color Master 2 first if you are new."
+    playUrl: "https://play.google.com/store/apps/details?id=com.neokim.colormaster",
+    detailUrl: "./colormaster/",
+    detailCtaKo: "랭킹/소개 보기",
+    detailCtaEn: "View Ranking",
+    highlightsKo: ["원작 감성", "색상 집중력", "랭킹 페이지", "바로 설치"],
+    highlightsEn: ["Original feel", "Color focus", "Ranking page", "Install now"],
+    primaryCtaKo: "컬러 마스터 설치",
+    primaryCtaEn: "Install Color Master",
+    statusNoteKo: "컬러마스터2 이전에 만든 원작 버전입니다. 지금도 Google Play에서 설치할 수 있습니다.",
+    statusNoteEn: "This is the original version before Color Master 2, and it is still available on Google Play."
   },
   {
     id: "korean-random-defense",
@@ -436,12 +440,17 @@ function initLandingCounter() {
 }
 
 function buildPlayUrl(app, placement = "home_card") {
-  if (!app?.playUrl || app.status !== "live") {
+  if (!app?.playUrl) {
     return app?.playUrl || "#";
   }
 
   try {
     const url = new URL(app.playUrl);
+
+    if (url.hostname !== "play.google.com") {
+      return app.playUrl;
+    }
+
     const referrer = new URLSearchParams({
       utm_source: "neokim_site",
       utm_medium: "landing",
@@ -462,15 +471,16 @@ function buildMailto(app) {
 }
 
 function renderAppCard(app) {
-  const isLive = app.status === "live";
+  const isInstallable = app.status === "live" || app.status === "classic";
   const isTesting = app.status === "testing" || app.status === "coming-soon";
-  const href = isLive ? buildPlayUrl(app, "home_card") : app.playUrl;
+  const href = isInstallable ? buildPlayUrl(app, "home_card") : app.playUrl;
+  const opensExternally = /^https?:\/\//.test(href || "");
   const detailLink = app.detailUrl
-    ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}">${localizedText("웹에서 먼저 체험", "Try Web Demo")}</a>`
+    ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}">${localizedText(app.detailCtaKo || "웹에서 먼저 체험", app.detailCtaEn || "Try Web Demo")}</a>`
     : "";
   const cta = isTesting
     ? `<a class="card-cta is-secondary" href="${escapeAttr(buildMailto(app))}" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`
-    : `<a class="card-cta ${isLive ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${isLive ? 'target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_card"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
+    : `<a class="card-cta ${isInstallable ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${opensExternally ? 'target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_card"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
 
   return `
     <article class="cyber-card" data-card-id="${escapeAttr(app.code)}" data-app-id="${escapeAttr(app.id)}">
@@ -527,7 +537,8 @@ function renderHighlights(app, className, maxItems) {
 function renderStatusBadge(status) {
   const statusMap = {
     live: { ko: "LIVE", en: "LIVE", className: "is-live" },
-    legacy: { ko: "구버전", en: "Legacy", className: "is-legacy" },
+    classic: { ko: "클래식", en: "Classic", className: "is-classic" },
+    legacy: { ko: "클래식", en: "Classic", className: "is-classic" },
     testing: { ko: "비공개 테스트", en: "Private Test", className: "is-testing" },
     "coming-soon": { ko: "준비 중", en: "Coming Soon", className: "is-testing" }
   };

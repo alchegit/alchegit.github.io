@@ -747,10 +747,11 @@ summary:focus-visible {
   background: rgba(255, 230, 107, 0.08);
 }
 
+.status-badge.is-classic,
 .status-badge.is-legacy {
-  border-color: rgba(255, 91, 123, 0.42);
-  color: #ff98aa;
-  background: rgba(255, 91, 123, 0.08);
+  border-color: rgba(179, 108, 255, 0.52);
+  color: #eadfff;
+  background: rgba(179, 108, 255, 0.1);
 }
 
 .status-badge.is-recommended {
