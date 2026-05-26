@@ -3,148 +3,184 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="컬러 마스터는 비슷한 색상 타일 속에서 미묘하게 다른 색을 찾는 클래식 색상 판별 게임입니다.">
+    <meta name="description" content="컬러 마스터는 정답 색상을 기억한 뒤 여러 색상 중 같은 색을 고르는 클래식 색상 기억 게임입니다.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alchegit.github.io/colormaster/">
 
-    <meta property="og:title" content="컬러 마스터 | 웹 미리보기">
-    <meta property="og:description" content="비슷한 색상 속에서 다른 색을 찾아보세요. 컬러 마스터의 게임 방식을 웹에서 간단히 미리 볼 수 있습니다.">
+    <meta property="og:title" content="컬러 마스터 | 웹 플레이">
+    <meta property="og:description" content="정답 색상을 기억하고, 여러 색상 중 같은 색을 골라보세요. 컬러 마스터를 웹에서 바로 체험할 수 있습니다.">
     <meta property="og:image" content="https://alchegit.github.io/assets/icon_colormaster.png">
     <meta property="og:url" content="https://alchegit.github.io/colormaster/">
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="컬러 마스터 | 웹 미리보기">
-    <meta name="twitter:description" content="비슷한 색상 타일 속에서 미묘하게 다른 색을 찾는 클래식 색상 판별 게임입니다.">
+    <meta name="twitter:title" content="컬러 마스터 | 웹 플레이">
+    <meta name="twitter:description" content="정답 색상을 기억하고, 여러 색상 중 같은 색을 골라보세요.">
     <meta name="twitter:image" content="https://alchegit.github.io/assets/icon_colormaster.png">
 
-    <title>컬러 마스터 | 웹 미리보기</title>
-    <link rel="stylesheet" href="style.css?v=20260526-v1">
+    <title>컬러 마스터 | 웹 플레이</title>
+    <link rel="stylesheet" href="style.css?v=20260526-v2">
   </head>
   <body>
-    <div class="page-shell">
-      <header class="top-bar">
-        <a class="home-link" href="/" data-ko="홈" data-en="Home">홈</a>
-        <div class="brand">
-          <img src="../assets/icon_colormaster.png" alt="컬러 마스터 아이콘" width="38" height="38" data-ko-alt="컬러 마스터 아이콘" data-en-alt="Color Master icon">
-          <span>Color Master</span>
-        </div>
+    <main class="game-shell" aria-labelledby="roundTitle">
+      <div class="game-topbar">
+        <a class="home-button" href="/" aria-label="홈으로 이동" data-ko-aria="홈으로 이동" data-en-aria="Go home">Color Master</a>
         <div class="language-toggle" aria-label="Language selector">
           <button type="button" data-lang="ko" aria-pressed="true">KO</button>
           <button type="button" data-lang="en" aria-pressed="false">EN</button>
         </div>
-      </header>
+      </div>
 
-      <main>
-        <section class="preview-section" aria-labelledby="pageTitle">
-          <div class="intro-copy">
-            <p class="eyebrow" data-ko="CLASSIC COLOR PUZZLE" data-en="CLASSIC COLOR PUZZLE">CLASSIC COLOR PUZZLE</p>
-            <h1 id="pageTitle" data-ko="컬러 마스터" data-en="Color Master">컬러 마스터</h1>
-            <p class="lead" data-ko="비슷한 색상 속에서 미묘하게 다른 타일을 찾아내는 색감 집중력 게임입니다." data-en="A color-focus game where you find the subtly different tile among similar colors.">비슷한 색상 속에서 미묘하게 다른 타일을 찾아내는 색감 집중력 게임입니다.</p>
-            <p class="subcopy" data-ko="아래 미리보기에서 타일을 눌러보면 앱의 기본 감각을 바로 알 수 있습니다. 실제 앱에서는 더 많은 라운드와 기록 도전을 즐길 수 있습니다." data-en="Tap the preview below to understand the core feel. The app adds more rounds and record chasing.">아래 미리보기에서 타일을 눌러보면 앱의 기본 감각을 바로 알 수 있습니다. 실제 앱에서는 더 많은 라운드와 기록 도전을 즐길 수 있습니다.</p>
-
-            <div class="actions">
-              <a class="primary-action" href="https://play.google.com/store/apps/details?id=com.neokim.colormaster&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dweb_preview%26utm_campaign%3Dcolormaster%26utm_content%3Dpreview_primary" target="_blank" rel="noopener" data-ko="Google Play에서 설치" data-en="Install on Google Play">Google Play에서 설치</a>
-              <a class="secondary-action" href="/" data-ko="앱 목록으로 돌아가기" data-en="Back to App Lab">앱 목록으로 돌아가기</a>
-            </div>
+      <section id="gameScreen" class="game-screen" aria-label="컬러 마스터 웹 게임" data-ko-aria="컬러 마스터 웹 게임" data-en-aria="Color Master web game">
+        <header class="round-header">
+          <h1 id="roundTitle">1번 정답 색상</h1>
+          <div class="timer-row">
+            <span id="timerText" class="timer">0:00</span>
+            <a class="close-link" href="/" aria-label="홈으로 이동" data-ko-aria="홈으로 이동" data-en-aria="Go home">×</a>
           </div>
+        </header>
 
-          <div class="demo-panel" aria-label="컬러 마스터 웹 미리보기" data-ko-aria="컬러 마스터 웹 미리보기" data-en-aria="Color Master web preview">
-            <div class="demo-header">
-              <div>
-                <p class="demo-label" data-ko="미리보기" data-en="Preview">미리보기</p>
-                <h2 data-ko="다른 색을 찾아보세요" data-en="Find the different color">다른 색을 찾아보세요</h2>
-              </div>
-              <div class="score-box">
-                <span data-ko="정답" data-en="Score">정답</span>
-                <strong id="scoreValue">0</strong>
-              </div>
-            </div>
+        <div id="progressTrack" class="progress-track" aria-label="문제 진행 상황" data-ko-aria="문제 진행 상황" data-en-aria="Round progress"></div>
 
-            <div id="tileBoard" class="tile-board" aria-label="색상 타일 선택 영역" data-ko-aria="색상 타일 선택 영역" data-en-aria="Color tile selection area"></div>
+        <div id="comboToast" class="combo-toast" aria-live="polite"></div>
+        <p id="feedbackText" class="feedback-text" role="status" aria-live="polite"></p>
 
-            <div class="demo-footer">
-              <p id="roundMessage" class="round-message" role="status" aria-live="polite" data-ko="가장 미묘하게 다른 타일을 눌러보세요." data-en="Tap the tile that looks subtly different.">가장 미묘하게 다른 타일을 눌러보세요.</p>
-              <button id="newRoundButton" type="button" class="secondary-action" data-ko="새 라운드" data-en="New Round">새 라운드</button>
+        <section id="memoryStage" class="memory-stage">
+          <button id="memoryCard" type="button" class="memory-card" aria-label="정답 색상 확인 후 선택 단계로 이동" data-ko-aria="정답 색상 확인 후 선택 단계로 이동" data-en-aria="Review the answer color, then move to choices">
+            <span class="memory-label" data-ko="이 색상을 기억하세요" data-en="Remember this color">이 색상을 기억하세요</span>
+          </button>
+        </section>
+
+        <section id="choiceStage" class="choice-stage" aria-hidden="true">
+          <div id="choiceGrid" class="choice-grid"></div>
+        </section>
+
+        <section id="resultStage" class="result-stage" hidden>
+          <div class="result-card">
+            <img src="../assets/icon_colormaster.png" alt="컬러 마스터 아이콘" width="74" height="74" data-ko-alt="컬러 마스터 아이콘" data-en-alt="Color Master icon">
+            <h2 id="resultTitle"></h2>
+            <p id="resultSummary"></p>
+            <div class="result-actions">
+              <button id="restartButton" type="button" class="primary-action" data-ko="다시 플레이" data-en="Play Again">다시 플레이</button>
+              <a class="secondary-action" href="https://play.google.com/store/apps/details?id=com.neokim.colormaster&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dweb_play%26utm_campaign%3Dcolormaster%26utm_content%3Dresult_install" target="_blank" rel="noopener" data-ko="앱 설치하기" data-en="Install App">앱 설치하기</a>
             </div>
           </div>
         </section>
+      </section>
 
-        <section class="info-grid" aria-label="게임 소개">
-          <article>
-            <h2 data-ko="한눈에 찾기" data-en="Quick Recognition">한눈에 찾기</h2>
-            <p data-ko="타일 대부분은 같은 색이고, 한 칸만 살짝 다릅니다. 색 차이를 얼마나 빨리 알아차리는지가 핵심입니다." data-en="Most tiles share one color, while one tile is slightly different. The challenge is noticing the difference quickly.">타일 대부분은 같은 색이고, 한 칸만 살짝 다릅니다. 색 차이를 얼마나 빨리 알아차리는지가 핵심입니다.</p>
-          </article>
-          <article>
-            <h2 data-ko="짧은 플레이" data-en="Short Sessions">짧은 플레이</h2>
-            <p data-ko="긴 설명 없이 바로 시작할 수 있습니다. 잠깐 쉬는 시간에 색감과 집중력을 시험하기 좋습니다." data-en="It starts without a long tutorial, making it easy to test your focus in a short break.">긴 설명 없이 바로 시작할 수 있습니다. 잠깐 쉬는 시간에 색감과 집중력을 시험하기 좋습니다.</p>
-          </article>
-          <article>
-            <h2 data-ko="원작 감성" data-en="Original Feel">원작 감성</h2>
-            <p data-ko="컬러마스터2보다 단순한 구조의 원작 버전입니다. 클래식한 색상 판별 플레이를 원하는 분에게 잘 맞습니다." data-en="This is the simpler original version before Color Master 2, made for players who like the classic color puzzle feel.">컬러마스터2보다 단순한 구조의 원작 버전입니다. 클래식한 색상 판별 플레이를 원하는 분에게 잘 맞습니다.</p>
-          </article>
-        </section>
-      </main>
-    </div>
+      <div class="install-strip">
+        <a href="https://play.google.com/store/apps/details?id=com.neokim.colormaster&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dweb_play%26utm_campaign%3Dcolormaster%26utm_content%3Dbottom_install" target="_blank" rel="noopener">
+          <img src="../assets/icon_colormaster.png" alt="" width="42" height="42">
+          <span data-ko="컬러 마스터 앱 설치" data-en="Install Color Master">컬러 마스터 앱 설치</span>
+        </a>
+      </div>
+    </main>
 
     <script>
-      const translations = {
+      const texts = {
         ko: {
-          title: "컬러 마스터 | 웹 미리보기",
-          correct: "정답입니다. 다음 라운드로 넘어갑니다.",
-          wrong: "아쉽습니다. 조금 더 미묘하게 다른 색을 찾아보세요.",
-          prompt: "가장 미묘하게 다른 타일을 눌러보세요.",
-          tile: "색상 타일"
+          title: "컬러 마스터 | 웹 플레이",
+          memoryTitle: "{round}번 정답 색상",
+          choiceTitle: "{round}번 색상 선택",
+          memoryPrompt: "이 색상을 기억하세요",
+          selectPrompt: "기억한 색상을 골라보세요.",
+          correct: "정답을 잘 골랐어요!",
+          wrong: "아쉽습니다. 정답 색상을 확인해보세요.",
+          combo: "{combo} COMBO",
+          tile: "색상 선택지",
+          resultTitle: "플레이 완료",
+          resultSummary: "10문제 중 {correct}문제를 맞혔어요.",
+          perfectSummary: "완벽합니다. 10문제를 모두 맞혔어요.",
+          homeAria: "홈으로 이동",
+          gameAria: "컬러 마스터 웹 게임",
+          progressAria: "문제 진행 상황",
+          memoryAria: "정답 색상 확인 후 선택 단계로 이동",
+          appIconAlt: "컬러 마스터 아이콘"
         },
         en: {
-          title: "Color Master | Web Preview",
-          correct: "Correct. Moving to the next round.",
-          wrong: "Not quite. Look for the tile with the subtle color shift.",
-          prompt: "Tap the tile that looks subtly different.",
-          tile: "Color tile"
+          title: "Color Master | Web Play",
+          memoryTitle: "Round {round}: Answer Color",
+          choiceTitle: "Round {round}: Pick a Color",
+          memoryPrompt: "Remember this color",
+          selectPrompt: "Pick the color you remembered.",
+          correct: "Nice pick. Correct!",
+          wrong: "Not quite. Here is the answer color.",
+          combo: "{combo} COMBO",
+          tile: "Color choice",
+          resultTitle: "Run Complete",
+          resultSummary: "You got {correct} out of 10.",
+          perfectSummary: "Perfect. You cleared all 10 rounds.",
+          homeAria: "Go home",
+          gameAria: "Color Master web game",
+          progressAria: "Round progress",
+          memoryAria: "Review the answer color, then move to choices",
+          appIconAlt: "Color Master icon"
         }
       };
 
-      const rounds = [
-        { base: [53, 221, 184], answer: [39, 197, 165] },
-        { base: [94, 166, 255], answer: [77, 143, 232] },
-        { base: [246, 105, 216], answer: [222, 79, 194] },
-        { base: [255, 223, 92], answer: [235, 201, 73] },
-        { base: [164, 121, 255], answer: [144, 101, 236] }
+      const roundPalette = [
+        { answer: "#5c4bb3", decoys: ["#6f1e7b", "#63afd0", "#662c9a", "#4d2a6f"] },
+        { answer: "#e75d65", decoys: ["#d94979", "#e98245", "#d36569", "#f07888"] },
+        { answer: "#2f8f7a", decoys: ["#307f8a", "#38a675", "#407b73", "#229a90"] },
+        { answer: "#efc743", decoys: ["#dfb848", "#f0d75b", "#d7c149", "#f2be51"] },
+        { answer: "#355cc9", decoys: ["#3147b3", "#3b74d8", "#4160bd", "#274da6"] },
+        { answer: "#9630c8", decoys: ["#a800d8", "#4b008d", "#7200b9", "#5e0085", "#8619b9"] },
+        { answer: "#c15b2c", decoys: ["#b54a39", "#d17632", "#ad6131", "#c84e2f", "#b96b43"] },
+        { answer: "#208cba", decoys: ["#2b74a8", "#36a3c0", "#1f7ea2", "#4297bd", "#256b9d"] },
+        { answer: "#7d3fc7", decoys: ["#6e25bd", "#8a4ed1", "#5c2397", "#7330aa", "#923fc6"] },
+        { answer: "#34008f", decoys: ["#b000d6", "#4a008f", "#7900c8", "#2a0079", "#6800b6"] }
       ];
 
-      const board = document.getElementById("tileBoard");
-      const scoreValue = document.getElementById("scoreValue");
-      const roundMessage = document.getElementById("roundMessage");
-      const newRoundButton = document.getElementById("newRoundButton");
+      const totalRounds = 10;
+      const memoryStage = document.getElementById("memoryStage");
+      const choiceStage = document.getElementById("choiceStage");
+      const resultStage = document.getElementById("resultStage");
+      const memoryCard = document.getElementById("memoryCard");
+      const choiceGrid = document.getElementById("choiceGrid");
+      const progressTrack = document.getElementById("progressTrack");
+      const roundTitle = document.getElementById("roundTitle");
+      const feedbackText = document.getElementById("feedbackText");
+      const comboToast = document.getElementById("comboToast");
+      const timerText = document.getElementById("timerText");
+      const restartButton = document.getElementById("restartButton");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultSummary = document.getElementById("resultSummary");
+
       const storedLanguage = localStorage.getItem("preferredColorMasterLanguage");
       const browserLanguage = navigator.language || "ko";
       let currentLanguage = storedLanguage || (browserLanguage.startsWith("ko") ? "ko" : "en");
-      let score = 0;
       let roundIndex = 0;
-      let answerIndex = 0;
-      let roundLocked = false;
+      let correctCount = 0;
+      let combo = 0;
+      let history = [];
+      let phase = "memory";
+      let locked = false;
+      let startedAt = Date.now();
+      let timerId = null;
 
-      function rgb(values) {
-        return `rgb(${values[0]}, ${values[1]}, ${values[2]})`;
+      function localText(key, values = {}) {
+        return Object.entries(values).reduce(
+          (message, entry) => message.replace(`{${entry[0]}}`, entry[1]),
+          texts[currentLanguage][key]
+        );
       }
 
       function setLanguage(lang) {
         currentLanguage = lang === "en" ? "en" : "ko";
         document.documentElement.lang = currentLanguage;
-        document.title = translations[currentLanguage].title;
+        document.title = texts[currentLanguage].title;
         localStorage.setItem("preferredColorMasterLanguage", currentLanguage);
 
         document.querySelectorAll("[data-ko]").forEach((element) => {
           element.textContent = element.dataset[currentLanguage];
         });
 
-        document.querySelectorAll(`[data-${currentLanguage}-alt]`).forEach((element) => {
-          element.setAttribute("alt", element.getAttribute(`data-${currentLanguage}-alt`));
-        });
-
         document.querySelectorAll(`[data-${currentLanguage}-aria]`).forEach((element) => {
           element.setAttribute("aria-label", element.getAttribute(`data-${currentLanguage}-aria`));
+        });
+
+        document.querySelectorAll(`[data-${currentLanguage}-alt]`).forEach((element) => {
+          element.setAttribute("alt", element.getAttribute(`data-${currentLanguage}-alt`));
         });
 
         document.querySelectorAll(".language-toggle button").forEach((button) => {
@@ -153,59 +189,229 @@
           button.setAttribute("aria-pressed", String(isActive));
         });
 
-        roundMessage.textContent = translations[currentLanguage].prompt;
-        renderRound();
+        renderFrame();
       }
 
-      function renderRound() {
-        const round = rounds[roundIndex % rounds.length];
-        answerIndex = (roundIndex * 5 + 3) % 16;
-        roundLocked = false;
-        board.innerHTML = "";
+      function startGame() {
+        roundIndex = 0;
+        correctCount = 0;
+        combo = 0;
+        history = [];
+        locked = false;
+        phase = "memory";
+        startedAt = Date.now();
+        resultStage.hidden = true;
+        resultStage.classList.remove("is-visible");
+        memoryStage.hidden = false;
+        choiceStage.hidden = true;
+        choiceStage.setAttribute("aria-hidden", "true");
+        startTimer();
+        renderFrame();
+      }
 
-        for (let index = 0; index < 16; index += 1) {
+      function startTimer() {
+        window.clearInterval(timerId);
+        updateTimer();
+        timerId = window.setInterval(updateTimer, 250);
+      }
+
+      function updateTimer() {
+          const elapsed = Math.floor((Date.now() - startedAt) / 1000);
+          const minutes = Math.floor(elapsed / 60);
+          const seconds = String(elapsed % 60).padStart(2, "0");
+          timerText.textContent = `${minutes}:${seconds}`;
+      }
+
+      function currentRound() {
+        return roundPalette[roundIndex % roundPalette.length];
+      }
+
+      function renderFrame() {
+        if (phase === "result") {
+          return;
+        }
+
+        const roundNumber = roundIndex + 1;
+        roundTitle.textContent = localText(phase === "memory" ? "memoryTitle" : "choiceTitle", { round: roundNumber });
+        feedbackText.textContent = phase === "memory" ? "" : localText("selectPrompt");
+        memoryCard.style.setProperty("--answer-color", currentRound().answer);
+        memoryCard.querySelector(".memory-label").textContent = localText("memoryPrompt");
+        renderProgress();
+
+        if (phase === "choice") {
+          renderChoices();
+        }
+      }
+
+      function renderProgress() {
+        progressTrack.innerHTML = "";
+
+        for (let index = 0; index < totalRounds; index += 1) {
+          const segment = document.createElement("span");
+          segment.className = "progress-segment";
+          if (history[index] === "correct") {
+            segment.classList.add("is-correct");
+          } else if (history[index] === "wrong") {
+            segment.classList.add("is-wrong");
+          } else if (index === roundIndex && phase !== "result") {
+            segment.classList.add("is-current");
+          }
+          progressTrack.appendChild(segment);
+        }
+      }
+
+      function showChoices() {
+        if (locked || phase !== "memory") {
+          return;
+        }
+
+        locked = false;
+        phase = "choice";
+        memoryStage.hidden = true;
+        choiceStage.hidden = false;
+        choiceStage.setAttribute("aria-hidden", "false");
+        renderFrame();
+      }
+
+      function renderChoices() {
+        const round = currentRound();
+        const choiceCount = roundIndex < 5 ? 4 : 6;
+        const answerPosition = (roundIndex * 3 + 1) % choiceCount;
+        const colors = [];
+        let decoyIndex = 0;
+
+        for (let index = 0; index < choiceCount; index += 1) {
+          colors.push(index === answerPosition ? round.answer : round.decoys[decoyIndex++ % round.decoys.length]);
+        }
+
+        choiceGrid.className = `choice-grid choice-count-${choiceCount}`;
+        choiceGrid.innerHTML = "";
+
+        colors.forEach((color, index) => {
           const tile = document.createElement("button");
           tile.type = "button";
-          tile.className = "tile";
-          tile.style.backgroundColor = rgb(index === answerIndex ? round.answer : round.base);
-          tile.setAttribute("aria-label", `${translations[currentLanguage].tile} ${index + 1}`);
-          tile.addEventListener("click", () => handleTileClick(index));
-          board.appendChild(tile);
-        }
+          tile.className = "choice-tile";
+          tile.style.setProperty("--tile-color", color);
+          tile.style.background = color;
+          tile.dataset.correct = String(index === answerPosition);
+          tile.setAttribute("aria-label", `${localText("tile")} ${index + 1}`);
+          tile.addEventListener("click", () => selectTile(tile));
+          choiceGrid.appendChild(tile);
+        });
       }
 
-      function handleTileClick(index) {
-        if (roundLocked) {
+      function selectTile(tile) {
+        if (locked || phase !== "choice") {
           return;
         }
 
-        if (index === answerIndex) {
-          roundLocked = true;
-          score += 1;
-          scoreValue.textContent = String(score);
-          roundMessage.textContent = translations[currentLanguage].correct;
-          roundIndex += 1;
-          window.setTimeout(() => {
-            roundMessage.textContent = translations[currentLanguage].prompt;
-            renderRound();
-          }, 520);
+        locked = true;
+        const isCorrect = tile.dataset.correct === "true";
+
+        if (isCorrect) {
+          markCorrect(tile);
+          history[roundIndex] = "correct";
+          correctCount += 1;
+          combo += 1;
+          renderProgress();
+          feedbackText.textContent = localText("correct");
+          showCombo();
+          window.setTimeout(nextRound, 1050);
           return;
         }
 
-        roundMessage.textContent = translations[currentLanguage].wrong;
+        combo = 0;
+        history[roundIndex] = "wrong";
+        renderProgress();
+        tile.classList.add("is-breaking");
+        addFragments(tile);
+        revealAnswer();
+        feedbackText.textContent = localText("wrong");
+        window.setTimeout(nextRound, 1650);
+      }
+
+      function markCorrect(tile) {
+        tile.classList.add("is-correct-choice");
+        const mark = document.createElement("span");
+        mark.className = "check-mark";
+        mark.textContent = "✓";
+        tile.appendChild(mark);
+      }
+
+      function revealAnswer() {
+        choiceGrid.querySelectorAll(".choice-tile").forEach((tile) => {
+          if (tile.dataset.correct === "true") {
+            markCorrect(tile);
+            tile.classList.add("is-answer-reveal");
+          }
+        });
+      }
+
+      function addFragments(tile) {
+        const fragments = document.createElement("span");
+        fragments.className = "tile-fragments";
+
+        for (let index = 0; index < 9; index += 1) {
+          const fragment = document.createElement("span");
+          fragment.style.setProperty("--piece-color", tile.style.getPropertyValue("--tile-color"));
+          fragments.appendChild(fragment);
+        }
+
+        tile.appendChild(fragments);
+      }
+
+      function showCombo() {
+        if (combo < 2) {
+          comboToast.textContent = "";
+          comboToast.classList.remove("is-visible");
+          return;
+        }
+
+        comboToast.textContent = localText("combo", { combo });
+        comboToast.classList.add("is-visible");
+        window.setTimeout(() => comboToast.classList.remove("is-visible"), 800);
+      }
+
+      function nextRound() {
+        comboToast.classList.remove("is-visible");
+        roundIndex += 1;
+
+        if (roundIndex >= totalRounds) {
+          showResult();
+          return;
+        }
+
+        locked = false;
+        phase = "memory";
+        choiceStage.hidden = true;
+        choiceStage.setAttribute("aria-hidden", "true");
+        memoryStage.hidden = false;
+        renderFrame();
+      }
+
+      function showResult() {
+        phase = "result";
+        window.clearInterval(timerId);
+        memoryStage.hidden = true;
+        choiceStage.hidden = true;
+        choiceStage.setAttribute("aria-hidden", "true");
+        resultStage.hidden = false;
+        resultStage.classList.add("is-visible");
+        resultTitle.textContent = localText("resultTitle");
+        resultSummary.textContent = correctCount === totalRounds
+          ? localText("perfectSummary")
+          : localText("resultSummary", { correct: correctCount });
+        renderProgress();
       }
 
       document.querySelectorAll(".language-toggle button").forEach((button) => {
         button.addEventListener("click", () => setLanguage(button.dataset.lang));
       });
 
-      newRoundButton.addEventListener("click", () => {
-        roundIndex += 1;
-        roundMessage.textContent = translations[currentLanguage].prompt;
-        renderRound();
-      });
-
+      memoryCard.addEventListener("click", showChoices);
+      restartButton.addEventListener("click", startGame);
       setLanguage(currentLanguage);
+      startGame();
     </script>
   </body>
 </html>
