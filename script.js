@@ -111,21 +111,47 @@ const apps = [
     categoryEn: "Private test strategy game",
     taglineKo: "한국사 속 수성전을 소재로 한 2D 랜덤 디펜스",
     taglineEn: "A 2D random defense game inspired by Korean fortress battles.",
-    descriptionKo: "현재 비공개 테스트 중입니다. 공개 Play 링크가 열리지 않을 수 있어 테스트 참여 문의로 연결합니다.",
-    descriptionEn: "Currently in private testing. The public Play link may not open, so use the test contact button.",
+    descriptionKo: "현재 비공개 테스트 중입니다. 개발자에게 참여 요청을 보낸 뒤 테스터로 등록되면 Google Play 테스트 링크로 설치할 수 있습니다.",
+    descriptionEn: "Currently in private testing. Send a tester access request, then install from the Google Play test link after you are added.",
     icon: "assets/icon_korean_random_defense.png",
     originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.krd",
-    highlightsKo: ["비공개 테스트", "랜덤 디펜스", "한국사 소재", "테스트 문의"],
-    highlightsEn: ["Private test", "Random defense", "Korean history", "Contact to join"],
+    highlightsKo: ["비공개 테스트", "랜덤 디펜스", "한국사 소재", "테스터 등록"],
+    highlightsEn: ["Private test", "Random defense", "Korean history", "Tester access"],
     primaryCtaKo: "테스트 참여 문의",
-    primaryCtaEn: "Join Private Test",
-    statusNoteKo: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 문의하세요.",
-    statusNoteEn: "The public Google Play link may not open. Contact the developer to join the test."
+    primaryCtaEn: "Request Tester Access",
+    testJoinCtaKo: "테스트 참여",
+    testJoinCtaEn: "Join Test",
+    statusNoteKo: "메일을 보내 테스터로 추가된 뒤, 테스트 참여 버튼으로 Google Play에서 설치할 수 있습니다.",
+    statusNoteEn: "After you email the developer and are added as a tester, use Join Test to install from Google Play."
+  },
+  {
+    id: "lucky-card-random-defense",
+    status: "testing",
+    priority: 6,
+    code: "ANDROID007",
+    titleKo: "운빨 카드 랜덤디펜스",
+    titleEn: "Lucky Card Random Defense",
+    categoryKo: "비공개 테스트 카드 랜덤 디펜스",
+    categoryEn: "Private test card random defense",
+    taglineKo: "카드 선택과 유닛 합성으로 10웨이브를 버티는 운빨 디펜스",
+    taglineEn: "Survive 10 waves with card choices, summons, and merges.",
+    descriptionKo: "현재 비공개 테스트 중입니다. 개발자에게 참여 요청을 보낸 뒤 테스터로 등록되면 Google Play 테스트 링크로 설치할 수 있습니다.",
+    descriptionEn: "Currently in private testing. Send a tester access request, then install from the Google Play test link after you are added.",
+    icon: "assets/icon_lucky_card_random_defense.png",
+    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.luckycarddefense",
+    highlightsKo: ["비공개 테스트", "카드 선택", "유닛 합성", "10웨이브"],
+    highlightsEn: ["Private test", "Card choices", "Unit merges", "10 waves"],
+    primaryCtaKo: "테스트 참여 문의",
+    primaryCtaEn: "Request Tester Access",
+    testJoinCtaKo: "테스트 참여",
+    testJoinCtaEn: "Join Test",
+    statusNoteKo: "메일을 보내 테스터로 추가된 뒤, 테스트 참여 버튼으로 Google Play에서 설치할 수 있습니다.",
+    statusNoteEn: "After you email the developer and are added as a tester, use Join Test to install from Google Play."
   },
   {
     id: "dark-maze",
     status: "testing",
-    priority: 6,
+    priority: 7,
     code: "ANDROID005",
     titleKo: "다크 메이즈",
     titleEn: "Dark Maze",
@@ -140,9 +166,9 @@ const apps = [
     highlightsKo: ["비공개 테스트", "미로 탈출", "아이템", "리더보드 예정"],
     highlightsEn: ["Private test", "Maze escape", "Items", "Leaderboard planned"],
     primaryCtaKo: "테스트 참여 문의",
-    primaryCtaEn: "Join Private Test",
-    statusNoteKo: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 문의하세요.",
-    statusNoteEn: "The public Google Play link may not open. Contact the developer to join the test."
+    primaryCtaEn: "Request Tester Access",
+    statusNoteKo: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 메일을 보내주세요.",
+    statusNoteEn: "The public Google Play link may not open. Email the developer to request tester access."
   }
 ];
 
@@ -291,8 +317,7 @@ function bindTestContactModal() {
   const modal = document.getElementById("testContactModal");
   const modalPanel = modal?.querySelector(".contact-modal__panel");
   const modalAppName = document.getElementById("testContactApp");
-  const copyButton = document.getElementById("copyEmailButton");
-  const copyConfirmation = document.getElementById("copyConfirmation");
+  const emailButton = document.getElementById("emailDeveloperButton");
 
   if (!modal || !modalPanel) {
     return;
@@ -310,6 +335,11 @@ function bindTestContactModal() {
 
     if (modalAppName && app) {
       modalAppName.textContent = localize(app, "title");
+    }
+
+    if (emailButton) {
+      emailButton.href = buildMailto(app);
+      emailButton.dataset.appId = app?.id || "";
     }
 
     modal.hidden = false;
@@ -330,16 +360,6 @@ function bindTestContactModal() {
     }
   });
 
-  copyButton?.addEventListener("click", () => {
-    copyTextToClipboard(developerEmail).then(() => {
-      if (!copyConfirmation) {
-        return;
-      }
-
-      copyConfirmation.classList.add("show");
-      window.setTimeout(() => copyConfirmation.classList.remove("show"), 2400);
-    });
-  });
 }
 
 function bindPlayClickTracking() {
@@ -466,8 +486,39 @@ function buildPlayUrl(app, placement = "home_card") {
 }
 
 function buildMailto(app) {
-  const subject = encodeURIComponent(`Private test request - ${app?.titleEn || "NeoKIM App Lab"}`);
-  return `mailto:${developerEmail}?subject=${subject}`;
+  const titleKo = app?.titleKo || "NeoKIM App Lab";
+  const titleEn = app?.titleEn || "NeoKIM App Lab";
+  const subject = currentLanguage === "en"
+    ? `Private test request - ${titleEn}`
+    : `비공개 테스트 참여 요청 - ${titleKo}`;
+  const body = currentLanguage === "en"
+    ? [
+        "Hello.",
+        `I would like to join the private test for ${titleEn}.`,
+        "",
+        "Google Play account email:",
+        "",
+        "Thank you."
+      ]
+    : [
+        "안녕하세요.",
+        `${titleKo} 비공개 테스트 참여를 요청드립니다.`,
+        "",
+        "Google Play 가입 이메일:",
+        "",
+        "감사합니다."
+      ];
+
+  return `mailto:${developerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
+}
+
+function renderTestingActions(app) {
+  const contactButton = `<a class="card-cta is-secondary" href="${escapeAttr(buildMailto(app))}" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
+  const joinButton = app.originalPlayUrl && app.testJoinCtaKo
+    ? `<a class="card-cta is-primary play-cta" href="${escapeAttr(app.originalPlayUrl)}" target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_test_join" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.testJoinCtaKo, app.testJoinCtaEn)}>${localizedText(app.testJoinCtaKo, app.testJoinCtaEn)}</a>`
+    : "";
+
+  return `${contactButton}${joinButton}`;
 }
 
 function renderAppCard(app) {
@@ -479,7 +530,7 @@ function renderAppCard(app) {
     ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}">${localizedText(app.detailCtaKo || "웹에서 먼저 체험", app.detailCtaEn || "Try Web Demo")}</a>`
     : "";
   const cta = isTesting
-    ? `<a class="card-cta is-secondary" href="${escapeAttr(buildMailto(app))}" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`
+    ? renderTestingActions(app)
     : `<a class="card-cta ${isInstallable ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${opensExternally ? 'target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_card"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
 
   return `
@@ -555,30 +606,6 @@ function closeTestContactModal(modal) {
   if (lastFocusedElement) {
     lastFocusedElement.focus();
   }
-}
-
-function copyTextToClipboard(text) {
-  if (navigator.clipboard?.writeText) {
-    return navigator.clipboard.writeText(text);
-  }
-
-  const textArea = document.createElement("textarea");
-  textArea.value = text;
-  textArea.setAttribute("readonly", "");
-  textArea.style.position = "fixed";
-  textArea.style.top = "-999px";
-  textArea.style.left = "-999px";
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-
-  try {
-    document.execCommand("copy");
-  } finally {
-    document.body.removeChild(textArea);
-  }
-
-  return Promise.resolve();
 }
 
 function localizedText(ko, en) {

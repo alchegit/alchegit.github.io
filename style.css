@@ -296,7 +296,7 @@ summary:focus-visible {
 .secondary-cta,
 .card-cta,
 .modal-cta,
-.copy-email {
+.email-action {
   max-width: 100%;
   min-height: 44px;
   display: inline-flex;
@@ -325,7 +325,7 @@ summary:focus-visible {
 
 .secondary-cta,
 .card-cta.is-secondary,
-.copy-email {
+.email-action {
   border: 1px solid var(--line-strong);
   background: rgba(0, 255, 170, 0.05);
   color: var(--mint);
@@ -335,7 +335,7 @@ summary:focus-visible {
 .secondary-cta:hover,
 .card-cta:hover,
 .modal-cta:hover,
-.copy-email:hover {
+.email-action:hover {
   transform: translateY(-2px);
 }
 
@@ -1028,17 +1028,7 @@ summary:focus-visible {
 
 .email-link {
   color: var(--mint);
-}
-
-.copy-confirmation {
-  visibility: hidden;
-  min-height: 24px;
-  margin: 12px 0 0;
-  color: var(--amber);
-}
-
-.copy-confirmation.show {
-  visibility: visible;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 980px) {
@@ -1261,7 +1251,7 @@ summary:focus-visible {
     align-items: stretch;
   }
 
-  .developer-email .copy-email,
+  .developer-email .email-action,
   .developer-email .email-link {
     width: 100%;
   }
