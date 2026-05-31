@@ -46,6 +46,63 @@ function pageRuntimeText(key, fallback, vars = {}) {
   });
 }
 
+function setRuntimeText(element, key, fallback, vars = {}) {
+  if (!element) {
+    return;
+  }
+
+  element.dataset.runtimeI18nKey = key;
+  element.dataset.runtimeI18nFallback = fallback;
+  element.dataset.runtimeI18nVars = JSON.stringify(vars);
+  element.textContent = pageRuntimeText(key, fallback, vars);
+}
+
+function clearRuntimeText(element) {
+  if (!element) {
+    return;
+  }
+
+  delete element.dataset.runtimeI18nKey;
+  delete element.dataset.runtimeI18nFallback;
+  delete element.dataset.runtimeI18nVars;
+  element.textContent = "";
+}
+
+function setRuntimeAttribute(element, attribute, key, fallback, vars = {}) {
+  if (!element) {
+    return;
+  }
+
+  const bindings = JSON.parse(element.dataset.runtimeI18nAttrs || "{}");
+  bindings[attribute] = { key, fallback, vars };
+  element.dataset.runtimeI18nAttrs = JSON.stringify(bindings);
+  element.setAttribute(attribute, pageRuntimeText(key, fallback, vars));
+}
+
+function refreshRuntimeI18n() {
+  document.querySelectorAll("[data-runtime-i18n-key]").forEach((element) => {
+    const vars = parseRuntimeVars(element.dataset.runtimeI18nVars);
+    element.textContent = pageRuntimeText(element.dataset.runtimeI18nKey, element.dataset.runtimeI18nFallback || "", vars);
+  });
+
+  document.querySelectorAll("[data-runtime-i18n-attrs]").forEach((element) => {
+    const bindings = parseRuntimeVars(element.dataset.runtimeI18nAttrs);
+    Object.entries(bindings).forEach(([attribute, binding]) => {
+      element.setAttribute(attribute, pageRuntimeText(binding.key, binding.fallback || "", binding.vars || {}));
+    });
+  });
+}
+
+function parseRuntimeVars(value) {
+  try {
+    return value ? JSON.parse(value) : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+window.addEventListener("neokim:localechange", refreshRuntimeI18n);
+
 document.addEventListener("DOMContentLoaded", () => {
   bindPlayLinks();
   initColorTest();
@@ -125,7 +182,7 @@ function initColorTest() {
     startTime = performance.now();
     timeLeft = 10;
     active = true;
-    result.textContent = pageRuntimeText("colorPrompt", "Tap the color tile you think is the answer.");
+    setRuntimeText(result, "colorPrompt", "Tap the color tile you think is the answer.");
     installPrompt?.setAttribute("hidden", "");
     timer.textContent = "00:10";
     grid.innerHTML = "";
@@ -139,7 +196,7 @@ function initColorTest() {
         active = false;
         window.clearInterval(intervalId);
         revealAnswer();
-        result.textContent = pageRuntimeText("colorTimeout", "Time is up! Try the color challenge again.");
+        setRuntimeText(result, "colorTimeout", "Time is up! Try the color challenge again.");
         showColorInstallPrompt("timeout");
       }
     }, 1000);
@@ -150,7 +207,7 @@ function initColorTest() {
       button.type = "button";
       button.className = "color-cell";
       button.style.setProperty("--tile-color", isAnswer ? round.answer : round.base);
-      button.setAttribute("aria-label", pageRuntimeText("colorTileAria", "Color tile {index}", { index: index + 1 }));
+      setRuntimeAttribute(button, "aria-label", "colorTileAria", "Color tile {index}", { index: index + 1 });
       button.addEventListener("click", () => selectColor(index));
       grid.appendChild(button);
     }
@@ -167,13 +224,13 @@ function initColorTest() {
 
     if (index === answerIndex) {
       const seconds = Math.max(0.1, (performance.now() - startTime) / 1000).toFixed(1);
-      result.textContent = pageRuntimeText("colorSpeed", "Your color reaction speed is {seconds} seconds. Challenge the ranking in the app.", { seconds });
+      setRuntimeText(result, "colorSpeed", "Your color reaction speed is {seconds} seconds. Challenge the ranking in the app.", { seconds });
       showColorInstallPrompt("correct");
       roundIndex += 1;
       return;
     }
 
-    result.textContent = pageRuntimeText("colorWrong", "So close. Check the answer tile and try again.");
+    setRuntimeText(result, "colorWrong", "So close. Check the answer tile and try again.");
     showColorInstallPrompt("wrong");
   };
 
@@ -188,13 +245,13 @@ function initColorTest() {
     }
 
     if (state === "correct") {
-      installTitle.textContent = pageRuntimeText("colorCorrectTitle", "Correct!");
-      installSummary.textContent = pageRuntimeText("colorCorrectSummary", "You found the odd color within 10 seconds.");
-      installDetail.textContent = pageRuntimeText("colorCorrectDetail", "The app has harder color stages and ranking challenges.");
+      setRuntimeText(installTitle, "colorCorrectTitle", "Correct!");
+      setRuntimeText(installSummary, "colorCorrectSummary", "You found the odd color within 10 seconds.");
+      setRuntimeText(installDetail, "colorCorrectDetail", "The app has harder color stages and ranking challenges.");
     } else {
-      installTitle.textContent = pageRuntimeText("colorWrongTitle", "Nice try.");
-      installSummary.textContent = pageRuntimeText("colorWrongSummary", "Similar colors can be tricky to tell apart.");
-      installDetail.textContent = pageRuntimeText("colorWrongDetail", "Try again in the app and leave your best record.");
+      setRuntimeText(installTitle, "colorWrongTitle", "Nice try.");
+      setRuntimeText(installSummary, "colorWrongSummary", "Similar colors can be tricky to tell apart.");
+      setRuntimeText(installDetail, "colorWrongDetail", "Try again in the app and leave your best record.");
     }
 
     installPrompt.removeAttribute("hidden");
@@ -281,12 +338,13 @@ function initClassicColorMaster() {
     }
 
     const roundNumber = roundIndex + 1;
-    roundTitle.textContent = phase === "memory"
-      ? pageRuntimeText("classicMemoryTitle", "Round {roundNumber} Answer Color", { roundNumber })
-      : pageRuntimeText("classicChoiceTitle", "Round {roundNumber} Color Select", { roundNumber });
-    feedback.textContent = phase === "memory"
-      ? pageRuntimeText("classicMemoryFeedback", "Memorize the answer color, then tap the card to choose.")
-      : pageRuntimeText("classicChoiceFeedback", "Choose the card that matches the color you remembered.");
+    if (phase === "memory") {
+      setRuntimeText(roundTitle, "classicMemoryTitle", "Round {roundNumber} Answer Color", { roundNumber });
+      setRuntimeText(feedback, "classicMemoryFeedback", "Memorize the answer color, then tap the card to choose.");
+    } else {
+      setRuntimeText(roundTitle, "classicChoiceTitle", "Round {roundNumber} Color Select", { roundNumber });
+      setRuntimeText(feedback, "classicChoiceFeedback", "Choose the card that matches the color you remembered.");
+    }
     memoryCard.style.setProperty("--answer-color", currentRound().answer);
     renderProgress();
 
@@ -346,7 +404,7 @@ function initClassicColorMaster() {
       tile.style.setProperty("--tile-color", color);
       tile.style.background = color;
       tile.dataset.correct = String(index === answerPosition);
-      tile.setAttribute("aria-label", pageRuntimeText("classicTileAria", "Color choice {index}", { index: index + 1 }));
+      setRuntimeAttribute(tile, "aria-label", "classicTileAria", "Color choice {index}", { index: index + 1 });
       tile.addEventListener("click", () => selectTile(tile));
       choiceGrid.appendChild(tile);
     });
@@ -365,7 +423,7 @@ function initClassicColorMaster() {
       history[roundIndex] = "correct";
       correctCount += 1;
       combo += 1;
-      feedback.textContent = pageRuntimeText("classicCorrect", "You chose the right color!");
+      setRuntimeText(feedback, "classicCorrect", "You chose the right color!");
       renderProgress();
       showCombo();
       window.setTimeout(nextRound, 1050);
@@ -377,7 +435,7 @@ function initClassicColorMaster() {
     tile.classList.add("is-breaking");
     addFragments(tile);
     revealAnswer();
-    feedback.textContent = pageRuntimeText("classicWrong", "Nice try. Check the correct color.");
+    setRuntimeText(feedback, "classicWrong", "Nice try. Check the correct color.");
     renderProgress();
     window.setTimeout(nextRound, 1650);
   }
@@ -418,12 +476,12 @@ function initClassicColorMaster() {
 
   function showCombo() {
     if (combo < 2) {
-      comboText.textContent = "";
+      clearRuntimeText(comboText);
       comboText.classList.remove("is-visible");
       return;
     }
 
-    comboText.textContent = pageRuntimeText("classicCombo", "{combo} COMBO", { combo });
+    setRuntimeText(comboText, "classicCombo", "{combo} COMBO", { combo });
     comboText.classList.add("is-visible");
     window.setTimeout(() => comboText.classList.remove("is-visible"), 850);
   }
@@ -450,10 +508,12 @@ function initClassicColorMaster() {
     choiceStage.setAttribute("hidden", "");
     memoryCard.setAttribute("hidden", "");
     result?.removeAttribute("hidden");
-    feedback.textContent = pageRuntimeText("classicComplete", "Play complete! Keep challenging yourself in the app.");
-    resultSummary.textContent = correctCount === totalRounds
-      ? pageRuntimeText("classicPerfect", "Amazing! You answered all 10 questions correctly.")
-      : pageRuntimeText("classicScore", "You answered {correctCount} out of 10 questions correctly.", { correctCount });
+    setRuntimeText(feedback, "classicComplete", "Play complete! Keep challenging yourself in the app.");
+    if (correctCount === totalRounds) {
+      setRuntimeText(resultSummary, "classicPerfect", "Amazing! You answered all 10 questions correctly.");
+    } else {
+      setRuntimeText(resultSummary, "classicScore", "You answered {correctCount} out of 10 questions correctly.", { correctCount });
+    }
     renderProgress();
   }
 
@@ -492,9 +552,9 @@ function initGalacticodeTool() {
   copyButton.addEventListener("click", async () => {
     await copyText(output.textContent);
     installPrompt?.removeAttribute("hidden");
-    copyButton.textContent = pageRuntimeText("galacticCopyDone", "Copied");
+    setRuntimeText(copyButton, "galacticCopyDone", "Copied");
     window.setTimeout(() => {
-      copyButton.textContent = pageRuntimeText("galacticCopyIdle", "Copy result");
+      setRuntimeText(copyButton, "galacticCopyIdle", "Copy result");
     }, 1600);
   });
 
@@ -522,7 +582,7 @@ function initUfoTool() {
   button.addEventListener("click", () => {
     stage.classList.add("is-calling");
     const [logKey, fallback] = logs[callCount % logs.length];
-    log.textContent = pageRuntimeText(logKey, fallback);
+    setRuntimeText(log, logKey, fallback);
     installPrompt?.removeAttribute("hidden");
     callCount += 1;
 

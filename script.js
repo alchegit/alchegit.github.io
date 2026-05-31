@@ -105,6 +105,9 @@ let lastFocusedElement = null;
 let lastLanguageTrigger = null;
 const pageTextNodes = new WeakMap();
 const pageAttributeValues = new WeakMap();
+const pageTextReverseMaps = new Map();
+let pageTextSourceSet = null;
+let pageTextAnyReverseMap = null;
 let originalDocumentTitle = "";
 let pageTextObserver = null;
 
@@ -249,6 +252,9 @@ function applyLocale(localeCode, options = {}) {
   updateMetadata();
   updateLanguageControls();
   updateTestingMailtoLinks();
+  window.dispatchEvent(new CustomEvent("neokim:localechange", {
+    detail: { locale: resolvedLocale }
+  }));
 }
 
 function setLocale(localeCode, options = {}) {
@@ -694,10 +700,11 @@ function applyPageTextTranslations(root = document.body) {
   }
 
   textNodes.forEach((node) => {
-    const source = pageTextNodes.get(node) || node.nodeValue.trim();
+    const visibleText = node.nodeValue.trim();
+    const source = pageTextNodes.get(node) || resolvePageTextSource(visibleText);
     pageTextNodes.set(node, source);
     const translated = translatePageString(source);
-    node.nodeValue = node.nodeValue.replace(source, translated);
+    node.nodeValue = node.nodeValue.replace(visibleText, translated);
   });
 
   document.querySelectorAll("[aria-label], [alt], [placeholder]").forEach((element) => {
@@ -711,7 +718,7 @@ function applyPageTextTranslations(root = document.body) {
         return;
       }
 
-      const source = rememberPageAttribute(element, attribute, value);
+      const source = rememberPageAttribute(element, attribute, resolvePageTextSource(value));
       element.setAttribute(attribute, translatePageString(source));
     });
   });
@@ -724,14 +731,14 @@ function applyPageAttributeTranslations() {
     return;
   }
 
-  const sourceTitle = pageAttributeValues.get(document)?.title || originalDocumentTitle || document.title;
+  const sourceTitle = pageAttributeValues.get(document)?.title || resolvePageTextSource(originalDocumentTitle || document.title);
   const translatedTitle = translatePageString(sourceTitle);
   if (translatedTitle) {
     document.title = translatedTitle;
   }
 
   document.querySelectorAll("meta[name='description'], meta[property='og:title'], meta[property='og:description'], meta[name='twitter:title'], meta[name='twitter:description']").forEach((element) => {
-    const source = rememberPageAttribute(element, "content", element.getAttribute("content") || "");
+    const source = rememberPageAttribute(element, "content", resolvePageTextSource(element.getAttribute("content") || ""));
     if (source) {
       element.setAttribute("content", translatePageString(source));
     }
@@ -739,7 +746,7 @@ function applyPageAttributeTranslations() {
 }
 
 function shouldSkipPlainTranslation(element) {
-  return Boolean(element.closest("script, style, noscript, template, [data-i18n], [data-no-page-i18n], .language-modal, .i18n-toolbar, #privacyI18nRoot"));
+  return Boolean(element.closest("script, style, noscript, template, [data-i18n], [data-runtime-i18n-key], [data-runtime-i18n-attrs], [data-no-page-i18n], .language-modal, .i18n-toolbar, #privacyI18nRoot"));
 }
 
 function rememberPageAttribute(element, attribute, value) {
@@ -754,6 +761,70 @@ function rememberPageAttribute(element, attribute, value) {
   }
 
   return values[attribute];
+}
+
+function resolvePageTextSource(value) {
+  const text = String(value || "").trim();
+  if (!text) {
+    return text;
+  }
+
+  if (isKnownPageTextSource(text)) {
+    return text;
+  }
+
+  for (const localeCode of getLocaleFallbackChain(currentLocale)) {
+    const source = getPageTextReverseMap(localeCode).get(text);
+    if (source) {
+      return source;
+    }
+  }
+
+  const anySource = getAnyPageTextReverseMap().get(text);
+  return anySource || text;
+}
+
+function isKnownPageTextSource(text) {
+  if (!pageTextSourceSet) {
+    pageTextSourceSet = new Set();
+    Object.values(translations).forEach((bundle) => {
+      Object.keys(bundle?.pageText || {}).forEach((source) => pageTextSourceSet.add(source));
+    });
+  }
+
+  return pageTextSourceSet.has(text);
+}
+
+function getPageTextReverseMap(localeCode) {
+  if (pageTextReverseMaps.has(localeCode)) {
+    return pageTextReverseMaps.get(localeCode);
+  }
+
+  const map = new Map();
+  Object.entries(translations[localeCode]?.pageText || {}).forEach(([source, translated]) => {
+    if (typeof translated === "string" && !map.has(translated)) {
+      map.set(translated, source);
+    }
+  });
+  pageTextReverseMaps.set(localeCode, map);
+  return map;
+}
+
+function getAnyPageTextReverseMap() {
+  if (pageTextAnyReverseMap) {
+    return pageTextAnyReverseMap;
+  }
+
+  pageTextAnyReverseMap = new Map();
+  Object.keys(translations).forEach((localeCode) => {
+    getPageTextReverseMap(localeCode).forEach((source, translated) => {
+      if (!pageTextAnyReverseMap.has(translated)) {
+        pageTextAnyReverseMap.set(translated, source);
+      }
+    });
+  });
+
+  return pageTextAnyReverseMap;
 }
 
 function translatePageString(source) {
