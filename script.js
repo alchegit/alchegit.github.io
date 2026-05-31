@@ -12,6 +12,7 @@ const recommendedLocales = i18nConfig.recommendedLocales || ["ko", "en-US"];
 const baseFallbacks = i18nConfig.baseFallbacks || {};
 const localeByCode = new Map(locales.map((locale) => [locale.code, locale]));
 const localeCodes = new Set(locales.map((locale) => locale.code));
+const languageDisplayNamesByLocale = new Map();
 const localeGroups = ["Asia", "Europe", "Middle East", "Africa", "Other"];
 const regionGroupKeyMap = {
   Asia: "language.asia",
@@ -514,7 +515,7 @@ function renderLanguageSelector(query = "") {
 
 function renderLanguageButton(locale) {
   const fallback = locale.fallback ? ` data-fallback="${escapeAttr(locale.fallback)}"` : "";
-  const searchText = `${locale.code} ${locale.nativeName} ${locale.englishName}`.toLowerCase();
+  const searchText = getLocaleSearchText(locale);
 
   return `
     <button type="button" class="language-option" data-locale-option="${escapeAttr(locale.code)}" data-search="${escapeAttr(searchText)}"${fallback}>
@@ -948,7 +949,73 @@ function matchesLocaleSearch(locale, query) {
     return true;
   }
 
-  return normalizeSearch(`${locale.code} ${locale.nativeName} ${locale.englishName}`).includes(query);
+  return getLocaleSearchText(locale).includes(query);
+}
+
+function getLocaleSearchText(locale) {
+  const baseLanguage = locale.code.split("-")[0];
+  const terms = [
+    locale.code,
+    baseLanguage,
+    locale.nativeName,
+    locale.englishName,
+    locale.fallback,
+    getLocalizedLanguageName(locale.code),
+    getLocalizedLanguageName(baseLanguage)
+  ];
+
+  return normalizeSearch([...new Set(terms.filter(Boolean))].join(" "));
+}
+
+function getLocalizedLanguageName(localeCode) {
+  const displayNames = getLanguageDisplayNames(currentLocale);
+
+  if (!displayNames) {
+    return "";
+  }
+
+  const candidates = [
+    localeCode,
+    toIntlLocaleCode(localeCode)
+  ];
+
+  for (const candidate of [...new Set(candidates.filter(Boolean))]) {
+    try {
+      const name = displayNames.of(candidate);
+      if (name) {
+        return name;
+      }
+    } catch (error) {
+      // Some legacy or regional tags are not accepted by Intl.DisplayNames.
+    }
+  }
+
+  return "";
+}
+
+function getLanguageDisplayNames(localeCode) {
+  const intlLocale = toIntlLocaleCode(localeCode);
+
+  if (!intlLocale || typeof Intl === "undefined" || !("DisplayNames" in Intl)) {
+    return null;
+  }
+
+  if (languageDisplayNamesByLocale.has(intlLocale)) {
+    return languageDisplayNamesByLocale.get(intlLocale);
+  }
+
+  try {
+    const displayNames = new Intl.DisplayNames([intlLocale, defaultLocale], { type: "language" });
+    languageDisplayNamesByLocale.set(intlLocale, displayNames);
+    return displayNames;
+  } catch (error) {
+    languageDisplayNamesByLocale.set(intlLocale, null);
+    return null;
+  }
+}
+
+function toIntlLocaleCode(localeCode) {
+  return String(localeCode || "").replace(/^iw\b/i, "he");
 }
 
 function normalizeSearch(value) {

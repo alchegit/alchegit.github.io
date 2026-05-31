@@ -125,9 +125,9 @@ window.NEOKIM_I18N = (() => {
       language: {
         buttonLabel: "Choose language",
         modalTitle: "Choose Language",
-        modalDescription: "Search by language name, native name, or locale code.",
+        modalDescription: "Search by native name, current UI language name, or locale code.",
         searchLabel: "Search languages",
-        searchPlaceholder: "Search: korean, 한국어, ko, japanese, 日本語, ja",
+        searchPlaceholder: "Search: German, Deutsch, de-DE, Korean, 한국어, ko",
         close: "Close language selector",
         recommended: "Recommended languages",
         asia: "Asia",
@@ -341,9 +341,9 @@ window.NEOKIM_I18N = (() => {
       language: {
         buttonLabel: "언어 선택",
         modalTitle: "언어 선택",
-        modalDescription: "언어 이름, 원어 이름, locale 코드로 검색할 수 있습니다.",
+        modalDescription: "원어 이름, 현재 UI 언어의 언어명, locale 코드로 검색할 수 있습니다.",
         searchLabel: "언어 검색",
-        searchPlaceholder: "검색: korean, 한국어, ko, japanese, 日本語, ja",
+        searchPlaceholder: "검색: 독일어, Deutsch, de-DE, 한국어, Korean, ko",
         close: "언어 선택 닫기",
         recommended: "추천 언어",
         asia: "아시아",
