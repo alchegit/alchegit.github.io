@@ -36,6 +36,16 @@ const colorRounds = [
 
 const alienGlyphs = ["⟁", "⌁", "◇", "◌", "⟐", "⋔", "⧫", "⌬", "◍", "⟡", "⋇", "⟁", "⌖", "◈"];
 
+function pageRuntimeText(key, fallback, vars = {}) {
+  if (typeof window.NEOKIM_PAGE_T === "function") {
+    return window.NEOKIM_PAGE_T(`seoRuntime.${key}`, vars, fallback);
+  }
+
+  return String(fallback).replace(/\{(\w+)\}/g, (match, name) => {
+    return Object.prototype.hasOwnProperty.call(vars, name) ? vars[name] : match;
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   bindPlayLinks();
   initColorTest();
@@ -115,7 +125,7 @@ function initColorTest() {
     startTime = performance.now();
     timeLeft = 10;
     active = true;
-    result.textContent = "정답이라고 생각하는 색상 칸을 눌러보세요.";
+    result.textContent = pageRuntimeText("colorPrompt", "Tap the color tile you think is the answer.");
     installPrompt?.setAttribute("hidden", "");
     timer.textContent = "00:10";
     grid.innerHTML = "";
@@ -129,7 +139,7 @@ function initColorTest() {
         active = false;
         window.clearInterval(intervalId);
         revealAnswer();
-        result.textContent = "시간 종료! 다시 한 번 색상 구별에 도전해보세요.";
+        result.textContent = pageRuntimeText("colorTimeout", "Time is up! Try the color challenge again.");
         showColorInstallPrompt("timeout");
       }
     }, 1000);
@@ -140,7 +150,7 @@ function initColorTest() {
       button.type = "button";
       button.className = "color-cell";
       button.style.setProperty("--tile-color", isAnswer ? round.answer : round.base);
-      button.setAttribute("aria-label", `${index + 1}번 색상 칸`);
+      button.setAttribute("aria-label", pageRuntimeText("colorTileAria", "Color tile {index}", { index: index + 1 }));
       button.addEventListener("click", () => selectColor(index));
       grid.appendChild(button);
     }
@@ -157,13 +167,13 @@ function initColorTest() {
 
     if (index === answerIndex) {
       const seconds = Math.max(0.1, (performance.now() - startTime) / 1000).toFixed(1);
-      result.textContent = `당신의 색감 반응 속도는 ${seconds}초입니다. 앱에서 랭킹에 도전해보세요.`;
+      result.textContent = pageRuntimeText("colorSpeed", "Your color reaction speed is {seconds} seconds. Challenge the ranking in the app.", { seconds });
       showColorInstallPrompt("correct");
       roundIndex += 1;
       return;
     }
 
-    result.textContent = "아깝습니다. 정답 칸을 확인하고 다시 도전해보세요.";
+    result.textContent = pageRuntimeText("colorWrong", "So close. Check the answer tile and try again.");
     showColorInstallPrompt("wrong");
   };
 
@@ -178,13 +188,13 @@ function initColorTest() {
     }
 
     if (state === "correct") {
-      installTitle.textContent = "정답입니다!";
-      installSummary.textContent = "당신은 10초 안에 다른 색을 찾았습니다.";
-      installDetail.textContent = "앱에서는 더 어려운 색상 단계와 랭킹 도전을 할 수 있습니다.";
+      installTitle.textContent = pageRuntimeText("colorCorrectTitle", "Correct!");
+      installSummary.textContent = pageRuntimeText("colorCorrectSummary", "You found the odd color within 10 seconds.");
+      installDetail.textContent = pageRuntimeText("colorCorrectDetail", "The app has harder color stages and ranking challenges.");
     } else {
-      installTitle.textContent = "아쉽습니다.";
-      installSummary.textContent = "비슷한 색이라 쉽게 헷갈릴 수 있습니다.";
-      installDetail.textContent = "앱에서 다시 도전하고 최고 기록을 남겨보세요.";
+      installTitle.textContent = pageRuntimeText("colorWrongTitle", "Nice try.");
+      installSummary.textContent = pageRuntimeText("colorWrongSummary", "Similar colors can be tricky to tell apart.");
+      installDetail.textContent = pageRuntimeText("colorWrongDetail", "Try again in the app and leave your best record.");
     }
 
     installPrompt.removeAttribute("hidden");
@@ -271,8 +281,12 @@ function initClassicColorMaster() {
     }
 
     const roundNumber = roundIndex + 1;
-    roundTitle.textContent = phase === "memory" ? `${roundNumber}번 정답 색상` : `${roundNumber}번 색상 선택`;
-    feedback.textContent = phase === "memory" ? "정답 색상을 기억한 뒤 카드를 눌러 선택지로 이동하세요." : "기억한 색상과 같은 카드를 고르세요.";
+    roundTitle.textContent = phase === "memory"
+      ? pageRuntimeText("classicMemoryTitle", "Round {roundNumber} Answer Color", { roundNumber })
+      : pageRuntimeText("classicChoiceTitle", "Round {roundNumber} Color Select", { roundNumber });
+    feedback.textContent = phase === "memory"
+      ? pageRuntimeText("classicMemoryFeedback", "Memorize the answer color, then tap the card to choose.")
+      : pageRuntimeText("classicChoiceFeedback", "Choose the card that matches the color you remembered.");
     memoryCard.style.setProperty("--answer-color", currentRound().answer);
     renderProgress();
 
@@ -332,7 +346,7 @@ function initClassicColorMaster() {
       tile.style.setProperty("--tile-color", color);
       tile.style.background = color;
       tile.dataset.correct = String(index === answerPosition);
-      tile.setAttribute("aria-label", `${index + 1}번 색상 선택지`);
+      tile.setAttribute("aria-label", pageRuntimeText("classicTileAria", "Color choice {index}", { index: index + 1 }));
       tile.addEventListener("click", () => selectTile(tile));
       choiceGrid.appendChild(tile);
     });
@@ -351,7 +365,7 @@ function initClassicColorMaster() {
       history[roundIndex] = "correct";
       correctCount += 1;
       combo += 1;
-      feedback.textContent = "정답을 잘 골랐어요!";
+      feedback.textContent = pageRuntimeText("classicCorrect", "You chose the right color!");
       renderProgress();
       showCombo();
       window.setTimeout(nextRound, 1050);
@@ -363,7 +377,7 @@ function initClassicColorMaster() {
     tile.classList.add("is-breaking");
     addFragments(tile);
     revealAnswer();
-    feedback.textContent = "아쉽습니다. 정답 색상을 확인해보세요.";
+    feedback.textContent = pageRuntimeText("classicWrong", "Nice try. Check the correct color.");
     renderProgress();
     window.setTimeout(nextRound, 1650);
   }
@@ -409,7 +423,7 @@ function initClassicColorMaster() {
       return;
     }
 
-    comboText.textContent = `${combo} COMBO`;
+    comboText.textContent = pageRuntimeText("classicCombo", "{combo} COMBO", { combo });
     comboText.classList.add("is-visible");
     window.setTimeout(() => comboText.classList.remove("is-visible"), 850);
   }
@@ -436,10 +450,10 @@ function initClassicColorMaster() {
     choiceStage.setAttribute("hidden", "");
     memoryCard.setAttribute("hidden", "");
     result?.removeAttribute("hidden");
-    feedback.textContent = "플레이 완료! 앱에서 계속 도전해보세요.";
+    feedback.textContent = pageRuntimeText("classicComplete", "Play complete! Keep challenging yourself in the app.");
     resultSummary.textContent = correctCount === totalRounds
-      ? "완벽합니다. 10문제를 모두 맞혔어요."
-      : `10문제 중 ${correctCount}문제를 맞혔어요.`;
+      ? pageRuntimeText("classicPerfect", "Amazing! You answered all 10 questions correctly.")
+      : pageRuntimeText("classicScore", "You answered {correctCount} out of 10 questions correctly.", { correctCount });
     renderProgress();
   }
 
@@ -459,7 +473,7 @@ function initGalacticodeTool() {
   }
 
   const convert = () => {
-    const value = input.value.trim() || "안녕?";
+    const value = input.value.trim() || pageRuntimeText("galacticDefaultInput", "Hello!");
     const converted = Array.from(value)
       .map((char, index) => {
         if (char === " ") {
@@ -478,9 +492,9 @@ function initGalacticodeTool() {
   copyButton.addEventListener("click", async () => {
     await copyText(output.textContent);
     installPrompt?.removeAttribute("hidden");
-    copyButton.textContent = "복사 완료";
+    copyButton.textContent = pageRuntimeText("galacticCopyDone", "Copied");
     window.setTimeout(() => {
-      copyButton.textContent = "결과 복사";
+      copyButton.textContent = pageRuntimeText("galacticCopyIdle", "Copy result");
     }, 1600);
   });
 
@@ -499,15 +513,16 @@ function initUfoTool() {
 
   let callCount = 0;
   const logs = [
-    "신호 송신 중... 3.72GHz",
-    "대기권 반사파 감지",
-    "응답 없음. 한 번 더 보내볼까요?",
-    "미확인 신호가 아주 약하게 잡혔습니다"
+    ["ufoLogOne", "Transmitting signal... 3.72 GHz"],
+    ["ufoLogTwo", "Atmospheric reflection detected."],
+    ["ufoLogThree", "No response yet. Send it one more time?"],
+    ["ufoLogFour", "An unidentified signal is ringing faintly."]
   ];
 
   button.addEventListener("click", () => {
     stage.classList.add("is-calling");
-    log.textContent = logs[callCount % logs.length];
+    const [logKey, fallback] = logs[callCount % logs.length];
+    log.textContent = pageRuntimeText(logKey, fallback);
     installPrompt?.removeAttribute("hidden");
     callCount += 1;
 

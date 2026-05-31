@@ -1005,7 +1005,7 @@ summary:focus-visible {
   position: relative;
   z-index: 1;
   width: min(760px, 100%);
-  max-height: min(820px, calc(100vh - 40px));
+  max-height: min(820px, calc(100dvh - 40px));
   display: grid;
   grid-template-rows: auto auto auto auto minmax(0, 1fr);
   border: 1px solid var(--line-strong);
@@ -1060,7 +1060,8 @@ summary:focus-visible {
 
 .language-modal__content {
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
+  overscroll-behavior: contain;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 12px;
@@ -1082,7 +1083,7 @@ summary:focus-visible {
 
 .language-list-scroll {
   min-height: 220px;
-  max-height: min(420px, 42vh);
+  max-height: min(420px, 42dvh);
   overflow: auto;
   border: 1px solid rgba(0, 255, 170, 0.16);
   border-radius: 8px;
@@ -1132,11 +1133,13 @@ summary:focus-visible {
 .language-option__native {
   color: #ffffff;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .language-option__meta {
   color: var(--dim);
   font-size: 0.82rem;
+  overflow-wrap: anywhere;
 }
 
 .language-option__check {
@@ -1318,8 +1321,19 @@ summary:focus-visible {
 
   .language-modal__sheet {
     width: 100%;
-    max-height: 92vh;
+    height: min(94dvh, calc(100dvh - env(safe-area-inset-top, 0px)));
+    max-height: min(94dvh, calc(100dvh - env(safe-area-inset-top, 0px)));
     border-radius: 14px 14px 0 0;
+  }
+
+  .language-modal__content {
+    overflow: auto;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .language-list-scroll {
+    min-height: 0;
+    max-height: none;
   }
 
   .language-grid,

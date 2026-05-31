@@ -1,10 +1,11 @@
 const developerEmail = "wlgnsl14@gmail.com";
 const i18nConfig = window.NEOKIM_I18N || {};
 const locales = Array.isArray(i18nConfig.locales) ? i18nConfig.locales : [];
-const translations = {
-  ...(i18nConfig.translations || {}),
-  ...(window.NEOKIM_I18N_TRANSLATIONS || {})
-};
+const translations = mergeLocaleBundles(
+  i18nConfig.translations || {},
+  window.NEOKIM_I18N_TRANSLATIONS || {},
+  window.NEOKIM_PAGE_I18N || {}
+);
 const defaultLocale = i18nConfig.defaultLocale || "en-US";
 const storageKey = i18nConfig.storageKey || "preferredLocale";
 const legacyStorageKey = i18nConfig.legacyStorageKey || "preferredLanguage";
@@ -102,6 +103,10 @@ const apps = [
 let currentLocale = defaultLocale;
 let lastFocusedElement = null;
 let lastLanguageTrigger = null;
+const pageTextNodes = new WeakMap();
+const pageAttributeValues = new WeakMap();
+let originalDocumentTitle = "";
+let pageTextObserver = null;
 
 const colorPreviewRounds = [
   { base: "#38e2bd", answer: "#1fb797", answerIndex: 6 },
@@ -115,10 +120,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialLocale = getInitialLocale();
   currentLocale = initialLocale.locale;
 
+  ensureLanguageInterface();
   renderLanguageSelector();
   renderSupportedLanguages();
   renderFeaturedApp();
   renderAppCards();
+  setupPageTextTranslation();
   applyLocale(currentLocale, {
     persist: false,
     updateUrl: initialLocale.fromUrl
@@ -237,6 +244,8 @@ function applyLocale(localeCode, options = {}) {
 
   updateTranslatedNodes();
   updateLocalizedAttributes();
+  applyPageTextTranslations();
+  renderPrivacyPolicyPage();
   updateMetadata();
   updateLanguageControls();
   updateTestingMailtoLinks();
@@ -281,6 +290,23 @@ function updateLocalizedAttributes() {
 }
 
 function updateMetadata() {
+  const pageSeo = getPageSeo();
+
+  if (pageSeo) {
+    document.title = interpolateText(pageSeo.title || document.title, { appName: getPrivacyAppName() });
+    setMetaContent('meta[name="description"]', interpolateText(pageSeo.description || "", { appName: getPrivacyAppName() }));
+    setMetaContent('meta[property="og:title"]', document.title);
+    setMetaContent('meta[property="og:description"]', interpolateText(pageSeo.description || "", { appName: getPrivacyAppName() }));
+    setMetaContent('meta[name="twitter:title"]', document.title);
+    setMetaContent('meta[name="twitter:description"]', interpolateText(pageSeo.description || "", { appName: getPrivacyAppName() }));
+    return;
+  }
+
+  if (!hasTranslation("seo.title") || document.body?.dataset.page) {
+    applyPageAttributeTranslations();
+    return;
+  }
+
   document.title = t("seo.title");
   setMetaContent('meta[name="description"]', t("seo.description"));
   setMetaContent('meta[property="og:title"]', t("seo.ogTitle"));
@@ -465,6 +491,72 @@ function renderStatusBadge(status) {
   return `<span class="status-badge ${statusInfo.className}" data-i18n="${statusInfo.key}">${escapeHtml(t(statusInfo.key))}</span>`;
 }
 
+function ensureLanguageInterface() {
+  if (!document.getElementById("languageTrigger")) {
+    const navLinks = document.querySelector(".nav-links");
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.id = "languageTrigger";
+    trigger.className = "language-trigger";
+    trigger.setAttribute("aria-label", t("language.buttonLabel"));
+    trigger.dataset.i18nAttr = "aria-label:language.buttonLabel";
+    trigger.innerHTML = `
+      <span aria-hidden="true">LANG</span>
+      <span id="currentLanguageName">${escapeHtml(getLocaleMeta(currentLocale).nativeName)}</span>
+    `;
+
+    if (navLinks) {
+      navLinks.appendChild(trigger);
+    } else {
+      const toolbar = document.createElement("div");
+      toolbar.className = "i18n-toolbar";
+      toolbar.innerHTML = `<a class="i18n-toolbar__home" href="../">NeoKIM App Lab</a>`;
+      toolbar.appendChild(trigger);
+      document.body.prepend(toolbar);
+    }
+  }
+
+  if (document.getElementById("languageModal")) {
+    return;
+  }
+
+  const modal = document.createElement("div");
+  modal.id = "languageModal";
+  modal.className = "language-modal";
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "languageModalTitle");
+  modal.setAttribute("aria-hidden", "true");
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="language-modal__backdrop" data-language-close></div>
+    <section class="language-modal__sheet" aria-describedby="languageModalDescription">
+      <header class="language-modal__header">
+        <div>
+          <p class="section-kicker" data-i18n="language.availableHint">${escapeHtml(t("language.availableHint"))}</p>
+          <h2 id="languageModalTitle" data-i18n="language.modalTitle">${escapeHtml(t("language.modalTitle"))}</h2>
+        </div>
+        <button type="button" class="modal-close" data-language-close aria-label="${escapeAttr(t("language.close"))}" data-i18n-attr="aria-label:language.close">&times;</button>
+      </header>
+      <p id="languageModalDescription" class="language-modal__description" data-i18n="language.modalDescription">${escapeHtml(t("language.modalDescription"))}</p>
+      <label class="language-search-label" for="languageSearch" data-i18n="language.searchLabel">${escapeHtml(t("language.searchLabel"))}</label>
+      <input id="languageSearch" class="language-search" type="search" autocomplete="off" inputmode="search" placeholder="${escapeAttr(t("language.searchPlaceholder"))}" data-i18n-attr="placeholder:language.searchPlaceholder">
+      <div class="language-modal__content">
+        <section class="language-recommended" aria-labelledby="recommendedLanguagesTitle">
+          <h3 id="recommendedLanguagesTitle" data-i18n="language.recommended">${escapeHtml(t("language.recommended"))}</h3>
+          <div id="recommendedLanguages" class="language-grid is-recommended"></div>
+        </section>
+        <div class="language-list-scroll">
+          <div id="languageGroups"></div>
+          <p id="languageNoResults" class="language-no-results" data-i18n="language.noResults" hidden>${escapeHtml(t("language.noResults"))}</p>
+        </div>
+      </div>
+    </section>
+  `;
+
+  document.body.appendChild(modal);
+}
+
 function renderLanguageSelector(query = "") {
   const recommendedContainer = document.getElementById("recommendedLanguages");
   const groupedContainer = document.getElementById("languageGroups");
@@ -545,6 +637,134 @@ function renderSupportedLanguages() {
       </button>
     `)
     .join("");
+}
+
+function setupPageTextTranslation() {
+  originalDocumentTitle = document.title;
+  rememberPageAttribute(document, "title", originalDocumentTitle);
+  document.querySelectorAll("meta[name='description'], meta[property='og:title'], meta[property='og:description'], meta[name='twitter:title'], meta[name='twitter:description']").forEach((element) => {
+    rememberPageAttribute(element, "content", element.getAttribute("content") || "");
+  });
+
+  if (!shouldTranslatePlainPage()) {
+    return;
+  }
+
+  applyPageTextTranslations();
+
+  if ("MutationObserver" in window && !pageTextObserver) {
+    pageTextObserver = new MutationObserver((mutations) => {
+      const shouldRun = mutations.some((mutation) => Array.from(mutation.addedNodes).some((node) => node.nodeType === Node.TEXT_NODE || node.nodeType === Node.ELEMENT_NODE));
+      if (shouldRun) {
+        applyPageTextTranslations();
+      }
+    });
+    pageTextObserver.observe(document.body, { childList: true, subtree: true });
+  }
+}
+
+function shouldTranslatePlainPage() {
+  return Boolean(document.body?.dataset.page || document.body?.dataset.privacyApp);
+}
+
+function applyPageTextTranslations(root = document.body) {
+  if (!shouldTranslatePlainPage() || !root) {
+    applyPageAttributeTranslations();
+    return;
+  }
+
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue.trim()) {
+        return NodeFilter.FILTER_REJECT;
+      }
+
+      const parent = node.parentElement;
+      if (!parent || shouldSkipPlainTranslation(parent)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode);
+  }
+
+  textNodes.forEach((node) => {
+    const source = pageTextNodes.get(node) || node.nodeValue.trim();
+    pageTextNodes.set(node, source);
+    const translated = translatePageString(source);
+    node.nodeValue = node.nodeValue.replace(source, translated);
+  });
+
+  document.querySelectorAll("[aria-label], [alt], [placeholder]").forEach((element) => {
+    if (shouldSkipPlainTranslation(element) || element.hasAttribute("data-i18n-attr")) {
+      return;
+    }
+
+    ["aria-label", "alt", "placeholder"].forEach((attribute) => {
+      const value = element.getAttribute(attribute);
+      if (!value) {
+        return;
+      }
+
+      const source = rememberPageAttribute(element, attribute, value);
+      element.setAttribute(attribute, translatePageString(source));
+    });
+  });
+
+  applyPageAttributeTranslations();
+}
+
+function applyPageAttributeTranslations() {
+  if (!shouldTranslatePlainPage()) {
+    return;
+  }
+
+  const sourceTitle = pageAttributeValues.get(document)?.title || originalDocumentTitle || document.title;
+  const translatedTitle = translatePageString(sourceTitle);
+  if (translatedTitle) {
+    document.title = translatedTitle;
+  }
+
+  document.querySelectorAll("meta[name='description'], meta[property='og:title'], meta[property='og:description'], meta[name='twitter:title'], meta[name='twitter:description']").forEach((element) => {
+    const source = rememberPageAttribute(element, "content", element.getAttribute("content") || "");
+    if (source) {
+      element.setAttribute("content", translatePageString(source));
+    }
+  });
+}
+
+function shouldSkipPlainTranslation(element) {
+  return Boolean(element.closest("script, style, noscript, template, [data-i18n], [data-no-page-i18n], .language-modal, .i18n-toolbar, #privacyI18nRoot"));
+}
+
+function rememberPageAttribute(element, attribute, value) {
+  let values = pageAttributeValues.get(element);
+  if (!values) {
+    values = {};
+    pageAttributeValues.set(element, values);
+  }
+
+  if (!(attribute in values)) {
+    values[attribute] = value;
+  }
+
+  return values[attribute];
+}
+
+function translatePageString(source) {
+  for (const localeCode of getLocaleFallbackChain(currentLocale)) {
+    const value = translations[localeCode]?.pageText?.[source];
+    if (typeof value === "string") {
+      return value;
+    }
+  }
+
+  return source;
 }
 
 function bindLanguageSelector() {
@@ -873,6 +1093,162 @@ function buildMailto(app) {
   const body = t("privateTest.mailBody").replace("{appName}", appName);
 
   return `mailto:${developerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+const privacyApps = {
+  "call-the-ufo": { appNameKey: "apps.ufoSignal.name", services: ["adMob", "playStore"] },
+  galacticode: { appNameKey: "apps.galaxyCode.name", services: ["adMob", "playStore"] },
+  "color-master-classic": { appNameKey: "apps.colorMasterClassic.name", services: ["adMob", "playStore"] },
+  colormaster: { appNameKey: "apps.colorMasterClassic.name", services: ["adMob", "playStore"] },
+  "color-master-2": { appNameKey: "apps.colorMaster2.name", services: ["adMob", "playGames", "playStore"] },
+  "dark-maze": { appNameKey: "apps.darkMaze.name", services: ["adMob", "playStore"] },
+  "korean-random-defense": { appNameKey: "apps.koreanRandomDefense.name", services: ["adMob", "playStore"] },
+  "lucky-card-random-defense": { appNameKey: "apps.luckyCardRandomDefense.name", services: ["adMob", "playStore"] },
+  "lucky-card-defense": { appNameKey: "apps.luckyCardRandomDefense.name", services: ["adMob", "playStore"] },
+  roadproof: { appNameText: "RoadProof", services: ["adMob", "playStore"] }
+};
+
+function renderPrivacyPolicyPage() {
+  const appId = document.body?.dataset.privacyApp;
+  if (!appId) {
+    return;
+  }
+
+  const app = privacyApps[appId] || privacyApps.roadproof;
+  const appName = getPrivacyAppName();
+  let root = document.getElementById("privacyI18nRoot");
+
+  document.body.classList.add("privacy-runtime-body");
+  hideOriginalPrivacyContent();
+
+  if (!root) {
+    root = document.createElement("main");
+    root.id = "privacyI18nRoot";
+    root.className = "privacy-runtime";
+    document.body.appendChild(root);
+  }
+
+  const serviceKeys = app.services?.length ? app.services : ["playStore"];
+  const serviceList = serviceKeys
+    .map((service) => `<li>${escapeHtml(t(`privacyRuntime.service${service[0].toUpperCase()}${service.slice(1)}`, service))}</li>`)
+    .join("");
+
+  const vars = { appName, email: developerEmail };
+  root.innerHTML = `
+    <article class="privacy-runtime__card">
+      <a class="privacy-runtime__back" href="../">${escapeHtml(rt("privacyRuntime.backHome"))}</a>
+      <p class="section-kicker">${escapeHtml(rt("privacyRuntime.languageHint"))}</p>
+      <h1>${escapeHtml(rt("privacyRuntime.title"))}</h1>
+      <dl class="privacy-runtime__meta">
+        <div><dt>${escapeHtml(rt("privacyRuntime.appLabel"))}</dt><dd>${escapeHtml(appName)}</dd></div>
+        <div><dt>${escapeHtml(rt("privacyRuntime.lastUpdatedLabel"))}</dt><dd>${escapeHtml(rt("privacyRuntime.lastUpdatedValue"))}</dd></div>
+      </dl>
+      ${renderPrivacySection("collectTitle", "collectBody", vars)}
+      ${renderPrivacySection("localTitle", "localBody", vars)}
+      <section class="privacy-runtime__section">
+        <h2>${escapeHtml(rt("privacyRuntime.thirdPartyTitle"))}</h2>
+        <p>${escapeHtml(rt("privacyRuntime.thirdPartyIntro"))}</p>
+        <h3>${escapeHtml(rt("privacyRuntime.servicesTitle"))}</h3>
+        <ul>${serviceList}</ul>
+        <p><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></p>
+      </section>
+      ${renderPrivacySection("adsTitle", "adsBody", vars)}
+      ${renderPrivacySection("childrenTitle", "childrenBody", vars)}
+      ${renderPrivacySection("permissionsTitle", "permissionsBody", vars)}
+      ${renderPrivacySection("retentionTitle", "retentionBody", vars)}
+      ${renderPrivacySection("contactTitle", "contactBody", vars)}
+      <p class="privacy-runtime__notice">${escapeHtml(rt("privacyRuntime.sourceNotice"))}</p>
+    </article>
+  `;
+}
+
+function hideOriginalPrivacyContent() {
+  Array.from(document.body.children).forEach((child) => {
+    if (child.id === "privacyI18nRoot" || child.id === "languageModal" || child.classList.contains("i18n-toolbar")) {
+      return;
+    }
+
+    child.hidden = true;
+  });
+}
+
+function renderPrivacySection(titleKey, bodyKey, vars) {
+  return `
+    <section class="privacy-runtime__section">
+      <h2>${escapeHtml(rt(`privacyRuntime.${titleKey}`))}</h2>
+      <p>${escapeHtml(rt(`privacyRuntime.${bodyKey}`, vars))}</p>
+    </section>
+  `;
+}
+
+function getPrivacyAppName() {
+  const appId = document.body?.dataset.privacyApp || document.body?.dataset.page;
+  const app = privacyApps[appId];
+
+  if (!app) {
+    return "NeoKIM App Lab";
+  }
+
+  return app.appNameKey ? t(app.appNameKey) : app.appNameText;
+}
+
+function getPageSeo() {
+  const pageId = document.body?.dataset.page;
+  const privacyApp = document.body?.dataset.privacyApp;
+
+  if (privacyApp) {
+    const appName = getPrivacyAppName();
+    return {
+      title: `${rt("privacyRuntime.title")} | ${appName}`,
+      description: rt("privacyRuntime.intro", { appName })
+    };
+  }
+
+  if (!pageId) {
+    return null;
+  }
+
+  const value = getTranslationValue(`pageSeo.${pageId}`);
+  return value && typeof value === "object" ? value : null;
+}
+
+function rt(key, vars = {}, fallback = key) {
+  const value = t(key, fallback);
+  return interpolateText(value, vars);
+}
+
+function interpolateText(value, vars = {}) {
+  return String(value || "").replace(/\{(\w+)\}/g, (match, name) => {
+    return Object.prototype.hasOwnProperty.call(vars, name) ? vars[name] : match;
+  });
+}
+
+window.NEOKIM_PAGE_T = (key, vars = {}, fallback = key) => rt(key, vars, fallback);
+window.NEOKIM_APPLY_PAGE_I18N = () => applyPageTextTranslations();
+
+function mergeLocaleBundles(...bundles) {
+  const merged = {};
+
+  bundles.forEach((bundle) => {
+    Object.entries(bundle || {}).forEach(([localeCode, values]) => {
+      merged[localeCode] = deepMergeObjects(merged[localeCode] || {}, values);
+    });
+  });
+
+  return merged;
+}
+
+function deepMergeObjects(target, source) {
+  Object.entries(source || {}).forEach(([key, value]) => {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      target[key] = deepMergeObjects(target[key] && typeof target[key] === "object" && !Array.isArray(target[key]) ? target[key] : {}, value);
+      return;
+    }
+
+    target[key] = value;
+  });
+
+  return target;
 }
 
 function t(key, fallback = key) {
