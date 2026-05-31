@@ -140,8 +140,8 @@ window.NEOKIM_I18N = (() => {
         availableHint: "Available in 85+ languages",
         supportedTitle: "Supported languages",
         supportedSummary: "Supported languages",
-        supportedDescription: "The site can display more than 85 locales. Locales without dedicated copy currently fall back to English.",
-        fallbackNotice: "Some locales use English fallback until full translations are added."
+        supportedDescription: "The site can display more than 85 locales with localized introduction text.",
+        fallbackNotice: "Product names and service names may stay unchanged so users can recognize the apps."
       },
       hero: {
         eyebrow: "Android mini app collection",
@@ -356,8 +356,8 @@ window.NEOKIM_I18N = (() => {
         availableHint: "85개 이상 언어 지원",
         supportedTitle: "지원 언어",
         supportedSummary: "지원 언어",
-        supportedDescription: "이 사이트는 85개 이상의 locale로 표시할 수 있습니다. 아직 전용 번역이 없는 언어는 영어로 표시됩니다.",
-        fallbackNotice: "일부 locale은 정식 번역 추가 전까지 영어 fallback을 사용합니다."
+        supportedDescription: "이 사이트는 85개 이상의 locale에서 각 언어 소개 문구를 표시할 수 있습니다.",
+        fallbackNotice: "앱 이름과 서비스 이름은 사용자가 알아볼 수 있도록 고유명으로 유지될 수 있습니다."
       },
       hero: {
         eyebrow: "Android mini app collection",

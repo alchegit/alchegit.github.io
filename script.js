@@ -1,7 +1,10 @@
 const developerEmail = "wlgnsl14@gmail.com";
 const i18nConfig = window.NEOKIM_I18N || {};
 const locales = Array.isArray(i18nConfig.locales) ? i18nConfig.locales : [];
-const translations = i18nConfig.translations || {};
+const translations = {
+  ...(i18nConfig.translations || {}),
+  ...(window.NEOKIM_I18N_TRANSLATIONS || {})
+};
 const defaultLocale = i18nConfig.defaultLocale || "en-US";
 const storageKey = i18nConfig.storageKey || "preferredLocale";
 const legacyStorageKey = i18nConfig.legacyStorageKey || "preferredLanguage";
