@@ -2,7 +2,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "gl-ES": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicacións gratuítas de Android",
-      "description": "Instala Atopar cor diferente, Texto alieníxena, Simulador de sinal OVNI, Proba de sentido da cor, Labirinto Escuro e probas privadas para obter máis miniaplicacións de Android.",
+      "description": "Instala Atopar cor diferente, Galaxy Code: texto alien, Simulador de sinal UFO, Color Master: Proba de cor, Labirinto Escuro e probas privadas para obter máis miniaplicacións de Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplicacións",
       "ogDescription": "Busca cores estrañas, fai texto secreto de estilo alieníxena, envía sinais de ovnis divertidos, escapa de labirintos escuros e únete a probas privadas para divertirse rapidamente con Android."
     },
@@ -84,7 +84,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona Atopar cor diferente"
       },
       "galaxyCode": {
-        "name": "Texto alieníxena",
+        "name": "Galaxy Code: texto alien",
         "category": "Aplicación de mensaxes secretas",
         "tagline": "Crea mensaxes secretas parecidas a un alieníxena que precisan dunha clave de uso compartido para decodificar.",
         "description": "Crea as túas propias regras de linguaxe galáctica. Só as persoas que teñan a túa clave de uso compartido poden recrear as mesmas regras e o texto orixinal non se carga nun servidor.",
@@ -97,10 +97,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crea mensaxes secretas",
         "detailCta": "Proba a demostración web",
         "statusNote": "Dispoñible agora en Google Play.",
-        "iconAlt": "Icona de Texto alieníxena"
+        "iconAlt": "Icona de Galaxy Code: texto alien"
       },
       "ufoSignal": {
-        "name": "Simulador de sinal OVNI",
+        "name": "Simulador de sinal UFO",
         "category": "Aplicación de entretemento con sinal misterioso",
         "tagline": "Envía un sinal espacial lúdico e goza do estado de ánimo OVNI.",
         "description": "Abre a aplicación, preme o botón de sinal e goza de son e animación que fan que o momento se sinta como un pequeno ritual OVNI.",
@@ -110,13 +110,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animación de humor",
           "Sen rexistro"
         ],
-        "primaryCta": "Instala Simulador de sinal OVNI",
+        "primaryCta": "Instala Simulador de sinal UFO",
         "detailCta": "Ver detalles da aplicación",
         "statusNote": "Consulta os detalles da aplicación e instálaa desde Google Play.",
-        "iconAlt": "Icona Simulador de sinal OVNI"
+        "iconAlt": "Icona Simulador de sinal UFO"
       },
       "colorMasterClassic": {
-        "name": "Proba de sentido da cor",
+        "name": "Color Master: Proba de cor",
         "category": "Xogo clásico de sentido da cor",
         "tagline": "O desafío orixinal de enfoque de cores: lembra a cor da resposta e escóllea entre cores similares.",
         "description": "A proba de detección da cor orixinal antes de Atopar cor diferente. Probao na web primeiro e despois instálao desde Google Play.",
@@ -129,7 +129,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instalar a proba de sentido da cor",
         "detailCta": "Proba a demostración web",
         "statusNote": "Probao na web primeiro e despois instálao desde Google Play.",
-        "iconAlt": "Icona Proba de sentido da cor"
+        "iconAlt": "Icona Color Master: Proba de cor"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana",
@@ -199,12 +199,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Compite cos amigos nun desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Texto alieníxena",
+        "app": "Galaxy Code: texto alien",
         "title": "\"Envía ao teu amigo unha mensaxe alieníxena que non poden decodificar\".",
         "description": "Deixa mensaxes secretas que só poden descodificar os posuidores da chave compartida."
       },
       "ufoSignal": {
-        "app": "Simulador de sinal OVNI",
+        "app": "Simulador de sinal UFO",
         "title": "\"Que pasa se envías un sinal OVNI ao amencer?\"",
         "description": "Goza dos sons e da animación nun cuarto escuro."
       }
@@ -234,8 +234,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última actualización: 31/05/2026",
       "googlePlay": "Aplicacións Google Play",
       "colorTest": "Atopar cor diferente",
-      "alienText": "Texto alieníxena",
-      "ufoApp": "Simulador de sinal OVNI",
+      "alienText": "Galaxy Code: texto alien",
+      "ufoApp": "Simulador de sinal UFO",
       "privacyPolicy": "Política de privacidade",
       "appAds": "app-ads.txt",
       "contact": "Contacto",
@@ -260,7 +260,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "gu": {
     "seo": {
       "title": "NeoKIM એપ લેબ | મફત Android મીની એપ્સ",
-      "description": "વિવિધ રંગ શોધો, એલિયન ટેક્સ્ટ મેકર, યુએફઓ સિગ્નલ સિમ્યુલેટર, કલર સેન્સ ટેસ્ટ, ડાર્ક મેઝ એસ્કેપ, અને વધુ Android મિની એપ્સ માટે ખાનગી પરીક્ષણો ઇન્સ્ટોલ કરો.",
+      "description": "વિવિધ રંગ શોધો, Galaxy Code: એલિયન લખાણ, UFO સિગ્નલ સિમ્યુલેટર, Color Master: રંગ ટેસ્ટ, ડાર્ક મેઝ એસ્કેપ, અને વધુ Android મિની એપ્સ માટે ખાનગી પરીક્ષણો ઇન્સ્ટોલ કરો.",
       "ogTitle": "NeoKIM એપ લેબ | Android મીની એપ્સ",
       "ogDescription": "વિચિત્ર રંગો શોધો, એલિયન-શૈલી ગુપ્ત ટેક્સ્ટ બનાવો, રમતિયાળ UFO સિગ્નલ મોકલો, શ્યામ મેઝથી બચો અને ઝડપી Android આનંદ માટે ખાનગી પરીક્ષણોમાં જોડાઓ."
     },
@@ -342,7 +342,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "વિવિધ રંગ શોધો ચિહ્ન"
       },
       "galaxyCode": {
-        "name": "એલિયન ટેક્સ્ટ મેકર",
+        "name": "Galaxy Code: એલિયન લખાણ",
         "category": "ગુપ્ત સંદેશ એપ્લિકેશન",
         "tagline": "એલિયન જેવા ગુપ્ત સંદેશાઓ બનાવો જેને ડીકોડ કરવા માટે શેર કીની જરૂર હોય.",
         "description": "તમારા પોતાના ગેલેક્ટીક ભાષાના નિયમો બનાવો. ફક્ત તમારી શેર કી ધરાવતા લોકો જ સમાન નિયમોને ફરીથી બનાવી શકે છે, અને મૂળ ટેક્સ્ટ સર્વર પર અપલોડ થતો નથી.",
@@ -355,10 +355,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ગુપ્ત સંદેશાઓ બનાવો",
         "detailCta": "વેબ ડેમો અજમાવી જુઓ",
         "statusNote": "Google Play પર હવે ઉપલબ્ધ છે.",
-        "iconAlt": "એલિયન ટેક્સ્ટ મેકર આઇકન"
+        "iconAlt": "Galaxy Code: એલિયન લખાણ આઇકન"
       },
       "ufoSignal": {
-        "name": "યુએફઓ સિગ્નલ સિમ્યુલેટર",
+        "name": "UFO સિગ્નલ સિમ્યુલેટર",
         "category": "મિસ્ટ્રી સિગ્નલ મનોરંજન એપ્લિકેશન",
         "tagline": "રમતિયાળ સ્પેસ સિગ્નલ મોકલો અને UFO મૂડનો આનંદ માણો.",
         "description": "એપ્લિકેશન ખોલો, સિગ્નલ બટન દબાવો અને અવાજ અને એનિમેશનનો આનંદ માણો જે ક્ષણને નાની UFO વિધિ જેવો અનુભવ કરાવે છે.",
@@ -368,26 +368,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "મૂડ એનિમેશન",
           "કોઈ સાઇન અપ નથી"
         ],
-        "primaryCta": "યુએફઓ સિગ્નલ સિમ્યુલેટર ઇન્સ્ટોલ કરો",
+        "primaryCta": "UFO સિગ્નલ સિમ્યુલેટર ઇન્સ્ટોલ કરો",
         "detailCta": "એપ્લિકેશન વિગતો જુઓ",
         "statusNote": "એપ્લિકેશન વિગતો જુઓ, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
-        "iconAlt": "યુએફઓ સિગ્નલ સિમ્યુલેટર આઇકન"
+        "iconAlt": "UFO સિગ્નલ સિમ્યુલેટર આઇકન"
       },
       "colorMasterClassic": {
-        "name": "કલર સેન્સ ટેસ્ટ",
+        "name": "Color Master: રંગ ટેસ્ટ",
         "category": "ક્લાસિક કલર સેન્સ ગેમ",
         "tagline": "મૂળ રંગ-ફોકસ પડકાર: જવાબનો રંગ યાદ રાખો અને તેને સમાન રંગોમાંથી પસંદ કરો.",
-        "description": "વિવિધ રંગ શોધો પહેલાં મૂળ કલર સેન્સ ટેસ્ટ. પહેલા તેને વેબ પર અજમાવો, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
+        "description": "વિવિધ રંગ શોધો પહેલાં મૂળ Color Master: રંગ ટેસ્ટ. પહેલા તેને વેબ પર અજમાવો, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
         "highlights": [
           "મૂળ અનુભૂતિ",
           "રંગ ફોકસ",
           "ઝડપી રમત",
           "હવે ઇન્સ્ટોલ કરો"
         ],
-        "primaryCta": "કલર સેન્સ ટેસ્ટ ઇન્સ્ટોલ કરો",
+        "primaryCta": "Color Master: રંગ ટેસ્ટ ઇન્સ્ટોલ કરો",
         "detailCta": "વેબ ડેમો અજમાવી જુઓ",
         "statusNote": "પહેલા તેને વેબ પર અજમાવો, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
-        "iconAlt": "કલર સેન્સ ટેસ્ટ આઇકન"
+        "iconAlt": "Color Master: રંગ ટેસ્ટ આઇકન"
       },
       "koreanRandomDefense": {
         "name": "કોરિયન રેન્ડમ સંરક્ષણ",
@@ -457,12 +457,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10-સેકન્ડના પડકારમાં મિત્રો સાથે હરીફાઈ કરો."
       },
       "galaxyCode": {
-        "app": "એલિયન ટેક્સ્ટ મેકર",
+        "app": "Galaxy Code: એલિયન લખાણ",
         "title": "\"તમારા મિત્રને એક એલિયન સંદેશ મોકલો જે તેઓ ડીકોડ કરી શકતા નથી.\"",
         "description": "ગુપ્ત સંદેશાઓ છોડો જે ફક્ત શેર-કી ધારકો જ ડીકોડ કરી શકે."
       },
       "ufoSignal": {
-        "app": "યુએફઓ સિગ્નલ સિમ્યુલેટર",
+        "app": "UFO સિગ્નલ સિમ્યુલેટર",
         "title": "\"જો તમે પરોઢિયે UFO સિગ્નલ મોકલો તો શું થશે?\"",
         "description": "ડાર્ક રૂમમાં અવાજો અને એનિમેશનનો આનંદ લો."
       }
@@ -492,8 +492,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "છેલ્લે અપડેટ કર્યું: 2026.05.31",
       "googlePlay": "Google Play એપ્સ",
       "colorTest": "વિવિધ રંગ શોધો",
-      "alienText": "એલિયન ટેક્સ્ટ મેકર",
-      "ufoApp": "યુએફઓ સિગ્નલ સિમ્યુલેટર",
+      "alienText": "Galaxy Code: એલિયન લખાણ",
+      "ufoApp": "UFO સિગ્નલ સિમ્યુલેટર",
       "privacyPolicy": "ગોપનીયતા નીતિ",
       "appAds": "app-ads.txt",
       "contact": "સંપર્ક કરો",
@@ -518,7 +518,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "el-GR": {
     "seo": {
       "title": "NeoKIM App Lab | Δωρεάν εφαρμογές Android Mini",
-      "description": "Εγκαταστήστε τα Βρείτε διαφορετικό χρώμα, Εξωγήινο κείμενο, Σήμα UFO, Δοκιμή αίσθησης χρώματος, Σκοτεινός λαβύρινθος και ιδιωτικές δοκιμές για περισσότερες μίνι εφαρμογές Android.",
+      "description": "Εγκαταστήστε τα Βρείτε διαφορετικό χρώμα, Galaxy Code: ξένο κείμενο, Προσομοιωτής σήματος UFO, Color Master: Τεστ Χρώματος, Σκοτεινός λαβύρινθος και ιδιωτικές δοκιμές για περισσότερες μίνι εφαρμογές Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Βρείτε περίεργα χρώματα, δημιουργήστε μυστικό κείμενο εξωγήινου, στείλτε παιχνιδιάρικα σήματα UFO, ξεφύγετε από σκοτεινούς λαβύρινθους και συμμετάσχετε σε ιδιωτικές δοκιμές για γρήγορη διασκέδαση Android."
     },
@@ -600,7 +600,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Εικονίδιο Βρείτε διαφορετικό χρώμα"
       },
       "galaxyCode": {
-        "name": "Εξωγήινο κείμενο",
+        "name": "Galaxy Code: ξένο κείμενο",
         "category": "Εφαρμογή μυστικών μηνυμάτων",
         "tagline": "Δημιουργήστε μυστικά μηνύματα που μοιάζουν με εξωγήινους που χρειάζονται κοινό κλειδί για αποκωδικοποίηση.",
         "description": "Δημιουργήστε τους δικούς σας κανόνες γαλαξιακής γλώσσας. Μόνο άτομα με το κοινόχρηστο κλειδί σας μπορούν να δημιουργήσουν εκ νέου τους ίδιους κανόνες και το αρχικό κείμενο δεν μεταφορτώνεται σε διακομιστή.",
@@ -613,10 +613,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Δημιουργήστε μυστικά μηνύματα",
         "detailCta": "Δοκιμάστε το Web Demo",
         "statusNote": "Διαθέσιμο τώρα στο Google Play.",
-        "iconAlt": "Εικονίδιο Εξωγήινο κείμενο"
+        "iconAlt": "Εικονίδιο Galaxy Code: ξένο κείμενο"
       },
       "ufoSignal": {
-        "name": "Σήμα UFO",
+        "name": "Προσομοιωτής σήματος UFO",
         "category": "Εφαρμογή ψυχαγωγίας σήματος μυστηρίου",
         "tagline": "Στείλτε ένα παιχνιδιάρικο διαστημικό σήμα και απολαύστε τη διάθεση UFO.",
         "description": "Ανοίξτε την εφαρμογή, πατήστε το κουμπί σήματος και απολαύστε ήχο και κινούμενα σχέδια που κάνουν τη στιγμή να μοιάζει με ένα μικρό τελετουργικό UFO.",
@@ -626,13 +626,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Κινούμενη εικόνα διάθεσης",
           "Χωρίς εγγραφή"
         ],
-        "primaryCta": "Εγκαταστήστε το Σήμα UFO",
+        "primaryCta": "Εγκαταστήστε το Προσομοιωτής σήματος UFO",
         "detailCta": "Προβολή λεπτομερειών εφαρμογής",
         "statusNote": "Δείτε τις λεπτομέρειες της εφαρμογής και, στη συνέχεια, εγκαταστήστε την από το Google Play.",
-        "iconAlt": "Εικονίδιο Σήμα UFO"
+        "iconAlt": "Εικονίδιο Προσομοιωτής σήματος UFO"
       },
       "colorMasterClassic": {
-        "name": "Δοκιμή αίσθησης χρώματος",
+        "name": "Color Master: Τεστ Χρώματος",
         "category": "Κλασικό παιχνίδι αίσθησης χρώματος",
         "tagline": "Η αρχική πρόκληση εστίασης χρώματος: θυμηθείτε το χρώμα της απάντησης και επιλέξτε το από παρόμοια χρώματα.",
         "description": "Το αρχικό τεστ αίσθησης χρώματος πριν από το Βρείτε διαφορετικό χρώμα. Δοκιμάστε το πρώτα στον Ιστό και μετά εγκαταστήστε το από το Google Play.",
@@ -642,10 +642,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Γρήγορο παιχνίδι",
           "Εγκαταστήστε τώρα"
         ],
-        "primaryCta": "Εγκαταστήστε το Δοκιμή αίσθησης χρώματος",
+        "primaryCta": "Εγκαταστήστε το Color Master: Τεστ Χρώματος",
         "detailCta": "Δοκιμάστε το Web Demo",
         "statusNote": "Δοκιμάστε το πρώτα στον Ιστό και μετά εγκαταστήστε το από το Google Play.",
-        "iconAlt": "Εικονίδιο Δοκιμή αίσθησης χρώματος"
+        "iconAlt": "Εικονίδιο Color Master: Τεστ Χρώματος"
       },
       "koreanRandomDefense": {
         "name": "Κορεατική Τυχαία Άμυνα",
@@ -715,12 +715,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Ανταγωνιστείτε με φίλους σε μια πρόκληση 10 δευτερολέπτων."
       },
       "galaxyCode": {
-        "app": "Εξωγήινο κείμενο",
+        "app": "Galaxy Code: ξένο κείμενο",
         "title": "«Στείλτε στον φίλο σας ένα εξωγήινο μήνυμα που δεν μπορεί να αποκωδικοποιήσει».",
         "description": "Αφήστε μυστικά μηνύματα που μόνο οι κάτοχοι κλειδιού κοινής χρήσης μπορούν να αποκωδικοποιήσουν."
       },
       "ufoSignal": {
-        "app": "Σήμα UFO",
+        "app": "Προσομοιωτής σήματος UFO",
         "title": "«Τι θα συμβεί αν στείλετε ένα σήμα UFO την αυγή;»",
         "description": "Απολαύστε τους ήχους και τα κινούμενα σχέδια σε ένα σκοτεινό δωμάτιο."
       }
@@ -750,8 +750,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Τελευταία ενημέρωση: 31.05.2026",
       "googlePlay": "Εφαρμογές Google Play",
       "colorTest": "Βρείτε διαφορετικό χρώμα",
-      "alienText": "Εξωγήινο κείμενο",
-      "ufoApp": "Σήμα UFO",
+      "alienText": "Galaxy Code: ξένο κείμενο",
+      "ufoApp": "Προσομοιωτής σήματος UFO",
       "privacyPolicy": "Πολιτική Απορρήτου",
       "appAds": "app-ads.txt",
       "contact": "Επικοινωνία",
@@ -776,7 +776,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "nl-NL": {
     "seo": {
       "title": "NeoKIM App-lab | Gratis Android Mini-apps",
-      "description": "Installeer Vind verschillende kleuren, Buitenaardse tekstmaker, UFO-signaalsimulator, Kleurwaarnemingstest, Donker doolhof en privétests voor meer Android mini-apps.",
+      "description": "Installeer Vind verschillende kleuren, Galaxy Code: alientekst, UFO-signaalsimulator, Color Master: Kleurtest, Donker doolhof en privétests voor meer Android mini-apps.",
       "ogTitle": "NeoKIM App-lab | Android Mini-apps",
       "ogDescription": "Vind vreemde kleuren, maak geheime tekst in buitenaardse stijl, stuur speelse UFO-signalen, ontsnap uit donkere doolhoven en doe mee aan privétests voor snel Android-plezier."
     },
@@ -858,7 +858,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Vind verschillende kleuren-pictogram"
       },
       "galaxyCode": {
-        "name": "Buitenaardse tekstmaker",
+        "name": "Galaxy Code: alientekst",
         "category": "Geheime berichten-app",
         "tagline": "Creëer buitenaardse geheime berichten die een deelsleutel nodig hebben om te decoderen.",
         "description": "Creëer je eigen galactische taalregels. Alleen mensen met uw deelsleutel kunnen dezelfde regels opnieuw maken, en de originele tekst wordt niet naar een server geüpload.",
@@ -871,7 +871,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Creëer geheime berichten",
         "detailCta": "Probeer de webdemo",
         "statusNote": "Nu beschikbaar op Google Play.",
-        "iconAlt": "Buitenaardse tekstmaker-pictogram"
+        "iconAlt": "Galaxy Code: alientekst-pictogram"
       },
       "ufoSignal": {
         "name": "UFO-signaalsimulator",
@@ -890,7 +890,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO-signaalsimulator-pictogram"
       },
       "colorMasterClassic": {
-        "name": "Kleurwaarnemingstest",
+        "name": "Color Master: Kleurtest",
         "category": "Klassiek kleurgevoelspel",
         "tagline": "De originele kleurfocusuitdaging: onthoud de antwoordkleur en kies deze uit vergelijkbare kleuren.",
         "description": "De originele kleurgevoeligheidstest vóór Vind verschillende kleuren. Probeer het eerst op internet en installeer het vervolgens vanaf Google Play.",
@@ -900,10 +900,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Snel spelen",
           "Installeer nu"
         ],
-        "primaryCta": "Installeer de Kleurwaarnemingstest",
+        "primaryCta": "Installeer de Color Master: Kleurtest",
         "detailCta": "Probeer de webdemo",
         "statusNote": "Probeer het eerst op internet en installeer het vervolgens vanaf Google Play.",
-        "iconAlt": "Kleurwaarnemingstest-pictogram"
+        "iconAlt": "Color Master: Kleurtest-pictogram"
       },
       "koreanRandomDefense": {
         "name": "Koreaanse defensie",
@@ -973,7 +973,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Concurreer met vrienden in een uitdaging van 10 seconden."
       },
       "galaxyCode": {
-        "app": "Buitenaardse tekstmaker",
+        "app": "Galaxy Code: alientekst",
         "title": "\"Stuur je vriend een buitenaards bericht dat hij niet kan decoderen.\"",
         "description": "Laat geheime berichten achter die alleen houders van een gedeelde sleutel kunnen decoderen."
       },
@@ -1008,7 +1008,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Laatst bijgewerkt: 31.05.2026",
       "googlePlay": "Google Play-apps",
       "colorTest": "Vind verschillende kleuren",
-      "alienText": "Buitenaardse tekstmaker",
+      "alienText": "Galaxy Code: alientekst",
       "ufoApp": "UFO-signaalsimulator",
       "privacyPolicy": "Privacybeleid",
       "appAds": "app-ads.txt",
@@ -1034,7 +1034,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ne-NP": {
     "seo": {
       "title": "NeoKIM एप ल्याब | नि: शुल्क Android मिनी एपहरू",
-      "description": "फरक रंग फेला पार्नुहोस्, विदेशी पाठ निर्माता, UFO सिग्नल सिम्युलेटर, कलर सेन्स टेस्ट, गाढा भूलभुलैया एस्केप, र थप Android मिनी एपहरूको लागि निजी परीक्षणहरू स्थापना गर्नुहोस्।",
+      "description": "फरक रंग फेला पार्नुहोस्, Galaxy Code: एलियन पाठ, UFO सिग्नल सिम्युलेटर, Color Master: रङ टेस्ट, गाढा भूलभुलैया एस्केप, र थप Android मिनी एपहरूको लागि निजी परीक्षणहरू स्थापना गर्नुहोस्।",
       "ogTitle": "NeoKIM एप ल्याब | Android मिनी एपहरू",
       "ogDescription": "विचित्र रंगहरू फेला पार्नुहोस्, एलियन-शैली गोप्य पाठ बनाउनुहोस्, चंचल UFO संकेतहरू पठाउनुहोस्, अँध्यारो भूलभुलैयाहरूबाट भाग्नुहोस्, र द्रुत Android रमाइलोको लागि निजी परीक्षणहरूमा सामेल हुनुहोस्।"
     },
@@ -1116,7 +1116,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "फरक रंग फेला पार्नुहोस् आइकन"
       },
       "galaxyCode": {
-        "name": "विदेशी पाठ निर्माता",
+        "name": "Galaxy Code: एलियन पाठ",
         "category": "गोप्य सन्देश अनुप्रयोग",
         "tagline": "डिकोड गर्न साझा कुञ्जी चाहिने विदेशी जस्तो गोप्य सन्देशहरू सिर्जना गर्नुहोस्।",
         "description": "तपाईंको आफ्नै ग्यालेक्टिक भाषा नियमहरू सिर्जना गर्नुहोस्। तपाईंको साझा कुञ्जी भएका व्यक्तिहरूले मात्र समान नियमहरू पुन: सिर्जना गर्न सक्छन्, र मूल पाठ सर्भरमा अपलोड गरिएको छैन।",
@@ -1129,7 +1129,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "गोप्य सन्देशहरू सिर्जना गर्नुहोस्",
         "detailCta": "वेब डेमो प्रयास गर्नुहोस्",
         "statusNote": "Google Play मा अब उपलब्ध छ।",
-        "iconAlt": "विदेशी पाठ निर्माता आइकन"
+        "iconAlt": "Galaxy Code: एलियन पाठ आइकन"
       },
       "ufoSignal": {
         "name": "UFO सिग्नल सिम्युलेटर",
@@ -1148,7 +1148,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO सिग्नल सिम्युलेटर आइकन"
       },
       "colorMasterClassic": {
-        "name": "कलर सेन्स टेस्ट",
+        "name": "Color Master: रङ टेस्ट",
         "category": "क्लासिक रंग भावना खेल",
         "tagline": "मूल रङ-फोकस चुनौती: जवाफको रङ सम्झनुहोस् र समान रङहरूबाट छान्नुहोस्।",
         "description": "फरक रंग फेला पार्नुहोस् अघि मूल रंग ज्ञान परीक्षण। यसलाई पहिले वेबमा प्रयास गर्नुहोस्, त्यसपछि यसलाई Google Play बाट स्थापना गर्नुहोस्।",
@@ -1158,10 +1158,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "द्रुत खेल",
           "अहिले स्थापना गर्नुहोस्"
         ],
-        "primaryCta": "कलर सेन्स टेस्ट स्थापना गर्नुहोस्",
+        "primaryCta": "Color Master: रङ टेस्ट स्थापना गर्नुहोस्",
         "detailCta": "वेब डेमो प्रयास गर्नुहोस्",
         "statusNote": "यसलाई पहिले वेबमा प्रयास गर्नुहोस्, त्यसपछि यसलाई Google Play बाट स्थापना गर्नुहोस्।",
-        "iconAlt": "कलर सेन्स टेस्ट आइकन"
+        "iconAlt": "Color Master: रङ टेस्ट आइकन"
       },
       "koreanRandomDefense": {
         "name": "कोरियाली अनियमित रक्षा",
@@ -1231,7 +1231,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "१० सेकेन्डको चुनौतीमा साथीहरूसँग प्रतिस्पर्धा गर्नुहोस्।"
       },
       "galaxyCode": {
-        "app": "विदेशी पाठ निर्माता",
+        "app": "Galaxy Code: एलियन पाठ",
         "title": "\"तपाईंको साथीलाई एक विदेशी सन्देश पठाउनुहोस् जुन तिनीहरू डिकोड गर्न सक्दैनन्।\"",
         "description": "सेयर-कुञ्जी धारकहरूले मात्र डिकोड गर्न सक्ने गोप्य सन्देशहरू छोड्नुहोस्।"
       },
@@ -1266,7 +1266,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "पछिल्लो अपडेट: २०२६.०५.३१",
       "googlePlay": "Google Play अनुप्रयोगहरू",
       "colorTest": "फरक रंग फेला पार्नुहोस्",
-      "alienText": "विदेशी पाठ निर्माता",
+      "alienText": "Galaxy Code: एलियन पाठ",
       "ufoApp": "UFO सिग्नल सिम्युलेटर",
       "privacyPolicy": "गोपनीयता नीति",
       "appAds": "app-ads.txt",
@@ -1292,7 +1292,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "no-NO": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-apper",
-      "description": "Installer Finn en annen farge, Fremmed tekstskaper, UFO-signalsimulator, Fargefølelsestest, Mørk labyrint og private tester for flere Android miniapper.",
+      "description": "Installer Finn en annen farge, Galaxy Code: alientekst, UFO-signalsimulator, Color Master: Fargetest, Mørk labyrint og private tester for flere Android miniapper.",
       "ogTitle": "NeoKIM App Lab | Android Mini-apper",
       "ogDescription": "Finn rare farger, lag hemmelig tekst i alien-stil, send lekne UFO-signaler, unnslipp mørke labyrinter og bli med i private tester for rask Android-moro."
     },
@@ -1374,7 +1374,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Finn en annen farge-ikon"
       },
       "galaxyCode": {
-        "name": "Fremmed tekstskaper",
+        "name": "Galaxy Code: alientekst",
         "category": "App for hemmelig melding",
         "tagline": "Lag romvesenlignende hemmelige meldinger som trenger en delingsnøkkel for å dekode.",
         "description": "Lag dine egne galaktiske språkregler. Bare personer med delingsnøkkelen din kan gjenskape de samme reglene, og den originale teksten lastes ikke opp til en server.",
@@ -1387,7 +1387,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Lag hemmelige meldinger",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Tilgjengelig nå på Google Play.",
-        "iconAlt": "Fremmed tekstskaper-ikon"
+        "iconAlt": "Galaxy Code: alientekst-ikon"
       },
       "ufoSignal": {
         "name": "UFO-signalsimulator",
@@ -1406,7 +1406,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO-signalsimulator-ikon"
       },
       "colorMasterClassic": {
-        "name": "Fargefølelsestest",
+        "name": "Color Master: Fargetest",
         "category": "Klassisk fargesansspill",
         "tagline": "Den originale fargefokusutfordringen: husk svarfargen og velg den fra lignende farger.",
         "description": "Den originale fargesansetesten før Finn en annen farge. Prøv det på nettet først, og installer det deretter fra Google Play.",
@@ -1416,10 +1416,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Raskt spill",
           "Installer nå"
         ],
-        "primaryCta": "Installer Fargefølelsestest",
+        "primaryCta": "Installer Color Master: Fargetest",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Prøv det på nettet først, og installer det deretter fra Google Play.",
-        "iconAlt": "Fargefølelsestest-ikon"
+        "iconAlt": "Color Master: Fargetest-ikon"
       },
       "koreanRandomDefense": {
         "name": "Koreansk tilfeldig forsvar",
@@ -1489,7 +1489,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Konkurrer med venner i en 10-sekunders utfordring."
       },
       "galaxyCode": {
-        "app": "Fremmed tekstskaper",
+        "app": "Galaxy Code: alientekst",
         "title": "\"Send din venn en fremmedmelding de ikke kan dekode.\"",
         "description": "Legg igjen hemmelige meldinger som bare eiere av aksjenøkkel kan avkode."
       },
@@ -1524,7 +1524,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Sist oppdatert: 2026.05.31",
       "googlePlay": "Google Play-apper",
       "colorTest": "Finn en annen farge",
-      "alienText": "Fremmed tekstskaper",
+      "alienText": "Galaxy Code: alientekst",
       "ufoApp": "UFO-signalsimulator",
       "privacyPolicy": "Personvernerklæring",
       "appAds": "app-ads.txt",
@@ -1550,7 +1550,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "da-DK": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini Apps",
-      "description": "Installer Find en anden farve, Fremmed tekstskaber, UFO-signalsimulator, Farvefølelsestest, Mørk labyrint og private tests for flere Android mini-apps.",
+      "description": "Installer Find en anden farve, Galaxy Code: alientekst, UFO-signalsimulator, Color Master: Farvetest, Mørk labyrint og private tests for flere Android mini-apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Find mærkelige farver, lav hemmelig tekst i alien-stil, send legende UFO-signaler, undslippe mørke labyrinter, og deltag i private tests for hurtig Android-sjov."
     },
@@ -1632,7 +1632,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Find en anden farve ikon"
       },
       "galaxyCode": {
-        "name": "Fremmed tekstskaber",
+        "name": "Galaxy Code: alientekst",
         "category": "App til hemmelig besked",
         "tagline": "Opret alien-lignende hemmelige beskeder, der skal bruge en delenøgle for at afkode.",
         "description": "Lav dine egne galaktiske sprogregler. Kun personer med din delenøgle kan genskabe de samme regler, og den originale tekst uploades ikke til en server.",
@@ -1645,7 +1645,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Opret hemmelige beskeder",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Tilgængelig nu på Google Play.",
-        "iconAlt": "Fremmed tekstskaber ikon"
+        "iconAlt": "Galaxy Code: alientekst ikon"
       },
       "ufoSignal": {
         "name": "UFO-signalsimulator",
@@ -1664,7 +1664,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO-signalsimulator ikon"
       },
       "colorMasterClassic": {
-        "name": "Farvefølelsestest",
+        "name": "Color Master: Farvetest",
         "category": "Klassisk farvesansspil",
         "tagline": "Den originale farvefokusudfordring: husk svarfarven og vælg den fra lignende farver.",
         "description": "Den originale farvesanstest før Find en anden farve. Prøv det på nettet først, og installer det derefter fra Google Play.",
@@ -1674,10 +1674,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Hurtigt spil",
           "Installer nu"
         ],
-        "primaryCta": "Installer Farvefølelsestest",
+        "primaryCta": "Installer Color Master: Farvetest",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Prøv det på nettet først, og installer det derefter fra Google Play.",
-        "iconAlt": "Farvefølelsestest ikon"
+        "iconAlt": "Color Master: Farvetest ikon"
       },
       "koreanRandomDefense": {
         "name": "Koreansk tilfældigt forsvar",
@@ -1747,7 +1747,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Konkurrer med venner i en 10 sekunders udfordring."
       },
       "galaxyCode": {
-        "app": "Fremmed tekstskaber",
+        "app": "Galaxy Code: alientekst",
         "title": "\"Send din ven en alien-besked, de ikke kan afkode.\"",
         "description": "Efterlad hemmelige beskeder, som kun aktienøgleindehavere kan afkode."
       },
@@ -1782,7 +1782,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Sidst opdateret: 2026.05.31",
       "googlePlay": "Google Play Apps",
       "colorTest": "Find en anden farve",
-      "alienText": "Fremmed tekstskaber",
+      "alienText": "Galaxy Code: alientekst",
       "ufoApp": "UFO-signalsimulator",
       "privacyPolicy": "Privatlivspolitik",
       "appAds": "app-ads.txt",
@@ -1808,7 +1808,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "de-DE": {
     "seo": {
       "title": "NeoKIM App Lab | Kostenlose Android Mini-Apps",
-      "description": "Installieren Sie Andere Farbe finden, Alien-Textmacher, UFO-Signalsimulator, Farbsinn-Test, Dunkles Labyrinth und private Tests für weitere Android-Mini-Apps.",
+      "description": "Installieren Sie Andere Farbe finden, Galaxy Code: Alien-Text, UFO-Signal-Simulator, Color Master: Farbtest, Dunkles Labyrinth und private Tests für weitere Android-Mini-Apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini-Apps",
       "ogDescription": "Finden Sie seltsame Farben, erstellen Sie geheime Texte im Alien-Stil, senden Sie verspielte UFO-Signale, entkommen Sie dunklen Labyrinthen und nehmen Sie an privaten Tests teil, um schnellen Android-Spaß zu haben."
     },
@@ -1890,7 +1890,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Andere Farbe finden-Symbol"
       },
       "galaxyCode": {
-        "name": "Alien-Textmacher",
+        "name": "Galaxy Code: Alien-Text",
         "category": "Geheimnachrichten-App",
         "tagline": "Erstellen Sie außerirdische Geheimnachrichten, die zum Entschlüsseln einen gemeinsamen Schlüssel benötigen.",
         "description": "Erstellen Sie Ihre eigenen galaktischen Sprachregeln. Nur Personen mit Ihrem Freigabeschlüssel können dieselben Regeln neu erstellen und der Originaltext wird nicht auf einen Server hochgeladen.",
@@ -1903,10 +1903,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Erstellen Sie geheime Nachrichten",
         "detailCta": "Probieren Sie die Webdemo aus",
         "statusNote": "Ab sofort auf Google Play verfügbar.",
-        "iconAlt": "Alien-Textmacher-Symbol"
+        "iconAlt": "Galaxy Code: Alien-Text-Symbol"
       },
       "ufoSignal": {
-        "name": "UFO-Signalsimulator",
+        "name": "UFO-Signal-Simulator",
         "category": "Mystery Signal-Unterhaltungs-App",
         "tagline": "Senden Sie ein spielerisches Weltraumsignal und genießen Sie die UFO-Stimmung.",
         "description": "Öffnen Sie die App, drücken Sie die Signaltaste und genießen Sie Sound und Animationen, die den Moment wie ein kleines UFO-Ritual wirken lassen.",
@@ -1916,13 +1916,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Stimmungsanimation",
           "Keine Anmeldung"
         ],
-        "primaryCta": "Installieren Sie UFO-Signalsimulator",
+        "primaryCta": "Installieren Sie UFO-Signal-Simulator",
         "detailCta": "App-Details anzeigen",
         "statusNote": "Sehen Sie sich die App-Details an und installieren Sie sie dann über Google Play.",
-        "iconAlt": "UFO-Signalsimulator-Symbol"
+        "iconAlt": "UFO-Signal-Simulator-Symbol"
       },
       "colorMasterClassic": {
-        "name": "Farbsinn-Test",
+        "name": "Color Master: Farbtest",
         "category": "Klassisches Farbsinnspiel",
         "tagline": "Die ursprüngliche Farbfokus-Herausforderung: Merken Sie sich die Antwortfarbe und wählen Sie sie aus ähnlichen Farben aus.",
         "description": "Der ursprüngliche Farbsinntest vor Andere Farbe finden. Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
@@ -1935,7 +1935,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Installieren Sie den Farbsinntest",
         "detailCta": "Probieren Sie die Webdemo aus",
         "statusNote": "Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
-        "iconAlt": "Farbsinn-Test-Symbol"
+        "iconAlt": "Color Master: Farbtest-Symbol"
       },
       "koreanRandomDefense": {
         "name": "Korea-Zufallsabwehr",
@@ -2005,12 +2005,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Messen Sie sich mit Freunden in einer 10-Sekunden-Challenge."
       },
       "galaxyCode": {
-        "app": "Alien-Textmacher",
+        "app": "Galaxy Code: Alien-Text",
         "title": "„Senden Sie Ihrem Freund eine Alien-Nachricht, die er nicht entschlüsseln kann.“",
         "description": "Hinterlassen Sie geheime Nachrichten, die nur Share-Key-Inhaber entschlüsseln können."
       },
       "ufoSignal": {
-        "app": "UFO-Signalsimulator",
+        "app": "UFO-Signal-Simulator",
         "title": "„Was passiert, wenn Sie im Morgengrauen ein UFO-Signal senden?“",
         "description": "Genießen Sie die Geräusche und Animationen in einem dunklen Raum."
       }
@@ -2040,8 +2040,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Letzte Aktualisierung: 31.05.2026",
       "googlePlay": "Google Play Apps",
       "colorTest": "Andere Farbe finden",
-      "alienText": "Alien-Textmacher",
-      "ufoApp": "UFO-Signalsimulator",
+      "alienText": "Galaxy Code: Alien-Text",
+      "ufoApp": "UFO-Signal-Simulator",
       "privacyPolicy": "Datenschutzrichtlinie",
       "appAds": "app-ads.txt",
       "contact": "Kontakt",
@@ -2066,7 +2066,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lo-LA": {
     "seo": {
       "title": "NeoKIM App Lab | ແອັບ Android Mini ຟຣີ",
-      "description": "ຕິດຕັ້ງ ຊອກຫາສີທີ່ແຕກຕ່າງກັນ, ຂໍ້ຄວາມມະນຸດຕ່າງດາວ, ເຄື່ອງຈຳລອງສັນຍານ UFO, ການທົດສອບຄວາມຮູ້ສຶກສີ, ເຂົາວົງກົດມືດ, ແລະການທົດສອບສ່ວນຕົວສຳລັບແອັບ mini Android ເພີ່ມເຕີມ.",
+      "description": "ຕິດຕັ້ງ ຊອກຫາສີທີ່ແຕກຕ່າງກັນ, Galaxy Code: ຂໍ້ຄວາມຕ່າງດາວ, ຈຳລອງສັນຍານ UFO, Color Master: ທົດສອບສີ, ເຂົາວົງກົດມືດ, ແລະການທົດສອບສ່ວນຕົວສຳລັບແອັບ mini Android ເພີ່ມເຕີມ.",
       "ogTitle": "NeoKIM App Lab | ແອັບ Android Mini",
       "ogDescription": "ຊອກຫາສີແປກໆ, ສ້າງຂໍ້ຄວາມລັບແບບມະນຸດຕ່າງດາວ, ສົ່ງສັນຍານ UFO ມ່ວນໆ, ໜີຈາກບ່ອນມືດ, ແລະເຂົ້າຮ່ວມການທົດສອບສ່ວນຕົວເພື່ອຄວາມມ່ວນໄວຂອງ Android."
     },
@@ -2148,7 +2148,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ໄອຄອນ ຊອກຫາສີທີ່ແຕກຕ່າງກັນ"
       },
       "galaxyCode": {
-        "name": "ຂໍ້ຄວາມມະນຸດຕ່າງດາວ",
+        "name": "Galaxy Code: ຂໍ້ຄວາມຕ່າງດາວ",
         "category": "ແອັບຯຂໍ້ຄວາມລັບ",
         "tagline": "ສ້າງຂໍ້ຄວາມລັບທີ່ຄ້າຍຄືກັບມະນຸດຕ່າງດາວທີ່ຕ້ອງການລະຫັດແບ່ງປັນເພື່ອຖອດລະຫັດ.",
         "description": "ສ້າງກົດລະບຽບພາສາກາລັກຊີຂອງທ່ານເອງ. ມີພຽງແຕ່ຄົນທີ່ມີກະແຈການແບ່ງປັນຂອງເຈົ້າສາມາດສ້າງກົດລະບຽບດຽວກັນໄດ້, ແລະຂໍ້ຄວາມຕົ້ນສະບັບບໍ່ໄດ້ຖືກອັບໂຫລດໃສ່ເຄື່ອງແມ່ຂ່າຍ.",
@@ -2161,10 +2161,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ສ້າງຂໍ້ຄວາມລັບ",
         "detailCta": "ລອງໃຊ້ Web Demo",
         "statusNote": "ມີໃຫ້ແລ້ວໃນ Google Play.",
-        "iconAlt": "ໄອຄອນ ຂໍ້ຄວາມມະນຸດຕ່າງດາວ"
+        "iconAlt": "ໄອຄອນ Galaxy Code: ຂໍ້ຄວາມຕ່າງດາວ"
       },
       "ufoSignal": {
-        "name": "ເຄື່ອງຈຳລອງສັນຍານ UFO",
+        "name": "ຈຳລອງສັນຍານ UFO",
         "category": "ແອັບບັນເທີງສັນຍານຄວາມລຶກລັບ",
         "tagline": "ສົ່ງສັນຍານຊ່ອງທີ່ຫຼິ້ນແລະມ່ວນຊື່ນກັບອາລົມ UFO.",
         "description": "ເປີດແອັບ, ກົດປຸ່ມສັນຍານ, ແລະເພີດເພີນໄປກັບສຽງ ແລະພາບເຄື່ອນໄຫວທີ່ເຮັດໃຫ້ເວລານີ້ຮູ້ສຶກຄືກັບພິທີກຳ UFO ຂະໜາດນ້ອຍ.",
@@ -2174,26 +2174,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ອານິເມຊັນອາລົມ",
           "ບໍ່ມີການລົງທະບຽນ"
         ],
-        "primaryCta": "ຕິດຕັ້ງ ເຄື່ອງຈຳລອງສັນຍານ UFO",
+        "primaryCta": "ຕິດຕັ້ງ ຈຳລອງສັນຍານ UFO",
         "detailCta": "ເບິ່ງລາຍລະອຽດແອັບ",
         "statusNote": "ເບິ່ງລາຍລະອຽດແອັບ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
-        "iconAlt": "ໄອຄອນ ເຄື່ອງຈຳລອງສັນຍານ UFO"
+        "iconAlt": "ໄອຄອນ ຈຳລອງສັນຍານ UFO"
       },
       "colorMasterClassic": {
-        "name": "ການທົດສອບຄວາມຮູ້ສຶກສີ",
+        "name": "Color Master: ທົດສອບສີ",
         "category": "ເກມຄວາມຮູ້ສຶກສີຄລາສສິກ",
         "tagline": "ສິ່ງທ້າທາຍການສຸມໃສ່ສີຕົ້ນສະບັບ: ຈື່ສີຄໍາຕອບແລະເລືອກເອົາມັນຈາກສີທີ່ຄ້າຍຄືກັນ.",
-        "description": "ການທົດສອບຄວາມຮູ້ສຶກສີຕົ້ນສະບັບກ່ອນ ຊອກຫາສີທີ່ແຕກຕ່າງກັນ. ລອງໃຊ້ມັນຢູ່ໃນເວັບກ່ອນ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
+        "description": "Color Master: ທົດສອບສີຕົ້ນສະບັບກ່ອນ ຊອກຫາສີທີ່ແຕກຕ່າງກັນ. ລອງໃຊ້ມັນຢູ່ໃນເວັບກ່ອນ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
         "highlights": [
           "ຄວາມຮູ້ສຶກຕົ້ນສະບັບ",
           "ເນັ້ນສີ",
           "ຫຼິ້ນໄວ",
           "ຕິດຕັ້ງດຽວນີ້"
         ],
-        "primaryCta": "ຕິດຕັ້ງ ການທົດສອບຄວາມຮູ້ສຶກສີ",
+        "primaryCta": "ຕິດຕັ້ງ Color Master: ທົດສອບສີ",
         "detailCta": "ລອງໃຊ້ Web Demo",
         "statusNote": "ລອງໃຊ້ມັນຢູ່ໃນເວັບກ່ອນ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
-        "iconAlt": "ໄອຄອນ ການທົດສອບຄວາມຮູ້ສຶກສີ"
+        "iconAlt": "ໄອຄອນ Color Master: ທົດສອບສີ"
       },
       "koreanRandomDefense": {
         "name": "ປ້ອງກັນເກົາຫຼີ",
@@ -2263,12 +2263,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "ແຂ່ງຂັນກັບຫມູ່ເພື່ອນໃນສິ່ງທ້າທາຍ 10 ວິນາທີ."
       },
       "galaxyCode": {
-        "app": "ຂໍ້ຄວາມມະນຸດຕ່າງດາວ",
-        "title": "\"ສົ່ງຂໍ້ຄວາມມະນຸດຕ່າງດາວໃຫ້ເພື່ອນຂອງເຈົ້າທີ່ພວກເຂົາບໍ່ສາມາດຖອດລະຫັດໄດ້.\"",
+        "app": "Galaxy Code: ຂໍ້ຄວາມຕ່າງດາວ",
+        "title": "\"ສົ່ງGalaxy Code: ຂໍ້ຄວາມຕ່າງດາວໃຫ້ເພື່ອນຂອງເຈົ້າທີ່ພວກເຂົາບໍ່ສາມາດຖອດລະຫັດໄດ້.\"",
         "description": "ປ່ອຍໃຫ້ຂໍ້ຄວາມລັບທີ່ມີພຽງແຕ່ຜູ້ຖືຫຸ້ນສາມາດຖອດລະຫັດໄດ້."
       },
       "ufoSignal": {
-        "app": "ເຄື່ອງຈຳລອງສັນຍານ UFO",
+        "app": "ຈຳລອງສັນຍານ UFO",
         "title": "\"ຈະເກີດຫຍັງຂຶ້ນຖ້າທ່ານສົ່ງສັນຍານ UFO ໃນຕອນເຊົ້າ?\"",
         "description": "ເພີດເພີນໄປກັບສຽງ ແລະພາບເຄື່ອນໄຫວຢູ່ໃນຫ້ອງມືດ."
       }
@@ -2298,8 +2298,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "ອັບເດດຫຼ້າສຸດ: 2026.05.31",
       "googlePlay": "ແອັບ Google Play",
       "colorTest": "ຊອກຫາສີທີ່ແຕກຕ່າງກັນ",
-      "alienText": "ຂໍ້ຄວາມມະນຸດຕ່າງດາວ",
-      "ufoApp": "ເຄື່ອງຈຳລອງສັນຍານ UFO",
+      "alienText": "Galaxy Code: ຂໍ້ຄວາມຕ່າງດາວ",
+      "ufoApp": "ຈຳລອງສັນຍານ UFO",
       "privacyPolicy": "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
       "appAds": "app-ads.txt",
       "contact": "ຕິດຕໍ່",
@@ -2324,7 +2324,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lv": {
     "seo": {
       "title": "NeoKIM App Lab | Bezmaksas Android mini lietotnes",
-      "description": "Instalējiet Atrodiet citu krāsu, Citplanētiešu teksta veidotājs, NLO signālu simulators, Krāsu sajūtas tests, Tumšā labirinta bēgšana un privātos testus citām Android mini lietotnēm.",
+      "description": "Instalējiet Atrodiet citu krāsu, Galaxy Code: alien teksts, UFO signāla simulators, Color Master: Krāsu tests, Tumšā labirinta bēgšana un privātos testus citām Android mini lietotnēm.",
       "ogTitle": "NeoKIM App Lab | Android mini lietotnes",
       "ogDescription": "Atrodiet nepāra krāsas, veidojiet svešzemju stila slepenu tekstu, sūtiet rotaļīgus NLO signālus, izvairieties no tumšiem labirintiem un pievienojieties privātiem testiem, lai ātri izklaidētos ar Android."
     },
@@ -2406,7 +2406,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Atrodiet citu krāsu ikona"
       },
       "galaxyCode": {
-        "name": "Citplanētiešu teksta veidotājs",
+        "name": "Galaxy Code: alien teksts",
         "category": "Slepeno ziņojumu lietotne",
         "tagline": "Izveidojiet citplanētiešiem līdzīgus slepenus ziņojumus, kuru atšifrēšanai nepieciešama koplietošanas atslēga.",
         "description": "Izveidojiet savus galaktikas valodas noteikumus. Tikai personas, kurām ir jūsu koplietošanas atslēga, var atkārtoti izveidot tos pašus noteikumus, un sākotnējais teksts netiek augšupielādēts serverī.",
@@ -2419,10 +2419,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Izveidojiet slepenus ziņojumus",
         "detailCta": "Izmēģiniet tīmekļa demonstrāciju",
         "statusNote": "Tagad pieejams vietnē Google Play.",
-        "iconAlt": "Citplanētiešu teksta veidotājs ikona"
+        "iconAlt": "Galaxy Code: alien teksts ikona"
       },
       "ufoSignal": {
-        "name": "NLO signālu simulators",
+        "name": "UFO signāla simulators",
         "category": "Mystery signāla izklaides lietotne",
         "tagline": "Sūtiet rotaļīgu kosmosa signālu un izbaudiet NLO noskaņu.",
         "description": "Atveriet lietotni, nospiediet signāla pogu un izbaudiet skaņu un animāciju, kas liek mirklim justies kā mazam NLO rituālam.",
@@ -2432,13 +2432,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Garastāvokļa animācija",
           "Nav pierakstīšanās"
         ],
-        "primaryCta": "Instalējiet NLO signālu simulators",
+        "primaryCta": "Instalējiet UFO signāla simulators",
         "detailCta": "Skatīt lietotnes informāciju",
         "statusNote": "Skatiet lietotnes informāciju un pēc tam instalējiet to no Google Play.",
-        "iconAlt": "NLO signālu simulators ikona"
+        "iconAlt": "UFO signāla simulators ikona"
       },
       "colorMasterClassic": {
-        "name": "Krāsu sajūtas tests",
+        "name": "Color Master: Krāsu tests",
         "category": "Klasiska krāsu izjūtu spēle",
         "tagline": "Sākotnējais krāsu fokusa izaicinājums: atcerieties atbildes krāsu un izvēlieties to no līdzīgām krāsām.",
         "description": "Sākotnējā krāsu sajūtas pārbaude pirms Atrodiet citu krāsu. Vispirms izmēģiniet to tīmeklī un pēc tam instalējiet no Google Play.",
@@ -2448,10 +2448,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Ātra spēle",
           "Instalējiet tūlīt"
         ],
-        "primaryCta": "Instalējiet Krāsu sajūtas tests",
+        "primaryCta": "Instalējiet Color Master: Krāsu tests",
         "detailCta": "Izmēģiniet tīmekļa demonstrāciju",
         "statusNote": "Vispirms izmēģiniet to tīmeklī un pēc tam instalējiet no Google Play.",
-        "iconAlt": "Krāsu sajūtas tests ikona"
+        "iconAlt": "Color Master: Krāsu tests ikona"
       },
       "koreanRandomDefense": {
         "name": "Korejas izlases aizsardzība",
@@ -2521,12 +2521,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Sacentieties ar draugiem 10 sekunžu izaicinājumā."
       },
       "galaxyCode": {
-        "app": "Citplanētiešu teksta veidotājs",
+        "app": "Galaxy Code: alien teksts",
         "title": "\"Nosūtiet savam draugam svešzemju ziņojumu, ko viņš nevar atšifrēt.\"",
         "description": "Atstājiet slepenus ziņojumus, kurus var atšifrēt tikai akciju atslēgu īpašnieki."
       },
       "ufoSignal": {
-        "app": "NLO signālu simulators",
+        "app": "UFO signāla simulators",
         "title": "\"Kas notiek, ja rītausmā nosūtīsit NLO signālu?\"",
         "description": "Izbaudiet skaņas un animāciju tumšā telpā."
       }
@@ -2556,8 +2556,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Pēdējo reizi atjaunināts: 2026.05.31",
       "googlePlay": "Google Play lietotnes",
       "colorTest": "Atrodiet citu krāsu",
-      "alienText": "Citplanētiešu teksta veidotājs",
-      "ufoApp": "NLO signālu simulators",
+      "alienText": "Galaxy Code: alien teksts",
+      "ufoApp": "UFO signāla simulators",
       "privacyPolicy": "Privātuma politika",
       "appAds": "app-ads.txt",
       "contact": "Sazināties",
@@ -2582,7 +2582,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ru-RU": {
     "seo": {
       "title": "Лаборатория приложений NeoKIM | Бесплатные мини-приложения Android",
-      "description": "Установите Найди другой цвет, Инопланетный текст, Симулятор сигнала НЛО, Тест чувства цвета, Побег из темного лабиринта и частные тесты для получения дополнительных мини-приложений Android.",
+      "description": "Установите Найди другой цвет, Galaxy Code: текст пришельца, Симулятор сигнала НЛО, Color Master: Тест цвета, Побег из темного лабиринта и частные тесты для получения дополнительных мини-приложений Android.",
       "ogTitle": "Лаборатория приложений NeoKIM | Мини-приложения Android",
       "ogDescription": "Находите странные цвета, создавайте секретный текст в стиле инопланетян, отправляйте игривые сигналы НЛО, выходите из темных лабиринтов и присоединяйтесь к частным тестам, чтобы быстро развлечься с Android."
     },
@@ -2664,7 +2664,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок Найди другой цвет"
       },
       "galaxyCode": {
-        "name": "Инопланетный текст",
+        "name": "Galaxy Code: текст пришельца",
         "category": "Приложение для секретных сообщений",
         "tagline": "Создавайте секретные сообщения, похожие на инопланетян, для декодирования которых требуется общий ключ.",
         "description": "Создайте свои собственные правила галактического языка. Только люди с вашим общим ключом могут воссоздать те же правила, а исходный текст не загружается на сервер.",
@@ -2677,7 +2677,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Создавайте секретные сообщения",
         "detailCta": "Попробуйте веб-демо",
         "statusNote": "Доступно сейчас на Google Play.",
-        "iconAlt": "Значок Инопланетный текст"
+        "iconAlt": "Значок Galaxy Code: текст пришельца"
       },
       "ufoSignal": {
         "name": "Симулятор сигнала НЛО",
@@ -2696,7 +2696,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок Симулятор сигнала НЛО"
       },
       "colorMasterClassic": {
-        "name": "Тест чувства цвета",
+        "name": "Color Master: Тест цвета",
         "category": "Классическая игра на определение цвета",
         "tagline": "Оригинальная задача по цветовому фокусу: запомни цвет ответа и выбери его среди похожих цветов.",
         "description": "Оригинальный тест на восприятие цвета до Найди другой цвет. Сначала попробуйте его через Интернет, а затем установите с Google Play.",
@@ -2709,7 +2709,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Установите тест цветовосприятия",
         "detailCta": "Попробуйте веб-демо",
         "statusNote": "Сначала попробуйте его через Интернет, а затем установите с Google Play.",
-        "iconAlt": "Значок Тест чувства цвета"
+        "iconAlt": "Значок Color Master: Тест цвета"
       },
       "koreanRandomDefense": {
         "name": "Корейская рандом-защита",
@@ -2779,7 +2779,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Соревнуйтесь с друзьями в 10-секундном испытании."
       },
       "galaxyCode": {
-        "app": "Инопланетный текст",
+        "app": "Galaxy Code: текст пришельца",
         "title": "«Отправь своему другу инопланетное сообщение, которое он не сможет расшифровать».",
         "description": "Оставляйте секретные сообщения, которые смогут расшифровать только обладатели общих ключей."
       },
@@ -2814,7 +2814,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Последнее обновление: 2026.05.31.",
       "googlePlay": "Приложения Google Play",
       "colorTest": "Найди другой цвет",
-      "alienText": "Инопланетный текст",
+      "alienText": "Galaxy Code: текст пришельца",
       "ufoApp": "Симулятор сигнала НЛО",
       "privacyPolicy": "Политика конфиденциальности",
       "appAds": "app-ads.txt",
@@ -2840,7 +2840,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "rm": {
     "seo": {
       "title": "NeoKIM App Lab | Kostenlose Android Mini-Apps",
-      "description": "Installieren Sie Chattar colur diversa, Creader text alien, Simulatur signal UFO, Test dal senn da colurs, Fugida labirint stgir und private Tests für weitere Android-Mini-Apps.",
+      "description": "Installieren Sie Chattar colur diversa, Galaxy Code: Alien-Text, UFO-Signal-Simulator, Color Master: Farbtest, Fugida labirint stgir und private Tests für weitere Android-Mini-Apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini-Apps",
       "ogDescription": "Finden Sie seltsame Farben, erstellen Sie geheime Texte im Alien-Stil, senden Sie verspielte UFO-Signale, entkommen Sie dunklen Labyrinthen und nehmen Sie an privaten Tests teil, um schnellen Android-Spaß zu haben."
     },
@@ -2922,7 +2922,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Chattar colur diversa-Symbol"
       },
       "galaxyCode": {
-        "name": "Creader text alien",
+        "name": "Galaxy Code: Alien-Text",
         "category": "Geheimnachrichten-App",
         "tagline": "Erstellen Sie außerirdische Geheimnachrichten, die zum Entschlüsseln einen gemeinsamen Schlüssel benötigen.",
         "description": "Erstellen Sie Ihre eigenen galaktischen Sprachregeln. Nur Personen mit Ihrem Freigabeschlüssel können dieselben Regeln neu erstellen und der Originaltext wird nicht auf einen Server hochgeladen.",
@@ -2935,10 +2935,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Erstellen Sie geheime Nachrichten",
         "detailCta": "Probieren Sie die Webdemo aus",
         "statusNote": "Ab sofort auf Google Play verfügbar.",
-        "iconAlt": "Creader text alien-Symbol"
+        "iconAlt": "Galaxy Code: Alien-Text-Symbol"
       },
       "ufoSignal": {
-        "name": "Simulatur signal UFO",
+        "name": "UFO-Signal-Simulator",
         "category": "Mystery Signal-Unterhaltungs-App",
         "tagline": "Senden Sie ein spielerisches Weltraumsignal und genießen Sie die UFO-Stimmung.",
         "description": "Öffnen Sie die App, drücken Sie die Signaltaste und genießen Sie Sound und Animationen, die den Moment wie ein kleines UFO-Ritual wirken lassen.",
@@ -2948,13 +2948,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Stimmungsanimation",
           "Keine Anmeldung"
         ],
-        "primaryCta": "Installieren Sie Simulatur signal UFO",
+        "primaryCta": "Installieren Sie UFO-Signal-Simulator",
         "detailCta": "App-Details anzeigen",
         "statusNote": "Sehen Sie sich die App-Details an und installieren Sie sie dann über Google Play.",
-        "iconAlt": "Simulatur signal UFO-Symbol"
+        "iconAlt": "UFO-Signal-Simulator-Symbol"
       },
       "colorMasterClassic": {
-        "name": "Test dal senn da colurs",
+        "name": "Color Master: Farbtest",
         "category": "Klassisches Farbsinnspiel",
         "tagline": "Die ursprüngliche Farbfokus-Herausforderung: Merken Sie sich die Antwortfarbe und wählen Sie sie aus ähnlichen Farben aus.",
         "description": "Der ursprüngliche Farbsinntest vor Chattar colur diversa. Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
@@ -2967,7 +2967,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Installieren Sie den Farbsinntest",
         "detailCta": "Probieren Sie die Webdemo aus",
         "statusNote": "Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
-        "iconAlt": "Test dal senn da colurs-Symbol"
+        "iconAlt": "Color Master: Farbtest-Symbol"
       },
       "koreanRandomDefense": {
         "name": "Defensiun coreana casuala",
@@ -3037,12 +3037,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Messen Sie sich mit Freunden in einer 10-Sekunden-Challenge."
       },
       "galaxyCode": {
-        "app": "Creader text alien",
+        "app": "Galaxy Code: Alien-Text",
         "title": "„Senden Sie Ihrem Freund eine Alien-Nachricht, die er nicht entschlüsseln kann.“",
         "description": "Hinterlassen Sie geheime Nachrichten, die nur Share-Key-Inhaber entschlüsseln können."
       },
       "ufoSignal": {
-        "app": "Simulatur signal UFO",
+        "app": "UFO-Signal-Simulator",
         "title": "„Was passiert, wenn Sie im Morgengrauen ein UFO-Signal senden?“",
         "description": "Genießen Sie die Geräusche und Animationen in einem dunklen Raum."
       }
@@ -3072,8 +3072,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Letzte Aktualisierung: 31.05.2026",
       "googlePlay": "Google Play Apps",
       "colorTest": "Chattar colur diversa",
-      "alienText": "Creader text alien",
-      "ufoApp": "Simulatur signal UFO",
+      "alienText": "Galaxy Code: Alien-Text",
+      "ufoApp": "UFO-Signal-Simulator",
       "privacyPolicy": "Datenschutzrichtlinie",
       "appAds": "app-ads.txt",
       "contact": "Kontakt",
@@ -3098,7 +3098,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ro": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicații gratuite Android",
-      "description": "Instalați Găsiți o culoare diferită, Text străin, Simulator de semnal OZN, Testul Sensului Culorii, Labirint întunecat și teste private pentru mai multe mini-aplicații Android.",
+      "description": "Instalați Găsiți o culoare diferită, Galaxy Code: text alien, Simulator semnal UFO, Color Master: Test de culori, Labirint întunecat și teste private pentru mai multe mini-aplicații Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Aplicații",
       "ogDescription": "Găsiți culori ciudate, creați text secret în stil extraterestru, trimiteți semnale jucăușe OZN, scăpați din labirinturi întunecate și alăturați-vă testelor private pentru distracția rapidă cu Android."
     },
@@ -3180,7 +3180,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "pictograma Găsiți o culoare diferită"
       },
       "galaxyCode": {
-        "name": "Text străin",
+        "name": "Galaxy Code: text alien",
         "category": "Aplicație pentru mesaje secrete",
         "tagline": "Creați mesaje secrete asemănătoare extraterestre care au nevoie de o cheie de partajare pentru a decoda.",
         "description": "Creați-vă propriile reguli de limbaj galactic. Numai persoanele cu cheia de partajare pot recrea aceleași reguli, iar textul original nu este încărcat pe un server.",
@@ -3193,10 +3193,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Creați mesaje secrete",
         "detailCta": "Încercați Demo Web",
         "statusNote": "Disponibil acum pe Google Play.",
-        "iconAlt": "Pictograma Text străin"
+        "iconAlt": "Pictograma Galaxy Code: text alien"
       },
       "ufoSignal": {
-        "name": "Simulator de semnal OZN",
+        "name": "Simulator semnal UFO",
         "category": "Aplicație de divertisment cu semnal misterios",
         "tagline": "Trimiteți un semnal spațial jucăuș și bucurați-vă de starea de spirit OZN.",
         "description": "Deschideți aplicația, apăsați butonul de semnal și bucurați-vă de sunet și animație care fac momentul să se simtă ca un mic ritual OZN.",
@@ -3206,13 +3206,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animație de dispoziție",
           "Fără înscriere"
         ],
-        "primaryCta": "Instalați Simulator de semnal OZN",
+        "primaryCta": "Instalați Simulator semnal UFO",
         "detailCta": "Vedeți detaliile aplicației",
         "statusNote": "Vizualizați detaliile aplicației, apoi instalați-o din Google Play.",
-        "iconAlt": "Pictograma Simulator de semnal OZN"
+        "iconAlt": "Pictograma Simulator semnal UFO"
       },
       "colorMasterClassic": {
-        "name": "Testul Sensului Culorii",
+        "name": "Color Master: Test de culori",
         "category": "Joc clasic de simț al culorilor",
         "tagline": "Provocarea originală de focalizare pe culoare: amintiți-vă culoarea răspunsului și alegeți-o din culori similare.",
         "description": "Testul original de sens al culorii înainte de Găsiți o culoare diferită. Încercați mai întâi pe web, apoi instalați-l din Google Play.",
@@ -3222,10 +3222,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Joacă rapidă",
           "Instalați acum"
         ],
-        "primaryCta": "Instalați Testul Sensului Culorii",
+        "primaryCta": "Instalați Color Master: Test de culori",
         "detailCta": "Încercați Demo Web",
         "statusNote": "Încercați mai întâi pe web, apoi instalați-l din Google Play.",
-        "iconAlt": "pictograma Testul Sensului Culorii"
+        "iconAlt": "pictograma Color Master: Test de culori"
       },
       "koreanRandomDefense": {
         "name": "Apărare aleatorie coreeană",
@@ -3295,12 +3295,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Concurează cu prietenii într-o provocare de 10 secunde."
       },
       "galaxyCode": {
-        "app": "Text străin",
+        "app": "Galaxy Code: text alien",
         "title": "„Trimite prietenului tău un mesaj extraterestru pe care nu-l poate decoda.”",
         "description": "Lăsați mesaje secrete pe care doar deținătorii de chei de acționare le pot decoda."
       },
       "ufoSignal": {
-        "app": "Simulator de semnal OZN",
+        "app": "Simulator semnal UFO",
         "title": "„Ce se întâmplă dacă trimiți un semnal OZN în zori?”",
         "description": "Bucurați-vă de sunetele și animația într-o cameră întunecată."
       }
@@ -3330,8 +3330,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Ultima actualizare: 31.05.2026",
       "googlePlay": "Aplicații Google Play",
       "colorTest": "Găsiți o culoare diferită",
-      "alienText": "Text străin",
-      "ufoApp": "Simulator de semnal OZN",
+      "alienText": "Galaxy Code: text alien",
+      "ufoApp": "Simulator semnal UFO",
       "privacyPolicy": "Politica de confidențialitate",
       "appAds": "app-ads.txt",
       "contact": "Contact",
@@ -3356,7 +3356,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lt": {
     "seo": {
       "title": "NeoKIM App Lab | Nemokamos Android mini programos",
-      "description": "Įdiekite Raskite skirtingą spalvą, Svetimas tekstas, NSO signalo simuliatorius, Spalvų jutimo testas, Tamsaus labirinto pabėgimas ir privačius testus, kad gautumėte daugiau Android mini programų.",
+      "description": "Įdiekite Raskite skirtingą spalvą, Galaxy Code: ateivių tekstas, UFO signalo simuliatorius, Color Master: Spalvų testas, Tamsaus labirinto pabėgimas ir privačius testus, kad gautumėte daugiau Android mini programų.",
       "ogTitle": "NeoKIM App Lab | Android mini programos",
       "ogDescription": "Raskite keistų spalvų, kurkite ateivių stiliaus slaptą tekstą, siųskite žaismingus NSO signalus, pabėgkite iš tamsių labirintų ir prisijunkite prie privačių testų, kad greitai pasilinksmintumėte Android."
     },
@@ -3438,7 +3438,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Raskite skirtingą spalvą piktograma"
       },
       "galaxyCode": {
-        "name": "Svetimas tekstas",
+        "name": "Galaxy Code: ateivių tekstas",
         "category": "Slapto pranešimo programa",
         "tagline": "Kurkite į ateivius panašius slaptus pranešimus, kuriems norint iššifruoti reikia bendrinimo rakto.",
         "description": "Sukurkite savo galaktikos kalbos taisykles. Tik žmonės, turintys jūsų bendrinimo raktą, gali atkurti tas pačias taisykles, o originalus tekstas neįkeliamas į serverį.",
@@ -3451,10 +3451,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Sukurkite slaptus pranešimus",
         "detailCta": "Išbandykite žiniatinklio demonstraciją",
         "statusNote": "Dabar pasiekiama Google Play.",
-        "iconAlt": "Svetimas tekstas piktograma"
+        "iconAlt": "Galaxy Code: ateivių tekstas piktograma"
       },
       "ufoSignal": {
-        "name": "NSO signalo simuliatorius",
+        "name": "UFO signalo simuliatorius",
         "category": "Paslaptingo signalo pramogų programa",
         "tagline": "Siųskite žaismingą erdvės signalą ir mėgaukitės NSO nuotaika.",
         "description": "Atidarykite programėlę, paspauskite signalo mygtuką ir mėgaukitės garsu bei animacija, kurios akimirką pajus kaip mažą NSO ritualą.",
@@ -3464,13 +3464,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Nuotaikos animacija",
           "Nėra registracijos"
         ],
-        "primaryCta": "Įdiekite NSO signalo simuliatorius",
+        "primaryCta": "Įdiekite UFO signalo simuliatorius",
         "detailCta": "Peržiūrėkite išsamią programos informaciją",
         "statusNote": "Peržiūrėkite išsamią programos informaciją, tada įdiekite ją iš Google Play.",
-        "iconAlt": "NSO signalo simuliatorius piktograma"
+        "iconAlt": "UFO signalo simuliatorius piktograma"
       },
       "colorMasterClassic": {
-        "name": "Spalvų jutimo testas",
+        "name": "Color Master: Spalvų testas",
         "category": "Klasikinis spalvų pojūčio žaidimas",
         "tagline": "Originalus spalvų fokusavimo iššūkis: prisiminkite atsakymo spalvą ir pasirinkite ją iš panašių spalvų.",
         "description": "Originalus spalvų jutimo testas prieš Raskite skirtingą spalvą. Pirmiausia išbandykite žiniatinklyje, tada įdiekite iš Google Play.",
@@ -3483,7 +3483,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Įdiekite spalvų jutimo testą",
         "detailCta": "Išbandykite žiniatinklio demonstraciją",
         "statusNote": "Pirmiausia išbandykite žiniatinklyje, tada įdiekite iš Google Play.",
-        "iconAlt": "Spalvų jutimo testas piktograma"
+        "iconAlt": "Color Master: Spalvų testas piktograma"
       },
       "koreanRandomDefense": {
         "name": "Korėjos atsitiktinė gynyba",
@@ -3553,12 +3553,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Konkuruokite su draugais 10 sekundžių iššūkyje."
       },
       "galaxyCode": {
-        "app": "Svetimas tekstas",
+        "app": "Galaxy Code: ateivių tekstas",
         "title": "„Siųsk savo draugui žinutę ateiviui, kurio jis negali iššifruoti“.",
         "description": "Palikite slaptus pranešimus, kuriuos gali iššifruoti tik akcijų raktų turėtojai."
       },
       "ufoSignal": {
-        "app": "NSO signalo simuliatorius",
+        "app": "UFO signalo simuliatorius",
         "title": "„Kas atsitiks, jei auštant pasiųsi NSO signalą?",
         "description": "Mėgaukitės garsais ir animacija tamsiame kambaryje."
       }
@@ -3588,8 +3588,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Paskutinį kartą atnaujinta: 2026-05-31",
       "googlePlay": "Google Play programos",
       "colorTest": "Raskite skirtingą spalvą",
-      "alienText": "Svetimas tekstas",
-      "ufoApp": "NSO signalo simuliatorius",
+      "alienText": "Galaxy Code: ateivių tekstas",
+      "ufoApp": "UFO signalo simuliatorius",
       "privacyPolicy": "Privatumo politika",
       "appAds": "app-ads.txt",
       "contact": "Susisiekite",
@@ -3614,7 +3614,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mr-IN": {
     "seo": {
       "title": "NeoKIM ॲप लॅब | मोफत Android मिनी ॲप्स",
-      "description": "अधिक Android मिनी ॲप्ससाठी भिन्न रंग शोधा, एलियन टेक्स्ट मेकर, UFO सिग्नल सिम्युलेटर, कलर सेन्स टेस्ट, गडद चक्रव्यूह एस्केप आणि खाजगी चाचण्या स्थापित करा.",
+      "description": "अधिक Android मिनी ॲप्ससाठी भिन्न रंग शोधा, Galaxy Code: एलियन मजकूर, UFO सिग्नल सिम्युलेटर, Color Master: रंग चाचणी, गडद चक्रव्यूह एस्केप आणि खाजगी चाचण्या स्थापित करा.",
       "ogTitle": "NeoKIM ॲप लॅब | Android मिनी ॲप्स",
       "ogDescription": "विचित्र रंग शोधा, एलियन-शैलीतील गुप्त मजकूर बनवा, खेळकर UFO सिग्नल पाठवा, गडद चक्रव्यूहातून बाहेर पडा आणि द्रुत Android मनोरंजनासाठी खाजगी चाचण्यांमध्ये सामील व्हा."
     },
@@ -3696,7 +3696,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "भिन्न रंग शोधा चिन्ह"
       },
       "galaxyCode": {
-        "name": "एलियन टेक्स्ट मेकर",
+        "name": "Galaxy Code: एलियन मजकूर",
         "category": "गुप्त संदेश ॲप",
         "tagline": "एलियनसारखे गुप्त संदेश तयार करा ज्यांना डीकोड करण्यासाठी शेअर की आवश्यक आहे.",
         "description": "तुमचे स्वतःचे गॅलेक्टिक भाषेचे नियम तयार करा. फक्त तुमची शेअर की असलेले लोक समान नियम पुन्हा तयार करू शकतात आणि मूळ मजकूर सर्व्हरवर अपलोड केला जात नाही.",
@@ -3709,7 +3709,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "गुप्त संदेश तयार करा",
         "detailCta": "वेब डेमो वापरून पहा",
         "statusNote": "Google Play वर आता उपलब्ध.",
-        "iconAlt": "एलियन टेक्स्ट मेकर चिन्ह"
+        "iconAlt": "Galaxy Code: एलियन मजकूर चिन्ह"
       },
       "ufoSignal": {
         "name": "UFO सिग्नल सिम्युलेटर",
@@ -3728,7 +3728,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO सिग्नल सिम्युलेटर चिन्ह"
       },
       "colorMasterClassic": {
-        "name": "कलर सेन्स टेस्ट",
+        "name": "Color Master: रंग चाचणी",
         "category": "क्लासिक कलर सेन्स गेम",
         "tagline": "मूळ रंग-फोकस आव्हान: उत्तर रंग लक्षात ठेवा आणि समान रंगांमधून निवडा.",
         "description": "भिन्न रंग शोधा पूर्वी मूळ रंग ज्ञान चाचणी. प्रथम ते वेबवर वापरून पहा, नंतर ते Google Play वरून स्थापित करा.",
@@ -3738,10 +3738,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "जलद खेळ",
           "आता स्थापित करा"
         ],
-        "primaryCta": "कलर सेन्स टेस्ट स्थापित करा",
+        "primaryCta": "Color Master: रंग चाचणी स्थापित करा",
         "detailCta": "वेब डेमो वापरून पहा",
         "statusNote": "प्रथम ते वेबवर वापरून पहा, नंतर ते Google Play वरून स्थापित करा.",
-        "iconAlt": "कलर सेन्स टेस्ट चिन्ह"
+        "iconAlt": "Color Master: रंग चाचणी चिन्ह"
       },
       "koreanRandomDefense": {
         "name": "कोरियन यादृच्छिक संरक्षण",
@@ -3811,7 +3811,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10-सेकंदांच्या आव्हानात मित्रांसह स्पर्धा करा."
       },
       "galaxyCode": {
-        "app": "एलियन टेक्स्ट मेकर",
+        "app": "Galaxy Code: एलियन मजकूर",
         "title": "\"तुमच्या मित्राला एलियन मेसेज पाठवा जो ते डीकोड करू शकत नाहीत.\"",
         "description": "गुप्त संदेश सोडा जे फक्त शेअर-की धारक डीकोड करू शकतात."
       },
@@ -3846,7 +3846,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "शेवटचे अपडेट: 2026.05.31",
       "googlePlay": "Google Play ॲप्स",
       "colorTest": "भिन्न रंग शोधा",
-      "alienText": "एलियन टेक्स्ट मेकर",
+      "alienText": "Galaxy Code: एलियन मजकूर",
       "ufoApp": "UFO सिग्नल सिम्युलेटर",
       "privacyPolicy": "गोपनीयता धोरण",
       "appAds": "app-ads.txt",
@@ -3872,7 +3872,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mk-MK": {
     "seo": {
       "title": "NeoKIM App Lab | Бесплатни апликации Android Mini",
-      "description": "Инсталирајте Најдете различна боја, Создавач на вонземски текст, Симулатор за сигнал за НЛО, Тест за чувство на боја, Бегство од темно лавиринт и приватни тестови за повеќе мини апликации Android.",
+      "description": "Инсталирајте Најдете различна боја, Galaxy Code: вонземски текст, Симулатор на UFO сигнал, Color Master: Тест за боја, Бегство од темно лавиринт и приватни тестови за повеќе мини апликации Android.",
       "ogTitle": "NeoKIM App Lab | Android мини апликации",
       "ogDescription": "Најдете чудни бои, направете таен текст во вонземјански стил, испраќајте разиграни сигнали за НЛО, избегајте од темните лавиринти и придружете се на приватни тестови за брза забава Android."
     },
@@ -3954,7 +3954,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Икона Најдете различна боја"
       },
       "galaxyCode": {
-        "name": "Создавач на вонземски текст",
+        "name": "Galaxy Code: вонземски текст",
         "category": "Апликација за тајни пораки",
         "tagline": "Создадете тајни пораки слични на вонземјани на кои им е потребен клуч за споделување за декодирање.",
         "description": "Создадете свои правила за галактички јазик. Само луѓето со вашиот клуч за споделување можат повторно да ги креираат истите правила, а оригиналниот текст не се поставува на сервер.",
@@ -3967,10 +3967,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Создадете тајни пораки",
         "detailCta": "Обидете се со веб-демо",
         "statusNote": "Достапно сега на Google Play.",
-        "iconAlt": "Икона Создавач на вонземски текст"
+        "iconAlt": "Икона Galaxy Code: вонземски текст"
       },
       "ufoSignal": {
-        "name": "Симулатор за сигнал за НЛО",
+        "name": "Симулатор на UFO сигнал",
         "category": "Апликација за забава со мистериозни сигнали",
         "tagline": "Испратете разигран вселенски сигнал и уживајте во расположението за НЛО.",
         "description": "Отворете ја апликацијата, притиснете го копчето за сигнал и уживајте во звукот и анимацијата што прават моментот да се чувствува како мал ритуал на НЛО.",
@@ -3980,13 +3980,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Анимација за расположение",
           "Нема пријавување"
         ],
-        "primaryCta": "Инсталирајте Симулатор за сигнал за НЛО",
+        "primaryCta": "Инсталирајте Симулатор на UFO сигнал",
         "detailCta": "Погледнете ги деталите за апликацијата",
         "statusNote": "Погледнете ги деталите за апликацијата, а потоа инсталирајте ја од Google Play.",
-        "iconAlt": "Икона Симулатор за сигнал за НЛО"
+        "iconAlt": "Икона Симулатор на UFO сигнал"
       },
       "colorMasterClassic": {
-        "name": "Тест за чувство на боја",
+        "name": "Color Master: Тест за боја",
         "category": "Класична игра со чувство за боја",
         "tagline": "Оригиналниот предизвик за фокусирање на бојата: запомнете ја бојата на одговорот и изберете ја од слични бои.",
         "description": "Оригиналниот тест за чувство за боја пред Најдете различна боја. Прво пробајте го на веб, а потоа инсталирајте го од Google Play.",
@@ -3999,7 +3999,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Инсталирајте тест за чувство на боја",
         "detailCta": "Обидете се со веб-демо",
         "statusNote": "Прво пробајте го на веб, а потоа инсталирајте го од Google Play.",
-        "iconAlt": "Икона Тест за чувство на боја"
+        "iconAlt": "Икона Color Master: Тест за боја"
       },
       "koreanRandomDefense": {
         "name": "Корејска Случајна одбрана",
@@ -4069,12 +4069,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Натпреварувајте се со пријателите во предизвик од 10 секунди."
       },
       "galaxyCode": {
-        "app": "Создавач на вонземски текст",
+        "app": "Galaxy Code: вонземски текст",
         "title": "„Испратете му на вашиот пријател порака од вонземјани која не може да ја декодира.",
         "description": "Оставете тајни пораки што може да ги декодираат само сопствениците на заеднички клуч."
       },
       "ufoSignal": {
-        "app": "Симулатор за сигнал за НЛО",
+        "app": "Симулатор на UFO сигнал",
         "title": "„Што ќе се случи ако испратите сигнал за НЛО во зори?",
         "description": "Уживајте во звуците и анимацијата во темна соба."
       }
@@ -4104,8 +4104,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Последно ажурирање: 31.05.2026",
       "googlePlay": "Google Play апликации",
       "colorTest": "Најдете различна боја",
-      "alienText": "Создавач на вонземски текст",
-      "ufoApp": "Симулатор за сигнал за НЛО",
+      "alienText": "Galaxy Code: вонземски текст",
+      "ufoApp": "Симулатор на UFO сигнал",
       "privacyPolicy": "Политика за приватност",
       "appAds": "app-ads.txt",
       "contact": "Контакт",
@@ -4130,7 +4130,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ml-IN": {
     "seo": {
       "title": "NeoKIM ആപ്പ് ലാബ് | സൗജന്യ Android മിനി ആപ്പുകൾ",
-      "description": "കൂടുതൽ Android മിനി ആപ്പുകൾക്കായി വ്യത്യസ്ത നിറം കണ്ടെത്തുക, ഏലിയൻ ടെക്സ്റ്റ് മേക്കർ, UFO സിഗ്നൽ സിമുലേറ്റർ, കളർ സെൻസ് ടെസ്റ്റ്, ഡാർക്ക് മേസ് എസ്കേപ്പ് എന്നിവയും സ്വകാര്യ ടെസ്റ്റുകളും ഇൻസ്റ്റാൾ ചെയ്യുക.",
+      "description": "കൂടുതൽ Android മിനി ആപ്പുകൾക്കായി വ്യത്യസ്ത നിറം കണ്ടെത്തുക, Galaxy Code: ഏലിയൻ ടെക്സ്റ്റ്, UFO സിഗ്നൽ സിമുലേറ്റർ, Color Master: നിറ ടെസ്റ്റ്, ഡാർക്ക് മേസ് എസ്കേപ്പ് എന്നിവയും സ്വകാര്യ ടെസ്റ്റുകളും ഇൻസ്റ്റാൾ ചെയ്യുക.",
       "ogTitle": "NeoKIM ആപ്പ് ലാബ് | Android മിനി ആപ്പുകൾ",
       "ogDescription": "വിചിത്രമായ നിറങ്ങൾ കണ്ടെത്തുക, അന്യഗ്രഹ ശൈലിയിലുള്ള രഹസ്യ വാചകം ഉണ്ടാക്കുക, കളിയായ UFO സിഗ്നലുകൾ അയയ്‌ക്കുക, ഇരുണ്ട മായാജാലങ്ങളിൽ നിന്ന് രക്ഷപ്പെടുക, വേഗത്തിലുള്ള Android വിനോദത്തിനായി സ്വകാര്യ പരിശോധനകളിൽ ചേരുക."
     },
@@ -4212,7 +4212,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "വ്യത്യസ്ത നിറം കണ്ടെത്തുക ഐക്കൺ"
       },
       "galaxyCode": {
-        "name": "ഏലിയൻ ടെക്സ്റ്റ് മേക്കർ",
+        "name": "Galaxy Code: ഏലിയൻ ടെക്സ്റ്റ്",
         "category": "രഹസ്യ സന്ദേശ ആപ്പ്",
         "tagline": "ഡീകോഡ് ചെയ്യാൻ ഒരു ഷെയർ കീ ആവശ്യമുള്ള അന്യഗ്രഹജീവിയെപ്പോലെയുള്ള രഹസ്യ സന്ദേശങ്ങൾ സൃഷ്‌ടിക്കുക.",
         "description": "നിങ്ങളുടെ സ്വന്തം ഗാലക്സി ഭാഷാ നിയമങ്ങൾ സൃഷ്ടിക്കുക. നിങ്ങളുടെ ഷെയർ കീ ഉള്ള ആളുകൾക്ക് മാത്രമേ സമാന നിയമങ്ങൾ പുനഃസൃഷ്‌ടിക്കാനാകൂ, യഥാർത്ഥ ടെക്‌സ്‌റ്റ് ഒരു സെർവറിലേക്ക് അപ്‌ലോഡ് ചെയ്യില്ല.",
@@ -4225,7 +4225,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "രഹസ്യ സന്ദേശങ്ങൾ സൃഷ്ടിക്കുക",
         "detailCta": "വെബ് ഡെമോ പരീക്ഷിക്കുക",
         "statusNote": "Google Play-ൽ ഇപ്പോൾ ലഭ്യമാണ്.",
-        "iconAlt": "ഏലിയൻ ടെക്സ്റ്റ് മേക്കർ ഐക്കൺ"
+        "iconAlt": "Galaxy Code: ഏലിയൻ ടെക്സ്റ്റ് ഐക്കൺ"
       },
       "ufoSignal": {
         "name": "UFO സിഗ്നൽ സിമുലേറ്റർ",
@@ -4244,7 +4244,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO സിഗ്നൽ സിമുലേറ്റർ ഐക്കൺ"
       },
       "colorMasterClassic": {
-        "name": "കളർ സെൻസ് ടെസ്റ്റ്",
+        "name": "Color Master: നിറ ടെസ്റ്റ്",
         "category": "ക്ലാസിക് കളർ സെൻസ് ഗെയിം",
         "tagline": "യഥാർത്ഥ കളർ-ഫോക്കസ് ചലഞ്ച്: ഉത്തരത്തിൻ്റെ നിറം ഓർത്ത് സമാന നിറങ്ങളിൽ നിന്ന് അത് തിരഞ്ഞെടുക്കുക.",
         "description": "വ്യത്യസ്ത നിറം കണ്ടെത്തുക-ന് മുമ്പുള്ള യഥാർത്ഥ വർണ്ണ സെൻസ് ടെസ്റ്റ്. ആദ്യം വെബിൽ ഇത് പരീക്ഷിക്കുക, തുടർന്ന് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക.",
@@ -4254,10 +4254,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "പെട്ടെന്നുള്ള കളി",
           "ഇപ്പോൾ ഇൻസ്റ്റാൾ ചെയ്യുക"
         ],
-        "primaryCta": "കളർ സെൻസ് ടെസ്റ്റ് ഇൻസ്റ്റാൾ ചെയ്യുക",
+        "primaryCta": "Color Master: നിറ ടെസ്റ്റ് ഇൻസ്റ്റാൾ ചെയ്യുക",
         "detailCta": "വെബ് ഡെമോ പരീക്ഷിക്കുക",
         "statusNote": "ആദ്യം വെബിൽ ഇത് പരീക്ഷിക്കുക, തുടർന്ന് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക.",
-        "iconAlt": "കളർ സെൻസ് ടെസ്റ്റ് ഐക്കൺ"
+        "iconAlt": "Color Master: നിറ ടെസ്റ്റ് ഐക്കൺ"
       },
       "koreanRandomDefense": {
         "name": "കൊറിയൻ റാൻഡം ഡിഫൻസ്",
@@ -4327,7 +4327,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 സെക്കൻഡ് ചലഞ്ചിൽ സുഹൃത്തുക്കളുമായി മത്സരിക്കുക."
       },
       "galaxyCode": {
-        "app": "ഏലിയൻ ടെക്സ്റ്റ് മേക്കർ",
+        "app": "Galaxy Code: ഏലിയൻ ടെക്സ്റ്റ്",
         "title": "\"നിങ്ങളുടെ സുഹൃത്തിന് ഡീകോഡ് ചെയ്യാൻ കഴിയാത്ത ഒരു അന്യഗ്രഹ സന്ദേശം അയയ്ക്കുക.\"",
         "description": "ഷെയർ-കീ ഹോൾഡർമാർക്ക് മാത്രം ഡീകോഡ് ചെയ്യാൻ കഴിയുന്ന രഹസ്യ സന്ദേശങ്ങൾ ഇടുക."
       },
@@ -4362,7 +4362,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "അവസാനം അപ്ഡേറ്റ് ചെയ്തത്: 2026.05.31",
       "googlePlay": "Google Play ആപ്പുകൾ",
       "colorTest": "വ്യത്യസ്ത നിറം കണ്ടെത്തുക",
-      "alienText": "ഏലിയൻ ടെക്സ്റ്റ് മേക്കർ",
+      "alienText": "Galaxy Code: ഏലിയൻ ടെക്സ്റ്റ്",
       "ufoApp": "UFO സിഗ്നൽ സിമുലേറ്റർ",
       "privacyPolicy": "സ്വകാര്യതാ നയം",
       "appAds": "app-ads.txt",
@@ -4388,7 +4388,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ms": {
     "seo": {
       "title": "Makmal Apl NeoKIM | Apl Mini Android percuma",
-      "description": "Pasang Cari Warna Berbeza, Pembuat Teks Alien, Simulator Isyarat UFO, Ujian Deria Warna, Lari Labirin Gelap dan ujian peribadi untuk lebih banyak apl mini Android.",
+      "description": "Pasang Cari Warna Berbeza, Galaxy Code: teks alien, Simulator Isyarat UFO, Color Master: Ujian Warna, Lari Labirin Gelap dan ujian peribadi untuk lebih banyak apl mini Android.",
       "ogTitle": "Makmal Apl NeoKIM | Apl Mini Android",
       "ogDescription": "Cari warna ganjil, buat teks rahsia gaya asing, hantar isyarat UFO yang suka bermain, lari dari labirin gelap dan sertai ujian peribadi untuk keseronokan Android yang pantas."
     },
@@ -4470,7 +4470,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Cari Warna Berbeza"
       },
       "galaxyCode": {
-        "name": "Pembuat Teks Alien",
+        "name": "Galaxy Code: teks alien",
         "category": "Apl mesej rahsia",
         "tagline": "Buat mesej rahsia seperti makhluk asing yang memerlukan kunci kongsi untuk menyahkod.",
         "description": "Cipta peraturan bahasa galaksi anda sendiri. Hanya orang yang mempunyai kunci kongsi anda boleh mencipta semula peraturan yang sama dan teks asal tidak dimuat naik ke pelayan.",
@@ -4483,7 +4483,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Cipta Mesej Rahsia",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon Pembuat Teks Alien"
+        "iconAlt": "Ikon Galaxy Code: teks alien"
       },
       "ufoSignal": {
         "name": "Simulator Isyarat UFO",
@@ -4502,7 +4502,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Simulator Isyarat UFO"
       },
       "colorMasterClassic": {
-        "name": "Ujian Deria Warna",
+        "name": "Color Master: Ujian Warna",
         "category": "Permainan deria warna klasik",
         "tagline": "Cabaran fokus warna asal: ingat warna jawapan dan pilih daripada warna yang serupa.",
         "description": "Ujian deria warna asal sebelum Cari Warna Berbeza. Cuba di web dahulu, kemudian pasang dari Google Play.",
@@ -4512,10 +4512,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Main cepat",
           "Pasang sekarang"
         ],
-        "primaryCta": "Pasang Ujian Deria Warna",
+        "primaryCta": "Pasang Color Master: Ujian Warna",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Cuba di web dahulu, kemudian pasang dari Google Play.",
-        "iconAlt": "Ikon Ujian Deria Warna"
+        "iconAlt": "Ikon Color Master: Ujian Warna"
       },
       "koreanRandomDefense": {
         "name": "Pertahanan Rawak Korea",
@@ -4585,7 +4585,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Bersaing dengan rakan dalam cabaran 10 saat."
       },
       "galaxyCode": {
-        "app": "Pembuat Teks Alien",
+        "app": "Galaxy Code: teks alien",
         "title": "\"Hantar rakan anda mesej asing yang mereka tidak boleh dekod.\"",
         "description": "Tinggalkan mesej rahsia yang hanya pemegang kunci kongsi boleh menyahkod."
       },
@@ -4620,7 +4620,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Kemas kini terakhir: 2026.05.31",
       "googlePlay": "Apl Google Play",
       "colorTest": "Cari Warna Berbeza",
-      "alienText": "Pembuat Teks Alien",
+      "alienText": "Galaxy Code: teks alien",
       "ufoApp": "Simulator Isyarat UFO",
       "privacyPolicy": "Dasar Privasi",
       "appAds": "app-ads.txt",
@@ -4646,7 +4646,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ms-MY": {
     "seo": {
       "title": "Makmal Apl NeoKIM | Apl Mini Android percuma",
-      "description": "Pasang Cari Warna Berbeza, Pembuat Teks Alien, Simulator Isyarat UFO, Ujian Deria Warna, Lari Labirin Gelap dan ujian peribadi untuk lebih banyak apl mini Android.",
+      "description": "Pasang Cari Warna Berbeza, Galaxy Code: teks alien, Simulator Isyarat UFO, Color Master: Ujian Warna, Lari Labirin Gelap dan ujian peribadi untuk lebih banyak apl mini Android.",
       "ogTitle": "Makmal Apl NeoKIM | Apl Mini Android",
       "ogDescription": "Cari warna ganjil, buat teks rahsia gaya asing, hantar isyarat UFO yang suka bermain, lari dari labirin gelap dan sertai ujian peribadi untuk keseronokan Android yang pantas."
     },
@@ -4728,7 +4728,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Cari Warna Berbeza"
       },
       "galaxyCode": {
-        "name": "Pembuat Teks Alien",
+        "name": "Galaxy Code: teks alien",
         "category": "Apl mesej rahsia",
         "tagline": "Buat mesej rahsia seperti makhluk asing yang memerlukan kunci kongsi untuk menyahkod.",
         "description": "Cipta peraturan bahasa galaksi anda sendiri. Hanya orang yang mempunyai kunci kongsi anda boleh mencipta semula peraturan yang sama dan teks asal tidak dimuat naik ke pelayan.",
@@ -4741,7 +4741,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Cipta Mesej Rahsia",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon Pembuat Teks Alien"
+        "iconAlt": "Ikon Galaxy Code: teks alien"
       },
       "ufoSignal": {
         "name": "Simulator Isyarat UFO",
@@ -4760,7 +4760,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Simulator Isyarat UFO"
       },
       "colorMasterClassic": {
-        "name": "Ujian Deria Warna",
+        "name": "Color Master: Ujian Warna",
         "category": "Permainan deria warna klasik",
         "tagline": "Cabaran fokus warna asal: ingat warna jawapan dan pilih daripada warna yang serupa.",
         "description": "Ujian deria warna asal sebelum Cari Warna Berbeza. Cuba di web dahulu, kemudian pasang dari Google Play.",
@@ -4770,10 +4770,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Main cepat",
           "Pasang sekarang"
         ],
-        "primaryCta": "Pasang Ujian Deria Warna",
+        "primaryCta": "Pasang Color Master: Ujian Warna",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Cuba di web dahulu, kemudian pasang dari Google Play.",
-        "iconAlt": "Ikon Ujian Deria Warna"
+        "iconAlt": "Ikon Color Master: Ujian Warna"
       },
       "koreanRandomDefense": {
         "name": "Pertahanan Rawak Korea",
@@ -4843,7 +4843,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Bersaing dengan rakan dalam cabaran 10 saat."
       },
       "galaxyCode": {
-        "app": "Pembuat Teks Alien",
+        "app": "Galaxy Code: teks alien",
         "title": "\"Hantar rakan anda mesej asing yang mereka tidak boleh dekod.\"",
         "description": "Tinggalkan mesej rahsia yang hanya pemegang kunci kongsi boleh menyahkod."
       },
@@ -4878,7 +4878,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Kemas kini terakhir: 2026.05.31",
       "googlePlay": "Apl Google Play",
       "colorTest": "Cari Warna Berbeza",
-      "alienText": "Pembuat Teks Alien",
+      "alienText": "Galaxy Code: teks alien",
       "ufoApp": "Simulator Isyarat UFO",
       "privacyPolicy": "Dasar Privasi",
       "appAds": "app-ads.txt",
@@ -4904,9 +4904,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mn-MN": {
     "seo": {
       "title": "NeoKIM App Lab | Үнэгүй Android Mini програмууд",
-      "description": "Өөр өнгө олох, Харь гарагийн текст бүтээгч, Нисдэг Үл Мэдэгдэх дохио, Өнгө мэдрэх тест, Хар төөрдөг болон бусад Android мини программуудын хувийн тестүүдийг суулгаарай.",
+      "description": "Өөр өнгө олох, Galaxy Code: харь текст, UFO дохионы симулятор, Color Master: Өнгөний тест, Хар төөрдөг болон бусад Android мини программуудын хувийн тестүүдийг суулгаарай.",
       "ogTitle": "NeoKIM App Lab | Android мини програмууд",
-      "ogDescription": "Android-ийг хурдан зугаацуулахын тулд хачирхалтай өнгийг олж, харь гарагийн хэв маягийн нууц бичвэр бичиж, хөгжилтэй Нисдэг Үл Мэдэгдэх дохио илгээж, харанхуй төөрдөг байшингаас зугтаж, хувийн тестүүдэд нэгдээрэй."
+      "ogDescription": "Android-ийг хурдан зугаацуулахын тулд хачирхалтай өнгийг олж, харь гарагийн хэв маягийн нууц бичвэр бичиж, хөгжилтэй UFO дохионы симулятор илгээж, харанхуй төөрдөг байшингаас зугтаж, хувийн тестүүдэд нэгдээрэй."
     },
     "skip": {
       "apps": "Програмын жагсаалт руу алгасах"
@@ -4941,7 +4941,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android мини програмын цуглуулга",
       "title": "NeoKIM App Lab",
       "subtitle": "Жижиг Android програмууд нь хурдан зугаацаж, хуваалцахад зориулагдсан",
-      "description": "Хачирхалтай өнгөт сорилтууд, харь гарагийн хэв маягийн нууц мессеж, Нисдэг Үл Мэдэгдэх дохионы тоглоом, харанхуй төөрдөг байшингаас зугтах. Хөнгөн суулгаарай. Нэг минутын дотор сайхан өнгөрүүлээрэй.",
+      "description": "Хачирхалтай өнгөт сорилтууд, харь гарагийн хэв маягийн нууц мессеж, UFO дохионы симуляторны тоглоом, харанхуй төөрдөг байшингаас зугтах. Хөнгөн суулгаарай. Нэг минутын дотор сайхан өнгөрүүлээрэй.",
       "primaryCta": "Онцлох програмыг суулгана уу",
       "primaryAria": "Өөр өнгө олох-г Google Play дээр суулгана уу",
       "secondaryCta": "Апп-уудыг үзэх",
@@ -4986,7 +4986,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Өөр өнгө олох дүрс"
       },
       "galaxyCode": {
-        "name": "Харь гарагийн текст бүтээгч",
+        "name": "Galaxy Code: харь текст",
         "category": "Нууц мессежийн програм",
         "tagline": "Шифрийг тайлахад хуваалцах түлхүүр шаардлагатай харь гаригийнх шиг нууц мессеж үүсгэ.",
         "description": "Өөрийнхөө галактик хэлний дүрмийг бий болго. Зөвхөн таны хуваалцах түлхүүртэй хүмүүс ижил дүрмийг дахин үүсгэх боломжтой бөгөөд эх текстийг серверт байршуулдаггүй.",
@@ -4999,10 +4999,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Нууц мессеж үүсгэх",
         "detailCta": "Вэб Демо туршиж үзээрэй",
         "statusNote": "Google Play дээр одоо ашиглах боломжтой.",
-        "iconAlt": "Харь гарагийн текст бүтээгч дүрс"
+        "iconAlt": "Galaxy Code: харь текст дүрс"
       },
       "ufoSignal": {
-        "name": "Нисдэг Үл Мэдэгдэх дохио",
+        "name": "UFO дохионы симулятор",
         "category": "Нууц дохионы зугаа цэнгэлийн програм",
         "tagline": "Хөгжилтэй сансрын дохио илгээж, Нисдэг Үл Мэдэгдэх уур амьсгалыг сайхан өнгөрүүлээрэй.",
         "description": "Аппликейшнийг нээж, дохионы товчлуурыг дарж, тэр агшинд Нисдэг Үл Мэдэгдэх жижиг зан үйл мэт мэдрэмж төрүүлэх дуу, хөдөлгөөнт дүрсийг таашаа.",
@@ -5012,13 +5012,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Сэтгэлийн хөдөлгөөн",
           "Бүртгүүлэхгүй"
         ],
-        "primaryCta": "Нисдэг Үл Мэдэгдэх дохио суулгана уу",
+        "primaryCta": "UFO дохионы симулятор суулгана уу",
         "detailCta": "Аппликешны дэлгэрэнгүй мэдээллийг харах",
         "statusNote": "Програмын дэлгэрэнгүй мэдээллийг үзээд Google Play-с суулгана уу.",
-        "iconAlt": "Нисдэг Үл Мэдэгдэх дохио дүрс"
+        "iconAlt": "UFO дохионы симулятор дүрс"
       },
       "colorMasterClassic": {
-        "name": "Өнгө мэдрэх тест",
+        "name": "Color Master: Өнгөний тест",
         "category": "Сонгодог өнгө мэдрэх тоглоом",
         "tagline": "Анхны өнгөт анхаарлаа төвлөрүүлэх сорилт: хариултын өнгийг санаж, ижил төстэй өнгөнөөс сонго.",
         "description": "Өөр өнгө олох-ийн өмнөх анхны өнгө мэдрэх тест. Эхлээд вэб дээр туршаад дараа нь Google Play-с суулгаарай.",
@@ -5028,10 +5028,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Түргэн тоглох",
           "Одоо суулгана уу"
         ],
-        "primaryCta": "Өнгө мэдрэх тестийг суулгана уу",
+        "primaryCta": "Color Master: Өнгөний тестийг суулгана уу",
         "detailCta": "Вэб Демо туршиж үзээрэй",
         "statusNote": "Эхлээд вэб дээр туршаад дараа нь Google Play-с суулгаарай.",
-        "iconAlt": "Өнгө мэдрэх тест дүрс"
+        "iconAlt": "Color Master: Өнгөний тест дүрс"
       },
       "koreanRandomDefense": {
         "name": "Солонгосын хамгаалалт",
@@ -5101,13 +5101,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Найзуудтайгаа 10 секундын сорилтоор өрсөлдөөрэй."
       },
       "galaxyCode": {
-        "app": "Харь гарагийн текст бүтээгч",
+        "app": "Galaxy Code: харь текст",
         "title": "\"Найздаа тайлж чадахгүй харь гаригийн мессеж илгээ.\"",
         "description": "Зөвхөн хувьцаа эзэмшигчид тайлж чадах нууц мессежийг үлдээгээрэй."
       },
       "ufoSignal": {
-        "app": "Нисдэг Үл Мэдэгдэх дохио",
-        "title": "\"Хэрэв та үүрээр Нисдэг Үл Мэдэгдэх дохио илгээвэл яах вэ?\"",
+        "app": "UFO дохионы симулятор",
+        "title": "\"Хэрэв та үүрээр UFO дохионы симулятор илгээвэл яах вэ?\"",
         "description": "Харанхуй өрөөнд дуу чимээ, хөдөлгөөнт дүрсийг сайхан өнгөрүүлээрэй."
       }
     },
@@ -5136,8 +5136,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Сүүлд шинэчлэгдсэн: 2026.05.31",
       "googlePlay": "Google Play програмууд",
       "colorTest": "Өөр өнгө олох",
-      "alienText": "Харь гарагийн текст бүтээгч",
-      "ufoApp": "Нисдэг Үл Мэдэгдэх дохио",
+      "alienText": "Galaxy Code: харь текст",
+      "ufoApp": "UFO дохионы симулятор",
       "privacyPolicy": "Нууцлалын бодлого",
       "appAds": "app-ads.txt",
       "contact": "Холбоо барих",
@@ -5162,7 +5162,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "eu-ES": {
     "seo": {
       "title": "NeoKIM App Lab | Doako Android Mini aplikazioak",
-      "description": "Instalatu Aurkitu kolore desberdina, Testu arrotza, UFO seinalearen simulagailua, Kolore Zentzumenaren Testa, Labirinto ilunetik ihes eta proba pribatuak Android aplikazio txiki gehiago lortzeko.",
+      "description": "Instalatu Aurkitu kolore desberdina, Galaxy Code: alien testua, UFO seinale simulatzailea, Color Master: Kolore proba, Labirinto ilunetik ihes eta proba pribatuak Android aplikazio txiki gehiago lortzeko.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplikazioak",
       "ogDescription": "Aurkitu kolore bitxiak, egin alien estiloko testu sekretua, bidali UFO seinale jostagarriak, ihes labirinto ilunetik eta batu proba pribatuetan Android azkar dibertitzeko."
     },
@@ -5244,7 +5244,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Aurkitu kolore desberdina ikonoa"
       },
       "galaxyCode": {
-        "name": "Testu arrotza",
+        "name": "Galaxy Code: alien testua",
         "category": "Mezu sekretuen aplikazioa",
         "tagline": "Sortu deskodetzeko partekatzeko gako bat behar duten alien antzeko mezu sekretuak.",
         "description": "Sortu zure hizkuntza galaktikoko arauak. Zure partekatzeko gakoa duten pertsonek soilik birsor ditzakete arau berdinak, eta jatorrizko testua ez da zerbitzari batera kargatzen.",
@@ -5257,10 +5257,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Sortu mezu sekretuak",
         "detailCta": "Saiatu Web Demo",
         "statusNote": "Orain eskuragarri Google Play-en.",
-        "iconAlt": "Testu arrotza ikonoa"
+        "iconAlt": "Galaxy Code: alien testua ikonoa"
       },
       "ufoSignal": {
-        "name": "UFO seinalearen simulagailua",
+        "name": "UFO seinale simulatzailea",
         "category": "Misterioko seinale entretenimendurako aplikazioa",
         "tagline": "Bidali espazio-seinale ludiko bat eta gozatu UFO aldarteaz.",
         "description": "Ireki aplikazioa, sakatu seinale-botoia eta gozatu unea UFO erritual txiki bat bezala sentiarazten duten soinu eta animazioz.",
@@ -5270,13 +5270,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Aldarte animazioa",
           "Izen-ematerik ez"
         ],
-        "primaryCta": "Instalatu UFO seinalearen simulagailua",
+        "primaryCta": "Instalatu UFO seinale simulatzailea",
         "detailCta": "Ikusi aplikazioaren xehetasunak",
         "statusNote": "Ikusi aplikazioaren xehetasunak, eta instalatu Google Play-etik.",
-        "iconAlt": "UFO seinalearen simulagailua ikonoa"
+        "iconAlt": "UFO seinale simulatzailea ikonoa"
       },
       "colorMasterClassic": {
-        "name": "Kolore Zentzumenaren Testa",
+        "name": "Color Master: Kolore proba",
         "category": "Kolore zentzuzko joko klasikoa",
         "tagline": "Jatorrizko kolore-foku erronka: gogoratu erantzunaren kolorea eta hautatu antzeko koloreetatik.",
         "description": "Aurkitu kolore desberdina baino lehen kolorearen zentzuaren jatorrizko proba. Saiatu lehenik sarean, gero instalatu Google Play-etik.",
@@ -5286,10 +5286,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Jolas azkarra",
           "Instalatu orain"
         ],
-        "primaryCta": "Instalatu Kolore Zentzumenaren Testa",
+        "primaryCta": "Instalatu Color Master: Kolore proba",
         "detailCta": "Saiatu Web Demo",
         "statusNote": "Saiatu lehenik sarean, gero instalatu Google Play-etik.",
-        "iconAlt": "Kolore Zentzumenaren Testa ikonoa"
+        "iconAlt": "Color Master: Kolore proba ikonoa"
       },
       "koreanRandomDefense": {
         "name": "Koreako Ausazko Defentsa",
@@ -5359,12 +5359,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Lehiatu lagunekin 10 segundoko erronka batean."
       },
       "galaxyCode": {
-        "app": "Testu arrotza",
+        "app": "Galaxy Code: alien testua",
         "title": "\"Bidali zure lagunari deskodetu ezin duen mezu arrotz bat\".",
         "description": "Utzi gakoen jabeek soilik deskodetu ditzaketen mezu sekretuak."
       },
       "ufoSignal": {
-        "app": "UFO seinalearen simulagailua",
+        "app": "UFO seinale simulatzailea",
         "title": "\"Zer gertatzen da egunsentian UFO seinalea bidaltzen baduzu?\"",
         "description": "Gozatu soinuez eta animazioez gela ilun batean."
       }
@@ -5394,8 +5394,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Azken eguneratzea: 31/05/2026",
       "googlePlay": "Google Play Aplikazioak",
       "colorTest": "Aurkitu kolore desberdina",
-      "alienText": "Testu arrotza",
-      "ufoApp": "UFO seinalearen simulagailua",
+      "alienText": "Galaxy Code: alien testua",
+      "ufoApp": "UFO seinale simulatzailea",
       "privacyPolicy": "Pribatutasun-politika",
       "appAds": "app-ads.txt",
       "contact": "Kontaktua",
@@ -5420,9 +5420,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "my-MM": {
     "seo": {
       "title": "NeoKIM App Lab | အခမဲ့ Android Mini အက်ပ်များ",
-      "description": "မတူညီသောအရောင်ကိုရှာပါ။၊ Alien စာသား၊ UFO အချက်ပြ၊ အရောင်စမ်းသပ်မှု၊ မှောင်မိုက်ဝင်္ကဘာ နှင့် နောက်ထပ် Android အသေးစားအက်ပ်များအတွက် သီးသန့်စမ်းသပ်မှုများကို ထည့်သွင်းပါ။",
+      "description": "မတူညီသောအရောင်ကိုရှာပါ။၊ Galaxy Code: ဂြိုဟ်သားစာ၊ UFO အချက်ပြ ဆင်မြူလೇಟာ၊ Color Master: အရောင်စမ်း၊ မှောင်မိုက်ဝင်္ကဘာ နှင့် နောက်ထပ် Android အသေးစားအက်ပ်များအတွက် သီးသန့်စမ်းသပ်မှုများကို ထည့်သွင်းပါ။",
       "ogTitle": "NeoKIM App Lab | Android Mini အက်ပ်များ",
-      "ogDescription": "ထူးဆန်းသောအရောင်များကိုရှာပါ၊ ဂြိုလ်သားပုံစံလျှို့ဝှက်စာတိုကိုဖန်တီးပါ၊ ရယ်စရာကောင်းသော UFO အချက်ပြမှုများကိုပေးပို့ပါ၊ မှောင်မိုက်ဝင်္ကပါများမှလွတ်မြောက်ကာ Android အမြန်ပျော်စရာအတွက်သီးသန့်စမ်းသပ်မှုများတွင်ပါဝင်ပါ။"
+      "ogDescription": "ထူးဆန်းသောအရောင်များကိုရှာပါ၊ ဂြိုလ်သားပုံစံလျှို့ဝှက်စာတိုကိုဖန်တီးပါ၊ ရယ်စရာကောင်းသော UFO အချက်ပြ ဆင်မြူလೇಟာမှုများကိုပေးပို့ပါ၊ မှောင်မိုက်ဝင်္ကပါများမှလွတ်မြောက်ကာ Android အမြန်ပျော်စရာအတွက်သီးသန့်စမ်းသပ်မှုများတွင်ပါဝင်ပါ။"
     },
     "skip": {
       "apps": "အက်ပ်စာရင်းသို့ ကျော်သွားပါ။"
@@ -5457,7 +5457,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android အသေးစားအက်ပ်စုဆောင်းမှု",
       "title": "NeoKIM အက်ပ်ဓာတ်ခွဲခန်း",
       "subtitle": "လျင်မြန်စွာ ပျော်စရာနှင့် မျှဝေရန် ဖန်တီးထားသည့် Android အက်ပ်အသေးများ",
-      "description": "ထူးဆန်းသောအရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားပုံစံလျှို့ဝှက်စာတိုများ၊ UFO အချက်ပြကစားခြင်းနှင့် မှောင်မိုက်ဝင်္ကပါမှ လွတ်မြောက်ခြင်း။ ပေါ့ပေါ့ပါးပါး တပ်ဆင်ပါ။ တစ်မိနစ်အတွင်း ခံစားလိုက်ပါ။",
+      "description": "ထူးဆန်းသောအရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားပုံစံလျှို့ဝှက်စာတိုများ၊ UFO အချက်ပြ ဆင်မြူလೇಟာကစားခြင်းနှင့် မှောင်မိုက်ဝင်္ကပါမှ လွတ်မြောက်ခြင်း။ ပေါ့ပေါ့ပါးပါး တပ်ဆင်ပါ။ တစ်မိနစ်အတွင်း ခံစားလိုက်ပါ။",
       "primaryCta": "အထူးပြုအက်ပ်ကို ထည့်သွင်းပါ။",
       "primaryAria": "မတူညီသောအရောင်ကိုရှာပါ။ ကို Google Play တွင် ထည့်သွင်းပါ။",
       "secondaryCta": "အက်ပ်များကို ရှာဖွေပါ။",
@@ -5502,7 +5502,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "မတူညီသောအရောင်ကိုရှာပါ။ သင်္ကေတ"
       },
       "galaxyCode": {
-        "name": "Alien စာသား",
+        "name": "Galaxy Code: ဂြိုဟ်သားစာ",
         "category": "လျှို့ဝှက်စာတိုအက်ပ်",
         "tagline": "ကုဒ်ဖွင့်ရန် မျှဝေသော့လိုအပ်သော ဂြိုလ်သားကဲ့သို့ လျှို့ဝှက်စာတိုများကို ဖန်တီးပါ။",
         "description": "သင့်ကိုယ်ပိုင် ဂလက်တစ်ဘာသာစကား စည်းမျဉ်းများကို ဖန်တီးပါ။ သင်၏ မျှဝေသော့ကို ကိုင်ဆောင်ထားသူများသာ တူညီသော စည်းမျဉ်းများကို ပြန်လည်ဖန်တီးနိုင်ပြီး မူရင်းစာသားကို ဆာဗာသို့ အပ်လုဒ်မလုပ်ပါ။",
@@ -5515,10 +5515,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "လျှို့ဝှက်စာတိုများ ဖန်တီးပါ။",
         "detailCta": "Web Demo စမ်းကြည့်ပါ။",
         "statusNote": "Google Play တွင် ယခုရရှိနိုင်ပါပြီ။",
-        "iconAlt": "Alien စာသား သင်္ကေတ"
+        "iconAlt": "Galaxy Code: ဂြိုဟ်သားစာ သင်္ကေတ"
       },
       "ufoSignal": {
-        "name": "UFO အချက်ပြ",
+        "name": "UFO အချက်ပြ ဆင်မြူလೇಟာ",
         "category": "လျှို့ဝှက်ဆန်းကြယ်အချက်ပြဖျော်ဖြေရေးအက်ပ်",
         "tagline": "ဆော့ကစားနိုင်သော အာကာသအချက်ပြမှုကို ပေးပို့ပြီး UFO ခံစားချက်ကို ခံစားလိုက်ပါ။",
         "description": "အက်ပ်ကိုဖွင့်ပါ၊ အချက်ပြခလုတ်ကို နှိပ်ပါ၊ အခိုက်အတန့်လေးကို UFO ထုံးတမ်းတစ်ခုလို ခံစားစေမည့် အသံနှင့် ကာတွန်းကို ခံစားလိုက်ပါ။",
@@ -5528,13 +5528,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ခံစားချက် ကာတွန်း",
           "စာရင်းသွင်းခြင်း မရှိပါ။"
         ],
-        "primaryCta": "UFO အချက်ပြ ကို ထည့်သွင်းပါ။",
+        "primaryCta": "UFO အချက်ပြ ဆင်မြူလೇಟာ ကို ထည့်သွင်းပါ။",
         "detailCta": "အက်ပ်အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုပါ။",
         "statusNote": "အက်ပ်အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုပြီးနောက် Google Play မှ ထည့်သွင်းပါ။",
-        "iconAlt": "UFO အချက်ပြ သင်္ကေတ"
+        "iconAlt": "UFO အချက်ပြ ဆင်မြူလೇಟာ သင်္ကေတ"
       },
       "colorMasterClassic": {
-        "name": "အရောင်စမ်းသပ်မှု",
+        "name": "Color Master: အရောင်စမ်း",
         "category": "ဂန္တဝင်အရောင်အာရုံခံဂိမ်း",
         "tagline": "မူရင်းအရောင်-အာရုံစူးစိုက်မှုစိန်ခေါ်မှု- အဖြေအရောင်ကို မှတ်မိပြီး အလားတူအရောင်များမှ ရွေးပါ။",
         "description": "မတူညီသောအရောင်ကိုရှာပါ။ မတိုင်မီ မူလအရောင်အာရုံခံစမ်းသပ်မှု။ ဝဘ်ပေါ်တွင် ဦးစွာ စမ်းသုံးကြည့်ပြီး Google Play မှ ထည့်သွင်းပါ။",
@@ -5544,10 +5544,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "အမြန်ကစားပါ။",
           "ယခုထည့်သွင်းပါ။"
         ],
-        "primaryCta": "အရောင်စမ်းသပ်မှု ကို ထည့်သွင်းပါ။",
+        "primaryCta": "Color Master: အရောင်စမ်း ကို ထည့်သွင်းပါ။",
         "detailCta": "Web Demo စမ်းကြည့်ပါ။",
         "statusNote": "ဝဘ်ပေါ်တွင် ဦးစွာ စမ်းသုံးကြည့်ပြီး Google Play မှ ထည့်သွင်းပါ။",
-        "iconAlt": "အရောင်စမ်းသပ်မှု သင်္ကေတ"
+        "iconAlt": "Color Master: အရောင်စမ်း သင်္ကေတ"
       },
       "koreanRandomDefense": {
         "name": "Korean Random ကာကွယ်ရေး",
@@ -5617,13 +5617,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 စက္ကန့်စိန်ခေါ်မှုတွင် သူငယ်ချင်းများနှင့် ယှဉ်ပြိုင်ပါ။"
       },
       "galaxyCode": {
-        "app": "Alien စာသား",
+        "app": "Galaxy Code: ဂြိုဟ်သားစာ",
         "title": "“သင့်သူငယ်ချင်းကို သူတို့ ကုဒ်မတတ်နိုင်တဲ့ ဂြိုလ်သားမက်ဆေ့ခ်ျ ပို့ပါ။”",
         "description": "share-key ကိုင်ဆောင်သူများသာ decode လုပ်နိုင်သော လျှို့ဝှက်စာတိုများကို ထားခဲ့ပါ။"
       },
       "ufoSignal": {
-        "app": "UFO အချက်ပြ",
-        "title": "\"မနက်မိုးလင်းရင် UFO အချက်ပြရင် ဘာဖြစ်မလဲ။\"",
+        "app": "UFO အချက်ပြ ဆင်မြူလೇಟာ",
+        "title": "\"မနက်မိုးလင်းရင် UFO အချက်ပြ ဆင်မြူလೇಟာရင် ဘာဖြစ်မလဲ။\"",
         "description": "အမှောင်ခန်းထဲတွင် အသံများနှင့် ကာတွန်းများကို ခံစားလိုက်ပါ။"
       }
     },
@@ -5652,8 +5652,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "နောက်ဆုံးမွမ်းမံမှု- 2026.05.31",
       "googlePlay": "Google Play အက်ပ်များ",
       "colorTest": "မတူညီသောအရောင်ကိုရှာပါ။",
-      "alienText": "Alien စာသား",
-      "ufoApp": "UFO အချက်ပြ",
+      "alienText": "Galaxy Code: ဂြိုဟ်သားစာ",
+      "ufoApp": "UFO အချက်ပြ ဆင်မြူလೇಟာ",
       "privacyPolicy": "ကိုယ်ရေးကိုယ်တာမူဝါဒ",
       "appAds": "app-ads.txt",
       "contact": "ဆက်သွယ်ရန်",
@@ -5678,7 +5678,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "vi": {
     "seo": {
       "title": "Phòng thí nghiệm ứng dụng NeoKIM | Ứng dụng nhỏ Android miễn phí",
-      "description": "Cài đặt Tìm màu khác, Văn bản ngoài hành tinh, Bộ mô phỏng tín hiệu UFO, Kiểm tra cảm giác màu sắc, Thoát khỏi mê cung tối và các thử nghiệm riêng tư để có thêm ứng dụng nhỏ Android.",
+      "description": "Cài đặt Tìm màu khác, Galaxy Code: chữ alien, Mô phỏng tín hiệu UFO, Color Master: Test màu, Thoát khỏi mê cung tối và các thử nghiệm riêng tư để có thêm ứng dụng nhỏ Android.",
       "ogTitle": "Phòng thí nghiệm ứng dụng NeoKIM | Ứng dụng nhỏ Android",
       "ogDescription": "Tìm các màu sắc kỳ lạ, tạo văn bản bí mật theo phong cách người ngoài hành tinh, gửi tín hiệu UFO vui nhộn, thoát khỏi mê cung tối tăm và tham gia các thử nghiệm riêng tư để nhanh chóng giải trí Android."
     },
@@ -5760,7 +5760,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Biểu tượng Tìm màu khác"
       },
       "galaxyCode": {
-        "name": "Văn bản ngoài hành tinh",
+        "name": "Galaxy Code: chữ alien",
         "category": "Ứng dụng tin nhắn bí mật",
         "tagline": "Tạo những tin nhắn bí mật giống người ngoài hành tinh cần có khóa chia sẻ để giải mã.",
         "description": "Tạo quy tắc ngôn ngữ thiên hà của riêng bạn. Chỉ những người có khóa chia sẻ của bạn mới có thể tạo lại các quy tắc tương tự và văn bản gốc không được tải lên máy chủ.",
@@ -5773,10 +5773,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Tạo tin nhắn bí mật",
         "detailCta": "Dùng thử bản trình diễn web",
         "statusNote": "Hiện có sẵn trên Google Play.",
-        "iconAlt": "Biểu tượng Văn bản ngoài hành tinh"
+        "iconAlt": "Biểu tượng Galaxy Code: chữ alien"
       },
       "ufoSignal": {
-        "name": "Bộ mô phỏng tín hiệu UFO",
+        "name": "Mô phỏng tín hiệu UFO",
         "category": "Ứng dụng giải trí tín hiệu bí ẩn",
         "tagline": "Gửi tín hiệu không gian vui tươi và tận hưởng tâm trạng UFO.",
         "description": "Mở ứng dụng, nhấn nút tín hiệu và thưởng thức âm thanh cũng như hoạt ảnh khiến khoảnh khắc này giống như một nghi lễ UFO nhỏ.",
@@ -5786,13 +5786,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Hoạt hình tâm trạng",
           "Không đăng ký"
         ],
-        "primaryCta": "Cài đặt Bộ mô phỏng tín hiệu UFO",
+        "primaryCta": "Cài đặt Mô phỏng tín hiệu UFO",
         "detailCta": "Xem chi tiết ứng dụng",
         "statusNote": "Xem chi tiết ứng dụng, sau đó cài đặt nó từ Google Play.",
-        "iconAlt": "Biểu tượng Bộ mô phỏng tín hiệu UFO"
+        "iconAlt": "Biểu tượng Mô phỏng tín hiệu UFO"
       },
       "colorMasterClassic": {
-        "name": "Kiểm tra cảm giác màu sắc",
+        "name": "Color Master: Test màu",
         "category": "Trò chơi cảm nhận màu sắc cổ điển",
         "tagline": "Thử thách tập trung vào màu sắc ban đầu: ghi nhớ màu câu trả lời và chọn nó từ các màu tương tự.",
         "description": "Thử nghiệm cảm nhận màu sắc ban đầu trước Tìm màu khác. Trước tiên hãy dùng thử trên web, sau đó cài đặt nó từ Google Play.",
@@ -5805,7 +5805,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Cài đặt thử nghiệm cảm nhận màu sắc",
         "detailCta": "Dùng thử bản trình diễn web",
         "statusNote": "Trước tiên hãy dùng thử trên web, sau đó cài đặt nó từ Google Play.",
-        "iconAlt": "Biểu tượng Kiểm tra cảm giác màu sắc"
+        "iconAlt": "Biểu tượng Color Master: Test màu"
       },
       "koreanRandomDefense": {
         "name": "Quốc phòng Hàn Quốc",
@@ -5875,12 +5875,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Cạnh tranh với bạn bè trong thử thách 10 giây."
       },
       "galaxyCode": {
-        "app": "Văn bản ngoài hành tinh",
+        "app": "Galaxy Code: chữ alien",
         "title": "“Gửi cho bạn của bạn một tin nhắn của người ngoài hành tinh mà họ không thể giải mã được.”",
         "description": "Để lại những tin nhắn bí mật mà chỉ những người nắm giữ chìa khóa chia sẻ mới có thể giải mã được."
       },
       "ufoSignal": {
-        "app": "Bộ mô phỏng tín hiệu UFO",
+        "app": "Mô phỏng tín hiệu UFO",
         "title": "“Điều gì xảy ra nếu bạn gửi tín hiệu UFO vào lúc bình minh?”",
         "description": "Thưởng thức âm thanh và hình ảnh động trong phòng tối."
       }
@@ -5910,8 +5910,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Cập nhật lần cuối: 2026.05.31",
       "googlePlay": "Ứng dụng Google Play",
       "colorTest": "Tìm màu khác",
-      "alienText": "Văn bản ngoài hành tinh",
-      "ufoApp": "Bộ mô phỏng tín hiệu UFO",
+      "alienText": "Galaxy Code: chữ alien",
+      "ufoApp": "Mô phỏng tín hiệu UFO",
       "privacyPolicy": "Chính sách bảo mật",
       "appAds": "app-ads.txt",
       "contact": "Liên hệ",
@@ -5936,7 +5936,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "be": {
     "seo": {
       "title": "NeoKIM App Lab | Бясплатныя міні-праграмы Android",
-      "description": "Усталюйце Знайсці іншы колер, Стваральнік чужародных тэкстаў, Сімулятар сігналу НЛА, Тэст адчування колеру, Ўцёкі з цёмнага лабірынта і прыватныя тэсты, каб атрымаць больш міні-прыкладанняў Android.",
+      "description": "Усталюйце Знайсці іншы колер, Galaxy Code: іншапл. тэкст, Сімулятар сігналу UFO, Color Master: Тэст колеру, Ўцёкі з цёмнага лабірынта і прыватныя тэсты, каб атрымаць больш міні-прыкладанняў Android.",
       "ogTitle": "NeoKIM App Lab | Міні-праграмы Android",
       "ogDescription": "Знайдзіце дзіўныя колеры, стварайце сакрэтны тэкст у стылі іншапланецян, адпраўляйце жартаўлівыя сігналы НЛА, пазбягайце цёмных лабірынтаў і далучайцеся да прыватных тэстаў для хуткай забавы Android."
     },
@@ -6018,7 +6018,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок Знайсці іншы колер"
       },
       "galaxyCode": {
-        "name": "Стваральнік чужародных тэкстаў",
+        "name": "Galaxy Code: іншапл. тэкст",
         "category": "Прыкладанне для сакрэтных паведамленняў",
         "tagline": "Стварайце сакрэтныя паведамленні, падобныя на прышэльцаў, для дэкадавання якіх патрабуецца агульны ключ.",
         "description": "Стварыце ўласныя правілы галактычнай мовы. Толькі людзі з вашым агульным ключом могуць аднавіць тыя ж правілы, і зыходны тэкст не загружаецца на сервер.",
@@ -6031,10 +6031,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Стварайце сакрэтныя паведамленні",
         "detailCta": "Паспрабуйце Web Demo",
         "statusNote": "Зараз даступны на Google Play.",
-        "iconAlt": "Значок Стваральнік чужародных тэкстаў"
+        "iconAlt": "Значок Galaxy Code: іншапл. тэкст"
       },
       "ufoSignal": {
-        "name": "Сімулятар сігналу НЛА",
+        "name": "Сімулятар сігналу UFO",
         "category": "Забаўляльнае прыкладанне Mystery Signal",
         "tagline": "Адпраўце гуллівы касмічны сігнал і атрымлівайце асалоду ад настрою НЛА.",
         "description": "Адкрыйце праграму, націсніце кнопку сігналу і атрымлівайце асалоду ад гуку і анімацыі, якія робяць гэты момант падобным на маленькі рытуал НЛА.",
@@ -6044,13 +6044,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Анімацыя настрою",
           "Няма рэгістрацыі"
         ],
-        "primaryCta": "Усталюйце Сімулятар сігналу НЛА",
+        "primaryCta": "Усталюйце Сімулятар сігналу UFO",
         "detailCta": "Прагляд падрабязнасцей праграмы",
         "statusNote": "Праглядзіце падрабязную інфармацыю пра праграму, затым усталюйце яе з Google Play.",
-        "iconAlt": "Значок Сімулятар сігналу НЛА"
+        "iconAlt": "Значок Сімулятар сігналу UFO"
       },
       "colorMasterClassic": {
-        "name": "Тэст адчування колеру",
+        "name": "Color Master: Тэст колеру",
         "category": "Класічная гульня па адчуванні колеру",
         "tagline": "Арыгінальнае заданне па колеры: запомніце колер адказу і выберыце яго з падобных колераў.",
         "description": "Арыгінальны тэст адчування колеру перад Знайсці іншы колер. Спачатку паспрабуйце ў Інтэрнэце, потым усталюйце з Google Play.",
@@ -6060,10 +6060,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Хуткая гульня",
           "Усталяваць зараз"
         ],
-        "primaryCta": "Усталюйце Тэст адчування колеру",
+        "primaryCta": "Усталюйце Color Master: Тэст колеру",
         "detailCta": "Паспрабуйце Web Demo",
         "statusNote": "Спачатку паспрабуйце ў Інтэрнэце, потым усталюйце з Google Play.",
-        "iconAlt": "Значок Тэст адчування колеру"
+        "iconAlt": "Значок Color Master: Тэст колеру"
       },
       "koreanRandomDefense": {
         "name": "Карэйская выпадковая абарона",
@@ -6133,12 +6133,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Спаборнічайце з сябрамі ў 10-секундным спаборніцтве."
       },
       "galaxyCode": {
-        "app": "Стваральнік чужародных тэкстаў",
+        "app": "Galaxy Code: іншапл. тэкст",
         "title": "«Адпраўце вашаму сябру паведамленне іншапланецян, якое яны не могуць расшыфраваць».",
         "description": "Пакідайце сакрэтныя паведамленні, якія могуць расшыфраваць толькі ўладальнікі ключоў акцый."
       },
       "ufoSignal": {
-        "app": "Сімулятар сігналу НЛА",
+        "app": "Сімулятар сігналу UFO",
         "title": "«Што адбудзецца, калі вы адправіце сігнал НЛА на досвітку?»",
         "description": "Атрымлівайце асалоду ад гукаў і анімацыі ў цёмным пакоі."
       }
@@ -6168,8 +6168,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Апошняе абнаўленне: 31.05.2026",
       "googlePlay": "Праграмы Google Play",
       "colorTest": "Знайсці іншы колер",
-      "alienText": "Стваральнік чужародных тэкстаў",
-      "ufoApp": "Сімулятар сігналу НЛА",
+      "alienText": "Galaxy Code: іншапл. тэкст",
+      "ufoApp": "Сімулятар сігналу UFO",
       "privacyPolicy": "Палітыка прыватнасці",
       "appAds": "app-ads.txt",
       "contact": "Кантакт",
@@ -6194,7 +6194,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "bn-BD": {
     "seo": {
       "title": "NeoKIM অ্যাপ ল্যাব | বিনামূল্যে Android মিনি অ্যাপস",
-      "description": "আরও Android মিনি অ্যাপের জন্য বিভিন্ন রঙ খুঁজুন, এলিয়েন টেক্সট মেকার, UFO সংকেত সিমুলেটর, কালার সেন্স টেস্ট, ডার্ক মেজ এস্কেপ এবং ব্যক্তিগত পরীক্ষা ইনস্টল করুন৷",
+      "description": "আরও Android মিনি অ্যাপের জন্য বিভিন্ন রঙ খুঁজুন, Galaxy Code: এলিয়েন টেক্সট, UFO সিগন্যাল সিমুলেটর, Color Master: রং পরীক্ষা, ডার্ক মেজ এস্কেপ এবং ব্যক্তিগত পরীক্ষা ইনস্টল করুন৷",
       "ogTitle": "NeoKIM অ্যাপ ল্যাব | Android মিনি অ্যাপস",
       "ogDescription": "অদ্ভুত রঙ খুঁজুন, এলিয়েন-স্টাইলের গোপন পাঠ্য তৈরি করুন, ক্রীড়নক UFO সংকেত পাঠান, অন্ধকার গোলকধাঁধা থেকে এড়িয়ে যান এবং দ্রুত Android মজার জন্য ব্যক্তিগত পরীক্ষায় যোগ দিন।"
     },
@@ -6276,7 +6276,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "বিভিন্ন রঙ খুঁজুন আইকন"
       },
       "galaxyCode": {
-        "name": "এলিয়েন টেক্সট মেকার",
+        "name": "Galaxy Code: এলিয়েন টেক্সট",
         "category": "গোপন বার্তা অ্যাপ",
         "tagline": "ডিকোড করার জন্য একটি শেয়ার কী প্রয়োজন এলিয়েনের মতো গোপন বার্তা তৈরি করুন।",
         "description": "আপনার নিজস্ব গ্যালাকটিক ভাষার নিয়ম তৈরি করুন। শুধুমাত্র আপনার শেয়ার কী সহ লোকেরা একই নিয়মগুলি পুনরায় তৈরি করতে পারে এবং মূল পাঠ্যটি কোনও সার্ভারে আপলোড করা হয় না৷",
@@ -6289,10 +6289,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "গোপন বার্তা তৈরি করুন",
         "detailCta": "ওয়েব ডেমো চেষ্টা করুন",
         "statusNote": "Google Play-এ এখন উপলব্ধ৷",
-        "iconAlt": "এলিয়েন টেক্সট মেকার আইকন"
+        "iconAlt": "Galaxy Code: এলিয়েন টেক্সট আইকন"
       },
       "ufoSignal": {
-        "name": "UFO সংকেত সিমুলেটর",
+        "name": "UFO সিগন্যাল সিমুলেটর",
         "category": "রহস্য সংকেত বিনোদন অ্যাপ্লিকেশন",
         "tagline": "একটি কৌতুকপূর্ণ স্থান সংকেত পাঠান এবং UFO মেজাজ উপভোগ করুন.",
         "description": "অ্যাপটি খুলুন, সিগন্যাল বোতাম টিপুন এবং শব্দ এবং অ্যানিমেশন উপভোগ করুন যা মুহূর্তটিকে একটি ছোট UFO আচারের মতো মনে করে।",
@@ -6302,26 +6302,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "মুড অ্যানিমেশন",
           "কোন সাইন আপ"
         ],
-        "primaryCta": "UFO সংকেত সিমুলেটর ইনস্টল করুন",
+        "primaryCta": "UFO সিগন্যাল সিমুলেটর ইনস্টল করুন",
         "detailCta": "অ্যাপের বিবরণ দেখুন",
         "statusNote": "অ্যাপের বিবরণ দেখুন, তারপর Google Play থেকে ইনস্টল করুন।",
-        "iconAlt": "UFO সংকেত সিমুলেটর আইকন"
+        "iconAlt": "UFO সিগন্যাল সিমুলেটর আইকন"
       },
       "colorMasterClassic": {
-        "name": "কালার সেন্স টেস্ট",
+        "name": "Color Master: রং পরীক্ষা",
         "category": "ক্লাসিক কালার সেন্স গেম",
         "tagline": "আসল রঙ-ফোকাস চ্যালেঞ্জ: উত্তরের রঙটি মনে রাখবেন এবং একই রঙ থেকে এটি বেছে নিন।",
-        "description": "বিভিন্ন রঙ খুঁজুন-এর আগে আসল কালার সেন্স টেস্ট। প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর Google Play থেকে এটি ইনস্টল করুন৷",
+        "description": "বিভিন্ন রঙ খুঁজুন-এর আগে আসল Color Master: রং পরীক্ষা। প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর Google Play থেকে এটি ইনস্টল করুন৷",
         "highlights": [
           "আসল অনুভূতি",
           "রঙ ফোকাস",
           "দ্রুত খেলা",
           "এখন ইন্সটল করুন"
         ],
-        "primaryCta": "কালার সেন্স টেস্ট ইনস্টল করুন",
+        "primaryCta": "Color Master: রং পরীক্ষা ইনস্টল করুন",
         "detailCta": "ওয়েব ডেমো চেষ্টা করুন",
         "statusNote": "প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর Google Play থেকে এটি ইনস্টল করুন৷",
-        "iconAlt": "কালার সেন্স টেস্ট আইকন"
+        "iconAlt": "Color Master: রং পরীক্ষা আইকন"
       },
       "koreanRandomDefense": {
         "name": "কোরিয়ান র্যান্ডম প্রতিরক্ষা",
@@ -6391,12 +6391,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10-সেকেন্ডের চ্যালেঞ্জে বন্ধুদের সাথে প্রতিযোগিতা করুন।"
       },
       "galaxyCode": {
-        "app": "এলিয়েন টেক্সট মেকার",
+        "app": "Galaxy Code: এলিয়েন টেক্সট",
         "title": "\"আপনার বন্ধুকে একটি এলিয়েন বার্তা পাঠান যে তারা ডিকোড করতে পারে না।\"",
         "description": "গোপন বার্তাগুলি ছেড়ে দিন যা শুধুমাত্র শেয়ার-কী হোল্ডাররা ডিকোড করতে পারে।"
       },
       "ufoSignal": {
-        "app": "UFO সংকেত সিমুলেটর",
+        "app": "UFO সিগন্যাল সিমুলেটর",
         "title": "\"আপনি যদি ভোরবেলা একটি UFO সংকেত পাঠান তাহলে কি হবে?\"",
         "description": "একটি অন্ধকার ঘরে শব্দ এবং অ্যানিমেশন উপভোগ করুন।"
       }
@@ -6426,8 +6426,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "সর্বশেষ আপডেট: 2026.05.31",
       "googlePlay": "Google Play অ্যাপস",
       "colorTest": "বিভিন্ন রঙ খুঁজুন",
-      "alienText": "এলিয়েন টেক্সট মেকার",
-      "ufoApp": "UFO সংকেত সিমুলেটর",
+      "alienText": "Galaxy Code: এলিয়েন টেক্সট",
+      "ufoApp": "UFO সিগন্যাল সিমুলেটর",
       "privacyPolicy": "গোপনীয়তা নীতি",
       "appAds": "app-ads.txt",
       "contact": "যোগাযোগ",
@@ -6452,7 +6452,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "bg": {
     "seo": {
       "title": "NeoKIM App Lab | Безплатни мини приложения Android",
-      "description": "Инсталирайте Намерете различен цвят, Създател на извънземен текст, Симулатор на НЛО сигнал, Тест за цветово усещане, Бягство от тъмен лабиринт и частни тестове за още мини приложения Android.",
+      "description": "Инсталирайте Намерете различен цвят, Galaxy Code: извънземен, Симулатор на UFO сигнал, Color Master: Цветови тест, Бягство от тъмен лабиринт и частни тестове за още мини приложения Android.",
       "ogTitle": "NeoKIM App Lab | Android Мини приложения",
       "ogDescription": "Намерете странни цветове, създайте таен текст в извънземен стил, изпращайте игриви НЛО сигнали, избягайте от тъмни лабиринти и се присъединете към частни тестове за бързо Android забавление."
     },
@@ -6534,7 +6534,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Икона Намерете различен цвят"
       },
       "galaxyCode": {
-        "name": "Създател на извънземен текст",
+        "name": "Galaxy Code: извънземен",
         "category": "Приложение за тайни съобщения",
         "tagline": "Създавайте подобни на извънземни тайни съобщения, които се нуждаят от ключ за споделяне, за да ги декодират.",
         "description": "Създайте свои собствени галактически езикови правила. Само хора с вашия ключ за споделяне могат да пресъздадат същите правила и оригиналният текст не се качва на сървър.",
@@ -6547,10 +6547,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Създайте тайни съобщения",
         "detailCta": "Опитайте уеб демонстрация",
         "statusNote": "Предлага се сега на Google Play.",
-        "iconAlt": "Икона Създател на извънземен текст"
+        "iconAlt": "Икона Galaxy Code: извънземен"
       },
       "ufoSignal": {
-        "name": "Симулатор на НЛО сигнал",
+        "name": "Симулатор на UFO сигнал",
         "category": "Приложение за забавление с мистериозен сигнал",
         "tagline": "Изпратете игрив космически сигнал и се насладете на НЛО настроението.",
         "description": "Отворете приложението, натиснете бутона за сигнал и се насладете на звук и анимация, които карат момента да се чувства като малък НЛО ритуал.",
@@ -6560,13 +6560,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Анимация за настроение",
           "Без записване"
         ],
-        "primaryCta": "Инсталирайте Симулатор на НЛО сигнал",
+        "primaryCta": "Инсталирайте Симулатор на UFO сигнал",
         "detailCta": "Вижте подробности за приложението",
         "statusNote": "Вижте подробностите за приложението, след което го инсталирайте от Google Play.",
-        "iconAlt": "Икона Симулатор на НЛО сигнал"
+        "iconAlt": "Икона Симулатор на UFO сигнал"
       },
       "colorMasterClassic": {
-        "name": "Тест за цветово усещане",
+        "name": "Color Master: Цветови тест",
         "category": "Класическа игра за усещане на цветовете",
         "tagline": "Оригиналното предизвикателство за фокусиране на цвета: запомнете цвета на отговора и го изберете от подобни цветове.",
         "description": "Оригиналният тест за цветово усещане преди Намерете различен цвят. Първо го изпробвайте в мрежата, след това го инсталирайте от Google Play.",
@@ -6576,10 +6576,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Бърза игра",
           "Инсталирайте сега"
         ],
-        "primaryCta": "Инсталирайте Тест за цветово усещане",
+        "primaryCta": "Инсталирайте Color Master: Цветови тест",
         "detailCta": "Опитайте уеб демонстрация",
         "statusNote": "Първо го изпробвайте в мрежата, след това го инсталирайте от Google Play.",
-        "iconAlt": "Икона Тест за цветово усещане"
+        "iconAlt": "Икона Color Master: Цветови тест"
       },
       "koreanRandomDefense": {
         "name": "Корейска случайна защита",
@@ -6649,12 +6649,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Състезавайте се с приятели в 10-секундно предизвикателство."
       },
       "galaxyCode": {
-        "app": "Създател на извънземен текст",
+        "app": "Galaxy Code: извънземен",
         "title": "„Изпратете на приятел извънземно съобщение, което той не може да декодира.“",
         "description": "Оставете тайни съобщения, които само притежателите на акционерен ключ могат да декодират."
       },
       "ufoSignal": {
-        "app": "Симулатор на НЛО сигнал",
+        "app": "Симулатор на UFO сигнал",
         "title": "„Какво се случва, ако изпратите сигнал за НЛО на зазоряване?“",
         "description": "Насладете се на звуците и анимацията в тъмна стая."
       }
@@ -6684,8 +6684,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Последна актуализация: 2026.05.31",
       "googlePlay": "Google Play приложения",
       "colorTest": "Намерете различен цвят",
-      "alienText": "Създател на извънземен текст",
-      "ufoApp": "Симулатор на НЛО сигнал",
+      "alienText": "Galaxy Code: извънземен",
+      "ufoApp": "Симулатор на UFO сигнал",
       "privacyPolicy": "Политика за поверителност",
       "appAds": "app-ads.txt",
       "contact": "Контакт",
@@ -6792,7 +6792,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Икона НЕОКИМПРОДУЦТ0ТОКЕН"
       },
       "galaxyCode": {
-        "name": "Алиен Тект Макер",
+        "name": "Galaxy Code: ванз. текст",
         "category": "Апликација за тајне поруке",
         "tagline": "Креирајте тајне поруке попут ванземаљаца којима је за декодирање потребан дељени кључ.",
         "description": "Креирајте сопствена правила галактичког језика. Само људи са вашим кључем за дељење могу поново да направе иста правила, а оригинални текст се не отпрема на сервер.",
@@ -6808,7 +6808,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Икона НЕОКИМПРОДУЦТ1ТОКЕН"
       },
       "ufoSignal": {
-        "name": "Симулатор НЛО сигнала",
+        "name": "Симулатор UFO сигнала",
         "category": "Апликација за забаву Мистери сигнал",
         "tagline": "Пошаљите разиграни свемирски сигнал и уживајте у НЛО расположењу.",
         "description": "Отворите апликацију, притисните дугме за сигнал и уживајте у звуку и анимацији због којих се тренутак осећа као мали НЛО ритуал.",
@@ -6824,7 +6824,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Икона НЕОКИМПРОДУЦТ2ТОКЕН"
       },
       "colorMasterClassic": {
-        "name": "Тест чула боје",
+        "name": "Color Master: Тест боја",
         "category": "Класична игра осећаја боја",
         "tagline": "Оригинални изазов фокусирања на боје: запамтите боју одговора и изаберите је из сличних боја.",
         "description": "Оригинални тест чула боја пре НЕОКИМПРОДУЦТ0ТОКЕН-а. Прво га испробајте на вебу, а затим га инсталирајте са НЕОКИМПРОДУЦТ7ТОКЕН-а.",
@@ -6907,12 +6907,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Такмичите се са пријатељима у изазову од 10 секунди."
       },
       "galaxyCode": {
-        "app": "Алиен Тект Макер",
+        "app": "Galaxy Code: ванз. текст",
         "title": "„Пошаљите свом пријатељу поруку ванземаљаца коју не могу декодирати.",
         "description": "Оставите тајне поруке које само власници дешифрованих кључева могу да декодирају."
       },
       "ufoSignal": {
-        "app": "Симулатор НЛО сигнала",
+        "app": "Симулатор UFO сигнала",
         "title": "„Шта се дешава ако пошаљете НЛО сигнал у зору?“",
         "description": "Уживајте у звуцима и анимацији у мрачној просторији."
       }
@@ -6942,8 +6942,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Последње ажурирање: 31.05.2026",
       "googlePlay": "Google Play Аппс",
       "colorTest": "Пронађите другу боју",
-      "alienText": "Алиен Тект Макер",
-      "ufoApp": "Симулатор НЛО сигнала",
+      "alienText": "Galaxy Code: ванз. текст",
+      "ufoApp": "Симулатор UFO сигнала",
       "privacyPolicy": "Политика приватности",
       "appAds": "app-ads.txt",
       "contact": "Контакт",
@@ -6968,7 +6968,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sw": {
     "seo": {
       "title": "Maabara ya Programu ya NeoKIM | Programu Ndogo za Android Zisizolipishwa",
-      "description": "Sakinisha Pata Rangi Tofauti, Muundaji wa maandishi ya mgeni, Simulator ya Ishara ya UFO, Mtihani wa Hisia za Rangi, Labirinthi ya Giza, na majaribio ya faragha kwa programu zaidi ndogo za Android.",
+      "description": "Sakinisha Pata Rangi Tofauti, Galaxy Code: maandishi ngeni, Kiiga Ishara ya UFO, Color Master: Jaribio la Rangi, Labirinthi ya Giza, na majaribio ya faragha kwa programu zaidi ndogo za Android.",
       "ogTitle": "Maabara ya Programu ya NeoKIM | Programu Ndogo za Android",
       "ogDescription": "Pata rangi zisizo za kawaida, tengeneza maandishi ya siri ya mtindo wa kigeni, tuma mawimbi ya mchezo wa UFO, epuka mawimbi meusi, na ujiunge na majaribio ya faragha kwa furaha ya haraka ya Android."
     },
@@ -7050,7 +7050,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ikoni ya Pata Rangi Tofauti"
       },
       "galaxyCode": {
-        "name": "Muundaji wa maandishi ya mgeni",
+        "name": "Galaxy Code: maandishi ngeni",
         "category": "Programu ya ujumbe wa siri",
         "tagline": "Unda ujumbe wa siri kama mgeni ambao unahitaji ufunguo wa kushiriki ili kusimbua.",
         "description": "Unda sheria zako za lugha ya galactic. Watu walio na ufunguo wako wa kushiriki pekee ndio wanaoweza kuunda upya sheria sawa, na maandishi asilia hayajapakiwa kwenye seva.",
@@ -7063,10 +7063,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Unda Ujumbe wa Siri",
         "detailCta": "Jaribu Onyesho la Wavuti",
         "statusNote": "Inapatikana sasa kwenye Google Play.",
-        "iconAlt": "ikoni ya Muundaji wa maandishi ya mgeni"
+        "iconAlt": "ikoni ya Galaxy Code: maandishi ngeni"
       },
       "ufoSignal": {
-        "name": "Simulator ya Ishara ya UFO",
+        "name": "Kiiga Ishara ya UFO",
         "category": "Programu ya burudani ya ishara ya siri",
         "tagline": "Tuma ishara ya kucheza nafasi na ufurahie hali ya UFO.",
         "description": "Fungua programu, bonyeza kitufe cha mawimbi, na ufurahie sauti na uhuishaji unaofanya wakati huu kuhisi kama tambiko ndogo ya UFO.",
@@ -7076,13 +7076,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Uhuishaji wa hisia",
           "Hakuna kujiandikisha"
         ],
-        "primaryCta": "Sakinisha Simulator ya Ishara ya UFO",
+        "primaryCta": "Sakinisha Kiiga Ishara ya UFO",
         "detailCta": "Tazama Maelezo ya Programu",
         "statusNote": "Tazama maelezo ya programu, kisha uisakinishe kutoka Google Play.",
-        "iconAlt": "ikoni ya Simulator ya Ishara ya UFO"
+        "iconAlt": "ikoni ya Kiiga Ishara ya UFO"
       },
       "colorMasterClassic": {
-        "name": "Mtihani wa Hisia za Rangi",
+        "name": "Color Master: Jaribio la Rangi",
         "category": "Mchezo wa kawaida wa hisia za rangi",
         "tagline": "Changamoto asili ya kulenga rangi: kumbuka rangi ya jibu na uchague kutoka kwa rangi zinazofanana.",
         "description": "Jaribio la asili la kuhisi rangi kabla ya Pata Rangi Tofauti. Ijaribu kwenye wavuti kwanza, kisha isakinishe kutoka Google Play.",
@@ -7095,7 +7095,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Sakinisha Jaribio la Kuhisi Rangi",
         "detailCta": "Jaribu Onyesho la Wavuti",
         "statusNote": "Ijaribu kwenye wavuti kwanza, kisha isakinishe kutoka Google Play.",
-        "iconAlt": "ikoni ya Mtihani wa Hisia za Rangi"
+        "iconAlt": "ikoni ya Color Master: Jaribio la Rangi"
       },
       "koreanRandomDefense": {
         "name": "Ulinzi wa Kikorea",
@@ -7165,12 +7165,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Shindana na marafiki katika shindano la sekunde 10."
       },
       "galaxyCode": {
-        "app": "Muundaji wa maandishi ya mgeni",
+        "app": "Galaxy Code: maandishi ngeni",
         "title": "\"Tuma rafiki yako ujumbe wa kigeni ambao hawawezi kuutambua.\"",
         "description": "Acha ujumbe wa siri ambao ni wamiliki wa ufunguo wa kushiriki pekee wanaweza kusimbua."
       },
       "ufoSignal": {
-        "app": "Simulator ya Ishara ya UFO",
+        "app": "Kiiga Ishara ya UFO",
         "title": "\"Ni nini kitatokea ikiwa utatuma ishara ya UFO alfajiri?\"",
         "description": "Furahia sauti na uhuishaji katika chumba chenye giza."
       }
@@ -7200,8 +7200,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Ilisasishwa mwisho: 2026.05.31",
       "googlePlay": "Programu za Google Play",
       "colorTest": "Pata Rangi Tofauti",
-      "alienText": "Muundaji wa maandishi ya mgeni",
-      "ufoApp": "Simulator ya Ishara ya UFO",
+      "alienText": "Galaxy Code: maandishi ngeni",
+      "ufoApp": "Kiiga Ishara ya UFO",
       "privacyPolicy": "Sera ya Faragha",
       "appAds": "app-ads.txt",
       "contact": "Wasiliana",
@@ -7226,7 +7226,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sv-SE": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-appar",
-      "description": "Installera Hitta annan färg, Galaxy kod, UFO-signalsimulator, Färgkänningstest, Mörk labyrint och privata tester för fler Android-miniappar.",
+      "description": "Installera Hitta annan färg, Galaxy Code: alientext, UFO-signalsimulator, Color Master: Färgtest, Mörk labyrint och privata tester för fler Android-miniappar.",
       "ogTitle": "NeoKIM App Lab | Android Mini-appar",
       "ogDescription": "Hitta udda färger, skapa hemlig text i utomjordisk stil, skicka lekfulla UFO-signaler, fly mörka labyrinter och gå med i privata tester för snabbt Android-kul."
     },
@@ -7308,7 +7308,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Hitta annan färg-ikonen"
       },
       "galaxyCode": {
-        "name": "Galaxy kod",
+        "name": "Galaxy Code: alientext",
         "category": "App för hemliga meddelanden",
         "tagline": "Skapa utomjordiska hemliga meddelanden som behöver en delningsnyckel för att avkoda.",
         "description": "Skapa dina egna galaktiska språkregler. Endast personer med din delningsnyckel kan återskapa samma regler, och originaltexten laddas inte upp till en server.",
@@ -7321,7 +7321,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Skapa hemliga meddelanden",
         "detailCta": "Prova webbdemo",
         "statusNote": "Tillgänglig nu på Google Play.",
-        "iconAlt": "Galaxy kod-ikon"
+        "iconAlt": "Galaxy Code: alientext-ikon"
       },
       "ufoSignal": {
         "name": "UFO-signalsimulator",
@@ -7340,7 +7340,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO-signalsimulator-ikonen"
       },
       "colorMasterClassic": {
-        "name": "Färgkänningstest",
+        "name": "Color Master: Färgtest",
         "category": "Klassiskt färgsinnespel",
         "tagline": "Den ursprungliga färgfokusutmaningen: kom ihåg svarsfärgen och välj den från liknande färger.",
         "description": "Det ursprungliga färgavkänningstestet före Hitta annan färg. Prova det på webben först och installera det sedan från Google Play.",
@@ -7350,10 +7350,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Snabbt spel",
           "Installera nu"
         ],
-        "primaryCta": "Installera Färgkänningstest",
+        "primaryCta": "Installera Color Master: Färgtest",
         "detailCta": "Prova webbdemo",
         "statusNote": "Testa det på webben först och installera det sedan från Google Play.",
-        "iconAlt": "Färgkänningstest-ikonen"
+        "iconAlt": "Color Master: Färgtest-ikonen"
       },
       "koreanRandomDefense": {
         "name": "Koreanskt slumpmässigt försvar",
@@ -7423,7 +7423,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Tävla med vänner i en 10 sekunder lång utmaning."
       },
       "galaxyCode": {
-        "app": "Galaxy kod",
+        "app": "Galaxy Code: alientext",
         "title": "\"Skicka ett utomjordiskt meddelande till din vän som de inte kan avkoda.\"",
         "description": "Lämna hemliga meddelanden som endast aktieägare kan avkoda."
       },
@@ -7458,7 +7458,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Senast uppdaterad: 2026.05.31",
       "googlePlay": "Google Play-appar",
       "colorTest": "Hitta annan färg",
-      "alienText": "Galaxy kod",
+      "alienText": "Galaxy Code: alientext",
       "ufoApp": "UFO-signalsimulator",
       "privacyPolicy": "Sekretesspolicy",
       "appAds": "app-ads.txt",
@@ -7484,7 +7484,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-419": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale Color diferente, Texto alienígena, Simulador señal OVNI, Prueba sentido color, Laberinto oscuro y pruebas privadas para obtener más miniaplicaciones Android.",
+      "description": "Instale Color diferente, Galaxy Code: texto alien, Simulador de señal UFO, Color Master: Prueba de color, Laberinto oscuro y pruebas privadas para obtener más miniaplicaciones Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
       "ogDescription": "Encuentra colores extraños, crea textos secretos de estilo alienígena, envía divertidas señales de ovnis, escapa de laberintos oscuros y únete a pruebas privadas para divertirte rápidamente con Android."
     },
@@ -7566,7 +7566,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono Color diferente"
       },
       "galaxyCode": {
-        "name": "Texto alienígena",
+        "name": "Galaxy Code: texto alien",
         "category": "Aplicación de mensajes secretos",
         "tagline": "Crea mensajes secretos extraterrestres que necesitan una clave compartida para decodificarlos.",
         "description": "Crea tus propias reglas del lenguaje galáctico. Sólo las personas con su clave compartida pueden recrear las mismas reglas y el texto original no se carga en un servidor.",
@@ -7579,10 +7579,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crear mensajes secretos",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono Texto alienígena"
+        "iconAlt": "Icono Galaxy Code: texto alien"
       },
       "ufoSignal": {
-        "name": "Simulador señal OVNI",
+        "name": "Simulador de señal UFO",
         "category": "Aplicación de entretenimiento de señal misteriosa.",
         "tagline": "Envía una señal espacial divertida y disfruta del ambiente ovni.",
         "description": "Abre la aplicación, presiona el botón de señal y disfruta del sonido y la animación que hacen que el momento parezca un pequeño ritual ovni.",
@@ -7592,13 +7592,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animación de humor",
           "Sin registro"
         ],
-        "primaryCta": "Instalar Simulador señal OVNI",
+        "primaryCta": "Instalar Simulador de señal UFO",
         "detailCta": "Ver detalles de la aplicación",
         "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play.",
-        "iconAlt": "Icono Simulador señal OVNI"
+        "iconAlt": "Icono Simulador de señal UFO"
       },
       "colorMasterClassic": {
-        "name": "Prueba sentido color",
+        "name": "Color Master: Prueba de color",
         "category": "Juego clásico de sentido del color",
         "tagline": "El desafío original de enfoque de color: recuerda el color de la respuesta y selecciónalo entre colores similares.",
         "description": "La prueba de detección de color original antes de Color diferente. Pruébelo primero en la web y luego instálelo desde Google Play.",
@@ -7611,7 +7611,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instalar la prueba de percepción del color",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Pruébelo primero en la web y luego instálelo desde Google Play.",
-        "iconAlt": "Icono Prueba sentido color"
+        "iconAlt": "Icono Color Master: Prueba de color"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana",
@@ -7681,12 +7681,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Compite con amigos en un desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Texto alienígena",
+        "app": "Galaxy Code: texto alien",
         "title": "\"Envía a tu amigo un mensaje extraterrestre que no pueda descifrar\".",
         "description": "Deje mensajes secretos que sólo los poseedores de claves compartidas puedan descifrar."
       },
       "ufoSignal": {
-        "app": "Simulador señal OVNI",
+        "app": "Simulador de señal UFO",
         "title": "“¿Qué pasa si envías una señal OVNI al amanecer?”",
         "description": "Disfruta de los sonidos y la animación en una habitación oscura."
       }
@@ -7716,8 +7716,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última actualización: 2026.05.31",
       "googlePlay": "Aplicaciones Google Play",
       "colorTest": "Color diferente",
-      "alienText": "Texto alienígena",
-      "ufoApp": "Simulador señal OVNI",
+      "alienText": "Galaxy Code: texto alien",
+      "ufoApp": "Simulador de señal UFO",
       "privacyPolicy": "Política de privacidad",
       "appAds": "zxappadsx",
       "contact": "Contacto",
@@ -7742,7 +7742,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-US": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale Color diferente, Texto alienígena, Simulador señal OVNI, Prueba sentido color, Laberinto oscuro y pruebas privadas para obtener más miniaplicaciones Android.",
+      "description": "Instale Color diferente, Galaxy Code: texto alien, Simulador de señal UFO, Color Master: Prueba de color, Laberinto oscuro y pruebas privadas para obtener más miniaplicaciones Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
       "ogDescription": "Encuentra colores extraños, crea textos secretos de estilo alienígena, envía divertidas señales de ovnis, escapa de laberintos oscuros y únete a pruebas privadas para divertirte rápidamente con Android."
     },
@@ -7824,7 +7824,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono Color diferente"
       },
       "galaxyCode": {
-        "name": "Texto alienígena",
+        "name": "Galaxy Code: texto alien",
         "category": "Aplicación de mensajes secretos",
         "tagline": "Crea mensajes secretos extraterrestres que necesitan una clave compartida para decodificarlos.",
         "description": "Crea tus propias reglas del lenguaje galáctico. Sólo las personas con su clave compartida pueden recrear las mismas reglas y el texto original no se carga en un servidor.",
@@ -7837,10 +7837,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crear mensajes secretos",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono Texto alienígena"
+        "iconAlt": "Icono Galaxy Code: texto alien"
       },
       "ufoSignal": {
-        "name": "Simulador señal OVNI",
+        "name": "Simulador de señal UFO",
         "category": "Aplicación de entretenimiento de señal misteriosa.",
         "tagline": "Envía una señal espacial divertida y disfruta del ambiente ovni.",
         "description": "Abre la aplicación, presiona el botón de señal y disfruta del sonido y la animación que hacen que el momento parezca un pequeño ritual ovni.",
@@ -7850,13 +7850,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animación de humor",
           "Sin registro"
         ],
-        "primaryCta": "Instalar Simulador señal OVNI",
+        "primaryCta": "Instalar Simulador de señal UFO",
         "detailCta": "Ver detalles de la aplicación",
         "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play.",
-        "iconAlt": "Icono Simulador señal OVNI"
+        "iconAlt": "Icono Simulador de señal UFO"
       },
       "colorMasterClassic": {
-        "name": "Prueba sentido color",
+        "name": "Color Master: Prueba de color",
         "category": "Juego clásico de sentido del color",
         "tagline": "El desafío original de enfoque de color: recuerda el color de la respuesta y selecciónalo entre colores similares.",
         "description": "La prueba de detección de color original antes de Color diferente. Pruébelo primero en la web y luego instálelo desde Google Play.",
@@ -7869,7 +7869,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instalar la prueba de percepción del color",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Pruébelo primero en la web y luego instálelo desde Google Play.",
-        "iconAlt": "Icono Prueba sentido color"
+        "iconAlt": "Icono Color Master: Prueba de color"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana",
@@ -7939,12 +7939,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Compite con amigos en un desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Texto alienígena",
+        "app": "Galaxy Code: texto alien",
         "title": "\"Envía a tu amigo un mensaje extraterrestre que no pueda descifrar\".",
         "description": "Deje mensajes secretos que sólo los poseedores de claves compartidas puedan descifrar."
       },
       "ufoSignal": {
-        "app": "Simulador señal OVNI",
+        "app": "Simulador de señal UFO",
         "title": "“¿Qué pasa si envías una señal OVNI al amanecer?”",
         "description": "Disfruta de los sonidos y la animación en una habitación oscura."
       }
@@ -7974,8 +7974,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última actualización: 2026.05.31",
       "googlePlay": "Aplicaciones Google Play",
       "colorTest": "Color diferente",
-      "alienText": "Texto alienígena",
-      "ufoApp": "Simulador señal OVNI",
+      "alienText": "Galaxy Code: texto alien",
+      "ufoApp": "Simulador de señal UFO",
       "privacyPolicy": "Política de privacidad",
       "appAds": "zxappadsx",
       "contact": "Contacto",
@@ -8000,7 +8000,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-ES": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale Color diferente, Texto alienígena, Simulador señal OVNI, Prueba sentido color, Laberinto oscuro y pruebas privadas para obtener más miniaplicaciones Android.",
+      "description": "Instale Color diferente, Galaxy Code: texto alien, Simulador de señal UFO, Color Master: Test de color, Laberinto oscuro y pruebas privadas para obtener más miniaplicaciones Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
       "ogDescription": "Encuentra colores extraños, crea textos secretos de estilo alienígena, envía divertidas señales de ovnis, escapa de laberintos oscuros y únete a pruebas privadas para divertirte rápidamente con Android."
     },
@@ -8082,7 +8082,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono Color diferente"
       },
       "galaxyCode": {
-        "name": "Texto alienígena",
+        "name": "Galaxy Code: texto alien",
         "category": "Aplicación de mensajes secretos",
         "tagline": "Crea mensajes secretos extraterrestres que necesitan una clave compartida para decodificarlos.",
         "description": "Crea tus propias reglas del lenguaje galáctico. Sólo las personas con su clave compartida pueden recrear las mismas reglas y el texto original no se carga en un servidor.",
@@ -8095,10 +8095,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crear mensajes secretos",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono Texto alienígena"
+        "iconAlt": "Icono Galaxy Code: texto alien"
       },
       "ufoSignal": {
-        "name": "Simulador señal OVNI",
+        "name": "Simulador de señal UFO",
         "category": "Aplicación de entretenimiento de señal misteriosa.",
         "tagline": "Envía una señal espacial divertida y disfruta del ambiente ovni.",
         "description": "Abre la aplicación, presiona el botón de señal y disfruta del sonido y la animación que hacen que el momento parezca un pequeño ritual ovni.",
@@ -8108,13 +8108,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animación de humor",
           "Sin registro"
         ],
-        "primaryCta": "Instalar Simulador señal OVNI",
+        "primaryCta": "Instalar Simulador de señal UFO",
         "detailCta": "Ver detalles de la aplicación",
         "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play.",
-        "iconAlt": "Icono Simulador señal OVNI"
+        "iconAlt": "Icono Simulador de señal UFO"
       },
       "colorMasterClassic": {
-        "name": "Prueba sentido color",
+        "name": "Color Master: Test de color",
         "category": "Juego clásico de sentido del color",
         "tagline": "El desafío original de enfoque de color: recuerda el color de la respuesta y selecciónalo entre colores similares.",
         "description": "La prueba de detección de color original antes de Color diferente. Pruébelo primero en la web y luego instálelo desde Google Play.",
@@ -8127,7 +8127,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instalar la prueba de percepción del color",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Pruébelo primero en la web y luego instálelo desde Google Play.",
-        "iconAlt": "Icono Prueba sentido color"
+        "iconAlt": "Icono Color Master: Test de color"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana",
@@ -8197,12 +8197,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Compite con amigos en un desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Texto alienígena",
+        "app": "Galaxy Code: texto alien",
         "title": "\"Envía a tu amigo un mensaje extraterrestre que no pueda descifrar\".",
         "description": "Deje mensajes secretos que sólo los poseedores de claves compartidas puedan descifrar."
       },
       "ufoSignal": {
-        "app": "Simulador señal OVNI",
+        "app": "Simulador de señal UFO",
         "title": "“¿Qué pasa si envías una señal OVNI al amanecer?”",
         "description": "Disfruta de los sonidos y la animación en una habitación oscura."
       }
@@ -8232,8 +8232,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última actualización: 2026.05.31",
       "googlePlay": "Aplicaciones Google Play",
       "colorTest": "Color diferente",
-      "alienText": "Texto alienígena",
-      "ufoApp": "Simulador señal OVNI",
+      "alienText": "Galaxy Code: texto alien",
+      "ufoApp": "Simulador de señal UFO",
       "privacyPolicy": "Política de privacidad",
       "appAds": "zxappadsx",
       "contact": "Contacto",
@@ -8258,7 +8258,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sk": {
     "seo": {
       "title": "NeoKIM App Lab | Bezplatné miniaplikácie Android",
-      "description": "Nainštalujte si Nájdite inú farbu, Mimozemský text, Simulátor signálu UFO, Test citlivosti farieb, Útek z temného bludiska a súkromné ​​testy pre ďalšie mini aplikácie Android.",
+      "description": "Nainštalujte si Nájdite inú farbu, Galaxy Code: mimozemský text, Simulátor UFO signálu, Color Master: Test farieb, Útek z temného bludiska a súkromné ​​testy pre ďalšie mini aplikácie Android.",
       "ogTitle": "NeoKIM App Lab | Miniaplikácie Android",
       "ogDescription": "Nájdite zvláštne farby, vytvorte tajný text v mimozemskom štýle, pošlite hravé signály UFO, uniknite z temných bludísk a zapojte sa do súkromných testov pre rýchlu zábavu Android."
     },
@@ -8340,7 +8340,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Nájdite inú farbu"
       },
       "galaxyCode": {
-        "name": "Mimozemský text",
+        "name": "Galaxy Code: mimozemský text",
         "category": "Aplikácia tajných správ",
         "tagline": "Vytvárajte tajné správy podobné mimozemšťanom, ktoré potrebujú na dekódovanie zdieľaný kľúč.",
         "description": "Vytvorte si vlastné galaktické jazykové pravidlá. Rovnaké pravidlá môžu znova vytvoriť iba ľudia s vaším zdieľaným kľúčom a pôvodný text sa neodovzdá na server.",
@@ -8353,10 +8353,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Vytvárajte tajné správy",
         "detailCta": "Vyskúšajte Web Demo",
         "statusNote": "Teraz k dispozícii na Google Play.",
-        "iconAlt": "Ikona Mimozemský text"
+        "iconAlt": "Ikona Galaxy Code: mimozemský text"
       },
       "ufoSignal": {
-        "name": "Simulátor signálu UFO",
+        "name": "Simulátor UFO signálu",
         "category": "Zábavná aplikácia Mystery Sign",
         "tagline": "Pošlite hravý vesmírny signál a vychutnajte si UFO náladu.",
         "description": "Otvorte aplikáciu, stlačte signálne tlačidlo a vychutnajte si zvuk a animáciu, vďaka ktorej bude tento moment vyzerať ako malý rituál UFO.",
@@ -8366,13 +8366,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animácia nálady",
           "Žiadna registrácia"
         ],
-        "primaryCta": "Nainštalujte Simulátor signálu UFO",
+        "primaryCta": "Nainštalujte Simulátor UFO signálu",
         "detailCta": "Zobraziť podrobnosti aplikácie",
         "statusNote": "Pozrite si podrobnosti o aplikácii a potom ju nainštalujte z Google Play.",
-        "iconAlt": "Ikona Simulátor signálu UFO"
+        "iconAlt": "Ikona Simulátor UFO signálu"
       },
       "colorMasterClassic": {
-        "name": "Test citlivosti farieb",
+        "name": "Color Master: Test farieb",
         "category": "Klasická hra na vnímanie farieb",
         "tagline": "Originálna výzva zameraná na farbu: zapamätajte si farbu odpovede a vyberte ju z podobných farieb.",
         "description": "Pôvodný test vnímania farieb pred Nájdite inú farbu. Najprv si to vyskúšajte na webe a potom si ho nainštalujte z Google Play.",
@@ -8382,10 +8382,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Rýchla hra",
           "Nainštalujte teraz"
         ],
-        "primaryCta": "Nainštalujte Test citlivosti farieb",
+        "primaryCta": "Nainštalujte Color Master: Test farieb",
         "detailCta": "Vyskúšajte Web Demo",
         "statusNote": "Najprv si to vyskúšajte na webe a potom si ho nainštalujte z Google Play.",
-        "iconAlt": "Ikona Test citlivosti farieb"
+        "iconAlt": "Ikona Color Master: Test farieb"
       },
       "koreanRandomDefense": {
         "name": "Kórejská náhodná obrana",
@@ -8455,12 +8455,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Súťažte s priateľmi v 10-sekundovej výzve."
       },
       "galaxyCode": {
-        "app": "Mimozemský text",
+        "app": "Galaxy Code: mimozemský text",
         "title": "\"Pošlite svojmu priateľovi mimozemskú správu, ktorú nedokážu dekódovať.\"",
         "description": "Nechajte tajné správy, ktoré môžu dekódovať iba držitelia zdieľaných kľúčov."
       },
       "ufoSignal": {
-        "app": "Simulátor signálu UFO",
+        "app": "Simulátor UFO signálu",
         "title": "\"Čo sa stane, ak vyšlete signál UFO za úsvitu?\"",
         "description": "Vychutnajte si zvuky a animácie v tmavej miestnosti."
       }
@@ -8490,8 +8490,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Posledná aktualizácia: 31.05.2026",
       "googlePlay": "Aplikácie Google Play",
       "colorTest": "Nájdite inú farbu",
-      "alienText": "Mimozemský text",
-      "ufoApp": "Simulátor signálu UFO",
+      "alienText": "Galaxy Code: mimozemský text",
+      "ufoApp": "Simulátor UFO signálu",
       "privacyPolicy": "Zásady ochrany osobných údajov",
       "appAds": "app-ads.txt",
       "contact": "Kontaktovať",
@@ -8516,7 +8516,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sl": {
     "seo": {
       "title": "NeoKIM App Lab | Brezplačne mini aplikacije Android",
-      "description": "Namestite Poiščite drugo barvo, Tuje besedilo, Simulator NLP signala, Test barvnega občutka, Pobeg iz temnega labirinta in zasebne preizkuse za več mini aplikacij Android.",
+      "description": "Namestite Poiščite drugo barvo, Galaxy Code: vesoljski tekst, Simulator UFO signala, Color Master: Barvni test, Pobeg iz temnega labirinta in zasebne preizkuse za več mini aplikacij Android.",
       "ogTitle": "NeoKIM App Lab | Mini aplikacije Android",
       "ogDescription": "Poiščite nenavadne barve, ustvarite skrivno besedilo v slogu nezemljanov, pošljite igrive NLP signale, pobegnite temnim labirintom in se pridružite zasebnim preizkusom za hitro Android zabavo."
     },
@@ -8598,7 +8598,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Poiščite drugo barvo"
       },
       "galaxyCode": {
-        "name": "Tuje besedilo",
+        "name": "Galaxy Code: vesoljski tekst",
         "category": "Aplikacija za tajna sporočila",
         "tagline": "Ustvarite skrivna sporočila, podobna nezemljanom, ki za dekodiranje potrebujejo ključ za skupno rabo.",
         "description": "Ustvarite svoja galaktična jezikovna pravila. Samo ljudje z vašim ključem za skupno rabo lahko znova ustvarijo ista pravila, izvirno besedilo pa se ne naloži na strežnik.",
@@ -8611,10 +8611,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Ustvarite skrivna sporočila",
         "detailCta": "Preizkusite spletno predstavitev",
         "statusNote": "Zdaj na voljo na Google Play.",
-        "iconAlt": "Ikona Tuje besedilo"
+        "iconAlt": "Ikona Galaxy Code: vesoljski tekst"
       },
       "ufoSignal": {
-        "name": "Simulator NLP signala",
+        "name": "Simulator UFO signala",
         "category": "Aplikacija za zabavo Mystery Signal",
         "tagline": "Pošljite igriv vesoljski signal in uživajte v razpoloženju NLP.",
         "description": "Odprite aplikacijo, pritisnite gumb za signal in uživajte v zvoku in animaciji, zaradi katerih se trenutek počuti kot majhen ritual NLP-ja.",
@@ -8624,13 +8624,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animacija razpoloženja",
           "Brez prijave"
         ],
-        "primaryCta": "Namestite Simulator NLP signala",
+        "primaryCta": "Namestite Simulator UFO signala",
         "detailCta": "Oglejte si podrobnosti aplikacije",
         "statusNote": "Oglejte si podrobnosti aplikacije in jo nato namestite iz Google Play.",
-        "iconAlt": "Ikona Simulator NLP signala"
+        "iconAlt": "Ikona Simulator UFO signala"
       },
       "colorMasterClassic": {
-        "name": "Test barvnega občutka",
+        "name": "Color Master: Barvni test",
         "category": "Klasična igra zaznavanja barv",
         "tagline": "Izvirni izziv osredotočanja na barvo: zapomnite si barvo odgovora in jo izberite med podobnimi barvami.",
         "description": "Izvirni barvni preizkus pred Poiščite drugo barvo. Najprej ga preizkusite v spletu, nato pa ga namestite iz Google Play.",
@@ -8640,10 +8640,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Hitra igra",
           "Namestite zdaj"
         ],
-        "primaryCta": "Namestite Test barvnega občutka",
+        "primaryCta": "Namestite Color Master: Barvni test",
         "detailCta": "Preizkusite spletno predstavitev",
         "statusNote": "Najprej ga preizkusite v spletu, nato pa ga namestite iz Google Play.",
-        "iconAlt": "Ikona Test barvnega občutka"
+        "iconAlt": "Ikona Color Master: Barvni test"
       },
       "koreanRandomDefense": {
         "name": "Korejska naključna obramba",
@@ -8713,12 +8713,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Tekmujte s prijatelji v 10-sekundnem izzivu."
       },
       "galaxyCode": {
-        "app": "Tuje besedilo",
+        "app": "Galaxy Code: vesoljski tekst",
         "title": "\"Pošljite svojemu prijatelju sporočilo nezemljana, ki ga ne morejo dekodirati.\"",
         "description": "Pustite skrivna sporočila, ki jih lahko dekodirajo samo lastniki delniških ključev."
       },
       "ufoSignal": {
-        "app": "Simulator NLP signala",
+        "app": "Simulator UFO signala",
         "title": "\"Kaj se zgodi, če ob zori pošljete signal NLP?\"",
         "description": "Uživajte v zvokih in animaciji v temni sobi."
       }
@@ -8748,8 +8748,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Zadnja posodobitev: 31.5.2026",
       "googlePlay": "Aplikacije Google Play",
       "colorTest": "Poiščite drugo barvo",
-      "alienText": "Tuje besedilo",
-      "ufoApp": "Simulator NLP signala",
+      "alienText": "Galaxy Code: vesoljski tekst",
+      "ufoApp": "Simulator UFO signala",
       "privacyPolicy": "Politika zasebnosti",
       "appAds": "app-ads.txt",
       "contact": "Kontakt",
@@ -8774,7 +8774,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "si-LK": {
     "seo": {
       "title": "NeoKIM යෙදුම් විද්‍යාගාරය | නොමිලේ Android කුඩා යෙදුම්",
-      "description": "විවිධ වර්ණ සොයන්න, පිටසක්වල පෙළ සාදන්නා, UFO සංඥා සිමියුලේටරය, වර්ණ සංවේදී පරීක්ෂණය, අඳුරු වංකගිරිය, සහ තවත් Android කුඩා යෙදුම් සඳහා පුද්ගලික පරීක්ෂණ ස්ථාපනය කරන්න.",
+      "description": "විවිධ වර්ණ සොයන්න, Galaxy Code: පිටසක්වල, UFO සංඥා සಿಮියුලේටරය, Color Master: වර්ණ පරීක්ෂණය, අඳුරු වංකගිරිය, සහ තවත් Android කුඩා යෙදුම් සඳහා පුද්ගලික පරීක්ෂණ ස්ථාපනය කරන්න.",
       "ogTitle": "NeoKIM යෙදුම් විද්‍යාගාරය | Android කුඩා යෙදුම්",
       "ogDescription": "අමුතු වර්ණ සොයන්න, පිටසක්වල පන්නයේ රහස් පෙළ සාදන්න, සෙල්ලක්කාර UFO සංඥා යවන්න, අඳුරු වංකගිරියෙන් බේරෙන්න, සහ ඉක්මන් Android විනෝදය සඳහා පුද්ගලික පරීක්ෂණවලට සම්බන්ධ වන්න."
     },
@@ -8856,7 +8856,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "විවිධ වර්ණ සොයන්න නිරූපකය"
       },
       "galaxyCode": {
-        "name": "පිටසක්වල පෙළ සාදන්නා",
+        "name": "Galaxy Code: පිටසක්වල",
         "category": "රහස් පණිවිඩ යෙදුම",
         "tagline": "විකේතනය කිරීමට කොටස් යතුරක් අවශ්‍ය පිටසක්වල වැනි රහස් පණිවිඩ සාදන්න.",
         "description": "ඔබේම මන්දාකිණි භාෂා රීති සාදන්න. ඔබේ බෙදාගැනීමේ යතුර ඇති පුද්ගලයින්ට පමණක් එකම රීති නැවත නිර්මාණය කළ හැකි අතර මුල් පෙළ සේවාදායකයකට උඩුගත නොකෙරේ.",
@@ -8869,10 +8869,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "රහස් පණිවිඩ සාදන්න",
         "detailCta": "Web Demo උත්සාහ කරන්න",
         "statusNote": "Google Play හි දැන් තිබේ.",
-        "iconAlt": "පිටසක්වල පෙළ සාදන්නා නිරූපකය"
+        "iconAlt": "Galaxy Code: පිටසක්වල නිරූපකය"
       },
       "ufoSignal": {
-        "name": "UFO සංඥා සිමියුලේටරය",
+        "name": "UFO සංඥා සಿಮියුලේටරය",
         "category": "අභිරහස් සංඥා විනෝදාස්වාද යෙදුම",
         "tagline": "සෙල්ලක්කාර අභ්‍යවකාශ සංඥාවක් යවා UFO මනෝභාවය භුක්ති විඳින්න.",
         "description": "යෙදුම විවෘත කරන්න, සංඥා බොත්තම ඔබන්න, සහ මොහොත කුඩා UFO චාරිත්රයක් ලෙස හැඟෙන ශබ්දය සහ සජීවිකරණය භුක්ති විඳින්න.",
@@ -8882,13 +8882,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "මනෝ සජීවිකරණය",
           "ලියාපදිංචි වීමක් නැත"
         ],
-        "primaryCta": "UFO සංඥා සිමියුලේටරය ස්ථාපනය කරන්න",
+        "primaryCta": "UFO සංඥා සಿಮියුලේටරය ස්ථාපනය කරන්න",
         "detailCta": "යෙදුම් විස්තර බලන්න",
         "statusNote": "යෙදුම් විස්තර බලන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න.",
-        "iconAlt": "UFO සංඥා සිමියුලේටරය නිරූපකය"
+        "iconAlt": "UFO සංඥා සಿಮියුලේටරය නිරූපකය"
       },
       "colorMasterClassic": {
-        "name": "වර්ණ සංවේදී පරීක්ෂණය",
+        "name": "Color Master: වර්ණ පරීක්ෂණය",
         "category": "සම්භාව්‍ය වර්ණ සංවේද ක්‍රීඩාව",
         "tagline": "මුල් වර්ණ නාභිගත අභියෝගය: පිළිතුරු වර්ණය මතක තබා ගෙන එය සමාන වර්ණවලින් තෝරන්න.",
         "description": "විවිධ වර්ණ සොයන්න ට පෙර මුල් වර්ණ සංවේද පරීක්ෂණය. එය මුලින්ම වෙබයේ උත්සාහ කරන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න.",
@@ -8901,7 +8901,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "වර්ණ සංවේද පරීක්ෂණය ස්ථාපනය කරන්න",
         "detailCta": "Web Demo උත්සාහ කරන්න",
         "statusNote": "එය මුලින්ම වෙබයේ උත්සාහ කරන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න.",
-        "iconAlt": "වර්ණ සංවේදී පරීක්ෂණය නිරූපකය"
+        "iconAlt": "Color Master: වර්ණ පරීක්ෂණය නිරූපකය"
       },
       "koreanRandomDefense": {
         "name": "කොරියානු අහඹු ආරක්ෂක",
@@ -8971,12 +8971,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "තත්පර 10ක අභියෝගයකදී මිතුරන් සමඟ තරඟ කරන්න."
       },
       "galaxyCode": {
-        "app": "පිටසක්වල පෙළ සාදන්නා",
+        "app": "Galaxy Code: පිටසක්වල",
         "title": "\"ඔබේ මිතුරාට විකේතනය කළ නොහැකි පිටසක්වල පණිවිඩයක් යවන්න.\"",
         "description": "කොටස්-යතුරු හිමියන්ට පමණක් විකේතනය කළ හැකි රහස් පණිවිඩ තබන්න."
       },
       "ufoSignal": {
-        "app": "UFO සංඥා සිමියුලේටරය",
+        "app": "UFO සංඥා සಿಮියුලේටරය",
         "title": "\"උදෑසන UFO සංඥාවක් යැවුවහොත් කුමක් සිදුවේද?\"",
         "description": "අඳුරු කාමරයක ශබ්ද සහ සජීවිකරණය භුක්ති විඳින්න."
       }
@@ -9006,8 +9006,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "අවසන් වරට යාවත්කාලීන කළේ: 2026.05.31",
       "googlePlay": "Google Play යෙදුම්",
       "colorTest": "විවිධ වර්ණ සොයන්න",
-      "alienText": "පිටසක්වල පෙළ සාදන්නා",
-      "ufoApp": "UFO සංඥා සිමියුලේටරය",
+      "alienText": "Galaxy Code: පිටසක්වල",
+      "ufoApp": "UFO සංඥා සಿಮියුලේටරය",
       "privacyPolicy": "රහස්‍යතා ප්‍රතිපත්තිය",
       "appAds": "app-ads.txt",
       "contact": "අමතන්න",
@@ -9032,7 +9032,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ar": {
     "seo": {
       "title": "مختبر تطبيقات NeoKIM | تطبيقات Android المصغرة المجانية",
-      "description": "قم بتثبيت ابحث عن لون مختلف وصانع نص فضائي ومحاكي إشارة UFO واختبار حس الألوان وهروب المتاهة المظلمة والاختبارات الخاصة لمزيد من تطبيقات Android المصغرة.",
+      "description": "قم بتثبيت ابحث عن لون مختلف وGalaxy Code: نص فضائي ومحاكي إشارة UFO وColor Master: اختبار اللون وهروب المتاهة المظلمة والاختبارات الخاصة لمزيد من تطبيقات Android المصغرة.",
       "ogTitle": "مختبر تطبيقات NeoKIM | تطبيقات Android المصغرة",
       "ogDescription": "ابحث عن ألوان غريبة، وقم بإنشاء نص سري على الطراز الفضائي، وأرسل إشارات جسم غامض مرحة، واهرب من المتاهات المظلمة، وانضم إلى الاختبارات الخاصة للحصول على متعة Android السريعة."
     },
@@ -9114,7 +9114,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "رمز ابحث عن لون مختلف"
       },
       "galaxyCode": {
-        "name": "صانع نص فضائي",
+        "name": "Galaxy Code: نص فضائي",
         "category": "تطبيق الرسائل السرية",
         "tagline": "أنشئ رسائل سرية تشبه الكائنات الفضائية وتحتاج إلى مفتاح مشاركة لفك تشفيرها.",
         "description": "قم بإنشاء قواعد اللغة المجرية الخاصة بك. يمكن فقط للأشخاص الذين لديهم مفتاح المشاركة الخاص بك إعادة إنشاء نفس القواعد، ولا يتم تحميل النص الأصلي إلى الخادم.",
@@ -9127,7 +9127,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "إنشاء رسائل سرية",
         "detailCta": "حاول عرض الويب",
         "statusNote": "متوفر الآن على Google Play.",
-        "iconAlt": "رمز صانع نص فضائي"
+        "iconAlt": "رمز Galaxy Code: نص فضائي"
       },
       "ufoSignal": {
         "name": "محاكي إشارة UFO",
@@ -9146,7 +9146,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "رمز محاكي إشارة UFO"
       },
       "colorMasterClassic": {
-        "name": "اختبار حس الألوان",
+        "name": "Color Master: اختبار اللون",
         "category": "لعبة حس اللون الكلاسيكية",
         "tagline": "تحدي التركيز على اللون الأصلي: تذكر لون الإجابة واختره من الألوان المشابهة.",
         "description": "اختبار تحسس اللون الأصلي قبل ابحث عن لون مختلف. جربه على الويب أولاً، ثم قم بتثبيته من Google Play.",
@@ -9159,7 +9159,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "تثبيت اختبار تحسس اللون",
         "detailCta": "حاول عرض الويب",
         "statusNote": "جربه على الويب أولاً، ثم قم بتثبيته من Google Play.",
-        "iconAlt": "رمز اختبار حس الألوان"
+        "iconAlt": "رمز Color Master: اختبار اللون"
       },
       "koreanRandomDefense": {
         "name": "دفاع كوري عشوائي",
@@ -9229,7 +9229,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "تنافس مع الأصدقاء في تحدي مدته 10 ثوانٍ."
       },
       "galaxyCode": {
-        "app": "صانع نص فضائي",
+        "app": "Galaxy Code: نص فضائي",
         "title": "\"أرسل إلى صديقك رسالة كائن فضائي لا يستطيع فك شفرتها.\"",
         "description": "اترك رسائل سرية لا يستطيع فك تشفيرها إلا أصحاب المفاتيح المشتركة."
       },
@@ -9264,7 +9264,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "آخر تحديث: 2026.05.31",
       "googlePlay": "تطبيقات Google Play",
       "colorTest": "ابحث عن لون مختلف",
-      "alienText": "صانع نص فضائي",
+      "alienText": "Galaxy Code: نص فضائي",
       "ufoApp": "محاكي إشارة UFO",
       "privacyPolicy": "سياسة الخصوصية",
       "appAds": "app-ads.txt",
@@ -9290,7 +9290,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hy-AM": {
     "seo": {
       "title": "NeoKIM հավելվածի լաբորատորիա | Անվճար Android Mini հավելվածներ",
-      "description": "Տեղադրեք Գտեք տարբեր գույներ, Այլմոլորակային տեքստ, ՉԹՕ ազդանշանի սիմուլյատոր, Գույնի զգացողության թեստ, Մութ լաբիրինթոս և մասնավոր թեստեր ավելի շատ Android մինի հավելվածների համար:",
+      "description": "Տեղադրեք Գտեք տարբեր գույներ, Galaxy Code: այլմոլ. տեքստ, UFO ազդանշանի սիմուլյատոր, Color Master: Գույնի թեստ, Մութ լաբիրինթոս և մասնավոր թեստեր ավելի շատ Android մինի հավելվածների համար:",
       "ogTitle": "NeoKIM հավելվածի լաբորատորիա | Android մինի հավելվածներ",
       "ogDescription": "Գտեք տարօրինակ գույներ, պատրաստեք այլմոլորակայինների ոճով գաղտնի տեքստ, ուղարկեք ՉԹՕ-ի զվարճալի ազդանշաններ, փախեք մութ լաբիրինթոսներից և միացեք մասնավոր թեստերին՝ Android արագ զվարճանալու համար:"
     },
@@ -9372,7 +9372,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Գտեք տարբեր գույներ պատկերակ"
       },
       "galaxyCode": {
-        "name": "Այլմոլորակային տեքստ",
+        "name": "Galaxy Code: այլմոլ. տեքստ",
         "category": "Գաղտնի հաղորդագրությունների հավելված",
         "tagline": "Ստեղծեք այլմոլորակայինների նման գաղտնի հաղորդագրություններ, որոնց ապակոդավորման համար անհրաժեշտ է համօգտագործման բանալի:",
         "description": "Ստեղծեք ձեր սեփական գալակտիկական լեզվի կանոնները: Միայն ձեր համօգտագործման բանալին ունեցող մարդիկ կարող են վերստեղծել նույն կանոնները, և բնօրինակ տեքստը չի վերբեռնվում սերվեր:",
@@ -9385,10 +9385,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Ստեղծեք գաղտնի հաղորդագրություններ",
         "detailCta": "Փորձեք Web Demo",
         "statusNote": "Այժմ հասանելի է Google Play-ում:",
-        "iconAlt": "Այլմոլորակային տեքստ պատկերակ"
+        "iconAlt": "Galaxy Code: այլմոլ. տեքստ պատկերակ"
       },
       "ufoSignal": {
-        "name": "ՉԹՕ ազդանշանի սիմուլյատոր",
+        "name": "UFO ազդանշանի սիմուլյատոր",
         "category": "Առեղծվածային ազդանշանային զվարճանքի հավելված",
         "tagline": "Ուղարկեք զվարճալի տիեզերական ազդանշան և վայելեք ՉԹՕ-ի տրամադրությունը:",
         "description": "Բացեք հավելվածը, սեղմեք ազդանշանի կոճակը և վայելեք ձայնն ու անիմացիաները, որոնք պահը դարձնում են ՉԹՕ-ի փոքրիկ ծես:",
@@ -9398,13 +9398,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Տրամադրության անիմացիա",
           "Ոչ մի գրանցում"
         ],
-        "primaryCta": "Տեղադրեք ՉԹՕ ազդանշանի սիմուլյատոր",
+        "primaryCta": "Տեղադրեք UFO ազդանշանի սիմուլյատոր",
         "detailCta": "Դիտեք հավելվածի մանրամասները",
         "statusNote": "Դիտեք հավելվածի մանրամասները, այնուհետև տեղադրեք այն Google Play-ից:",
-        "iconAlt": "ՉԹՕ ազդանշանի սիմուլյատոր պատկերակ"
+        "iconAlt": "UFO ազդանշանի սիմուլյատոր պատկերակ"
       },
       "colorMasterClassic": {
-        "name": "Գույնի զգացողության թեստ",
+        "name": "Color Master: Գույնի թեստ",
         "category": "Դասական գունային իմաստով խաղ",
         "tagline": "Գույնի կենտրոնացման բնօրինակ մարտահրավեր. հիշեք պատասխանի գույնը և ընտրեք այն նմանատիպ գույներից:",
         "description": "Գույնի զգացողության բնօրինակ թեստը Գտեք տարբեր գույներ-ից առաջ: Նախ փորձեք այն համացանցում, ապա տեղադրեք այն Google Play-ից:",
@@ -9414,10 +9414,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Արագ խաղ",
           "Տեղադրեք հիմա"
         ],
-        "primaryCta": "Տեղադրեք Գույնի զգացողության թեստ-ը",
+        "primaryCta": "Տեղադրեք Color Master: Գույնի թեստ-ը",
         "detailCta": "Փորձեք Web Demo",
         "statusNote": "Նախ փորձեք այն համացանցում, ապա տեղադրեք այն Google Play-ից:",
-        "iconAlt": "Գույնի զգացողության թեստ պատկերակ"
+        "iconAlt": "Color Master: Գույնի թեստ պատկերակ"
       },
       "koreanRandomDefense": {
         "name": "Կորեայի պաշտպանություն",
@@ -9487,12 +9487,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Մրցակցեք ընկերների հետ 10 վայրկյան տեւողությամբ մարտահրավերում:"
       },
       "galaxyCode": {
-        "app": "Այլմոլորակային տեքստ",
+        "app": "Galaxy Code: այլմոլ. տեքստ",
         "title": "«Ձեր ընկերոջը ուղարկեք այլմոլորակային հաղորդագրություն, որը նրանք չեն կարող վերծանել»:",
         "description": "Թողեք գաղտնի հաղորդագրություններ, որոնք կարող են վերծանել միայն համօգտագործվող բանալիների սեփականատերերը:"
       },
       "ufoSignal": {
-        "app": "ՉԹՕ ազդանշանի սիմուլյատոր",
+        "app": "UFO ազդանշանի սիմուլյատոր",
         "title": "«Ի՞նչ կլինի, եթե լուսադեմին ՉԹՕ ազդանշան ուղարկեք»:",
         "description": "Վայելեք ձայները և անիմացիաները մութ սենյակում:"
       }
@@ -9522,8 +9522,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Վերջին թարմացումը՝ 2026.05.31",
       "googlePlay": "Google Play հավելվածներ",
       "colorTest": "Գտեք տարբեր գույներ",
-      "alienText": "Այլմոլորակային տեքստ",
-      "ufoApp": "ՉԹՕ ազդանշանի սիմուլյատոր",
+      "alienText": "Galaxy Code: այլմոլ. տեքստ",
+      "ufoApp": "UFO ազդանշանի սիմուլյատոր",
       "privacyPolicy": "Գաղտնիության քաղաքականություն",
       "appAds": "app-ads.txt",
       "contact": "Կապ",
@@ -9548,7 +9548,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "is-IS": {
     "seo": {
       "title": "NeoKIM App Lab | Ókeypis Android Mini Apps",
-      "description": "Settu upp Finndu annan lit, Alien texti, UFO merkjahermir, Litaskynspróf, Dökk völundarhús og einkapróf fyrir fleiri Android smáforrit.",
+      "description": "Settu upp Finndu annan lit, Galaxy Code: geimverutexti, UFO-merkishermir, Color Master: Litapróf, Dökk völundarhús og einkapróf fyrir fleiri Android smáforrit.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Finndu skrýtna liti, búðu til leynilegan texta í geimverumstíl, sendu fjörug UFO-merki, slepptu dimmum völundarhúsum og taktu þátt í einkaprófum fyrir fljótlega Android skemmtun."
     },
@@ -9630,7 +9630,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Finndu annan lit táknmynd"
       },
       "galaxyCode": {
-        "name": "Alien texti",
+        "name": "Galaxy Code: geimverutexti",
         "category": "Leyniskilaboðaforrit",
         "tagline": "Búðu til geimverulík leyndarmál skilaboð sem þurfa deilingarlykil til að afkóða.",
         "description": "Búðu til þínar eigin galactic tungumálareglur. Aðeins fólk með deilingarlykilinn þinn getur endurskapað sömu reglur og upprunalega textanum er ekki hlaðið upp á netþjón.",
@@ -9643,10 +9643,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Búðu til leyniskilaboð",
         "detailCta": "Prófaðu Web Demo",
         "statusNote": "Fáanlegt núna á Google Play.",
-        "iconAlt": "Alien texti táknmynd"
+        "iconAlt": "Galaxy Code: geimverutexti táknmynd"
       },
       "ufoSignal": {
-        "name": "UFO merkjahermir",
+        "name": "UFO-merkishermir",
         "category": "Mystery signal afþreyingarforrit",
         "tagline": "Sendu fjörugt geimmerki og njóttu UFO-stemningarinnar.",
         "description": "Opnaðu appið, ýttu á merkjahnappinn og njóttu hljóðs og hreyfimyndar sem láta augnablikið líða eins og lítið UFO-ritual.",
@@ -9656,13 +9656,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mood fjör",
           "Engin skráning"
         ],
-        "primaryCta": "Settu upp UFO merkjahermir",
+        "primaryCta": "Settu upp UFO-merkishermir",
         "detailCta": "Skoða upplýsingar um forrit",
         "statusNote": "Skoðaðu smáatriði forritsins og settu það síðan upp frá Google Play.",
-        "iconAlt": "UFO merkjahermir táknmynd"
+        "iconAlt": "UFO-merkishermir táknmynd"
       },
       "colorMasterClassic": {
-        "name": "Litaskynspróf",
+        "name": "Color Master: Litapróf",
         "category": "Klassískur litaskynsleikur",
         "tagline": "Upprunalega litafókusáskorunin: mundu svarlitinn og veldu hann úr svipuðum litum.",
         "description": "Upprunalega litskynjunarprófið fyrir Finndu annan lit. Prófaðu það fyrst á vefnum og settu það síðan upp frá Google Play.",
@@ -9672,10 +9672,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Fljótur leikur",
           "Settu upp núna"
         ],
-        "primaryCta": "Settu upp Litaskynspróf",
+        "primaryCta": "Settu upp Color Master: Litapróf",
         "detailCta": "Prófaðu Web Demo",
         "statusNote": "Prófaðu það fyrst á vefnum og settu það síðan upp frá Google Play.",
-        "iconAlt": "Litaskynspróf táknmynd"
+        "iconAlt": "Color Master: Litapróf táknmynd"
       },
       "koreanRandomDefense": {
         "name": "Kóresk tilviljunarkennd vörn",
@@ -9745,12 +9745,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Kepptu við vini í 10 sekúndna áskorun."
       },
       "galaxyCode": {
-        "app": "Alien texti",
+        "app": "Galaxy Code: geimverutexti",
         "title": "„Sendu vini þínum geimveruskilaboð sem hann getur ekki afkóða.",
         "description": "Skildu eftir leynileg skilaboð sem aðeins hluthafar geta afkóðað."
       },
       "ufoSignal": {
-        "app": "UFO merkjahermir",
+        "app": "UFO-merkishermir",
         "title": "\"Hvað gerist ef þú sendir UFO merki í dögun?\"",
         "description": "Njóttu hljóðanna og fjörsins í dimmu herbergi."
       }
@@ -9780,8 +9780,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Síðast uppfært: 2026.05.31",
       "googlePlay": "Google Play forrit",
       "colorTest": "Finndu annan lit",
-      "alienText": "Alien texti",
-      "ufoApp": "UFO merkjahermir",
+      "alienText": "Galaxy Code: geimverutexti",
+      "ufoApp": "UFO-merkishermir",
       "privacyPolicy": "Persónuverndarstefna",
       "appAds": "app-ads.txt",
       "contact": "Hafðu samband",
@@ -9806,7 +9806,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "az-AZ": {
     "seo": {
       "title": "NeoKIM Tətbiq Laboratoriyası | Pulsuz Android Mini Proqramları",
-      "description": "Fərqli Rəng tapın, Yadplanetli mətn, UFO siqnal simulyatoru, Rəng hissi testi, Qaranlıq labirentdən qaçış və daha çox Android mini proqramları üçün şəxsi testləri quraşdırın.",
+      "description": "Fərqli Rəng tapın, Galaxy Code: yadplanet mətni, UFO siqnal simulyatoru, Color Master: Rəng testi, Qaranlıq labirentdən qaçış və daha çox Android mini proqramları üçün şəxsi testləri quraşdırın.",
       "ogTitle": "NeoKIM Tətbiq Laboratoriyası | Android Mini Proqramlar",
       "ogDescription": "Qeyri-adi rənglər tapın, yadplanetli tipli gizli mətn yaradın, oynaq UFO siqnalları göndərin, qaranlıq labirintlərdən qaçın və sürətli Android əyləncəsi üçün şəxsi testlərə qoşulun."
     },
@@ -9888,7 +9888,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Fərqli Rəng tapın ikonası"
       },
       "galaxyCode": {
-        "name": "Yadplanetli mətn",
+        "name": "Galaxy Code: yadplanet mətni",
         "category": "Gizli mesaj proqramı",
         "tagline": "Şifrəni açmaq üçün paylaşma açarına ehtiyacı olan yadplanetlilərə bənzər gizli mesajlar yaradın.",
         "description": "Öz qalaktik dil qaydalarınızı yaradın. Yalnız paylaşma açarınız olan insanlar eyni qaydaları yenidən yarada bilər və orijinal mətn serverə yüklənmir.",
@@ -9901,7 +9901,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Gizli Mesajlar yaradın",
         "detailCta": "Veb nümayişini sınayın",
         "statusNote": "İndi Google Play-də mövcuddur.",
-        "iconAlt": "Yadplanetli mətn ikonası"
+        "iconAlt": "Galaxy Code: yadplanet mətni ikonası"
       },
       "ufoSignal": {
         "name": "UFO siqnal simulyatoru",
@@ -9920,7 +9920,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO siqnal simulyatoru ikonası"
       },
       "colorMasterClassic": {
-        "name": "Rəng hissi testi",
+        "name": "Color Master: Rəng testi",
         "category": "Klassik rəng hissi oyunu",
         "tagline": "Orijinal rəng fokus problemi: cavab rəngini xatırlayın və onu oxşar rənglərdən seçin.",
         "description": "Fərqli Rəng tapın-dən əvvəl orijinal rəng hissi testi. Əvvəlcə onu internetdə sınayın, sonra Google Play-dən quraşdırın.",
@@ -9930,10 +9930,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Sürətli oyun",
           "İndi quraşdırın"
         ],
-        "primaryCta": "Rəng hissi testini quraşdırın",
+        "primaryCta": "Color Master: Rəng testini quraşdırın",
         "detailCta": "Veb nümayişini sınayın",
         "statusNote": "Əvvəlcə onu internetdə sınayın, sonra Google Play-dən quraşdırın.",
-        "iconAlt": "Rəng hissi testi ikonası"
+        "iconAlt": "Color Master: Rəng testi ikonası"
       },
       "koreanRandomDefense": {
         "name": "Koreyanın təsadüfi müdafiəsi",
@@ -10003,7 +10003,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 saniyəlik problemdə dostlarınızla yarışın."
       },
       "galaxyCode": {
-        "app": "Yadplanetli mətn",
+        "app": "Galaxy Code: yadplanet mətni",
         "title": "“Dostunuza deşifrə edə bilməyəcəyi yadplanetli mesaj göndərin.”",
         "description": "Yalnız pay sahibinin deşifrə edə biləcəyi gizli mesajlar buraxın."
       },
@@ -10038,7 +10038,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Son yeniləmə: 31.05.2026",
       "googlePlay": "Google Play Proqramları",
       "colorTest": "Fərqli Rəng tapın",
-      "alienText": "Yadplanetli mətn",
+      "alienText": "Galaxy Code: yadplanet mətni",
       "ufoApp": "UFO siqnal simulyatoru",
       "privacyPolicy": "Məxfilik Siyasəti",
       "appAds": "app-ads.txt",
@@ -10064,7 +10064,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "af": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-toepassings",
-      "description": "Installeer Vind verskillende kleure, Uitheemse teksvervaardiger, UFO-seinsimulator, Kleursintoets, Donker doolhof, en privaat toetse vir nog Android mini-toepassings.",
+      "description": "Installeer Vind verskillende kleure, Galaxy Code: alien-teks, UFO-seinsimulator, Color Master: Kleurtoets, Donker doolhof, en privaat toetse vir nog Android mini-toepassings.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Soek vreemde kleure, maak geheime teks in uitheemse styl, stuur speelse UFO-seine, ontsnap donker doolhowe, en sluit aan by privaat toetse vir vinnige Android-pret."
     },
@@ -10146,7 +10146,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Vind verskillende kleure-ikoon"
       },
       "galaxyCode": {
-        "name": "Uitheemse teksvervaardiger",
+        "name": "Galaxy Code: alien-teks",
         "category": "Geheime boodskap-app",
         "tagline": "Skep uitheemse geheime boodskappe wat 'n deelsleutel nodig het om te dekodeer.",
         "description": "Skep jou eie galaktiese taalreëls. Slegs mense met jou deelsleutel kan dieselfde reëls herskep, en die oorspronklike teks word nie na 'n bediener opgelaai nie.",
@@ -10159,7 +10159,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Skep geheime boodskappe",
         "detailCta": "Probeer Web Demo",
         "statusNote": "Nou beskikbaar op Google Play.",
-        "iconAlt": "Uitheemse teksvervaardiger-ikoon"
+        "iconAlt": "Galaxy Code: alien-teks-ikoon"
       },
       "ufoSignal": {
         "name": "UFO-seinsimulator",
@@ -10178,7 +10178,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO-seinsimulator-ikoon"
       },
       "colorMasterClassic": {
-        "name": "Kleursintoets",
+        "name": "Color Master: Kleurtoets",
         "category": "Klassieke kleursinspel",
         "tagline": "Die oorspronklike kleurfokus-uitdaging: onthou die antwoordkleur en kies dit uit soortgelyke kleure.",
         "description": "Die oorspronklike kleursintoets voor Vind verskillende kleure. Probeer dit eers op die web en installeer dit dan vanaf Google Play.",
@@ -10188,10 +10188,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Vinnige speel",
           "Installeer nou"
         ],
-        "primaryCta": "Installeer Kleursintoets",
+        "primaryCta": "Installeer Color Master: Kleurtoets",
         "detailCta": "Probeer Web Demo",
         "statusNote": "Probeer dit eers op die web en installeer dit dan vanaf Google Play.",
-        "iconAlt": "Kleursintoets-ikoon"
+        "iconAlt": "Color Master: Kleurtoets-ikoon"
       },
       "koreanRandomDefense": {
         "name": "Koreaanse verdediging",
@@ -10261,7 +10261,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Kompeteer met vriende in 'n 10-sekonde-uitdaging."
       },
       "galaxyCode": {
-        "app": "Uitheemse teksvervaardiger",
+        "app": "Galaxy Code: alien-teks",
         "title": "\"Stuur vir jou vriend 'n vreemdelingboodskap wat hulle nie kan dekodeer nie.\"",
         "description": "Los geheime boodskappe wat slegs aandeelsleutelhouers kan dekodeer."
       },
@@ -10296,7 +10296,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Laas opgedateer: 2026.05.31",
       "googlePlay": "Google Play Apps",
       "colorTest": "Vind verskillende kleure",
-      "alienText": "Uitheemse teksvervaardiger",
+      "alienText": "Galaxy Code: alien-teks",
       "ufoApp": "UFO-seinsimulator",
       "privacyPolicy": "Privaatheidsbeleid",
       "appAds": "app-ads.txt",
@@ -10322,7 +10322,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sq": {
     "seo": {
       "title": "NeoKIM App Lab | Aplikacionet falas të Android Mini",
-      "description": "Instaloni Gjeni ngjyra të ndryshme, Krijuesi i tekstit të huaj, Simulator i sinjalit UFO, Testi i sensit të ngjyrave, Arratisje labirint i errët dhe teste private për më shumë mini aplikacione Android.",
+      "description": "Instaloni Gjeni ngjyra të ndryshme, Galaxy Code: tekst alien, Simulator sinjali UFO, Color Master: Test ngjyrash, Arratisje labirint i errët dhe teste private për më shumë mini aplikacione Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Gjeni ngjyra të çuditshme, bëni tekst sekret të stilit alien, dërgoni sinjale UFO-je lozonjare, shpëtoni nga labirintet e errëta dhe bashkohuni me testet private për argëtim të shpejtë Android."
     },
@@ -10404,7 +10404,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Gjeni ngjyra të ndryshme"
       },
       "galaxyCode": {
-        "name": "Krijuesi i tekstit të huaj",
+        "name": "Galaxy Code: tekst alien",
         "category": "Aplikacioni i mesazheve sekrete",
         "tagline": "Krijoni mesazhe sekrete të ngjashme me alienët që kanë nevojë për një çelës share për t'i deshifruar.",
         "description": "Krijoni rregullat tuaja të gjuhës galaktike. Vetëm njerëzit me çelësin tuaj të ndarjes mund të rikrijojnë të njëjtat rregulla dhe teksti origjinal nuk ngarkohet në një server.",
@@ -10417,10 +10417,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Krijoni mesazhe sekrete",
         "detailCta": "Provoni Web Demo",
         "statusNote": "Në dispozicion tani në Google Play.",
-        "iconAlt": "Ikona Krijuesi i tekstit të huaj"
+        "iconAlt": "Ikona Galaxy Code: tekst alien"
       },
       "ufoSignal": {
-        "name": "Simulator i sinjalit UFO",
+        "name": "Simulator sinjali UFO",
         "category": "Aplikacioni argëtues me sinjal misterioz",
         "tagline": "Dërgoni një sinjal hapësinor të këndshëm dhe shijoni disponimin e UFO-ve.",
         "description": "Hapni aplikacionin, shtypni butonin e sinjalit dhe shijoni tingujt dhe animacionet që e bëjnë momentin të duket si një ritual i vogël UFO-sh.",
@@ -10430,13 +10430,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animacion i humorit",
           "Asnjë regjistrim"
         ],
-        "primaryCta": "Instaloni Simulator i sinjalit UFO",
+        "primaryCta": "Instaloni Simulator sinjali UFO",
         "detailCta": "Shikoni detajet e aplikacionit",
         "statusNote": "Shikoni detajet e aplikacionit, më pas instaloni atë nga Google Play.",
-        "iconAlt": "Ikona Simulator i sinjalit UFO"
+        "iconAlt": "Ikona Simulator sinjali UFO"
       },
       "colorMasterClassic": {
-        "name": "Testi i sensit të ngjyrave",
+        "name": "Color Master: Test ngjyrash",
         "category": "Lojë klasike e sensit të ngjyrave",
         "tagline": "Sfida origjinale e fokusimit të ngjyrave: mbani mend ngjyrën e përgjigjes dhe zgjidhni atë nga ngjyra të ngjashme.",
         "description": "Testi origjinal i sensit të ngjyrës përpara Gjeni ngjyra të ndryshme. Provojeni fillimisht në ueb, më pas instalojeni nga Google Play.",
@@ -10449,7 +10449,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instaloni Testin e Ndjesisë së Ngjyrave",
         "detailCta": "Provoni Web Demo",
         "statusNote": "Provojeni fillimisht në ueb, më pas instalojeni nga Google Play.",
-        "iconAlt": "Ikona Testi i sensit të ngjyrave"
+        "iconAlt": "Ikona Color Master: Test ngjyrash"
       },
       "koreanRandomDefense": {
         "name": "Mbrojtja e rastësishme koreane",
@@ -10519,12 +10519,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Konkurroni me miqtë në një sfidë 10 sekondash."
       },
       "galaxyCode": {
-        "app": "Krijuesi i tekstit të huaj",
+        "app": "Galaxy Code: tekst alien",
         "title": "“Dërgoji mikut tënd një mesazh alien që nuk mund ta deshifrojë.”",
         "description": "Lini mesazhe sekrete që vetëm mbajtësit e çelësave të përbashkët mund t'i deshifrojnë."
       },
       "ufoSignal": {
-        "app": "Simulator i sinjalit UFO",
+        "app": "Simulator sinjali UFO",
         "title": "\"Çfarë ndodh nëse dërgoni një sinjal UFO në agim?\"",
         "description": "Shijoni tingujt dhe animacionin në një dhomë të errët."
       }
@@ -10554,8 +10554,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Përditësimi i fundit: 31.05.2026",
       "googlePlay": "Aplikacionet Google Play",
       "colorTest": "Gjeni ngjyra të ndryshme",
-      "alienText": "Krijuesi i tekstit të huaj",
-      "ufoApp": "Simulator i sinjalit UFO",
+      "alienText": "Galaxy Code: tekst alien",
+      "ufoApp": "Simulator sinjali UFO",
       "privacyPolicy": "Politika e privatësisë",
       "appAds": "app-ads.txt",
       "contact": "Kontaktoni",
@@ -10580,7 +10580,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "am": {
     "seo": {
       "title": "NeoKIM መተግበሪያ ቤተ ሙከራ | ነጻ Android ሚኒ መተግበሪያዎች",
-      "description": "ለተጨማሪ Android ሚኒ መተግበሪያዎች የተለያየ ቀለም ያግኙ፣ የውጭ ዜጋ ጽሑፍ፣ የዩፎ ሲግናል አስመሳይ፣ የቀለም ስሜት ሙከራ፣ ጨለማ ማዝ አምልጥ እና የግል ሙከራዎችን ጫን።",
+      "description": "ለተጨማሪ Android ሚኒ መተግበሪያዎች የተለያየ ቀለም ያግኙ፣ Galaxy Code: የባዕድ ጽሑፍ፣ UFO ምልክት ሲሙሌተር፣ Color Master: የቀለም ፈተና፣ ጨለማ ማዝ አምልጥ እና የግል ሙከራዎችን ጫን።",
       "ogTitle": "NeoKIM መተግበሪያ ቤተ ሙከራ | Android ሚኒ መተግበሪያዎች",
       "ogDescription": "ያልተለመዱ ቀለሞችን ያግኙ፣ የባዕድ ቅጥ የሚስጥር ጽሑፍ ይስሩ፣ ተጫዋች የሆኑ የዩፎ ምልክቶችን ይላኩ፣ ከጨለማ ቀውሶች ያመልጡ፣ እና ለፈጣን Android አዝናኝ የግል ሙከራዎችን ይቀላቀሉ።"
     },
@@ -10662,7 +10662,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "የተለያየ ቀለም ያግኙ አዶ"
       },
       "galaxyCode": {
-        "name": "የውጭ ዜጋ ጽሑፍ",
+        "name": "Galaxy Code: የባዕድ ጽሑፍ",
         "category": "ሚስጥራዊ መልእክት መተግበሪያ",
         "tagline": "ኮድ ለመፍታት የማጋሪያ ቁልፍ የሚያስፈልጋቸው ባዕድ የሚመስሉ ሚስጥራዊ መልዕክቶችን ይፍጠሩ።",
         "description": "የራስዎን የጋላክሲ ቋንቋ ህጎች ይፍጠሩ። የእርስዎን የማጋሪያ ቁልፍ ያላቸው ሰዎች ብቻ ተመሳሳዩን ደንቦችን መፍጠር ይችላሉ፣ እና ዋናው ጽሑፍ ወደ አገልጋይ አይሰቀልም።",
@@ -10675,10 +10675,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ሚስጥራዊ መልዕክቶችን ይፍጠሩ",
         "detailCta": "የድር ማሳያን ይሞክሩ",
         "statusNote": "አሁን በGoogle Play ላይ ይገኛል።",
-        "iconAlt": "የውጭ ዜጋ ጽሑፍ አዶ"
+        "iconAlt": "Galaxy Code: የባዕድ ጽሑፍ አዶ"
       },
       "ufoSignal": {
-        "name": "የዩፎ ሲግናል አስመሳይ",
+        "name": "UFO ምልክት ሲሙሌተር",
         "category": "ሚስጥራዊ ምልክት መዝናኛ መተግበሪያ",
         "tagline": "ተጫዋች የጠፈር ምልክት ይላኩ እና በ UFO ስሜት ይደሰቱ።",
         "description": "መተግበሪያውን ይክፈቱ፣ የሲግናል አዝራሩን ይጫኑ እና በድምጽ እና በአኒሜሽን ይደሰቱ ይህም ቅፅበት እንደ ትንሽ የዩፎ ሥነ ሥርዓት እንዲሰማው ያደርጋል።",
@@ -10688,26 +10688,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ስሜት እነማ",
           "ምንም ምዝገባ የለም።"
         ],
-        "primaryCta": "የዩፎ ሲግናል አስመሳይ ጫን",
+        "primaryCta": "UFO ምልክት ሲሙሌተር ጫን",
         "detailCta": "የመተግበሪያ ዝርዝሮችን ይመልከቱ",
         "statusNote": "የመተግበሪያውን ዝርዝሮች ይመልከቱ፣ ከዚያ ከGoogle Play ይጫኑት።",
-        "iconAlt": "የዩፎ ሲግናል አስመሳይ አዶ"
+        "iconAlt": "UFO ምልክት ሲሙሌተር አዶ"
       },
       "colorMasterClassic": {
-        "name": "የቀለም ስሜት ሙከራ",
+        "name": "Color Master: የቀለም ፈተና",
         "category": "ክላሲክ የቀለም ስሜት ጨዋታ",
         "tagline": "ዋናው የቀለም ትኩረት ፈተና: የመልሱን ቀለም አስታውሱ እና ከተመሳሳይ ቀለሞች ይምረጡት.",
-        "description": "ከየተለያየ ቀለም ያግኙ በፊት የመጀመሪያው የቀለም ስሜት ሙከራ። መጀመሪያ በድሩ ላይ ይሞክሩት፣ ከዚያ ከGoogle Play ይጫኑት።",
+        "description": "ከየተለያየ ቀለም ያግኙ በፊት የመጀመሪያው Color Master: የቀለም ፈተና። መጀመሪያ በድሩ ላይ ይሞክሩት፣ ከዚያ ከGoogle Play ይጫኑት።",
         "highlights": [
           "ኦሪጅናል ስሜት",
           "የቀለም ትኩረት",
           "ፈጣን ጨዋታ",
           "አሁን ጫን"
         ],
-        "primaryCta": "የቀለም ስሜት ሙከራን ጫን",
+        "primaryCta": "Color Master: የቀለም ፈተናን ጫን",
         "detailCta": "የድር ማሳያን ይሞክሩ",
         "statusNote": "መጀመሪያ በድሩ ላይ ይሞክሩት፣ ከዚያ ከGoogle Play ይጫኑት።",
-        "iconAlt": "የቀለም ስሜት ሙከራ አዶ"
+        "iconAlt": "Color Master: የቀለም ፈተና አዶ"
       },
       "koreanRandomDefense": {
         "name": "የኮሪያ የዘፈቀደ መከላከያ",
@@ -10777,12 +10777,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "በ10 ሰከንድ ፈተና ከጓደኞች ጋር ይወዳደሩ።"
       },
       "galaxyCode": {
-        "app": "የውጭ ዜጋ ጽሑፍ",
+        "app": "Galaxy Code: የባዕድ ጽሑፍ",
         "title": "\"ለጓደኛዎ ኮድ መፍታት የማይችሉትን የውጭ መልእክት ይላኩ።\"",
         "description": "የተጋሩ ቁልፍ ያዢዎች ብቻ ኮድ መፍታት የሚችሉት ሚስጥራዊ መልዕክቶችን ይተዉ።"
       },
       "ufoSignal": {
-        "app": "የዩፎ ሲግናል አስመሳይ",
+        "app": "UFO ምልክት ሲሙሌተር",
         "title": "\" ጎህ ሲቀድ የ UFO ምልክት ከላኩ ምን ይሆናል?\"",
         "description": "በጨለማ ክፍል ውስጥ ባሉ ድምጾች እና እነማ ይደሰቱ።"
       }
@@ -10812,8 +10812,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "መጨረሻ የዘመነው: 2026.05.31",
       "googlePlay": "Google Play መተግበሪያዎች",
       "colorTest": "የተለያየ ቀለም ያግኙ",
-      "alienText": "የውጭ ዜጋ ጽሑፍ",
-      "ufoApp": "የዩፎ ሲግናል አስመሳይ",
+      "alienText": "Galaxy Code: የባዕድ ጽሑፍ",
+      "ufoApp": "UFO ምልክት ሲሙሌተር",
       "privacyPolicy": "የግላዊነት ፖሊሲ",
       "appAds": "app-ads.txt",
       "contact": "ተገናኝ",
@@ -10838,7 +10838,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "et": {
     "seo": {
       "title": "NeoKIM App Lab | Tasuta Android minirakendused",
-      "description": "Installige Otsige erinevat värvi, Võõra tekstitegija, UFO signaali simulaator, Värvitunde test, Tume labürint ja privaatsed testid rohkemate Android minirakenduste jaoks.",
+      "description": "Installige Otsige erinevat värvi, Galaxy Code: tulnukatekst, UFO signaali simulaator, Color Master: Värvitest, Tume labürint ja privaatsed testid rohkemate Android minirakenduste jaoks.",
       "ogTitle": "NeoKIM App Lab | Android minirakendused",
       "ogDescription": "Leidke veidraid värve, koostage tulnukate stiilis salatekste, saatke mängulisi UFO-signaale, põgenege pimedatest labürintidest ja liituge privaatsete testidega, et Android kiiresti lõbutseda."
     },
@@ -10920,7 +10920,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Otsige erinevat värvi ikoon"
       },
       "galaxyCode": {
-        "name": "Võõra tekstitegija",
+        "name": "Galaxy Code: tulnukatekst",
         "category": "Salasõnumite rakendus",
         "tagline": "Looge tulnukatega sarnaseid salasõnumeid, mis vajavad dekodeerimiseks jagamisvõtit.",
         "description": "Looge oma galaktilise keele reeglid. Ainult teie jagamisvõtmega inimesed saavad samu reegleid uuesti luua ja algset teksti ei laadita serverisse üles.",
@@ -10933,7 +10933,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Looge salasõnumeid",
         "detailCta": "Proovige veebidemot",
         "statusNote": "Nüüd saadaval saidil Google Play.",
-        "iconAlt": "Võõra tekstitegija ikoon"
+        "iconAlt": "Galaxy Code: tulnukatekst ikoon"
       },
       "ufoSignal": {
         "name": "UFO signaali simulaator",
@@ -10952,7 +10952,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO signaali simulaator ikoon"
       },
       "colorMasterClassic": {
-        "name": "Värvitunde test",
+        "name": "Color Master: Värvitest",
         "category": "Klassikaline värvitaju mäng",
         "tagline": "Algne värvifookuse väljakutse: jäta vastuse värv meelde ja vali see sarnaste värvide hulgast.",
         "description": "Algne värvitaju test enne Otsige erinevat värviI. Proovige seda esmalt veebis ja seejärel installige see saidilt Google Play.",
@@ -10962,10 +10962,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Kiire mängimine",
           "Installige kohe"
         ],
-        "primaryCta": "Installige Värvitunde test",
+        "primaryCta": "Installige Color Master: Värvitest",
         "detailCta": "Proovige veebidemot",
         "statusNote": "Proovige seda esmalt veebis ja seejärel installige see saidilt Google Play.",
-        "iconAlt": "Värvitunde test ikoon"
+        "iconAlt": "Color Master: Värvitest ikoon"
       },
       "koreanRandomDefense": {
         "name": "Korea juhuslik kaitse",
@@ -11035,7 +11035,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Võistelge sõpradega 10-sekundilises väljakutses."
       },
       "galaxyCode": {
-        "app": "Võõra tekstitegija",
+        "app": "Galaxy Code: tulnukatekst",
         "title": "\"Saada oma sõbrale tulnuka sõnum, mida ta ei suuda dekodeerida.\"",
         "description": "Jätke salajased sõnumid, mida saavad dekodeerida ainult aktsiate võtmeomanikud."
       },
@@ -11070,7 +11070,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Viimati uuendatud: 2026.05.31",
       "googlePlay": "Google Play rakendused",
       "colorTest": "Otsige erinevat värvi",
-      "alienText": "Võõra tekstitegija",
+      "alienText": "Galaxy Code: tulnukatekst",
       "ufoApp": "UFO signaali simulaator",
       "privacyPolicy": "Privaatsuspoliitika",
       "appAds": "app-ads.txt",
@@ -12644,7 +12644,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ur": {
     "seo": {
       "title": "NeoKIM ایپ لیب | مفت Android Mini ایپس",
-      "description": "مزید Android منی ایپس کے لیے مختلف رنگ تلاش کریں۔, ایلین ٹیکسٹ میکر, UFO سگنل سمیلیٹر, کلر سینس ٹیسٹ, تاریک بھولبلییا سے فرار اور نجی ٹیسٹ انسٹال کریں۔",
+      "description": "مزید Android منی ایپس کے لیے مختلف رنگ تلاش کریں۔, Galaxy Code: اجنبی متن, UFO سگنل سمیولیٹر, Color Master: رنگ ٹیسٹ, تاریک بھولبلییا سے فرار اور نجی ٹیسٹ انسٹال کریں۔",
       "ogTitle": "NeoKIM ایپ لیب | Android منی ایپس",
       "ogDescription": "عجیب رنگ تلاش کریں، اجنبی طرز کا خفیہ متن بنائیں، چنچل UFO سگنل بھیجیں، تاریک بھولبلییا سے بچیں، اور فوری Android تفریح ​​کے لیے نجی ٹیسٹوں میں شامل ہوں۔"
     },
@@ -12726,7 +12726,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "مختلف رنگ تلاش کریں۔ آئیکن"
       },
       "galaxyCode": {
-        "name": "ایلین ٹیکسٹ میکر",
+        "name": "Galaxy Code: اجنبی متن",
         "category": "خفیہ پیغام ایپ",
         "tagline": "اجنبی جیسے خفیہ پیغامات بنائیں جنہیں ڈی کوڈ کرنے کے لیے شیئر کلید کی ضرورت ہے۔",
         "description": "اپنے کہکشاں زبان کے اصول بنائیں۔ صرف وہی لوگ جو آپ کی شیئر کلید والے ہیں وہی اصول دوبارہ بنا سکتے ہیں، اور اصل متن سرور پر اپ لوڈ نہیں ہوتا ہے۔",
@@ -12739,10 +12739,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "خفیہ پیغامات بنائیں",
         "detailCta": "ویب ڈیمو آزمائیں۔",
         "statusNote": "Google Play پر اب دستیاب ہے۔",
-        "iconAlt": "ایلین ٹیکسٹ میکر آئیکن"
+        "iconAlt": "Galaxy Code: اجنبی متن آئیکن"
       },
       "ufoSignal": {
-        "name": "UFO سگنل سمیلیٹر",
+        "name": "UFO سگنل سمیولیٹر",
         "category": "اسرار سگنل تفریحی ایپ",
         "tagline": "ایک چنچل خلائی سگنل بھیجیں اور UFO موڈ سے لطف اندوز ہوں۔",
         "description": "ایپ کھولیں، سگنل بٹن دبائیں، اور آواز اور اینیمیشن سے لطف اندوز ہوں جو اس لمحے کو ایک چھوٹی UFO رسم کی طرح محسوس کریں۔",
@@ -12752,26 +12752,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "موڈ اینیمیشن",
           "کوئی سائن اپ نہیں۔"
         ],
-        "primaryCta": "UFO سگنل سمیلیٹر انسٹال کریں۔",
+        "primaryCta": "UFO سگنل سمیولیٹر انسٹال کریں۔",
         "detailCta": "ایپ کی تفصیلات دیکھیں",
         "statusNote": "ایپ کی تفصیلات دیکھیں، پھر اسے Google Play سے انسٹال کریں۔",
-        "iconAlt": "UFO سگنل سمیلیٹر آئیکن"
+        "iconAlt": "UFO سگنل سمیولیٹر آئیکن"
       },
       "colorMasterClassic": {
-        "name": "کلر سینس ٹیسٹ",
+        "name": "Color Master: رنگ ٹیسٹ",
         "category": "کلاسیکی کلر سینس گیم",
         "tagline": "اصل کلر فوکس چیلنج: جواب کا رنگ یاد رکھیں اور اسے ملتے جلتے رنگوں سے چنیں۔",
-        "description": "مختلف رنگ تلاش کریں۔ سے پہلے اصل کلر سینس ٹیسٹ۔ پہلے اسے ویب پر آزمائیں، پھر اسے Google Play سے انسٹال کریں۔",
+        "description": "مختلف رنگ تلاش کریں۔ سے پہلے اصل Color Master: رنگ ٹیسٹ۔ پہلے اسے ویب پر آزمائیں، پھر اسے Google Play سے انسٹال کریں۔",
         "highlights": [
           "اصل احساس",
           "رنگین فوکس",
           "فوری کھیل",
           "ابھی انسٹال کریں۔"
         ],
-        "primaryCta": "کلر سینس ٹیسٹ انسٹال کریں۔",
+        "primaryCta": "Color Master: رنگ ٹیسٹ انسٹال کریں۔",
         "detailCta": "ویب ڈیمو آزمائیں۔",
         "statusNote": "پہلے اسے ویب پر آزمائیں، پھر اسے Google Play سے انسٹال کریں۔",
-        "iconAlt": "کلر سینس ٹیسٹ آئیکن"
+        "iconAlt": "Color Master: رنگ ٹیسٹ آئیکن"
       },
       "koreanRandomDefense": {
         "name": "کورین رینڈم ڈیفنس",
@@ -12841,12 +12841,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 سیکنڈ کے چیلنج میں دوستوں کے ساتھ مقابلہ کریں۔"
       },
       "galaxyCode": {
-        "app": "ایلین ٹیکسٹ میکر",
+        "app": "Galaxy Code: اجنبی متن",
         "title": "\"اپنے دوست کو ایک اجنبی پیغام بھیجیں جسے وہ ڈی کوڈ نہیں کر سکتا۔\"",
         "description": "ایسے خفیہ پیغامات چھوڑیں جنہیں صرف شیئر کلید رکھنے والے ہی ڈی کوڈ کر سکتے ہیں۔"
       },
       "ufoSignal": {
-        "app": "UFO سگنل سمیلیٹر",
+        "app": "UFO سگنل سمیولیٹر",
         "title": "\"اگر آپ فجر کے وقت UFO سگنل بھیجیں تو کیا ہوگا؟\"",
         "description": "تاریک کمرے میں آوازوں اور حرکت پذیری کا لطف اٹھائیں۔"
       }
@@ -12876,8 +12876,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "آخری اپ ڈیٹ: 2026.05.31",
       "googlePlay": "Google Play ایپس",
       "colorTest": "مختلف رنگ تلاش کریں۔",
-      "alienText": "ایلین ٹیکسٹ میکر",
-      "ufoApp": "UFO سگنل سمیلیٹر",
+      "alienText": "Galaxy Code: اجنبی متن",
+      "ufoApp": "UFO سگنل سمیولیٹر",
       "privacyPolicy": "رازداری کی پالیسی",
       "appAds": "app-ads.txt",
       "contact": "رابطہ کریں۔",
@@ -12902,7 +12902,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "uk": {
     "seo": {
       "title": "NeoKIM App Lab | Безкоштовні міні-програми Android",
-      "description": "Установіть Знайди інший колір, Створювач інопланетного тексту, Симулятор сигналу НЛО, Тест відчуття кольору, Втеча з темного лабіринту і приватні тести, щоб отримати більше міні-програм Android.",
+      "description": "Установіть Знайди інший колір, Galaxy Code: текст прибульців, Симулятор сигналу НЛО, Color Master: Тест кольору, Втеча з темного лабіринту і приватні тести, щоб отримати більше міні-програм Android.",
       "ogTitle": "NeoKIM App Lab | Міні-програми Android",
       "ogDescription": "Знаходьте незвичайні кольори, створюйте секретний текст у стилі інопланетян, надсилайте жартівливі сигнали НЛО, виходьте з темних лабіринтів і приєднуйтесь до приватних тестів, щоб отримати швидке задоволення від Android."
     },
@@ -12984,7 +12984,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок Знайди інший колір"
       },
       "galaxyCode": {
-        "name": "Створювач інопланетного тексту",
+        "name": "Galaxy Code: текст прибульців",
         "category": "Додаток для секретних повідомлень",
         "tagline": "Створюйте секретні повідомлення, схожі на прибульців, для декодування яких потрібен спільний ключ.",
         "description": "Створіть власні правила галактичної мови. Лише люди, які мають ваш спільний ключ, можуть відтворити ті самі правила, а вихідний текст не завантажується на сервер.",
@@ -12997,7 +12997,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Створення секретних повідомлень",
         "detailCta": "Спробуйте веб-демо",
         "statusNote": "Зараз доступний на Google Play.",
-        "iconAlt": "Значок Створювач інопланетного тексту"
+        "iconAlt": "Значок Galaxy Code: текст прибульців"
       },
       "ufoSignal": {
         "name": "Симулятор сигналу НЛО",
@@ -13016,7 +13016,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок Симулятор сигналу НЛО"
       },
       "colorMasterClassic": {
-        "name": "Тест відчуття кольору",
+        "name": "Color Master: Тест кольору",
         "category": "Класична гра на відчуття кольору",
         "tagline": "Оригінальне завдання з фокусуванням кольору: запам’ятайте колір відповіді та виберіть його зі схожих кольорів.",
         "description": "Оригінальний тест відчуття кольору перед Знайди інший колір. Спершу спробуйте в Інтернеті, а потім встановіть із Google Play.",
@@ -13026,10 +13026,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Швидка гра",
           "Встановити зараз"
         ],
-        "primaryCta": "Встановіть Тест відчуття кольору",
+        "primaryCta": "Встановіть Color Master: Тест кольору",
         "detailCta": "Спробуйте веб-демо",
         "statusNote": "Спершу спробуйте в Інтернеті, а потім встановіть із Google Play.",
-        "iconAlt": "Значок Тест відчуття кольору"
+        "iconAlt": "Значок Color Master: Тест кольору"
       },
       "koreanRandomDefense": {
         "name": "Корейська випадкова оборона",
@@ -13099,7 +13099,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Змагайтеся з друзями в 10-секундному випробуванні."
       },
       "galaxyCode": {
-        "app": "Створювач інопланетного тексту",
+        "app": "Galaxy Code: текст прибульців",
         "title": "«Надішліть своєму другові повідомлення про прибульців, яке вони не можуть розшифрувати».",
         "description": "Залишайте секретні повідомлення, які можуть розшифрувати лише власники акцій."
       },
@@ -13134,7 +13134,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Останнє оновлення: 31.05.2026",
       "googlePlay": "Програми Google Play",
       "colorTest": "Знайди інший колір",
-      "alienText": "Створювач інопланетного тексту",
+      "alienText": "Galaxy Code: текст прибульців",
       "ufoApp": "Симулятор сигналу НЛО",
       "privacyPolicy": "Політика конфіденційності",
       "appAds": "app-ads.txt",
@@ -13160,7 +13160,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "it-IT": {
     "seo": {
       "title": "Laboratorio dell'app NeoKIM | Mini app Android gratuite",
-      "description": "Installa Colore diverso, Testo alieno, Simulatore segnale UFO, Test senso colore, Fuga labirinto oscuro e test privati ​​per altre mini app Android.",
+      "description": "Installa Colore diverso, Galaxy Code: testo alieno, Simulatore segnale UFO, Color Master: Test colori, Fuga labirinto oscuro e test privati ​​per altre mini app Android.",
       "ogTitle": "Laboratorio dell'app NeoKIM | Mini app Android",
       "ogDescription": "Trova colori strani, crea testi segreti in stile alieno, invia segnali UFO giocosi, fuggi da labirinti oscuri e partecipa a test privati per un rapido divertimento Android."
     },
@@ -13242,7 +13242,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona Colore diverso"
       },
       "galaxyCode": {
-        "name": "Testo alieno",
+        "name": "Galaxy Code: testo alieno",
         "category": "App per messaggi segreti",
         "tagline": "Crea messaggi segreti simili ad alieni che necessitano di una chiave condivisa per essere decodificati.",
         "description": "Crea le tue regole linguistiche galattiche. Solo le persone con la tua chiave condivisa possono ricreare le stesse regole e il testo originale non viene caricato su un server.",
@@ -13255,7 +13255,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crea messaggi segreti",
         "detailCta": "Prova la demo web",
         "statusNote": "Disponibile ora su Google Play.",
-        "iconAlt": "Icona Testo alieno"
+        "iconAlt": "Icona Galaxy Code: testo alieno"
       },
       "ufoSignal": {
         "name": "Simulatore segnale UFO",
@@ -13274,7 +13274,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona Simulatore segnale UFO"
       },
       "colorMasterClassic": {
-        "name": "Test senso colore",
+        "name": "Color Master: Test colori",
         "category": "Classico gioco di percezione del colore",
         "tagline": "L'originale sfida del colore: ricorda il colore della risposta e sceglilo tra colori simili.",
         "description": "Il test di rilevamento del colore originale prima di Colore diverso. Provalo prima sul Web, quindi installalo da Google Play.",
@@ -13287,7 +13287,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Installa il test del senso del colore",
         "detailCta": "Prova la demo web",
         "statusNote": "Provalo prima sul Web, quindi installalo da Google Play.",
-        "iconAlt": "Icona Test senso colore"
+        "iconAlt": "Icona Color Master: Test colori"
       },
       "koreanRandomDefense": {
         "name": "Difesa casuale coreana",
@@ -13357,7 +13357,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Competi con gli amici in una sfida di 10 secondi."
       },
       "galaxyCode": {
-        "app": "Testo alieno",
+        "app": "Galaxy Code: testo alieno",
         "title": "\"Invia al tuo amico un messaggio alieno che non può decodificare.\"",
         "description": "Lascia messaggi segreti che solo i detentori della chiave condivisa possono decodificare."
       },
@@ -13392,7 +13392,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Ultimo aggiornamento: 31.05.2026",
       "googlePlay": "App Google Play",
       "colorTest": "Colore diverso",
-      "alienText": "Testo alieno",
+      "alienText": "Galaxy Code: testo alieno",
       "ufoApp": "Simulatore segnale UFO",
       "privacyPolicy": "Informativa sulla privacy",
       "appAds": "app-ads.txt",
@@ -13418,7 +13418,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "id": {
     "seo": {
       "title": "Lab Aplikasi NeoKIM | Aplikasi Mini Android Gratis",
-      "description": "Instal Cari Warna Berbeda, Pembuat Teks Alien, Simulator Sinyal UFO, Tes Kepekaan Warna, Kabur Labirin Gelap, dan pengujian pribadi untuk aplikasi mini Android lainnya.",
+      "description": "Instal Cari Warna Berbeda, Galaxy Code: teks alien, Simulator Sinyal UFO, Color Master: Tes Warna, Kabur Labirin Gelap, dan pengujian pribadi untuk aplikasi mini Android lainnya.",
       "ogTitle": "Lab Aplikasi NeoKIM | Aplikasi Mini Android",
       "ogDescription": "Temukan warna-warna aneh, buat teks rahasia bergaya alien, kirim sinyal UFO yang lucu, keluar dari labirin gelap, dan ikuti tes pribadi untuk bersenang-senang Android dengan cepat."
     },
@@ -13500,7 +13500,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ikon Cari Warna Berbeda"
       },
       "galaxyCode": {
-        "name": "Pembuat Teks Alien",
+        "name": "Galaxy Code: teks alien",
         "category": "Aplikasi pesan rahasia",
         "tagline": "Buat pesan rahasia seperti alien yang memerlukan kunci berbagi untuk memecahkan kodenya.",
         "description": "Buat aturan bahasa galaksi Anda sendiri. Hanya orang yang memiliki kunci berbagi Anda yang dapat membuat ulang aturan yang sama, dan teks asli tidak diunggah ke server.",
@@ -13513,7 +13513,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Buat Pesan Rahasia",
         "detailCta": "Coba Demo Web",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "ikon Pembuat Teks Alien"
+        "iconAlt": "ikon Galaxy Code: teks alien"
       },
       "ufoSignal": {
         "name": "Simulator Sinyal UFO",
@@ -13532,7 +13532,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ikon Simulator Sinyal UFO"
       },
       "colorMasterClassic": {
-        "name": "Tes Kepekaan Warna",
+        "name": "Color Master: Tes Warna",
         "category": "Permainan indera warna klasik",
         "tagline": "Tantangan fokus warna yang asli: ingat warna jawaban dan pilih dari warna yang serupa.",
         "description": "Tes indera warna asli sebelum Cari Warna Berbeda. Coba dulu di web, lalu instal dari Google Play.",
@@ -13545,7 +13545,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instal Tes Indra Warna",
         "detailCta": "Coba Demo Web",
         "statusNote": "Coba dulu di web, lalu instal dari Google Play.",
-        "iconAlt": "ikon Tes Kepekaan Warna"
+        "iconAlt": "ikon Color Master: Tes Warna"
       },
       "koreanRandomDefense": {
         "name": "Pertahanan Acak Korea",
@@ -13615,7 +13615,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Bersaing dengan teman dalam tantangan 10 detik."
       },
       "galaxyCode": {
-        "app": "Pembuat Teks Alien",
+        "app": "Galaxy Code: teks alien",
         "title": "“Kirimkan pesan alien kepada temanmu yang tidak dapat mereka pecahkan kodenya.”",
         "description": "Tinggalkan pesan rahasia yang hanya dapat dipecahkan oleh pemegang kunci bersama."
       },
@@ -13650,7 +13650,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Terakhir diperbarui: 2026.05.31",
       "googlePlay": "Aplikasi Google Play",
       "colorTest": "Cari Warna Berbeda",
-      "alienText": "Pembuat Teks Alien",
+      "alienText": "Galaxy Code: teks alien",
       "ufoApp": "Simulator Sinyal UFO",
       "privacyPolicy": "Kebijakan Privasi",
       "appAds": "app-ads.txt",
@@ -13676,7 +13676,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ja-JP": {
     "seo": {
       "title": "NeoKIMアプリラボ |無料のAndroidミニアプリ",
-      "description": "違う色探し、宇宙語メーカー、UFO信号シミュレーター、色覚テスト、暗闇迷路脱出、およびその他の Android ミニ アプリのプライベート テストをインストールします。",
+      "description": "違う色探し、Galaxy Code: 宇宙文字、UFO信号シミュレーター、Color Master: 色覚テスト、暗闇迷路脱出、およびその他の Android ミニ アプリのプライベート テストをインストールします。",
       "ogTitle": "NeoKIMアプリラボ | Android ミニアプリ",
       "ogDescription": "奇妙な色を見つけたり、エイリアン風の秘密のテキストを作成したり、遊び心のある UFO 信号を送信したり、暗い迷路を脱出したり、Android をすばやく楽しむためのプライベート テストに参加したりできます。"
     },
@@ -13758,7 +13758,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "違う色探し アイコン"
       },
       "galaxyCode": {
-        "name": "宇宙語メーカー",
+        "name": "Galaxy Code: 宇宙文字",
         "category": "秘密のメッセージアプリ",
         "tagline": "デコードするには共有キーが必要なエイリアンのような秘密メッセージを作成します。",
         "description": "独自の銀河言語ルールを作成します。共有キーを持っている人だけが同じルールを再作成でき、元のテキストはサーバーにアップロードされません。",
@@ -13771,7 +13771,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "秘密のメッセージを作成する",
         "detailCta": "ウェブデモを試す",
         "statusNote": "Google Play で入手可能になりました。",
-        "iconAlt": "宇宙語メーカーアイコン"
+        "iconAlt": "Galaxy Code: 宇宙文字アイコン"
       },
       "ufoSignal": {
         "name": "UFO信号シミュレーター",
@@ -13790,7 +13790,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO信号シミュレーター アイコン"
       },
       "colorMasterClassic": {
-        "name": "色覚テスト",
+        "name": "Color Master: 色覚テスト",
         "category": "古典的な色彩感覚ゲーム",
         "tagline": "オリジナルの色に焦点を当てるチャレンジ: 答えの色を覚えて、類似した色からそれを選びます。",
         "description": "違う色探し前のオリジナル色彩感覚テスト。まずはWeb上で試してから、Google Playからインストールしてください。",
@@ -13803,7 +13803,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "色彩感覚テストをインストールする",
         "detailCta": "ウェブデモを試す",
         "statusNote": "まずはWeb上で試してから、Google Playからインストールしてください。",
-        "iconAlt": "色覚テスト アイコン"
+        "iconAlt": "Color Master: 色覚テスト アイコン"
       },
       "koreanRandomDefense": {
         "name": "韓国ランダム防衛",
@@ -13873,7 +13873,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 秒間のチャレンジで友達と競争しましょう。"
       },
       "galaxyCode": {
-        "app": "宇宙語メーカー",
+        "app": "Galaxy Code: 宇宙文字",
         "title": "「友達には解読できないエイリアンのメッセージを送ってください。」",
         "description": "共有キーの所有者だけが解読できる秘密のメッセージを残します。"
       },
@@ -13908,7 +13908,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "最終更新日: 2026.05.31",
       "googlePlay": "Google Play アプリ",
       "colorTest": "違う色探し",
-      "alienText": "宇宙語メーカー",
+      "alienText": "Galaxy Code: 宇宙文字",
       "ufoApp": "UFO信号シミュレーター",
       "privacyPolicy": "プライバシーポリシー",
       "appAds": "app-ads.txt",
@@ -13934,7 +13934,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ka-GE": {
     "seo": {
       "title": "NeoKIM აპლიკაციის ლაბორატორია | უფასო Android მინი აპები",
-      "description": "დააინსტალირეთ იპოვნეთ განსხვავებული ფერი, უცხო ტექსტი, UFO სიგნალის სიმულატორი, ფერის გრძნობის ტესტი, ბნელი ლაბირინთი და პირადი ტესტები მეტი Android მინი აპებისთვის.",
+      "description": "დააინსტალირეთ იპოვნეთ განსხვავებული ფერი, Galaxy Code: უცხო ტექსტი, UFO სიგნალის სიმულატორი, Color Master: ფერის ტესტი, ბნელი ლაბირინთი და პირადი ტესტები მეტი Android მინი აპებისთვის.",
       "ogTitle": "NeoKIM აპლიკაციის ლაბორატორია | Android მინი აპები",
       "ogDescription": "იპოვეთ უცნაური ფერები, შექმენით უცხოპლანეტელების სტილის საიდუმლო ტექსტი, გააგზავნეთ მხიარული უცხოპლანეტელები, გაექცეთ ბნელ ლაბირინთებს და შეუერთდით პირად ტესტებს Android სწრაფი გართობისთვის."
     },
@@ -14016,7 +14016,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "იპოვნეთ განსხვავებული ფერი ხატულა"
       },
       "galaxyCode": {
-        "name": "უცხო ტექსტი",
+        "name": "Galaxy Code: უცხო ტექსტი",
         "category": "საიდუმლო შეტყობინებების აპლიკაცია",
         "tagline": "შექმენით უცხოპლანეტელების მსგავსი საიდუმლო შეტყობინებები, რომელთა გაშიფვრისთვის საჭიროა გაზიარების გასაღები.",
         "description": "შექმენით თქვენი საკუთარი გალაქტიკური ენის წესები. მხოლოდ თქვენი გაზიარების გასაღების მქონე ადამიანებს შეუძლიათ იგივე წესების ხელახლა შექმნა და ორიგინალი ტექსტი არ აიტვირთება სერვერზე.",
@@ -14029,7 +14029,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "შექმენით საიდუმლო შეტყობინებები",
         "detailCta": "სცადეთ ვებ დემო",
         "statusNote": "ახლა ხელმისაწვდომია Google Play-ზე.",
-        "iconAlt": "უცხო ტექსტი ხატულა"
+        "iconAlt": "Galaxy Code: უცხო ტექსტი ხატულა"
       },
       "ufoSignal": {
         "name": "UFO სიგნალის სიმულატორი",
@@ -14048,7 +14048,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO სიგნალის სიმულატორი ხატულა"
       },
       "colorMasterClassic": {
-        "name": "ფერის გრძნობის ტესტი",
+        "name": "Color Master: ფერის ტესტი",
         "category": "კლასიკური ფერის გრძნობის თამაში",
         "tagline": "ორიგინალური ფერის ფოკუსის გამოწვევა: დაიმახსოვრეთ პასუხის ფერი და შეარჩიეთ იგი მსგავსი ფერებიდან.",
         "description": "ორიგინალური ფერის შეგრძნების ტესტი იპოვნეთ განსხვავებული ფერი-მდე. სცადეთ ჯერ ვებში, შემდეგ დააინსტალირეთ Google Play-დან.",
@@ -14058,10 +14058,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "სწრაფი თამაში",
           "დააინსტალირეთ ახლა"
         ],
-        "primaryCta": "დააინსტალირეთ ფერის გრძნობის ტესტი",
+        "primaryCta": "დააინსტალირეთ Color Master: ფერის ტესტი",
         "detailCta": "სცადეთ ვებ დემო",
         "statusNote": "სცადეთ ჯერ ვებში, შემდეგ დააინსტალირეთ Google Play-დან.",
-        "iconAlt": "ფერის გრძნობის ტესტი ხატულა"
+        "iconAlt": "Color Master: ფერის ტესტი ხატულა"
       },
       "koreanRandomDefense": {
         "name": "კორეის შემთხვევითი დაცვა",
@@ -14131,7 +14131,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "შეეჯიბრეთ მეგობრებს 10 წამიან გამოწვევაში."
       },
       "galaxyCode": {
-        "app": "უცხო ტექსტი",
+        "app": "Galaxy Code: უცხო ტექსტი",
         "title": "\"გაუგზავნე მეგობარს უცხოპლანეტელი შეტყობინება, რომლის გაშიფვრა შეუძლებელია.\"",
         "description": "დატოვეთ საიდუმლო შეტყობინებები, რომელთა გაშიფვრა მხოლოდ საზიარო გასაღების მფლობელებს შეუძლიათ."
       },
@@ -14166,7 +14166,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "ბოლო განახლება: 2026.05.31",
       "googlePlay": "Google Play აპები",
       "colorTest": "იპოვნეთ განსხვავებული ფერი",
-      "alienText": "უცხო ტექსტი",
+      "alienText": "Galaxy Code: უცხო ტექსტი",
       "ufoApp": "UFO სიგნალის სიმულატორი",
       "privacyPolicy": "კონფიდენციალურობის პოლიტიკა",
       "appAds": "app-ads.txt",
@@ -14192,7 +14192,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zu": {
     "seo": {
       "title": "NeoKIM App Lab | I-Android Mini Apps yamahhala",
-      "description": "Faka i-Thola Umbala Ohlukile, Umenzi wombhalo we-alien, Isiginali ye-UFO, Ukuhlolwa Kwenzwa Yombala, I-Indida emnyama, nokuhlola okuyimfihlo ukuze uthole ezinye izinhlelo zokusebenza ezincane ze-Android.",
+      "description": "Faka i-Thola Umbala Ohlukile, Galaxy Code: umbhalo alien, Isilingisi sesignali ye-UFO, Color Master: Ukuhlola Umbala, I-Indida emnyama, nokuhlola okuyimfihlo ukuze uthole ezinye izinhlelo zokusebenza ezincane ze-Android.",
       "ogTitle": "NeoKIM App Lab | I-Android Mini Apps",
       "ogDescription": "Thola imibala engavamile, yenza umbhalo oyimfihlo wohlobo oluhlukile, thumela amasiginali e-UFO adlalayo, ubalekele ama-maze amnyama, futhi ujoyine izivivinyo eziyimfihlo ukuze uthole ukuzijabulisa okusheshayo kwe-Android."
     },
@@ -14274,7 +14274,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Isithonjana se-Thola Umbala Ohlukile"
       },
       "galaxyCode": {
-        "name": "Umenzi wombhalo we-alien",
+        "name": "Galaxy Code: umbhalo alien",
         "category": "Uhlelo lokusebenza lomlayezo oyimfihlo",
         "tagline": "Dala imilayezo eyimfihlo efana ne-alien edinga ukhiye wokwabelana ukuze uhlukanise.",
         "description": "Dala imithetho yakho yolimi lwe-galactic. Abantu abanokhiye wakho wokwabelana kuphela abangakwazi ukudala kabusha imithetho efanayo, futhi umbhalo wangempela awulayishwa kuseva.",
@@ -14287,10 +14287,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Dala Imilayezo Eyimfihlo",
         "detailCta": "Zama iDemo Yewebhu",
         "statusNote": "Iyatholakala manje ku-Google Play.",
-        "iconAlt": "Isithonjana se-Umenzi wombhalo we-alien"
+        "iconAlt": "Isithonjana se-Galaxy Code: umbhalo alien"
       },
       "ufoSignal": {
-        "name": "Isiginali ye-UFO",
+        "name": "Isilingisi sesignali ye-UFO",
         "category": "Uhlelo lokusebenza lokuzijabulisa lwesignali eyimfihlakalo",
         "tagline": "Thumela isignali yesikhala esidlalayo futhi ujabulele isimo se-UFO.",
         "description": "Vula uhlelo lokusebenza, cindezela inkinobho yesiginali, futhi ujabulele umsindo nokugqwayiza okwenza isikhathi sizizwe njengesiko elincane le-UFO.",
@@ -14300,13 +14300,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Ukugqwayiza kwemizwa",
           "Akukho ukubhalisa"
         ],
-        "primaryCta": "Faka i-Isiginali ye-UFO",
+        "primaryCta": "Faka i-Isilingisi sesignali ye-UFO",
         "detailCta": "Buka Imininingwane Yohlelo Lokusebenza",
         "statusNote": "Buka imininingwane yohlelo lokusebenza, bese ulufaka ku-Google Play.",
-        "iconAlt": "Isithonjana se-Isiginali ye-UFO"
+        "iconAlt": "Isithonjana se-Isilingisi sesignali ye-UFO"
       },
       "colorMasterClassic": {
-        "name": "Ukuhlolwa Kwenzwa Yombala",
+        "name": "Color Master: Ukuhlola Umbala",
         "category": "Umdlalo we-Classic color sense",
         "tagline": "Inselele yoqobo yokugxila kumbala: khumbula umbala wempendulo bese uwukhetha emibaleni efanayo.",
         "description": "Ukuhlolwa komqondo wombala kwasekuqaleni ngaphambi kwe-Thola Umbala Ohlukile. Yizame kuwebhu kuqala, bese uyayifaka isuka ku-Google Play.",
@@ -14316,10 +14316,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Ukudlala okusheshayo",
           "Faka manje"
         ],
-        "primaryCta": "Faka Ukuhlolwa Kwenzwa Yombala",
+        "primaryCta": "Faka Color Master: Ukuhlola Umbala",
         "detailCta": "Zama iDemo Yewebhu",
         "statusNote": "Yizame kuwebhu kuqala, bese uyayifaka isuka ku-Google Play.",
-        "iconAlt": "Isithonjana se-Ukuhlolwa Kwenzwa Yombala"
+        "iconAlt": "Isithonjana se-Color Master: Ukuhlola Umbala"
       },
       "koreanRandomDefense": {
         "name": "Ukuvikela kwaseKorea",
@@ -14389,12 +14389,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Qhudelana nabangani kwinselelo yamasekhondi ayi-10."
       },
       "galaxyCode": {
-        "app": "Umenzi wombhalo we-alien",
+        "app": "Galaxy Code: umbhalo alien",
         "title": "\"Thumela umngane wakho umlayezo ongaziwa abangakwazi ukuwuchaza.\"",
         "description": "Shiya imilayezo eyimfihlo abangabanikazi bokhiye wokwabelana kuphela abangayinquma."
       },
       "ufoSignal": {
-        "app": "Isiginali ye-UFO",
+        "app": "Isilingisi sesignali ye-UFO",
         "title": "\"Kwenzekani uma uthumela isignali ye-UFO ekuseni?\"",
         "description": "Jabulela imisindo nokugqwayiza egumbini elimnyama."
       }
@@ -14424,8 +14424,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Kugcine ukubuyekezwa: 2026.05.31",
       "googlePlay": "Google Play Izinhlelo zokusebenza",
       "colorTest": "Thola Umbala Ohlukile",
-      "alienText": "Umenzi wombhalo we-alien",
-      "ufoApp": "Isiginali ye-UFO",
+      "alienText": "Galaxy Code: umbhalo alien",
+      "ufoApp": "Isilingisi sesignali ye-UFO",
       "privacyPolicy": "Inqubomgomo Yobumfihlo",
       "appAds": "I-app-ads.txt",
       "contact": "Oxhumana naye",
@@ -14450,7 +14450,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-CN": {
     "seo": {
       "title": "NeoKIM应用实验室|免费 Android 迷你应用程序",
-      "description": "安装 找不同颜色、外星文字生成器、UFO信号模拟器、色彩感知测试、黑暗迷宫逃脱 以及更多 Android 迷你应用程序的私人测试。",
+      "description": "安装 找不同颜色、Galaxy Code：外星文字、UFO信号模拟器、Color Master：色彩测试、黑暗迷宫逃脱 以及更多 Android 迷你应用程序的私人测试。",
       "ogTitle": "NeoKIM应用实验室| Android 迷你应用程序",
       "ogDescription": "寻找奇怪的颜色，制作外星人风格的秘密文本，发送有趣的 UFO 信号，逃离黑暗迷宫，并参加私人测试，享受快速 Android 的乐趣。"
     },
@@ -14532,7 +14532,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "找不同颜色 图标"
       },
       "galaxyCode": {
-        "name": "外星文字生成器",
+        "name": "Galaxy Code：外星文字",
         "category": "秘密消息应用程序",
         "tagline": "创建类似外星人的秘密消息，需要共享密钥才能解码。",
         "description": "创建你自己的银河语言规则。只有拥有您的共享密钥的人才能重新创建相同的规则，并且原始文本不会上传到服务器。",
@@ -14545,7 +14545,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "创建秘密消息",
         "detailCta": "尝试网络演示",
         "statusNote": "现已在 Google Play 上提供。",
-        "iconAlt": "外星文字生成器 图标"
+        "iconAlt": "Galaxy Code：外星文字 图标"
       },
       "ufoSignal": {
         "name": "UFO信号模拟器",
@@ -14564,7 +14564,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO信号模拟器 图标"
       },
       "colorMasterClassic": {
-        "name": "色彩感知测试",
+        "name": "Color Master：色彩测试",
         "category": "经典色感游戏",
         "tagline": "最初的颜色聚焦挑战：记住答案颜色并从相似的颜色中挑选它。",
         "description": "找不同颜色之前的原版色感测试。首先在网络上尝试，然后从 Google Play 安装。",
@@ -14577,7 +14577,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "安装色感测试",
         "detailCta": "尝试网络演示",
         "statusNote": "首先在网络上尝试，然后从 Google Play 安装。",
-        "iconAlt": "色彩感知测试 图标"
+        "iconAlt": "Color Master：色彩测试 图标"
       },
       "koreanRandomDefense": {
         "name": "韩国随机防御",
@@ -14647,7 +14647,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "与朋友一起参加 10 秒挑战。"
       },
       "galaxyCode": {
-        "app": "外星文字生成器",
+        "app": "Galaxy Code：外星文字",
         "title": "“向你的朋友发送一条他们无法解码的外星人信息。”",
         "description": "留下只有共享密钥持有者才能解码的秘密消息。"
       },
@@ -14682,7 +14682,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "最后更新：2026.05.31",
       "googlePlay": "Google Play 应用程序",
       "colorTest": "找不同颜色",
-      "alienText": "外星文字生成器",
+      "alienText": "Galaxy Code：外星文字",
       "ufoApp": "UFO信号模拟器",
       "privacyPolicy": "隐私政策",
       "appAds": "app-ads.txt",
@@ -14708,7 +14708,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-TW": {
     "seo": {
       "title": "NeoKIM應用實驗室|免費 Android 迷你應用程式",
-      "description": "安裝 找不同顏色、外星文字產生器、UFO訊號模擬器、色彩感知測試、黑暗迷宮逃脫 以及更多 Android 迷你應用程式的私人測試。",
+      "description": "安裝 找不同顏色、Galaxy Code：外星文字、UFO訊號模擬器、Color Master：色彩測驗、黑暗迷宮逃脫 以及更多 Android 迷你應用程式的私人測試。",
       "ogTitle": "NeoKIM應用實驗室| Android 迷你應用程式",
       "ogDescription": "尋找奇怪的顏色，製作外星人風格的秘密文本，發送有趣的 UFO 信號，逃離黑暗迷宮，並參加私人測試，享受快速 Android 的樂趣。"
     },
@@ -14790,7 +14790,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "找不同顏色 圖標"
       },
       "galaxyCode": {
-        "name": "外星文字產生器",
+        "name": "Galaxy Code：外星文字",
         "category": "秘密訊息應用程式",
         "tagline": "創建類似外星人的秘密訊息，需要共享密鑰才能解碼。",
         "description": "創建你自己的銀河語言規則。只有擁有您的共用金鑰的人才能重新建立相同的規則，並且原始文字不會上傳到伺服器。",
@@ -14803,7 +14803,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "創建秘密訊息",
         "detailCta": "嘗試網路演示",
         "statusNote": "現已在 Google Play 上提供。",
-        "iconAlt": "外星文字產生器 圖標"
+        "iconAlt": "Galaxy Code：外星文字 圖標"
       },
       "ufoSignal": {
         "name": "UFO訊號模擬器",
@@ -14822,7 +14822,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO訊號模擬器 圖標"
       },
       "colorMasterClassic": {
-        "name": "色彩感知測試",
+        "name": "Color Master：色彩測驗",
         "category": "經典色感遊戲",
         "tagline": "最初的顏色聚焦挑戰：記住答案顏色並從相似的顏色中挑選它。",
         "description": "找不同顏色之前的原版色感測試。首先在網路上嘗試，然後從 Google Play 安裝。",
@@ -14835,7 +14835,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "安裝色感測試",
         "detailCta": "嘗試網路演示",
         "statusNote": "首先在網路上嘗試，然後從 Google Play 安裝。",
-        "iconAlt": "色彩感知測試 圖標"
+        "iconAlt": "Color Master：色彩測驗 圖標"
       },
       "koreanRandomDefense": {
         "name": "韓國隨機防禦",
@@ -14905,7 +14905,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "與朋友一起參加 10 秒挑戰。"
       },
       "galaxyCode": {
-        "app": "外星文字產生器",
+        "app": "Galaxy Code：外星文字",
         "title": "“向你的朋友發送一條他們無法解碼的外星人信息。”",
         "description": "留下只有共享密鑰持有者才能解碼的秘密訊息。"
       },
@@ -14940,7 +14940,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "最後更新：2026.05.31",
       "googlePlay": "Google Play 應用程式",
       "colorTest": "找不同顏色",
-      "alienText": "外星文字產生器",
+      "alienText": "Galaxy Code：外星文字",
       "ufoApp": "UFO訊號模擬器",
       "privacyPolicy": "隱私權政策",
       "appAds": "app-ads.txt",
@@ -14966,7 +14966,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-HK": {
     "seo": {
       "title": "NeoKIM應用實驗室|免費 Android 迷你應用程式",
-      "description": "安裝 找不同顏色、外星文字產生器、UFO訊號模擬器、色彩感知測試、黑暗迷宮逃脫 以及更多 Android 迷你應用程式的私人測試。",
+      "description": "安裝 找不同顏色、Galaxy Code：外星文字、UFO訊號模擬器、Color Master：色彩測驗、黑暗迷宮逃脫 以及更多 Android 迷你應用程式的私人測試。",
       "ogTitle": "NeoKIM應用實驗室| Android 迷你應用程式",
       "ogDescription": "尋找奇怪的顏色，製作外星人風格的秘密文本，發送有趣的 UFO 信號，逃離黑暗迷宮，並參加私人測試，享受快速 Android 的樂趣。"
     },
@@ -15048,7 +15048,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "找不同顏色 圖標"
       },
       "galaxyCode": {
-        "name": "外星文字產生器",
+        "name": "Galaxy Code：外星文字",
         "category": "秘密訊息應用程式",
         "tagline": "創建類似外星人的秘密訊息，需要共享密鑰才能解碼。",
         "description": "創建你自己的銀河語言規則。只有擁有您的共用金鑰的人才能重新建立相同的規則，並且原始文字不會上傳到伺服器。",
@@ -15061,7 +15061,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "創建秘密訊息",
         "detailCta": "嘗試網路演示",
         "statusNote": "現已在 Google Play 上提供。",
-        "iconAlt": "外星文字產生器 圖標"
+        "iconAlt": "Galaxy Code：外星文字 圖標"
       },
       "ufoSignal": {
         "name": "UFO訊號模擬器",
@@ -15080,7 +15080,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO訊號模擬器 圖標"
       },
       "colorMasterClassic": {
-        "name": "色彩感知測試",
+        "name": "Color Master：色彩測驗",
         "category": "經典色感遊戲",
         "tagline": "最初的顏色聚焦挑戰：記住答案顏色並從相似的顏色中挑選它。",
         "description": "找不同顏色之前的原版色感測試。首先在網路上嘗試，然後從 Google Play 安裝。",
@@ -15093,7 +15093,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "安裝色感測試",
         "detailCta": "嘗試網路演示",
         "statusNote": "首先在網路上嘗試，然後從 Google Play 安裝。",
-        "iconAlt": "色彩感知測試 圖標"
+        "iconAlt": "Color Master：色彩測驗 圖標"
       },
       "koreanRandomDefense": {
         "name": "韓國隨機防禦",
@@ -15163,7 +15163,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "與朋友一起參加 10 秒挑戰。"
       },
       "galaxyCode": {
-        "app": "外星文字產生器",
+        "app": "Galaxy Code：外星文字",
         "title": "“向你的朋友發送一條他們無法解碼的外星人信息。”",
         "description": "留下只有共享密鑰持有者才能解碼的秘密訊息。"
       },
@@ -15198,7 +15198,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "最後更新：2026.05.31",
       "googlePlay": "Google Play 應用程式",
       "colorTest": "找不同顏色",
-      "alienText": "外星文字產生器",
+      "alienText": "Galaxy Code：外星文字",
       "ufoApp": "UFO訊號模擬器",
       "privacyPolicy": "隱私權政策",
       "appAds": "app-ads.txt",
@@ -15224,7 +15224,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "cs-CZ": {
     "seo": {
       "title": "NeoKIM App Lab | Zdarma Android Mini Apps",
-      "description": "Nainstalujte si Najít jinou barvu, Mimozemský textař, Simulátor signálu UFO, Test citlivosti barev, Útěk z temného bludiště a soukromé testy pro další mini aplikace Android.",
+      "description": "Nainstalujte si Najít jinou barvu, Galaxy Code: mimozemský text, Simulátor signálu UFO, Color Master: Test barev, Útěk z temného bludiště a soukromé testy pro další mini aplikace Android.",
       "ogTitle": "NeoKIM App Lab | Mini aplikace Android",
       "ogDescription": "Najděte zvláštní barvy, vytvořte tajný text ve stylu mimozemšťanů, posílejte hravé signály UFO, unikněte temným bludištím a připojte se k soukromým testům pro rychlou zábavu Android."
     },
@@ -15306,7 +15306,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Najít jinou barvu"
       },
       "galaxyCode": {
-        "name": "Mimozemský textař",
+        "name": "Galaxy Code: mimozemský text",
         "category": "Aplikace tajných zpráv",
         "tagline": "Vytvářejte tajné zprávy podobné mimozemšťanům, které k dekódování potřebují sdílený klíč.",
         "description": "Vytvořte si vlastní galaktická jazyková pravidla. Stejná pravidla mohou znovu vytvořit pouze lidé s vaším sdíleným klíčem a původní text se nenahraje na server.",
@@ -15319,7 +15319,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Vytvářejte tajné zprávy",
         "detailCta": "Vyzkoušejte Web Demo",
         "statusNote": "Nyní k dispozici na Google Play.",
-        "iconAlt": "Ikona Mimozemský textař"
+        "iconAlt": "Ikona Galaxy Code: mimozemský text"
       },
       "ufoSignal": {
         "name": "Simulátor signálu UFO",
@@ -15338,7 +15338,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Simulátor signálu UFO"
       },
       "colorMasterClassic": {
-        "name": "Test citlivosti barev",
+        "name": "Color Master: Test barev",
         "category": "Klasická hra se smyslem pro barvy",
         "tagline": "Originální výzva k zaměření barev: zapamatujte si barvu odpovědi a vyberte ji z podobných barev.",
         "description": "Původní test citlivosti barev před Najít jinou barvu. Nejprve to vyzkoušejte na webu a poté si jej nainstalujte z Google Play.",
@@ -15348,10 +15348,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Rychlá hra",
           "Nainstalujte nyní"
         ],
-        "primaryCta": "Nainstalujte Test citlivosti barev",
+        "primaryCta": "Nainstalujte Color Master: Test barev",
         "detailCta": "Vyzkoušejte Web Demo",
         "statusNote": "Nejprve to vyzkoušejte na webu a poté si jej nainstalujte z Google Play.",
-        "iconAlt": "Ikona Test citlivosti barev"
+        "iconAlt": "Ikona Color Master: Test barev"
       },
       "koreanRandomDefense": {
         "name": "Korejská náhodná obrana",
@@ -15421,7 +15421,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Soutěžte s přáteli v 10sekundové výzvě."
       },
       "galaxyCode": {
-        "app": "Mimozemský textař",
+        "app": "Galaxy Code: mimozemský text",
         "title": "\"Pošlete svému příteli mimozemskou zprávu, kterou nemohou dekódovat.\"",
         "description": "Nechte tajné zprávy, které mohou dekódovat pouze držitelé sdílených klíčů."
       },
@@ -15456,7 +15456,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Poslední aktualizace: 31.05.2026",
       "googlePlay": "Aplikace Google Play",
       "colorTest": "Najít jinou barvu",
-      "alienText": "Mimozemský textař",
+      "alienText": "Galaxy Code: mimozemský text",
       "ufoApp": "Simulátor signálu UFO",
       "privacyPolicy": "Zásady ochrany osobních údajů",
       "appAds": "app-ads.txt",
@@ -15482,7 +15482,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "kk": {
     "seo": {
       "title": "NeoKIM қолданбалы зертханасы | Тегін Android шағын қолданбалары",
-      "description": "Түрлі түсті табыңыз, Бөтен мәтін, UFO сигналының симуляторы, Түс сезіну сынағы, Қараңғы лабиринттен қашу және қосымша Android шағын қолданбалары үшін жеке сынақтарды орнатыңыз.",
+      "description": "Түрлі түсті табыңыз, Galaxy Code: бөгде мәтін, UFO сигнал симуляторы, Color Master: Түс тесті, Қараңғы лабиринттен қашу және қосымша Android шағын қолданбалары үшін жеке сынақтарды орнатыңыз.",
       "ogTitle": "NeoKIM қолданбалы зертханасы | Android шағын қолданбалары",
       "ogDescription": "Біртүрлі түстерді табыңыз, бөтен стильдегі құпия мәтін жасаңыз, ойнақы НЛО сигналдарын жіберіңіз, қараңғы лабиринттерден құтылыңыз және Android жылдам көңіл көтеру үшін жеке сынақтарға қосылыңыз."
     },
@@ -15564,7 +15564,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Түрлі түсті табыңыз белгішесі"
       },
       "galaxyCode": {
-        "name": "Бөтен мәтін",
+        "name": "Galaxy Code: бөгде мәтін",
         "category": "Құпия хабарлама қолданбасы",
         "tagline": "Дешифрлеу үшін ортақ кілтті қажет ететін шетелдіктерге ұқсас құпия хабарларды жасаңыз.",
         "description": "Өзіңіздің галактикалық тіл ережелеріңізді жасаңыз. Ортақ кілті бар адамдар ғана бірдей ережелерді қайта жасай алады және түпнұсқа мәтін серверге жүктеп салынбайды.",
@@ -15577,10 +15577,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Құпия хабарларды жасаңыз",
         "detailCta": "Веб-демо нұсқасын қолданып көріңіз",
         "statusNote": "Қазір Google Play жүйесінде қол жетімді.",
-        "iconAlt": "Бөтен мәтін белгішесі"
+        "iconAlt": "Galaxy Code: бөгде мәтін белгішесі"
       },
       "ufoSignal": {
-        "name": "UFO сигналының симуляторы",
+        "name": "UFO сигнал симуляторы",
         "category": "Жұмбақ сигнал ойын-сауық қолданбасы",
         "tagline": "Ойын ғарыштық сигнал жіберіп, UFO көңіл-күйінен ләззат алыңыз.",
         "description": "Қолданбаны ашыңыз, сигнал түймешігін басыңыз және сәтті дыбыс пен анимациядан ләззат алыңыз, бұл сәтті кішкентай НЛО рәсімі сияқты сезінеді.",
@@ -15590,13 +15590,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Көңіл-күй анимациясы",
           "Тіркелу жоқ"
         ],
-        "primaryCta": "UFO сигналының симуляторы орнатыңыз",
+        "primaryCta": "UFO сигнал симуляторы орнатыңыз",
         "detailCta": "Қолданба мәліметтерін көру",
         "statusNote": "Қолданба мәліметтерін қараңыз, содан кейін оны Google Play ішінен орнатыңыз.",
-        "iconAlt": "UFO сигналының симуляторы белгішесі"
+        "iconAlt": "UFO сигнал симуляторы белгішесі"
       },
       "colorMasterClassic": {
-        "name": "Түс сезіну сынағы",
+        "name": "Color Master: Түс тесті",
         "category": "Классикалық түсті сезіну ойыны",
         "tagline": "Түпнұсқа түс фокусы мәселесі: жауап түсін есте сақтаңыз және оны ұқсас түстерден таңдаңыз.",
         "description": "Түрлі түсті табыңыз алдында түпнұсқа түс сезіну сынағы. Алдымен оны интернетте қолданып көріңіз, содан кейін Google Play ішінен орнатыңыз.",
@@ -15609,7 +15609,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Түсті сезу сынағын орнатыңыз",
         "detailCta": "Веб-демо нұсқасын қолданып көріңіз",
         "statusNote": "Алдымен оны интернетте қолданып көріңіз, содан кейін Google Play ішінен орнатыңыз.",
-        "iconAlt": "Түс сезіну сынағы белгішесі"
+        "iconAlt": "Color Master: Түс тесті белгішесі"
       },
       "koreanRandomDefense": {
         "name": "Кореяның кездейсоқ қорғанысы",
@@ -15679,12 +15679,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 секундтық сынақта достарыңызбен жарысыңыз."
       },
       "galaxyCode": {
-        "app": "Бөтен мәтін",
+        "app": "Galaxy Code: бөгде мәтін",
         "title": "«Досыңызға кодты шеше алмайтын бөтен хабарды жіберіңіз.»",
         "description": "Тек ортақ кілт иелері кодты шеше алатын құпия хабарларды қалдырыңыз."
       },
       "ufoSignal": {
-        "app": "UFO сигналының симуляторы",
+        "app": "UFO сигнал симуляторы",
         "title": "«Егер сіз таң ата НЛО сигналын жіберсеңіз не болады?»",
         "description": "Қараңғы бөлмеде дыбыстар мен анимациядан ләззат алыңыз."
       }
@@ -15714,8 +15714,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Соңғы жаңартылған күні: 31.05.2026",
       "googlePlay": "Google Play қолданбалары",
       "colorTest": "Түрлі түсті табыңыз",
-      "alienText": "Бөтен мәтін",
-      "ufoApp": "UFO сигналының симуляторы",
+      "alienText": "Galaxy Code: бөгде мәтін",
+      "ufoApp": "UFO сигнал симуляторы",
       "privacyPolicy": "Құпиялық саясаты",
       "appAds": "app-ads.txt",
       "contact": "Байланыс",
@@ -15740,7 +15740,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ca": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicacions Android gratuïtes",
-      "description": "Instal·leu Troba un color diferent, Creador de textos alienígenes, Simulador de senyals OVNI, Test de sentit del color, Fuga del laberint fosc i proves privades per a més miniaplicacions de Android.",
+      "description": "Instal·leu Troba un color diferent, Galaxy Code: text alien, Simulador de senyal UFO, Color Master: Prova de color, Fuga del laberint fosc i proves privades per a més miniaplicacions de Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplicacions",
       "ogDescription": "Troba colors estranys, fes text secret d'estil alienígena, envia senyals d'OVNI divertits, escapa dels laberints foscos i uneix-te a proves privades per divertir-te ràpidament amb Android."
     },
@@ -15822,7 +15822,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona Troba un color diferent"
       },
       "galaxyCode": {
-        "name": "Creador de textos alienígenes",
+        "name": "Galaxy Code: text alien",
         "category": "Aplicació de missatges secrets",
         "tagline": "Creeu missatges secrets semblants a alienígenes que necessiten una clau compartida per descodificar.",
         "description": "Crea les teves pròpies regles de llenguatge galàctic. Només les persones amb la vostra clau compartida poden recrear les mateixes regles i el text original no es penja a un servidor.",
@@ -15835,10 +15835,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crea missatges secrets",
         "detailCta": "Proveu la demostració web",
         "statusNote": "Disponible ara a Google Play.",
-        "iconAlt": "Icona de Creador de textos alienígenes"
+        "iconAlt": "Icona de Galaxy Code: text alien"
       },
       "ufoSignal": {
-        "name": "Simulador de senyals OVNI",
+        "name": "Simulador de senyal UFO",
         "category": "Aplicació d'entreteniment de senyal misteriós",
         "tagline": "Envia un senyal d'espai lúdic i gaudeix de l'estat d'ànim OVNI.",
         "description": "Obriu l'aplicació, premeu el botó de senyal i gaudiu del so i l'animació que fan que el moment se senti com un petit ritual OVNI.",
@@ -15848,13 +15848,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animació d'estat d'ànim",
           "Sense inscripció"
         ],
-        "primaryCta": "Instal·leu Simulador de senyals OVNI",
+        "primaryCta": "Instal·leu Simulador de senyal UFO",
         "detailCta": "Mostra els detalls de l'aplicació",
         "statusNote": "Consulteu els detalls de l'aplicació i, a continuació, instal·leu-la des de Google Play.",
-        "iconAlt": "Icona Simulador de senyals OVNI"
+        "iconAlt": "Icona Simulador de senyal UFO"
       },
       "colorMasterClassic": {
-        "name": "Test de sentit del color",
+        "name": "Color Master: Prova de color",
         "category": "Joc clàssic del sentit del color",
         "tagline": "El repte original de l'enfocament del color: recordeu el color de la resposta i trieu-lo entre colors similars.",
         "description": "La prova original del sentit del color abans de Troba un color diferent. Proveu-ho primer al web i després instal·leu-lo des de Google Play.",
@@ -15867,7 +15867,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instal·leu la prova de sentit del color",
         "detailCta": "Proveu la demostració web",
         "statusNote": "Proveu-ho primer al web i després instal·leu-lo des de Google Play.",
-        "iconAlt": "Icona Test de sentit del color"
+        "iconAlt": "Icona Color Master: Prova de color"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatòria coreana",
@@ -15937,12 +15937,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Competiu amb els amics en un repte de 10 segons."
       },
       "galaxyCode": {
-        "app": "Creador de textos alienígenes",
+        "app": "Galaxy Code: text alien",
         "title": "\"Envia al teu amic un missatge alienígena que no poden descodificar\".",
         "description": "Deixa missatges secrets que només els titulars de claus compartides poden descodificar."
       },
       "ufoSignal": {
-        "app": "Simulador de senyals OVNI",
+        "app": "Simulador de senyal UFO",
         "title": "\"Què passa si envieu un senyal d'OVNI a l'alba?\"",
         "description": "Gaudeix dels sons i l'animació en una habitació fosca."
       }
@@ -15972,8 +15972,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última actualització: 31/05/2026",
       "googlePlay": "Aplicacions Google Play",
       "colorTest": "Troba un color diferent",
-      "alienText": "Creador de textos alienígenes",
-      "ufoApp": "Simulador de senyals OVNI",
+      "alienText": "Galaxy Code: text alien",
+      "ufoApp": "Simulador de senyal UFO",
       "privacyPolicy": "Política de privadesa",
       "appAds": "app-ads.txt",
       "contact": "Contacte",
@@ -15998,7 +15998,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "kn-IN": {
     "seo": {
       "title": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್ | ಉಚಿತ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "description": "ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ, ಏಲಿಯನ್ ಟೆಕ್ಸ್ಟ್ ಮೇಕರ್, UFO ಸಿಗ್ನಲ್ ಸಿಮ್ಯುಲೇಟರ್, ಕಲರ್ ಸೆನ್ಸ್ ಟೆಸ್ಟ್, ಡಾರ್ಕ್ ಮೇಜ್ ಎಸ್ಕೇಪ್, ಮತ್ತು ಹೆಚ್ಚಿನ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳನ್ನು ಸ್ಥಾಪಿಸಿ.",
+      "description": "ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ, Galaxy Code: ಏಲಿಯನ್ ಪಠ್ಯ, UFO ಸಿಗ್ನಲ್ ಸಿಮ್ಯುಲೇಟರ್, Color Master: ಬಣ್ಣ ಪರೀಕ್ಷೆ, ಡಾರ್ಕ್ ಮೇಜ್ ಎಸ್ಕೇಪ್, ಮತ್ತು ಹೆಚ್ಚಿನ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳನ್ನು ಸ್ಥಾಪಿಸಿ.",
       "ogTitle": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್ | Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
       "ogDescription": "ಬೆಸ ಬಣ್ಣಗಳನ್ನು ಹುಡುಕಿ, ಅನ್ಯಲೋಕದ ಶೈಲಿಯ ರಹಸ್ಯ ಪಠ್ಯವನ್ನು ರಚಿಸಿ, ತಮಾಷೆಯ UFO ಸಂಕೇತಗಳನ್ನು ಕಳುಹಿಸಿ, ಡಾರ್ಕ್ ಜಟಿಲಗಳಿಂದ ತಪ್ಪಿಸಿಕೊಳ್ಳಿ ಮತ್ತು ತ್ವರಿತ Android ವಿನೋದಕ್ಕಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳಿಗೆ ಸೇರಿಕೊಳ್ಳಿ."
     },
@@ -16080,7 +16080,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ ಐಕಾನ್"
       },
       "galaxyCode": {
-        "name": "ಏಲಿಯನ್ ಟೆಕ್ಸ್ಟ್ ಮೇಕರ್",
+        "name": "Galaxy Code: ಏಲಿಯನ್ ಪಠ್ಯ",
         "category": "ರಹಸ್ಯ ಸಂದೇಶ ಅಪ್ಲಿಕೇಶನ್",
         "tagline": "ಡಿಕೋಡ್ ಮಾಡಲು ಹಂಚಿಕೆ ಕೀ ಅಗತ್ಯವಿರುವ ಅನ್ಯಲೋಕದಂತಹ ರಹಸ್ಯ ಸಂದೇಶಗಳನ್ನು ರಚಿಸಿ.",
         "description": "ನಿಮ್ಮ ಸ್ವಂತ ಗ್ಯಾಲಕ್ಸಿಯ ಭಾಷಾ ನಿಯಮಗಳನ್ನು ರಚಿಸಿ. ನಿಮ್ಮ ಹಂಚಿಕೆ ಕೀ ಹೊಂದಿರುವ ಜನರು ಮಾತ್ರ ಅದೇ ನಿಯಮಗಳನ್ನು ಮರುಸೃಷ್ಟಿಸಬಹುದು ಮತ್ತು ಮೂಲ ಪಠ್ಯವನ್ನು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ.",
@@ -16093,7 +16093,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ರಹಸ್ಯ ಸಂದೇಶಗಳನ್ನು ರಚಿಸಿ",
         "detailCta": "ವೆಬ್ ಡೆಮೊ ಪ್ರಯತ್ನಿಸಿ",
         "statusNote": "Google Play ನಲ್ಲಿ ಈಗ ಲಭ್ಯವಿದೆ.",
-        "iconAlt": "ಏಲಿಯನ್ ಟೆಕ್ಸ್ಟ್ ಮೇಕರ್ ಐಕಾನ್"
+        "iconAlt": "Galaxy Code: ಏಲಿಯನ್ ಪಠ್ಯ ಐಕಾನ್"
       },
       "ufoSignal": {
         "name": "UFO ಸಿಗ್ನಲ್ ಸಿಮ್ಯುಲೇಟರ್",
@@ -16112,7 +16112,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO ಸಿಗ್ನಲ್ ಸಿಮ್ಯುಲೇಟರ್ ಐಕಾನ್"
       },
       "colorMasterClassic": {
-        "name": "ಕಲರ್ ಸೆನ್ಸ್ ಟೆಸ್ಟ್",
+        "name": "Color Master: ಬಣ್ಣ ಪರೀಕ್ಷೆ",
         "category": "ಕ್ಲಾಸಿಕ್ ಕಲರ್ ಸೆನ್ಸ್ ಆಟ",
         "tagline": "ಮೂಲ ಬಣ್ಣ-ಕೇಂದ್ರಿತ ಸವಾಲು: ಉತ್ತರದ ಬಣ್ಣವನ್ನು ನೆನಪಿಡಿ ಮತ್ತು ಒಂದೇ ರೀತಿಯ ಬಣ್ಣಗಳಿಂದ ಅದನ್ನು ಆರಿಸಿ.",
         "description": "ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ ಮೊದಲು ಮೂಲ ಬಣ್ಣದ ಅರ್ಥ ಪರೀಕ್ಷೆ. ಇದನ್ನು ಮೊದಲು ವೆಬ್‌ನಲ್ಲಿ ಪ್ರಯತ್ನಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ.",
@@ -16122,10 +16122,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ತ್ವರಿತ ಆಟ",
           "ಈಗ ಸ್ಥಾಪಿಸಿ"
         ],
-        "primaryCta": "ಕಲರ್ ಸೆನ್ಸ್ ಟೆಸ್ಟ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
+        "primaryCta": "Color Master: ಬಣ್ಣ ಪರೀಕ್ಷೆ ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
         "detailCta": "ವೆಬ್ ಡೆಮೊ ಪ್ರಯತ್ನಿಸಿ",
         "statusNote": "ಇದನ್ನು ಮೊದಲು ವೆಬ್‌ನಲ್ಲಿ ಪ್ರಯತ್ನಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ.",
-        "iconAlt": "ಕಲರ್ ಸೆನ್ಸ್ ಟೆಸ್ಟ್ ಐಕಾನ್"
+        "iconAlt": "Color Master: ಬಣ್ಣ ಪರೀಕ್ಷೆ ಐಕಾನ್"
       },
       "koreanRandomDefense": {
         "name": "ಕೊರಿಯನ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್",
@@ -16195,7 +16195,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 ಸೆಕೆಂಡುಗಳ ಸವಾಲಿನಲ್ಲಿ ಸ್ನೇಹಿತರೊಂದಿಗೆ ಸ್ಪರ್ಧಿಸಿ."
       },
       "galaxyCode": {
-        "app": "ಏಲಿಯನ್ ಟೆಕ್ಸ್ಟ್ ಮೇಕರ್",
+        "app": "Galaxy Code: ಏಲಿಯನ್ ಪಠ್ಯ",
         "title": "\"ನಿಮ್ಮ ಸ್ನೇಹಿತರಿಗೆ ಅನ್ಯಲೋಕದ ಸಂದೇಶವನ್ನು ಕಳುಹಿಸಿ ಅವರು ಡಿಕೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.\"",
         "description": "ಷೇರು-ಕೀ ಹೊಂದಿರುವವರು ಮಾತ್ರ ಡಿಕೋಡ್ ಮಾಡಬಹುದಾದ ರಹಸ್ಯ ಸಂದೇಶಗಳನ್ನು ಬಿಡಿ."
       },
@@ -16230,7 +16230,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ: 2026.05.31",
       "googlePlay": "Google Play ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
       "colorTest": "ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ",
-      "alienText": "ಏಲಿಯನ್ ಟೆಕ್ಸ್ಟ್ ಮೇಕರ್",
+      "alienText": "Galaxy Code: ಏಲಿಯನ್ ಪಠ್ಯ",
       "ufoApp": "UFO ಸಿಗ್ನಲ್ ಸಿಮ್ಯುಲೇಟರ್",
       "privacyPolicy": "ಗೌಪ್ಯತೆ ನೀತಿ",
       "appAds": "app-ads.txt",
@@ -16256,7 +16256,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hr": {
     "seo": {
       "title": "NeoKIM App Lab | Besplatne mini aplikacije Android",
-      "description": "Instalirajte Pronađite drugu boju, Vanzemaljski tekst, Simulator NLO signala, Test osjeta boja, Bijeg iz tamnog labirinta i privatne testove za više Android mini aplikacija.",
+      "description": "Instalirajte Pronađite drugu boju, Galaxy Code: alien tekst, Simulator UFO signala, Color Master: Test boja, Bijeg iz tamnog labirinta i privatne testove za više Android mini aplikacija.",
       "ogTitle": "NeoKIM App Lab | Mini aplikacije Android",
       "ogDescription": "Pronađite neobične boje, napravite tajni tekst u vanzemaljskom stilu, pošaljite razigrane NLO signale, pobjegnite iz mračnih labirinata i pridružite se privatnim testovima za brzu Android zabavu."
     },
@@ -16338,7 +16338,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Pronađite drugu boju"
       },
       "galaxyCode": {
-        "name": "Vanzemaljski tekst",
+        "name": "Galaxy Code: alien tekst",
         "category": "Aplikacija za tajne poruke",
         "tagline": "Stvorite tajne poruke poput vanzemaljaca kojima je za dekodiranje potreban ključ za dijeljenje.",
         "description": "Stvorite vlastita pravila galaktičkog jezika. Samo osobe s vašim ključem dijeljenja mogu ponovno stvoriti ista pravila, a izvorni tekst se ne učitava na poslužitelj.",
@@ -16351,10 +16351,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Stvorite tajne poruke",
         "detailCta": "Isprobajte web demo",
         "statusNote": "Sada dostupno na Google Play.",
-        "iconAlt": "Vanzemaljski tekst ikona"
+        "iconAlt": "Galaxy Code: alien tekst ikona"
       },
       "ufoSignal": {
-        "name": "Simulator NLO signala",
+        "name": "Simulator UFO signala",
         "category": "Aplikacija za zabavu Mystery Signal",
         "tagline": "Pošaljite razigrani svemirski signal i uživajte u NLO raspoloženju.",
         "description": "Otvorite aplikaciju, pritisnite tipku signala i uživajte u zvuku i animaciji koji čine trenutak poput malog NLO rituala.",
@@ -16364,13 +16364,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animacija raspoloženja",
           "Nema prijave"
         ],
-        "primaryCta": "Instalirajte Simulator NLO signala",
+        "primaryCta": "Instalirajte Simulator UFO signala",
         "detailCta": "Pogledajte pojedinosti aplikacije",
         "statusNote": "Pogledajte pojedinosti o aplikaciji, a zatim je instalirajte s Google Play.",
-        "iconAlt": "Ikona Simulator NLO signala"
+        "iconAlt": "Ikona Simulator UFO signala"
       },
       "colorMasterClassic": {
-        "name": "Test osjeta boja",
+        "name": "Color Master: Test boja",
         "category": "Klasična igra osjećaja boja",
         "tagline": "Izvorni izazov fokusiranja na boju: zapamtite boju odgovora i odaberite je među sličnim bojama.",
         "description": "Izvorni test osjetila boje prije Pronađite drugu boju-a. Prvo ga isprobajte na webu, a zatim ga instalirajte s Google Play-a.",
@@ -16380,10 +16380,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Brza igra",
           "Instalirajte sada"
         ],
-        "primaryCta": "Instalirajte Test osjeta boja",
+        "primaryCta": "Instalirajte Color Master: Test boja",
         "detailCta": "Isprobajte web demo",
         "statusNote": "Prvo ga isprobajte na webu, a zatim ga instalirajte s Google Play-a.",
-        "iconAlt": "Ikona Test osjeta boja"
+        "iconAlt": "Ikona Color Master: Test boja"
       },
       "koreanRandomDefense": {
         "name": "Korejska nasumična obrana",
@@ -16453,12 +16453,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Natječite se s prijateljima u izazovu od 10 sekundi."
       },
       "galaxyCode": {
-        "app": "Vanzemaljski tekst",
+        "app": "Galaxy Code: alien tekst",
         "title": "\"Pošalji svom prijatelju poruku vanzemaljaca koju ne mogu dekodirati.\"",
         "description": "Ostavite tajne poruke koje samo vlasnici dioničkih ključeva mogu dekodirati."
       },
       "ufoSignal": {
-        "app": "Simulator NLO signala",
+        "app": "Simulator UFO signala",
         "title": "“Što se događa ako pošaljete NLO signal u zoru?”",
         "description": "Uživajte u zvukovima i animaciji u mračnoj sobi."
       }
@@ -16488,8 +16488,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Zadnje ažuriranje: 31.5.2026",
       "googlePlay": "Google Play aplikacije",
       "colorTest": "Pronađite drugu boju",
-      "alienText": "Vanzemaljski tekst",
-      "ufoApp": "Simulator NLO signala",
+      "alienText": "Galaxy Code: alien tekst",
+      "ufoApp": "Simulator UFO signala",
       "privacyPolicy": "Politika privatnosti",
       "appAds": "app-ads.txt",
       "contact": "kontakt",
@@ -16514,7 +16514,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "km-KH": {
     "seo": {
       "title": "NeoKIM App Lab | កម្មវិធី Android Mini ឥតគិតថ្លៃ",
-      "description": "ដំឡើង ស្វែងរកពណ៌ផ្សេងគ្នា, អ្នកបង្កើតអត្ថបទ Alien, កម្មវិធីត្រាប់តាមសញ្ញា UFO, តេស្តអារម្មណ៍ពណ៌, ផ្លូវវង្វេងងងឹត និងការធ្វើតេស្តឯកជនសម្រាប់កម្មវិធីខ្នាតតូច Android ជាច្រើនទៀត។",
+      "description": "ដំឡើង ស្វែងរកពណ៌ផ្សេងគ្នា, Galaxy Code: អត្ថបទអេលៀន, កម្មវិធីសញ្ញា UFO, Color Master: តេស្តពណ៌, ផ្លូវវង្វេងងងឹត និងការធ្វើតេស្តឯកជនសម្រាប់កម្មវិធីខ្នាតតូច Android ជាច្រើនទៀត។",
       "ogTitle": "NeoKIM App Lab | កម្មវិធីខ្នាតតូច Android",
       "ogDescription": "ស្វែងរកពណ៌សេស បង្កើតអត្ថបទសម្ងាត់តាមបែបមនុស្សភពក្រៅ ផ្ញើសញ្ញា UFO លេងៗ គេចពីកន្លែងងងឹត និងចូលរួមការសាកល្បងឯកជនសម្រាប់ការសប្បាយរហ័ស Android ។"
     },
@@ -16596,7 +16596,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "រូបតំណាង ស្វែងរកពណ៌ផ្សេងគ្នា"
       },
       "galaxyCode": {
-        "name": "អ្នកបង្កើតអត្ថបទ Alien",
+        "name": "Galaxy Code: អត្ថបទអេលៀន",
         "category": "កម្មវិធីសារសម្ងាត់",
         "tagline": "បង្កើត​សារ​សម្ងាត់​ដូច​មនុស្ស​ក្រៅ​ភព ដែល​ត្រូវ​ការ​គន្លឹះ​ចែករំលែក​ដើម្បី​ឌិកូដ។",
         "description": "បង្កើតច្បាប់ភាសាកាឡាក់ស៊ីផ្ទាល់ខ្លួនរបស់អ្នក។ មានតែមនុស្សដែលមានគន្លឹះចែករំលែករបស់អ្នកប៉ុណ្ណោះដែលអាចបង្កើតច្បាប់ដូចគ្នានេះឡើងវិញ ហើយអត្ថបទដើមមិនត្រូវបានផ្ទុកឡើងទៅកាន់ម៉ាស៊ីនមេទេ។",
@@ -16609,10 +16609,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "បង្កើតសារសម្ងាត់",
         "detailCta": "សាកល្បង Web Demo",
         "statusNote": "អាចរកបានឥឡូវនេះនៅលើ Google Play ។",
-        "iconAlt": "រូបតំណាង អ្នកបង្កើតអត្ថបទ Alien"
+        "iconAlt": "រូបតំណាង Galaxy Code: អត្ថបទអេលៀន"
       },
       "ufoSignal": {
-        "name": "កម្មវិធីត្រាប់តាមសញ្ញា UFO",
+        "name": "កម្មវិធីសញ្ញា UFO",
         "category": "កម្មវិធីកម្សាន្តសញ្ញាអាថ៌កំបាំង",
         "tagline": "ផ្ញើសញ្ញាអវកាសលេងសើច និងរីករាយជាមួយអារម្មណ៍ UFO ។",
         "description": "បើកកម្មវិធី ចុចប៊ូតុងសញ្ញា ហើយរីករាយជាមួយសំឡេង និងចលនាដែលធ្វើអោយអារម្មណ៍ពេលនេះដូចជាពិធីបុណ្យ UFO តូចមួយ។",
@@ -16622,26 +16622,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ចលនាអារម្មណ៍",
           "គ្មានការចុះឈ្មោះទេ។"
         ],
-        "primaryCta": "ដំឡើង កម្មវិធីត្រាប់តាមសញ្ញា UFO",
+        "primaryCta": "ដំឡើង កម្មវិធីសញ្ញា UFO",
         "detailCta": "មើលព័ត៌មានលម្អិតកម្មវិធី",
         "statusNote": "មើលព័ត៌មានលម្អិតកម្មវិធី បន្ទាប់មកដំឡើងវាពី Google Play។",
-        "iconAlt": "រូបតំណាង កម្មវិធីត្រាប់តាមសញ្ញា UFO"
+        "iconAlt": "រូបតំណាង កម្មវិធីសញ្ញា UFO"
       },
       "colorMasterClassic": {
-        "name": "តេស្តអារម្មណ៍ពណ៌",
+        "name": "Color Master: តេស្តពណ៌",
         "category": "ល្បែងអារម្មណ៍ពណ៌បុរាណ",
         "tagline": "ការប្រកួតប្រជែងផ្តោតលើពណ៌ដើម៖ ចងចាំពណ៌ចម្លើយ ហើយជ្រើសរើសវាពីពណ៌ស្រដៀងគ្នា។",
-        "description": "ការធ្វើតេស្តអារម្មណ៍ពណ៌ដើមមុនពេល ស្វែងរកពណ៌ផ្សេងគ្នា ។ សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play។",
+        "description": "ការធ្វើColor Master: តេស្តពណ៌ដើមមុនពេល ស្វែងរកពណ៌ផ្សេងគ្នា ។ សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play។",
         "highlights": [
           "អារម្មណ៍ដើម",
           "ការផ្តោតអារម្មណ៍ពណ៌",
           "លេងរហ័ស",
           "ដំឡើងឥឡូវនេះ"
         ],
-        "primaryCta": "ដំឡើង តេស្តអារម្មណ៍ពណ៌",
+        "primaryCta": "ដំឡើង Color Master: តេស្តពណ៌",
         "detailCta": "សាកល្បង Web Demo",
         "statusNote": "សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play។",
-        "iconAlt": "រូបតំណាង តេស្តអារម្មណ៍ពណ៌"
+        "iconAlt": "រូបតំណាង Color Master: តេស្តពណ៌"
       },
       "koreanRandomDefense": {
         "name": "ការការពារចៃដន្យកូរ៉េ",
@@ -16711,12 +16711,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "ប្រកួតប្រជែងជាមួយមិត្តភក្តិក្នុងការប្រកួតប្រជែង 10 វិនាទី។"
       },
       "galaxyCode": {
-        "app": "អ្នកបង្កើតអត្ថបទ Alien",
+        "app": "Galaxy Code: អត្ថបទអេលៀន",
         "title": "\"ផ្ញើ​សារ​ឱ្យ​មិត្ត​ភក្តិ​របស់​អ្នក​ជា​ជនបរទេស​ដែល​ពួកគេ​មិន​អាច​ឌិកូដ​បាន​។\"",
         "description": "ទុក​សារ​សម្ងាត់​ដែល​មាន​តែ​អ្នក​កាន់​គន្លឹះ​ចែករំលែក​ប៉ុណ្ណោះ​អាច​ឌិកូដ​បាន។"
       },
       "ufoSignal": {
-        "app": "កម្មវិធីត្រាប់តាមសញ្ញា UFO",
+        "app": "កម្មវិធីសញ្ញា UFO",
         "title": "\"តើមានអ្វីកើតឡើងប្រសិនបើអ្នកបញ្ជូនសញ្ញា UFO នៅពេលព្រឹកព្រលឹម?\"",
         "description": "រីករាយជាមួយសំឡេង និងចលនានៅក្នុងបន្ទប់ងងឹត។"
       }
@@ -16746,8 +16746,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "អាប់ដេតចុងក្រោយ៖ 2026.05.31",
       "googlePlay": "កម្មវិធី Google Play",
       "colorTest": "ស្វែងរកពណ៌ផ្សេងគ្នា",
-      "alienText": "អ្នកបង្កើតអត្ថបទ Alien",
-      "ufoApp": "កម្មវិធីត្រាប់តាមសញ្ញា UFO",
+      "alienText": "Galaxy Code: អត្ថបទអេលៀន",
+      "ufoApp": "កម្មវិធីសញ្ញា UFO",
       "privacyPolicy": "គោលការណ៍ឯកជនភាព",
       "appAds": "app-ads.txt",
       "contact": "ទំនាក់ទំនង",
@@ -16772,7 +16772,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ky-KG": {
     "seo": {
       "title": "NeoKIM App Lab | Акысыз Android Mini колдонмолору",
-      "description": "Көбүрөөк Android мини колдонмолору үчүн Башка түс табуу, Alien Текст, UFO сигнал симулятору, Түс сыноо, Караңгы лабиринт жана жеке сыноолорду орнотуңуз.",
+      "description": "Көбүрөөк Android мини колдонмолору үчүн Башка түс табуу, Galaxy Code: бөтөн текст, UFO сигнал симулятору, Color Master: Түс тести, Караңгы лабиринт жана жеке сыноолорду орнотуңуз.",
       "ogTitle": "NeoKIM App Lab | Android Мини колдонмолору",
       "ogDescription": "Кызык түстөрдү табыңыз, келгин стилиндеги жашыруун текстти түзүңүз, ойноок UFO сигналдарын жөнөтүңүз, караңгы лабиринттерден качыңыз жана Android тез көңүл ачуу үчүн жеке тесттерге кошулуңуз."
     },
@@ -16854,7 +16854,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Башка түс табуу сөлөкөтү"
       },
       "galaxyCode": {
-        "name": "Alien Текст",
+        "name": "Galaxy Code: бөтөн текст",
         "category": "Жашыруун билдирүү колдонмосу",
         "tagline": "Дешифрлөө үчүн бөлүшүү ачкычын талап кылган келгиндерге окшош жашыруун билдирүүлөрдү түзүңүз.",
         "description": "Өзүңүздүн галактикалык тил эрежелериңизди түзүңүз. Бөлүшүү ачкычыңыз бар адамдар гана ошол эле эрежелерди кайра түзө алышат жана түпнуска текст серверге жүктөлбөйт.",
@@ -16867,7 +16867,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Жашыруун билдирүүлөрдү түзүү",
         "detailCta": "Web Demo колдонуп көрүңүз",
         "statusNote": "Азыр Google Playде жеткиликтүү.",
-        "iconAlt": "Alien Текст сөлөкөтү"
+        "iconAlt": "Galaxy Code: бөтөн текст сөлөкөтү"
       },
       "ufoSignal": {
         "name": "UFO сигнал симулятору",
@@ -16886,7 +16886,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO сигнал симулятору сөлөкөтү"
       },
       "colorMasterClassic": {
-        "name": "Түс сыноо",
+        "name": "Color Master: Түс тести",
         "category": "Классикалык түс сезүү оюну",
         "tagline": "Түпкү түскө көңүл буруу маселеси: жооптун түсүн эстеп, аны окшош түстөрдөн тандаңыз.",
         "description": "Башка түс табуу алдында оригиналдуу түс сезимин текшерүү. Адегенде аны интернеттен байкап көрүңүз, андан кийин Google Playден орнотуңуз.",
@@ -16896,10 +16896,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Тез ойноо",
           "Азыр орнотуу"
         ],
-        "primaryCta": "Түс сынооин орнотуңуз",
+        "primaryCta": "Color Master: Түс тестиин орнотуңуз",
         "detailCta": "Web Demo колдонуп көрүңүз",
         "statusNote": "Адегенде аны интернеттен байкап көрүңүз, андан кийин Google Playден орнотуңуз.",
-        "iconAlt": "Түс сыноо сөлөкөтү"
+        "iconAlt": "Color Master: Түс тести сөлөкөтү"
       },
       "koreanRandomDefense": {
         "name": "Кореянын Random Defence",
@@ -16969,7 +16969,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 секунддук тапшырмада досторуңуз менен жарышыңыз."
       },
       "galaxyCode": {
-        "app": "Alien Текст",
+        "app": "Galaxy Code: бөтөн текст",
         "title": "\"Досуңузга алар чече албаган чоочун билдирүү жөнөтүңүз.\"",
         "description": "Ачкыч ээлери гана чече ала турган жашыруун билдирүүлөрдү калтырыңыз."
       },
@@ -17004,7 +17004,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Акыркы жаңыртылган күнү: 31.05.2026",
       "googlePlay": "Google Play колдонмолору",
       "colorTest": "Башка түс табуу",
-      "alienText": "Alien Текст",
+      "alienText": "Galaxy Code: бөтөн текст",
       "ufoApp": "UFO сигнал симулятору",
       "privacyPolicy": "Купуялык саясаты",
       "appAds": "app-ads.txt",
@@ -17030,7 +17030,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ta-IN": {
     "seo": {
       "title": "NeoKIM ஆப் லேப் | இலவச Android மினி ஆப்ஸ்",
-      "description": "ஒற்றைப்படை நிறம், ஏலியன் டெக்ஸ்ட் மேக்கர், யுஎஃப்ஒ சிக்னல் சிமுலேட்டர், வண்ண உணர்வு சோதனை, டார்க் பிரமை எஸ்கேப் மற்றும் மேலும் Android மினி பயன்பாடுகளுக்கு தனிப்பட்ட சோதனைகளை நிறுவவும்.",
+      "description": "ஒற்றைப்படை நிறம், Galaxy Code: ஏலியன் உரை, UFO சிக்னல் சிமுலேட்டர், Color Master: நிற சோதனை, டார்க் பிரமை எஸ்கேப் மற்றும் மேலும் Android மினி பயன்பாடுகளுக்கு தனிப்பட்ட சோதனைகளை நிறுவவும்.",
       "ogTitle": "NeoKIM ஆப் லேப் | Android மினி ஆப்ஸ்",
       "ogDescription": "ஒற்றைப்படை நிறங்களைக் கண்டறியவும், ஏலியன் பாணியில் இரகசிய உரையை உருவாக்கவும், விளையாட்டுத்தனமான UFO சிக்னல்களை அனுப்பவும், இருண்ட பிரமைகளிலிருந்து தப்பிக்கவும், மேலும் விரைவான Android வேடிக்கைக்காக தனிப்பட்ட சோதனைகளில் சேரவும்."
     },
@@ -17112,7 +17112,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ஒற்றைப்படை நிறம் ஐகான்"
       },
       "galaxyCode": {
-        "name": "ஏலியன் டெக்ஸ்ட் மேக்கர்",
+        "name": "Galaxy Code: ஏலியன் உரை",
         "category": "ரகசிய செய்தி பயன்பாடு",
         "tagline": "டிகோட் செய்ய பங்கு விசை தேவைப்படும் ஏலியன் போன்ற ரகசிய செய்திகளை உருவாக்கவும்.",
         "description": "உங்கள் சொந்த விண்மீன் மொழி விதிகளை உருவாக்கவும். உங்கள் பகிர்வு விசையை உள்ளவர்கள் மட்டுமே அதே விதிகளை மீண்டும் உருவாக்க முடியும், மேலும் அசல் உரை சேவையகத்தில் பதிவேற்றப்படாது.",
@@ -17125,10 +17125,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ரகசிய செய்திகளை உருவாக்கவும்",
         "detailCta": "வலை டெமோவை முயற்சிக்கவும்",
         "statusNote": "Google Play இல் இப்போது கிடைக்கிறது.",
-        "iconAlt": "ஏலியன் டெக்ஸ்ட் மேக்கர் ஐகான்"
+        "iconAlt": "Galaxy Code: ஏலியன் உரை ஐகான்"
       },
       "ufoSignal": {
-        "name": "யுஎஃப்ஒ சிக்னல் சிமுலேட்டர்",
+        "name": "UFO சிக்னல் சிமுலேட்டர்",
         "category": "மர்ம சமிக்ஞை பொழுதுபோக்கு பயன்பாடு",
         "tagline": "விளையாட்டுத்தனமான ஸ்பேஸ் சிக்னலை அனுப்பி UFO மனநிலையை அனுபவிக்கவும்.",
         "description": "பயன்பாட்டைத் திறந்து, சிக்னல் பொத்தானை அழுத்தி, ஒரு சிறிய யுஎஃப்ஒ சடங்காக உணரக்கூடிய ஒலி மற்றும் அனிமேஷனை அனுபவிக்கவும்.",
@@ -17138,26 +17138,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "மனநிலை அனிமேஷன்",
           "பதிவு இல்லை"
         ],
-        "primaryCta": "யுஎஃப்ஒ சிக்னல் சிமுலேட்டர் ஐ நிறுவவும்",
+        "primaryCta": "UFO சிக்னல் சிமுலேட்டர் ஐ நிறுவவும்",
         "detailCta": "ஆப்ஸ் விவரங்களைக் காண்க",
         "statusNote": "பயன்பாட்டு விவரங்களைப் பார்த்து, அதை Google Play இலிருந்து நிறுவவும்.",
-        "iconAlt": "யுஎஃப்ஒ சிக்னல் சிமுலேட்டர் ஐகான்"
+        "iconAlt": "UFO சிக்னல் சிமுலேட்டர் ஐகான்"
       },
       "colorMasterClassic": {
-        "name": "வண்ண உணர்வு சோதனை",
+        "name": "Color Master: நிற சோதனை",
         "category": "கிளாசிக் வண்ண உணர்வு விளையாட்டு",
         "tagline": "அசல் கலர்-ஃபோகஸ் சவால்: பதில் நிறத்தை நினைவில் வைத்து, ஒத்த வண்ணங்களிலிருந்து அதைத் தேர்ந்தெடுக்கவும்.",
-        "description": "ஒற்றைப்படை நிறம் க்கு முன் அசல் வண்ண உணர்வு சோதனை. முதலில் இணையத்தில் இதை முயற்சிக்கவும், பின்னர் Google Play இலிருந்து நிறுவவும்.",
+        "description": "ஒற்றைப்படை நிறம் க்கு முன் அசல் Color Master: நிற சோதனை. முதலில் இணையத்தில் இதை முயற்சிக்கவும், பின்னர் Google Play இலிருந்து நிறுவவும்.",
         "highlights": [
           "அசல் உணர்வு",
           "வண்ண கவனம்",
           "விரைவான விளையாட்டு",
           "இப்போது நிறுவவும்"
         ],
-        "primaryCta": "வண்ண உணர்வு சோதனையை நிறுவவும்",
+        "primaryCta": "Color Master: நிற சோதனையை நிறுவவும்",
         "detailCta": "வலை டெமோவை முயற்சிக்கவும்",
         "statusNote": "முதலில் இணையத்தில் இதை முயற்சிக்கவும், பின்னர் Google Play இலிருந்து நிறுவவும்.",
-        "iconAlt": "வண்ண உணர்வு சோதனை ஐகான்"
+        "iconAlt": "Color Master: நிற சோதனை ஐகான்"
       },
       "koreanRandomDefense": {
         "name": "கொரிய சீரற்ற பாதுகாப்பு",
@@ -17227,12 +17227,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10-வினாடி சவாலில் நண்பர்களுடன் போட்டியிடுங்கள்."
       },
       "galaxyCode": {
-        "app": "ஏலியன் டெக்ஸ்ட் மேக்கர்",
+        "app": "Galaxy Code: ஏலியன் உரை",
         "title": "\"உங்கள் நண்பருக்கு அவர்களால் டிகோட் செய்ய முடியாத அன்னிய செய்தியை அனுப்பவும்.\"",
         "description": "ஷேர்-கீ வைத்திருப்பவர்கள் மட்டுமே டிகோட் செய்யக்கூடிய ரகசிய செய்திகளை விடுங்கள்."
       },
       "ufoSignal": {
-        "app": "யுஎஃப்ஒ சிக்னல் சிமுலேட்டர்",
+        "app": "UFO சிக்னல் சிமுலேட்டர்",
         "title": "\"நீங்கள் விடியற்காலையில் யுஎஃப்ஒ சிக்னலை அனுப்பினால் என்ன நடக்கும்?\"",
         "description": "இருண்ட அறையில் ஒலிகள் மற்றும் அனிமேஷனை அனுபவிக்கவும்."
       }
@@ -17262,8 +17262,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "கடைசியாக புதுப்பிக்கப்பட்டது: 2026.05.31",
       "googlePlay": "Google Play பயன்பாடுகள்",
       "colorTest": "ஒற்றைப்படை நிறம்",
-      "alienText": "ஏலியன் டெக்ஸ்ட் மேக்கர்",
-      "ufoApp": "யுஎஃப்ஒ சிக்னல் சிமுலேட்டர்",
+      "alienText": "Galaxy Code: ஏலியன் உரை",
+      "ufoApp": "UFO சிக்னல் சிமுலேட்டர்",
       "privacyPolicy": "தனியுரிமைக் கொள்கை",
       "appAds": "app-ads.txt",
       "contact": "தொடர்பு கொள்ளவும்",
@@ -17288,7 +17288,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "th": {
     "seo": {
       "title": "NeoKIM App Lab | แอปมินิ Android ฟรี",
-      "description": "ติดตั้ง ค้นหาสีที่แตกต่าง, โปรแกรมสร้างข้อความคนต่างด้าว, เครื่องจำลองสัญญาณยูเอฟโอ, การทดสอบการรับรู้สี, หลบหนีเขาวงกตมืด และการทดสอบส่วนตัวสำหรับมินิแอป Android เพิ่มเติม",
+      "description": "ติดตั้ง ค้นหาสีที่แตกต่าง, Galaxy Code: ข้อความเอเลี่ยน, เครื่องจำลองสัญญาณ UFO, Color Master: ทดสอบสี, หลบหนีเขาวงกตมืด และการทดสอบส่วนตัวสำหรับมินิแอป Android เพิ่มเติม",
       "ogTitle": "NeoKIM App Lab | แอพมินิ Android",
       "ogDescription": "ค้นหาสีแปลก ๆ สร้างข้อความลับสไตล์เอเลี่ยน ส่งสัญญาณยูเอฟโอขี้เล่น หลบหนีเขาวงกตอันมืดมิด และเข้าร่วมการทดสอบส่วนตัวเพื่อความสนุกจาก Android อย่างรวดเร็ว"
     },
@@ -17370,7 +17370,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ไอคอน ค้นหาสีที่แตกต่าง"
       },
       "galaxyCode": {
-        "name": "โปรแกรมสร้างข้อความคนต่างด้าว",
+        "name": "Galaxy Code: ข้อความเอเลี่ยน",
         "category": "แอพข้อความลับ",
         "tagline": "สร้างข้อความลับเหมือนเอเลี่ยนที่ต้องใช้คีย์แชร์เพื่อถอดรหัส",
         "description": "สร้างกฎภาษากาแล็กซี่ของคุณเอง เฉพาะผู้ที่มีรหัสแชร์ของคุณเท่านั้นที่สามารถสร้างกฎเดียวกันขึ้นใหม่ได้ และข้อความต้นฉบับจะไม่ถูกอัพโหลดไปยังเซิร์ฟเวอร์",
@@ -17383,10 +17383,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "สร้างข้อความลับ",
         "detailCta": "ลองเว็บสาธิต",
         "statusNote": "วางจำหน่ายแล้วที่ Google Play",
-        "iconAlt": "ไอคอน โปรแกรมสร้างข้อความคนต่างด้าว"
+        "iconAlt": "ไอคอน Galaxy Code: ข้อความเอเลี่ยน"
       },
       "ufoSignal": {
-        "name": "เครื่องจำลองสัญญาณยูเอฟโอ",
+        "name": "เครื่องจำลองสัญญาณ UFO",
         "category": "แอพความบันเทิงสัญญาณลึกลับ",
         "tagline": "ส่งสัญญาณอวกาศอย่างสนุกสนานและเพลิดเพลินไปกับอารมณ์ของยูเอฟโอ",
         "description": "เปิดแอป กดปุ่มสัญญาณ และเพลิดเพลินไปกับเสียงและแอนิเมชั่นที่ทำให้ช่วงเวลานั้นรู้สึกเหมือนเป็นพิธีกรรมยูเอฟโอเล็กๆ",
@@ -17396,26 +17396,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "แอนิเมชั่นอารมณ์",
           "ไม่มีการสมัครสมาชิก"
         ],
-        "primaryCta": "ติดตั้ง เครื่องจำลองสัญญาณยูเอฟโอ",
+        "primaryCta": "ติดตั้ง เครื่องจำลองสัญญาณ UFO",
         "detailCta": "ดูรายละเอียดแอพ",
         "statusNote": "ดูรายละเอียดแอป จากนั้นติดตั้งจาก Google Play",
-        "iconAlt": "ไอคอน เครื่องจำลองสัญญาณยูเอฟโอ"
+        "iconAlt": "ไอคอน เครื่องจำลองสัญญาณ UFO"
       },
       "colorMasterClassic": {
-        "name": "การทดสอบการรับรู้สี",
+        "name": "Color Master: ทดสอบสี",
         "category": "เกมสัมผัสสีคลาสสิก",
         "tagline": "ความท้าทายในการเน้นสีแบบเดิม: จำสีคำตอบและเลือกจากสีที่คล้ายกัน",
-        "description": "การทดสอบการรับรู้สีดั้งเดิมก่อน ค้นหาสีที่แตกต่าง ลองใช้บนเว็บก่อน จากนั้นจึงติดตั้งจาก Google Play",
+        "description": "Color Master: ทดสอบสีดั้งเดิมก่อน ค้นหาสีที่แตกต่าง ลองใช้บนเว็บก่อน จากนั้นจึงติดตั้งจาก Google Play",
         "highlights": [
           "ความรู้สึกดั้งเดิม",
           "เน้นสี",
           "เล่นด่วน",
           "ติดตั้งทันที"
         ],
-        "primaryCta": "ติดตั้งการทดสอบการรับรู้สี",
+        "primaryCta": "ติดตั้งColor Master: ทดสอบสี",
         "detailCta": "ลองเว็บสาธิต",
         "statusNote": "ลองใช้บนเว็บก่อน จากนั้นจึงติดตั้งจาก Google Play",
-        "iconAlt": "ไอคอน การทดสอบการรับรู้สี"
+        "iconAlt": "ไอคอน Color Master: ทดสอบสี"
       },
       "koreanRandomDefense": {
         "name": "การป้องกันแบบสุ่มของเกาหลี",
@@ -17485,12 +17485,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "แข่งขันกับเพื่อน ๆ ในการท้าทาย 10 วินาที"
       },
       "galaxyCode": {
-        "app": "โปรแกรมสร้างข้อความคนต่างด้าว",
+        "app": "Galaxy Code: ข้อความเอเลี่ยน",
         "title": "“ส่งข้อความเอเลี่ยนให้เพื่อนของคุณที่พวกเขาไม่สามารถถอดรหัสได้”",
         "description": "ฝากข้อความลับไว้ซึ่งมีเพียงผู้ถือกุญแจแชร์เท่านั้นที่สามารถถอดรหัสได้"
       },
       "ufoSignal": {
-        "app": "เครื่องจำลองสัญญาณยูเอฟโอ",
+        "app": "เครื่องจำลองสัญญาณ UFO",
         "title": "“จะเกิดอะไรขึ้นถ้าคุณส่งสัญญาณยูเอฟโอในตอนเช้า?”",
         "description": "เพลิดเพลินกับเสียงและภาพเคลื่อนไหวในห้องมืด"
       }
@@ -17520,8 +17520,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "อัปเดตล่าสุด: 2026.05.31",
       "googlePlay": "แอป Google Play",
       "colorTest": "ค้นหาสีที่แตกต่าง",
-      "alienText": "โปรแกรมสร้างข้อความคนต่างด้าว",
-      "ufoApp": "เครื่องจำลองสัญญาณยูเอฟโอ",
+      "alienText": "Galaxy Code: ข้อความเอเลี่ยน",
+      "ufoApp": "เครื่องจำลองสัญญาณ UFO",
       "privacyPolicy": "นโยบายความเป็นส่วนตัว",
       "appAds": "app-ads.txt",
       "contact": "ติดต่อ",
@@ -17546,7 +17546,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "te-IN": {
     "seo": {
       "title": "NeoKIM యాప్ ల్యాబ్ | ఉచిత Android మినీ యాప్‌లు",
-      "description": "విభిన్న రంగును కనుగొనండి, ఏలియన్ టెక్స్ట్ మేకర్, UFO సిగ్నల్ సిమ్యులేటర్, కలర్ సెన్స్ టెస్ట్, డార్క్ మేజ్ ఎస్కేప్ మరియు మరిన్ని Android మినీ యాప్‌ల కోసం ప్రైవేట్ పరీక్షలను ఇన్‌స్టాల్ చేయండి.",
+      "description": "విభిన్న రంగును కనుగొనండి, Galaxy Code: ఏలియన్, UFO సిగ్నల్ సిమ్యులేటర్, Color Master: రంగు పరీక్ష, డార్క్ మేజ్ ఎస్కేప్ మరియు మరిన్ని Android మినీ యాప్‌ల కోసం ప్రైవేట్ పరీక్షలను ఇన్‌స్టాల్ చేయండి.",
       "ogTitle": "NeoKIM యాప్ ల్యాబ్ | Android మినీ యాప్‌లు",
       "ogDescription": "బేసి రంగులను కనుగొనండి, ఏలియన్-శైలి రహస్య వచనాన్ని రూపొందించండి, ఉల్లాసభరితమైన UFO సంకేతాలను పంపండి, చీకటి చిట్టడవులను తప్పించుకోండి మరియు త్వరిత Android వినోదం కోసం ప్రైవేట్ పరీక్షల్లో చేరండి."
     },
@@ -17628,7 +17628,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "విభిన్న రంగును కనుగొనండి చిహ్నం"
       },
       "galaxyCode": {
-        "name": "ఏలియన్ టెక్స్ట్ మేకర్",
+        "name": "Galaxy Code: ఏలియన్",
         "category": "రహస్య సందేశ యాప్",
         "tagline": "డీకోడ్ చేయడానికి షేర్ కీ అవసరమయ్యే గ్రహాంతరవాసుల లాంటి రహస్య సందేశాలను సృష్టించండి.",
         "description": "మీ స్వంత గెలాక్సీ భాషా నియమాలను సృష్టించండి. మీ షేర్ కీ ఉన్న వ్యక్తులు మాత్రమే అదే నియమాలను పునఃసృష్టించగలరు మరియు అసలు వచనం సర్వర్‌కు అప్‌లోడ్ చేయబడదు.",
@@ -17641,7 +17641,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "రహస్య సందేశాలను సృష్టించండి",
         "detailCta": "వెబ్ డెమోని ప్రయత్నించండి",
         "statusNote": "ఇప్పుడు Google Playలో అందుబాటులో ఉంది.",
-        "iconAlt": "ఏలియన్ టెక్స్ట్ మేకర్ చిహ్నం"
+        "iconAlt": "Galaxy Code: ఏలియన్ చిహ్నం"
       },
       "ufoSignal": {
         "name": "UFO సిగ్నల్ సిమ్యులేటర్",
@@ -17660,7 +17660,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO సిగ్నల్ సిమ్యులేటర్ చిహ్నం"
       },
       "colorMasterClassic": {
-        "name": "కలర్ సెన్స్ టెస్ట్",
+        "name": "Color Master: రంగు పరీక్ష",
         "category": "క్లాసిక్ కలర్ సెన్స్ గేమ్",
         "tagline": "అసలు రంగు-ఫోకస్ ఛాలెంజ్: సమాధాన రంగును గుర్తుంచుకోండి మరియు సారూప్య రంగుల నుండి దాన్ని ఎంచుకోండి.",
         "description": "విభిన్న రంగును కనుగొనండి కంటే ముందు అసలు రంగు సెన్స్ పరీక్ష. దీన్ని ముందుగా వెబ్‌లో ప్రయత్నించండి, ఆపై Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
@@ -17670,10 +17670,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "త్వరగా ఆడండి",
           "ఇప్పుడే ఇన్‌స్టాల్ చేయండి"
         ],
-        "primaryCta": "కలర్ సెన్స్ టెస్ట్‌ను ఇన్‌స్టాల్ చేయండి",
+        "primaryCta": "Color Master: రంగు పరీక్ష‌ను ఇన్‌స్టాల్ చేయండి",
         "detailCta": "వెబ్ డెమోని ప్రయత్నించండి",
         "statusNote": "దీన్ని ముందుగా వెబ్‌లో ప్రయత్నించండి, ఆపై Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
-        "iconAlt": "కలర్ సెన్స్ టెస్ట్ చిహ్నం"
+        "iconAlt": "Color Master: రంగు పరీక్ష చిహ్నం"
       },
       "koreanRandomDefense": {
         "name": "కొరియన్ రాండమ్ డిఫెన్స్",
@@ -17743,7 +17743,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 సెకన్ల ఛాలెంజ్‌లో స్నేహితులతో పోటీపడండి."
       },
       "galaxyCode": {
-        "app": "ఏలియన్ టెక్స్ట్ మేకర్",
+        "app": "Galaxy Code: ఏలియన్",
         "title": "\"మీ స్నేహితుడికి వారు డీకోడ్ చేయలేని గ్రహాంతర సందేశాన్ని పంపండి.\"",
         "description": "షేర్-కీ హోల్డర్‌లు మాత్రమే డీకోడ్ చేయగల రహస్య సందేశాలను వదిలివేయండి."
       },
@@ -17778,7 +17778,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "చివరిగా నవీకరించబడింది: 2026.05.31",
       "googlePlay": "Google Play యాప్‌లు",
       "colorTest": "విభిన్న రంగును కనుగొనండి",
-      "alienText": "ఏలియన్ టెక్స్ట్ మేకర్",
+      "alienText": "Galaxy Code: ఏలియన్",
       "ufoApp": "UFO సిగ్నల్ సిమ్యులేటర్",
       "privacyPolicy": "గోప్యతా విధానం",
       "appAds": "app-ads.txt",
@@ -17804,7 +17804,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "tr-TR": {
     "seo": {
       "title": "NeoKIM Uygulama Laboratuvarı | Ücretsiz Android Mini Uygulamalar",
-      "description": "Daha fazla Android mini uygulaması için Farklı Renk Bul, Uzaylı Metin Oluşturucu, UFO Sinyal Simülatörü, Renk Duyusu Testi, Karanlık Labirentten Kaçış ve özel testleri yükleyin.",
+      "description": "Daha fazla Android mini uygulaması için Farklı Renk Bul, Galaxy Code: uzaylı metin, UFO Sinyal Simülatörü, Color Master: Renk Testi, Karanlık Labirentten Kaçış ve özel testleri yükleyin.",
       "ogTitle": "NeoKIM Uygulama Laboratuvarı | Android Mini Uygulamalar",
       "ogDescription": "Tuhaf renkler bulun, uzaylı tarzı gizli metinler oluşturun, eğlenceli UFO sinyalleri gönderin, karanlık labirentlerden kaçın ve hızlı Android eğlencesi için özel testlere katılın."
     },
@@ -17886,7 +17886,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Farklı Renk Bul simgesi"
       },
       "galaxyCode": {
-        "name": "Uzaylı Metin Oluşturucu",
+        "name": "Galaxy Code: uzaylı metin",
         "category": "Gizli mesaj uygulaması",
         "tagline": "Şifresini çözmek için bir paylaşım anahtarına ihtiyaç duyan uzaylı benzeri gizli mesajlar oluşturun.",
         "description": "Kendi galaktik dil kurallarınızı oluşturun. Yalnızca paylaşım anahtarınıza sahip kişiler aynı kuralları yeniden oluşturabilir ve orijinal metin bir sunucuya yüklenmez.",
@@ -17899,7 +17899,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Gizli Mesajlar Oluşturun",
         "detailCta": "Web Demosunu Deneyin",
         "statusNote": "Artık Google Play'de mevcut.",
-        "iconAlt": "Uzaylı Metin Oluşturucu simgesi"
+        "iconAlt": "Galaxy Code: uzaylı metin simgesi"
       },
       "ufoSignal": {
         "name": "UFO Sinyal Simülatörü",
@@ -17918,7 +17918,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO Sinyal Simülatörü simgesi"
       },
       "colorMasterClassic": {
-        "name": "Renk Duyusu Testi",
+        "name": "Color Master: Renk Testi",
         "category": "Klasik renk duygusu oyunu",
         "tagline": "Orijinal renk odaklı zorluk: Yanıt rengini hatırlayın ve benzer renklerden seçin.",
         "description": "Farklı Renk Bul'den önceki orijinal renk algılama testi. Önce web'de deneyin, ardından Google Play'den yükleyin.",
@@ -17928,10 +17928,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Hızlı oyun",
           "Şimdi yükle"
         ],
-        "primaryCta": "Renk Duyusu Testiini Yükle",
+        "primaryCta": "Color Master: Renk Testiini Yükle",
         "detailCta": "Web Demosunu Deneyin",
         "statusNote": "Önce web'de deneyin, ardından Google Play'den yükleyin.",
-        "iconAlt": "Renk Duyusu Testi simgesi"
+        "iconAlt": "Color Master: Renk Testi simgesi"
       },
       "koreanRandomDefense": {
         "name": "Kore Rastgele Savunması",
@@ -18001,7 +18001,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 saniyelik bir mücadelede arkadaşlarınızla yarışın."
       },
       "galaxyCode": {
-        "app": "Uzaylı Metin Oluşturucu",
+        "app": "Galaxy Code: uzaylı metin",
         "title": "\"Arkadaşınıza şifresini çözemeyecekleri bir uzaylı mesajı gönderin.\"",
         "description": "Yalnızca ortak anahtar sahiplerinin çözebileceği gizli mesajlar bırakın."
       },
@@ -18036,7 +18036,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Son güncelleme: 2026.05.31",
       "googlePlay": "Google Play Uygulamaları",
       "colorTest": "Farklı Renk Bul",
-      "alienText": "Uzaylı Metin Oluşturucu",
+      "alienText": "Galaxy Code: uzaylı metin",
       "ufoApp": "UFO Sinyal Simülatörü",
       "privacyPolicy": "Gizlilik Politikası",
       "appAds": "app-ads.txt",
@@ -18062,7 +18062,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pa": {
     "seo": {
       "title": "NeoKIM ਐਪ ਲੈਬ | ਮੁਫ਼ਤ Android ਮਿੰਨੀ ਐਪਸ",
-      "description": "ਹੋਰ Android ਮਿੰਨੀ ਐਪਾਂ ਲਈ ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ, ਏਲੀਅਨ ਟੈਕਸਟ ਮੇਕਰ, UFO ਸਿਗਨਲ ਸਿਮੂਲੇਟਰ, ਕਲਰ ਸੈਂਸ ਟੈਸਟ, ਡਾਰਕ ਮੇਜ਼ ਐਸਕੇਪ, ਅਤੇ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ।",
+      "description": "ਹੋਰ Android ਮਿੰਨੀ ਐਪਾਂ ਲਈ ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ, Galaxy Code: ਏਲੀਅਨ ਟੈਕਸਟ, UFO ਸਿਗਨਲ ਸਿਮੂਲੇਟਰ, Color Master: ਰੰਗ ਟੈਸਟ, ਡਾਰਕ ਮੇਜ਼ ਐਸਕੇਪ, ਅਤੇ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ।",
       "ogTitle": "NeoKIM ਐਪ ਲੈਬ | Android ਮਿੰਨੀ ਐਪਾਂ",
       "ogDescription": "ਅਜੀਬ ਰੰਗ ਲੱਭੋ, ਏਲੀਅਨ-ਸ਼ੈਲੀ ਦਾ ਗੁਪਤ ਟੈਕਸਟ ਬਣਾਓ, ਹੁਸ਼ਿਆਰ UFO ਸਿਗਨਲ ਭੇਜੋ, ਹਨੇਰੇ ਮੇਜ਼ ਤੋਂ ਬਚੋ, ਅਤੇ ਤੇਜ਼ Android ਮਜ਼ੇ ਲਈ ਨਿੱਜੀ ਟੈਸਟਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ।"
     },
@@ -18144,7 +18144,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ ਪ੍ਰਤੀਕ"
       },
       "galaxyCode": {
-        "name": "ਏਲੀਅਨ ਟੈਕਸਟ ਮੇਕਰ",
+        "name": "Galaxy Code: ਏਲੀਅਨ ਟੈਕਸਟ",
         "category": "ਗੁਪਤ ਸੁਨੇਹਾ ਐਪ",
         "tagline": "ਏਲੀਅਨ ਵਰਗੇ ਗੁਪਤ ਸੁਨੇਹੇ ਬਣਾਓ ਜਿਨ੍ਹਾਂ ਨੂੰ ਡੀਕੋਡ ਕਰਨ ਲਈ ਸ਼ੇਅਰ ਕੁੰਜੀ ਦੀ ਲੋੜ ਹੈ।",
         "description": "ਆਪਣੇ ਗੈਲੈਕਟਿਕ ਭਾਸ਼ਾ ਦੇ ਨਿਯਮ ਬਣਾਓ। ਸਿਰਫ਼ ਤੁਹਾਡੀ ਸ਼ੇਅਰ ਕੁੰਜੀ ਵਾਲੇ ਲੋਕ ਹੀ ਉਹੀ ਨਿਯਮ ਦੁਬਾਰਾ ਬਣਾ ਸਕਦੇ ਹਨ, ਅਤੇ ਅਸਲੀ ਟੈਕਸਟ ਨੂੰ ਸਰਵਰ 'ਤੇ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।",
@@ -18157,7 +18157,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ਗੁਪਤ ਸੁਨੇਹੇ ਬਣਾਓ",
         "detailCta": "ਵੈੱਬ ਡੈਮੋ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
         "statusNote": "ਹੁਣ Google Play 'ਤੇ ਉਪਲਬਧ ਹੈ।",
-        "iconAlt": "ਏਲੀਅਨ ਟੈਕਸਟ ਮੇਕਰ ਪ੍ਰਤੀਕ"
+        "iconAlt": "Galaxy Code: ਏਲੀਅਨ ਟੈਕਸਟ ਪ੍ਰਤੀਕ"
       },
       "ufoSignal": {
         "name": "UFO ਸਿਗਨਲ ਸਿਮੂਲੇਟਰ",
@@ -18176,7 +18176,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO ਸਿਗਨਲ ਸਿਮੂਲੇਟਰ ਪ੍ਰਤੀਕ"
       },
       "colorMasterClassic": {
-        "name": "ਕਲਰ ਸੈਂਸ ਟੈਸਟ",
+        "name": "Color Master: ਰੰਗ ਟੈਸਟ",
         "category": "ਕਲਾਸਿਕ ਰੰਗ ਭਾਵਨਾ ਵਾਲੀ ਖੇਡ",
         "tagline": "ਅਸਲ ਰੰਗ-ਫੋਕਸ ਚੁਣੌਤੀ: ਜਵਾਬ ਦਾ ਰੰਗ ਯਾਦ ਰੱਖੋ ਅਤੇ ਇਸ ਨੂੰ ਸਮਾਨ ਰੰਗਾਂ ਵਿੱਚੋਂ ਚੁਣੋ।",
         "description": "ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ ਤੋਂ ਪਹਿਲਾਂ ਅਸਲ ਰੰਗ ਸੂਝ ਦੀ ਜਾਂਚ। ਇਸਨੂੰ ਪਹਿਲਾਂ ਵੈੱਬ 'ਤੇ ਅਜ਼ਮਾਓ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
@@ -18186,10 +18186,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ਤੇਜ਼ ਖੇਡੋ",
           "ਹੁਣੇ ਸਥਾਪਿਤ ਕਰੋ"
         ],
-        "primaryCta": "ਕਲਰ ਸੈਂਸ ਟੈਸਟ ਸਥਾਪਿਤ ਕਰੋ",
+        "primaryCta": "Color Master: ਰੰਗ ਟੈਸਟ ਸਥਾਪਿਤ ਕਰੋ",
         "detailCta": "ਵੈੱਬ ਡੈਮੋ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
         "statusNote": "ਇਸਨੂੰ ਪਹਿਲਾਂ ਵੈੱਬ 'ਤੇ ਅਜ਼ਮਾਓ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
-        "iconAlt": "ਕਲਰ ਸੈਂਸ ਟੈਸਟ ਪ੍ਰਤੀਕ"
+        "iconAlt": "Color Master: ਰੰਗ ਟੈਸਟ ਪ੍ਰਤੀਕ"
       },
       "koreanRandomDefense": {
         "name": "ਕੋਰੀਅਨ ਬੇਤਰਤੀਬ ਰੱਖਿਆ",
@@ -18259,7 +18259,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10-ਸਕਿੰਟ ਦੀ ਚੁਣੌਤੀ ਵਿੱਚ ਦੋਸਤਾਂ ਨਾਲ ਮੁਕਾਬਲਾ ਕਰੋ।"
       },
       "galaxyCode": {
-        "app": "ਏਲੀਅਨ ਟੈਕਸਟ ਮੇਕਰ",
+        "app": "Galaxy Code: ਏਲੀਅਨ ਟੈਕਸਟ",
         "title": "\"ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਇੱਕ ਏਲੀਅਨ ਸੁਨੇਹਾ ਭੇਜੋ ਜੋ ਉਹ ਡੀਕੋਡ ਨਹੀਂ ਕਰ ਸਕਦਾ।\"",
         "description": "ਗੁਪਤ ਸੁਨੇਹੇ ਛੱਡੋ ਜੋ ਸਿਰਫ਼ ਸ਼ੇਅਰ-ਕੁੰਜੀ ਧਾਰਕ ਹੀ ਡੀਕੋਡ ਕਰ ਸਕਦੇ ਹਨ।"
       },
@@ -18294,7 +18294,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "ਆਖਰੀ ਅੱਪਡੇਟ: 2026.05.31",
       "googlePlay": "Google Play ਐਪਾਂ",
       "colorTest": "ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ",
-      "alienText": "ਏਲੀਅਨ ਟੈਕਸਟ ਮੇਕਰ",
+      "alienText": "Galaxy Code: ਏਲੀਅਨ ਟੈਕਸਟ",
       "ufoApp": "UFO ਸਿਗਨਲ ਸਿਮੂਲੇਟਰ",
       "privacyPolicy": "ਗੋਪਨੀਯਤਾ ਨੀਤੀ",
       "appAds": "app-ads.txt",
@@ -18320,7 +18320,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "رنگ های مختلف را پیدا کنید، ساز متن بیگانه، شبیه ساز سیگنال بشقاب پرنده، تست حس رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
+      "description": "رنگ های مختلف را پیدا کنید، Galaxy Code: متن بیگانه، شبیه‌ساز سیگنال یوفو، Color Master: آزمون رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
       "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
@@ -18402,7 +18402,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد رنگ های مختلف را پیدا کنید"
       },
       "galaxyCode": {
-        "name": "ساز متن بیگانه",
+        "name": "Galaxy Code: متن بیگانه",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -18415,10 +18415,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد ساز متن بیگانه"
+        "iconAlt": "نماد Galaxy Code: متن بیگانه"
       },
       "ufoSignal": {
-        "name": "شبیه ساز سیگنال بشقاب پرنده",
+        "name": "شبیه‌ساز سیگنال یوفو",
         "category": "برنامه سرگرمی سیگنال رمز و راز",
         "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
         "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
@@ -18428,26 +18428,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "شبیه ساز سیگنال بشقاب پرنده را نصب کنید",
+        "primaryCta": "شبیه‌ساز سیگنال یوفو را نصب کنید",
         "detailCta": "مشاهده جزئیات برنامه",
         "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد شبیه ساز سیگنال بشقاب پرنده"
+        "iconAlt": "نماد شبیه‌ساز سیگنال یوفو"
       },
       "colorMasterClassic": {
-        "name": "تست حس رنگ",
+        "name": "Color Master: آزمون رنگ",
         "category": "بازی کلاسیک حس رنگ",
         "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
-        "description": "تست حس رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "description": "Color Master: آزمون رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "تست حس رنگ را نصب کنید",
+        "primaryCta": "Color Master: آزمون رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد تست حس رنگ"
+        "iconAlt": "نماد Color Master: آزمون رنگ"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای",
@@ -18517,12 +18517,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "ساز متن بیگانه",
+        "app": "Galaxy Code: متن بیگانه",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "شبیه ساز سیگنال بشقاب پرنده",
+        "app": "شبیه‌ساز سیگنال یوفو",
         "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
@@ -18552,8 +18552,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
       "colorTest": "رنگ های مختلف را پیدا کنید",
-      "alienText": "ساز متن بیگانه",
-      "ufoApp": "شبیه ساز سیگنال بشقاب پرنده",
+      "alienText": "Galaxy Code: متن بیگانه",
+      "ufoApp": "شبیه‌ساز سیگنال یوفو",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
       "contact": "تماس بگیرید",
@@ -18578,7 +18578,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-AE": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "رنگ های مختلف را پیدا کنید، ساز متن بیگانه، شبیه ساز سیگنال بشقاب پرنده، تست حس رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
+      "description": "رنگ های مختلف را پیدا کنید، Galaxy Code: متن بیگانه، شبیه‌ساز سیگنال یوفو، Color Master: آزمون رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
       "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
@@ -18660,7 +18660,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد رنگ های مختلف را پیدا کنید"
       },
       "galaxyCode": {
-        "name": "ساز متن بیگانه",
+        "name": "Galaxy Code: متن بیگانه",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -18673,10 +18673,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد ساز متن بیگانه"
+        "iconAlt": "نماد Galaxy Code: متن بیگانه"
       },
       "ufoSignal": {
-        "name": "شبیه ساز سیگنال بشقاب پرنده",
+        "name": "شبیه‌ساز سیگنال یوفو",
         "category": "برنامه سرگرمی سیگنال رمز و راز",
         "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
         "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
@@ -18686,26 +18686,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "شبیه ساز سیگنال بشقاب پرنده را نصب کنید",
+        "primaryCta": "شبیه‌ساز سیگنال یوفو را نصب کنید",
         "detailCta": "مشاهده جزئیات برنامه",
         "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد شبیه ساز سیگنال بشقاب پرنده"
+        "iconAlt": "نماد شبیه‌ساز سیگنال یوفو"
       },
       "colorMasterClassic": {
-        "name": "تست حس رنگ",
+        "name": "Color Master: آزمون رنگ",
         "category": "بازی کلاسیک حس رنگ",
         "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
-        "description": "تست حس رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "description": "Color Master: آزمون رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "تست حس رنگ را نصب کنید",
+        "primaryCta": "Color Master: آزمون رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد تست حس رنگ"
+        "iconAlt": "نماد Color Master: آزمون رنگ"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای",
@@ -18775,12 +18775,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "ساز متن بیگانه",
+        "app": "Galaxy Code: متن بیگانه",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "شبیه ساز سیگنال بشقاب پرنده",
+        "app": "شبیه‌ساز سیگنال یوفو",
         "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
@@ -18810,8 +18810,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
       "colorTest": "رنگ های مختلف را پیدا کنید",
-      "alienText": "ساز متن بیگانه",
-      "ufoApp": "شبیه ساز سیگنال بشقاب پرنده",
+      "alienText": "Galaxy Code: متن بیگانه",
+      "ufoApp": "شبیه‌ساز سیگنال یوفو",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
       "contact": "تماس بگیرید",
@@ -18836,7 +18836,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-AF": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "رنگ های مختلف را پیدا کنید، ساز متن بیگانه، شبیه ساز سیگنال بشقاب پرنده، تست حس رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
+      "description": "رنگ های مختلف را پیدا کنید، Galaxy Code: متن بیگانه، شبیه‌ساز سیگنال یوفو، Color Master: آزمون رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
       "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
@@ -18918,7 +18918,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد رنگ های مختلف را پیدا کنید"
       },
       "galaxyCode": {
-        "name": "ساز متن بیگانه",
+        "name": "Galaxy Code: متن بیگانه",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -18931,10 +18931,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد ساز متن بیگانه"
+        "iconAlt": "نماد Galaxy Code: متن بیگانه"
       },
       "ufoSignal": {
-        "name": "شبیه ساز سیگنال بشقاب پرنده",
+        "name": "شبیه‌ساز سیگنال یوفو",
         "category": "برنامه سرگرمی سیگنال رمز و راز",
         "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
         "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
@@ -18944,26 +18944,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "شبیه ساز سیگنال بشقاب پرنده را نصب کنید",
+        "primaryCta": "شبیه‌ساز سیگنال یوفو را نصب کنید",
         "detailCta": "مشاهده جزئیات برنامه",
         "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد شبیه ساز سیگنال بشقاب پرنده"
+        "iconAlt": "نماد شبیه‌ساز سیگنال یوفو"
       },
       "colorMasterClassic": {
-        "name": "تست حس رنگ",
+        "name": "Color Master: آزمون رنگ",
         "category": "بازی کلاسیک حس رنگ",
         "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
-        "description": "تست حس رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "description": "Color Master: آزمون رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "تست حس رنگ را نصب کنید",
+        "primaryCta": "Color Master: آزمون رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد تست حس رنگ"
+        "iconAlt": "نماد Color Master: آزمون رنگ"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای",
@@ -19033,12 +19033,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "ساز متن بیگانه",
+        "app": "Galaxy Code: متن بیگانه",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "شبیه ساز سیگنال بشقاب پرنده",
+        "app": "شبیه‌ساز سیگنال یوفو",
         "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
@@ -19068,8 +19068,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
       "colorTest": "رنگ های مختلف را پیدا کنید",
-      "alienText": "ساز متن بیگانه",
-      "ufoApp": "شبیه ساز سیگنال بشقاب پرنده",
+      "alienText": "Galaxy Code: متن بیگانه",
+      "ufoApp": "شبیه‌ساز سیگنال یوفو",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
       "contact": "تماس بگیرید",
@@ -19094,7 +19094,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-IR": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "رنگ های مختلف را پیدا کنید، ساز متن بیگانه، شبیه ساز سیگنال بشقاب پرنده، تست حس رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
+      "description": "رنگ های مختلف را پیدا کنید، Galaxy Code: متن بیگانه، شبیه‌ساز سیگنال یوفو، Color Master: آزمون رنگ، فرار از پیچ و خم تاریک و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
       "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
@@ -19176,7 +19176,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد رنگ های مختلف را پیدا کنید"
       },
       "galaxyCode": {
-        "name": "ساز متن بیگانه",
+        "name": "Galaxy Code: متن بیگانه",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -19189,10 +19189,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد ساز متن بیگانه"
+        "iconAlt": "نماد Galaxy Code: متن بیگانه"
       },
       "ufoSignal": {
-        "name": "شبیه ساز سیگنال بشقاب پرنده",
+        "name": "شبیه‌ساز سیگنال یوفو",
         "category": "برنامه سرگرمی سیگنال رمز و راز",
         "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
         "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
@@ -19202,26 +19202,26 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "شبیه ساز سیگنال بشقاب پرنده را نصب کنید",
+        "primaryCta": "شبیه‌ساز سیگنال یوفو را نصب کنید",
         "detailCta": "مشاهده جزئیات برنامه",
         "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد شبیه ساز سیگنال بشقاب پرنده"
+        "iconAlt": "نماد شبیه‌ساز سیگنال یوفو"
       },
       "colorMasterClassic": {
-        "name": "تست حس رنگ",
+        "name": "Color Master: آزمون رنگ",
         "category": "بازی کلاسیک حس رنگ",
         "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
-        "description": "تست حس رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "description": "Color Master: آزمون رنگ اصلی قبل از رنگ های مختلف را پیدا کنید. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "تست حس رنگ را نصب کنید",
+        "primaryCta": "Color Master: آزمون رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد تست حس رنگ"
+        "iconAlt": "نماد Color Master: آزمون رنگ"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای",
@@ -19291,12 +19291,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "ساز متن بیگانه",
+        "app": "Galaxy Code: متن بیگانه",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "شبیه ساز سیگنال بشقاب پرنده",
+        "app": "شبیه‌ساز سیگنال یوفو",
         "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
@@ -19326,8 +19326,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
       "colorTest": "رنگ های مختلف را پیدا کنید",
-      "alienText": "ساز متن بیگانه",
-      "ufoApp": "شبیه ساز سیگنال بشقاب پرنده",
+      "alienText": "Galaxy Code: متن بیگانه",
+      "ufoApp": "شبیه‌ساز سیگنال یوفو",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
       "contact": "تماس بگیرید",
@@ -19352,7 +19352,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pt-BR": {
     "seo": {
       "title": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android gratuitos",
-      "description": "Instale Cor diferente, Texto alienígena, Simulador sinal OVNI, Teste senso de cor, Fuga labirinto escuro e testes privados para mais miniaplicativos Android.",
+      "description": "Instale Cor diferente, Galaxy Code: texto alien, Simulador de Sinal UFO, Color Master: Teste de cor, Fuga labirinto escuro e testes privados para mais miniaplicativos Android.",
       "ogTitle": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android",
       "ogDescription": "Encontre cores estranhas, crie textos secretos no estilo alienígena, envie sinais divertidos de OVNIs, escape de labirintos escuros e participe de testes privados para diversão rápida com Android."
     },
@@ -19434,7 +19434,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ícone Cor diferente"
       },
       "galaxyCode": {
-        "name": "Texto alienígena",
+        "name": "Galaxy Code: texto alien",
         "category": "Aplicativo de mensagem secreta",
         "tagline": "Crie mensagens secretas semelhantes a alienígenas que precisam de uma chave de compartilhamento para serem decodificadas.",
         "description": "Crie suas próprias regras de linguagem galáctica. Somente pessoas com sua chave de compartilhamento podem recriar as mesmas regras, e o texto original não é carregado em um servidor.",
@@ -19447,10 +19447,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crie mensagens secretas",
         "detailCta": "Experimente a demonstração na web",
         "statusNote": "Disponível agora em Google Play.",
-        "iconAlt": "Ícone Texto alienígena"
+        "iconAlt": "Ícone Galaxy Code: texto alien"
       },
       "ufoSignal": {
-        "name": "Simulador sinal OVNI",
+        "name": "Simulador de Sinal UFO",
         "category": "Aplicativo de entretenimento com sinal misterioso",
         "tagline": "Envie um sinal espacial divertido e aproveite o clima do OVNI.",
         "description": "Abra o aplicativo, pressione o botão de sinalização e desfrute de som e animação que fazem o momento parecer um pequeno ritual de OVNI.",
@@ -19460,13 +19460,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animação de humor",
           "Sem inscrição"
         ],
-        "primaryCta": "Instale Simulador sinal OVNI",
+        "primaryCta": "Instale Simulador de Sinal UFO",
         "detailCta": "Ver detalhes do aplicativo",
         "statusNote": "Veja os detalhes do aplicativo e instale-o em Google Play.",
-        "iconAlt": "Ícone Simulador sinal OVNI"
+        "iconAlt": "Ícone Simulador de Sinal UFO"
       },
       "colorMasterClassic": {
-        "name": "Teste senso de cor",
+        "name": "Color Master: Teste de cor",
         "category": "Jogo clássico de percepção de cores",
         "tagline": "O desafio original de foco na cor: lembre-se da cor da resposta e escolha-a entre cores semelhantes.",
         "description": "O teste de detecção de cor original antes de Cor diferente. Experimente primeiro na web e depois instale-o em Google Play.",
@@ -19479,7 +19479,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instalar teste de detecção de cores",
         "detailCta": "Experimente a demonstração na web",
         "statusNote": "Experimente primeiro na web e depois instale-o em Google Play.",
-        "iconAlt": "Ícone Teste senso de cor"
+        "iconAlt": "Ícone Color Master: Teste de cor"
       },
       "koreanRandomDefense": {
         "name": "Defesa coreana aleatória",
@@ -19549,12 +19549,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Competir com amigos em um desafio de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Texto alienígena",
+        "app": "Galaxy Code: texto alien",
         "title": "“Envie ao seu amigo uma mensagem alienígena que ele não possa decodificar.”",
         "description": "Deixe mensagens secretas que somente os detentores de chaves compartilhadas possam decodificar."
       },
       "ufoSignal": {
-        "app": "Simulador sinal OVNI",
+        "app": "Simulador de Sinal UFO",
         "title": "“O que acontece se você enviar um sinal de OVNI ao amanhecer?”",
         "description": "Aproveite os sons e a animação em um quarto escuro."
       }
@@ -19584,8 +19584,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última atualização: 2026.05.31",
       "googlePlay": "Aplicativos Google Play",
       "colorTest": "Cor diferente",
-      "alienText": "Texto alienígena",
-      "ufoApp": "Simulador sinal OVNI",
+      "alienText": "Galaxy Code: texto alien",
+      "ufoApp": "Simulador de Sinal UFO",
       "privacyPolicy": "Política de Privacidade",
       "appAds": "app-ads.txt",
       "contact": "Contato",
@@ -19610,7 +19610,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pt-PT": {
     "seo": {
       "title": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android gratuitos",
-      "description": "Instale Cor diferente, Texto alienígena, Simulador sinal OVNI, Teste senso de cor, Fuga labirinto escuro e testes privados para mais miniaplicativos Android.",
+      "description": "Instale Cor diferente, Galaxy Code: texto alien, Simulador de Sinal UFO, Color Master: Teste de cor, Fuga labirinto escuro e testes privados para mais miniaplicativos Android.",
       "ogTitle": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android",
       "ogDescription": "Encontre cores estranhas, crie textos secretos no estilo alienígena, envie sinais divertidos de OVNIs, escape de labirintos escuros e participe de testes privados para diversão rápida com Android."
     },
@@ -19692,7 +19692,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ícone Cor diferente"
       },
       "galaxyCode": {
-        "name": "Texto alienígena",
+        "name": "Galaxy Code: texto alien",
         "category": "Aplicativo de mensagem secreta",
         "tagline": "Crie mensagens secretas semelhantes a alienígenas que precisam de uma chave de compartilhamento para serem decodificadas.",
         "description": "Crie suas próprias regras de linguagem galáctica. Somente pessoas com sua chave de compartilhamento podem recriar as mesmas regras, e o texto original não é carregado em um servidor.",
@@ -19705,10 +19705,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crie mensagens secretas",
         "detailCta": "Experimente a demonstração na web",
         "statusNote": "Disponível agora em Google Play.",
-        "iconAlt": "Ícone Texto alienígena"
+        "iconAlt": "Ícone Galaxy Code: texto alien"
       },
       "ufoSignal": {
-        "name": "Simulador sinal OVNI",
+        "name": "Simulador de Sinal UFO",
         "category": "Aplicativo de entretenimento com sinal misterioso",
         "tagline": "Envie um sinal espacial divertido e aproveite o clima do OVNI.",
         "description": "Abra o aplicativo, pressione o botão de sinalização e desfrute de som e animação que fazem o momento parecer um pequeno ritual de OVNI.",
@@ -19718,13 +19718,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animação de humor",
           "Sem inscrição"
         ],
-        "primaryCta": "Instale Simulador sinal OVNI",
+        "primaryCta": "Instale Simulador de Sinal UFO",
         "detailCta": "Ver detalhes do aplicativo",
         "statusNote": "Veja os detalhes do aplicativo e instale-o em Google Play.",
-        "iconAlt": "Ícone Simulador sinal OVNI"
+        "iconAlt": "Ícone Simulador de Sinal UFO"
       },
       "colorMasterClassic": {
-        "name": "Teste senso de cor",
+        "name": "Color Master: Teste de cor",
         "category": "Jogo clássico de percepção de cores",
         "tagline": "O desafio original de foco na cor: lembre-se da cor da resposta e escolha-a entre cores semelhantes.",
         "description": "O teste de detecção de cor original antes de Cor diferente. Experimente primeiro na web e depois instale-o em Google Play.",
@@ -19737,7 +19737,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Instalar teste de detecção de cores",
         "detailCta": "Experimente a demonstração na web",
         "statusNote": "Experimente primeiro na web e depois instale-o em Google Play.",
-        "iconAlt": "Ícone Teste senso de cor"
+        "iconAlt": "Ícone Color Master: Teste de cor"
       },
       "koreanRandomDefense": {
         "name": "Defesa coreana aleatória",
@@ -19807,12 +19807,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Competir com amigos em um desafio de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Texto alienígena",
+        "app": "Galaxy Code: texto alien",
         "title": "“Envie ao seu amigo uma mensagem alienígena que ele não possa decodificar.”",
         "description": "Deixe mensagens secretas que somente os detentores de chaves compartilhadas possam decodificar."
       },
       "ufoSignal": {
-        "app": "Simulador sinal OVNI",
+        "app": "Simulador de Sinal UFO",
         "title": "“O que acontece se você enviar um sinal de OVNI ao amanhecer?”",
         "description": "Aproveite os sons e a animação em um quarto escuro."
       }
@@ -19842,8 +19842,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Última atualização: 2026.05.31",
       "googlePlay": "Aplicativos Google Play",
       "colorTest": "Cor diferente",
-      "alienText": "Texto alienígena",
-      "ufoApp": "Simulador sinal OVNI",
+      "alienText": "Galaxy Code: texto alien",
+      "ufoApp": "Simulador de Sinal UFO",
       "privacyPolicy": "Política de Privacidade",
       "appAds": "app-ads.txt",
       "contact": "Contato",
@@ -19868,7 +19868,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pl-PL": {
     "seo": {
       "title": "Laboratorium aplikacji NeoKIM | Darmowe aplikacje Android Mini",
-      "description": "Zainstaluj Znajdź inny kolor, Kreator tekstu obcych, Symulator sygnału UFO, Test wyczucia koloru, Ucieczka z ciemnego labiryntu i prywatne testy, aby uzyskać więcej miniaplikacji Android.",
+      "description": "Zainstaluj Znajdź inny kolor, Galaxy Code: texte alien, Symulator sygnału UFO, Color Master: Test kolorów, Ucieczka z ciemnego labiryntu i prywatne testy, aby uzyskać więcej miniaplikacji Android.",
       "ogTitle": "Laboratorium aplikacji NeoKIM | Miniaplikacje Android",
       "ogDescription": "Znajdź dziwne kolory, napisz tajny tekst w stylu kosmitów, wysyłaj zabawne sygnały UFO, ucieknij z ciemnych labiryntów i dołącz do prywatnych testów, aby szybko się bawić Android."
     },
@@ -19950,7 +19950,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Znajdź inny kolor"
       },
       "galaxyCode": {
-        "name": "Kreator tekstu obcych",
+        "name": "Galaxy Code: texte alien",
         "category": "Aplikacja do tajnych wiadomości",
         "tagline": "Twórz tajne wiadomości przypominające kosmitów, które wymagają klucza udostępniania do odszyfrowania.",
         "description": "Stwórz własne zasady języka galaktycznego. Tylko osoby posiadające Twój klucz udostępniania mogą odtworzyć te same reguły, a oryginalny tekst nie jest przesyłany na serwer.",
@@ -19963,7 +19963,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Twórz tajne wiadomości",
         "detailCta": "Wypróbuj wersję demonstracyjną w Internecie",
         "statusNote": "Dostępne teraz na Google Play.",
-        "iconAlt": "Ikona Kreator tekstu obcych"
+        "iconAlt": "Ikona Galaxy Code: texte alien"
       },
       "ufoSignal": {
         "name": "Symulator sygnału UFO",
@@ -19982,7 +19982,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona Symulator sygnału UFO"
       },
       "colorMasterClassic": {
-        "name": "Test wyczucia koloru",
+        "name": "Color Master: Test kolorów",
         "category": "Klasyczna gra polegająca na wyczuciu kolorów",
         "tagline": "Oryginalne wyzwanie skupienia się na kolorze: zapamiętaj kolor odpowiedzi i wybierz go spośród podobnych kolorów.",
         "description": "Oryginalny test wyczucia koloru przed Znajdź inny kolor. Najpierw wypróbuj w Internecie, a następnie zainstaluj z Google Play.",
@@ -19995,7 +19995,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Zainstaluj Test wyczucia kolorów",
         "detailCta": "Wypróbuj wersję demonstracyjną w Internecie",
         "statusNote": "Najpierw wypróbuj w Internecie, a następnie zainstaluj z Google Play.",
-        "iconAlt": "Ikona Test wyczucia koloru"
+        "iconAlt": "Ikona Color Master: Test kolorów"
       },
       "koreanRandomDefense": {
         "name": "Koreańska obrona losowa",
@@ -20065,7 +20065,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Rywalizuj z przyjaciółmi w 10-sekundowym wyzwaniu."
       },
       "galaxyCode": {
-        "app": "Kreator tekstu obcych",
+        "app": "Galaxy Code: texte alien",
         "title": "„Wyślij swojemu przyjacielowi wiadomość od kosmitów, której nie może rozszyfrować”.",
         "description": "Zostaw tajne wiadomości, które tylko posiadacze klucza udostępniania mogą odszyfrować."
       },
@@ -20100,7 +20100,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Ostatnia aktualizacja: 2026.05.31",
       "googlePlay": "Aplikacje Google Play",
       "colorTest": "Znajdź inny kolor",
-      "alienText": "Kreator tekstu obcych",
+      "alienText": "Galaxy Code: texte alien",
       "ufoApp": "Symulator sygnału UFO",
       "privacyPolicy": "Polityka prywatności",
       "appAds": "app-ads.txt",
@@ -20126,7 +20126,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fr-CA": {
     "seo": {
       "title": "Laboratoire d'applications NeoKIM | Mini-applications gratuites Android",
-      "description": "Installez Couleur différente, Texte extraterrestre, Simulateur signal OVNI, Test sens des couleurs, Évasion labyrinthe sombre et des tests privés pour plus de mini-applications Android.",
+      "description": "Installez Couleur différente, Galaxy Code: texte alien, Simulateur de signal OVNI, Color Master: Test couleur, Évasion labyrinthe sombre et des tests privés pour plus de mini-applications Android.",
       "ogTitle": "Laboratoire d'applications NeoKIM | Mini-applications Android",
       "ogDescription": "Trouvez des couleurs étranges, créez un texte secret de style extraterrestre, envoyez des signaux d'OVNI ludiques, échappez à des labyrinthes sombres et rejoignez des tests privés pour vous amuser rapidement avec Android."
     },
@@ -20208,7 +20208,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icône Couleur différente"
       },
       "galaxyCode": {
-        "name": "Texte extraterrestre",
+        "name": "Galaxy Code: texte alien",
         "category": "Application de messages secrets",
         "tagline": "Créez des messages secrets de type extraterrestre qui nécessitent une clé de partage pour être décodés.",
         "description": "Créez vos propres règles de langage galactique. Seules les personnes disposant de votre clé de partage peuvent recréer les mêmes règles et le texte original n'est pas téléchargé sur un serveur.",
@@ -20221,10 +20221,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Créer des messages secrets",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Icône Texte extraterrestre"
+        "iconAlt": "Icône Galaxy Code: texte alien"
       },
       "ufoSignal": {
-        "name": "Simulateur signal OVNI",
+        "name": "Simulateur de signal OVNI",
         "category": "Application de divertissement avec signal mystère",
         "tagline": "Envoyez un signal spatial ludique et profitez de l'ambiance OVNI.",
         "description": "Ouvrez l'application, appuyez sur le bouton de signal et profitez du son et de l'animation qui donnent à ce moment l'impression d'être un petit rituel OVNI.",
@@ -20234,13 +20234,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animation d'ambiance",
           "Aucune inscription"
         ],
-        "primaryCta": "Installer Simulateur signal OVNI",
+        "primaryCta": "Installer Simulateur de signal OVNI",
         "detailCta": "Afficher les détails de l'application",
         "statusNote": "Affichez les détails de l'application, puis installez-la à partir de Google Play.",
-        "iconAlt": "Icône Simulateur signal OVNI"
+        "iconAlt": "Icône Simulateur de signal OVNI"
       },
       "colorMasterClassic": {
-        "name": "Test sens des couleurs",
+        "name": "Color Master: Test couleur",
         "category": "Jeu classique de détection des couleurs",
         "tagline": "Le défi original de mise au point sur les couleurs : mémorisez la couleur de la réponse et choisissez-la parmi des couleurs similaires.",
         "description": "Le test original de détection des couleurs avant Couleur différente. Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
@@ -20253,7 +20253,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Installer le test de détection des couleurs",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
-        "iconAlt": "Icône Test sens des couleurs"
+        "iconAlt": "Icône Color Master: Test couleur"
       },
       "koreanRandomDefense": {
         "name": "Défense coréenne aléatoire",
@@ -20323,12 +20323,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Affrontez vos amis dans un défi de 10 secondes."
       },
       "galaxyCode": {
-        "app": "Texte extraterrestre",
+        "app": "Galaxy Code: texte alien",
         "title": "\"Envoyez à votre ami un message extraterrestre qu'il ne peut pas décoder.\"",
         "description": "Laissez des messages secrets que seuls les détenteurs de clés de partage peuvent décoder."
       },
       "ufoSignal": {
-        "app": "Simulateur signal OVNI",
+        "app": "Simulateur de signal OVNI",
         "title": "\"Que se passe-t-il si vous envoyez un signal d'OVNI à l'aube ?\"",
         "description": "Profitez des sons et de l'animation dans une pièce sombre."
       }
@@ -20358,8 +20358,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Dernière mise à jour : 2026.05.31",
       "googlePlay": "Applications Google Play",
       "colorTest": "Couleur différente",
-      "alienText": "Texte extraterrestre",
-      "ufoApp": "Simulateur signal OVNI",
+      "alienText": "Galaxy Code: texte alien",
+      "ufoApp": "Simulateur de signal OVNI",
       "privacyPolicy": "Politique de confidentialité",
       "appAds": "app-ads.txt",
       "contact": "Contacter",
@@ -20384,7 +20384,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fr-FR": {
     "seo": {
       "title": "Laboratoire d'applications NeoKIM | Mini-applications gratuites Android",
-      "description": "Installez Couleur différente, Texte extraterrestre, Simulateur signal OVNI, Test sens des couleurs, Évasion labyrinthe sombre et des tests privés pour plus de mini-applications Android.",
+      "description": "Installez Couleur différente, Galaxy Code: texte alien, Simulateur de signal OVNI, Color Master: Test couleur, Évasion labyrinthe sombre et des tests privés pour plus de mini-applications Android.",
       "ogTitle": "Laboratoire d'applications NeoKIM | Mini-applications Android",
       "ogDescription": "Trouvez des couleurs étranges, créez un texte secret de style extraterrestre, envoyez des signaux d'OVNI ludiques, échappez à des labyrinthes sombres et rejoignez des tests privés pour vous amuser rapidement avec Android."
     },
@@ -20466,7 +20466,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icône Couleur différente"
       },
       "galaxyCode": {
-        "name": "Texte extraterrestre",
+        "name": "Galaxy Code: texte alien",
         "category": "Application de messages secrets",
         "tagline": "Créez des messages secrets de type extraterrestre qui nécessitent une clé de partage pour être décodés.",
         "description": "Créez vos propres règles de langage galactique. Seules les personnes disposant de votre clé de partage peuvent recréer les mêmes règles et le texte original n'est pas téléchargé sur un serveur.",
@@ -20479,10 +20479,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Créer des messages secrets",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Icône Texte extraterrestre"
+        "iconAlt": "Icône Galaxy Code: texte alien"
       },
       "ufoSignal": {
-        "name": "Simulateur signal OVNI",
+        "name": "Simulateur de signal OVNI",
         "category": "Application de divertissement avec signal mystère",
         "tagline": "Envoyez un signal spatial ludique et profitez de l'ambiance OVNI.",
         "description": "Ouvrez l'application, appuyez sur le bouton de signal et profitez du son et de l'animation qui donnent à ce moment l'impression d'être un petit rituel OVNI.",
@@ -20492,13 +20492,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animation d'ambiance",
           "Aucune inscription"
         ],
-        "primaryCta": "Installer Simulateur signal OVNI",
+        "primaryCta": "Installer Simulateur de signal OVNI",
         "detailCta": "Afficher les détails de l'application",
         "statusNote": "Affichez les détails de l'application, puis installez-la à partir de Google Play.",
-        "iconAlt": "Icône Simulateur signal OVNI"
+        "iconAlt": "Icône Simulateur de signal OVNI"
       },
       "colorMasterClassic": {
-        "name": "Test sens des couleurs",
+        "name": "Color Master: Test couleur",
         "category": "Jeu classique de détection des couleurs",
         "tagline": "Le défi original de mise au point sur les couleurs : mémorisez la couleur de la réponse et choisissez-la parmi des couleurs similaires.",
         "description": "Le test original de détection des couleurs avant Couleur différente. Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
@@ -20511,7 +20511,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Installer le test de détection des couleurs",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
-        "iconAlt": "Icône Test sens des couleurs"
+        "iconAlt": "Icône Color Master: Test couleur"
       },
       "koreanRandomDefense": {
         "name": "Défense coréenne aléatoire",
@@ -20581,12 +20581,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Affrontez vos amis dans un défi de 10 secondes."
       },
       "galaxyCode": {
-        "app": "Texte extraterrestre",
+        "app": "Galaxy Code: texte alien",
         "title": "\"Envoyez à votre ami un message extraterrestre qu'il ne peut pas décoder.\"",
         "description": "Laissez des messages secrets que seuls les détenteurs de clés de partage peuvent décoder."
       },
       "ufoSignal": {
-        "app": "Simulateur signal OVNI",
+        "app": "Simulateur de signal OVNI",
         "title": "\"Que se passe-t-il si vous envoyez un signal d'OVNI à l'aube ?\"",
         "description": "Profitez des sons et de l'animation dans une pièce sombre."
       }
@@ -20616,8 +20616,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Dernière mise à jour : 2026.05.31",
       "googlePlay": "Applications Google Play",
       "colorTest": "Couleur différente",
-      "alienText": "Texte extraterrestre",
-      "ufoApp": "Simulateur signal OVNI",
+      "alienText": "Galaxy Code: texte alien",
+      "ufoApp": "Simulateur de signal OVNI",
       "privacyPolicy": "Politique de confidentialité",
       "appAds": "app-ads.txt",
       "contact": "Contacter",
@@ -20642,7 +20642,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fi-FI": {
     "seo": {
       "title": "NeoKIM App Lab | Ilmaiset Android Mini -sovellukset",
-      "description": "Asenna Etsi eri väriä, Vierasteksti, UFO-signaalisimulaattori, Väritesti, Tumma labyrintti ja yksityisiä testejä muille Android-minisovelluksille.",
+      "description": "Asenna Etsi eri väriä, Galaxy Code: alienteksti, UFO-signaalisimulaattori, Color Master: Väritesti, Tumma labyrintti ja yksityisiä testejä muille Android-minisovelluksille.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Löydä outoja värejä, tee alien-tyylistä salatekstiä, lähetä leikkisä UFO-signaalia, pakene tummia sokkeloita ja liity yksityisiin testeihin saadaksesi nopeaa Android-hauskaa."
     },
@@ -20724,7 +20724,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Etsi eri väriä -kuvake"
       },
       "galaxyCode": {
-        "name": "Vierasteksti",
+        "name": "Galaxy Code: alienteksti",
         "category": "Salainen viestisovellus",
         "tagline": "Luo muukalaisia muistuttavia salaisia viestejä, jotka tarvitsevat jakoavaimen koodin purkamiseen.",
         "description": "Luo omat galaktisen kielen säännöt. Vain henkilöt, joilla on jakoavaimesi, voivat luoda samat säännöt uudelleen, eikä alkuperäistä tekstiä lähetetä palvelimelle.",
@@ -20737,7 +20737,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Luo salaisia viestejä",
         "detailCta": "Kokeile Web-demoa",
         "statusNote": "Saatavilla nyt Google Playista.",
-        "iconAlt": "Vierasteksti -kuvake"
+        "iconAlt": "Galaxy Code: alienteksti -kuvake"
       },
       "ufoSignal": {
         "name": "UFO-signaalisimulaattori",
@@ -20756,7 +20756,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO-signaalisimulaattori -kuvake"
       },
       "colorMasterClassic": {
-        "name": "Väritesti",
+        "name": "Color Master: Väritesti",
         "category": "Klassinen väriaistipeli",
         "tagline": "Alkuperäinen väritarkennushaaste: muista vastauksen väri ja valitse se samanlaisista väreistä.",
         "description": "Alkuperäinen värintunnistustesti ennen Etsi eri väriäia. Kokeile sitä ensin verkossa ja asenna se sitten Google Playista.",
@@ -20766,10 +20766,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Nopea peli",
           "Asenna nyt"
         ],
-        "primaryCta": "Asenna Väritesti",
+        "primaryCta": "Asenna Color Master: Väritesti",
         "detailCta": "Kokeile Web-demoa",
         "statusNote": "Kokeile sitä ensin verkossa ja asenna se sitten Google Playista.",
-        "iconAlt": "Väritesti -kuvake"
+        "iconAlt": "Color Master: Väritesti -kuvake"
       },
       "koreanRandomDefense": {
         "name": "Korean satunnainen puolustus",
@@ -20839,7 +20839,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Kilpaile ystävien kanssa 10 sekunnin haasteessa."
       },
       "galaxyCode": {
-        "app": "Vierasteksti",
+        "app": "Galaxy Code: alienteksti",
         "title": "\"Lähetä ystävällesi muukalainen viesti, jota hän ei voi purkaa.\"",
         "description": "Jätä salaisia viestejä, jotka vain osakkeiden avainten haltijat voivat purkaa."
       },
@@ -20874,7 +20874,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Viimeksi päivitetty: 2026.05.31",
       "googlePlay": "Google Play-sovellukset",
       "colorTest": "Etsi eri väriä",
-      "alienText": "Vierasteksti",
+      "alienText": "Galaxy Code: alienteksti",
       "ufoApp": "UFO-signaalisimulaattori",
       "privacyPolicy": "Tietosuojakäytäntö",
       "appAds": "app-ads.txt",
@@ -20900,7 +20900,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fil": {
     "seo": {
       "title": "NeoKIM App Lab | Libreng Android Mini Apps",
-      "description": "I-install ang Maghanap ng Iba't ibang Kulay, Tekstong Alien, Simulador ng Senyas UFO, Pagsubok sa Kulay, Madilim na Labirinto, at mga pribadong pagsubok para sa higit pang mga mini app ng Android.",
+      "description": "I-install ang Maghanap ng Iba't ibang Kulay, Galaxy Code: tekstong alien, Simulator ng Sinyal UFO, Color Master: Test ng Kulay, Madilim na Labirinto, at mga pribadong pagsubok para sa higit pang mga mini app ng Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Maghanap ng mga kakaibang kulay, gumawa ng alien-style na sikretong text, magpadala ng mga mapaglarong UFO signal, tumakas sa madilim na maze, at sumali sa mga pribadong pagsubok para sa mabilis na kasiyahan sa Android."
     },
@@ -20982,7 +20982,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "icon ng Maghanap ng Iba't ibang Kulay"
       },
       "galaxyCode": {
-        "name": "Tekstong Alien",
+        "name": "Galaxy Code: tekstong alien",
         "category": "Lihim na mensahe ng app",
         "tagline": "Gumawa ng mga alien-like na lihim na mensahe na nangangailangan ng share key para mag-decode.",
         "description": "Lumikha ng iyong sariling galactic na mga panuntunan sa wika. Ang mga taong may iyong share key lang ang makakagawa ng parehong mga panuntunan, at ang orihinal na text ay hindi ina-upload sa isang server.",
@@ -20995,10 +20995,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Gumawa ng Mga Lihim na Mensahe",
         "detailCta": "Subukan ang Web Demo",
         "statusNote": "Available na ngayon sa Google Play.",
-        "iconAlt": "icon ng Tekstong Alien"
+        "iconAlt": "icon ng Galaxy Code: tekstong alien"
       },
       "ufoSignal": {
-        "name": "Simulador ng Senyas UFO",
+        "name": "Simulator ng Sinyal UFO",
         "category": "Misteryo signal entertainment app",
         "tagline": "Magpadala ng mapaglarong space signal at tamasahin ang UFO mood.",
         "description": "Buksan ang app, pindutin ang button ng signal, at i-enjoy ang tunog at animation na nagpaparamdam sa sandaling ito na parang isang maliit na ritwal ng UFO.",
@@ -21008,13 +21008,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Animasyon ng mood",
           "Walang sign-up"
         ],
-        "primaryCta": "I-install ang Simulador ng Senyas UFO",
+        "primaryCta": "I-install ang Simulator ng Sinyal UFO",
         "detailCta": "Tingnan ang Mga Detalye ng App",
         "statusNote": "Tingnan ang mga detalye ng app, pagkatapos ay i-install ito mula sa Google Play.",
-        "iconAlt": "icon ng Simulador ng Senyas UFO"
+        "iconAlt": "icon ng Simulator ng Sinyal UFO"
       },
       "colorMasterClassic": {
-        "name": "Pagsubok sa Kulay",
+        "name": "Color Master: Test ng Kulay",
         "category": "Klasikong laro ng kahulugan ng kulay",
         "tagline": "Ang orihinal na hamon sa pagtutok sa kulay: tandaan ang kulay ng sagot at piliin ito mula sa magkatulad na mga kulay.",
         "description": "Ang orihinal na color sense test bago ang Maghanap ng Iba't ibang Kulay. Subukan muna ito sa web, pagkatapos ay i-install ito mula sa Google Play.",
@@ -21024,10 +21024,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mabilis na paglalaro",
           "I-install ngayon"
         ],
-        "primaryCta": "I-install ang Pagsubok sa Kulay",
+        "primaryCta": "I-install ang Color Master: Test ng Kulay",
         "detailCta": "Subukan ang Web Demo",
         "statusNote": "Subukan muna ito sa web, pagkatapos ay i-install ito mula sa Google Play.",
-        "iconAlt": "icon ng Pagsubok sa Kulay"
+        "iconAlt": "icon ng Color Master: Test ng Kulay"
       },
       "koreanRandomDefense": {
         "name": "Tanggulan ng Korea",
@@ -21097,12 +21097,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Makipagkumpitensya sa mga kaibigan sa isang 10 segundong hamon."
       },
       "galaxyCode": {
-        "app": "Tekstong Alien",
+        "app": "Galaxy Code: tekstong alien",
         "title": "\"Padalhan ang iyong kaibigan ng alien message na hindi nila ma-decode.\"",
         "description": "Mag-iwan ng mga lihim na mensahe na ang mga share-key holder lang ang makakapag-decode."
       },
       "ufoSignal": {
-        "app": "Simulador ng Senyas UFO",
+        "app": "Simulator ng Sinyal UFO",
         "title": "\"Ano ang mangyayari kung magpadala ka ng UFO signal sa madaling araw?\"",
         "description": "Tangkilikin ang mga tunog at animation sa isang madilim na silid."
       }
@@ -21132,8 +21132,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Huling na-update: 2026.05.31",
       "googlePlay": "Google Play Apps",
       "colorTest": "Maghanap ng Iba't ibang Kulay",
-      "alienText": "Tekstong Alien",
-      "ufoApp": "Simulador ng Senyas UFO",
+      "alienText": "Galaxy Code: tekstong alien",
+      "ufoApp": "Simulator ng Sinyal UFO",
       "privacyPolicy": "Patakaran sa Privacy",
       "appAds": "app-ads.txt",
       "contact": "Makipag-ugnayan",
@@ -21158,7 +21158,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hu-HU": {
     "seo": {
       "title": "NeoKIM App Lab | Ingyenes Android Mini alkalmazások",
-      "description": "Telepítse a Keressen más színt, Idegen szöveg, UFO jel szimulátor, Színérzékelési teszt, Sötét labirintus menekülés és privát teszteket további Android minialkalmazásokhoz.",
+      "description": "Telepítse a Keressen más színt, Galaxy Code: idegen szöveg, UFO jel szimulátor, Color Master: Színteszt, Sötét labirintus menekülés és privát teszteket további Android minialkalmazásokhoz.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
       "ogDescription": "Találja meg a furcsa színeket, készítsen idegen stílusú titkos szöveget, küldjön játékos UFO-jeleket, meneküljön el a sötét útvesztőkből, és csatlakozzon privát tesztekhez a gyors Android szórakozáshoz."
     },
@@ -21240,7 +21240,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Keressen más színt ikonra"
       },
       "galaxyCode": {
-        "name": "Idegen szöveg",
+        "name": "Galaxy Code: idegen szöveg",
         "category": "Titkos üzenet alkalmazás",
         "tagline": "Hozzon létre idegenszerű titkos üzeneteket, amelyek dekódolásához megosztási kulcsra van szükség.",
         "description": "Készítse el saját galaktikus nyelvi szabályait. Csak az Ön megosztási kulcsával rendelkező személyek hozhatják újra ugyanazokat a szabályokat, és az eredeti szöveg nem kerül feltöltésre a szerverre.",
@@ -21253,7 +21253,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Hozzon létre titkos üzeneteket",
         "detailCta": "Próbáld ki a webdemót",
         "statusNote": "Már elérhető a Google Play-en.",
-        "iconAlt": "Idegen szöveg ikonra"
+        "iconAlt": "Galaxy Code: idegen szöveg ikonra"
       },
       "ufoSignal": {
         "name": "UFO jel szimulátor",
@@ -21272,7 +21272,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO jel szimulátor ikonra"
       },
       "colorMasterClassic": {
-        "name": "Színérzékelési teszt",
+        "name": "Color Master: Színteszt",
         "category": "Klasszikus színérzékelési játék",
         "tagline": "Az eredeti szín-fókusz kihívás: emlékezzen a válasz színére, és válassza ki a hasonló színek közül.",
         "description": "Az eredeti színérzékelési teszt a Keressen más színt előtt. Először próbálja ki az interneten, majd telepítse a Google Play webhelyről.",
@@ -21282,10 +21282,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Gyors játék",
           "Telepítse most"
         ],
-        "primaryCta": "Telepítse a Színérzékelési teszt",
+        "primaryCta": "Telepítse a Color Master: Színteszt",
         "detailCta": "Próbáld ki a webdemót",
         "statusNote": "Először próbálja ki az interneten, majd telepítse a Google Play webhelyről.",
-        "iconAlt": "Színérzékelési teszt ikonra"
+        "iconAlt": "Color Master: Színteszt ikonra"
       },
       "koreanRandomDefense": {
         "name": "Koreai véletlen védelem",
@@ -21355,7 +21355,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "Versenyezz a barátaiddal egy 10 másodperces kihívásban."
       },
       "galaxyCode": {
-        "app": "Idegen szöveg",
+        "app": "Galaxy Code: idegen szöveg",
         "title": "\"Küldj a barátodnak egy idegen üzenetet, amelyet nem tudnak megfejteni.\"",
         "description": "Hagyjon titkos üzeneteket, amelyeket csak a megosztási kulcsok birtokosai tudnak dekódolni."
       },
@@ -21390,7 +21390,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "Utolsó frissítés: 2026.05.31",
       "googlePlay": "Google Play alkalmazások",
       "colorTest": "Keressen más színt",
-      "alienText": "Idegen szöveg",
+      "alienText": "Galaxy Code: idegen szöveg",
       "ufoApp": "UFO jel szimulátor",
       "privacyPolicy": "Adatvédelmi szabályzat",
       "appAds": "app-ads.txt",
@@ -21416,7 +21416,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "iw-IL": {
     "seo": {
       "title": "NeoKIM App Lab | אפליקציות מיני Android בחינם",
-      "description": "התקן את מצא צבע אחר, יוצר טקסטים חייזרים, סימולטור אותות עב\"מים, מבחן חוש צבע, בריחה מהמבוך האפל ובדיקות פרטיות לאפליקציות מיני נוספות של Android.",
+      "description": "התקן את מצא צבע אחר, Galaxy Code: טקסט חייזרי, סימולטור אות UFO, Color Master: מבחן צבעים, בריחה מהמבוך האפל ובדיקות פרטיות לאפליקציות מיני נוספות של Android.",
       "ogTitle": "NeoKIM App Lab | Android מיני אפליקציות",
       "ogDescription": "מצא צבעים מוזרים, צור טקסט סודי בסגנון חייזר, שלח אותות עב\"מים שובבים, לברוח ממבוכים אפלים, והצטרף לבדיקות פרטיות לכיף מהיר של Android."
     },
@@ -21498,7 +21498,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "סמל מצא צבע אחר"
       },
       "galaxyCode": {
-        "name": "יוצר טקסטים חייזרים",
+        "name": "Galaxy Code: טקסט חייזרי",
         "category": "אפליקציית הודעות סודיות",
         "tagline": "צור הודעות סודיות דמויות חייזרים שזקוקים למפתח שיתוף כדי לפענח.",
         "description": "צור חוקי שפה גלקטית משלך. רק אנשים עם מפתח השיתוף שלך יכולים ליצור מחדש את אותם כללים, והטקסט המקורי לא מועלה לשרת.",
@@ -21511,10 +21511,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "צור הודעות סודיות",
         "detailCta": "נסה את הדגמת אינטרנט",
         "statusNote": "זמין כעת ב-Google Play.",
-        "iconAlt": "סמל יוצר טקסטים חייזרים"
+        "iconAlt": "סמל Galaxy Code: טקסט חייזרי"
       },
       "ufoSignal": {
-        "name": "סימולטור אותות עב\"מים",
+        "name": "סימולטור אות UFO",
         "category": "אפליקציית בידור אות מסתורין",
         "tagline": "שלח אות מרחב שובב ותיהנה ממצב הרוח של עב\"מים.",
         "description": "פתחו את האפליקציה, לחצו על כפתור האות ותיהנו מסאונד ואנימציה שגורמים לרגע להרגיש כמו טקס עב\"מים קטן.",
@@ -21524,13 +21524,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "אנימציית מצב רוח",
           "אין הרשמה"
         ],
-        "primaryCta": "התקן את סימולטור אותות עב\"מים",
+        "primaryCta": "התקן את סימולטור אות UFO",
         "detailCta": "הצג את פרטי האפליקציה",
         "statusNote": "הצג את פרטי האפליקציה ולאחר מכן התקן אותה מ-Google Play.",
-        "iconAlt": "סמל סימולטור אותות עב\"מים"
+        "iconAlt": "סמל סימולטור אות UFO"
       },
       "colorMasterClassic": {
-        "name": "מבחן חוש צבע",
+        "name": "Color Master: מבחן צבעים",
         "category": "משחק חוש צבע קלאסי",
         "tagline": "האתגר המקורי של מיקוד הצבע: זכור את צבע התשובה ובחר אותו מתוך צבעים דומים.",
         "description": "בדיקת חוש הצבע המקורית לפני מצא צבע אחר. נסה אותו קודם באינטרנט, ולאחר מכן התקן אותו מ-Google Play.",
@@ -21540,10 +21540,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "משחק מהיר",
           "התקן עכשיו"
         ],
-        "primaryCta": "התקן את מבחן חוש צבע",
+        "primaryCta": "התקן את Color Master: מבחן צבעים",
         "detailCta": "נסה את הדגמת אינטרנט",
         "statusNote": "נסה אותו קודם באינטרנט, ולאחר מכן התקן אותו מ-Google Play.",
-        "iconAlt": "סמל מבחן חוש צבע"
+        "iconAlt": "סמל Color Master: מבחן צבעים"
       },
       "koreanRandomDefense": {
         "name": "הגנה אקראית קוריאנית",
@@ -21613,12 +21613,12 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "התחרו עם חברים באתגר של 10 שניות."
       },
       "galaxyCode": {
-        "app": "יוצר טקסטים חייזרים",
+        "app": "Galaxy Code: טקסט חייזרי",
         "title": "\"שלח לחבר שלך הודעה זר שהוא לא יכול לפענח.\"",
         "description": "השאר הודעות סודיות שרק בעלי מפתחות מניות יכולים לפענח."
       },
       "ufoSignal": {
-        "app": "סימולטור אותות עב\"מים",
+        "app": "סימולטור אות UFO",
         "title": "\"מה קורה אם אתה שולח אות עב\"מים עם עלות השחר?\"",
         "description": "תהנה מהצלילים והאנימציה בחדר חשוך."
       }
@@ -21648,8 +21648,8 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "עדכון אחרון: 2026.05.31",
       "googlePlay": "אפליקציות Google Play",
       "colorTest": "מצא צבע אחר",
-      "alienText": "יוצר טקסטים חייזרים",
-      "ufoApp": "סימולטור אותות עב\"מים",
+      "alienText": "Galaxy Code: טקסט חייזרי",
+      "ufoApp": "סימולטור אות UFO",
       "privacyPolicy": "מדיניות פרטיות",
       "appAds": "app-ads.txt",
       "contact": "צור קשר",
@@ -21674,7 +21674,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hi-IN": {
     "seo": {
       "title": "NeoKIM ऐप लैब | मुफ़्त Android मिनी ऐप्स",
-      "description": "अधिक Android मिनी ऐप्स के लिए अलग रंग खोजें, एलियन टेक्स्ट मेकर, UFO सिग्नल सिम्युलेटर, रंग बोध टेस्ट, अंधेरी भूलभुलैया बचाव और निजी परीक्षण इंस्टॉल करें।",
+      "description": "अधिक Android मिनी ऐप्स के लिए अलग रंग खोजें, Galaxy Code: एलियन टेक्स्ट, UFO सिग्नल सिम्युलेटर, Color Master: रंग टेस्ट, अंधेरी भूलभुलैया बचाव और निजी परीक्षण इंस्टॉल करें।",
       "ogTitle": "NeoKIM ऐप लैब | Android मिनी ऐप्स",
       "ogDescription": "अजीब रंग ढूंढें, एलियन-शैली का गुप्त पाठ बनाएं, चंचल यूएफओ सिग्नल भेजें, अंधेरे भूलभुलैया से बचें, और त्वरित Android मनोरंजन के लिए निजी परीक्षणों में शामिल हों।"
     },
@@ -21756,7 +21756,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "अलग रंग खोजें आइकन"
       },
       "galaxyCode": {
-        "name": "एलियन टेक्स्ट मेकर",
+        "name": "Galaxy Code: एलियन टेक्स्ट",
         "category": "गुप्त संदेश ऐप",
         "tagline": "एलियन जैसे गुप्त संदेश बनाएं जिन्हें डिकोड करने के लिए शेयर कुंजी की आवश्यकता होती है।",
         "description": "अपने स्वयं के गैलेक्टिक भाषा नियम बनाएं। केवल आपकी शेयर कुंजी वाले लोग ही समान नियमों को फिर से बना सकते हैं, और मूल पाठ सर्वर पर अपलोड नहीं किया जाता है।",
@@ -21769,7 +21769,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "गुप्त संदेश बनाएँ",
         "detailCta": "वेब डेमो आज़माएँ",
         "statusNote": "अब Google Play पर उपलब्ध है।",
-        "iconAlt": "एलियन टेक्स्ट मेकर आइकन"
+        "iconAlt": "Galaxy Code: एलियन टेक्स्ट आइकन"
       },
       "ufoSignal": {
         "name": "UFO सिग्नल सिम्युलेटर",
@@ -21788,7 +21788,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "UFO सिग्नल सिम्युलेटर आइकन"
       },
       "colorMasterClassic": {
-        "name": "रंग बोध टेस्ट",
+        "name": "Color Master: रंग टेस्ट",
         "category": "क्लासिक रंग बोध खेल",
         "tagline": "मूल रंग-फ़ोकस चुनौती: उत्तर रंग याद रखें और उसे समान रंगों में से चुनें।",
         "description": "अलग रंग खोजें से पहले मूल रंग बोध परीक्षण। पहले इसे वेब पर आज़माएँ, फिर इसे Google Play से इंस्टॉल करें।",
@@ -21801,7 +21801,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "कलर सेंस टेस्ट स्थापित करें",
         "detailCta": "वेब डेमो आज़माएँ",
         "statusNote": "पहले इसे वेब पर आज़माएँ, फिर इसे Google Play से इंस्टॉल करें।",
-        "iconAlt": "रंग बोध टेस्ट आइकन"
+        "iconAlt": "Color Master: रंग टेस्ट आइकन"
       },
       "koreanRandomDefense": {
         "name": "कोरियाई रैंडम डिफेंस",
@@ -21871,7 +21871,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "description": "10 सेकंड की चुनौती में दोस्तों के साथ प्रतिस्पर्धा करें।"
       },
       "galaxyCode": {
-        "app": "एलियन टेक्स्ट मेकर",
+        "app": "Galaxy Code: एलियन टेक्स्ट",
         "title": "\"अपने मित्र को एक विदेशी संदेश भेजें जिसे वे डिकोड नहीं कर सकते।\"",
         "description": "गुप्त संदेश छोड़ें जिन्हें केवल शेयर-कुंजी धारक ही डिकोड कर सकते हैं।"
       },
@@ -21906,7 +21906,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "lastUpdated": "अंतिम अद्यतन: 2026.05.31",
       "googlePlay": "Google Play ऐप्स",
       "colorTest": "अलग रंग खोजें",
-      "alienText": "एलियन टेक्स्ट मेकर",
+      "alienText": "Galaxy Code: एलियन टेक्स्ट",
       "ufoApp": "UFO सिग्नल सिम्युलेटर",
       "privacyPolicy": "गोपनीयता नीति",
       "appAds": "app-ads.txt",
