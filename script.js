@@ -1239,7 +1239,7 @@ function hideOriginalPrivacyContent() {
       return;
     }
 
-    child.hidden = true;
+    child.remove();
   });
 }
 

@@ -14,10 +14,16 @@ body.language-modal-open {
   overflow: hidden;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body.privacy-runtime-body {
   max-width: none !important;
   margin: 0 !important;
   font-family: inherit;
+  padding: 0 !important;
+  background: #050b12;
 }
 
 .i18n-toolbar {
