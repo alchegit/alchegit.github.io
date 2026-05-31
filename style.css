@@ -38,7 +38,8 @@ body {
   overflow-x: hidden;
 }
 
-body.modal-open {
+body.modal-open,
+body.language-modal-open {
   overflow: hidden;
 }
 
@@ -61,7 +62,7 @@ summary:focus-visible {
 .skip-link {
   position: fixed;
   top: 12px;
-  left: 12px;
+  inset-inline-start: 12px;
   z-index: 1000;
   transform: translateY(-140%);
   background: var(--mint);
@@ -186,29 +187,26 @@ summary:focus-visible {
   color: var(--mint);
 }
 
-.lang-switcher {
+.language-trigger {
+  max-width: 180px;
+  min-height: 38px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 7px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 3px;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.lang-toggle {
-  min-width: 44px;
-  min-height: 36px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
+  padding: 7px 12px;
+  background: rgba(0, 255, 170, 0.06);
+  color: var(--mint);
   cursor: pointer;
   font: inherit;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
 }
 
-.lang-toggle.is-active {
-  background: var(--mint);
-  color: #00130d;
+.language-trigger:hover {
+  border-color: var(--line-strong);
   box-shadow: var(--shadow-mint);
 }
 
@@ -355,6 +353,12 @@ summary:focus-visible {
   background: rgba(0, 213, 255, 0.08);
   color: #d9fbff;
   font-size: 0.84rem;
+}
+
+.language-hint {
+  margin: 14px 0 0;
+  color: var(--cyan);
+  font-size: 0.88rem;
 }
 
 .hero-visual,
@@ -684,8 +688,7 @@ summary:focus-visible {
 }
 
 .cyber-card::after {
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   top: -40%;
   height: 40%;
   background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08), transparent);
@@ -931,6 +934,65 @@ summary:focus-visible {
   gap: 5px;
 }
 
+.supported-languages {
+  width: min(1160px, 100%);
+  margin: 24px auto 0;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.supported-languages details {
+  border: 1px solid rgba(0, 213, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(0, 213, 255, 0.04);
+  padding: 12px 14px;
+}
+
+.supported-languages summary {
+  color: var(--mint);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.supported-languages p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.supported-language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.supported-language {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid rgba(0, 255, 170, 0.18);
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.supported-language small {
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.supported-language.is-current,
+.supported-language:hover {
+  border-color: var(--line-strong);
+  color: var(--mint);
+}
+
 .contact-modal {
   position: fixed;
   inset: 0;
@@ -938,6 +1000,181 @@ summary:focus-visible {
   display: grid;
   place-items: center;
   padding: 20px;
+}
+
+.language-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.language-modal[hidden] {
+  display: none;
+}
+
+.language-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.language-modal__sheet {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  max-height: min(820px, calc(100vh - 40px));
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: #07101a;
+  box-shadow: 0 0 36px rgba(0, 255, 170, 0.32);
+  overflow: hidden;
+}
+
+.language-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.language-modal__header h2 {
+  margin: 4px 0 0;
+  font-size: 1.55rem;
+}
+
+.language-modal__description,
+.language-search-label {
+  margin: 0;
+  padding: 14px 18px 0;
+  color: var(--muted);
+}
+
+.language-search-label {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.language-search {
+  width: calc(100% - 36px);
+  min-height: 46px;
+  margin: 8px 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 12px;
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--text);
+  font: inherit;
+}
+
+.language-search:focus {
+  border-color: var(--amber);
+  outline: none;
+}
+
+.language-modal__content {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+  padding: 0 18px 18px;
+}
+
+.language-recommended,
+.language-group {
+  display: grid;
+  gap: 8px;
+}
+
+.language-recommended h3,
+.language-group h3 {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 1rem;
+}
+
+.language-list-scroll {
+  min-height: 220px;
+  max-height: min(420px, 42vh);
+  overflow: auto;
+  border: 1px solid rgba(0, 255, 170, 0.16);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.language-group + .language-group {
+  margin-top: 16px;
+}
+
+.language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.language-grid.is-recommended {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.language-option {
+  min-height: 58px;
+  position: relative;
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(0, 255, 170, 0.2);
+  border-radius: 6px;
+  padding: 9px 34px 9px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+[dir="rtl"] .language-option {
+  padding: 9px 10px 9px 34px;
+}
+
+.language-option:hover,
+.language-option.is-current {
+  border-color: var(--line-strong);
+  background: rgba(0, 255, 170, 0.08);
+}
+
+.language-option__native {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.language-option__meta {
+  color: var(--dim);
+  font-size: 0.82rem;
+}
+
+.language-option__check {
+  position: absolute;
+  inset-inline-end: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--amber);
+  opacity: 0;
+}
+
+.language-option.is-current .language-option__check {
+  opacity: 1;
+}
+
+.language-no-results {
+  margin: 0;
+  color: var(--amber);
 }
 
 .contact-modal[hidden] {
@@ -1010,7 +1247,7 @@ summary:focus-visible {
 
 .participation-steps {
   margin: 16px 0;
-  padding-left: 24px;
+  padding-inline-start: 24px;
   color: var(--text);
 }
 
@@ -1043,24 +1280,20 @@ summary:focus-visible {
 
   .terminal-actions {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
     gap: 8px;
     overflow: hidden;
   }
 
-  .terminal-actions a {
+  .terminal-actions a,
+  .language-trigger {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 0;
     text-align: center;
-  }
-
-  .lang-switcher {
-    width: 100%;
-    justify-content: stretch;
   }
 
   .terminal-status {
@@ -1097,6 +1330,22 @@ summary:focus-visible {
   .footer-links {
     justify-content: flex-start;
   }
+
+  .language-modal {
+    align-items: end;
+    padding: 0;
+  }
+
+  .language-modal__sheet {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .language-grid,
+  .language-grid.is-recommended {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1124,7 +1373,8 @@ summary:focus-visible {
     overflow: hidden;
   }
 
-  .terminal-actions a {
+  .terminal-actions a,
+  .language-trigger {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1136,16 +1386,6 @@ summary:focus-visible {
 
   .terminal-actions a[href="#faq"] {
     display: none;
-  }
-
-  .lang-toggle {
-    min-width: 42px;
-  }
-
-  .lang-switcher {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
   }
 
   .terminal-status {
@@ -1264,14 +1504,6 @@ summary:focus-visible {
 
   .terminal-actions a {
     min-height: 32px;
-  }
-
-  .lang-switcher {
-    width: 100%;
-  }
-
-  .lang-toggle {
-    flex: 1;
   }
 
   .hero-copy h1 {

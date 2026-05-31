@@ -1,4 +1,22 @@
 const developerEmail = "wlgnsl14@gmail.com";
+const i18nConfig = window.NEOKIM_I18N || {};
+const locales = Array.isArray(i18nConfig.locales) ? i18nConfig.locales : [];
+const translations = i18nConfig.translations || {};
+const defaultLocale = i18nConfig.defaultLocale || "en-US";
+const storageKey = i18nConfig.storageKey || "preferredLocale";
+const legacyStorageKey = i18nConfig.legacyStorageKey || "preferredLanguage";
+const recommendedLocales = i18nConfig.recommendedLocales || ["ko", "en-US"];
+const baseFallbacks = i18nConfig.baseFallbacks || {};
+const localeByCode = new Map(locales.map((locale) => [locale.code, locale]));
+const localeCodes = new Set(locales.map((locale) => locale.code));
+const localeGroups = ["Asia", "Europe", "Middle East", "Africa", "Other"];
+const regionGroupKeyMap = {
+  Asia: "language.asia",
+  Europe: "language.europe",
+  "Middle East": "language.middleEast",
+  Africa: "language.africa",
+  Other: "language.other"
+};
 
 const apps = [
   {
@@ -8,23 +26,10 @@ const apps = [
     code: "ANDROID004",
     campaign: "color_master2",
     recommended: true,
-    titleKo: "컬러마스터2",
-    titleEn: "Color Master 2",
-    categoryKo: "색상 판별 퍼즐",
-    categoryEn: "Color puzzle",
-    taglineKo: "10초 안에 다른 색을 찾는 원라이프 색감 챌린지",
-    taglineEn: "Find the different color in 10 seconds.",
-    descriptionKo: "한 번 틀리면 끝. 색감, 집중력, 순발력을 시험하는 짧고 중독성 있는 퍼즐 게임입니다.",
-    descriptionEn: "One mistake ends the run. A short, addictive color perception challenge.",
+    i18nKey: "apps.colorMaster2",
     icon: "assets/icon_colormaster2.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.codexdev.color_master2",
-    detailUrl: "./color-master-2/",
-    highlightsKo: ["10초 제한", "원라이프", "랭킹 지원", "색약 보조"],
-    highlightsEn: ["10-second limit", "One-life run", "Leaderboard", "Colorblind aid"],
-    primaryCtaKo: "컬러마스터2 설치",
-    primaryCtaEn: "Install Color Master 2",
-    statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
-    statusNoteEn: "Available now on Google Play."
+    detailUrl: "./color-master-2/"
   },
   {
     id: "galacticode",
@@ -32,23 +37,10 @@ const apps = [
     priority: 2,
     code: "ANDROID002",
     campaign: "galacticode",
-    titleKo: "은하코드",
-    titleEn: "Galacticode",
-    categoryKo: "비밀 메시지 생성기",
-    categoryEn: "Secret message app",
-    taglineKo: "공유키 없이는 읽기 어려운 나만의 외계어 비밀 메시지",
-    taglineEn: "Create alien-like secret messages that need a share key to decode.",
-    descriptionKo: "나만의 은하 언어 규칙을 만들고, 공유키를 받은 사람만 같은 규칙으로 메시지를 해독할 수 있습니다. 원문과 변환 규칙은 서버로 보내지 않습니다.",
-    descriptionEn: "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
+    i18nKey: "apps.galaxyCode",
     icon: "assets/icon_galacticode.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.galactic.speak",
-    detailUrl: "./galacticode/",
-    highlightsKo: ["공유키 기반", "나만의 규칙", "SNS 활용", "서버 전송 없음"],
-    highlightsEn: ["Share-key based", "Personal rules", "SNS-ready", "No server upload"],
-    primaryCtaKo: "비밀 메시지 만들기",
-    primaryCtaEn: "Create Secret Messages",
-    statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
-    statusNoteEn: "Available now on Google Play."
+    detailUrl: "./galacticode/"
   },
   {
     id: "call-the-ufo",
@@ -56,23 +48,10 @@ const apps = [
     priority: 3,
     code: "ANDROID001",
     campaign: "call_the_ufo",
-    titleKo: "UFO 호출기",
-    titleEn: "Call the UFO",
-    categoryKo: "몰입형 체험 앱",
-    categoryEn: "Immersive fun app",
-    taglineKo: "밤에 누르면 더 재밌는 미스터리 UFO 호출 체험",
-    taglineEn: "A mysterious UFO calling experience for fun.",
-    descriptionKo: "버튼, 사운드, 애니메이션으로 우주에 신호를 보내는 듯한 상상 체험을 제공합니다.",
-    descriptionEn: "Press the button, hear the signal, and imagine something listening from space.",
+    i18nKey: "apps.ufoSignal",
     icon: "assets/icon_calltheufo.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.call_the_ufo",
-    detailUrl: "./call-the-ufo/",
-    highlightsKo: ["인터랙티브 버튼", "미스터리 사운드", "애니메이션", "회원가입 없음"],
-    highlightsEn: ["Interactive button", "Mystery sounds", "Animation", "No sign-up"],
-    primaryCtaKo: "UFO 호출해보기",
-    primaryCtaEn: "Call the UFO",
-    statusNoteKo: "Google Play에서 바로 설치할 수 있습니다.",
-    statusNoteEn: "Available now on Google Play."
+    detailUrl: "./call-the-ufo/"
   },
   {
     id: "color-master-classic",
@@ -80,100 +59,43 @@ const apps = [
     priority: 4,
     code: "ANDROID003",
     campaign: "colormaster",
-    titleKo: "컬러 마스터",
-    titleEn: "Color Master",
-    categoryKo: "클래식 색상 판별 게임",
-    categoryEn: "Classic color puzzle",
-    taglineKo: "비슷한 색상 속에서 정답을 찾는 원작 색감 집중력 테스트",
-    taglineEn: "The original color-focus challenge: find the answer among similar colors.",
-    descriptionKo: "컬러마스터2 이전에 만든 원작 버전입니다. 웹에서 먼저 체험해보고, Google Play에서 설치할 수 있습니다.",
-    descriptionEn: "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+    i18nKey: "apps.colorMasterClassic",
     icon: "assets/icon_colormaster.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.neokim.colormaster",
-    detailUrl: "./colormaster/",
-    detailCtaKo: "웹에서 먼저 체험",
-    detailCtaEn: "Try Web Demo",
-    highlightsKo: ["원작 감성", "색상 집중력", "짧은 플레이", "바로 설치"],
-    highlightsEn: ["Original feel", "Color focus", "Quick play", "Install now"],
-    primaryCtaKo: "컬러 마스터 설치",
-    primaryCtaEn: "Install Color Master",
-    statusNoteKo: "웹에서 먼저 체험해보고, Google Play에서 설치할 수 있습니다.",
-    statusNoteEn: "Try it on the web first, then install it from Google Play."
+    detailUrl: "./colormaster/"
   },
   {
     id: "korean-random-defense",
     status: "testing",
     priority: 5,
     code: "ANDROID006",
-    titleKo: "한국사 랜덤 디펜스: 수성전",
-    titleEn: "Korean Random Defense: Siege",
-    categoryKo: "비공개 테스트 전략 게임",
-    categoryEn: "Private test strategy game",
-    taglineKo: "한국사 속 수성전을 소재로 한 2D 랜덤 디펜스",
-    taglineEn: "A 2D random defense game inspired by Korean fortress battles.",
-    descriptionKo: "현재 비공개 테스트 중입니다. 개발자에게 참여 요청을 보낸 뒤 테스터로 등록되면 Google Play 테스트 링크로 설치할 수 있습니다.",
-    descriptionEn: "Currently in private testing. Send a tester access request, then install from the Google Play test link after you are added.",
+    i18nKey: "apps.koreanRandomDefense",
     icon: "assets/icon_korean_random_defense.png",
-    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.krd",
-    highlightsKo: ["비공개 테스트", "랜덤 디펜스", "한국사 소재", "테스터 등록"],
-    highlightsEn: ["Private test", "Random defense", "Korean history", "Tester access"],
-    primaryCtaKo: "테스트 참여 문의",
-    primaryCtaEn: "Request Tester Access",
-    testJoinCtaKo: "테스트 참여",
-    testJoinCtaEn: "Join Test",
-    statusNoteKo: "메일을 보내 테스터로 추가된 뒤, 테스트 참여 버튼으로 Google Play에서 설치할 수 있습니다.",
-    statusNoteEn: "After you email the developer and are added as a tester, use Join Test to install from Google Play."
+    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.krd"
   },
   {
     id: "lucky-card-random-defense",
     status: "testing",
     priority: 6,
     code: "ANDROID007",
-    titleKo: "운빨 카드 랜덤디펜스",
-    titleEn: "Lucky Card Random Defense",
-    categoryKo: "비공개 테스트 카드 랜덤 디펜스",
-    categoryEn: "Private test card random defense",
-    taglineKo: "카드 선택과 유닛 합성으로 10웨이브를 버티는 운빨 디펜스",
-    taglineEn: "Survive 10 waves with card choices, summons, and merges.",
-    descriptionKo: "현재 비공개 테스트 중입니다. 개발자에게 참여 요청을 보낸 뒤 테스터로 등록되면 Google Play 테스트 링크로 설치할 수 있습니다.",
-    descriptionEn: "Currently in private testing. Send a tester access request, then install from the Google Play test link after you are added.",
+    i18nKey: "apps.luckyCardRandomDefense",
     icon: "assets/icon_lucky_card_random_defense.png",
-    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.luckycarddefense",
-    highlightsKo: ["비공개 테스트", "카드 선택", "유닛 합성", "10웨이브"],
-    highlightsEn: ["Private test", "Card choices", "Unit merges", "10 waves"],
-    primaryCtaKo: "테스트 참여 문의",
-    primaryCtaEn: "Request Tester Access",
-    testJoinCtaKo: "테스트 참여",
-    testJoinCtaEn: "Join Test",
-    statusNoteKo: "메일을 보내 테스터로 추가된 뒤, 테스트 참여 버튼으로 Google Play에서 설치할 수 있습니다.",
-    statusNoteEn: "After you email the developer and are added as a tester, use Join Test to install from Google Play."
+    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.luckycarddefense"
   },
   {
     id: "dark-maze",
     status: "testing",
     priority: 7,
     code: "ANDROID005",
-    titleKo: "다크 메이즈",
-    titleEn: "Dark Maze",
-    categoryKo: "비공개 테스트 탈출 게임",
-    categoryEn: "Private test escape game",
-    taglineKo: "어둠 속 미로에서 출구를 찾는 실험쥐 탈출 게임",
-    taglineEn: "Find the exit in a dark maze as a lab rat escape challenge.",
-    descriptionKo: "현재 비공개 테스트 중입니다. 공개 Play 링크가 열리지 않을 수 있어 테스트 참여 문의로 연결합니다.",
-    descriptionEn: "Currently in private testing. The public Play link may not open, so use the test contact button.",
+    i18nKey: "apps.darkMaze",
     icon: "assets/icon_darkmaze.png",
-    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze",
-    highlightsKo: ["비공개 테스트", "미로 탈출", "아이템", "리더보드 예정"],
-    highlightsEn: ["Private test", "Maze escape", "Items", "Leaderboard planned"],
-    primaryCtaKo: "테스트 참여 문의",
-    primaryCtaEn: "Request Tester Access",
-    statusNoteKo: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 메일을 보내주세요.",
-    statusNoteEn: "The public Google Play link may not open. Email the developer to request tester access."
+    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze"
   }
 ];
 
-let currentLanguage = "ko";
+let currentLocale = defaultLocale;
 let lastFocusedElement = null;
+let lastLanguageTrigger = null;
 
 const colorPreviewRounds = [
   { base: "#38e2bd", answer: "#1fb797", answerIndex: 6 },
@@ -184,10 +106,19 @@ const colorPreviewRounds = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  initLanguage();
+  const initialLocale = getInitialLocale();
+  currentLocale = initialLocale.locale;
+
+  renderLanguageSelector();
+  renderSupportedLanguages();
   renderFeaturedApp();
   renderAppCards();
-  bindLanguageToggle();
+  applyLocale(currentLocale, {
+    persist: false,
+    updateUrl: initialLocale.fromUrl
+  });
+
+  bindLanguageSelector();
   bindSmoothScroll();
   bindTestContactModal();
   bindPlayClickTracking();
@@ -195,11 +126,203 @@ document.addEventListener("DOMContentLoaded", () => {
   initLandingCounter();
 });
 
-function initLanguage() {
-  const storedLanguage = localStorage.getItem("preferredLanguage");
-  const browserLanguage = navigator.language || navigator.userLanguage || "ko";
-  currentLanguage = storedLanguage || (browserLanguage.startsWith("ko") ? "ko" : "en");
-  setLanguage(currentLanguage);
+function getInitialLocale() {
+  const params = new URLSearchParams(window.location.search);
+  const urlLocale = params.get("lang");
+
+  if (urlLocale) {
+    return { locale: resolveLocale(urlLocale), fromUrl: true };
+  }
+
+  const storedLocale = localStorage.getItem(storageKey) || localStorage.getItem(legacyStorageKey);
+  if (storedLocale) {
+    return { locale: resolveLocale(storedLocale), fromUrl: false };
+  }
+
+  const browserLocales = Array.isArray(navigator.languages) && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language || navigator.userLanguage || defaultLocale];
+
+  for (const browserLocale of browserLocales) {
+    const resolvedLocale = resolveLocale(browserLocale, null);
+    if (resolvedLocale) {
+      return { locale: resolvedLocale, fromUrl: false };
+    }
+  }
+
+  return { locale: defaultLocale, fromUrl: false };
+}
+
+function resolveLocale(localeValue, finalFallback = defaultLocale, visited = new Set()) {
+  if (!localeValue) {
+    return finalFallback;
+  }
+
+  const normalized = normalizeLocale(localeValue);
+  if (!normalized || visited.has(normalized)) {
+    return finalFallback;
+  }
+
+  visited.add(normalized);
+
+  if (localeCodes.has(normalized)) {
+    return normalized;
+  }
+
+  const lowerMatch = locales.find((locale) => locale.code.toLowerCase() === normalized.toLowerCase());
+  if (lowerMatch) {
+    return lowerMatch.code;
+  }
+
+  const baseLanguage = normalized.split("-")[0];
+  const fallbackTarget = baseFallbacks[baseLanguage];
+  if (fallbackTarget) {
+    const resolvedFallback = resolveLocale(fallbackTarget, null, visited);
+    if (resolvedFallback) {
+      return resolvedFallback;
+    }
+  }
+
+  if (localeCodes.has(baseLanguage)) {
+    return baseLanguage;
+  }
+
+  const baseMatch = locales.find((locale) => locale.code.split("-")[0] === baseLanguage);
+  return baseMatch?.code || finalFallback;
+}
+
+function normalizeLocale(localeValue) {
+  const cleaned = String(localeValue).trim().replace(/_/g, "-");
+  if (!cleaned) {
+    return "";
+  }
+
+  const parts = cleaned.split("-");
+  return parts
+    .map((part, index) => {
+      if (index === 0) {
+        return part.toLowerCase();
+      }
+
+      if (/^\d+$/.test(part)) {
+        return part;
+      }
+
+      return part.length === 2 ? part.toUpperCase() : part[0].toUpperCase() + part.slice(1).toLowerCase();
+    })
+    .join("-");
+}
+
+function applyLocale(localeCode, options = {}) {
+  const resolvedLocale = resolveLocale(localeCode);
+  currentLocale = resolvedLocale;
+  const locale = getLocaleMeta(resolvedLocale);
+
+  document.documentElement.lang = resolvedLocale;
+  document.documentElement.dir = locale.rtl ? "rtl" : "ltr";
+
+  if (options.persist) {
+    localStorage.setItem(storageKey, resolvedLocale);
+  }
+
+  if (options.updateUrl) {
+    updateUrlLocale(resolvedLocale);
+  }
+
+  updateTranslatedNodes();
+  updateLocalizedAttributes();
+  updateMetadata();
+  updateLanguageControls();
+  updateTestingMailtoLinks();
+}
+
+function setLocale(localeCode, options = {}) {
+  const resolvedLocale = resolveLocale(localeCode);
+  currentLocale = resolvedLocale;
+  renderFeaturedApp();
+  renderAppCards();
+  applyLocale(resolvedLocale, {
+    persist: options.persist !== false,
+    updateUrl: options.updateUrl !== false
+  });
+}
+
+function updateUrlLocale(localeCode) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("lang", localeCode);
+  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+function updateTranslatedNodes() {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+}
+
+function updateLocalizedAttributes() {
+  document.querySelectorAll("[data-i18n-attr]").forEach((element) => {
+    const bindings = element.dataset.i18nAttr.split(";").map((binding) => binding.trim()).filter(Boolean);
+
+    bindings.forEach((binding) => {
+      const [attributeName, key] = binding.split(":").map((part) => part.trim());
+      if (!attributeName || !key) {
+        return;
+      }
+
+      element.setAttribute(attributeName, t(key));
+    });
+  });
+}
+
+function updateMetadata() {
+  document.title = t("seo.title");
+  setMetaContent('meta[name="description"]', t("seo.description"));
+  setMetaContent('meta[property="og:title"]', t("seo.ogTitle"));
+  setMetaContent('meta[property="og:description"]', t("seo.ogDescription"));
+  setMetaContent('meta[name="twitter:title"]', t("seo.ogTitle"));
+  setMetaContent('meta[name="twitter:description"]', t("seo.description"));
+}
+
+function setMetaContent(selector, content) {
+  const element = document.querySelector(selector);
+  if (element) {
+    element.setAttribute("content", content);
+  }
+}
+
+function updateLanguageControls() {
+  const locale = getLocaleMeta(currentLocale);
+  const currentName = document.getElementById("currentLanguageName");
+  const trigger = document.getElementById("languageTrigger");
+
+  if (currentName) {
+    currentName.textContent = locale.nativeName;
+  }
+
+  if (trigger) {
+    trigger.setAttribute("aria-label", `${t("language.buttonLabel")}: ${locale.nativeName}`);
+  }
+
+  document.querySelectorAll("[data-locale-option]").forEach((button) => {
+    const isCurrent = button.dataset.localeOption === currentLocale;
+    button.classList.toggle("is-current", isCurrent);
+    button.setAttribute("aria-current", isCurrent ? "true" : "false");
+  });
+}
+
+function updateTestingMailtoLinks() {
+  document.querySelectorAll("[data-action='test-contact']").forEach((link) => {
+    const app = apps.find((item) => item.id === link.dataset.appId);
+    if (app) {
+      link.href = buildMailto(app);
+    }
+  });
+
+  const emailButton = document.getElementById("emailDeveloperButton");
+  const activeApp = apps.find((item) => item.id === emailButton?.dataset.appId);
+  if (emailButton && activeApp) {
+    emailButton.href = buildMailto(activeApp);
+  }
 }
 
 function renderFeaturedApp() {
@@ -218,24 +341,22 @@ function renderFeaturedApp() {
 
   featuredContainer.innerHTML = `
     <div class="featured-layout">
-      <div class="featured-visual" role="img" ${localizedAria("컬러마스터2 색상 타일 챌린지 휴대폰 목업", "Color Master 2 color tile challenge phone mockup")}>
+      <div class="featured-visual" role="img" data-i18n-attr="aria-label:featured.visualAria" aria-label="${escapeAttr(t("featured.visualAria"))}">
         ${renderPhoneMockup(app)}
       </div>
       <div class="featured-copy">
-        <span class="featured-badge">${localizedText("추천", "Featured")}</span>
-        <h3>${localizedText("컬러마스터2", "Color Master 2")}</h3>
-        <p class="featured-tagline">${localizedText("10초 안에 다른 색을 찾아보세요.", "Find the different color in 10 seconds.")}</p>
-        <p class="featured-description">${localizedText("한 번 틀리면 끝나는 원라이프 색상 판별 퍼즐입니다. 짧게 시작하지만, 기록을 깨고 싶어서 계속 다시 하게 되는 구조입니다.", "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.")}</p>
+        <span class="featured-badge" data-i18n="featured.badge">${escapeHtml(t("featured.badge"))}</span>
+        <h3 data-i18n="featured.appName">${escapeHtml(t("featured.appName"))}</h3>
+        <p class="featured-tagline" data-i18n="featured.short">${escapeHtml(t("featured.short"))}</p>
+        <p class="featured-description" data-i18n="featured.description">${escapeHtml(t("featured.description"))}</p>
         ${renderHighlights(app, "highlight-list")}
         <div class="featured-actions">
-          <a class="card-cta is-primary play-cta" href="${buildPlayUrl(app, "home_featured")}" target="_blank" rel="noopener" data-app-id="${app.id}" data-event="play_click" data-utm-content="home_featured" ${localizedAria("컬러마스터2 Google Play에서 설치", "Install Color Master 2 on Google Play")}>${localizedText("Google Play에서 설치", "Install on Google Play")}</a>
-          <a class="card-cta is-secondary" href="#apps">${localizedText("전체 앱 보기", "Browse Apps")}</a>
+          <a class="card-cta is-primary play-cta" href="${buildPlayUrl(app, "home_featured")}" target="_blank" rel="noopener" data-app-id="${escapeAttr(app.id)}" data-event="play_click" data-utm-content="home_featured" data-i18n="featured.primaryCta" data-i18n-attr="aria-label:featured.primaryAria" aria-label="${escapeAttr(t("featured.primaryAria"))}">${escapeHtml(t("featured.primaryCta"))}</a>
+          <a class="card-cta is-secondary" href="#apps" data-i18n="featured.secondaryCta">${escapeHtml(t("featured.secondaryCta"))}</a>
         </div>
       </div>
     </div>
   `;
-
-  setLanguage(currentLanguage);
 }
 
 function renderAppCards() {
@@ -250,46 +371,275 @@ function renderAppCards() {
     .sort((a, b) => a.priority - b.priority)
     .map((app) => renderAppCard(app))
     .join("");
-
-  setLanguage(currentLanguage);
 }
 
-function setLanguage(lang) {
-  const normalizedLanguage = lang === "en" ? "en" : "ko";
-  currentLanguage = normalizedLanguage;
-  document.documentElement.lang = normalizedLanguage;
-  localStorage.setItem("preferredLanguage", normalizedLanguage);
+function renderAppCard(app) {
+  const isInstallable = app.status === "live" || app.status === "classic";
+  const isTesting = app.status === "testing" || app.status === "coming-soon";
+  const href = isInstallable ? buildPlayUrl(app, "home_card") : app.playUrl;
+  const opensExternally = /^https?:\/\//.test(href || "");
+  const detailLink = app.detailUrl
+    ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}" data-i18n="${app.i18nKey}.detailCta">${escapeHtml(t(`${app.i18nKey}.detailCta`, t("common.webDemo")))}</a>`
+    : "";
+  const cta = isTesting
+    ? renderTestingActions(app)
+    : `<a class="card-cta ${isInstallable ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${opensExternally ? 'target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_card"' : ""} data-app-id="${escapeAttr(app.id)}" data-i18n="${app.i18nKey}.primaryCta" data-i18n-attr="aria-label:${app.i18nKey}.primaryCta" aria-label="${escapeAttr(t(`${app.i18nKey}.primaryCta`))}">${escapeHtml(t(`${app.i18nKey}.primaryCta`))}</a>`;
 
-  const title = document.querySelector("title");
-  if (title?.dataset[`lang${suffix(normalizedLanguage)}`]) {
-    document.title = title.dataset[`lang${suffix(normalizedLanguage)}`];
+  return `
+    <article class="cyber-card" data-card-id="${escapeAttr(app.code)}" data-app-id="${escapeAttr(app.id)}">
+      <div class="card-content">
+        <div class="card-header-area">
+          <span class="card-id">#${escapeHtml(app.code)}</span>
+          <div class="card-badges">
+            ${app.recommended ? `<span class="status-badge is-recommended" data-i18n="status.recommended">${escapeHtml(t("status.recommended"))}</span>` : ""}
+            ${renderStatusBadge(app.status)}
+          </div>
+        </div>
+        <img class="card-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(t(`${app.i18nKey}.iconAlt`))}" width="74" height="74" loading="lazy" data-i18n-attr="alt:${app.i18nKey}.iconAlt">
+        <h3 class="card-title" data-i18n="${app.i18nKey}.name">${escapeHtml(t(`${app.i18nKey}.name`))}</h3>
+        <p class="card-category" data-i18n="${app.i18nKey}.category">${escapeHtml(t(`${app.i18nKey}.category`))}</p>
+        <p class="card-tagline" data-i18n="${app.i18nKey}.tagline">${escapeHtml(t(`${app.i18nKey}.tagline`))}</p>
+        ${renderHighlights(app, "card-highlights", 4)}
+        <p class="card-note" data-i18n="${app.i18nKey}.statusNote">${escapeHtml(t(`${app.i18nKey}.statusNote`))}</p>
+        <div class="card-actions">${cta}${detailLink}</div>
+      </div>
+    </article>
+  `;
+}
+
+function renderTestingActions(app) {
+  const contactButton = `<a class="card-cta is-secondary" href="${escapeAttr(buildMailto(app))}" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" data-i18n="${app.i18nKey}.primaryCta" data-i18n-attr="aria-label:${app.i18nKey}.primaryCta" aria-label="${escapeAttr(t(`${app.i18nKey}.primaryCta`))}">${escapeHtml(t(`${app.i18nKey}.primaryCta`))}</a>`;
+  const joinButton = app.originalPlayUrl && hasTranslation(`${app.i18nKey}.testJoinCta`)
+    ? `<a class="card-cta is-primary play-cta" href="${escapeAttr(app.originalPlayUrl)}" target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_test_join" data-app-id="${escapeAttr(app.id)}" data-i18n="${app.i18nKey}.testJoinCta" data-i18n-attr="aria-label:${app.i18nKey}.testJoinCta" aria-label="${escapeAttr(t(`${app.i18nKey}.testJoinCta`))}">${escapeHtml(t(`${app.i18nKey}.testJoinCta`))}</a>`
+    : "";
+
+  return `${contactButton}${joinButton}`;
+}
+
+function renderPhoneMockup(app) {
+  return `
+    <div class="phone-shell">
+      <div class="phone-speaker" aria-hidden="true"></div>
+      <div class="phone-screen">
+        <img class="phone-app-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(t(`${app.i18nKey}.iconAlt`))}" width="78" height="78" loading="lazy" data-i18n-attr="alt:${app.i18nKey}.iconAlt">
+        <div class="phone-title">${escapeHtml(t(`${app.i18nKey}.name`))}</div>
+        <div class="phone-timer">00:10</div>
+        <div class="color-tile-grid" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHighlights(app, className, maxItems) {
+  const highlights = getTranslationValue(`${app.i18nKey}.highlights`);
+  const items = Array.isArray(highlights) ? highlights.slice(0, maxItems || highlights.length) : [];
+
+  return `
+    <ul class="${className}">
+      ${items.map((item, index) => `<li data-i18n="${app.i18nKey}.highlights.${index}">${escapeHtml(item)}</li>`).join("")}
+    </ul>
+  `;
+}
+
+function renderStatusBadge(status) {
+  const statusMap = {
+    live: { key: "status.live", className: "is-live" },
+    classic: { key: "status.classic", className: "is-classic" },
+    legacy: { key: "status.classic", className: "is-classic" },
+    testing: { key: "status.testing", className: "is-testing" },
+    "coming-soon": { key: "status.comingSoon", className: "is-testing" }
+  };
+  const statusInfo = statusMap[status] || statusMap.live;
+
+  return `<span class="status-badge ${statusInfo.className}" data-i18n="${statusInfo.key}">${escapeHtml(t(statusInfo.key))}</span>`;
+}
+
+function renderLanguageSelector(query = "") {
+  const recommendedContainer = document.getElementById("recommendedLanguages");
+  const groupedContainer = document.getElementById("languageGroups");
+  const noResults = document.getElementById("languageNoResults");
+  const normalizedQuery = normalizeSearch(query);
+  let renderedCount = 0;
+
+  if (recommendedContainer) {
+    const recommended = recommendedLocales
+      .map((code) => getLocaleMeta(code))
+      .filter(Boolean)
+      .filter((locale) => matchesLocaleSearch(locale, normalizedQuery));
+
+    recommendedContainer.innerHTML = recommended.map(renderLanguageButton).join("");
+    renderedCount += recommended.length;
   }
 
-  document.querySelectorAll(`[data-lang-${normalizedLanguage}]`).forEach((element) => {
-    element.textContent = element.getAttribute(`data-lang-${normalizedLanguage}`);
+  if (groupedContainer) {
+    groupedContainer.innerHTML = localeGroups
+      .map((group) => {
+        const groupLocales = locales
+          .filter((locale) => locale.regionGroup === group)
+          .filter((locale) => matchesLocaleSearch(locale, normalizedQuery))
+          .sort(compareLocales);
+
+        renderedCount += groupLocales.length;
+
+        if (!groupLocales.length) {
+          return "";
+        }
+
+        return `
+          <section class="language-group" aria-labelledby="languageGroup${escapeAttr(group.replace(/\s/g, ""))}">
+            <h3 id="languageGroup${escapeAttr(group.replace(/\s/g, ""))}" data-i18n="${regionGroupKeyMap[group]}">${escapeHtml(t(regionGroupKeyMap[group]))}</h3>
+            <div class="language-grid">
+              ${groupLocales.map(renderLanguageButton).join("")}
+            </div>
+          </section>
+        `;
+      })
+      .join("");
+  }
+
+  if (noResults) {
+    noResults.hidden = renderedCount > 0;
+  }
+
+  updateLanguageControls();
+}
+
+function renderLanguageButton(locale) {
+  const fallback = locale.fallback ? ` data-fallback="${escapeAttr(locale.fallback)}"` : "";
+  const searchText = `${locale.code} ${locale.nativeName} ${locale.englishName}`.toLowerCase();
+
+  return `
+    <button type="button" class="language-option" data-locale-option="${escapeAttr(locale.code)}" data-search="${escapeAttr(searchText)}"${fallback}>
+      <span class="language-option__native">${escapeHtml(locale.nativeName)}</span>
+      <span class="language-option__meta">${escapeHtml(locale.englishName)} · ${escapeHtml(locale.code)}</span>
+      <span class="language-option__check" aria-hidden="true">✓</span>
+    </button>
+  `;
+}
+
+function renderSupportedLanguages() {
+  const container = document.getElementById("supportedLanguageGrid");
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = locales
+    .slice()
+    .sort(compareLocales)
+    .map((locale) => `
+      <button type="button" class="supported-language" data-locale-option="${escapeAttr(locale.code)}">
+        <span>${escapeHtml(locale.nativeName)}</span>
+        <small>${escapeHtml(locale.code)}</small>
+      </button>
+    `)
+    .join("");
+}
+
+function bindLanguageSelector() {
+  const trigger = document.getElementById("languageTrigger");
+  const modal = document.getElementById("languageModal");
+  const search = document.getElementById("languageSearch");
+
+  trigger?.addEventListener("click", () => openLanguageModal(trigger));
+
+  modal?.addEventListener("click", (event) => {
+    if (event.target.closest("[data-language-close]")) {
+      closeLanguageModal();
+    }
   });
 
-  document.querySelectorAll(`[data-lang-${normalizedLanguage}-alt]`).forEach((element) => {
-    element.setAttribute("alt", element.getAttribute(`data-lang-${normalizedLanguage}-alt`));
+  search?.addEventListener("input", () => {
+    renderLanguageSelector(search.value);
   });
 
-  document.querySelectorAll(`[data-lang-${normalizedLanguage}-aria]`).forEach((element) => {
-    element.setAttribute("aria-label", element.getAttribute(`data-lang-${normalizedLanguage}-aria`));
+  document.addEventListener("click", (event) => {
+    const localeButton = event.target.closest("[data-locale-option]");
+
+    if (!localeButton) {
+      return;
+    }
+
+    setLocale(localeButton.dataset.localeOption, { persist: true, updateUrl: true });
+    closeLanguageModal();
   });
 
-  document.querySelectorAll(".lang-toggle").forEach((button) => {
-    const isActive = button.dataset.langTarget === normalizedLanguage;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
+  document.addEventListener("keydown", (event) => {
+    if (!modal || modal.hidden) {
+      return;
+    }
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeLanguageModal();
+      return;
+    }
+
+    if (event.key === "Tab") {
+      trapFocus(event, modal);
+    }
   });
 }
 
-function bindLanguageToggle() {
-  document.querySelectorAll(".lang-toggle").forEach((button) => {
-    button.addEventListener("click", () => {
-      setLanguage(button.dataset.langTarget);
-    });
-  });
+function openLanguageModal(trigger) {
+  const modal = document.getElementById("languageModal");
+  const search = document.getElementById("languageSearch");
+
+  if (!modal) {
+    return;
+  }
+
+  lastLanguageTrigger = trigger || document.activeElement;
+  modal.hidden = false;
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("language-modal-open");
+  renderLanguageSelector("");
+
+  if (search) {
+    search.value = "";
+    window.setTimeout(() => search.focus(), 0);
+  }
+}
+
+function closeLanguageModal() {
+  const modal = document.getElementById("languageModal");
+
+  if (!modal) {
+    return;
+  }
+
+  modal.hidden = true;
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("language-modal-open");
+
+  if (lastLanguageTrigger) {
+    lastLanguageTrigger.focus();
+  }
+}
+
+function trapFocus(event, container) {
+  const focusable = Array.from(container.querySelectorAll("a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])"))
+    .filter((element) => element.offsetParent !== null);
+
+  if (!focusable.length) {
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 
 function bindSmoothScroll() {
@@ -334,12 +684,12 @@ function bindTestContactModal() {
     lastFocusedElement = contactButton;
 
     if (modalAppName && app) {
-      modalAppName.textContent = localize(app, "title");
+      modalAppName.textContent = t(`${app.i18nKey}.name`);
     }
 
-    if (emailButton) {
+    if (emailButton && app) {
       emailButton.href = buildMailto(app);
-      emailButton.dataset.appId = app?.id || "";
+      emailButton.dataset.appId = app.id;
     }
 
     modal.hidden = false;
@@ -359,7 +709,16 @@ function bindTestContactModal() {
       closeTestContactModal(modal);
     }
   });
+}
 
+function closeTestContactModal(modal) {
+  modal.hidden = true;
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
 }
 
 function bindPlayClickTracking() {
@@ -373,7 +732,8 @@ function bindPlayClickTracking() {
     console.log("play_click", {
       appId: playLink.dataset.appId,
       href: playLink.href,
-      placement: playLink.dataset.utmContent || (playLink.closest(".hero-section") ? "home_hero" : playLink.closest(".featured-app") ? "home_featured" : "home_card")
+      placement: playLink.dataset.utmContent || (playLink.closest(".hero-section") ? "home_hero" : playLink.closest(".featured-app") ? "home_featured" : "home_card"),
+      locale: currentLocale
     });
   });
 }
@@ -486,145 +846,114 @@ function buildPlayUrl(app, placement = "home_card") {
 }
 
 function buildMailto(app) {
-  const titleKo = app?.titleKo || "NeoKIM App Lab";
-  const titleEn = app?.titleEn || "NeoKIM App Lab";
-  const subject = currentLanguage === "en"
-    ? `Private test request - ${titleEn}`
-    : `비공개 테스트 참여 요청 - ${titleKo}`;
-  const body = currentLanguage === "en"
-    ? [
-        "Hello.",
-        `I would like to join the private test for ${titleEn}.`,
-        "",
-        "Google Play account email:",
-        "",
-        "Thank you."
-      ]
-    : [
-        "안녕하세요.",
-        `${titleKo} 비공개 테스트 참여를 요청드립니다.`,
-        "",
-        "Google Play 가입 이메일:",
-        "",
-        "감사합니다."
-      ];
+  const appName = app ? t(`${app.i18nKey}.name`) : "NeoKIM App Lab";
+  const subject = t("privateTest.mailSubject").replace("{appName}", appName);
+  const body = t("privateTest.mailBody").replace("{appName}", appName);
 
-  return `mailto:${developerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
+  return `mailto:${developerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-function renderTestingActions(app) {
-  const contactButton = `<a class="card-cta is-secondary" href="${escapeAttr(buildMailto(app))}" data-action="test-contact" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
-  const joinButton = app.originalPlayUrl && app.testJoinCtaKo
-    ? `<a class="card-cta is-primary play-cta" href="${escapeAttr(app.originalPlayUrl)}" target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_test_join" data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.testJoinCtaKo, app.testJoinCtaEn)}>${localizedText(app.testJoinCtaKo, app.testJoinCtaEn)}</a>`
-    : "";
-
-  return `${contactButton}${joinButton}`;
-}
-
-function renderAppCard(app) {
-  const isInstallable = app.status === "live" || app.status === "classic";
-  const isTesting = app.status === "testing" || app.status === "coming-soon";
-  const href = isInstallable ? buildPlayUrl(app, "home_card") : app.playUrl;
-  const opensExternally = /^https?:\/\//.test(href || "");
-  const detailLink = app.detailUrl
-    ? `<a class="card-cta is-secondary" href="${escapeAttr(app.detailUrl)}">${localizedText(app.detailCtaKo || "웹에서 먼저 체험", app.detailCtaEn || "Try Web Demo")}</a>`
-    : "";
-  const cta = isTesting
-    ? renderTestingActions(app)
-    : `<a class="card-cta ${isInstallable ? "is-primary play-cta" : "is-secondary"}" href="${escapeAttr(href)}" ${opensExternally ? 'target="_blank" rel="noopener" data-event="play_click" data-utm-content="home_card"' : ""} data-app-id="${escapeAttr(app.id)}" ${localizedAria(app.primaryCtaKo, app.primaryCtaEn)}>${localizedText(app.primaryCtaKo, app.primaryCtaEn)}</a>`;
-
-  return `
-    <article class="cyber-card" data-card-id="${escapeAttr(app.code)}" data-app-id="${escapeAttr(app.id)}">
-      <div class="card-content">
-        <div class="card-header-area">
-          <span class="card-id">#${escapeHtml(app.code)}</span>
-          <div class="card-badges">
-            ${app.recommended ? `<span class="status-badge is-recommended">${localizedText("추천", "Recommended")}</span>` : ""}
-            ${renderStatusBadge(app.status)}
-          </div>
-        </div>
-        <img class="card-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(localize(app, "title"))} 아이콘" width="74" height="74" loading="lazy" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
-        <h3 class="card-title">${localizedText(app.titleKo, app.titleEn)}</h3>
-        <p class="card-category">${localizedText(app.categoryKo, app.categoryEn)}</p>
-        <p class="card-tagline">${localizedText(app.taglineKo, app.taglineEn)}</p>
-        ${renderHighlights(app, "card-highlights", 4)}
-        <p class="card-note">${localizedText(app.statusNoteKo, app.statusNoteEn)}</p>
-        <div class="card-actions">${cta}${detailLink}</div>
-      </div>
-    </article>
-  `;
-}
-
-function renderPhoneMockup(app) {
-  return `
-    <div class="phone-shell">
-      <div class="phone-speaker" aria-hidden="true"></div>
-      <div class="phone-screen">
-        <img class="phone-app-icon" src="${escapeAttr(app.icon)}" alt="${escapeAttr(app.titleKo)} 아이콘" width="78" height="78" loading="lazy" data-lang-ko-alt="${escapeAttr(app.titleKo)} 아이콘" data-lang-en-alt="${escapeAttr(app.titleEn)} icon">
-        <div class="phone-title">${escapeHtml(app.titleEn)}</div>
-        <div class="phone-timer">00:10</div>
-        <div class="color-tile-grid" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function renderHighlights(app, className, maxItems) {
-  const koItems = app.highlightsKo.slice(0, maxItems || app.highlightsKo.length);
-  const enItems = app.highlightsEn.slice(0, maxItems || app.highlightsEn.length);
-
-  return `
-    <ul class="${className}">
-      ${koItems.map((item, index) => `<li>${localizedText(item, enItems[index])}</li>`).join("")}
-    </ul>
-  `;
-}
-
-function renderStatusBadge(status) {
-  const statusMap = {
-    live: { ko: "LIVE", en: "LIVE", className: "is-live" },
-    classic: { ko: "클래식", en: "Classic", className: "is-classic" },
-    legacy: { ko: "클래식", en: "Classic", className: "is-classic" },
-    testing: { ko: "비공개 테스트", en: "Private Test", className: "is-testing" },
-    "coming-soon": { ko: "준비 중", en: "Coming Soon", className: "is-testing" }
-  };
-  const statusInfo = statusMap[status] || statusMap.live;
-
-  return `<span class="status-badge ${statusInfo.className}">${localizedText(statusInfo.ko, statusInfo.en)}</span>`;
-}
-
-function closeTestContactModal(modal) {
-  modal.hidden = true;
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-
-  if (lastFocusedElement) {
-    lastFocusedElement.focus();
+function t(key, fallback = key) {
+  const value = getTranslationValue(key);
+  if (typeof value === "string") {
+    return value;
   }
+
+  if (value !== undefined && value !== null) {
+    return String(value);
+  }
+
+  if (fallback !== key) {
+    return fallback;
+  }
+
+  console.warn(`Missing i18n key: ${key} (${currentLocale})`);
+  return key;
 }
 
-function localizedText(ko, en) {
-  const text = currentLanguage === "en" ? en : ko;
-  return `<span data-lang-ko="${escapeAttr(ko)}" data-lang-en="${escapeAttr(en)}">${escapeHtml(text)}</span>`;
+function hasTranslation(key) {
+  return getTranslationValue(key) !== undefined;
 }
 
-function localizedAria(ko, en) {
-  const text = currentLanguage === "en" ? en : ko;
-  return `data-lang-ko-aria="${escapeAttr(ko)}" data-lang-en-aria="${escapeAttr(en)}" aria-label="${escapeAttr(text)}"`;
+function getTranslationValue(key) {
+  const chain = getLocaleFallbackChain(currentLocale);
+
+  for (const localeCode of chain) {
+    const value = getValueByPath(translations[localeCode], key);
+    if (value !== undefined) {
+      return value;
+    }
+  }
+
+  return undefined;
 }
 
-function localize(app, key) {
-  const languageSuffix = currentLanguage === "en" ? "En" : "Ko";
-  return app[`${key}${languageSuffix}`] || app[`${key}Ko`] || "";
+function getLocaleFallbackChain(localeCode) {
+  const chain = [];
+  const add = (code) => {
+    if (code && !chain.includes(code)) {
+      chain.push(code);
+    }
+  };
+  const resolved = resolveLocale(localeCode);
+  const locale = getLocaleMeta(resolved);
+  const baseLanguage = resolved.split("-")[0];
+
+  add(resolved);
+  add(locale.fallback);
+  add(baseLanguage);
+  add(baseFallbacks[baseLanguage]);
+  add(defaultLocale);
+
+  return chain.filter((code) => translations[code]);
 }
 
-function suffix(lang) {
-  return lang === "en" ? "En" : "Ko";
+function getValueByPath(source, key) {
+  if (!source) {
+    return undefined;
+  }
+
+  return key.split(".").reduce((value, part) => {
+    if (value === undefined || value === null) {
+      return undefined;
+    }
+
+    if (Array.isArray(value) && /^\d+$/.test(part)) {
+      return value[Number(part)];
+    }
+
+    return value[part];
+  }, source);
+}
+
+function getLocaleMeta(code) {
+  return localeByCode.get(resolveLocale(code, defaultLocale)) || localeByCode.get(defaultLocale) || {
+    code: defaultLocale,
+    nativeName: "English",
+    englishName: "English",
+    regionGroup: "Other",
+    rtl: false
+  };
+}
+
+function compareLocales(a, b) {
+  return a.englishName.localeCompare(b.englishName, "en", { sensitivity: "base" });
+}
+
+function matchesLocaleSearch(locale, query) {
+  if (!query) {
+    return true;
+  }
+
+  return normalizeSearch(`${locale.code} ${locale.nativeName} ${locale.englishName}`).includes(query);
+}
+
+function normalizeSearch(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
 function prefersReducedMotion() {
