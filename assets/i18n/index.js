@@ -110,9 +110,9 @@ window.NEOKIM_I18N = (() => {
     "en-US": {
       seo: {
         title: "NeoKIM App Lab | Free Android Mini Apps",
-        description: "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+        description: "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
         ogTitle: "NeoKIM App Lab | Android Mini Apps",
-        ogDescription: "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+        ogDescription: "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
       },
       skip: {
         apps: "Skip to app list"
@@ -237,14 +237,14 @@ window.NEOKIM_I18N = (() => {
           iconAlt: "Lucky Card Random Defense icon"
         },
         darkMaze: {
-          name: "Dark Maze",
-          category: "Private test escape game",
-          tagline: "Find the exit in a dark maze as a lab rat escape challenge.",
-          description: "Currently in private testing. The public Play link may not open, so use the test contact button.",
-          highlights: ["Private test", "Maze escape", "Items", "Leaderboard planned"],
-          primaryCta: "Request Tester Access",
-          statusNote: "The public Google Play link may not open. Email the developer to request tester access.",
-          iconAlt: "Dark Maze icon"
+          name: "Lab Rat Maze Escape: Dark Maze",
+          category: "Released maze escape game",
+          tagline: "Guide a lab rat through the dark maze and find the exit.",
+          description: "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
+          highlights: ["Released May 28, 2026", "Maze escape", "Items", "Dark survival"],
+          primaryCta: "Install on Google Play",
+          statusNote: "Now available on Google Play. No web demo is provided for this app.",
+          iconAlt: "Lab Rat Maze Escape: Dark Maze icon"
         }
       },
       status: {
@@ -326,9 +326,9 @@ window.NEOKIM_I18N = (() => {
     ko: {
       seo: {
         title: "NeoKIM App Lab | 무료 Android 미니앱 컬렉션",
-        description: "컬러마스터2, 은하코드, UFO 호출기, 운빨 카드 랜덤디펜스 등 무료 Android 미니앱을 바로 설치하거나 비공개 테스트로 체험해보세요.",
+        description: "컬러마스터2, 은하코드, UFO 호출기, 실험쥐 미로탈출: 다크메이즈, 운빨 카드 랜덤디펜스 등 Android 미니앱을 설치하거나 비공개 테스트로 체험해보세요.",
         ogTitle: "NeoKIM App Lab | Android 미니앱",
-        ogDescription: "색감 테스트, 공유키 기반 외계어 메시지, UFO 호출 체험, 운빨 카드 랜덤디펜스 비공개 테스트까지. 짧게 즐기는 Android 앱 컬렉션."
+        ogDescription: "색감 테스트, 공유키 기반 외계어 메시지, UFO 호출 체험, 실험쥐 미로탈출: 다크메이즈 출시작과 비공개 테스트까지. 짧게 즐기는 Android 앱 컬렉션."
       },
       skip: {
         apps: "앱 목록으로 이동"
@@ -453,14 +453,14 @@ window.NEOKIM_I18N = (() => {
           iconAlt: "운빨 카드 랜덤디펜스 아이콘"
         },
         darkMaze: {
-          name: "다크 메이즈",
-          category: "비공개 테스트 탈출 게임",
+          name: "실험쥐 미로탈출: 다크메이즈",
+          category: "출시 완료 미로 탈출 게임",
           tagline: "어둠 속 미로에서 출구를 찾는 실험쥐 탈출 게임",
-          description: "현재 비공개 테스트 중입니다. 공개 Play 링크가 열리지 않을 수 있어 테스트 참여 문의로 연결합니다.",
-          highlights: ["비공개 테스트", "미로 탈출", "아이템", "리더보드 예정"],
-          primaryCta: "테스트 참여 문의",
-          statusNote: "Google Play 공개 링크가 열리지 않을 수 있습니다. 테스트 참여를 원하면 개발자에게 메일을 보내주세요.",
-          iconAlt: "다크 메이즈 아이콘"
+          description: "2026년 5월 28일 Google Play에 출시했습니다. 어둠 속 미로를 이동하고 아이템을 활용해 출구를 찾아 탈출하세요.",
+          highlights: ["2026년 5월 28일 출시", "미로 탈출", "아이템", "어둠 속 생존"],
+          primaryCta: "Google Play에서 설치",
+          statusNote: "현재 Google Play에서 설치할 수 있습니다. 이 앱은 웹 미리해보기를 제공하지 않습니다.",
+          iconAlt: "실험쥐 미로탈출: 다크메이즈 아이콘"
         }
       },
       status: {

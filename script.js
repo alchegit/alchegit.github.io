@@ -88,12 +88,13 @@ const apps = [
   },
   {
     id: "dark-maze",
-    status: "testing",
+    status: "live",
     priority: 7,
     code: "ANDROID005",
+    campaign: "darkmaze",
     i18nKey: "apps.darkMaze",
     icon: "assets/icon_darkmaze.png",
-    originalPlayUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze"
+    playUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze"
   }
 ];
 

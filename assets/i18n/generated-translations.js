@@ -2,9 +2,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "gl-ES": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicacións gratuítas de Android",
-      "description": "Instala ou proba probas privadas para Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense e máis mini aplicacións Android.",
+      "description": "Instala Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e probas privadas para Lucky Card Random Defense e máis mini aplicacións de Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplicacións",
-      "ogDescription": "Desafíos de cores, mensaxes secretas extraterrestres, experiencias de chamadas de OVNI e probas privadas para divertirse rapidamente con Android."
+      "ogDescription": "Desafíos de cores, mensaxes secretas extraterrestres, experiencias de chamadas de ovnis, Lab Rat Maze Escape: Dark Maze e probas privadas para divertirse rapidamente con Android."
     },
     "skip": {
       "apps": "Saltar á lista de aplicacións"
@@ -164,19 +164,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona Lucky Card Random Defense"
       },
       "darkMaze": {
-        "name": "Labirinto Escuro",
-        "category": "Xogo de escape de proba privada",
-        "tagline": "Busca a saída nun labirinto escuro como un desafío de fuga de ratas de laboratorio.",
-        "description": "Actualmente en probas privadas. É posible que a ligazón de Play pública non se abra, polo que utiliza o botón de contacto de proba.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Xogo de escape do labirinto lanzado",
+        "tagline": "Guía unha rata de laboratorio polo escuro labirinto e atopa a saída.",
+        "description": "Publicado en Google Play o 28 de maio de 2026. Móvete polo escuro labirinto, usa elementos e escapa antes de que se peche o camiño.",
         "highlights": [
-          "Proba privada",
+          "Publicado o 28 de maio de 2026",
           "Escape do labirinto",
           "Elementos",
-          "Taboleiro de clasificación planificado"
+          "Supervivencia escura"
         ],
-        "primaryCta": "Solicitar acceso ao probador",
-        "statusNote": "É posible que a ligazón pública Google Play non se abra. Envía un correo electrónico ao programador para solicitar acceso ao probador.",
-        "iconAlt": "Icona Dark Maze"
+        "primaryCta": "Instalar en Google Play",
+        "statusNote": "Agora dispoñible en Google Play. Non se ofrece ningunha demostración web para esta aplicación.",
+        "iconAlt": "Lab Rat Maze Escape: Icona Dark Maze"
       }
     },
     "status": {
@@ -258,9 +258,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "gu": {
     "seo": {
       "title": "NeoKIM એપ લેબ | મફત Android મીની એપ્સ",
-      "description": "કલર માસ્ટર 2, ગેલેક્ટીકોડ, કૉલ ધ યુએફઓ, લકી કાર્ડ રેન્ડમ ડિફેન્સ અને વધુ Android મિની એપ્સ માટે ખાનગી પરીક્ષણો ઇન્સ્ટોલ કરો અથવા અજમાવો.",
+      "description": "કલર માસ્ટર 2, ગેલેક્ટીકોડ, કૉલ ધ યુએફઓ, લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ અને લકી કાર્ડ રેન્ડમ ડિફેન્સ માટે ખાનગી પરીક્ષણો અને વધુ Android મીની એપ્લિકેશન્સ ઇન્સ્ટોલ કરો.",
       "ogTitle": "NeoKIM એપ લેબ | Android મીની એપ્સ",
-      "ogDescription": "ઝડપી Android આનંદ માટે રંગ પડકારો, એલિયન જેવા ગુપ્ત સંદેશાઓ, UFO કૉલિંગ અનુભવો અને ખાનગી પરીક્ષણો."
+      "ogDescription": "રંગ પડકારો, એલિયન જેવા ગુપ્ત સંદેશાઓ, UFO કૉલિંગ અનુભવો, લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ અને ઝડપી એન્ડ્રોઇડ આનંદ માટે ખાનગી પરીક્ષણો."
     },
     "skip": {
       "apps": "એપ્લિકેશન સૂચિ પર જાઓ"
@@ -420,19 +420,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "લકી કાર્ડ રેન્ડમ ડિફેન્સ આઇકન"
       },
       "darkMaze": {
-        "name": "ડાર્ક મેઝ",
-        "category": "ખાનગી ટેસ્ટ એસ્કેપ ગેમ",
-        "tagline": "લેબ રેટ એસ્કેપ ચેલેન્જ તરીકે ડાર્ક મેઝમાં બહાર નીકળો શોધો.",
-        "description": "હાલમાં ખાનગી પરીક્ષણમાં છે. સાર્વજનિક પ્લે લિંક ખુલી શકશે નહીં, તેથી પરીક્ષણ સંપર્ક બટનનો ઉપયોગ કરો.",
+        "name": "લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ",
+        "category": "મેઝ એસ્કેપ ગેમ રીલીઝ કરી",
+        "tagline": "ડાર્ક મેઝમાંથી લેબ ઉંદરને માર્ગદર્શન આપો અને બહાર નીકળો.",
+        "description": "28 મે, 2026 ના રોજ Google Play પર રીલિઝ થયું. ડાર્ક મેઝમાંથી આગળ વધો, વસ્તુઓનો ઉપયોગ કરો અને રસ્તો બંધ થાય તે પહેલાં ભાગી જાઓ.",
         "highlights": [
-          "ખાનગી કસોટી",
+          "28 મે, 2026ના રોજ રીલિઝ થયું",
           "મેઝ એસ્કેપ",
           "વસ્તુઓ",
-          "લીડરબોર્ડ આયોજન"
+          "શ્યામ અસ્તિત્વ"
         ],
-        "primaryCta": "ટેસ્ટર ઍક્સેસની વિનંતી કરો",
-        "statusNote": "સાર્વજનિક Google Play લિંક કદાચ ખુલશે નહીં. ટેસ્ટર ઍક્સેસની વિનંતી કરવા ડેવલપરને ઇમેઇલ કરો.",
-        "iconAlt": "ડાર્ક મેઝ આઇકન"
+        "primaryCta": "Google Play પર ઇન્સ્ટોલ કરો",
+        "statusNote": "હવે Google Play પર ઉપલબ્ધ છે. આ એપ માટે કોઈ વેબ ડેમો આપવામાં આવેલ નથી.",
+        "iconAlt": "લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ આઇકન"
       }
     },
     "status": {
@@ -514,9 +514,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "el-GR": {
     "seo": {
       "title": "NeoKIM App Lab | Δωρεάν εφαρμογές Android Mini",
-      "description": "Εγκαταστήστε ή δοκιμάστε ιδιωτικές δοκιμές για τις εφαρμογές Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense και περισσότερες εφαρμογές μίνι Android.",
+      "description": "Εγκαταστήστε το Color Master 2, το Galacticode, το Call the UFO, το Lab Rat Maze Escape: Dark Maze και ιδιωτικές δοκιμές για Lucky Card Random Defense και περισσότερες mini εφαρμογές Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Προκλήσεις χρωμάτων, μυστικά μηνύματα που θυμίζουν εξωγήινους, εμπειρίες κλήσεων UFO και ιδιωτικές δοκιμές για γρήγορη διασκέδαση Android."
+      "ogDescription": "Προκλήσεις χρωμάτων, μυστικά μηνύματα που θυμίζουν εξωγήινους, εμπειρίες κλήσης UFO, Lab Rat Maze Escape: Dark Maze και ιδιωτικές δοκιμές για γρήγορη διασκέδαση στο Android."
     },
     "skip": {
       "apps": "Μετάβαση στη λίστα εφαρμογών"
@@ -676,19 +676,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Εικονίδιο τυχαίας κάρτας τυχαίας άμυνας"
       },
       "darkMaze": {
-        "name": "Σκοτεινός Λαβύρινθος",
-        "category": "Ιδιωτικό δοκιμαστικό παιχνίδι απόδρασης",
-        "tagline": "Βρείτε την έξοδο σε έναν σκοτεινό λαβύρινθο ως πρόκληση διαφυγής αρουραίου εργαστηρίου.",
-        "description": "Επί του παρόντος σε ιδιωτικές δοκιμές. Ο δημόσιος σύνδεσμος Play ενδέχεται να μην ανοίξει, επομένως χρησιμοποιήστε το κουμπί δοκιμής επαφής.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Κυκλοφόρησε το παιχνίδι απόδρασης λαβύρινθου",
+        "tagline": "Οδηγήστε έναν εργαστηριακό αρουραίο στον σκοτεινό λαβύρινθο και βρείτε την έξοδο.",
+        "description": "Κυκλοφόρησε στο Google Play στις 28 Μαΐου 2026. Μετακινηθείτε στον σκοτεινό λαβύρινθο, χρησιμοποιήστε αντικείμενα και αποδράστε πριν κλείσει το μονοπάτι.",
         "highlights": [
-          "Ιδιωτικό τεστ",
+          "Κυκλοφόρησε στις 28 Μαΐου 2026",
           "Απόδραση από λαβύρινθο",
           "Είδη",
-          "Προγραμματισμένος βαθμολογικός πίνακας"
+          "Σκοτεινή επιβίωση"
         ],
-        "primaryCta": "Ζητήστε πρόσβαση δοκιμαστή",
-        "statusNote": "Ο δημόσιος σύνδεσμος Google Play ενδέχεται να μην ανοίξει. Στείλτε μήνυμα ηλεκτρονικού ταχυδρομείου στον προγραμματιστή για να ζητήσετε πρόσβαση από τον δοκιμαστή.",
-        "iconAlt": "Σκοτεινό λαβύρινθο εικονίδιο"
+        "primaryCta": "Εγκατάσταση στο Google Play",
+        "statusNote": "Τώρα διαθέσιμο στο Google Play. Δεν παρέχεται επίδειξη ιστού για αυτήν την εφαρμογή.",
+        "iconAlt": "Lab Rat Maze Escape: Εικονίδιο Dark Maze"
       }
     },
     "status": {
@@ -770,9 +770,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "nl-NL": {
     "seo": {
       "title": "NeoKIM App-lab | Gratis Android Mini-apps",
-      "description": "Installeer of probeer privétests voor Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense en meer Android mini-apps.",
+      "description": "Installeer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze en privétests voor Lucky Card Random Defense en meer Android-mini-apps.",
       "ogTitle": "NeoKIM App-lab | Android Mini-apps",
-      "ogDescription": "Kleuruitdagingen, buitenaardse geheime berichten, UFO-oproepervaringen en privétests voor snel Android-plezier."
+      "ogDescription": "Kleuruitdagingen, buitenaardse geheime berichten, UFO-oproepervaringen, Lab Rat Maze Escape: Dark Maze en privétests voor snel Android-plezier."
     },
     "skip": {
       "apps": "Ga naar de applijst"
@@ -932,19 +932,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Willekeurig verdedigingspictogram"
       },
       "darkMaze": {
-        "name": "Donker doolhof",
-        "category": "Privé-test-ontsnappingsspel",
-        "tagline": "Vind de uitgang in een donker doolhof als een ontsnappingsuitdaging voor laboratoriumratten.",
-        "description": "Momenteel in privétest. De openbare Play-link wordt mogelijk niet geopend, gebruik daarom de testcontactknop.",
+        "name": "Lab Rat Doolhof Ontsnapping: Donker Doolhof",
+        "category": "Uitgebracht doolhof ontsnappingsspel",
+        "tagline": "Leid een laboratoriumrat door het donkere doolhof en vind de uitgang.",
+        "description": "Uitgebracht op Google Play op 28 mei 2026. Beweeg door het donkere doolhof, gebruik items en ontsnap voordat het pad dichterbij komt.",
         "highlights": [
-          "Privé proef",
+          "Uitgebracht op 28 mei 2026",
           "Doolhof ontsnappen",
           "Artikelen",
-          "Leiderbord gepland"
+          "Duistere overleving"
         ],
-        "primaryCta": "Vraag testertoegang aan",
-        "statusNote": "De openbare Google Play-link wordt mogelijk niet geopend. E-mail de ontwikkelaar om testertoegang aan te vragen.",
-        "iconAlt": "Donker doolhof icoon"
+        "primaryCta": "Installeer op Google Play",
+        "statusNote": "Nu beschikbaar op Google Play. Er is geen webdemo beschikbaar voor deze app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-pictogram"
       }
     },
     "status": {
@@ -1026,9 +1026,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ne-NP": {
     "seo": {
       "title": "NeoKIM एप ल्याब | नि: शुल्क Android मिनी एपहरू",
-      "description": "कलर मास्टर २, ग्यालेक्टिकोड, कल द यूएफओ, लकी कार्ड र्यान्डम डिफेन्स, र थप Android मिनी एपहरूको लागि निजी परीक्षणहरू स्थापना गर्नुहोस् वा प्रयास गर्नुहोस्।",
+      "description": "कलर मास्टर २, ग्यालेक्टिकोड, कल द यूएफओ, ल्याब रेट मेज एस्केप: डार्क मेज, र लक्की कार्ड अनियमित रक्षा र थप एन्ड्रोइड मिनी एपहरूको लागि निजी परीक्षणहरू स्थापना गर्नुहोस्।",
       "ogTitle": "NeoKIM एप ल्याब | Android मिनी एपहरू",
-      "ogDescription": "रङ चुनौतीहरू, एलियन जस्तो गोप्य सन्देशहरू, UFO कलिङ अनुभवहरू, र द्रुत Android रमाइलोको लागि निजी परीक्षणहरू।"
+      "ogDescription": "रङ चुनौतीहरू, एलियन जस्तो गोप्य सन्देशहरू, UFO कल गर्ने अनुभवहरू, ल्याब रेट मेज एस्केप: डार्क मेज, र द्रुत एन्ड्रोइड रमाइलोको लागि निजी परीक्षणहरू।"
     },
     "skip": {
       "apps": "एप सूचीमा जानुहोस्"
@@ -1188,19 +1188,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "भाग्यशाली कार्ड अनियमित रक्षा प्रतिमा"
       },
       "darkMaze": {
-        "name": "गाढा भूलभुलैया",
-        "category": "निजी परीक्षण एस्केप खेल",
-        "tagline": "प्रयोगशाला मुसा एस्केप चुनौतीको रूपमा अँध्यारो भूलभुलैयामा बाहिर निस्कनुहोस्।",
-        "description": "हाल निजी परीक्षणमा। सार्वजनिक प्ले लिङ्क नखोल्न सक्छ, त्यसैले परीक्षण सम्पर्क बटन प्रयोग गर्नुहोस्।",
+        "name": "ल्याब रेट भूलभुलैया एस्केप: गाढा भूलभुलैया",
+        "category": "जारी भूलभुलैया एस्केप खेल",
+        "tagline": "अँध्यारो भूलभुलैया मार्फत प्रयोगशाला मुसालाई मार्गदर्शन गर्नुहोस् र बाहिर निस्कनुहोस्।",
+        "description": "28 मे, 2026 मा Google Play मा रिलीज। अँध्यारो भूलभुलैयामा जानुहोस्, वस्तुहरू प्रयोग गर्नुहोस् र बाटो बन्द हुनु अघि भाग्नुहोस्।",
         "highlights": [
-          "निजी परीक्षण",
+          "मे 28, 2026 मा जारी गरियो",
           "भूलभुलैया एस्केप",
           "वस्तुहरू",
-          "लिडरबोर्ड योजना गरिएको छ"
+          "अँध्यारो अस्तित्व"
         ],
-        "primaryCta": "परीक्षक पहुँच अनुरोध गर्नुहोस्",
-        "statusNote": "सार्वजनिक Google Play लिङ्क नखोल्न सक्छ। परीक्षक पहुँच अनुरोध गर्न विकासकर्तालाई इमेल गर्नुहोस्।",
-        "iconAlt": "गाढा भूलभुलैया आइकन"
+        "primaryCta": "Google Play मा स्थापना गर्नुहोस्",
+        "statusNote": "अब Google Play मा उपलब्ध छ। यो एपको लागि कुनै वेब डेमो प्रदान गरिएको छैन।",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze आइकन"
       }
     },
     "status": {
@@ -1282,9 +1282,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "no-NO": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-apper",
-      "description": "Installer eller prøv private tester for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense og flere Android miniapper.",
+      "description": "Installer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze og private tester for Lucky Card Random Defense og flere Android-miniapper.",
       "ogTitle": "NeoKIM App Lab | Android Mini-apper",
-      "ogDescription": "Fargeutfordringer, romvesenlignende hemmelige meldinger, UFO-ringeopplevelser og private tester for rask Android-moro."
+      "ogDescription": "Fargeutfordringer, romvesenlignende hemmelige meldinger, UFO-ringeopplevelser, Lab Rat Maze Escape: Dark Maze og private tester for rask Android-moro."
     },
     "skip": {
       "apps": "Hopp til applisten"
@@ -1444,19 +1444,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense-ikon"
       },
       "darkMaze": {
-        "name": "Mørk labyrint",
-        "category": "Privat testfluktspill",
-        "tagline": "Finn utgangen i en mørk labyrint som en rømningsutfordring for laboratorieroter.",
-        "description": "For tiden i privat testing. Den offentlige Play-koblingen åpnes kanskje ikke, så bruk testkontaktknappen.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Utgitt labyrint escape-spill",
+        "tagline": "Led en laboratorierotte gjennom den mørke labyrinten og finn utgangen.",
+        "description": "Utgitt på Google Play 28. mai 2026. Beveg deg gjennom den mørke labyrinten, bruk gjenstander og flykt før stien nærmer seg.",
         "highlights": [
-          "Privat test",
+          "Utgitt 28. mai 2026",
           "Labyrintflukt",
           "Varer",
-          "Leaderboard planlagt"
+          "Mørk overlevelse"
         ],
-        "primaryCta": "Be om testertilgang",
-        "statusNote": "Den offentlige Google Play-lenken åpnes kanskje ikke. Send e-post til utvikleren for å be om testertilgang.",
-        "iconAlt": "Mørk labyrint-ikon"
+        "primaryCta": "Installer på Google Play",
+        "statusNote": "Nå tilgjengelig på Google Play. Ingen nettdemo er gitt for denne appen.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon"
       }
     },
     "status": {
@@ -1538,9 +1538,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "da-DK": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini Apps",
-      "description": "Installer eller prøv private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense og flere Android mini-apps.",
+      "description": "Installer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze og private tests for Lucky Card Random Defense og flere Android-miniapps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Farveudfordringer, alien-lignende hemmelige beskeder, UFO-opkaldsoplevelser og private tests for hurtig Android-sjov."
+      "ogDescription": "Farveudfordringer, alien-lignende hemmelige beskeder, UFO-opkaldsoplevelser, Lab Rat Maze Escape: Dark Maze og private tests for hurtig Android-sjov."
     },
     "skip": {
       "apps": "Spring til applisten"
@@ -1700,19 +1700,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense-ikon"
       },
       "darkMaze": {
-        "name": "Mørk labyrint",
-        "category": "Privat test flugt spil",
-        "tagline": "Find udgangen i en mørk labyrint som en udfordring for at undslippe laboratoriet.",
-        "description": "I øjeblikket i privat test. Det offentlige Play-link åbnes muligvis ikke, så brug testkontaktknappen.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Udgivet labyrint flugt spil",
+        "tagline": "Før en laboratorierotte gennem den mørke labyrint og find udgangen.",
+        "description": "Udgivet på Google Play den 28. maj 2026. Bevæg dig gennem den mørke labyrint, brug genstande, og flygt, før stien lukker sig.",
         "highlights": [
-          "Privat test",
+          "Udgivet 28. maj 2026",
           "Labyrint flugt",
           "genstande",
-          "Leaderboard planlagt"
+          "Mørk overlevelse"
         ],
-        "primaryCta": "Anmod om testeradgang",
-        "statusNote": "Det offentlige Google Play-link åbnes muligvis ikke. Send en e-mail til udvikleren for at anmode om testadgang.",
-        "iconAlt": "Mørk labyrint ikon"
+        "primaryCta": "Installer på Google Play",
+        "statusNote": "Nu tilgængelig på Google Play. Der er ingen webdemo til denne app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon"
       }
     },
     "status": {
@@ -1794,9 +1794,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "de-DE": {
     "seo": {
       "title": "NeoKIM App Lab | Kostenlose Android Mini-Apps",
-      "description": "Installieren oder testen Sie private Tests für Color Master 2, Galacticcode, Call the UFO, Lucky Card Random Defense und weitere Android-Mini-Apps.",
+      "description": "Installieren Sie Color Master 2, Galacticcode, Call the UFO, Lab Rat Maze Escape: Dark Maze und private Tests für Lucky Card Random Defense und weitere Android-Mini-Apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini-Apps",
-      "ogDescription": "Farbherausforderungen, außerirdische Geheimbotschaften, UFO-Anruferlebnisse und private Tests für schnellen Android-Spaß."
+      "ogDescription": "Farbherausforderungen, außerirdische Geheimbotschaften, UFO-Anruferlebnisse, Lab Rat Maze Escape: Dark Maze und private Tests für schnellen Android-Spaß."
     },
     "skip": {
       "apps": "Zur App-Liste springen"
@@ -1956,19 +1956,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Glückskarten-Zufallsverteidigungssymbol"
       },
       "darkMaze": {
-        "name": "Dunkles Labyrinth",
-        "category": "Privates Test-Escape-Spiel",
-        "tagline": "Finden Sie als Laborratten-Fluchtherausforderung den Ausgang in einem dunklen Labyrinth.",
-        "description": "Derzeit im privaten Test. Der öffentliche Play-Link wird möglicherweise nicht geöffnet. Verwenden Sie daher die Schaltfläche „Kontakt testen“.",
+        "name": "Lab Rat Maze Escape: Dunkles Labyrinth",
+        "category": "Labyrinth-Fluchtspiel veröffentlicht",
+        "tagline": "Führe eine Laborratte durch das dunkle Labyrinth und finde den Ausgang.",
+        "description": "Veröffentlicht am 28. Mai 2026 bei Google Play. Bewegen Sie sich durch das dunkle Labyrinth, verwenden Sie Gegenstände und entkommen Sie, bevor der Weg zuschließt.",
         "highlights": [
-          "Privater Test",
+          "Veröffentlicht am 28. Mai 2026",
           "Flucht aus dem Labyrinth",
           "Artikel",
-          "Bestenliste geplant"
+          "Dunkles Überleben"
         ],
-        "primaryCta": "Fordern Sie Testerzugang an",
-        "statusNote": "Der öffentliche Google Play-Link wird möglicherweise nicht geöffnet. Senden Sie eine E-Mail an den Entwickler, um Testerzugriff anzufordern.",
-        "iconAlt": "Dunkles Labyrinth-Symbol"
+        "primaryCta": "Bei Google Play installieren",
+        "statusNote": "Jetzt bei Google Play verfügbar. Für diese App wird keine Webdemo bereitgestellt.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-Symbol"
       }
     },
     "status": {
@@ -2050,9 +2050,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lo-LA": {
     "seo": {
       "title": "NeoKIM App Lab | ແອັບ Android Mini ຟຣີ",
-      "description": "ຕິດຕັ້ງ ຫຼືລອງທົດສອບສ່ວນຕົວສຳລັບ Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "ຕິດຕັ້ງ Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, ແລະການທົດສອບສ່ວນຕົວສຳລັບ Lucky Card Random Defense ແລະແອັບຯ Android mini ອື່ນໆອີກ.",
       "ogTitle": "NeoKIM App Lab | ແອັບ Android Mini",
-      "ogDescription": "ການທ້າທາຍສີ, ຂໍ້ຄວາມລັບທີ່ຄ້າຍຄືມະນຸດຕ່າງດາວ, ປະສົບການການໂທ UFO, ແລະການທົດສອບສ່ວນຕົວສໍາລັບການມ່ວນຊື່ນ Android ໄວ."
+      "ogDescription": "ການທ້າທາຍສີ, ຂໍ້ຄວາມລັບທີ່ຄ້າຍຄືກັບມະນຸດຕ່າງດາວ, ປະສົບການການໂທ UFO, Lab Rat Maze Escape: Dark Maze, ແລະການທົດສອບສ່ວນຕົວເພື່ອຄວາມມ່ວນໄວຂອງ Android."
     },
     "skip": {
       "apps": "ຂ້າມໄປຫາລາຍການແອັບ"
@@ -2212,19 +2212,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ໄອຄອນປ້ອງກັນແບບສຸ່ມບັດໂຊກດີ"
       },
       "darkMaze": {
-        "name": "Maze ມືດ",
-        "category": "ເກມ escape ການທົດສອບເອກະຊົນ",
-        "tagline": "ຊອກຫາທາງອອກໃນ maze ມືດເປັນສິ່ງທ້າທາຍການຫລົບຫນີຫນູຫ້ອງທົດລອງ.",
-        "description": "ໃນປັດຈຸບັນຢູ່ໃນການທົດສອບເອກະຊົນ. ລິ້ງຫຼິ້ນສາທາລະນະອາດຈະບໍ່ເປີດ, ສະນັ້ນໃຫ້ໃຊ້ປຸ່ມຕິດຕໍ່ທົດສອບ.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "ເກມ escape maze ປ່ອຍອອກມາ",
+        "tagline": "ແນະນໍາຫນູຫ້ອງທົດລອງຜ່ານ maze ຊ້ໍາແລະຊອກຫາທາງອອກ.",
+        "description": "ປ່ອຍອອກມາເມື່ອ Google Play ໃນວັນທີ 28 ພຶດສະພາ 2026. ຍ້າຍຜ່ານ maze ມືດ, ໃຊ້ລາຍການຕ່າງໆ ແລະ ໜີກ່ອນທີ່ເສັ້ນທາງຈະປິດລົງ.",
         "highlights": [
-          "ການທົດສອບສ່ວນຕົວ",
+          "ປ່ອຍອອກມາເມື່ອ 28 ພຶດສະພາ 2026",
           "ຫນີ Maze",
           "ລາຍການ",
-          "ກະດານຜູ້ນໍາທີ່ວາງແຜນໄວ້"
+          "ຄວາມຢູ່ລອດຊ້ໍາ"
         ],
-        "primaryCta": "ຮ້ອງຂໍການເຂົ້າເຖິງຜູ້ທົດສອບ",
-        "statusNote": "ລິ້ງ Google Play ສາທາລະນະອາດຈະບໍ່ເປີດ. ສົ່ງອີເມວຫາຜູ້ພັດທະນາເພື່ອຮ້ອງຂໍການເຂົ້າເຖິງຜູ້ທົດສອບ.",
-        "iconAlt": "ໄອຄອນ Maze ມືດ"
+        "primaryCta": "ຕິດຕັ້ງຢູ່ໃນ Google Play",
+        "statusNote": "ຕອນນີ້ມີໃຫ້ຢູ່ໃນ Google Play. ບໍ່​ມີ​ການ​ສາ​ທິດ​ເວັບ​ໄດ້​ສະ​ຫນອງ​ໃຫ້​ສໍາ​ລັບ app ນີ້​.",
+        "iconAlt": "Lab Rat Maze Escape: ໄອຄອນ Maze ມືດ"
       }
     },
     "status": {
@@ -2306,9 +2306,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lv": {
     "seo": {
       "title": "NeoKIM App Lab | Bezmaksas Android mini lietotnes",
-      "description": "Instalējiet vai izmēģiniet privātos testus Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense un citām Android mini lietotnēm.",
+      "description": "Instalējiet Color Master 2, Galacticode, Call the NLO, Lab Rat Maze Escape: Dark Maze un privātos testus Lucky Card Random Defense un citām Android mini lietotnēm.",
       "ogTitle": "NeoKIM App Lab | Android mini lietotnes",
-      "ogDescription": "Krāsu izaicinājumi, citplanētiešiem līdzīgi slepeni ziņojumi, NLO zvanīšanas pieredze un privāti testi ātrai Android jautrībai."
+      "ogDescription": "Krāsu izaicinājumi, citplanētiešiem līdzīgi slepeni ziņojumi, NLO zvanīšanas pieredze, Lab Rat Maze Escape: Dark Maze un privāti testi ātrai Android izklaidei."
     },
     "skip": {
       "apps": "Pāriet uz lietotņu sarakstu"
@@ -2468,19 +2468,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Laimīgās kartes izlases aizsardzības ikona"
       },
       "darkMaze": {
-        "name": "Tumšais labirints",
-        "category": "Privāta testa bēgšanas spēle",
-        "tagline": "Atrodiet izeju tumšā labirintā kā laboratorijas žurku bēgšanas izaicinājumu.",
-        "description": "Pašlaik privātā testēšanā. Publiskā Play saite var netikt atvērta, tāpēc izmantojiet testa kontaktpersonas pogu.",
+        "name": "Laboratorijas žurku labirinta bēgšana: tumšais labirints",
+        "category": "Izlaista labirinta bēgšanas spēle",
+        "tagline": "Vadi laboratorijas žurku pa tumšo labirintu un atrodi izeju.",
+        "description": "Izlaists pakalpojumā Google Play 2026. gada 28. maijā. Pārvietojieties tumšajā labirintā, izmantojiet priekšmetus un aizbēgiet, pirms ceļš noslēdzas.",
         "highlights": [
-          "Privāts tests",
+          "Publicēts 2026. gada 28. maijā",
           "Labirints bēgšana",
           "Preces",
-          "Plānots uzvarētāju saraksts"
+          "Tumšā izdzīvošana"
         ],
-        "primaryCta": "Pieprasīt testētāja piekļuvi",
-        "statusNote": "Publiskā Google Play saite var netikt atvērta. Nosūtiet izstrādātājam e-pasta ziņojumu, lai pieprasītu testētāja piekļuvi.",
-        "iconAlt": "Tumšā labirinta ikona"
+        "primaryCta": "Instalējiet pakalpojumā Google Play",
+        "statusNote": "Tagad pieejams pakalpojumā Google Play. Šai lietotnei nav nodrošināta tīmekļa demonstrācija.",
+        "iconAlt": "Laboratorijas žurku labirinta bēgšana: tumšā labirinta ikona"
       }
     },
     "status": {
@@ -2562,9 +2562,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ru-RU": {
     "seo": {
       "title": "Лаборатория приложений NeoKIM | Бесплатные мини-приложения Android",
-      "description": "Установите или попробуйте частные тесты для Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense и других мини-приложений Android.",
+      "description": "Установите Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, а также частные тесты Lucky Card Random Defense и другие мини-приложения для Android.",
       "ogTitle": "Лаборатория приложений NeoKIM | Мини-приложения Android",
-      "ogDescription": "Цветные задания, секретные сообщения, похожие на инопланетные, вызовы НЛО и частные тесты для быстрого развлечения в Android."
+      "ogDescription": "Цветные испытания, секретные сообщения, похожие на инопланетные, вызов НЛО, побег из лабиринта лабораторной крысы: Темный лабиринт и частные тесты для быстрого развлечения на Android."
     },
     "skip": {
       "apps": "Перейти к списку приложений"
@@ -2724,19 +2724,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок случайной защиты счастливой карты"
       },
       "darkMaze": {
-        "name": "Темный лабиринт",
-        "category": "Частная тестовая квест-игра",
-        "tagline": "Найдите выход в темном лабиринте, выполняя задание по побегу лабораторной крысы.",
-        "description": "В настоящее время находится в закрытом тестировании. Ссылка на общедоступную игру может не открыться, поэтому воспользуйтесь кнопкой проверки контакта.",
+        "name": "Побег из лабиринта лабораторной крысы: Темный лабиринт",
+        "category": "Выпущена игра о побеге из лабиринта",
+        "tagline": "Проведите лабораторную крысу через темный лабиринт и найдите выход.",
+        "description": "Выпущено в Google Play 28 мая 2026 года. Двигайтесь по темному лабиринту, используйте предметы и убегайте, прежде чем путь закроется.",
         "highlights": [
-          "Частный тест",
+          "Выпущено 28 мая 2026 г.",
           "Побег из лабиринта",
           "Предметы",
-          "Планируется таблица лидеров"
+          "Темное выживание"
         ],
-        "primaryCta": "Запросить доступ тестера",
-        "statusNote": "Публичная ссылка Google Play может не открыться. Отправьте электронное письмо разработчику, чтобы запросить доступ для тестировщика.",
-        "iconAlt": "Значок темного лабиринта"
+        "primaryCta": "Установить в Google Play",
+        "statusNote": "Теперь доступно в Google Play. Для этого приложения не предусмотрена веб-демо.",
+        "iconAlt": "Побег из лабиринта лабораторной крысы: значок темного лабиринта"
       }
     },
     "status": {
@@ -2818,9 +2818,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "rm": {
     "seo": {
       "title": "NeoKIM App Lab | Kostenlose Android Mini-Apps",
-      "description": "Installieren oder testen Sie private Tests für Color Master 2, Galacticcode, Call the UFO, Lucky Card Random Defense und weitere Android-Mini-Apps.",
+      "description": "Installieren Sie Color Master 2, Galacticcode, Call the UFO, Lab Rat Maze Escape: Dark Maze und private Tests für Lucky Card Random Defense und weitere Android-Mini-Apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini-Apps",
-      "ogDescription": "Farbherausforderungen, außerirdische Geheimbotschaften, UFO-Anruferlebnisse und private Tests für schnellen Android-Spaß."
+      "ogDescription": "Farbherausforderungen, außerirdische Geheimbotschaften, UFO-Anruferlebnisse, Lab Rat Maze Escape: Dark Maze und private Tests für schnellen Android-Spaß."
     },
     "skip": {
       "apps": "Zur App-Liste springen"
@@ -2980,19 +2980,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Glückskarten-Zufallsverteidigungssymbol"
       },
       "darkMaze": {
-        "name": "Dunkles Labyrinth",
-        "category": "Privates Test-Escape-Spiel",
-        "tagline": "Finden Sie als Laborratten-Fluchtherausforderung den Ausgang in einem dunklen Labyrinth.",
-        "description": "Derzeit im privaten Test. Der öffentliche Play-Link wird möglicherweise nicht geöffnet. Verwenden Sie daher die Schaltfläche „Kontakt testen“.",
+        "name": "Lab Rat Maze Escape: Dunkles Labyrinth",
+        "category": "Labyrinth-Fluchtspiel veröffentlicht",
+        "tagline": "Führe eine Laborratte durch das dunkle Labyrinth und finde den Ausgang.",
+        "description": "Veröffentlicht am 28. Mai 2026 bei Google Play. Bewegen Sie sich durch das dunkle Labyrinth, verwenden Sie Gegenstände und entkommen Sie, bevor der Weg zuschließt.",
         "highlights": [
-          "Privater Test",
+          "Veröffentlicht am 28. Mai 2026",
           "Flucht aus dem Labyrinth",
           "Artikel",
-          "Bestenliste geplant"
+          "Dunkles Überleben"
         ],
-        "primaryCta": "Fordern Sie Testerzugang an",
-        "statusNote": "Der öffentliche Google Play-Link wird möglicherweise nicht geöffnet. Senden Sie eine E-Mail an den Entwickler, um Testerzugriff anzufordern.",
-        "iconAlt": "Dunkles Labyrinth-Symbol"
+        "primaryCta": "Bei Google Play installieren",
+        "statusNote": "Jetzt bei Google Play verfügbar. Für diese App wird keine Webdemo bereitgestellt.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-Symbol"
       }
     },
     "status": {
@@ -3074,9 +3074,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ro": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicații gratuite Android",
-      "description": "Instalați sau încercați teste private pentru Color Master 2, Galacticode, Call the OZN, Lucky Card Random Defense și mai multe mini-aplicații Android.",
+      "description": "Instalați Color Master 2, Galacticode, Call the OZN, Lab Rat Maze Escape: Dark Maze și teste private pentru Lucky Card Random Defense și mai multe mini-aplicații Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Aplicații",
-      "ogDescription": "Provocări de culoare, mesaje secrete asemănătoare extratereștrilor, experiențe de apelare OZN și teste private pentru distracția rapidă cu Android."
+      "ogDescription": "Provocări de culoare, mesaje secrete asemănătoare extratereștrilor, experiențe de apelare OZN, Lab Rat Maze Escape: Dark Maze și teste private pentru distracția rapidă cu Android."
     },
     "skip": {
       "apps": "Treci la lista de aplicații"
@@ -3236,19 +3236,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Pictograma Lucky Card Random Defense"
       },
       "darkMaze": {
-        "name": "Labirint întunecat",
-        "category": "Joc privat de evadare de testare",
-        "tagline": "Găsiți ieșirea într-un labirint întunecat ca o provocare de evadare a șobolanilor de laborator.",
-        "description": "Momentan în testare privată. Este posibil ca linkul Play public să nu se deschidă, așa că utilizați butonul de contact de testare.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Joc de evadare labirint lansat",
+        "tagline": "Ghidează un șobolan de laborator prin labirintul întunecat și găsește ieșirea.",
+        "description": "Lansat pe Google Play pe 28 mai 2026. Deplasați-vă prin labirintul întunecat, folosiți obiecte și fugiți înainte ca poteca să se închidă.",
         "highlights": [
-          "Test privat",
+          "Lansat pe 28 mai 2026",
           "Evadare labirint",
           "Articole",
-          "Clasament planificat"
+          "Supraviețuire întunecată"
         ],
-        "primaryCta": "Solicitați acces la tester",
-        "statusNote": "Este posibil ca linkul public Google Play să nu se deschidă. Trimiteți un e-mail dezvoltatorului pentru a solicita accesul testerului.",
-        "iconAlt": "Pictograma Dark Maze"
+        "primaryCta": "Instalați pe Google Play",
+        "statusNote": "Acum disponibil pe Google Play. Nu este oferită nicio demonstrație web pentru această aplicație.",
+        "iconAlt": "Lab Rat Maze Escape: pictograma Dark Maze"
       }
     },
     "status": {
@@ -3330,9 +3330,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lt": {
     "seo": {
       "title": "NeoKIM App Lab | Nemokamos Android mini programos",
-      "description": "Įdiekite arba išbandykite privačius Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense ir kitų Android mini programų testus.",
+      "description": "Įdiekite „Color Master 2“, „Galacticode“, „Call the UFO“, „Lab Rat Maze Escape: Dark Maze“ ir privačius „Lucky Card Random Defense“ testus ir daugiau „Android“ mini programų.",
       "ogTitle": "NeoKIM App Lab | Android mini programos",
-      "ogDescription": "Spalvų iššūkiai, į ateivius panašios slaptos žinutės, NSO skambučių patirtis ir privatūs testai, kad Android būtų linksma."
+      "ogDescription": "Spalvų iššūkiai, į ateivius panašios slaptos žinutės, NSO skambučių patirtis, pabėgimas iš laboratorijos žiurkių labirinto: tamsus labirintas ir privatūs testai, skirti greitai pasimėgauti „Android“."
     },
     "skip": {
       "apps": "Pereiti prie programų sąrašo"
@@ -3492,19 +3492,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Laimingos kortelės atsitiktinės gynybos piktograma"
       },
       "darkMaze": {
-        "name": "Tamsus labirintas",
-        "category": "Privatus bandomasis pabėgimo žaidimas",
-        "tagline": "Raskite išėjimą tamsiame labirinte kaip pabėgimo iš laboratorinės žiurkės iššūkį.",
-        "description": "Šiuo metu atliekami privatūs bandymai. Vieša Play nuoroda gali neatsidaryti, todėl naudokite bandomąjį kontaktinį mygtuką.",
+        "name": "Laboratorinių žiurkių labirinto pabėgimas: tamsus labirintas",
+        "category": "Išleistas labirinto pabėgimo žaidimas",
+        "tagline": "Nuveskite laboratorinę žiurkę tamsiu labirintu ir raskite išėjimą.",
+        "description": "Išleistas „Google Play“ 2026 m. gegužės 28 d. Judėkite tamsiu labirintu, naudokitės daiktais ir pabėgkite, kol takas neužsivers.",
         "highlights": [
-          "Privatus testas",
+          "Išleista 2026 m. gegužės 28 d",
           "Pabėgimas iš labirinto",
           "Daiktai",
-          "Planuojama lyderių lentelė"
+          "Tamsus išgyvenimas"
         ],
-        "primaryCta": "Prašyti testuotojo prieigos",
-        "statusNote": "Vieša Google Play nuoroda gali neatsidaryti. Išsiųskite el. laišką kūrėjui ir paprašykite bandytojo prieigos.",
-        "iconAlt": "Tamsaus labirinto piktograma"
+        "primaryCta": "Įdiekite „Google Play“.",
+        "statusNote": "Dabar pasiekiama „Google Play“. Šiai programai žiniatinklio demonstracinė versija nepateikiama.",
+        "iconAlt": "Laboratorinių žiurkių labirinto pabėgimas: tamsaus labirinto piktograma"
       }
     },
     "status": {
@@ -3586,9 +3586,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mr-IN": {
     "seo": {
       "title": "NeoKIM ॲप लॅब | मोफत Android मिनी ॲप्स",
-      "description": "कलर मास्टर 2, गॅलॅक्टिकोड, कॉल द UFO, लकी कार्ड रँडम डिफेन्स आणि अधिक Android मिनी ॲप्ससाठी खाजगी चाचण्या स्थापित करा किंवा वापरून पहा.",
+      "description": "कलर मास्टर 2, गॅलॅक्टिकोड, कॉल द यूएफओ, लॅब रॅट मेझ एस्केप: डार्क मेझ आणि लकी कार्ड रँडम डिफेन्ससाठी खाजगी चाचण्या आणि अधिक Android मिनी ॲप्स स्थापित करा.",
       "ogTitle": "NeoKIM ॲप लॅब | Android मिनी ॲप्स",
-      "ogDescription": "झटपट Android मनोरंजनासाठी रंगीत आव्हाने, एलियनसारखे गुप्त संदेश, UFO कॉलिंग अनुभव आणि खाजगी चाचण्या."
+      "ogDescription": "रंगीत आव्हाने, एलियनसारखे गुप्त संदेश, UFO कॉलिंग अनुभव, लॅब रॅट मेझ एस्केप: डार्क मेझ आणि द्रुत Android मजा साठी खाजगी चाचण्या."
     },
     "skip": {
       "apps": "ॲप सूचीवर जा"
@@ -3748,19 +3748,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "लकी कार्ड यादृच्छिक संरक्षण चिन्ह"
       },
       "darkMaze": {
-        "name": "गडद चक्रव्यूह",
-        "category": "खाजगी चाचणी सुटलेला खेळ",
-        "tagline": "लॅब उंदीर सुटण्याचे आव्हान म्हणून गडद चक्रव्यूहातून बाहेर पडा.",
-        "description": "सध्या खाजगी चाचणीत आहे. सार्वजनिक प्ले लिंक उघडू शकत नाही, म्हणून चाचणी संपर्क बटण वापरा.",
+        "name": "लॅब रॅट मेझ एस्केप: गडद चक्रव्यूह",
+        "category": "भूलभुलैया सुटलेला खेळ सोडला",
+        "tagline": "गडद चक्रव्यूहातून प्रयोगशाळेतील उंदराला मार्गदर्शन करा आणि बाहेर पडा.",
+        "description": "28 मे 2026 रोजी Google Play वर रिलीझ झाले. गडद चक्रव्यूहातून जा, आयटम वापरा आणि मार्ग बंद होण्यापूर्वी बाहेर पडा.",
         "highlights": [
-          "खाजगी चाचणी",
+          "28 मे 2026 रोजी प्रसिद्ध झाले",
           "चक्रव्यूह सुटला",
           "वस्तू",
-          "लीडरबोर्ड नियोजित"
+          "गडद जगणे"
         ],
-        "primaryCta": "परीक्षक प्रवेशाची विनंती करा",
-        "statusNote": "सार्वजनिक Google Play लिंक कदाचित उघडणार नाही. परीक्षक प्रवेशाची विनंती करण्यासाठी विकसकाला ईमेल करा.",
-        "iconAlt": "गडद चक्रव्यूह चिन्ह"
+        "primaryCta": "Google Play वर स्थापित करा",
+        "statusNote": "आता Google Play वर उपलब्ध आहे. या ॲपसाठी कोणताही वेब डेमो प्रदान केलेला नाही.",
+        "iconAlt": "लॅब रॅट मेझ एस्केप: गडद चक्रव्यूह चिन्ह"
       }
     },
     "status": {
@@ -3842,9 +3842,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mk-MK": {
     "seo": {
       "title": "NeoKIM App Lab | Бесплатни апликации Android Mini",
-      "description": "Инсталирајте или испробајте приватни тестови за Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense и повеќе мини апликации Android.",
+      "description": "Инсталирајте Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze и приватни тестови за Lucky Card Random Defense и повеќе мини апликации за Android.",
       "ogTitle": "NeoKIM App Lab | Android мини апликации",
-      "ogDescription": "Предизвици во боја, тајни пораки слични на вонземјани, искуства за повикување НЛО и приватни тестови за брза забава Android."
+      "ogDescription": "Предизвици во боја, тајни пораки слични на вонземјани, искуства со повикување НЛО, Lab Rat Maze Escape: Dark Maze и приватни тестови за брза забава со Android."
     },
     "skip": {
       "apps": "Прескокнете на списокот со апликации"
@@ -4004,19 +4004,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Случајна одбрана икона за среќна картичка"
       },
       "darkMaze": {
-        "name": "Темниот лавиринт",
-        "category": "Приватна тест игра за бегство",
-        "tagline": "Најдете го излезот во темен лавиринт како предизвик за бегство од лабораториски стаорци.",
-        "description": "Моментално во приватно тестирање. Јавната врска за Play може да не се отвори, затоа користете го копчето за тестирање контакт.",
+        "name": "Лабораториски стаорец лавиринт Бегство: темен лавиринт",
+        "category": "Објавена игра за бегство од лавиринт",
+        "tagline": "Водете лабораториски стаорец низ темниот лавиринт и пронајдете го излезот.",
+        "description": "Објавено на Google Play на 28 мај 2026 година. Движете се низ темниот лавиринт, користете ставки и бегајте пред да се затвори патеката.",
         "highlights": [
-          "Приватен тест",
+          "Објавено на 28 мај 2026 година",
           "Бегство од лавиринт",
           "Предмети",
-          "Планиран табла на водачи"
+          "Темно преживување"
         ],
-        "primaryCta": "Побарајте пристап до тестерот",
-        "statusNote": "Јавната врска Google Play може да не се отвори. Испратете му е-пошта на програмерот за да побарате пристап од тестерот.",
-        "iconAlt": "Икона на Темниот лавиринт"
+        "primaryCta": "Инсталирајте на Google Play",
+        "statusNote": "Сега е достапен на Google Play. Не е обезбедено веб демо за оваа апликација.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze икона"
       }
     },
     "status": {
@@ -4098,9 +4098,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ml-IN": {
     "seo": {
       "title": "NeoKIM ആപ്പ് ലാബ് | സൗജന്യ Android മിനി ആപ്പുകൾ",
-      "description": "Colour Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, കൂടാതെ കൂടുതൽ Android മിനി ആപ്പുകൾ എന്നിവയ്ക്കായി സ്വകാര്യ പരിശോധനകൾ ഇൻസ്റ്റാൾ ചെയ്യുക അല്ലെങ്കിൽ പരീക്ഷിക്കുക.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, Lucky Card Random Defense-നും കൂടുതൽ Android മിനി ആപ്പുകൾക്കുമുള്ള സ്വകാര്യ പരിശോധനകൾ എന്നിവ ഇൻസ്റ്റാൾ ചെയ്യുക.",
       "ogTitle": "NeoKIM ആപ്പ് ലാബ് | Android മിനി ആപ്പുകൾ",
-      "ogDescription": "വർണ്ണ വെല്ലുവിളികൾ, അന്യഗ്രഹജീവികളെപ്പോലെയുള്ള രഹസ്യ സന്ദേശങ്ങൾ, UFO കോളിംഗ് അനുഭവങ്ങൾ, വേഗത്തിലുള്ള Android വിനോദത്തിനുള്ള സ്വകാര്യ പരിശോധനകൾ."
+      "ogDescription": "വർണ്ണ വെല്ലുവിളികൾ, അന്യഗ്രഹജീവികളെപ്പോലെയുള്ള രഹസ്യ സന്ദേശങ്ങൾ, UFO കോളിംഗ് അനുഭവങ്ങൾ, ലാബ് റാറ്റ് മേസ് എസ്‌കേപ്പ്: ഡാർക്ക് മേസ്, ദ്രുത Android വിനോദത്തിനുള്ള സ്വകാര്യ പരിശോധനകൾ."
     },
     "skip": {
       "apps": "ആപ്പ് ലിസ്റ്റിലേക്ക് പോകുക"
@@ -4260,19 +4260,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ലക്കി കാർഡ് റാൻഡം ഡിഫൻസ് ഐക്കൺ"
       },
       "darkMaze": {
-        "name": "ഡാർക്ക് മേസ്",
-        "category": "സ്വകാര്യ ടെസ്റ്റ് എസ്കേപ്പ് ഗെയിം",
-        "tagline": "ഒരു ലാബ് റാറ്റ് എസ്‌കേപ്പ് ചലഞ്ചായി ഇരുണ്ട മർമ്മത്തിൽ എക്സിറ്റ് കണ്ടെത്തുക.",
-        "description": "നിലവിൽ സ്വകാര്യ പരിശോധനയിലാണ്. പബ്ലിക് പ്ലേ ലിങ്ക് തുറന്നേക്കില്ല, അതിനാൽ ടെസ്റ്റ് കോൺടാക്റ്റ് ബട്ടൺ ഉപയോഗിക്കുക.",
+        "name": "ലാബ് റാറ്റ് മെയ്സ് എസ്കേപ്പ്: ഡാർക്ക് മേസ്",
+        "category": "റിലീസ് ചെയ്‌ത മാസി എസ്‌കേപ്പ് ഗെയിം",
+        "tagline": "ഇരുണ്ട മട്ടിലൂടെ ഒരു ലാബ് എലിയെ നയിച്ച് പുറത്തുകടക്കുക.",
+        "description": "2026 മെയ് 28-ന് Google Play-യിൽ റിലീസ് ചെയ്‌തു. ഇരുണ്ട മുനമ്പിലൂടെ നീങ്ങുക, ഇനങ്ങൾ ഉപയോഗിക്കുക, പാത അടയ്ക്കുന്നതിന് മുമ്പ് രക്ഷപ്പെടുക.",
         "highlights": [
-          "സ്വകാര്യ പരീക്ഷ",
+          "2026 മെയ് 28-ന് റിലീസ് ചെയ്തു",
           "Maze രക്ഷപ്പെടൽ",
           "ഇനങ്ങൾ",
-          "ലീഡർബോർഡ് ആസൂത്രണം ചെയ്തു"
+          "ഇരുണ്ട അതിജീവനം"
         ],
-        "primaryCta": "ടെസ്റ്റർ ആക്‌സസ് അഭ്യർത്ഥിക്കുക",
-        "statusNote": "പൊതു Google Play ലിങ്ക് തുറന്നേക്കില്ല. ടെസ്റ്റർ ആക്‌സസ് അഭ്യർത്ഥിക്കാൻ ഡെവലപ്പർക്ക് ഇമെയിൽ ചെയ്യുക.",
-        "iconAlt": "ഇരുണ്ട മേസ് ഐക്കൺ"
+        "primaryCta": "Google Play-യിൽ ഇൻസ്റ്റാൾ ചെയ്യുക",
+        "statusNote": "ഇപ്പോൾ Google Play-യിൽ ലഭ്യമാണ്. ഈ ആപ്പിനായി വെബ് ഡെമോ ഒന്നും നൽകിയിട്ടില്ല.",
+        "iconAlt": "ലാബ് റാറ്റ് മെയ്സ് എസ്കേപ്പ്: ഡാർക്ക് മേസ് ഐക്കൺ"
       }
     },
     "status": {
@@ -4354,9 +4354,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ms": {
     "seo": {
       "title": "Makmal Apl NeoKIM | Apl Mini Android percuma",
-      "description": "Pasang atau cuba ujian peribadi untuk Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense dan banyak lagi apl mini Android.",
+      "description": "Pasang Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, dan ujian peribadi untuk Lucky Card Random Defense dan banyak lagi apl mini Android.",
       "ogTitle": "Makmal Apl NeoKIM | Apl Mini Android",
-      "ogDescription": "Cabaran warna, mesej rahsia seperti makhluk asing, pengalaman panggilan UFO dan ujian peribadi untuk keseronokan Android yang pantas."
+      "ogDescription": "Cabaran warna, mesej rahsia seperti makhluk asing, pengalaman panggilan UFO, Lab Rat Maze Escape: Dark Maze dan ujian peribadi untuk keseronokan Android yang pantas."
     },
     "skip": {
       "apps": "Langkau ke senarai apl"
@@ -4516,19 +4516,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Pertahanan Rawak Kad Bertuah"
       },
       "darkMaze": {
-        "name": "Maze Gelap",
-        "category": "Permainan melarikan diri ujian peribadi",
-        "tagline": "Cari jalan keluar dalam labirin gelap sebagai cabaran melarikan tikus makmal.",
-        "description": "Kini dalam ujian persendirian. Pautan Play awam mungkin tidak dibuka, jadi gunakan butang kenalan ujian.",
+        "name": "Labirin Tikus Lab Melarikan Diri: Labirin Gelap",
+        "category": "Permainan melarikan diri maze yang dikeluarkan",
+        "tagline": "Bimbing tikus makmal melalui labirin yang gelap dan cari jalan keluar.",
+        "description": "Dikeluarkan di Google Play pada 28 Mei 2026. Bergerak melalui labirin gelap, gunakan item dan melarikan diri sebelum laluan ditutup.",
         "highlights": [
-          "Ujian peribadi",
+          "Dikeluarkan pada 28 Mei 2026",
           "melarikan diri labirin",
           "barang",
-          "Papan pendahulu dirancang"
+          "Kelangsungan hidup gelap"
         ],
-        "primaryCta": "Minta Akses Penguji",
-        "statusNote": "Pautan awam Google Play mungkin tidak dibuka. E-mel pembangun untuk meminta akses penguji.",
-        "iconAlt": "Ikon Maze Gelap"
+        "primaryCta": "Pasang di Google Play",
+        "statusNote": "Kini tersedia di Google Play. Tiada demo web disediakan untuk apl ini.",
+        "iconAlt": "Lab Rat Maze Melarikan diri: Ikon Maze Gelap"
       }
     },
     "status": {
@@ -4610,9 +4610,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ms-MY": {
     "seo": {
       "title": "Makmal Apl NeoKIM | Apl Mini Android percuma",
-      "description": "Pasang atau cuba ujian peribadi untuk Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense dan banyak lagi apl mini Android.",
+      "description": "Pasang Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, dan ujian peribadi untuk Lucky Card Random Defense dan banyak lagi apl mini Android.",
       "ogTitle": "Makmal Apl NeoKIM | Apl Mini Android",
-      "ogDescription": "Cabaran warna, mesej rahsia seperti makhluk asing, pengalaman panggilan UFO dan ujian peribadi untuk keseronokan Android yang pantas."
+      "ogDescription": "Cabaran warna, mesej rahsia seperti makhluk asing, pengalaman panggilan UFO, Lab Rat Maze Escape: Dark Maze dan ujian peribadi untuk keseronokan Android yang pantas."
     },
     "skip": {
       "apps": "Langkau ke senarai apl"
@@ -4772,19 +4772,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Pertahanan Rawak Kad Bertuah"
       },
       "darkMaze": {
-        "name": "Maze Gelap",
-        "category": "Permainan melarikan diri ujian peribadi",
-        "tagline": "Cari jalan keluar dalam labirin gelap sebagai cabaran melarikan tikus makmal.",
-        "description": "Kini dalam ujian persendirian. Pautan Play awam mungkin tidak dibuka, jadi gunakan butang kenalan ujian.",
+        "name": "Labirin Tikus Lab Melarikan Diri: Labirin Gelap",
+        "category": "Permainan melarikan diri maze yang dikeluarkan",
+        "tagline": "Bimbing tikus makmal melalui labirin yang gelap dan cari jalan keluar.",
+        "description": "Dikeluarkan di Google Play pada 28 Mei 2026. Bergerak melalui labirin gelap, gunakan item dan melarikan diri sebelum laluan ditutup.",
         "highlights": [
-          "Ujian peribadi",
+          "Dikeluarkan pada 28 Mei 2026",
           "melarikan diri labirin",
           "barang",
-          "Papan pendahulu dirancang"
+          "Kelangsungan hidup gelap"
         ],
-        "primaryCta": "Minta Akses Penguji",
-        "statusNote": "Pautan awam Google Play mungkin tidak dibuka. E-mel pembangun untuk meminta akses penguji.",
-        "iconAlt": "Ikon Maze Gelap"
+        "primaryCta": "Pasang di Google Play",
+        "statusNote": "Kini tersedia di Google Play. Tiada demo web disediakan untuk apl ini.",
+        "iconAlt": "Lab Rat Maze Melarikan diri: Ikon Maze Gelap"
       }
     },
     "status": {
@@ -4866,9 +4866,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mn-MN": {
     "seo": {
       "title": "NeoKIM App Lab | Үнэгүй Android Mini програмууд",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense болон бусад мини Android програмуудыг суулгаж эсвэл туршиж үзээрэй.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze болон Азтай картын санамсаргүй хамгаалалт болон бусад Android мини програмуудыг суулгаарай.",
       "ogTitle": "NeoKIM App Lab | Android мини програмууд",
-      "ogDescription": "Өнгөт сорилт, харь гаригийнх шиг нууц мессеж, Нисдэг Үл нисдэг биетүүд рүү залгах туршлага, Android-г хурдан зугаацуулах хувийн тестүүд."
+      "ogDescription": "Өнгөт сорилтууд, харь гаригийнх шиг нууц мессежүүд, Нисдэг Үл нисдэг биетүүдийг дуудах туршлага, Lab Rat Maze Escape: Dark Maze болон Android-г хурдан зугаацуулах хувийн тестүүд."
     },
     "skip": {
       "apps": "Програмын жагсаалт руу алгасах"
@@ -5028,19 +5028,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Азын картын санамсаргүй хамгаалалтын дүрс тэмдэг"
       },
       "darkMaze": {
-        "name": "Хар төөрдөг",
-        "category": "Хувийн туршилтаас зугтах тоглоом",
-        "tagline": "Лабораторийн хархнаас зугтах сорилтоор харанхуй төөрдөг байшинд гарах гарцыг олоорой.",
-        "description": "Одоогоор хувийн туршилтанд хамрагдаж байна. Нийтийн Play холбоос нээгдэхгүй байгаа тул тестийн холбоо барих товчийг ашиглана уу.",
+        "name": "Лабораторийн хархнаас зугтах: Харанхуй төөрдөг байшин",
+        "category": "Төөрдөг байшингаас зугтах тоглоомыг гаргасан",
+        "tagline": "Лабораторийн хархыг харанхуй төөрдөг байшингаар хөтөлж, гарцыг олоорой.",
+        "description": "2026 оны 5-р сарын 28-нд Google Play дээр гарсан. Зам хаагдахаас өмнө харанхуй төөрдөг байшингаар хөдөлж, эд зүйлсийг ашиглаж, зугт.",
         "highlights": [
-          "Хувийн тест",
+          "2026 оны тавдугаар сарын 28-нд гарсан",
           "Төөрдөг байшингаас зугтах",
           "Эд зүйлс",
-          "Тэргүүлэгчдийн самбар төлөвлөгдсөн"
+          "Харанхуй амьд үлдэх"
         ],
-        "primaryCta": "Туршилтын хандалтыг хүсэх",
-        "statusNote": "Нийтийн Google Play холбоос нээгдэхгүй байж магадгүй. Тестерийн хандалтыг хүсэхийн тулд хөгжүүлэгч рүү имэйл илгээнэ үү.",
-        "iconAlt": "Dark Maze дүрс"
+        "primaryCta": "Google Play дээр суулгана уу",
+        "statusNote": "Одоо Google Play дээр ашиглах боломжтой. Энэ апп-д зориулсан вэб демо байхгүй.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze дүрс"
       }
     },
     "status": {
@@ -5122,9 +5122,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "eu-ES": {
     "seo": {
       "title": "NeoKIM App Lab | Doako Android Mini aplikazioak",
-      "description": "Instalatu edo probatu proba pribatuak Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense eta Android aplikazio txiki gehiagorako.",
+      "description": "Instalatu Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze eta proba pribatuak Lucky Card Random Defense eta Android mini-aplikazio gehiagorako.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplikazioak",
-      "ogDescription": "Koloreen erronkak, alien antzeko mezu sekretuak, UFO deien esperientziak eta proba pribatuak Android dibertitzeko azkar."
+      "ogDescription": "Kolore-erronkak, alien antzeko mezu sekretuak, UFO deien esperientziak, Lab Rat Maze Escape: Dark Maze eta proba pribatuak Android azkar dibertitzeko."
     },
     "skip": {
       "apps": "Saltatu aplikazioen zerrendara"
@@ -5284,19 +5284,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense ikonoa"
       },
       "darkMaze": {
-        "name": "Labirinto Iluna",
-        "category": "Probako ihes joko pribatua",
-        "tagline": "Aurkitu irteera labirinto ilun batean laborategiko arratoi ihes egiteko erronka gisa.",
-        "description": "Gaur egun, proba pribatuetan. Baliteke Play publikoko esteka ez irekitzea; beraz, erabili probako kontaktuaren botoia.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Labirintoko ihes jokoa kaleratu da",
+        "tagline": "Gidatu laborategiko arratoi bat labirinto ilunean zehar eta aurkitu irteera.",
+        "description": "2026ko maiatzaren 28an kaleratu zen Google Play-n. Mugitu labirinto ilunean, erabili elementuak eta ihes egin bidea itxi baino lehen.",
         "highlights": [
-          "Proba pribatua",
+          "2026ko maiatzaren 28an kaleratua",
           "Maze ihesa",
           "Elementuak",
-          "Sailkapen taula aurreikusita"
+          "Biziraupen iluna"
         ],
-        "primaryCta": "Eskatu probatzailerako sarbidea",
-        "statusNote": "Baliteke Google Play esteka publikoa ez irekitzea. Bidali mezu elektroniko bat garatzaileari probatzailerako sarbidea eskatzeko.",
-        "iconAlt": "Dark Maze ikonoa"
+        "primaryCta": "Instalatu Google Play-n",
+        "statusNote": "Orain eskuragarri Google Play-n. Ez da web demorik eskaintzen aplikazio honetarako.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikonoa"
       }
     },
     "status": {
@@ -5378,9 +5378,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "my-MM": {
     "seo": {
       "title": "NeoKIM App Lab | အခမဲ့ Android Mini အက်ပ်များ",
-      "description": "Color Master 2၊ Galacticode၊ UFO ခေါ်ဆိုမှု၊ Lucky Card ကျပန်းကာကွယ်ရေးနှင့် အခြား Android အသေးစားအက်ပ်များအတွက် သီးသန့်စမ်းသပ်မှုများကို ထည့်သွင်းပါ သို့မဟုတ် စမ်းကြည့်ပါ။",
+      "description": "Color Master 2၊ Galacticode၊ UFO ကိုခေါ်ဆိုပါ၊ Lab Rat Maze Escape- Dark Maze နှင့် Lucky Card Random Defense နှင့် အခြား Android mini အက်ပ်များအတွက် သီးသန့်စမ်းသပ်မှုများကို ထည့်သွင်းပါ။",
       "ogTitle": "NeoKIM App Lab | Android Mini အက်ပ်များ",
-      "ogDescription": "အရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားများကဲ့သို့ လျှို့ဝှက်စာတိုများ၊ UFO ခေါ်ဆိုမှုအတွေ့အကြုံများနှင့် Android ပျော်ရွှင်မှုအတွက် သီးသန့်စမ်းသပ်မှုများ။"
+      "ogDescription": "အရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားများကဲ့သို့ လျှို့ဝှက်စာတိုများ၊ UFO ခေါ်ဆိုမှုအတွေ့အကြုံများ၊ Lab Rat Maze Escape- Dark Maze နှင့် အမြန် Android ပျော်ရွှင်မှုအတွက် သီးသန့်စမ်းသပ်မှုများ။"
     },
     "skip": {
       "apps": "အက်ပ်စာရင်းသို့ ကျော်သွားပါ။"
@@ -5540,19 +5540,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card ကျပန်းကာကွယ်ရေးသင်္ကေတ"
       },
       "darkMaze": {
-        "name": "မဟူရာ ဝင်္ကဘာ",
-        "category": "သီးသန့်စမ်းသပ်လွတ်မြောက်ဂိမ်း",
-        "tagline": "ဓာတ်ခွဲခန်းကြွက်ထွက်ပေါက်စိန်ခေါ်မှုအဖြစ် မှောင်မိုက်ဝင်္ကပါထဲက ထွက်ပေါက်ကိုရှာပါ။",
-        "description": "လောလောဆယ် သီးသန့် စမ်းသပ်နေပါတယ်။ အများသူငှာ Play လင့်ခ်သည် မပွင့်နိုင်သောကြောင့် စမ်းသပ်အဆက်အသွယ်ခလုတ်ကို အသုံးပြုပါ။",
+        "name": "Lab Rat Maze Escape- Dark Maze",
+        "category": "ထုတ်ပြန်ထားသော ဝင်္ကပါလွတ်မြောက်ဂိမ်း",
+        "tagline": "ဓာတ်ခွဲခန်းကြွက်တစ်ကောင်ကို အမှောင်ဝင်္ကပါလမ်းပြပြီး ထွက်ပေါက်ကိုရှာပါ။",
+        "description": "မေလ 28 ရက်၊ 2026 တွင် Google Play တွင် ထုတ်ဝေခဲ့သည်။ မှောင်မိုက်သော ဝင်္ကပါကို ဖြတ်ကျော်ကာ လမ်းကြောင်းမပိတ်မီ ပစ္စည်းများအသုံးပြုကာ ထွက်ပြေးပါ။",
         "highlights": [
-          "သီးသန့်စမ်းသပ်မှု",
+          "မေလ 28 ရက် 2026 တွင်ထုတ်ဝေခဲ့သည်။",
           "ဝင်္ကပါ မလွတ်",
           "ပစ္စည်းများ",
-          "ဦးဆောင်ဘုတ်မှာ စီစဉ်ထားပါတယ်။"
+          "အမှောင်ရှင်သန်မှု"
         ],
-        "primaryCta": "Tester Access ကို တောင်းဆိုပါ။",
-        "statusNote": "အများသူငှာ Google Play လင့်ခ်ကို ဖွင့်၍မရပါ။ စမ်းသပ်အသုံးပြုခွင့် တောင်းဆိုရန် developer ကို အီးမေးလ်ပို့ပါ။",
-        "iconAlt": "Dark Maze သင်္ကေတ"
+        "primaryCta": "Google Play တွင် ထည့်သွင်းပါ။",
+        "statusNote": "Google Play တွင် ယခုရရှိနိုင်ပါပြီ။ ဤအက်ပ်အတွက် ဝဘ်သရုပ်ပြပေးမထားပါ။",
+        "iconAlt": "Lab Rat Maze Escape- Dark Maze သင်္ကေတ"
       }
     },
     "status": {
@@ -5634,9 +5634,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "vi": {
     "seo": {
       "title": "Phòng thí nghiệm ứng dụng NeoKIM | Ứng dụng nhỏ Android miễn phí",
-      "description": "Cài đặt hoặc dùng thử các thử nghiệm riêng cho Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense và nhiều ứng dụng mini Android khác.",
+      "description": "Cài đặt Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze và các thử nghiệm riêng cho Phòng thủ ngẫu nhiên thẻ may mắn và nhiều ứng dụng Android mini khác.",
       "ogTitle": "Phòng thí nghiệm ứng dụng NeoKIM | Ứng dụng nhỏ Android",
-      "ogDescription": "Thử thách màu sắc, tin nhắn bí mật giống người ngoài hành tinh, trải nghiệm gọi UFO và thử nghiệm riêng tư để mang lại niềm vui Android nhanh chóng."
+      "ogDescription": "Thử thách màu sắc, tin nhắn bí mật giống người ngoài hành tinh, trải nghiệm gọi UFO, Thoát khỏi mê cung Lab Rat: Mê cung đen tối và các thử nghiệm riêng tư để giải trí nhanh chóng trên Android."
     },
     "skip": {
       "apps": "Chuyển đến danh sách ứng dụng"
@@ -5796,19 +5796,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Biểu tượng phòng thủ ngẫu nhiên thẻ may mắn"
       },
       "darkMaze": {
-        "name": "Mê cung tối",
-        "category": "Trò chơi trốn thoát thử nghiệm riêng",
-        "tagline": "Tìm lối ra trong mê cung tối tăm như một thử thách trốn thoát của chuột thí nghiệm.",
-        "description": "Hiện đang trong giai đoạn thử nghiệm riêng tư. Liên kết Play công khai có thể không mở được, vì vậy hãy sử dụng nút liên hệ thử nghiệm.",
+        "name": "Phòng thí nghiệm thoát khỏi mê cung chuột: Mê cung tối",
+        "category": "Ra mắt game thoát khỏi mê cung",
+        "tagline": "Hướng dẫn một con chuột thí nghiệm xuyên qua mê cung tối tăm và tìm lối ra.",
+        "description": "Được phát hành trên Google Play vào ngày 28 tháng 5 năm 2026. Di chuyển qua mê cung tối tăm, sử dụng vật phẩm và trốn thoát trước khi con đường đóng lại.",
         "highlights": [
-          "Kiểm tra riêng",
+          "Phát hành ngày 28 tháng 5 năm 2026",
           "Thoát khỏi mê cung",
           "Mặt hàng",
-          "Bảng xếp hạng đã lên kế hoạch"
+          "Sinh tồn đen tối"
         ],
-        "primaryCta": "Yêu cầu quyền truy cập của người kiểm tra",
-        "statusNote": "Liên kết Google Play công khai có thể không mở được. Gửi email cho nhà phát triển để yêu cầu quyền truy cập của người thử nghiệm.",
-        "iconAlt": "Biểu tượng Mê cung tối"
+        "primaryCta": "Cài đặt trên Google Play",
+        "statusNote": "Hiện đã có trên Google Play. Không có bản demo web nào được cung cấp cho ứng dụng này.",
+        "iconAlt": "Lab Rat Maze Escape: Biểu tượng Mê cung tối"
       }
     },
     "status": {
@@ -5890,9 +5890,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "be": {
     "seo": {
       "title": "NeoKIM App Lab | Бясплатныя міні-праграмы Android",
-      "description": "Усталюйце або паспрабуйце прыватныя тэсты для Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense і іншых міні-праграм Android.",
+      "description": "Усталюйце Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze і прыватныя тэсты для Lucky Card Random Defense і іншыя міні-праграмы Android.",
       "ogTitle": "NeoKIM App Lab | Міні-праграмы Android",
-      "ogDescription": "Каляровыя задачы, сакрэтныя паведамленні, падобныя на іншапланецян, вопыт выкліку НЛА і прыватныя тэсты для хуткай забавы Android."
+      "ogDescription": "Каляровыя выпрабаванні, сакрэтныя паведамленні, падобныя на іншапланецян, выклікі НЛА, уцёкі з лабірынтаў пацукоў: Цёмны лабірынт і прыватныя тэсты для хуткага задавальнення Android."
     },
     "skip": {
       "apps": "Перайсці да спісу праграм"
@@ -6052,19 +6052,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок выпадковай абароны Lucky Card"
       },
       "darkMaze": {
-        "name": "Цёмны лабірынт",
-        "category": "Прыватная тэставая гульня ўцёкі",
-        "tagline": "Знайдзіце выхад у цёмным лабірынце, прабяжыце ўцёкі з лабараторных пацукоў.",
-        "description": "У цяперашні час у прыватным тэсціраванні. Публічная спасылка Play можа не адкрыцца, таму выкарыстоўвайце кнопку тэставага кантакту.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Выпушчаная гульня ўцёкі з лабірынта",
+        "tagline": "Правядзіце лабараторную пацука праз цёмны лабірынт і знайдзіце выхад.",
+        "description": "Выпушчана ў Google Play 28 мая 2026 г. Перамяшчайцеся па цёмным лабірынце, выкарыстоўвайце прадметы і ратуйцеся, перш чым шлях наблізіцца.",
         "highlights": [
-          "Прыватны тэст",
+          "Вызвалены 28 мая 2026 г",
           "Ўцёкі з лабірынта",
           "Прадметы",
-          "Плануецца табліца лідэраў"
+          "Цёмнае выжыванне"
         ],
-        "primaryCta": "Запытаць доступ тэсціроўшчыка",
-        "statusNote": "Публічная спасылка Google Play можа не адкрыцца. Напішыце распрацоўшчыку электронны ліст, каб запытаць доступ тэсціроўшчыка.",
-        "iconAlt": "Значок цёмнага лабірынта"
+        "primaryCta": "Усталяваць на Google Play",
+        "statusNote": "Цяпер даступны ў Google Play. Для гэтай праграмы няма вэб-дэманстрацыі.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze значок"
       }
     },
     "status": {
@@ -6146,9 +6146,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "bn-BD": {
     "seo": {
       "title": "NeoKIM অ্যাপ ল্যাব | বিনামূল্যে Android মিনি অ্যাপস",
-      "description": "কালার মাস্টার 2, গ্যালাক্টিকোড, কল দ্য ইউএফও, লাকি কার্ড র্যান্ডম ডিফেন্স এবং আরও Android মিনি অ্যাপের জন্য ব্যক্তিগত পরীক্ষা ইনস্টল করুন বা চেষ্টা করুন।",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, এবং Lucky Card Random Defence এবং আরও Android মিনি অ্যাপের জন্য ব্যক্তিগত পরীক্ষা ইনস্টল করুন।",
       "ogTitle": "NeoKIM অ্যাপ ল্যাব | Android মিনি অ্যাপস",
-      "ogDescription": "রঙিন চ্যালেঞ্জ, এলিয়েনের মতো গোপন বার্তা, UFO কল করার অভিজ্ঞতা এবং দ্রুত Android মজার জন্য ব্যক্তিগত পরীক্ষা।"
+      "ogDescription": "রঙের চ্যালেঞ্জ, এলিয়েনের মতো গোপন বার্তা, ইউএফও কল করার অভিজ্ঞতা, ল্যাব র্যাট মেজ এস্কেপ: ডার্ক মেজ এবং দ্রুত অ্যান্ড্রয়েড মজার জন্য ব্যক্তিগত পরীক্ষা।"
     },
     "skip": {
       "apps": "অ্যাপ তালিকা এড়িয়ে যান"
@@ -6308,19 +6308,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "লাকি কার্ড র্যান্ডম ডিফেন্স আইকন"
       },
       "darkMaze": {
-        "name": "অন্ধকার গোলকধাঁধা",
-        "category": "ব্যক্তিগত পরীক্ষা অব্যাহতি খেলা",
-        "tagline": "একটি ল্যাব ইঁদুর পালানো চ্যালেঞ্জ হিসাবে একটি অন্ধকার গোলকধাঁধা মধ্যে প্রস্থান খুঁজুন.",
-        "description": "বর্তমানে প্রাইভেট পরীক্ষা চলছে। সর্বজনীন প্লে লিঙ্কটি নাও খুলতে পারে, তাই পরীক্ষার যোগাযোগ বোতামটি ব্যবহার করুন।",
+        "name": "ল্যাব ইঁদুর গোলকধাঁধা এস্কেপ: ডার্ক মেজ",
+        "category": "ম্যাজ এস্কেপ গেম রিলিজ হয়েছে",
+        "tagline": "অন্ধকার গোলকধাঁধা দিয়ে একটি ল্যাব ইঁদুরকে গাইড করুন এবং প্রস্থান করুন।",
+        "description": "28 মে, 2026-এ Google Play-তে রিলিজ হয়েছে। অন্ধকার গোলকধাঁধার মধ্য দিয়ে যান, আইটেম ব্যবহার করুন এবং পথ বন্ধ হওয়ার আগে পালিয়ে যান।",
         "highlights": [
-          "প্রাইভেট পরীক্ষা",
+          "28 মে, 2026 এ প্রকাশিত হয়েছে",
           "গোলকধাঁধা পলায়ন",
           "আইটেম",
-          "লিডারবোর্ড পরিকল্পিত"
+          "অন্ধকার বেঁচে থাকা"
         ],
-        "primaryCta": "পরীক্ষক অ্যাক্সেসের অনুরোধ করুন",
-        "statusNote": "সর্বজনীন Google Play লিঙ্কটি নাও খুলতে পারে৷ পরীক্ষক অ্যাক্সেসের অনুরোধ করতে বিকাশকারীকে ইমেল করুন।",
-        "iconAlt": "ডার্ক মেজ আইকন"
+        "primaryCta": "গুগল প্লেতে ইনস্টল করুন",
+        "statusNote": "এখন Google Play এ উপলব্ধ। এই অ্যাপের জন্য কোনো ওয়েব ডেমো দেওয়া হয় না।",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze আইকন"
       }
     },
     "status": {
@@ -6402,9 +6402,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "bg": {
     "seo": {
       "title": "NeoKIM App Lab | Безплатни мини приложения Android",
-      "description": "Инсталирайте или опитайте частни тестове за Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense и други мини приложения Android.",
+      "description": "Инсталирайте Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze и частни тестове за Lucky Card Random Defense и още мини приложения за Android.",
       "ogTitle": "NeoKIM App Lab | Android Мини приложения",
-      "ogDescription": "Цветни предизвикателства, подобни на извънземни тайни съобщения, изживявания с повикване на НЛО и частни тестове за бързо Android забавление."
+      "ogDescription": "Цветни предизвикателства, тайни съобщения, подобни на извънземни, изживявания при обаждане на НЛО, Lab Rat Maze Escape: Dark Maze и частни тестове за бързо забавление с Android."
     },
     "skip": {
       "apps": "Преминете към списъка с приложения"
@@ -6564,19 +6564,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Икона за случайна защита на късметлийска карта"
       },
       "darkMaze": {
-        "name": "Тъмен лабиринт",
-        "category": "Частна тестова игра за бягство",
-        "tagline": "Намерете изхода в тъмен лабиринт като предизвикателство за бягство от лабораторни плъхове.",
-        "description": "В момента в частно тестване. Публичната връзка за възпроизвеждане може да не се отвори, така че използвайте бутона за тестови контакти.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Издадена игра за бягство в лабиринта",
+        "tagline": "Преведете лабораторен плъх през тъмния лабиринт и намерете изхода.",
+        "description": "Пуснато в Google Play на 28 май 2026 г. Придвижвайте се през тъмния лабиринт, използвайте предмети и избягайте, преди пътят да се е затворил.",
         "highlights": [
-          "Частен тест",
+          "Издаден на 28 май 2026 г",
           "Бягство от лабиринта",
           "Предмети",
-          "Планирана класация"
+          "Тъмно оцеляване"
         ],
-        "primaryCta": "Поискайте достъп на тестер",
-        "statusNote": "Публичната връзка Google Play може да не се отвори. Изпратете имейл на програмиста, за да поиска достъп на тестер.",
-        "iconAlt": "Икона на тъмен лабиринт"
+        "primaryCta": "Инсталирайте в Google Play",
+        "statusNote": "Вече се предлага в Google Play. За това приложение не е предоставена уеб демонстрация.",
+        "iconAlt": "Lab Rat Maze Escape: Икона на тъмен лабиринт"
       }
     },
     "status": {
@@ -6658,9 +6658,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sr": {
     "seo": {
       "title": "NeoKIM Апп Лаб | Бесплатне Android Мини апликације",
-      "description": "Инсталирајте или испробајте приватне тестове за Цолор Мастер 2, Галацтицоде, Цалл тхе УФО, Луцки Цард Рандом Дефенсе и више Android мини апликација.",
+      "description": "Инсталирајте Цолор Мастер 2, Галацтицоде, Цалл тхе УФО, Лаб Рат Мазе Есцапе: Дарк Мазе и приватне тестове за Луцки Цард Рандом Дефенсе и више Андроид мини апликација.",
       "ogTitle": "NeoKIM Апп Лаб | Android Мини апликације",
-      "ogDescription": "Изазови у боји, тајне поруке попут ванземаљаца, искуства НЛО позивања и приватни тестови за брзу Android забаву."
+      "ogDescription": "Изазови у боји, тајне поруке налик ванземаљцима, искуства са НЛО позивањем, бекство из лабораторијског пацова из лавиринта: Мрачни лавиринт и приватни тестови за брзу забаву на Андроиду."
     },
     "skip": {
       "apps": "Прескочи на листу апликација"
@@ -6820,19 +6820,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Срећна карта икона случајне одбране"
       },
       "darkMaze": {
-        "name": "Дарк Мазе",
-        "category": "Приватна пробна игра бекства",
-        "tagline": "Пронађите излаз у мрачном лавиринту као изазов за бекство лабораторијског пацова.",
-        "description": "Тренутно на приватном тестирању. Јавни Плаи линк се можда неће отворити, па користите дугме за тестирање контакта.",
+        "name": "Побег из лабораторијског пацова из лавиринта: мрачни лабиринт",
+        "category": "Објављена игра бекства из лавиринта",
+        "tagline": "Водите лабораторијског пацова кроз мрачни лавиринт и пронађите излаз.",
+        "description": "Објављено на Гоогле Плаи-у 28. маја 2026. Крећите се кроз мрачни лавиринт, користите ставке и бежите пре него што се стаза затвори.",
         "highlights": [
-          "Приватни тест",
+          "Објављено 28. маја 2026",
           "Бекство из лавиринта",
           "Предмети",
-          "Планирани ранг листе"
+          "Мрачно преживљавање"
         ],
-        "primaryCta": "Затражите приступ испитивачу",
-        "statusNote": "Јавна Google Play веза се можда неће отворити. Пошаљите е-поруку програмеру да затражи приступ тестеру.",
-        "iconAlt": "Икона тамног лавиринта"
+        "primaryCta": "Инсталирајте на Гоогле Плаи",
+        "statusNote": "Сада доступно на Гоогле Плаи-у. За ову апликацију није обезбеђен веб демо.",
+        "iconAlt": "Бекство из лабораторијског пацова из лавиринта: икона тамног лавиринта"
       }
     },
     "status": {
@@ -6914,9 +6914,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sw": {
     "seo": {
       "title": "Maabara ya Programu ya NeoKIM | Programu Ndogo za Android Zisizolipishwa",
-      "description": "Sakinisha au ujaribu majaribio ya faragha ya Color Master 2, Galacticode, Piga UFO, Lucky Card Nasibu Ulinzi na programu zaidi za Android mini.",
+      "description": "Sakinisha Color Master 2, Galacticode, Call UFO, Lab Rat Maze Escape: Dark Maze, na majaribio ya faragha ya Lucky Card Random Defense na programu zaidi za mini za Android.",
       "ogTitle": "Maabara ya Programu ya NeoKIM | Programu Ndogo za Android",
-      "ogDescription": "Changamoto za rangi, ujumbe wa siri kama mgeni, hali ya upigaji simu za UFO, na majaribio ya faragha kwa furaha ya haraka ya Android."
+      "ogDescription": "Changamoto za rangi, ujumbe wa siri kama mgeni, hali ya kupiga simu kwenye UFO, Lab Rat Maze Escape: Dark Maze na majaribio ya faragha kwa ajili ya kufurahisha Android kwa haraka."
     },
     "skip": {
       "apps": "Ruka hadi kwenye orodha ya programu"
@@ -7076,19 +7076,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Aikoni ya Kadi ya Bahati Nasibu ya Ulinzi"
       },
       "darkMaze": {
-        "name": "Maze ya Giza",
-        "category": "Mchezo wa kutoroka wa jaribio la kibinafsi",
-        "tagline": "Pata njia ya kutoka katika msururu wa giza kama changamoto ya kutoroka kwa panya wa maabara.",
-        "description": "Hivi sasa katika majaribio ya kibinafsi. Huenda kiungo cha Google Play cha umma kisifunguke, kwa hivyo tumia kitufe cha anwani cha jaribio.",
+        "name": "Lab Panya Maze Escape: Dark Maze",
+        "category": "Mchezo uliotolewa wa kutoroka wa maze",
+        "tagline": "Mwongoze panya wa maabara kupitia msururu wa giza na utafute njia ya kutoka.",
+        "description": "Ilizinduliwa kwenye Google Play mnamo Mei 28, 2026. Sogeza kwenye eneo lenye giza, tumia vipengee na utoroke kabla njia haijafungwa.",
         "highlights": [
-          "Mtihani wa kibinafsi",
+          "Ilizinduliwa Mei 28, 2026",
           "Maze kutoroka",
           "Vipengee",
-          "Ubao wa wanaoongoza umepangwa"
+          "Uhai wa giza"
         ],
-        "primaryCta": "Omba Ufikiaji wa Mjaribu",
-        "statusNote": "Kiungo cha Google Play cha umma kinaweza kisifunguke. Tuma barua pepe kwa msanidi programu ili kuomba ufikiaji wa wanaojaribu.",
-        "iconAlt": "Aikoni ya Dark Maze"
+        "primaryCta": "Sakinisha kwenye Google Play",
+        "statusNote": "Sasa inapatikana kwenye Google Play. Hakuna onyesho la wavuti linalotolewa kwa programu hii.",
+        "iconAlt": "Lab Panya Maze Escape: Dark Maze ikoni"
       }
     },
     "status": {
@@ -7170,9 +7170,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sv-SE": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-appar",
-      "description": "Installera eller prova privata tester för Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense och fler Android miniappar.",
+      "description": "Installera Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze och privata tester för Lucky Card Random Defense och fler Android-miniappar.",
       "ogTitle": "NeoKIM App Lab | Android Mini-appar",
-      "ogDescription": "Färgutmaningar, utomjordingarliknande hemliga meddelanden, UFO-samtalupplevelser och privata tester för snabbt Android-kul."
+      "ogDescription": "Färgutmaningar, utomjordingarliknande hemliga meddelanden, UFO-anropsupplevelser, Lab Rat Maze Escape: Dark Maze och privata tester för snabbt Android-kul."
     },
     "skip": {
       "apps": "Hoppa till applistan"
@@ -7332,19 +7332,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense-ikonen"
       },
       "darkMaze": {
-        "name": "Mörk labyrint",
-        "category": "Privat test flyktspel",
-        "tagline": "Hitta utgången i en mörk labyrint som en flyktutmaning för labbråtta.",
-        "description": "För närvarande i privat testning. Den offentliga Play-länken kanske inte öppnas, så använd knappen för testkontakt.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Släppt maze escape-spel",
+        "tagline": "Led en labbråtta genom den mörka labyrinten och hitta utgången.",
+        "description": "Släpptes på Google Play den 28 maj 2026. Gå genom den mörka labyrinten, använd föremål och fly innan stigen sluter sig.",
         "highlights": [
-          "Privat test",
+          "Släppt 28 maj 2026",
           "Labyrint flykt",
           "Föremål",
-          "Leaderboard planerad"
+          "Mörk överlevnad"
         ],
-        "primaryCta": "Begär åtkomst till testare",
-        "statusNote": "Den offentliga Google Play-länken kanske inte öppnas. Skicka e-post till utvecklaren för att begära åtkomst till testare.",
-        "iconAlt": "Mörk labyrint ikon"
+        "primaryCta": "Installera på Google Play",
+        "statusNote": "Nu tillgänglig på Google Play. Ingen webbdemo tillhandahålls för denna app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon"
       }
     },
     "status": {
@@ -7426,9 +7426,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-419": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale o pruebe pruebas privadas para Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense y más miniaplicaciones de Android.",
+      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze y pruebas privadas para Lucky Card Random Defense y más miniaplicaciones de Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
-      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis y pruebas privadas para una rápida diversión con Android."
+      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis, Lab Rat Maze Escape: Dark Maze y pruebas privadas para una rápida diversión en Android."
     },
     "skip": {
       "apps": "Saltar a la lista de aplicaciones"
@@ -7588,19 +7588,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono de defensa aleatoria de cartas de la suerte"
       },
       "darkMaze": {
-        "name": "Laberinto oscuro",
-        "category": "Juego de escape de prueba privado",
-        "tagline": "Encuentra la salida en un laberinto oscuro como un desafío de escape de ratas de laboratorio.",
-        "description": "Actualmente en pruebas privadas. Es posible que el enlace público de Play no se abra, así que utilice el botón de contacto de prueba.",
+        "name": "Escape del laberinto de ratas de laboratorio: Laberinto oscuro",
+        "category": "Lanzamiento del juego de escape del laberinto.",
+        "tagline": "Guía a una rata de laboratorio a través del oscuro laberinto y encuentra la salida.",
+        "description": "Lanzado en Google Play el 28 de mayo de 2026. Muévete por el oscuro laberinto, usa elementos y escapa antes de que el camino se cierre.",
         "highlights": [
-          "prueba privada",
+          "Publicado el 28 de mayo de 2026",
           "escapar del laberinto",
           "Artículos",
-          "Tabla de clasificación planificada"
+          "Supervivencia oscura"
         ],
-        "primaryCta": "Solicitar acceso al probador",
-        "statusNote": "Es posible que el enlace público Google Play no se abra. Envíe un correo electrónico al desarrollador para solicitar acceso de prueba.",
-        "iconAlt": "Icono de laberinto oscuro"
+        "primaryCta": "Instalar en Google Play",
+        "statusNote": "Ahora disponible en Google Play. No se proporciona ninguna demostración web para esta aplicación.",
+        "iconAlt": "Lab Rat Maze Escape: Icono de Laberinto Oscuro"
       }
     },
     "status": {
@@ -7682,9 +7682,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-US": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale o pruebe pruebas privadas para Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense y más miniaplicaciones de Android.",
+      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze y pruebas privadas para Lucky Card Random Defense y más miniaplicaciones de Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
-      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis y pruebas privadas para una rápida diversión con Android."
+      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis, Lab Rat Maze Escape: Dark Maze y pruebas privadas para una rápida diversión en Android."
     },
     "skip": {
       "apps": "Saltar a la lista de aplicaciones"
@@ -7844,19 +7844,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono de defensa aleatoria de cartas de la suerte"
       },
       "darkMaze": {
-        "name": "Laberinto oscuro",
-        "category": "Juego de escape de prueba privado",
-        "tagline": "Encuentra la salida en un laberinto oscuro como un desafío de escape de ratas de laboratorio.",
-        "description": "Actualmente en pruebas privadas. Es posible que el enlace público de Play no se abra, así que utilice el botón de contacto de prueba.",
+        "name": "Escape del laberinto de ratas de laboratorio: Laberinto oscuro",
+        "category": "Lanzamiento del juego de escape del laberinto.",
+        "tagline": "Guía a una rata de laboratorio a través del oscuro laberinto y encuentra la salida.",
+        "description": "Lanzado en Google Play el 28 de mayo de 2026. Muévete por el oscuro laberinto, usa elementos y escapa antes de que el camino se cierre.",
         "highlights": [
-          "prueba privada",
+          "Publicado el 28 de mayo de 2026",
           "escapar del laberinto",
           "Artículos",
-          "Tabla de clasificación planificada"
+          "Supervivencia oscura"
         ],
-        "primaryCta": "Solicitar acceso al probador",
-        "statusNote": "Es posible que el enlace público Google Play no se abra. Envíe un correo electrónico al desarrollador para solicitar acceso de prueba.",
-        "iconAlt": "Icono de laberinto oscuro"
+        "primaryCta": "Instalar en Google Play",
+        "statusNote": "Ahora disponible en Google Play. No se proporciona ninguna demostración web para esta aplicación.",
+        "iconAlt": "Lab Rat Maze Escape: Icono de Laberinto Oscuro"
       }
     },
     "status": {
@@ -7938,9 +7938,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-ES": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale o pruebe pruebas privadas para Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense y más miniaplicaciones de Android.",
+      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze y pruebas privadas para Lucky Card Random Defense y más miniaplicaciones de Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
-      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis y pruebas privadas para una rápida diversión con Android."
+      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis, Lab Rat Maze Escape: Dark Maze y pruebas privadas para una rápida diversión en Android."
     },
     "skip": {
       "apps": "Saltar a la lista de aplicaciones"
@@ -8100,19 +8100,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono de defensa aleatoria de cartas de la suerte"
       },
       "darkMaze": {
-        "name": "Laberinto oscuro",
-        "category": "Juego de escape de prueba privado",
-        "tagline": "Encuentra la salida en un laberinto oscuro como un desafío de escape de ratas de laboratorio.",
-        "description": "Actualmente en pruebas privadas. Es posible que el enlace público de Play no se abra, así que utilice el botón de contacto de prueba.",
+        "name": "Escape del laberinto de ratas de laboratorio: Laberinto oscuro",
+        "category": "Lanzamiento del juego de escape del laberinto.",
+        "tagline": "Guía a una rata de laboratorio a través del oscuro laberinto y encuentra la salida.",
+        "description": "Lanzado en Google Play el 28 de mayo de 2026. Muévete por el oscuro laberinto, usa elementos y escapa antes de que el camino se cierre.",
         "highlights": [
-          "prueba privada",
+          "Publicado el 28 de mayo de 2026",
           "escapar del laberinto",
           "Artículos",
-          "Tabla de clasificación planificada"
+          "Supervivencia oscura"
         ],
-        "primaryCta": "Solicitar acceso al probador",
-        "statusNote": "Es posible que el enlace público Google Play no se abra. Envíe un correo electrónico al desarrollador para solicitar acceso de prueba.",
-        "iconAlt": "Icono de laberinto oscuro"
+        "primaryCta": "Instalar en Google Play",
+        "statusNote": "Ahora disponible en Google Play. No se proporciona ninguna demostración web para esta aplicación.",
+        "iconAlt": "Lab Rat Maze Escape: Icono de Laberinto Oscuro"
       }
     },
     "status": {
@@ -8194,9 +8194,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sk": {
     "seo": {
       "title": "NeoKIM App Lab | Bezplatné miniaplikácie Android",
-      "description": "Nainštalujte alebo vyskúšajte súkromné testy pre Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense a ďalšie mini aplikácie Android.",
+      "description": "Nainštalujte si Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze a súkromné ​​testy pre Lucky Card Random Defense a ďalšie mini aplikácie pre Android.",
       "ogTitle": "NeoKIM App Lab | Miniaplikácie Android",
-      "ogDescription": "Farebné výzvy, tajné správy ako mimozemšťania, skúsenosti s volaním UFO a súkromné testy pre rýchlu zábavu so Android."
+      "ogDescription": "Farebné výzvy, tajné správy ako mimozemšťania, zážitky z volania UFO, Lab Rat Maze Escape: Dark Maze a súkromné testy pre rýchlu zábavu s Androidom."
     },
     "skip": {
       "apps": "Preskočiť na zoznam aplikácií"
@@ -8356,19 +8356,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona náhodnej obrany šťastnej karty"
       },
       "darkMaze": {
-        "name": "Temné bludisko",
-        "category": "Súkromná testovacia úniková hra",
-        "tagline": "Nájdite východ v temnom bludisku ako výzva na útek laboratórnych potkanov.",
-        "description": "Momentálne v súkromnom testovaní. Verejný odkaz Play sa nemusí otvoriť, preto použite testovacie tlačidlo kontaktu.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Vydaná úniková hra z bludiska",
+        "tagline": "Veďte laboratórnu krysu cez temné bludisko a nájdite východ.",
+        "description": "Vydané v službe Google Play 28. mája 2026. Pohybujte sa temným bludiskom, používajte predmety a utečte skôr, ako sa cesta uzavrie.",
         "highlights": [
-          "Súkromný test",
+          "Vydané 28. mája 2026",
           "Bludisko útek",
           "Položky",
-          "Plánovaný rebríček"
+          "Temné prežitie"
         ],
-        "primaryCta": "Požiadajte o prístup testera",
-        "statusNote": "Verejný odkaz Google Play sa nemusí otvoriť. Pošlite e-mail vývojárovi so žiadosťou o prístup testera.",
-        "iconAlt": "Ikona tmavého bludiska"
+        "primaryCta": "Nainštalujte na Google Play",
+        "statusNote": "Teraz k dispozícii na Google Play. Pre túto aplikáciu nie je k dispozícii žiadna webová ukážka.",
+        "iconAlt": "Lab Rat Maze Escape: Ikona Dark Maze"
       }
     },
     "status": {
@@ -8450,9 +8450,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sl": {
     "seo": {
       "title": "NeoKIM App Lab | Brezplačne mini aplikacije Android",
-      "description": "Namestite ali preizkusite zasebne teste za Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense in druge mini aplikacije Android.",
+      "description": "Namestite Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze in zasebne teste za Lucky Card Random Defense in več mini aplikacij za Android.",
       "ogTitle": "NeoKIM App Lab | Mini aplikacije Android",
-      "ogDescription": "Barvni izzivi, skrivna sporočila, podobna nezemljanom, izkušnje klicanja NLP-jev in zasebni testi za hitro Android zabavo."
+      "ogDescription": "Barvni izzivi, skrivna sporočila, podobna nezemljanom, izkušnje klicanja NLP-jev, pobeg iz Lab Rat Maze Escape: Dark Maze in zasebni testi za hitro zabavo Android."
     },
     "skip": {
       "apps": "Preskoči na seznam aplikacij"
@@ -8612,19 +8612,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona naključne obrambe Lucky Card"
       },
       "darkMaze": {
-        "name": "Temni labirint",
-        "category": "Zasebna preizkusna igra pobega",
-        "tagline": "Poiščite izhod v temnem labirintu kot izziv pobega iz laboratorijske podgane.",
-        "description": "Trenutno v zasebnem testiranju. Javna povezava za predvajanje se morda ne bo odprla, zato uporabite gumb za preizkus stika.",
+        "name": "Lab Lab Rat Maze Escape: Dark Maze",
+        "category": "Izdana igra pobeg iz labirinta",
+        "tagline": "Vodite laboratorijsko podgano skozi temni labirint in poiščite izhod.",
+        "description": "Izdano v Googlu Play 28. maja 2026. Premaknite se skozi temni labirint, uporabite predmete in pobegnite, preden se pot zapre.",
         "highlights": [
-          "Zasebni test",
+          "Izdano 28. maja 2026",
           "Pobeg iz labirinta",
           "Predmeti",
-          "Načrtovana lestvica najboljših"
+          "Temno preživetje"
         ],
-        "primaryCta": "Zahtevaj dostop testerja",
-        "statusNote": "Javna povezava Google Play se morda ne bo odprla. Pošljite e-pošto razvijalcu, da zahteva dostop preizkuševalca.",
-        "iconAlt": "Ikona temnega labirinta"
+        "primaryCta": "Namestite v Google Play",
+        "statusNote": "Zdaj na voljo v Googlu Play. Za to aplikacijo ni na voljo nobena spletna predstavitev.",
+        "iconAlt": "Lab Rat Maze Escape: ikona temnega labirinta"
       }
     },
     "status": {
@@ -8706,9 +8706,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "si-LK": {
     "seo": {
       "title": "NeoKIM යෙදුම් විද්‍යාගාරය | නොමිලේ Android කුඩා යෙදුම්",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, සහ තවත් Android කුඩා යෙදුම් සඳහා පුද්ගලික පරීක්ෂණ ස්ථාපනය කරන්න හෝ උත්සාහ කරන්න.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, සහ Lucky Card Random Defense සහ තවත් Android කුඩා යෙදුම් සඳහා පුද්ගලික පරීක්ෂණ ස්ථාපනය කරන්න.",
       "ogTitle": "NeoKIM යෙදුම් විද්‍යාගාරය | Android කුඩා යෙදුම්",
-      "ogDescription": "වර්ණ අභියෝග, පිටසක්වල වැනි රහස් පණිවිඩ, UFO ඇමතුම් අත්දැකීම්, සහ ඉක්මන් Android විනෝදය සඳහා පුද්ගලික පරීක්ෂණ."
+      "ogDescription": "වර්ණ අභියෝග, පිටසක්වල වැනි රහස් පණිවිඩ, UFO ඇමතුම් අත්දැකීම්, Lab Rat Maze Escape: Dark Maze, සහ ඉක්මන් Android විනෝදය සඳහා පුද්ගලික පරීක්ෂණ."
     },
     "skip": {
       "apps": "යෙදුම් ලැයිස්තුවට යන්න"
@@ -8868,19 +8868,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense නිරූපකය"
       },
       "darkMaze": {
-        "name": "අඳුරු වංකගිරිය",
-        "category": "පුද්ගලික පරීක්ෂණ ගැලවීමේ ක්‍රීඩාව",
-        "tagline": "රසායනාගාර මීයන් පැන යාමේ අභියෝගයක් ලෙස අඳුරු වංකගිරියක පිටවීම සොයන්න.",
-        "description": "දැනට පුද්ගලික පරීක්ෂණයක පවතී. පොදු Play සබැඳිය විවෘත නොවිය හැක, එබැවින් පරීක්ෂණ සම්බන්ධතා බොත්තම භාවිතා කරන්න.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "මුදා හරින ලද වංකගිරි ගැලවීමේ ක්‍රීඩාව",
+        "tagline": "අඳුරු වංකගිරිය හරහා රසායනාගාර මීයෙකු මෙහෙයවා පිටවීම සොයා ගන්න.",
+        "description": "2026 මැයි 28 Google Play හි නිකුත් කරන ලදී. අඳුරු වංකගිරිය හරහා ගමන් කරන්න, අයිතම භාවිතා කරන්න, සහ මාර්ගය වැසීමට පෙර පැන යන්න.",
         "highlights": [
-          "පුද්ගලික පරීක්ෂණය",
+          "2026 මැයි 28 නිකුත් කරන ලදී",
           "වංකගිරි ගැලවීම",
           "භාණ්ඩ",
-          "ප්‍රමුඛ පුවරුව සැලසුම් කර ඇත"
+          "අඳුරු පැවැත්ම"
         ],
-        "primaryCta": "පරීක්ෂක ප්‍රවේශය ඉල්ලන්න",
-        "statusNote": "පොදු Google Play සබැඳිය විවෘත නොවිය හැක. පරීක්ෂක ප්‍රවේශය ඉල්ලීමට සංවර්ධකයාට විද්‍යුත් තැපැල් කරන්න.",
-        "iconAlt": "අඳුරු වංකගිරි නිරූපකය"
+        "primaryCta": "Google Play හි ස්ථාපනය කරන්න",
+        "statusNote": "දැන් Google Play හි ඇත. මෙම යෙදුම සඳහා කිසිදු වෙබ් ආදර්ශනයක් සපයා නැත.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze නිරූපකය"
       }
     },
     "status": {
@@ -8962,9 +8962,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ar": {
     "seo": {
       "title": "مختبر تطبيقات NeoKIM | تطبيقات Android المصغرة المجانية",
-      "description": "قم بتثبيت أو تجربة اختبارات خاصة لـ Color Master 2 وGalacticode وCall the UFO وLucky Card Random Defense والمزيد من تطبيقات Android المصغرة.",
+      "description": "قم بتثبيت Color Master 2 وGalacticode وCall the UFO وLab Rat Maze Escape: Dark Maze والاختبارات الخاصة لـ Lucky Card Random Defense والمزيد من تطبيقات Android المصغرة.",
       "ogTitle": "مختبر تطبيقات NeoKIM | تطبيقات Android المصغرة",
-      "ogDescription": "تحديات الألوان، والرسائل السرية الشبيهة بالكائنات الفضائية، وتجارب الاتصال بالأجسام الطائرة المجهولة، والاختبارات الخاصة لمتعة Android السريعة."
+      "ogDescription": "تحديات الألوان، والرسائل السرية الشبيهة بالكائنات الفضائية، وتجارب الاتصال بالأجسام الطائرة المجهولة، وLab Rat Maze Escape: Dark Maze، والاختبارات الخاصة للمتعة السريعة على Android."
     },
     "skip": {
       "apps": "انتقل إلى قائمة التطبيقات"
@@ -9124,19 +9124,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "أيقونة الدفاع العشوائي لبطاقة الحظ"
       },
       "darkMaze": {
-        "name": "المتاهة المظلمة",
-        "category": "لعبة الهروب من الاختبار الخاص",
-        "tagline": "ابحث عن المخرج في متاهة مظلمة كتحدي للهروب من فأر المختبر.",
-        "description": "حاليا في اختبار خاص. قد لا يتم فتح رابط التشغيل العام، لذا استخدم زر الاتصال التجريبي.",
+        "name": "الهروب من متاهة فأر المختبر: المتاهة المظلمة",
+        "category": "تم إصدار لعبة الهروب من المتاهة",
+        "tagline": "قم بتوجيه فأر المختبر عبر المتاهة المظلمة وابحث عن المخرج.",
+        "description": "تم إصدارها على Google Play في 28 مايو 2026. تحرك عبر المتاهة المظلمة واستخدم العناصر واهرب قبل أن يُغلق المسار.",
         "highlights": [
-          "اختبار خاص",
+          "تم الإصدار في 28 مايو 2026",
           "الهروب من المتاهة",
           "العناصر",
-          "المتصدرين المخطط لها"
+          "البقاء على قيد الحياة الظلام"
         ],
-        "primaryCta": "طلب وصول المختبر",
-        "statusNote": "قد لا يتم فتح رابط Google Play العام. أرسل بريدًا إلكترونيًا إلى المطور لطلب وصول المختبر.",
-        "iconAlt": "أيقونة المتاهة المظلمة"
+        "primaryCta": "التثبيت على جوجل بلاي",
+        "statusNote": "متوفر الآن على جوجل بلاي. لم يتم توفير عرض ويب لهذا التطبيق.",
+        "iconAlt": "الهروب من متاهة الفئران المختبرية: أيقونة المتاهة المظلمة"
       }
     },
     "status": {
@@ -9218,9 +9218,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hy-AM": {
     "seo": {
       "title": "NeoKIM հավելվածի լաբորատորիա | Անվճար Android Mini հավելվածներ",
-      "description": "Տեղադրեք կամ փորձեք մասնավոր թեստեր Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense և այլ Android մինի հավելվածների համար:",
+      "description": "Տեղադրեք Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape. Dark Maze և մասնավոր թեստեր Lucky Card Random Defense-ի և ավելի շատ Android mini հավելվածների համար:",
       "ogTitle": "NeoKIM հավելվածի լաբորատորիա | Android մինի հավելվածներ",
-      "ogDescription": "Գունավոր մարտահրավերներ, այլմոլորակայինների նման գաղտնի հաղորդագրություններ, ՉԹՕ-ի զանգերի փորձառություններ և մասնավոր թեստեր՝ արագ Android զվարճանքի համար:"
+      "ogDescription": "Գունավոր մարտահրավերներ, այլմոլորակայինների նման գաղտնի հաղորդագրություններ, ՉԹՕ-ի զանգերի փորձառություններ, Lab Rat Maze Escape. Dark Maze և անձնական թեստեր՝ արագ Android-ով զվարճանալու համար:"
     },
     "skip": {
       "apps": "Բաց թողնել հավելվածների ցանկը"
@@ -9380,19 +9380,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Պատահական պաշտպանության պատկերակ"
       },
       "darkMaze": {
-        "name": "Մութ լաբիրինթոս",
-        "category": "Մասնավոր թեստային փախուստի խաղ",
-        "tagline": "Գտեք ելքը մութ լաբիրինթոսում՝ որպես լաբորատոր առնետի փախուստի մարտահրավեր:",
-        "description": "Ներկայումս մասնավոր թեստավորման փուլում է: Հանրային Play հղումը կարող է չբացվել, այնպես որ օգտագործեք փորձարկման կոնտակտային կոճակը:",
+        "name": "Lab Rat Maze Escape. Dark Maze",
+        "category": "Թողարկված լաբիրինթոս փախուստի խաղ",
+        "tagline": "Առաջնորդեք լաբորատոր առնետին մութ լաբիրինթոսով և գտեք ելքը:",
+        "description": "Թողարկվել է Google Play-ում 2026 թվականի մայիսի 28-ին: Շարժվեք մութ լաբիրինթոսով, օգտագործեք իրեր և փախեք մինչև ճանապարհի փակվելը:",
         "highlights": [
-          "Անձնական թեստ",
+          "Թողարկվել է 2026 թվականի մայիսի 28-ին",
           "Լաբիրինթոս փախուստ",
           "Նյութեր",
-          "Առաջատար աղյուսակը պլանավորված է"
+          "Մութ գոյատեւում"
         ],
-        "primaryCta": "Հայցել փորձարկողի մուտք",
-        "statusNote": "Հանրային Google Play հղումը կարող է չբացվել: Էլփոստով ուղարկեք մշակողին՝ փորձարկողի մուտքի թույլտվություն խնդրելու համար:",
-        "iconAlt": "Dark Maze պատկերակը"
+        "primaryCta": "Տեղադրեք Google Play-ում",
+        "statusNote": "Այժմ հասանելի է Google Play-ում: Այս հավելվածի համար վեբ ցուցադրություն չի տրամադրվում:",
+        "iconAlt": "Lab Rat Maze Escape. Dark Maze պատկերակը"
       }
     },
     "status": {
@@ -9474,9 +9474,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "is-IS": {
     "seo": {
       "title": "NeoKIM App Lab | Ókeypis Android Mini Apps",
-      "description": "Settu upp eða reyndu einkapróf fyrir Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense og fleiri Android smáforrit.",
+      "description": "Settu upp Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze og einkapróf fyrir Lucky Card Random Defense og fleiri Android smáforrit.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Litaáskoranir, leynileg skilaboð sem líkjast geimverum, upplifun af UFO-símtölum og einkapróf fyrir fljótlega Android skemmtun."
+      "ogDescription": "Litaáskoranir, geimverulík leyndarmál, upplifun af UFO-símtölum, Lab Rat Maze Escape: Dark Maze og einkapróf fyrir fljótlegt Android gaman."
     },
     "skip": {
       "apps": "Farðu í forritalista"
@@ -9636,19 +9636,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense táknið"
       },
       "darkMaze": {
-        "name": "Dökk völundarhús",
-        "category": "Einkapróf flóttaleikur",
-        "tagline": "Finndu útganginn í dimmu völundarhúsi sem tilraunastofurotta sem flótta áskorun.",
-        "description": "Núna í einkaprófun. Almenningur Play hlekkur gæti ekki opnast, svo notaðu prófunartengiliðinn.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Gefinn út völundarhús flóttaleikur",
+        "tagline": "Leiddu rannsóknarrottu í gegnum myrka völundarhúsið og finndu útganginn.",
+        "description": "Gefið út á Google Play 28. maí 2026. Farðu í gegnum myrka völundarhúsið, notaðu hluti og flýðu áður en leiðin lokar inn.",
         "highlights": [
-          "Einkapróf",
+          "Gefið út 28. maí 2026",
           "Völundarhús flótta",
           "Atriði",
-          "Stigatöflu fyrirhuguð"
+          "Myrkur lifun"
         ],
-        "primaryCta": "Biðja um aðgang að prófunaraðila",
-        "statusNote": "Opinberi Google Play hlekkurinn gæti ekki opnast. Sendu þróunaraðilanum tölvupóst til að biðja um prófunaraðgang.",
-        "iconAlt": "Dark Maze táknmynd"
+        "primaryCta": "Settu upp á Google Play",
+        "statusNote": "Nú fáanlegt á Google Play. Engin kynning á vefnum er veitt fyrir þetta forrit.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze táknið"
       }
     },
     "status": {
@@ -9730,9 +9730,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "az-AZ": {
     "seo": {
       "title": "NeoKIM Tətbiq Laboratoriyası | Pulsuz Android Mini Proqramları",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense və daha çox Android mini proqramları üçün şəxsi testləri quraşdırın və ya sınaqdan keçirin.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze və Lucky Card Random Defense üçün şəxsi testləri və daha çox Android mini proqramlarını quraşdırın.",
       "ogTitle": "NeoKIM Tətbiq Laboratoriyası | Android Mini Proqramlar",
-      "ogDescription": "Sürətli Android əyləncəsi üçün rəng problemləri, yadplanetlilərə bənzər gizli mesajlar, UFO zəng təcrübələri və şəxsi testlər."
+      "ogDescription": "Rəng problemləri, yadplanetlilərə bənzər gizli mesajlar, UFO çağırış təcrübələri, Lab Rat Maze Escape: Dark Maze və sürətli Android əyləncəsi üçün şəxsi testlər."
     },
     "skip": {
       "apps": "Proqram siyahısına keçin"
@@ -9892,19 +9892,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Şanslı Kart Təsadüfi Müdafiə simvolu"
       },
       "darkMaze": {
-        "name": "Qaranlıq Labirent",
-        "category": "Şəxsi sınaqdan qaçış oyunu",
-        "tagline": "Laboratoriya siçovullarından qaçmaq üçün qaranlıq bir labirintdə çıxış tapın.",
-        "description": "Hazırda özəl testdədir. İctimai Play linki açılmaya bilər, ona görə də test əlaqə düyməsini istifadə edin.",
+        "name": "Laboratoriya siçovullarından qaçış: Qaranlıq labirint",
+        "category": "Labirentdən qaçış oyunu buraxıldı",
+        "tagline": "Laboratoriya siçovulunu qaranlıq labirintdən keçirin və çıxış yolunu tapın.",
+        "description": "28 may 2026-cı ildə Google Play-də buraxıldı. Qaranlıq labirintdə hərəkət edin, elementlərdən istifadə edin və yol bağlanana qədər qaçın.",
         "highlights": [
-          "Şəxsi test",
+          "28 may 2026-cı ildə buraxılmışdır",
           "Labirentdən qaçış",
           "Əşyalar",
-          "Liderlər lövhəsi planlaşdırılır"
+          "Qaranlıq sağ qalma"
         ],
-        "primaryCta": "Tester Girişi tələb edin",
-        "statusNote": "İctimai Google Play linki açılmaya bilər. Testerə giriş tələb etmək üçün tərtibatçıya e-poçt göndərin.",
-        "iconAlt": "Qaranlıq Labirent ikonası"
+        "primaryCta": "Google Play-də quraşdırın",
+        "statusNote": "İndi Google Play-də mövcuddur. Bu proqram üçün heç bir veb demo təqdim edilməyib.",
+        "iconAlt": "Laboratoriya Siçovullarından Qaçış: Qaranlıq Maze ikonu"
       }
     },
     "status": {
@@ -9986,9 +9986,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "af": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-toepassings",
-      "description": "Installeer of probeer privaat toetse vir Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, en meer Android mini-toepassings.",
+      "description": "Installeer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, en privaat toetse vir Lucky Card Random Defense en meer Android-mini-toepassings.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Kleuruitdagings, vreemdelingagtige geheime boodskappe, UFO-oproepervarings en privaat toetse vir vinnige Android-pret."
+      "ogDescription": "Kleuruitdagings, vreemdelingagtige geheime boodskappe, UFO-oproepervarings, Lab Rat Maze Escape: Dark Maze, en privaat toetse vir vinnige Android-pret."
     },
     "skip": {
       "apps": "Slaan oor na toepassinglys"
@@ -10148,19 +10148,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense-ikoon"
       },
       "darkMaze": {
-        "name": "Donker doolhof",
-        "category": "Privaat toets ontsnap spel",
-        "tagline": "Vind die uitgang in 'n donker doolhof as 'n laboratoriumrot-ontsnapuitdaging.",
-        "description": "Tans in privaat toetsing. Die publieke Play-skakel sal dalk nie oopmaak nie, so gebruik die toetskontakknoppie.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Vrygestel doolhof ontsnap spel",
+        "tagline": "Lei 'n laboratoriumrot deur die donker doolhof en vind die uitgang.",
+        "description": "Vrygestel op Google Play op 28 Mei 2026. Beweeg deur die donker doolhof, gebruik items en ontsnap voor die paadjie toemaak.",
         "highlights": [
-          "Privaat toets",
+          "Vrygestel op 28 Mei 2026",
           "Doolhof ontsnap",
           "Items",
-          "Ranglys beplan"
+          "Donker oorlewing"
         ],
-        "primaryCta": "Versoek toetsertoegang",
-        "statusNote": "Die publieke Google Play-skakel sal dalk nie oopmaak nie. E-pos die ontwikkelaar om toetsertoegang te versoek.",
-        "iconAlt": "Donker doolhof ikoon"
+        "primaryCta": "Installeer op Google Play",
+        "statusNote": "Nou beskikbaar op Google Play. Geen webdemo word vir hierdie toepassing verskaf nie.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikoon"
       }
     },
     "status": {
@@ -10242,9 +10242,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sq": {
     "seo": {
       "title": "NeoKIM App Lab | Aplikacionet falas të Android Mini",
-      "description": "Instaloni ose provoni teste private për Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense dhe më shumë aplikacione mini Android.",
+      "description": "Instaloni Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze dhe teste private për Lucky Card Random Defense dhe më shumë aplikacione mini Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Sfida me ngjyra, mesazhe sekrete të ngjashme me alienët, përvoja të thirrjeve me UFO dhe teste private për argëtim të shpejtë Android."
+      "ogDescription": "Sfida me ngjyra, mesazhe sekrete të ngjashme me alienët, përvoja të thirrjeve të UFO-ve, Labirint Labirint Lab Rat: Dark Maze dhe teste private për argëtim të shpejtë në Android."
     },
     "skip": {
       "apps": "Kalo te lista e aplikacioneve"
@@ -10404,19 +10404,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona e mbrojtjes së rastësishme të kartës me fat"
       },
       "darkMaze": {
-        "name": "Labirint i errët",
-        "category": "Lojë arratisjeje provë private",
-        "tagline": "Gjeni daljen në një labirint të errët si një sfidë arratisjeje miu laboratori.",
-        "description": "Aktualisht në testim privat. Lidhja publike Play mund të mos hapet, prandaj përdorni butonin e kontaktit të testimit.",
+        "name": "Labirint Lab Rat Arratisjes: Dark Maze",
+        "category": "Lëshuar lojë arratisje labirint",
+        "tagline": "Drejtoni një miu laboratori nëpër labirintin e errët dhe gjeni daljen.",
+        "description": "Lëshuar në Google Play më 28 maj 2026. Lëvizni nëpër labirintin e errët, përdorni artikujt dhe ikni përpara se shtegu të mbyllet.",
         "highlights": [
-          "Test privat",
+          "Publikuar më 28 maj 2026",
           "Ikja me labirint",
           "Artikuj",
-          "Bordi drejtues i planifikuar"
+          "Mbijetesë e errët"
         ],
-        "primaryCta": "Kërko qasje te testuesi",
-        "statusNote": "Lidhja publike Google Play mund të mos hapet. Dërgo email zhvilluesit për të kërkuar qasje te testuesi.",
-        "iconAlt": "Ikona e labirintit të errët"
+        "primaryCta": "Instaloni në Google Play",
+        "statusNote": "Tani disponohet në Google Play. Asnjë demonstrim në ueb nuk ofrohet për këtë aplikacion.",
+        "iconAlt": "Arratisja e labirintit të miut të laboratorit: Ikona e labirintit të errët"
       }
     },
     "status": {
@@ -10498,9 +10498,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "am": {
     "seo": {
       "title": "NeoKIM መተግበሪያ ቤተ ሙከራ | ነጻ Android ሚኒ መተግበሪያዎች",
-      "description": "ለ Color Master 2 ፣ Galacticode ፣ UFO ይደውሉ ፣ Lucky Card Random Defense እና ሌሎችም Android ሚኒ መተግበሪያዎችን ይጫኑ ወይም ይሞክሩ።",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze እና የግል ሙከራዎች ለ Lucky Card Random Defence እና ለሌሎችም የአንድሮይድ ሚኒ መተግበሪያዎች።",
       "ogTitle": "NeoKIM መተግበሪያ ቤተ ሙከራ | Android ሚኒ መተግበሪያዎች",
-      "ogDescription": "የቀለም ፈተናዎች፣ ባዕድ መሰል ሚስጥራዊ መልዕክቶች፣ የ UFO ጥሪ ተሞክሮዎች እና የግል ሙከራዎች ለፈጣን Android አዝናኝ።"
+      "ogDescription": "የቀለም ፈተናዎች፣ ባዕድ መሰል ሚስጥራዊ መልእክቶች፣ የ UFO የጥሪ ተሞክሮዎች፣ የላብ ራት ማዝ ማምለጫ፡ ጨለማ ማዝ እና ለፈጣን አንድሮይድ መዝናኛ የግል ሙከራዎች።"
     },
     "skip": {
       "apps": "ወደ መተግበሪያ ዝርዝር ዝለል"
@@ -10660,19 +10660,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ዕድለኛ ካርድ የዘፈቀደ መከላከያ አዶ"
       },
       "darkMaze": {
-        "name": "ጨለማ ማዝ",
-        "category": "የግል ሙከራ የማምለጫ ጨዋታ",
-        "tagline": "እንደ የላብራቶሪ አይጥ ማምለጫ ፈተና በጨለማ ግርግር ውስጥ መውጫውን ያግኙ።",
-        "description": "በአሁኑ ጊዜ በግል ሙከራ ውስጥ። ይፋዊው የፕሌይ ማገናኛ ላይከፈት ይችላል፣ስለዚህ የሙከራ አድራሻ አዝራሩን ተጠቀም።",
+        "name": "የላብራቶሪ አይጥ ማዝ አምልጥ፡ ጥቁር ማዝ",
+        "category": "የተለቀቀ የሜዝ ማምለጫ ጨዋታ",
+        "tagline": "የላብራቶሪ አይጥ በጨለማው ግርግር ውስጥ ይምራው እና መውጫውን ያግኙ።",
+        "description": "በሜይ 28፣ 2026 በጎግል ፕሌይ ላይ የተለቀቀ። በጨለማው ግርግር ይለፉ፣ ንጥሎችን ይጠቀሙ እና መንገዱ ከመዘጋቱ በፊት ያመልጡ።",
         "highlights": [
-          "የግል ሙከራ",
+          "በሜይ 28፣ 2026 ተለቋል",
           "ማዝ ማምለጥ",
           "እቃዎች",
-          "የመሪዎች ሰሌዳ ታቅዷል"
+          "የጨለማ መትረፍ"
         ],
-        "primaryCta": "የሞካሪ መዳረሻን ይጠይቁ",
-        "statusNote": "ይፋዊው የGoogle Play አገናኝ ላይከፈት ይችላል። የሞካሪ መዳረሻን ለመጠየቅ ገንቢውን ኢሜይል ያድርጉ።",
-        "iconAlt": "የጨለማ ማዜ አዶ"
+        "primaryCta": "Google Play ላይ ጫን",
+        "statusNote": "አሁን በጎግል ፕሌይ ላይ ይገኛል። ለዚህ መተግበሪያ ምንም የድር ማሳያ አልተሰጠም።",
+        "iconAlt": "Lab Rat Maze Escape፡ የጨለማ ማዝ አዶ"
       }
     },
     "status": {
@@ -10754,9 +10754,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "et": {
     "seo": {
       "title": "NeoKIM App Lab | Tasuta Android minirakendused",
-      "description": "Installige või proovige privaatseid teste Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense ja muude Android minirakenduste jaoks.",
+      "description": "Installige Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze ning Lucky Card Random Defense ja muude Androidi minirakenduste privaatsed testid.",
       "ogTitle": "NeoKIM App Lab | Android minirakendused",
-      "ogDescription": "Värviväljakutsed, tulnukatega sarnased salasõnumid, UFO-kõnede kogemused ja privaatsed testid Android kiireks lõbuks."
+      "ogDescription": "Värviväljakutsed, tulnukatega sarnased salasõnumid, UFO-kõnede kogemused, Lab Rat Maze Escape: Dark Maze ja privaatsed testid Androidi kiireks lõbuks."
     },
     "skip": {
       "apps": "Liikuge rakenduste loendisse"
@@ -10916,19 +10916,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Õnnekaardi juhusliku kaitse ikoon"
       },
       "darkMaze": {
-        "name": "Tume labürint",
-        "category": "Privaatne test põgenemismäng",
-        "tagline": "Leia väljapääs pimedas labürindis laborirottide põgenemise väljakutsena.",
-        "description": "Hetkel eratestimisel. Avalik Play link ei pruugi avaneda, seega kasutage kontakti testimise nuppu.",
+        "name": "Labrotilabürindi põgenemine: tume labürint",
+        "category": "Välja antud labürindi põgenemismäng",
+        "tagline": "Juhtige laborirott läbi pimeda labürindi ja leidke väljapääs.",
+        "description": "Ilmus Google Plays 28. mail 2026. Liikuge läbi pimeda labürindi, kasutage üksusi ja põgenege enne, kui rada sulgub.",
         "highlights": [
-          "Privaatne test",
+          "Välja antud 28. mail 2026",
           "Labürindi põgenemine",
           "Üksused",
-          "Plaanis edetabel"
+          "Tume ellujäämine"
         ],
-        "primaryCta": "Taotlege testija juurdepääsu",
-        "statusNote": "Avalik Google Play link ei pruugi avaneda. Testija juurdepääsu taotlemiseks saatke arendajale meil.",
-        "iconAlt": "Tume labürindi ikoon"
+        "primaryCta": "Installige Google Playst",
+        "statusNote": "Nüüd saadaval Google Plays. Selle rakenduse jaoks ei pakuta veebidemot.",
+        "iconAlt": "Labroti labürinti põgenemine: tumeda labürindi ikoon"
       }
     },
     "status": {
@@ -11010,9 +11010,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-IN": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11172,19 +11172,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense icon"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Private test escape game",
-        "tagline": "Find the exit in a dark maze as a lab rat escape challenge.",
-        "description": "Currently in private testing. The public Play link may not open, so use the test contact button.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Released maze escape game",
+        "tagline": "Guide a lab rat through the dark maze and find the exit.",
+        "description": "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
         "highlights": [
-          "Private test",
+          "Released May 28, 2026",
           "Maze escape",
           "Items",
-          "Leaderboard planned"
+          "Dark survival"
         ],
-        "primaryCta": "Request Tester Access",
-        "statusNote": "The public Google Play link may not open. Email the developer to request tester access.",
-        "iconAlt": "Dark Maze icon"
+        "primaryCta": "Install on Google Play",
+        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -11266,9 +11266,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-SG": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11428,19 +11428,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense icon"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Private test escape game",
-        "tagline": "Find the exit in a dark maze as a lab rat escape challenge.",
-        "description": "Currently in private testing. The public Play link may not open, so use the test contact button.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Released maze escape game",
+        "tagline": "Guide a lab rat through the dark maze and find the exit.",
+        "description": "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
         "highlights": [
-          "Private test",
+          "Released May 28, 2026",
           "Maze escape",
           "Items",
-          "Leaderboard planned"
+          "Dark survival"
         ],
-        "primaryCta": "Request Tester Access",
-        "statusNote": "The public Google Play link may not open. Email the developer to request tester access.",
-        "iconAlt": "Dark Maze icon"
+        "primaryCta": "Install on Google Play",
+        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -11522,9 +11522,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-ZA": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11684,19 +11684,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense icon"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Private test escape game",
-        "tagline": "Find the exit in a dark maze as a lab rat escape challenge.",
-        "description": "Currently in private testing. The public Play link may not open, so use the test contact button.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Released maze escape game",
+        "tagline": "Guide a lab rat through the dark maze and find the exit.",
+        "description": "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
         "highlights": [
-          "Private test",
+          "Released May 28, 2026",
           "Maze escape",
           "Items",
-          "Leaderboard planned"
+          "Dark survival"
         ],
-        "primaryCta": "Request Tester Access",
-        "statusNote": "The public Google Play link may not open. Email the developer to request tester access.",
-        "iconAlt": "Dark Maze icon"
+        "primaryCta": "Install on Google Play",
+        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -11778,9 +11778,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-GB": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11940,19 +11940,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense icon"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Private test escape game",
-        "tagline": "Find the exit in a dark maze as a lab rat escape challenge.",
-        "description": "Currently in private testing. The public Play link may not open, so use the test contact button.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Released maze escape game",
+        "tagline": "Guide a lab rat through the dark maze and find the exit.",
+        "description": "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
         "highlights": [
-          "Private test",
+          "Released May 28, 2026",
           "Maze escape",
           "Items",
-          "Leaderboard planned"
+          "Dark survival"
         ],
-        "primaryCta": "Request Tester Access",
-        "statusNote": "The public Google Play link may not open. Email the developer to request tester access.",
-        "iconAlt": "Dark Maze icon"
+        "primaryCta": "Install on Google Play",
+        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -12034,9 +12034,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-AU": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -12196,19 +12196,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense icon"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Private test escape game",
-        "tagline": "Find the exit in a dark maze as a lab rat escape challenge.",
-        "description": "Currently in private testing. The public Play link may not open, so use the test contact button.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Released maze escape game",
+        "tagline": "Guide a lab rat through the dark maze and find the exit.",
+        "description": "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
         "highlights": [
-          "Private test",
+          "Released May 28, 2026",
           "Maze escape",
           "Items",
-          "Leaderboard planned"
+          "Dark survival"
         ],
-        "primaryCta": "Request Tester Access",
-        "statusNote": "The public Google Play link may not open. Email the developer to request tester access.",
-        "iconAlt": "Dark Maze icon"
+        "primaryCta": "Install on Google Play",
+        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -12290,9 +12290,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-CA": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install or try private tests for Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, and more Android mini apps.",
+      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, and private tests for quick Android fun."
+      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -12452,19 +12452,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense icon"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Private test escape game",
-        "tagline": "Find the exit in a dark maze as a lab rat escape challenge.",
-        "description": "Currently in private testing. The public Play link may not open, so use the test contact button.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Released maze escape game",
+        "tagline": "Guide a lab rat through the dark maze and find the exit.",
+        "description": "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
         "highlights": [
-          "Private test",
+          "Released May 28, 2026",
           "Maze escape",
           "Items",
-          "Leaderboard planned"
+          "Dark survival"
         ],
-        "primaryCta": "Request Tester Access",
-        "statusNote": "The public Google Play link may not open. Email the developer to request tester access.",
-        "iconAlt": "Dark Maze icon"
+        "primaryCta": "Install on Google Play",
+        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -12546,9 +12546,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ur": {
     "seo": {
       "title": "NeoKIM ایپ لیب | مفت Android Mini ایپس",
-      "description": "Color Master 2، Galacticode، کال دی UFO، لکی کارڈ رینڈم ڈیفنس، اور مزید Android منی ایپس کے لیے پرائیویٹ ٹیسٹ انسٹال کریں یا آزمائیں۔",
+      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، اور Lucky Card Random Defence اور مزید Android mini ایپس کے لیے نجی ٹیسٹ انسٹال کریں۔",
       "ogTitle": "NeoKIM ایپ لیب | Android منی ایپس",
-      "ogDescription": "رنگین چیلنجز، اجنبی جیسے خفیہ پیغامات، UFO کال کرنے کے تجربات، اور فوری Android تفریح کے لیے نجی ٹیسٹ۔"
+      "ogDescription": "رنگین چیلنجز، اجنبی جیسے خفیہ پیغامات، UFO کالنگ کے تجربات، Lab Rat Maze Escape: Dark Maze، اور فوری Android تفریح کے لیے نجی ٹیسٹ۔"
     },
     "skip": {
       "apps": "ایپ کی فہرست پر جائیں۔"
@@ -12708,19 +12708,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "لکی کارڈ رینڈم ڈیفنس آئیکن"
       },
       "darkMaze": {
-        "name": "تاریک بھولبلییا",
-        "category": "نجی ٹیسٹ سے فرار کا کھیل",
-        "tagline": "لیب چوہا فرار چیلنج کے طور پر ایک تاریک بھولبلییا میں باہر نکلیں تلاش کریں۔",
-        "description": "فی الحال پرائیویٹ ٹیسٹنگ میں ہے۔ ہو سکتا ہے پبلک پلے کا لنک نہ کھلے، اس لیے ٹیسٹ رابطہ بٹن استعمال کریں۔",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "بھولبلییا سے فرار کا کھیل جاری کیا گیا۔",
+        "tagline": "تاریک بھولبلییا کے ذریعے لیب کے چوہے کی رہنمائی کریں اور باہر نکلنے کا راستہ تلاش کریں۔",
+        "description": "28 مئی 2026 کو Google Play پر ریلیز ہوا۔ تاریک بھولبلییا سے گزریں، آئٹمز استعمال کریں اور راستہ بند ہونے سے پہلے فرار ہوں۔",
         "highlights": [
-          "پرائیویٹ ٹیسٹ",
+          "28 مئی 2026 کو ریلیز ہوا۔",
           "بھولبلییا سے فرار",
           "اشیاء",
-          "لیڈر بورڈ نے منصوبہ بنایا"
+          "تاریک بقا"
         ],
-        "primaryCta": "ٹیسٹر تک رسائی کی درخواست کریں۔",
-        "statusNote": "عوامی Google Play لنک نہیں کھل سکتا۔ ٹیسٹر تک رسائی کی درخواست کرنے کے لیے ڈویلپر کو ای میل کریں۔",
-        "iconAlt": "گہرا بھولبلییا کا آئیکن"
+        "primaryCta": "گوگل پلے پر انسٹال کریں۔",
+        "statusNote": "اب گوگل پلے پر دستیاب ہے۔ اس ایپ کے لیے کوئی ویب ڈیمو فراہم نہیں کیا گیا ہے۔",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze کا آئیکن"
       }
     },
     "status": {
@@ -12802,9 +12802,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "uk": {
     "seo": {
       "title": "NeoKIM App Lab | Безкоштовні міні-програми Android",
-      "description": "Установіть або спробуйте приватні тести для Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense та інших міні-додатків Android.",
+      "description": "Встановіть Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze та приватні тести для Lucky Card Random Defense та інші міні-програми для Android.",
       "ogTitle": "NeoKIM App Lab | Міні-програми Android",
-      "ogDescription": "Кольорові виклики, таємні повідомлення, схожі на інопланетян, виклики НЛО та приватні тести для швидкої розваги Android."
+      "ogDescription": "Кольорові випробування, таємні повідомлення, схожі на інопланетян, досвід виклику НЛО, втеча з лабіринту щурів у лабораторії: Темний лабіринт і приватні тести для швидкої розваги на Android."
     },
     "skip": {
       "apps": "Перейти до списку програм"
@@ -12964,19 +12964,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок випадкового захисту щасливої карти"
       },
       "darkMaze": {
-        "name": "Темний лабіринт",
-        "category": "Приватна тестова гра-втеча",
-        "tagline": "Знайдіть вихід у темному лабіринті, виконуючи втечу лабораторних щурів.",
-        "description": "Наразі в приватному тестуванні. Публічне посилання Play може не відкритися, тому скористайтеся кнопкою тестового контакту.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Випущена гра про втечу з лабіринту",
+        "tagline": "Проведіть лабораторного щура через темний лабіринт і знайдіть вихід.",
+        "description": "Випущено в Google Play 28 травня 2026 року. Пересувайтеся темним лабіринтом, використовуйте предмети та тікайте, перш ніж шлях закриється.",
         "highlights": [
-          "Приватний тест",
+          "Випущено 28 травня 2026 р",
           "Втеча з лабіринту",
           "Предмети",
-          "Запланована таблиця лідерів"
+          "Темне виживання"
         ],
-        "primaryCta": "Запит на доступ тестувальника",
-        "statusNote": "Публічне посилання Google Play може не відкритися. Надішліть електронного листа розробнику, щоб отримати доступ тестера.",
-        "iconAlt": "Темний лабіринт значок"
+        "primaryCta": "Встановити в Google Play",
+        "statusNote": "Тепер доступно в Google Play. Для цієї програми не надається веб-демо.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze значок"
       }
     },
     "status": {
@@ -13058,9 +13058,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "it-IT": {
     "seo": {
       "title": "Laboratorio dell'app NeoKIM | Mini app Android gratuite",
-      "description": "Installa o prova test privati per Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense e altre mini app Android.",
+      "description": "Installa Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e test privati ​​per Lucky Card Random Defense e altre mini app Android.",
       "ogTitle": "Laboratorio dell'app NeoKIM | Mini app Android",
-      "ogDescription": "Sfide di colori, messaggi segreti simili ad alieni, esperienze di chiamate UFO e test privati per un rapido divertimento Android."
+      "ogDescription": "Sfide di colori, messaggi segreti simili ad alieni, esperienze di chiamate UFO, Lab Rat Maze Escape: Dark Maze e test privati per un rapido divertimento Android."
     },
     "skip": {
       "apps": "Passa all'elenco delle app"
@@ -13220,19 +13220,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona di difesa casuale della carta fortunata"
       },
       "darkMaze": {
-        "name": "Labirinto oscuro",
-        "category": "Gioco di fuga di prova privato",
-        "tagline": "Trova l'uscita in un labirinto oscuro come una sfida di fuga per topi da laboratorio.",
-        "description": "Attualmente in fase di test privato. Il collegamento di riproduzione pubblica potrebbe non aprirsi, quindi utilizza il pulsante di prova del contatto.",
+        "name": "Fuga dal labirinto dei topi da laboratorio: labirinto oscuro",
+        "category": "Rilasciato il gioco di fuga dal labirinto",
+        "tagline": "Guida un topo da laboratorio attraverso l'oscuro labirinto e trova l'uscita.",
+        "description": "Rilasciato su Google Play il 28 maggio 2026. Muoviti nel labirinto oscuro, usa gli oggetti e scappa prima che il percorso si chiuda.",
         "highlights": [
-          "Prova privata",
+          "Rilasciato il 28 maggio 2026",
           "Fuga nel labirinto",
           "Articoli",
-          "Classifica pianificata"
+          "Sopravvivenza oscura"
         ],
-        "primaryCta": "Richiedi l'accesso al tester",
-        "statusNote": "Il collegamento pubblico Google Play potrebbe non aprirsi. Invia un'e-mail allo sviluppatore per richiedere l'accesso come tester.",
-        "iconAlt": "Icona del labirinto scuro"
+        "primaryCta": "Installa su Google Play",
+        "statusNote": "Ora disponibile su Google Play. Per questa app non viene fornita alcuna demo web.",
+        "iconAlt": "Lab Rat Maze Escape: icona del labirinto oscuro"
       }
     },
     "status": {
@@ -13314,9 +13314,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "id": {
     "seo": {
       "title": "Lab Aplikasi NeoKIM | Aplikasi Mini Android Gratis",
-      "description": "Instal atau coba tes pribadi untuk Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, dan aplikasi mini Android lainnya.",
+      "description": "Instal Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, dan tes pribadi untuk Lucky Card Random Defense dan aplikasi mini Android lainnya.",
       "ogTitle": "Lab Aplikasi NeoKIM | Aplikasi Mini Android",
-      "ogDescription": "Tantangan warna, pesan rahasia mirip alien, pengalaman menelepon UFO, dan tes pribadi untuk kesenangan Android dengan cepat."
+      "ogDescription": "Tantangan warna, pesan rahasia mirip alien, pengalaman menelepon UFO, Pelarian Labirin Tikus Lab: Labirin Gelap, dan tes pribadi untuk kesenangan cepat di Android."
     },
     "skip": {
       "apps": "Lewati ke daftar aplikasi"
@@ -13476,19 +13476,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Pertahanan Acak Kartu Keberuntungan"
       },
       "darkMaze": {
-        "name": "Labirin Gelap",
-        "category": "Game pelarian tes pribadi",
-        "tagline": "Temukan jalan keluar di labirin gelap sebagai tantangan pelarian tikus laboratorium.",
-        "description": "Saat ini dalam pengujian pribadi. Tautan Play publik mungkin tidak terbuka, jadi gunakan tombol kontak uji.",
+        "name": "Pelarian Labirin Tikus Lab: Labirin Gelap",
+        "category": "Merilis game pelarian labirin",
+        "tagline": "Pandu tikus laboratorium melewati labirin gelap dan temukan jalan keluar.",
+        "description": "Dirilis di Google Play pada 28 Mei 2026. Bergerak melewati labirin gelap, gunakan item, dan melarikan diri sebelum jalan ditutup.",
         "highlights": [
-          "Tes pribadi",
+          "Dirilis 28 Mei 2026",
           "Pelarian labirin",
           "Barang",
-          "Papan peringkat direncanakan"
+          "Kelangsungan hidup yang gelap"
         ],
-        "primaryCta": "Minta Akses Penguji",
-        "statusNote": "Tautan Google Play publik mungkin tidak terbuka. Kirim email ke pengembang untuk meminta akses penguji.",
-        "iconAlt": "Ikon Labirin Gelap"
+        "primaryCta": "Instal di Google Play",
+        "statusNote": "Sekarang tersedia di Google Play. Tidak ada demo web yang disediakan untuk aplikasi ini.",
+        "iconAlt": "Pelarian Labirin Tikus Lab: Ikon Labirin Gelap"
       }
     },
     "status": {
@@ -13570,9 +13570,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ja-JP": {
     "seo": {
       "title": "NeoKIMアプリラボ |無料のAndroidミニアプリ",
-      "description": "カラー マスター 2、ギャラクティコード、コール ザ UFO、ラッキー カード ランダム ディフェンス、その他の Android ミニ アプリのプライベート テストをインストールまたは試してください。",
+      "description": "Color Master 2、Galaxycode、Call the UFO、Lab Rat Maze Escape: Dark Maze、Lucky Card Random Defense のプライベート テストなどの Android ミニ アプリをインストールします。",
       "ogTitle": "NeoKIMアプリラボ | Android ミニアプリ",
-      "ogDescription": "カラー チャレンジ、エイリアンのような秘密のメッセージ、UFO 呼び出し体験、Android をすぐに楽しめるプライベート テスト。"
+      "ogDescription": "カラー チャレンジ、エイリアンのような秘密のメッセージ、UFO 呼び出し体験、Lab Rat Maze Escape: Dark Maze、Android をすばやく楽しむためのプライベート テスト。"
     },
     "skip": {
       "apps": "アプリリストにスキップ"
@@ -13732,19 +13732,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ラッキーカードのランダム防御アイコン"
       },
       "darkMaze": {
-        "name": "ダークメイズ",
-        "category": "プライベートテスト脱出ゲーム",
-        "tagline": "実験用ネズミの脱出チャレンジとして、暗い迷路で出口を見つけてください。",
-        "description": "現在プライベートテスト中。公開の Play リンクが開かない場合があるため、テスト連絡ボタンを使用してください。",
+        "name": "実験室ネズミの迷路脱出: 暗い迷路",
+        "category": "迷路脱出ゲームをリリース",
+        "tagline": "実験用ネズミを暗い迷路に誘導し、出口を見つけてください。",
+        "description": "2026 年 5 月 28 日に Google Play でリリースされました。暗い迷路を進み、アイテムを使用し、道が近づく前に脱出してください。",
         "highlights": [
-          "プライベートテスト",
+          "2026 年 5 月 28 日リリース",
           "迷路脱出",
           "アイテム",
-          "リーダーボードの予定"
+          "ダークサバイバル"
         ],
-        "primaryCta": "テスターへのアクセスをリクエストする",
-        "statusNote": "Google Play の公開リンクが開かない可能性があります。開発者に電子メールを送信して、テスターへのアクセスをリクエストします。",
-        "iconAlt": "暗い迷路アイコン"
+        "primaryCta": "Google Play にインストールする",
+        "statusNote": "Google Play で入手可能になりました。このアプリには Web デモは提供されていません。",
+        "iconAlt": "研究室ネズミの迷路脱出: 暗い迷路アイコン"
       }
     },
     "status": {
@@ -13826,9 +13826,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ka-GE": {
     "seo": {
       "title": "NeoKIM აპლიკაციის ლაბორატორია | უფასო Android მინი აპები",
-      "description": "დააინსტალირეთ ან სცადეთ პირადი ტესტები Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense და სხვა Android მინი აპებისთვის.",
+      "description": "დააინსტალირეთ Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze და პირადი ტესტები Lucky Card Random Defense და სხვა Android mini აპებისთვის.",
       "ogTitle": "NeoKIM აპლიკაციის ლაბორატორია | Android მინი აპები",
-      "ogDescription": "ფერების გამოწვევები, უცხოპლანეტელების მსგავსი საიდუმლო შეტყობინებები, უცხოპლანეტელები დარეკვის გამოცდილება და პირადი ტესტები Android სწრაფი გართობისთვის."
+      "ogDescription": "ფერების გამოწვევები, უცხოპლანეტელების მსგავსი საიდუმლო შეტყობინებები, უცხოპლანეტელებთან დარეკვის გამოცდილება, Lab Rat Maze Escape: Dark Maze და პირადი ტესტები სწრაფი Android გართობისთვის."
     },
     "skip": {
       "apps": "აპების სიაზე გადასვლა"
@@ -13988,19 +13988,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "იღბლიანი ბარათის შემთხვევითი თავდაცვის ხატულა"
       },
       "darkMaze": {
-        "name": "ბნელი ლაბირინთი",
-        "category": "პირადი ტესტი გაქცევის თამაში",
-        "tagline": "იპოვეთ გასასვლელი ბნელ ლაბირინთში, როგორც ლაბორატორიული ვირთხების გაქცევის გამოწვევა.",
-        "description": "ამჟამად კერძო ტესტირებაშია. საჯარო Play ბმული შეიძლება არ გაიხსნას, ამიტომ გამოიყენეთ ტესტის საკონტაქტო ღილაკი.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "გამოვიდა ლაბირინთიდან გაქცევის თამაში",
+        "tagline": "გაიარეთ ლაბორატორიული ვირთხა ბნელ ლაბირინთში და იპოვეთ გასასვლელი.",
+        "description": "გამოშვებულია Google Play-ზე 2026 წლის 28 მაისს. იმოძრავეთ ბნელ ლაბირინთში, გამოიყენეთ ნივთები და გაიქცეთ სანამ ბილიკი დაიხურება.",
         "highlights": [
-          "პირადი ტესტი",
+          "გამოშვებულია 2026 წლის 28 მაისს",
           "ლაბირინთიდან გაქცევა",
           "ნივთები",
-          "დაგეგმილია ლიდერბორდი"
+          "ბნელი გადარჩენა"
         ],
-        "primaryCta": "მოითხოვეთ ტესტერის წვდომა",
-        "statusNote": "საჯარო Google Play ბმული შეიძლება არ გაიხსნას. გაუგზავნეთ ელფოსტა დეველოპერს, რათა მოითხოვოს ტესტერის წვდომა.",
-        "iconAlt": "ბნელი ლაბირინთის ხატი"
+        "primaryCta": "დააინსტალირეთ Google Play-ზე",
+        "statusNote": "ახლა ხელმისაწვდომია Google Play-ზე. ამ აპისთვის ვებ დემო არ არის გათვალისწინებული.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ხატულა"
       }
     },
     "status": {
@@ -14082,9 +14082,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zu": {
     "seo": {
       "title": "NeoKIM App Lab | I-Android Mini Apps yamahhala",
-      "description": "Faka noma zama ukuhlola okuyimfihlo kwe-Color Master 2, i-Galacticode, Shayela i-UFO, I-Lucky Card Random Defense, nezinye izinhlelo zokusebenza ezincane ze-Android.",
+      "description": "Faka i-Colour Master 2, i-Galacticode, Shayela i-UFO, i-Lab Rat Maze Escape: I-Dark Maze, nokuhlolwa okuyimfihlo kwe-Lucky Card Random Defense nezinye izinhlelo zokusebenza ezincane ze-Android.\nI-",
       "ogTitle": "NeoKIM App Lab | I-Android Mini Apps",
-      "ogDescription": "Izinselele zemibala, imilayezo eyimfihlo efana ne-alien, ukuzizwisa kokushayela kwe-UFO, nokuhlolwa okuyimfihlo kokuzijabulisa okusheshayo kwe-Android."
+      "ogDescription": "Izinselele zemibala, imilayezo eyimfihlo efana ne-alien, umuzwa wokushaya we-UFO, i-Lab Rat Maze Escape: I-Dark Maze, nokuhlolwa okuyimfihlo kokuzijabulisa okusheshayo kwe-Android."
     },
     "skip": {
       "apps": "Yeqela ohlwini lohlelo lokusebenza"
@@ -14244,19 +14244,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Isithonjana Sekhadi Lenhlanhla Lokuvikela Okungahleliwe"
       },
       "darkMaze": {
-        "name": "I-Maze Emnyama",
-        "category": "Umdlalo wokuphunyuka oyimfihlo wokuhlola",
-        "tagline": "Thola indlela yokuphuma ku-maze emnyama njengenselele yokuphunyuka kwamagundane elebhu.",
-        "description": "Okwamanje isesihlolweni sangasese. Isixhumanisi se-Google Play esesidlangalaleni singase singavuleki, ngakho-ke sebenzisa inkinobho yokuhlola yokuxhumana.",
+        "name": "I-Lab Rat Maze Escape: I-Maze Emnyama",
+        "category": "Ikhishwe umdlalo wokuphunyuka we-maze",
+        "tagline": "Qondisa igundane laselabhu ku-maze emnyama futhi uthole indlela yokuphuma.",
+        "description": "Ikhishwe ku-Google Play ngomhla ka-Meyi 28, 2026. Hamba ku-maze emnyama, sebenzisa izinto, futhi ubaleke ngaphambi kokuthi indlela ivalwe.",
         "highlights": [
-          "Ukuhlolwa okuyimfihlo",
+          "Ikhishwe ngoMeyi 28, 2026",
           "Ukuphunyuka kweMaze",
           "Izinto",
-          "Ibhodi yabaphambili ihleliwe"
+          "Ukusinda okumnyama"
         ],
-        "primaryCta": "Cela Ukufinyelela Komhloli",
-        "statusNote": "Isixhumanisi esisesidlangalaleni se-Google Play singase singavulwa. Thumela i-imeyili kunjiniyela ukuze ucele ukufinyelela komhloli.",
-        "iconAlt": "Isithonjana seMaze Emnyama"
+        "primaryCta": "Faka ku-Google Play",
+        "statusNote": "Manje iyatholakala ku-Google Play. Ayikho idemo yewebhu enikeziwe kulolu hlelo lokusebenza.",
+        "iconAlt": "I-Lab Rat Maze Escape: Isithonjana se-Dark Maze"
       }
     },
     "status": {
@@ -14338,9 +14338,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-CN": {
     "seo": {
       "title": "NeoKIM应用实验室|免费 Android 迷你应用程序",
-      "description": "安装或尝试私人测试 Color Master 2、Galaicode、Call the UFO、Lucky Card Random Defense 以及更多 Android 迷你应用程序。",
+      "description": "安装 Color Master 2、Galaicode、Call the UFO、Lab Rat Maze Escape: Dark Maze 以及 Lucky Card Random Defense 和更多 Android 迷你应用程序的私人测试。",
       "ogTitle": "NeoKIM应用实验室| Android 迷你应用程序",
-      "ogDescription": "颜色挑战、外星人般的秘密信息、UFO 通话体验以及快速 Android 乐趣的私人测试。"
+      "ogDescription": "颜色挑战、类似外星人的秘密消息、UFO 呼叫体验、实验室老鼠迷宫逃脱：黑暗迷宫以及快速享受 Android 乐趣的私人测试。"
     },
     "skip": {
       "apps": "跳至应用程序列表"
@@ -14500,19 +14500,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "幸运卡随机防御图标"
       },
       "darkMaze": {
-        "name": "黑暗迷宫",
-        "category": "私人测试逃脱游戏",
-        "tagline": "作为实验室老鼠逃脱挑战，在黑暗迷宫中找到出口。",
-        "description": "目前正在进行私人测试。公共播放链接可能无法打开，因此请使用测试联系按钮。",
+        "name": "实验室老鼠迷宫逃脱：黑暗迷宫",
+        "category": "推出迷宫逃脱游戏",
+        "tagline": "引导实验鼠穿过黑暗迷宫并找到出口。",
+        "description": "于 2026 年 5 月 28 日在 Google Play 上发布。穿过黑暗迷宫，使用物品，并在路径关闭之前逃脱。",
         "highlights": [
-          "私人测试",
+          "发布日期：2026 年 5 月 28 日",
           "迷宫逃脱",
           "项目",
-          "计划排行榜"
+          "黑暗生存"
         ],
-        "primaryCta": "请求测试人员访问",
-        "statusNote": "公共 Google Play 链接可能无法打开。 Email the developer to request tester access.",
-        "iconAlt": "黑暗迷宫图标"
+        "primaryCta": "在 Google Play 上安装",
+        "statusNote": "现已在 Google Play 上架。没有为此应用程序提供网络演示。",
+        "iconAlt": "实验室老鼠迷宫逃脱：黑暗迷宫 图标"
       }
     },
     "status": {
@@ -14594,9 +14594,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-TW": {
     "seo": {
       "title": "NeoKIM應用實驗室|免費 Android 迷你應用程式",
-      "description": "安裝或嘗試私人測試 Color Master 2、Galaicode、Call the UFO、Lucky Card Random Defense 以及更多 Android 迷你應用程式。",
+      "description": "安裝 Color Master 2、Galaicode、Call the UFO、Lab Rat Maze Escape: Dark Maze 以及 Lucky Card Random Defense 和更多 Android 迷你應用程式的私人測試。",
       "ogTitle": "NeoKIM應用實驗室| Android 迷你應用程式",
-      "ogDescription": "顏色挑戰、外星人般的秘密訊息、UFO 通話體驗以及快速 Android 樂趣的私人測試。"
+      "ogDescription": "顏色挑戰、類似外星人的秘密消息、UFO 呼叫體驗、實驗室老鼠迷宮逃脫：黑暗迷宮以及快速享受 Android 樂趣的私人測試。"
     },
     "skip": {
       "apps": "跳至應用程式列表"
@@ -14756,19 +14756,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "幸運卡隨機防禦圖標"
       },
       "darkMaze": {
-        "name": "黑暗迷宮",
-        "category": "私人測試逃脫遊戲",
-        "tagline": "作為實驗室老鼠逃脫挑戰，在黑暗迷宮中找到出口。",
-        "description": "目前正在進行私人測試。公共播放連結可能無法打開，因此請使用測試聯絡按鈕。",
+        "name": "實驗室老鼠迷宮逃脫：黑暗迷宮",
+        "category": "推出迷宮逃脫遊戲",
+        "tagline": "引導實驗鼠穿過黑暗迷宮並找到出口。",
+        "description": "於 2026 年 5 月 28 日在 Google Play 上發布。穿過黑暗迷宮，使用物品，並在路徑關閉之前逃脫。",
         "highlights": [
-          "私人測試",
+          "發售日期：2026 年 5 月 28 日",
           "迷宮逃脫",
           "專案",
-          "計劃排行榜"
+          "黑暗生存"
         ],
-        "primaryCta": "請求測試人員訪問",
-        "statusNote": "公共 Google Play 連結可能無法開啟。向開發人員發送電子郵件以請求測試人員存取權限。",
-        "iconAlt": "黑暗迷宮圖標"
+        "primaryCta": "在 Google Play 上安裝",
+        "statusNote": "現已在 Google Play 上架。沒有為此應用程式提供網路演示。",
+        "iconAlt": "實驗室老鼠迷宮逃脫：黑暗迷宮 圖標"
       }
     },
     "status": {
@@ -14850,9 +14850,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-HK": {
     "seo": {
       "title": "NeoKIM應用實驗室|免費 Android 迷你應用程式",
-      "description": "安裝或嘗試私人測試 Color Master 2、Galaicode、Call the UFO、Lucky Card Random Defense 以及更多 Android 迷你應用程式。",
+      "description": "安裝 Color Master 2、Galaicode、Call the UFO、Lab Rat Maze Escape: Dark Maze 以及 Lucky Card Random Defense 和更多 Android 迷你應用程式的私人測試。",
       "ogTitle": "NeoKIM應用實驗室| Android 迷你應用程式",
-      "ogDescription": "顏色挑戰、外星人般的秘密訊息、UFO 通話體驗以及快速 Android 樂趣的私人測試。"
+      "ogDescription": "顏色挑戰、類似外星人的秘密消息、UFO 呼叫體驗、實驗室老鼠迷宮逃脫：黑暗迷宮以及快速享受 Android 樂趣的私人測試。"
     },
     "skip": {
       "apps": "跳至應用程式列表"
@@ -15012,19 +15012,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "幸運卡隨機防禦圖標"
       },
       "darkMaze": {
-        "name": "黑暗迷宮",
-        "category": "私人測試逃脫遊戲",
-        "tagline": "作為實驗室老鼠逃脫挑戰，在黑暗迷宮中找到出口。",
-        "description": "目前正在進行私人測試。公共播放連結可能無法打開，因此請使用測試聯絡按鈕。",
+        "name": "實驗室老鼠迷宮逃脫：黑暗迷宮",
+        "category": "推出迷宮逃脫遊戲",
+        "tagline": "引導實驗鼠穿過黑暗迷宮並找到出口。",
+        "description": "於 2026 年 5 月 28 日在 Google Play 上發布。穿過黑暗迷宮，使用物品，並在路徑關閉之前逃脫。",
         "highlights": [
-          "私人測試",
+          "發售日期：2026 年 5 月 28 日",
           "迷宮逃脫",
           "專案",
-          "計劃排行榜"
+          "黑暗生存"
         ],
-        "primaryCta": "請求測試人員訪問",
-        "statusNote": "公共 Google Play 連結可能無法開啟。向開發人員發送電子郵件以請求測試人員存取權限。",
-        "iconAlt": "黑暗迷宮圖標"
+        "primaryCta": "在 Google Play 上安裝",
+        "statusNote": "現已在 Google Play 上架。沒有為此應用程式提供網路演示。",
+        "iconAlt": "實驗室老鼠迷宮逃脫：黑暗迷宮 圖標"
       }
     },
     "status": {
@@ -15106,9 +15106,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "cs-CZ": {
     "seo": {
       "title": "NeoKIM App Lab | Zdarma Android Mini Apps",
-      "description": "Nainstalujte si nebo vyzkoušejte soukromé testy pro Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense a další mini aplikace Android.",
+      "description": "Nainstalujte si Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze a soukromé testy pro Lucky Card Random Defense a další mini aplikace pro Android.",
       "ogTitle": "NeoKIM App Lab | Mini aplikace Android",
-      "ogDescription": "Barevné výzvy, tajné zprávy jako mimozemšťané, zážitky z volání UFO a soukromé testy pro rychlou zábavu se Android."
+      "ogDescription": "Barevné výzvy, tajné zprávy jako mimozemšťané, zážitky z volání UFO, Lab Rat Maze Escape: Dark Maze a soukromé testy pro rychlou zábavu s Androidem."
     },
     "skip": {
       "apps": "Přejít na seznam aplikací"
@@ -15268,19 +15268,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona náhodné obrany karty štěstí"
       },
       "darkMaze": {
-        "name": "Temné bludiště",
-        "category": "Soukromá testovací úniková hra",
-        "tagline": "Najděte východ v temném bludišti jako výzva k útěku laboratorní krysy.",
-        "description": "Momentálně v soukromém testování. Veřejný odkaz Play se nemusí otevřít, takže použijte testovací tlačítko kontaktu.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Vydáno bludiště úniková hra",
+        "tagline": "Proveďte laboratorní krysu temným bludištěm a najděte východ.",
+        "description": "Vydáno na Google Play 28. května 2026. Pohybujte se temným bludištěm, používejte předměty a unikněte, než se cesta uzavře.",
         "highlights": [
-          "Soukromý test",
+          "Vydáno 28. května 2026",
           "Bludiště útěk",
           "Položky",
-          "Plánovaný žebříček"
+          "Temné přežití"
         ],
-        "primaryCta": "Požádejte o přístup testera",
-        "statusNote": "Veřejný odkaz Google Play se nemusí otevřít. Zašlete vývojáři e-mail s žádostí o přístup pro testery.",
-        "iconAlt": "Ikona temného bludiště"
+        "primaryCta": "Nainstalovat na Google Play",
+        "statusNote": "Nyní k dispozici na Google Play. Pro tuto aplikaci není poskytována žádná webová ukázka.",
+        "iconAlt": "Lab Rat Maze Escape: Ikona Dark Maze"
       }
     },
     "status": {
@@ -15362,9 +15362,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "kk": {
     "seo": {
       "title": "NeoKIM қолданбалы зертханасы | Тегін Android шағын қолданбалары",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense және басқа да Android шағын қолданбаларына арналған жеке сынақтарды орнатыңыз немесе қолданып көріңіз.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze және Lucky Card Random Defense үшін жеке сынақтарды және басқа да Android шағын қолданбаларын орнатыңыз.",
       "ogTitle": "NeoKIM қолданбалы зертханасы | Android шағын қолданбалары",
-      "ogDescription": "Түрлі-түсті сынақтар, бөтенге ұқсас құпия хабарлар, НЛО шақыру тәжірибесі және Android жылдам көңіл көтеру үшін жеке сынақтар."
+      "ogDescription": "Түс сынақтары, бөтен планеталарға ұқсас құпия хабарлар, НЛО шақыру тәжірибесі, Lab Rat Maze Escape: Dark Maze және жылдам Android қызығына арналған жеке сынақтар."
     },
     "skip": {
       "apps": "Қолданбалар тізіміне өту"
@@ -15524,19 +15524,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Бақытты карта кездейсоқ қорғаныс белгішесі"
       },
       "darkMaze": {
-        "name": "Қараңғы лабиринт",
-        "category": "Жеке сынақтан қашу ойыны",
-        "tagline": "Лабораториялық егеуқұйрықтардан құтылу үшін қараңғы лабиринттен шығуды табыңыз.",
-        "description": "Қазіргі уақытта жеке тестілеуде. Жалпыға ортақ Play сілтемесі ашылмауы мүмкін, сондықтан сынақ контакті түймесін пайдаланыңыз.",
+        "name": "Зертханалық егеуқұйрық лабиринтінен қашу: қара лабиринт",
+        "category": "Лабиринттен қашу ойыны шығарылды",
+        "tagline": "Зертханалық егеуқұйрықты қараңғы лабиринт арқылы жүргізіп, шығуды табыңыз.",
+        "description": "Google Play дүкенінде 2026 жылдың 28 мамырында шығарылды. Жол жабылмай тұрып, қараңғы лабиринт арқылы жылжыңыз, элементтерді пайдаланыңыз және қашыңыз.",
         "highlights": [
-          "Жеке сынақ",
+          "2026 жылдың 28 мамырында шығарылды",
           "Лабиринттен қашу",
           "Элементтер",
-          "Көшбасшылар тақтасы жоспарланған"
+          "Қараңғы тірі қалу"
         ],
-        "primaryCta": "Сынақ құралына кіруді сұрау",
-        "statusNote": "Жалпы Google Play сілтемесі ашылмауы мүмкін. Сынақшыға рұқсат сұрау үшін әзірлеушіге электрондық хат жіберіңіз.",
-        "iconAlt": "Қараңғы лабиринт белгішесі"
+        "primaryCta": "Google Play жүйесінде орнату",
+        "statusNote": "Қазір Google Play дүкенінде қолжетімді. Бұл қолданба үшін веб-демо көрсетілмеген.",
+        "iconAlt": "Зертханалық егеуқұйрық лабиринтінен қашу: қараңғы лабиринт белгішесі"
       }
     },
     "status": {
@@ -15618,9 +15618,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ca": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicacions Android gratuïtes",
-      "description": "Instal·leu o proveu proves privades per a Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense i més miniaplicacions Android.",
+      "description": "Instal·leu Color Master 2, Galacticode, Call the OVNI, Lab Rat Maze Escape: Dark Maze i proves privades per a Lucky Card Random Defense i més aplicacions mini d'Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplicacions",
-      "ogDescription": "Reptes de color, missatges secrets com alienígenes, experiències de trucades OVNI i proves privades per a una diversió ràpida amb Android."
+      "ogDescription": "Reptes de color, missatges secrets com alienígenes, experiències de trucades d'OVNI, Lab Rat Maze Escape: Dark Maze i proves privades per divertir-se ràpidament amb Android."
     },
     "skip": {
       "apps": "Salta a la llista d'aplicacions"
@@ -15780,19 +15780,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona de defensa aleatòria de la carta de la sort"
       },
       "darkMaze": {
-        "name": "Laberint fosc",
-        "category": "Joc d'escapada de prova privada",
-        "tagline": "Troba la sortida en un laberint fosc com un repte d'escapament de rata de laboratori.",
-        "description": "Actualment en proves privades. És possible que l'enllaç de Play públic no s'obri, així que fes servir el botó de contacte de prova.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "S'ha llançat el joc d'escapament del laberint",
+        "tagline": "Guia una rata de laboratori pel fosc laberint i troba la sortida.",
+        "description": "Publicat a Google Play el 28 de maig de 2026. Mou-te pel laberint fosc, utilitza objectes i escapa abans que el camí s'hi tanqui.",
         "highlights": [
-          "Prova privada",
+          "Publicat el 28 de maig de 2026",
           "Escapada del laberint",
           "Elements",
-          "Tauler de classificació planificat"
+          "Supervivència fosca"
         ],
-        "primaryCta": "Sol·liciteu accés al provador",
-        "statusNote": "És possible que l'enllaç públic Google Play no s'obri. Envieu un correu electrònic al desenvolupador per sol·licitar accés al provador.",
-        "iconAlt": "Icona de laberint fosc"
+        "primaryCta": "Instal·lar a Google Play",
+        "statusNote": "Ara disponible a Google Play. No es proporciona cap demostració web per a aquesta aplicació.",
+        "iconAlt": "Lab Rat Maze Escape: Icona Dark Maze"
       }
     },
     "status": {
@@ -15874,9 +15874,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "kn-IN": {
     "seo": {
       "title": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್ | ಉಚಿತ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "description": "ಕಲರ್ ಮಾಸ್ಟರ್ 2, ಗ್ಯಾಲಕ್ಟಿಕೋಡ್, UFO ಗೆ ಕರೆ ಮಾಡಿ, ಲಕ್ಕಿ ಕಾರ್ಡ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್ ಮತ್ತು ಹೆಚ್ಚಿನ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳನ್ನು ಸ್ಥಾಪಿಸಿ ಅಥವಾ ಪ್ರಯತ್ನಿಸಿ.",
+      "description": "ಕಲರ್ ಮಾಸ್ಟರ್ 2, ಗ್ಯಾಲಕ್ಟಿಕೋಡ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ, UFO ಗೆ ಕರೆ ಮಾಡಿ, ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್ ಮತ್ತು ಲಕ್ಕಿ ಕಾರ್ಡ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್ ಮತ್ತು ಹೆಚ್ಚಿನ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳು.",
       "ogTitle": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್ | Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "ogDescription": "ಬಣ್ಣದ ಸವಾಲುಗಳು, ಅನ್ಯಲೋಕದಂತಹ ರಹಸ್ಯ ಸಂದೇಶಗಳು, UFO ಕರೆ ಅನುಭವಗಳು ಮತ್ತು ತ್ವರಿತ Android ವಿನೋದಕ್ಕಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳು."
+      "ogDescription": "ಬಣ್ಣದ ಸವಾಲುಗಳು, ಅನ್ಯಲೋಕದಂತಹ ರಹಸ್ಯ ಸಂದೇಶಗಳು, UFO ಕರೆ ಅನುಭವಗಳು, ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್ ಮತ್ತು ತ್ವರಿತ Android ವಿನೋದಕ್ಕಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳು."
     },
     "skip": {
       "apps": "ಅಪ್ಲಿಕೇಶನ್ ಪಟ್ಟಿಗೆ ತೆರಳಿ"
@@ -16036,19 +16036,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ಲಕ್ಕಿ ಕಾರ್ಡ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್ ಐಕಾನ್"
       },
       "darkMaze": {
-        "name": "ಡಾರ್ಕ್ ಮೇಜ್",
-        "category": "ಖಾಸಗಿ ಪರೀಕ್ಷಾ ಪಾರು ಆಟ",
-        "tagline": "ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಎಸ್ಕೇಪ್ ಸವಾಲಾಗಿ ಡಾರ್ಕ್ ಜಟಿಲದಲ್ಲಿ ನಿರ್ಗಮನವನ್ನು ಹುಡುಕಿ.",
-        "description": "ಪ್ರಸ್ತುತ ಖಾಸಗಿ ಪರೀಕ್ಷೆಯಲ್ಲಿದೆ. ಸಾರ್ವಜನಿಕ ಪ್ಲೇ ಲಿಂಕ್ ತೆರೆಯದೇ ಇರಬಹುದು, ಆದ್ದರಿಂದ ಪರೀಕ್ಷಾ ಸಂಪರ್ಕ ಬಟನ್ ಬಳಸಿ.",
+        "name": "ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್",
+        "category": "ಬಿಡುಗಡೆ ಮಾಡಿದ ಜಟಿಲ ಪಾರು ಆಟ",
+        "tagline": "ಡಾರ್ಕ್ ಜಟಿಲ ಮೂಲಕ ಲ್ಯಾಬ್ ಇಲಿಯನ್ನು ಮಾರ್ಗದರ್ಶನ ಮಾಡಿ ಮತ್ತು ನಿರ್ಗಮನವನ್ನು ಕಂಡುಕೊಳ್ಳಿ.",
+        "description": "ಮೇ 28, 2026 ರಂದು Google Play ನಲ್ಲಿ ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ. ಡಾರ್ಕ್ ಜಟಿಲ ಮೂಲಕ ಸರಿಸಿ, ಐಟಂಗಳನ್ನು ಬಳಸಿ ಮತ್ತು ಮಾರ್ಗವು ಮುಚ್ಚುವ ಮೊದಲು ತಪ್ಪಿಸಿಕೊಳ್ಳಿ.",
         "highlights": [
-          "ಖಾಸಗಿ ಪರೀಕ್ಷೆ",
+          "ಮೇ 28, 2026 ರಂದು ಬಿಡುಗಡೆಯಾಗಿದೆ",
           "ಜಟಿಲ ಪಾರು",
           "ವಸ್ತುಗಳು",
-          "ಲೀಡರ್‌ಬೋರ್ಡ್ ಯೋಜಿಸಲಾಗಿದೆ"
+          "ಡಾರ್ಕ್ ಬದುಕುಳಿಯುವಿಕೆ"
         ],
-        "primaryCta": "ಪರೀಕ್ಷಕ ಪ್ರವೇಶವನ್ನು ವಿನಂತಿಸಿ",
-        "statusNote": "ಸಾರ್ವಜನಿಕ Google Play ಲಿಂಕ್ ತೆರೆಯದೇ ಇರಬಹುದು. ಪರೀಕ್ಷಕ ಪ್ರವೇಶವನ್ನು ವಿನಂತಿಸಲು ಡೆವಲಪರ್‌ಗೆ ಇಮೇಲ್ ಮಾಡಿ.",
-        "iconAlt": "ಡಾರ್ಕ್ ಮೇಜ್ ಐಕಾನ್"
+        "primaryCta": "Google Play ನಲ್ಲಿ ಸ್ಥಾಪಿಸಿ",
+        "statusNote": "ಈಗ Google Play ನಲ್ಲಿ ಲಭ್ಯವಿದೆ. ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಯಾವುದೇ ವೆಬ್ ಡೆಮೊವನ್ನು ಒದಗಿಸಲಾಗಿಲ್ಲ.",
+        "iconAlt": "ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್ ಐಕಾನ್"
       }
     },
     "status": {
@@ -16130,9 +16130,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hr": {
     "seo": {
       "title": "NeoKIM App Lab | Besplatne mini aplikacije Android",
-      "description": "Instalirajte ili isprobajte privatne testove za Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense i druge Android mini aplikacije.",
+      "description": "Instalirajte Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze i privatne testove za Lucky Card Random Defense i više Android mini aplikacija.",
       "ogTitle": "NeoKIM App Lab | Mini aplikacije Android",
-      "ogDescription": "Izazovi u boji, tajne poruke poput vanzemaljaca, iskustva pozivanja NLO-a i privatni testovi za brzu Android zabavu."
+      "ogDescription": "Izazovi u boji, tajne poruke poput izvanzemaljaca, iskustva pozivanja NLO-a, Lab Rat Maze Escape: Dark Maze i privatni testovi za brzu Android zabavu."
     },
     "skip": {
       "apps": "Preskoči na popis aplikacija"
@@ -16292,19 +16292,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Sretna karta Slučajna ikona obrane"
       },
       "darkMaze": {
-        "name": "Tamni labirint",
-        "category": "Privatna probna igra bijega",
-        "tagline": "Pronađite izlaz u mračnom labirintu kao izazov za bijeg iz laboratorijskog štakora.",
-        "description": "Trenutno u privatnom testiranju. Javna poveznica za reprodukciju se možda neće otvoriti, stoga upotrijebite gumb za testiranje kontakta.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Objavljena igra bijega iz labirinta",
+        "tagline": "Vodite laboratorijskog štakora kroz mračni labirint i pronađite izlaz.",
+        "description": "Objavljeno na Google Playu 28. svibnja 2026. Krećite se kroz mračni labirint, koristite predmete i pobjegnite prije nego što se staza zatvori.",
         "highlights": [
-          "Privatni test",
+          "Objavljeno 28. svibnja 2026",
           "Bijeg iz labirinta",
           "Predmeti",
-          "Planirana ploča s najboljim rezultatima"
+          "Mračno preživljavanje"
         ],
-        "primaryCta": "Zatraži pristup testera",
-        "statusNote": "Javna veza Google Play možda se neće otvoriti. Pošaljite e-poruku razvojnom programeru da biste zatražili pristup testera.",
-        "iconAlt": "Ikona tamnog labirinta"
+        "primaryCta": "Instalirajte na Google Play",
+        "statusNote": "Sada dostupno na Google Playu. Za ovu aplikaciju nije osiguran web demo.",
+        "iconAlt": "Lab Rat Maze Escape: ikona tamnog labirinta"
       }
     },
     "status": {
@@ -16386,9 +16386,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "km-KH": {
     "seo": {
       "title": "NeoKIM App Lab | កម្មវិធី Android Mini ឥតគិតថ្លៃ",
-      "description": "ដំឡើង ឬសាកល្បងការសាកល្បងឯកជនសម្រាប់ Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense និងកម្មវិធីខ្នាតតូច Android ជាច្រើនទៀត។",
+      "description": "ដំឡើង Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze និងការធ្វើតេស្តឯកជនសម្រាប់ Lucky Card Random Defense និងកម្មវិធី Android mini ជាច្រើនទៀត។",
       "ogTitle": "NeoKIM App Lab | កម្មវិធីខ្នាតតូច Android",
-      "ogDescription": "បញ្ហាប្រឈមពណ៌ សារសម្ងាត់ដូចមនុស្សភពក្រៅ បទពិសោធន៍ហៅ UFO និងការធ្វើតេស្តឯកជនសម្រាប់ការសប្បាយ Android រហ័ស។"
+      "ogDescription": "បញ្ហាប្រឈមពណ៌ សារសម្ងាត់ដូចមនុស្សក្រៅភព បទពិសោធន៍ហៅ UFO ការរត់គេចពី Lab Rat Maze: Dark Maze និងការធ្វើតេស្តឯកជនសម្រាប់ការសប្បាយរហ័សរបស់ Android ។"
     },
     "skip": {
       "apps": "រំលងទៅបញ្ជីកម្មវិធី"
@@ -16548,19 +16548,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "រូបតំណាងការពារចៃដន្យ កាតសំណាង"
       },
       "darkMaze": {
-        "name": "Maze ងងឹត",
-        "category": "ហ្គេមគេចខ្លួនសាកល្បងឯកជន",
-        "tagline": "ស្វែងរកច្រកចេញនៅក្នុងវាលស្ផោងងឹតដែលជាការប្រឈមមុខនឹងការរត់គេចពីកណ្តុរមន្ទីរពិសោធន៍។",
-        "description": "បច្ចុប្បន្នកំពុងធ្វើតេស្តឯកជន។ តំណ​លេង​សាធារណៈ​ប្រហែល​ជា​មិន​បើក​ទេ ដូច្នេះ​សូម​ប្រើ​ប៊ូតុង​ទំនាក់ទំនង​សាកល្បង។",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "ហ្គេម​រត់​គេច​ភ្នំ​ដែល​បាន​ចេញ​ផ្សាយ",
+        "tagline": "ណែនាំសត្វកណ្ដុរក្នុងបន្ទប់ពិសោធន៍ កាត់តាមវាលគោងងឹត ហើយស្វែងរកច្រកចេញ។",
+        "description": "បានចេញផ្សាយនៅលើ Google Play នៅថ្ងៃទី 28 ខែឧសភា ឆ្នាំ 2026។ ផ្លាស់ទីកាត់តំបន់ងងឹត ប្រើរបស់របរ និងរត់គេចមុនពេលផ្លូវបិទ។",
         "highlights": [
-          "ការធ្វើតេស្តឯកជន",
+          "ចេញផ្សាយ ថ្ងៃទី 28 ខែ ឧសភា ឆ្នាំ 2026",
           "Maze រត់គេចខ្លួន",
           "ធាតុ",
-          "តារាងពិន្ទុដែលបានគ្រោងទុក"
+          "ការរស់រានមានជីវិតងងឹត"
         ],
-        "primaryCta": "ស្នើសុំការចូលប្រើអ្នកសាកល្បង",
-        "statusNote": "តំណ Google Play សាធារណៈអាចមិនបើក។ ផ្ញើអ៊ីមែលទៅអ្នកអភិវឌ្ឍន៍ដើម្បីស្នើសុំការចូលប្រើអ្នកសាកល្បង។",
-        "iconAlt": "រូបសញ្ញា Dark Maze"
+        "primaryCta": "ដំឡើងនៅលើ Google Play",
+        "statusNote": "ឥឡូវនេះមាននៅលើ Google Play ។ គ្មានការបង្ហាញតាមអ៊ីនធឺណិតត្រូវបានផ្តល់ជូនសម្រាប់កម្មវិធីនេះទេ។",
+        "iconAlt": "Lab Rat Maze Escape: រូបតំណាង Dark Maze"
       }
     },
     "status": {
@@ -16642,9 +16642,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ky-KG": {
     "seo": {
       "title": "NeoKIM App Lab | Акысыз Android Mini колдонмолору",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense жана башка Android мини колдонмолору үчүн жеке тесттерди орнотуп же колдонуп көрүңүз.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze жана Lucky Card Random Defence үчүн жеке тесттерди жана башка Android мини колдонмолорун орнотуңуз.",
       "ogTitle": "NeoKIM App Lab | Android Мини колдонмолору",
-      "ogDescription": "Түстүү чакырыктар, келгиндерге окшош жашыруун билдирүүлөр, UFO чалуу тажрыйбасы жана Android тез көңүл ачуу үчүн жеке тесттер."
+      "ogDescription": "Түстүү чакырыктар, келгиндерге окшош жашыруун билдирүүлөр, UFO чалуу тажрыйбалары, Lab Rat Maze Escape: Dark Maze жана Android'де тез көңүл ачуу үчүн жеке тесттер."
     },
     "skip": {
       "apps": "Колдонмолордун тизмесине өтүү"
@@ -16804,19 +16804,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defence сөлөкөтү"
       },
       "darkMaze": {
-        "name": "Dark Maze",
-        "category": "Жеке тесттен качуу оюну",
-        "tagline": "Лабораториялык келемиштерден качуу үчүн караңгы лабиринттен чыгууну табыңыз.",
-        "description": "Учурда жеке тестирлөөдө. Жалпыга ачык Play шилтемеси ачылбашы мүмкүн, андыктан сыноо байланыш баскычын колдонуңуз.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Лабиринттен качуу оюну чыкты",
+        "tagline": "Лабораториялык келемишти караңгы лабиринт аркылуу жетектеп, чыгууну табыңыз.",
+        "description": "Google Play'де 2026-жылдын 28-майында жарыкка чыкты. Жол жабылганга чейин караңгы лабиринттен өтүп, нерселерди колдонуп, качып кетиңиз.",
         "highlights": [
-          "Жеке тест",
+          "2026-жылдын 28-майында чыгарылган",
           "Лабиринттен качуу",
           "Items",
-          "Лидер тактасы пландаштырылган"
+          "Караңгы жашоо"
         ],
-        "primaryCta": "Сыноочуга кирүү мүмкүнчүлүгүн сураңыз",
-        "statusNote": "Жалпыга ачык Google Play шилтемеси ачылбашы мүмкүн. Сыноочуга кирүү мүмкүнчүлүгүн суроо үчүн иштеп чыгуучуга электрондук кат жөнөтүңүз.",
-        "iconAlt": "Dark Maze сөлөкөтү"
+        "primaryCta": "Google Play'ге орнотуу",
+        "statusNote": "Азыр Google Play'де жеткиликтүү. Бул колдонмо үчүн эч кандай веб демо каралган эмес.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze сөлөкөтү"
       }
     },
     "status": {
@@ -16898,9 +16898,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ta-IN": {
     "seo": {
       "title": "NeoKIM ஆப் லேப் | இலவச Android மினி ஆப்ஸ்",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense மற்றும் பல Android மினி பயன்பாடுகளுக்கான தனிப்பட்ட சோதனைகளை நிறுவவும் அல்லது முயற்சிக்கவும்.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze மற்றும் லக்கி கார்டு ரேண்டம் டிஃபென்ஸ் மற்றும் பல ஆண்ட்ராய்டு மினி பயன்பாடுகளுக்கான தனிப்பட்ட சோதனைகளை நிறுவவும்.",
       "ogTitle": "NeoKIM ஆப் லேப் | Android மினி ஆப்ஸ்",
-      "ogDescription": "வண்ண சவால்கள், ஏலியன் போன்ற ரகசிய செய்திகள், UFO அழைப்பு அனுபவங்கள் மற்றும் விரைவான Android வேடிக்கைக்கான தனிப்பட்ட சோதனைகள்."
+      "ogDescription": "வண்ண சவால்கள், ஏலியன் போன்ற ரகசிய செய்திகள், யுஎஃப்ஒ அழைப்பு அனுபவங்கள், லேப் ரேட் பிரமை எஸ்கேப்: டார்க் பிரமை மற்றும் விரைவான Android வேடிக்கைக்கான தனிப்பட்ட சோதனைகள்."
     },
     "skip": {
       "apps": "பயன்பாட்டு பட்டியலுக்கு செல்க"
@@ -17060,19 +17060,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "லக்கி கார்டு ரேண்டம் டிஃபென்ஸ் ஐகான்"
       },
       "darkMaze": {
-        "name": "இருண்ட பிரமை",
-        "category": "தனிப்பட்ட சோதனை தப்பிக்கும் விளையாட்டு",
-        "tagline": "ஆய்வக எலி தப்பிக்கும் சவாலாக இருண்ட பிரமையில் வெளியேறுவதைக் கண்டறியவும்.",
-        "description": "தற்போது தனிப்பட்ட சோதனையில் உள்ளது. பொது Play இணைப்பு திறக்கப்படாமல் இருக்கலாம், எனவே சோதனை தொடர்பு பொத்தானைப் பயன்படுத்தவும்.",
+        "name": "ஆய்வக எலி பிரமை எஸ்கேப்: டார்க் பிரமை",
+        "category": "பிரமை தப்பிக்கும் விளையாட்டு வெளியிடப்பட்டது",
+        "tagline": "இருண்ட பிரமை வழியாக ஆய்வக எலிக்கு வழிகாட்டி வெளியேறும் வழியைக் கண்டறியவும்.",
+        "description": "மே 28, 2026 அன்று Google Play இல் வெளியிடப்பட்டது. இருண்ட பிரமை வழியாகச் செல்லவும், பொருட்களைப் பயன்படுத்தவும், பாதை மூடும் முன் தப்பிக்கவும்.",
         "highlights": [
-          "தனிப்பட்ட சோதனை",
+          "மே 28, 2026 அன்று வெளியிடப்பட்டது",
           "பிரமை தப்பித்தல்",
           "பொருட்கள்",
-          "லீடர்போர்டு திட்டமிடப்பட்டது"
+          "இருண்ட உயிர்"
         ],
-        "primaryCta": "சோதனையாளர் அணுகலைக் கோரவும்",
-        "statusNote": "பொது Google Play இணைப்பு திறக்கப்படாமல் போகலாம். சோதனையாளர் அணுகலைக் கோர டெவலப்பருக்கு மின்னஞ்சல் அனுப்பவும்.",
-        "iconAlt": "டார்க் பிரமை ஐகான்"
+        "primaryCta": "Google Play இல் நிறுவவும்",
+        "statusNote": "இப்போது Google Play இல் கிடைக்கிறது. இந்த பயன்பாட்டிற்கு இணைய டெமோ எதுவும் வழங்கப்படவில்லை.",
+        "iconAlt": "லேப் ரேட் பிரமை எஸ்கேப்: டார்க் பிரமை ஐகான்"
       }
     },
     "status": {
@@ -17154,9 +17154,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "th": {
     "seo": {
       "title": "NeoKIM App Lab | แอปมินิ Android ฟรี",
-      "description": "ติดตั้งหรือลองใช้การทดสอบส่วนตัวสำหรับ Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense และมินิแอป Android อื่นๆ อีกมากมาย",
+      "description": "ติดตั้ง Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze และการทดสอบส่วนตัวสำหรับ Lucky Card Random Defense และแอปขนาดเล็กอื่นๆ ของ Android",
       "ogTitle": "NeoKIM App Lab | แอพมินิ Android",
-      "ogDescription": "ความท้าทายด้านสี ข้อความลับเหมือนเอเลี่ยน ประสบการณ์การโทรยูเอฟโอ และการทดสอบส่วนตัวเพื่อความสนุกของ Android อย่างรวดเร็ว"
+      "ogDescription": "ความท้าทายด้านสี ข้อความลับเหมือนเอเลี่ยน ประสบการณ์การโทรด้วยยูเอฟโอ Lab Rat Maze Escape: Dark Maze และการทดสอบส่วนตัวเพื่อความสนุกสนานบน Android อย่างรวดเร็ว"
     },
     "skip": {
       "apps": "ข้ามไปที่รายการแอป"
@@ -17316,19 +17316,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ไอคอนลัคกี้การ์ดสุ่มป้องกัน"
       },
       "darkMaze": {
-        "name": "เขาวงกตแห่งความมืด",
-        "category": "เกมหลบหนีทดสอบส่วนตัว",
-        "tagline": "ค้นหาทางออกในเขาวงกตอันมืดมิดเพื่อท้าทายการหลบหนีของหนูทดลอง",
-        "description": "ขณะนี้อยู่ในการทดสอบส่วนตัว ลิงก์ Play สาธารณะอาจไม่เปิด ดังนั้นให้ใช้ปุ่มติดต่อทดสอบ",
+        "name": "Lab Rat Maze Escape: เขาวงกตแห่งความมืด",
+        "category": "เปิดตัวเกมหนีเขาวงกต",
+        "tagline": "นำทางหนูทดลองผ่านเขาวงกตอันมืดมิดแล้วหาทางออก",
+        "description": "วางจำหน่ายบน Google Play เมื่อวันที่ 28 พฤษภาคม 2026 เคลื่อนที่ผ่านเขาวงกตอันมืดมิด ใช้ไอเท็ม และหลบหนีก่อนที่เส้นทางจะปิด",
         "highlights": [
-          "การทดสอบส่วนตัว",
+          "เผยแพร่เมื่อวันที่ 28 พฤษภาคม 2026",
           "เขาวงกตหลบหนี",
           "รายการ",
-          "กระดานผู้นำที่วางแผนไว้"
+          "การอยู่รอดที่มืดมน"
         ],
-        "primaryCta": "ขอการเข้าถึงผู้ทดสอบ",
-        "statusNote": "ลิงก์ Google Play สาธารณะอาจไม่เปิดขึ้น ส่งอีเมลถึงนักพัฒนาเพื่อขอการเข้าถึงผู้ทดสอบ",
-        "iconAlt": "ไอคอนเขาวงกตแห่งความมืด"
+        "primaryCta": "ติดตั้งบน Google Play",
+        "statusNote": "วางจำหน่ายแล้วบน Google Play ไม่มีการสาธิตเว็บสำหรับแอพนี้",
+        "iconAlt": "Lab Rat Maze Escape: ไอคอน Dark Maze"
       }
     },
     "status": {
@@ -17410,9 +17410,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "te-IN": {
     "seo": {
       "title": "NeoKIM యాప్ ల్యాబ్ | ఉచిత Android మినీ యాప్‌లు",
-      "description": "కలర్ మాస్టర్ 2, గెలాక్టికోడ్, UFO కాల్, లక్కీ కార్డ్ రాండమ్ డిఫెన్స్ మరియు మరిన్ని Android మినీ యాప్‌ల కోసం ప్రైవేట్ పరీక్షలను ఇన్‌స్టాల్ చేయండి లేదా ప్రయత్నించండి.",
+      "description": "కలర్ మాస్టర్ 2, గెలాక్టికోడ్ ఇన్‌స్టాల్ చేయండి, UFOకి కాల్ చేయండి, ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్ మరియు లక్కీ కార్డ్ రాండమ్ డిఫెన్స్ మరియు మరిన్ని ఆండ్రాయిడ్ మినీ యాప్‌ల కోసం ప్రైవేట్ పరీక్షలు.",
       "ogTitle": "NeoKIM యాప్ ల్యాబ్ | Android మినీ యాప్‌లు",
-      "ogDescription": "రంగు సవాళ్లు, గ్రహాంతరవాసుల లాంటి రహస్య సందేశాలు, UFO కాలింగ్ అనుభవాలు మరియు త్వరిత Android వినోదం కోసం ప్రైవేట్ పరీక్షలు."
+      "ogDescription": "రంగు సవాళ్లు, గ్రహాంతరవాసుల లాంటి రహస్య సందేశాలు, UFO కాలింగ్ అనుభవాలు, ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్ మరియు త్వరిత Android వినోదం కోసం ప్రైవేట్ పరీక్షలు."
     },
     "skip": {
       "apps": "అనువర్తన జాబితాకు దాటవేయి"
@@ -17572,19 +17572,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "లక్కీ కార్డ్ రాండమ్ డిఫెన్స్ చిహ్నం"
       },
       "darkMaze": {
-        "name": "డార్క్ మేజ్",
-        "category": "ప్రైవేట్ టెస్ట్ ఎస్కేప్ గేమ్",
-        "tagline": "ల్యాబ్ ర్యాట్ ఎస్కేప్ ఛాలెంజ్‌గా చీకటి చిట్టడవిలో నిష్క్రమణను కనుగొనండి.",
-        "description": "ప్రస్తుతం ప్రైవేట్ పరీక్షలో ఉంది. పబ్లిక్ ప్లే లింక్ తెరవబడకపోవచ్చు, కాబట్టి టెస్ట్ కాంటాక్ట్ బటన్‌ని ఉపయోగించండి.",
+        "name": "ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్",
+        "category": "మేజ్ ఎస్కేప్ గేమ్ విడుదల చేయబడింది",
+        "tagline": "చీకటి చిట్టడవి ద్వారా ల్యాబ్ ఎలుకకు మార్గనిర్దేశం చేయండి మరియు నిష్క్రమణను కనుగొనండి.",
+        "description": "మే 28, 2026న Google Playలో విడుదలైంది. చీకటి చిట్టడవి గుండా వెళ్లండి, ఐటెమ్‌లను ఉపయోగించండి మరియు మార్గం మూసుకుపోయేలోపు తప్పించుకోండి.",
         "highlights": [
-          "ప్రైవేట్ పరీక్ష",
+          "మే 28, 2026న విడుదలైంది",
           "మేజ్ ఎస్కేప్",
           "వస్తువులు",
-          "లీడర్‌బోర్డ్ ప్లాన్ చేయబడింది"
+          "చీకటి మనుగడ"
         ],
-        "primaryCta": "టెస్టర్ యాక్సెస్‌ని అభ్యర్థించండి",
-        "statusNote": "పబ్లిక్ Google Play లింక్ తెరవబడకపోవచ్చు. టెస్టర్ యాక్సెస్‌ని అభ్యర్థించడానికి డెవలపర్‌కి ఇమెయిల్ చేయండి.",
-        "iconAlt": "డార్క్ మేజ్ చిహ్నం"
+        "primaryCta": "Google Playలో ఇన్‌స్టాల్ చేయండి",
+        "statusNote": "ఇప్పుడు Google Playలో అందుబాటులో ఉంది. ఈ యాప్ కోసం వెబ్ డెమో అందించబడలేదు.",
+        "iconAlt": "ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్ చిహ్నం"
       }
     },
     "status": {
@@ -17666,9 +17666,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "tr-TR": {
     "seo": {
       "title": "NeoKIM Uygulama Laboratuvarı | Ücretsiz Android Mini Uygulamalar",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense ve daha fazla Android mini uygulaması için özel testler yükleyin veya deneyin.",
+      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze ve Lucky Card Random Defense için özel testleri ve daha fazla Android mini uygulamasını yükleyin.",
       "ogTitle": "NeoKIM Uygulama Laboratuvarı | Android Mini Uygulamalar",
-      "ogDescription": "Hızlı Android eğlencesi için renkli zorluklar, uzaylı benzeri gizli mesajlar, UFO arama deneyimleri ve özel testler."
+      "ogDescription": "Renkli zorluklar, uzaylı benzeri gizli mesajlar, UFO arama deneyimleri, Laboratuvar Faresi Labirentinden Kaçış: Karanlık Labirent ve hızlı Android eğlencesi için özel testler."
     },
     "skip": {
       "apps": "Uygulama listesine atla"
@@ -17828,19 +17828,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Şanslı Kart Rastgele Savunma simgesi"
       },
       "darkMaze": {
-        "name": "Karanlık Labirent",
-        "category": "Özel test kaçış oyunu",
-        "tagline": "Laboratuvar faresinden kaçış mücadelesi olarak karanlık bir labirentte çıkışı bulun.",
-        "description": "Şu anda özel test aşamasında. Herkese açık Oynatma bağlantısı açılmayabilir, bu nedenle test iletişim düğmesini kullanın.",
+        "name": "Laboratuvar Faresi Labirentten Kaçış: Karanlık Labirent",
+        "category": "Labirentten kaçış oyunu yayınlandı",
+        "tagline": "Bir laboratuvar faresini karanlık labirentte yönlendirin ve çıkışı bulun.",
+        "description": "28 Mayıs 2026'da Google Play'de yayınlandı. Karanlık labirentte ilerleyin, öğeleri kullanın ve yol kapanmadan kaçın.",
         "highlights": [
-          "Özel test",
+          "28 Mayıs 2026'da yayınlandı",
           "Labirent kaçış",
           "Öğeler",
-          "Skor tablosu planlandı"
+          "Karanlıkta hayatta kalma"
         ],
-        "primaryCta": "Test Kullanıcısına Erişim Talebi",
-        "statusNote": "Herkese açık Google Play bağlantısı açılmayabilir. Test kullanıcısı erişimi istemek için geliştiriciye e-posta gönderin.",
-        "iconAlt": "Karanlık Labirent simgesi"
+        "primaryCta": "Google Play'e yükleyin",
+        "statusNote": "Artık Google Play'de mevcut. Bu uygulama için web demosu sağlanmamıştır.",
+        "iconAlt": "Laboratuvar Faresi Labirentinden Kaçış: Karanlık Labirent simgesi"
       }
     },
     "status": {
@@ -17922,9 +17922,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pa": {
     "seo": {
       "title": "NeoKIM ਐਪ ਲੈਬ | ਮੁਫ਼ਤ Android ਮਿੰਨੀ ਐਪਸ",
-      "description": "ਕਲਰ ਮਾਸਟਰ 2, ਗਲੈਕਟੀਕੋਡ, ਕਾਲ ਦ ਯੂਐਫਓ, ਲੱਕੀ ਕਾਰਡ ਰੈਂਡਮ ਡਿਫੈਂਸ, ਅਤੇ ਹੋਰ Android ਮਿੰਨੀ ਐਪਾਂ ਲਈ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ ਜਾਂ ਅਜ਼ਮਾਓ।",
+      "description": "ਕਲਰ ਮਾਸਟਰ 2, ਗਲੈਕਟੀਕੋਡ, ਕਾਲ ਦ ਯੂਐਫਓ, ਲੈਬ ਰੈਟ ਮੇਜ਼ ਏਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼, ਅਤੇ ਲੱਕੀ ਕਾਰਡ ਰੈਂਡਮ ਡਿਫੈਂਸ ਅਤੇ ਹੋਰ ਐਂਡਰੌਇਡ ਮਿੰਨੀ ਐਪਾਂ ਲਈ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ।",
       "ogTitle": "NeoKIM ਐਪ ਲੈਬ | Android ਮਿੰਨੀ ਐਪਾਂ",
-      "ogDescription": "ਰੰਗ ਦੀਆਂ ਚੁਣੌਤੀਆਂ, ਏਲੀਅਨ ਵਰਗੇ ਗੁਪਤ ਸੰਦੇਸ਼, UFO ਕਾਲਿੰਗ ਅਨੁਭਵ, ਅਤੇ ਤੇਜ਼ Android ਮਜ਼ੇ ਲਈ ਨਿੱਜੀ ਟੈਸਟ।"
+      "ogDescription": "ਰੰਗ ਚੁਣੌਤੀਆਂ, ਏਲੀਅਨ ਵਰਗੇ ਗੁਪਤ ਸੁਨੇਹੇ, ਯੂਐਫਓ ਕਾਲਿੰਗ ਅਨੁਭਵ, ਲੈਬ ਰੈਟ ਮੇਜ਼ ਐਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼, ਅਤੇ ਤੇਜ਼ ਐਂਡਰੌਇਡ ਮਨੋਰੰਜਨ ਲਈ ਨਿੱਜੀ ਟੈਸਟ।"
     },
     "skip": {
       "apps": "ਐਪ ਸੂਚੀ 'ਤੇ ਜਾਓ"
@@ -18084,19 +18084,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ਲੱਕੀ ਕਾਰਡ ਰੈਂਡਮ ਡਿਫੈਂਸ ਆਈਕਨ"
       },
       "darkMaze": {
-        "name": "ਡਾਰਕ ਮੇਜ਼",
-        "category": "ਪ੍ਰਾਈਵੇਟ ਟੈਸਟ ਬਚਣ ਦੀ ਖੇਡ",
-        "tagline": "ਲੈਬ ਚੂਹੇ ਤੋਂ ਬਚਣ ਦੀ ਚੁਣੌਤੀ ਦੇ ਰੂਪ ਵਿੱਚ ਇੱਕ ਹਨੇਰੇ ਭੁਲੇਖੇ ਵਿੱਚ ਬਾਹਰ ਨਿਕਲਣ ਦਾ ਪਤਾ ਲਗਾਓ।",
-        "description": "ਵਰਤਮਾਨ ਵਿੱਚ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਿੰਗ ਵਿੱਚ. ਜਨਤਕ ਪਲੇ ਲਿੰਕ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕਦਾ ਹੈ, ਇਸ ਲਈ ਟੈਸਟ ਸੰਪਰਕ ਬਟਨ ਦੀ ਵਰਤੋਂ ਕਰੋ।",
+        "name": "ਲੈਬ ਰੈਟ ਮੇਜ਼ ਏਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼",
+        "category": "ਰੀਲੀਜ਼ ਕੀਤੀ ਮੇਜ਼ ਏਕੇਪ ਗੇਮ",
+        "tagline": "ਹਨੇਰੇ ਭੁਲੇਖੇ ਵਿੱਚੋਂ ਇੱਕ ਲੈਬ ਚੂਹੇ ਦੀ ਅਗਵਾਈ ਕਰੋ ਅਤੇ ਬਾਹਰ ਨਿਕਲਣ ਦਾ ਪਤਾ ਲਗਾਓ।",
+        "description": "28 ਮਈ, 2026 ਨੂੰ Google Play 'ਤੇ ਰਿਲੀਜ਼ ਕੀਤਾ ਗਿਆ। ਰਸਤੇ ਦੇ ਬੰਦ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਗੂੜ੍ਹੇ ਭੁਲੇਖੇ ਵਿੱਚੋਂ ਲੰਘੋ, ਆਈਟਮਾਂ ਦੀ ਵਰਤੋਂ ਕਰੋ ਅਤੇ ਬਚੋ।",
         "highlights": [
-          "ਪ੍ਰਾਈਵੇਟ ਟੈਸਟ",
+          "28 ਮਈ, 2026 ਨੂੰ ਜਾਰੀ ਕੀਤਾ ਗਿਆ",
           "ਭੁਲੇਖੇ ਤੋਂ ਬਚਣਾ",
           "ਆਈਟਮਾਂ",
-          "ਲੀਡਰਬੋਰਡ ਯੋਜਨਾਬੱਧ"
+          "ਹਨੇਰਾ ਬਚਾਅ"
         ],
-        "primaryCta": "ਟੈਸਟਰ ਪਹੁੰਚ ਲਈ ਬੇਨਤੀ ਕਰੋ",
-        "statusNote": "ਜਨਤਕ Google Play ਲਿੰਕ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕਦਾ ਹੈ। ਟੈਸਟਰ ਪਹੁੰਚ ਦੀ ਬੇਨਤੀ ਕਰਨ ਲਈ ਡਿਵੈਲਪਰ ਨੂੰ ਈਮੇਲ ਕਰੋ।",
-        "iconAlt": "ਡਾਰਕ ਮੇਜ਼ ਆਈਕਨ"
+        "primaryCta": "Google Play 'ਤੇ ਸਥਾਪਤ ਕਰੋ",
+        "statusNote": "ਹੁਣ Google Play 'ਤੇ ਉਪਲਬਧ ਹੈ। ਇਸ ਐਪ ਲਈ ਕੋਈ ਵੈੱਬ ਡੈਮੋ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।",
+        "iconAlt": "ਲੈਬ ਰੈਟ ਮੇਜ਼ ਐਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼ ਆਈਕਨ"
       }
     },
     "status": {
@@ -18178,9 +18178,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "آزمایش‌های خصوصی برای Color Master 2، Galacticode، Call the UFO، Lucky Card Random Defense، و برنامه‌های کوچک Android را نصب یا امتحان کنید.",
+      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش‌های رنگی، پیام‌های مخفی بیگانه‌مانند، تجربه تماس با بشقاب پرنده، و آزمایش‌های خصوصی برای سرگرمی سریع Android."
+      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18340,19 +18340,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد دفاع تصادفی کارت شانس"
       },
       "darkMaze": {
-        "name": "ماز تاریک",
-        "category": "بازی فرار تست خصوصی",
-        "tagline": "خروجی را در پیچ و خم تاریک به عنوان چالش فرار موش آزمایشگاهی پیدا کنید.",
-        "description": "در حال حاضر در تست خصوصی پیوند عمومی Play ممکن است باز نشود، بنابراین از دکمه تماس آزمایشی استفاده کنید.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "بازی فرار از پیچ و خم منتشر شد",
+        "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
+        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
-          "آزمون خصوصی",
+          "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
-          "تابلوی امتیازات برنامه ریزی شده"
+          "بقای تاریک"
         ],
-        "primaryCta": "درخواست دسترسی تستر",
-        "statusNote": "پیوند عمومی Google Play ممکن است باز نشود. برای درخواست دسترسی آزمایشگر به برنامه‌نویس ایمیل بزنید.",
-        "iconAlt": "نماد ماز تاریک"
+        "primaryCta": "در گوگل پلی نصب کنید",
+        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
       }
     },
     "status": {
@@ -18434,9 +18434,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-AE": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "آزمایش‌های خصوصی برای Color Master 2، Galacticode، Call the UFO، Lucky Card Random Defense، و برنامه‌های کوچک Android را نصب یا امتحان کنید.",
+      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش‌های رنگی، پیام‌های مخفی بیگانه‌مانند، تجربه تماس با بشقاب پرنده، و آزمایش‌های خصوصی برای سرگرمی سریع Android."
+      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18596,19 +18596,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد دفاع تصادفی کارت شانس"
       },
       "darkMaze": {
-        "name": "ماز تاریک",
-        "category": "بازی فرار تست خصوصی",
-        "tagline": "خروجی را در پیچ و خم تاریک به عنوان چالش فرار موش آزمایشگاهی پیدا کنید.",
-        "description": "در حال حاضر در تست خصوصی پیوند عمومی Play ممکن است باز نشود، بنابراین از دکمه تماس آزمایشی استفاده کنید.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "بازی فرار از پیچ و خم منتشر شد",
+        "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
+        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
-          "آزمون خصوصی",
+          "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
-          "تابلوی امتیازات برنامه ریزی شده"
+          "بقای تاریک"
         ],
-        "primaryCta": "درخواست دسترسی تستر",
-        "statusNote": "پیوند عمومی Google Play ممکن است باز نشود. برای درخواست دسترسی آزمایشگر به برنامه‌نویس ایمیل بزنید.",
-        "iconAlt": "نماد ماز تاریک"
+        "primaryCta": "در گوگل پلی نصب کنید",
+        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
       }
     },
     "status": {
@@ -18690,9 +18690,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-AF": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "آزمایش‌های خصوصی برای Color Master 2، Galacticode، Call the UFO، Lucky Card Random Defense، و برنامه‌های کوچک Android را نصب یا امتحان کنید.",
+      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش‌های رنگی، پیام‌های مخفی بیگانه‌مانند، تجربه تماس با بشقاب پرنده، و آزمایش‌های خصوصی برای سرگرمی سریع Android."
+      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18852,19 +18852,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد دفاع تصادفی کارت شانس"
       },
       "darkMaze": {
-        "name": "ماز تاریک",
-        "category": "بازی فرار تست خصوصی",
-        "tagline": "خروجی را در پیچ و خم تاریک به عنوان چالش فرار موش آزمایشگاهی پیدا کنید.",
-        "description": "در حال حاضر در تست خصوصی پیوند عمومی Play ممکن است باز نشود، بنابراین از دکمه تماس آزمایشی استفاده کنید.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "بازی فرار از پیچ و خم منتشر شد",
+        "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
+        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
-          "آزمون خصوصی",
+          "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
-          "تابلوی امتیازات برنامه ریزی شده"
+          "بقای تاریک"
         ],
-        "primaryCta": "درخواست دسترسی تستر",
-        "statusNote": "پیوند عمومی Google Play ممکن است باز نشود. برای درخواست دسترسی آزمایشگر به برنامه‌نویس ایمیل بزنید.",
-        "iconAlt": "نماد ماز تاریک"
+        "primaryCta": "در گوگل پلی نصب کنید",
+        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
       }
     },
     "status": {
@@ -18946,9 +18946,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-IR": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "آزمایش‌های خصوصی برای Color Master 2، Galacticode، Call the UFO، Lucky Card Random Defense، و برنامه‌های کوچک Android را نصب یا امتحان کنید.",
+      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش‌های رنگی، پیام‌های مخفی بیگانه‌مانند، تجربه تماس با بشقاب پرنده، و آزمایش‌های خصوصی برای سرگرمی سریع Android."
+      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -19108,19 +19108,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "نماد دفاع تصادفی کارت شانس"
       },
       "darkMaze": {
-        "name": "ماز تاریک",
-        "category": "بازی فرار تست خصوصی",
-        "tagline": "خروجی را در پیچ و خم تاریک به عنوان چالش فرار موش آزمایشگاهی پیدا کنید.",
-        "description": "در حال حاضر در تست خصوصی پیوند عمومی Play ممکن است باز نشود، بنابراین از دکمه تماس آزمایشی استفاده کنید.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "بازی فرار از پیچ و خم منتشر شد",
+        "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
+        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
-          "آزمون خصوصی",
+          "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
-          "تابلوی امتیازات برنامه ریزی شده"
+          "بقای تاریک"
         ],
-        "primaryCta": "درخواست دسترسی تستر",
-        "statusNote": "پیوند عمومی Google Play ممکن است باز نشود. برای درخواست دسترسی آزمایشگر به برنامه‌نویس ایمیل بزنید.",
-        "iconAlt": "نماد ماز تاریک"
+        "primaryCta": "در گوگل پلی نصب کنید",
+        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
       }
     },
     "status": {
@@ -19202,9 +19202,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pt-BR": {
     "seo": {
       "title": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android gratuitos",
-      "description": "Instale ou experimente testes privados para Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense e mais miniaplicativos Android.",
+      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e testes privados para Lucky Card Random Defense e mais miniaplicativos Android.",
       "ogTitle": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android",
-      "ogDescription": "Desafios de cores, mensagens secretas semelhantes a alienígenas, experiências de chamadas de OVNIs e testes privados para diversão rápida com Android."
+      "ogDescription": "Desafios de cores, mensagens secretas semelhantes a alienígenas, experiências de chamada de OVNIs, Lab Rat Maze Escape: Dark Maze e testes privados para diversão rápida no Android."
     },
     "skip": {
       "apps": "Pular para a lista de aplicativos"
@@ -19364,19 +19364,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ícone de defesa aleatória da carta da sorte"
       },
       "darkMaze": {
-        "name": "Labirinto Escuro",
-        "category": "Jogo de fuga de teste privado",
-        "tagline": "Encontre a saída em um labirinto escuro como um desafio de fuga de ratos de laboratório.",
-        "description": "Atualmente em testes privados. O link público do Play pode não abrir, então use o botão de contato de teste.",
+        "name": "Fuga do labirinto de ratos de laboratório: labirinto escuro",
+        "category": "Lançado jogo de fuga do labirinto",
+        "tagline": "Guie um rato de laboratório pelo labirinto escuro e encontre a saída.",
+        "description": "Lançado no Google Play em 28 de maio de 2026. Percorra o labirinto escuro, use itens e escape antes que o caminho se feche.",
         "highlights": [
-          "Teste privado",
+          "Lançado em 28 de maio de 2026",
           "Fuga do labirinto",
           "Itens",
-          "Tabela de classificação planejada"
+          "Sobrevivência sombria"
         ],
-        "primaryCta": "Solicitar acesso de testador",
-        "statusNote": "O link público Google Play pode não abrir. Envie um e-mail ao desenvolvedor para solicitar acesso de testador.",
-        "iconAlt": "Ícone do labirinto escuro"
+        "primaryCta": "Instalar no Google Play",
+        "statusNote": "Agora disponível no Google Play. Nenhuma demonstração na web é fornecida para este aplicativo.",
+        "iconAlt": "Lab Rat Maze Escape: ícone do labirinto escuro"
       }
     },
     "status": {
@@ -19458,9 +19458,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pt-PT": {
     "seo": {
       "title": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android gratuitos",
-      "description": "Instale ou experimente testes privados para Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense e mais miniaplicativos Android.",
+      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e testes privados para Lucky Card Random Defense e mais miniaplicativos Android.",
       "ogTitle": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android",
-      "ogDescription": "Desafios de cores, mensagens secretas semelhantes a alienígenas, experiências de chamadas de OVNIs e testes privados para diversão rápida com Android."
+      "ogDescription": "Desafios de cores, mensagens secretas semelhantes a alienígenas, experiências de chamada de OVNIs, Lab Rat Maze Escape: Dark Maze e testes privados para diversão rápida no Android."
     },
     "skip": {
       "apps": "Pular para a lista de aplicativos"
@@ -19620,19 +19620,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ícone de defesa aleatória da carta da sorte"
       },
       "darkMaze": {
-        "name": "Labirinto Escuro",
-        "category": "Jogo de fuga de teste privado",
-        "tagline": "Encontre a saída em um labirinto escuro como um desafio de fuga de ratos de laboratório.",
-        "description": "Atualmente em testes privados. O link público do Play pode não abrir, então use o botão de contato de teste.",
+        "name": "Fuga do labirinto de ratos de laboratório: labirinto escuro",
+        "category": "Lançado jogo de fuga do labirinto",
+        "tagline": "Guie um rato de laboratório pelo labirinto escuro e encontre a saída.",
+        "description": "Lançado no Google Play em 28 de maio de 2026. Percorra o labirinto escuro, use itens e escape antes que o caminho se feche.",
         "highlights": [
-          "Teste privado",
+          "Lançado em 28 de maio de 2026",
           "Fuga do labirinto",
           "Itens",
-          "Tabela de classificação planejada"
+          "Sobrevivência sombria"
         ],
-        "primaryCta": "Solicitar acesso de testador",
-        "statusNote": "O link público Google Play pode não abrir. Envie um e-mail ao desenvolvedor para solicitar acesso de testador.",
-        "iconAlt": "Ícone do labirinto escuro"
+        "primaryCta": "Instalar no Google Play",
+        "statusNote": "Agora disponível no Google Play. Nenhuma demonstração na web é fornecida para este aplicativo.",
+        "iconAlt": "Lab Rat Maze Escape: ícone do labirinto escuro"
       }
     },
     "status": {
@@ -19714,9 +19714,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pl-PL": {
     "seo": {
       "title": "Laboratorium aplikacji NeoKIM | Darmowe aplikacje Android Mini",
-      "description": "Zainstaluj lub wypróbuj prywatne testy Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense i innych miniaplikacji Android.",
+      "description": "Zainstaluj Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze i prywatne testy Lucky Card Random Defense i innych miniaplikacji na Androida.",
       "ogTitle": "Laboratorium aplikacji NeoKIM | Miniaplikacje Android",
-      "ogDescription": "Wyzwania związane z kolorami, tajne wiadomości przypominające kosmitów, wywoływanie UFO i prywatne testy zapewniające szybką zabawę Android."
+      "ogDescription": "Kolorowe wyzwania, tajne wiadomości przypominające kosmitów, wywoływanie UFO, Lab Rat Maze Escape: Dark Maze i prywatne testy zapewniające szybką zabawę na Androidzie."
     },
     "skip": {
       "apps": "Przejdź do listy aplikacji"
@@ -19876,19 +19876,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona losowej obrony Szczęśliwej Karty"
       },
       "darkMaze": {
-        "name": "Ciemny labirynt",
-        "category": "Prywatna testowa gra ucieczki",
-        "tagline": "Znajdź wyjście z ciemnego labiryntu w ramach wyzwania ucieczki od szczurów laboratoryjnych.",
-        "description": "Obecnie w fazie testów prywatnych. Link do publicznego Play może się nie otworzyć, więc użyj przycisku kontaktu testowego.",
+        "name": "Ucieczka z labiryntu szczurów laboratoryjnych: Mroczny labirynt",
+        "category": "Wydano grę ucieczki z labiryntu",
+        "tagline": "Poprowadź szczura laboratoryjnego przez ciemny labirynt i znajdź wyjście.",
+        "description": "Wydano w Google Play 28 maja 2026 r. Poruszaj się przez ciemny labirynt, korzystaj z przedmiotów i uciekaj, zanim ścieżka się zamknie.",
         "highlights": [
-          "Prywatny test",
+          "Wydany 28 maja 2026 r",
           "Ucieczka z labiryntu",
           "Przedmioty",
-          "Planowana tabela wyników"
+          "Mroczne przetrwanie"
         ],
-        "primaryCta": "Poproś o dostęp testera",
-        "statusNote": "Publiczny link Google Play może się nie otworzyć. Wyślij e-mail do programisty z prośbą o dostęp testera.",
-        "iconAlt": "Ikona ciemnego labiryntu"
+        "primaryCta": "Zainstaluj w Google Play",
+        "statusNote": "Teraz dostępne w Google Play. Dla tej aplikacji nie jest dostępne demo internetowe.",
+        "iconAlt": "Ucieczka z labiryntu szczurów laboratoryjnych: ikona ciemnego labiryntu"
       }
     },
     "status": {
@@ -19970,9 +19970,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fr-CA": {
     "seo": {
       "title": "Laboratoire d'applications NeoKIM | Mini-applications gratuites Android",
-      "description": "Installez ou essayez des tests privés pour Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense et d'autres mini-applications Android.",
+      "description": "Installez Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze et des tests privés pour Lucky Card Random Defense et d'autres mini-applications Android.",
       "ogTitle": "Laboratoire d'applications NeoKIM | Mini-applications Android",
-      "ogDescription": "Défis de couleurs, messages secrets de type extraterrestre, expériences d'appel d'OVNI et tests privés pour un plaisir rapide avec Android."
+      "ogDescription": "Défis de couleurs, messages secrets de type extraterrestre, expériences d'appel d'OVNIS, Lab Rat Maze Escape: Dark Maze et tests privés pour un plaisir rapide sur Android."
     },
     "skip": {
       "apps": "Passer à la liste des applications"
@@ -20132,19 +20132,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icône de défense aléatoire de la carte chanceuse"
       },
       "darkMaze": {
-        "name": "Labyrinthe sombre",
-        "category": "Jeu d'évasion test privé",
-        "tagline": "Trouvez la sortie dans un labyrinthe sombre pour relever un défi d'évasion de rat de laboratoire.",
-        "description": "Actuellement en test privé. Le lien de lecture public peut ne pas s'ouvrir, utilisez donc le bouton de test de contact.",
+        "name": "Évasion du labyrinthe des rats de laboratoire : Labyrinthe sombre",
+        "category": "Sortie du jeu d'évasion de labyrinthe",
+        "tagline": "Guidez un rat de laboratoire à travers le labyrinthe sombre et trouvez la sortie.",
+        "description": "Sorti sur Google Play le 28 mai 2026. Déplacez-vous dans le labyrinthe sombre, utilisez des objets et échappez-vous avant que le chemin ne se ferme.",
         "highlights": [
-          "Essai privé",
+          "Sortie le 28 mai 2026",
           "Évasion du labyrinthe",
           "Articles",
-          "Classement prévu"
+          "Survie sombre"
         ],
-        "primaryCta": "Demander l'accès au testeur",
-        "statusNote": "Le lien public Google Play peut ne pas s'ouvrir. Envoyez un e-mail au développeur pour demander l'accès au testeur.",
-        "iconAlt": "Icône du labyrinthe sombre"
+        "primaryCta": "Installer sur Google Play",
+        "statusNote": "Maintenant disponible sur Google Play. Aucune démo Web n'est fournie pour cette application.",
+        "iconAlt": "Évasion du labyrinthe de rats de laboratoire : icône du labyrinthe sombre"
       }
     },
     "status": {
@@ -20226,9 +20226,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fr-FR": {
     "seo": {
       "title": "Laboratoire d'applications NeoKIM | Mini-applications gratuites Android",
-      "description": "Installez ou essayez des tests privés pour Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense et d'autres mini-applications Android.",
+      "description": "Installez Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze et des tests privés pour Lucky Card Random Defense et d'autres mini-applications Android.",
       "ogTitle": "Laboratoire d'applications NeoKIM | Mini-applications Android",
-      "ogDescription": "Défis de couleurs, messages secrets de type extraterrestre, expériences d'appel d'OVNI et tests privés pour un plaisir rapide avec Android."
+      "ogDescription": "Défis de couleurs, messages secrets de type extraterrestre, expériences d'appel d'OVNIS, Lab Rat Maze Escape: Dark Maze et tests privés pour un plaisir rapide sur Android."
     },
     "skip": {
       "apps": "Passer à la liste des applications"
@@ -20388,19 +20388,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icône de défense aléatoire de la carte chanceuse"
       },
       "darkMaze": {
-        "name": "Labyrinthe sombre",
-        "category": "Jeu d'évasion test privé",
-        "tagline": "Trouvez la sortie dans un labyrinthe sombre pour relever un défi d'évasion de rat de laboratoire.",
-        "description": "Actuellement en test privé. Le lien de lecture public peut ne pas s'ouvrir, utilisez donc le bouton de test de contact.",
+        "name": "Évasion du labyrinthe des rats de laboratoire : Labyrinthe sombre",
+        "category": "Sortie du jeu d'évasion de labyrinthe",
+        "tagline": "Guidez un rat de laboratoire à travers le labyrinthe sombre et trouvez la sortie.",
+        "description": "Sorti sur Google Play le 28 mai 2026. Déplacez-vous dans le labyrinthe sombre, utilisez des objets et échappez-vous avant que le chemin ne se ferme.",
         "highlights": [
-          "Essai privé",
+          "Sortie le 28 mai 2026",
           "Évasion du labyrinthe",
           "Articles",
-          "Classement prévu"
+          "Survie sombre"
         ],
-        "primaryCta": "Demander l'accès au testeur",
-        "statusNote": "Le lien public Google Play peut ne pas s'ouvrir. Envoyez un e-mail au développeur pour demander l'accès au testeur.",
-        "iconAlt": "Icône du labyrinthe sombre"
+        "primaryCta": "Installer sur Google Play",
+        "statusNote": "Maintenant disponible sur Google Play. Aucune démo Web n'est fournie pour cette application.",
+        "iconAlt": "Évasion du labyrinthe de rats de laboratoire : icône du labyrinthe sombre"
       }
     },
     "status": {
@@ -20482,9 +20482,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fi-FI": {
     "seo": {
       "title": "NeoKIM App Lab | Ilmaiset Android Mini -sovellukset",
-      "description": "Asenna tai kokeile yksityisiä testejä Color Master 2-, Galacticode-, Call the UFO-, Lucky Card Random Defense -ohjelmille ja muille Android-minisovelluksille.",
+      "description": "Asenna Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze ja yksityiset testit Lucky Card Random Defenselle ja muille Android-minisovelluksille.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Värihaasteita, avaruusolioita muistuttavia salaisia viestejä, UFO-kutsukokemuksia ja yksityisiä testejä nopeaan Android-hauskuuteen."
+      "ogDescription": "Värihaasteita, avaruusolioita muistuttavia salaisia viestejä, UFO-kutsukokemuksia, Lab Rat Maze Escape: Dark Maze ja yksityisiä testejä nopeaan Android-hauskuuteen."
     },
     "skip": {
       "apps": "Siirry sovellusluetteloon"
@@ -20644,19 +20644,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense -kuvake"
       },
       "darkMaze": {
-        "name": "Tumma labyrintti",
-        "category": "Yksityinen koepakopeli",
-        "tagline": "Etsi uloskäynti pimeästä sokkelosta laboratoriorotan pakohaasteena.",
-        "description": "Tällä hetkellä yksityisessä testauksessa. Julkinen Play-linkki ei välttämättä avaudu, joten käytä testiyhteyspainiketta.",
+        "name": "Laboratoriorotan sokkelopako: tumma sokkelo",
+        "category": "Julkaistu labyrinttipakopeli",
+        "tagline": "Ohjaa laboratoriorotta pimeän sokkelon läpi ja etsi uloskäynti.",
+        "description": "Julkaistu Google Playssa 28. toukokuuta 2026. Liiku pimeässä sokkelossa, käytä esineitä ja pakene ennen kuin polku sulkeutuu.",
         "highlights": [
-          "Yksityinen testi",
+          "Julkaistu 28.5.2026",
           "Labyrinttipako",
           "Tuotteet",
-          "Tulostaulu suunniteltu"
+          "Pimeä selviytyminen"
         ],
-        "primaryCta": "Pyydä testaajan käyttöoikeutta",
-        "statusNote": "Julkinen Google Play-linkki ei välttämättä avaudu. Lähetä sähköpostia kehittäjälle ja pyydä testaajan käyttöoikeutta.",
-        "iconAlt": "Tumma labyrintti-kuvake"
+        "primaryCta": "Asenna Google Playsta",
+        "statusNote": "Nyt saatavilla Google Playsta. Tälle sovellukselle ei ole tarjolla web-demoa.",
+        "iconAlt": "Laboratoriorotan sokkelopako: Tumma labyrintti -kuvake"
       }
     },
     "status": {
@@ -20738,9 +20738,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fil": {
     "seo": {
       "title": "NeoKIM App Lab | Libreng Android Mini Apps",
-      "description": "I-install o subukan ang mga pribadong pagsubok para sa Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense, at higit pang Android mini app.",
+      "description": "I-install ang Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, at mga pribadong pagsubok para sa Lucky Card Random Defense at higit pang Android mini app.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Mga hamon sa kulay, mga lihim na mensaheng mala-alien, mga karanasan sa pagtawag sa UFO, at mga pribadong pagsubok para sa mabilis na kasiyahan ng Android."
+      "ogDescription": "Mga hamon sa kulay, mga lihim na mensaheng mala-alien, mga karanasan sa pagtawag sa UFO, Lab Rat Maze Escape: Dark Maze, at mga pribadong pagsubok para sa mabilis na kasiyahan sa Android."
     },
     "skip": {
       "apps": "Lumaktaw sa listahan ng app"
@@ -20900,19 +20900,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icon ng Lucky Card Random Defense"
       },
       "darkMaze": {
-        "name": "Madilim na Maze",
-        "category": "Pribadong laro ng pagtakas sa pagsubok",
-        "tagline": "Hanapin ang exit sa isang madilim na maze bilang isang lab rat escape challenge.",
-        "description": "Kasalukuyang nasa pribadong pagsubok. Maaaring hindi bumukas ang pampublikong link ng Play, kaya gamitin ang test button na contact.",
+        "name": "Lab Rat Maze Escape: Dark Maze",
+        "category": "Inilabas ang maze escape game",
+        "tagline": "Gabayan ang isang lab rat sa madilim na maze at hanapin ang labasan.",
+        "description": "Inilabas sa Google Play noong Mayo 28, 2026. Lumipat sa madilim na maze, gumamit ng mga item, at tumakas bago magsara ang landas.",
         "highlights": [
-          "Pribadong pagsubok",
+          "Inilabas noong Mayo 28, 2026",
           "pagtakas ng maze",
           "Mga bagay",
-          "Pinlano ang leaderboard"
+          "Madilim na kaligtasan ng buhay"
         ],
-        "primaryCta": "Humiling ng Pag-access sa Tester",
-        "statusNote": "Maaaring hindi mabuksan ang pampublikong link na Google Play. I-email ang developer para humiling ng access sa tester.",
-        "iconAlt": "Icon ng Dark Maze"
+        "primaryCta": "I-install sa Google Play",
+        "statusNote": "Available na ngayon sa Google Play. Walang web demo na ibinigay para sa app na ito.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
       }
     },
     "status": {
@@ -20994,9 +20994,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hu-HU": {
     "seo": {
       "title": "NeoKIM App Lab | Ingyenes Android Mini alkalmazások",
-      "description": "Telepítsen vagy próbáljon ki privát teszteket a Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense és más Android mini alkalmazásokhoz.",
+      "description": "Telepítse a Color Master 2-t, a Galacticode-ot, a Call the UFO-t, a Lab Rat Maze Escape: Dark Maze-t, valamint a Lucky Card Random Defense privát tesztjeit és további Android-minialkalmazásokat.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Színes kihívások, idegenszerű titkos üzenetek, UFO-hívási élmények és privát tesztek a Android gyors szórakozásához."
+      "ogDescription": "Színes kihívások, idegenszerű titkos üzenetek, UFO-hívási élmények, Lab Rat Maze Escape: Dark Maze és privát tesztek a gyors Android szórakozáshoz."
     },
     "skip": {
       "apps": "Ugrás az alkalmazáslistához"
@@ -21156,19 +21156,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Szerencsekártya véletlenszerű védelem ikonra"
       },
       "darkMaze": {
-        "name": "Sötét labirintus",
-        "category": "Privát próbamenekülési játék",
-        "tagline": "Keresse meg a kijáratot egy sötét labirintusban, mint egy laborpatkány menekülési kihívás.",
-        "description": "Jelenleg privát tesztelés alatt áll. Előfordulhat, hogy a nyilvános Play link nem nyílik meg, ezért használja a kapcsolatfelvételi teszt gombot.",
+        "name": "Lab-rat labirintus menekülés: Sötét labirintus",
+        "category": "Megjelent labirintus menekülési játék",
+        "tagline": "Vezess át egy laborpatkányt a sötét labirintuson, és találd meg a kijáratot.",
+        "description": "Megjelenés a Google Playen 2026. május 28-án. Menj át a sötét labirintusban, használj tárgyakat, és menekülj, mielőtt az ösvény bezárulna.",
         "highlights": [
-          "Privát teszt",
+          "Megjelenés: 2026. május 28",
           "Labirintus menekülés",
           "Tételek",
-          "Tervezett ranglista"
+          "Sötét túlélés"
         ],
-        "primaryCta": "Kérjen tesztelői hozzáférést",
-        "statusNote": "Előfordulhat, hogy a nyilvános Google Play link nem nyílik meg. Küldjön e-mailt a fejlesztőnek, ha tesztelői hozzáférést kér.",
-        "iconAlt": "Sötét labirintus ikonra"
+        "primaryCta": "Telepítés a Google Playen",
+        "statusNote": "Már elérhető a Google Playen. Ehhez az alkalmazáshoz nincs webes bemutató.",
+        "iconAlt": "Labirintus Labirintus Escape: Sötét labirintus ikon"
       }
     },
     "status": {
@@ -21250,9 +21250,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "iw-IL": {
     "seo": {
       "title": "NeoKIM App Lab | אפליקציות מיני Android בחינם",
-      "description": "התקן או נסה בדיקות פרטיות עבור Color Master 2, Galacticode, Call the UFO, Lucky Card Random Defense ועוד אפליקציות מיני Android.",
+      "description": "התקן את Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, ובדיקות פרטיות עבור Lucky Card Random Defense ועוד אפליקציות מיני אנדרואיד.",
       "ogTitle": "NeoKIM App Lab | Android מיני אפליקציות",
-      "ogDescription": "אתגרי צבע, הודעות סודיות דמויות חייזרים, חוויות שיחות עב\"מים ומבחנים פרטיים להנאה מהירה של Android."
+      "ogDescription": "אתגרי צבע, הודעות סודיות דמויות חייזרים, חוויות שיחות עב\"מים, בריחה של מבוך עכברוש מעבדה: מבוך אפל ומבחנים פרטיים להנאה מהירה של אנדרואיד."
     },
     "skip": {
       "apps": "דלג לרשימת האפליקציות"
@@ -21412,19 +21412,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "סמל הגנה אקראית של Lucky Card"
       },
       "darkMaze": {
-        "name": "מבוך אפל",
-        "category": "משחק בריחה מבחן פרטי",
-        "tagline": "מצא את היציאה במבוך אפל כאתגר בריחה של חולדות מעבדה.",
-        "description": "כרגע בבדיקה פרטית. ייתכן שקישור ההפעלה הציבורי לא ייפתח, אז השתמש בלחצן איש הקשר לבדיקה.",
+        "name": "Lab Rat Maze Escape: מבוך אפל",
+        "category": "פורסם משחק בריחה מבוך",
+        "tagline": "הנח עכברוש מעבדה דרך המבוך האפל ומצא את היציאה.",
+        "description": "פורסם ב-Google Play ב-28 במאי 2026. עברו במבוך האפל, השתמשו בפריטים וברח לפני שהנתיב נסגר.",
         "highlights": [
-          "מבחן פרטי",
+          "פורסם ב-28 במאי 2026",
           "בריחה ממבוך",
           "פריטים",
-          "Leaderboard מתוכנן"
+          "הישרדות אפלה"
         ],
-        "primaryCta": "בקש גישת בודק",
-        "statusNote": "ייתכן שהקישור הציבורי Google Play לא ייפתח. שלח דוא\"ל למפתח כדי לבקש גישת בודק.",
-        "iconAlt": "סמל מבוך אפל"
+        "primaryCta": "התקן ב-Google Play",
+        "statusNote": "זמין כעת ב-Google Play. לא מסופק הדגמת אינטרנט עבור אפליקציה זו.",
+        "iconAlt": "Lab Rat Maze Escape: סמל מבוך אפל"
       }
     },
     "status": {
@@ -21506,9 +21506,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hi-IN": {
     "seo": {
       "title": "NeoKIM ऐप लैब | मुफ़्त Android मिनी ऐप्स",
-      "description": "कलर मास्टर 2, गैलेक्टिकोड, कॉल द यूएफओ, लकी कार्ड रैंडम डिफेंस और अधिक Android मिनी ऐप्स के लिए निजी परीक्षण इंस्टॉल करें या आज़माएं।",
+      "description": "कलर मास्टर 2, गैलेक्टिकोड, यूएफओ को कॉल करें, लैब रैट मेज़ एस्केप: डार्क मेज़, और लकी कार्ड रैंडम डिफेंस और अधिक एंड्रॉइड मिनी ऐप्स के लिए निजी परीक्षण इंस्टॉल करें।",
       "ogTitle": "NeoKIM ऐप लैब | Android मिनी ऐप्स",
-      "ogDescription": "रंग चुनौतियाँ, एलियन जैसे गुप्त संदेश, यूएफओ कॉलिंग अनुभव और त्वरित Android मनोरंजन के लिए निजी परीक्षण।"
+      "ogDescription": "रंग चुनौतियाँ, एलियन जैसे गुप्त संदेश, यूएफओ कॉलिंग अनुभव, लैब रैट मेज़ एस्केप: डार्क मेज़, और त्वरित एंड्रॉइड मनोरंजन के लिए निजी परीक्षण।"
     },
     "skip": {
       "apps": "ऐप सूची पर जाएं"
@@ -21668,19 +21668,19 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "लकी कार्ड रैंडम डिफेंस आइकन"
       },
       "darkMaze": {
-        "name": "अँधेरी भूलभुलैया",
-        "category": "निजी परीक्षण से बचने का खेल",
-        "tagline": "लैब चूहे से भागने की चुनौती के रूप में एक अंधेरी भूलभुलैया से बाहर निकलने का रास्ता खोजें।",
-        "description": "अभी निजी परीक्षण में है। सार्वजनिक प्ले लिंक नहीं खुल सकता है, इसलिए परीक्षण संपर्क बटन का उपयोग करें।",
+        "name": "लैब रैट भूलभुलैया से बच: डार्क भूलभुलैया",
+        "category": "भूलभुलैया से भागने का खेल जारी किया गया",
+        "tagline": "अंधेरे भूलभुलैया के माध्यम से एक लैब चूहे का मार्गदर्शन करें और बाहर निकलने का रास्ता ढूंढें।",
+        "description": "28 मई, 2026 को Google Play पर जारी किया गया। अंधेरी भूलभुलैया से गुजरें, वस्तुओं का उपयोग करें और रास्ता बंद होने से पहले भाग जाएँ।",
         "highlights": [
-          "निजी परीक्षण",
+          "28 मई, 2026 को रिलीज़ हुई",
           "भूलभुलैया से बच",
           "आइटम",
-          "लीडरबोर्ड की योजना बनाई गई"
+          "अँधेरा अस्तित्व"
         ],
-        "primaryCta": "परीक्षक पहुंच का अनुरोध करें",
-        "statusNote": "सार्वजनिक Google Play लिंक नहीं खुल सकता है। परीक्षक पहुंच का अनुरोध करने के लिए डेवलपर को ईमेल करें।",
-        "iconAlt": "डार्क भूलभुलैया आइकन"
+        "primaryCta": "Google Play पर इंस्टॉल करें",
+        "statusNote": "अब Google Play पर उपलब्ध है. इस ऐप के लिए कोई वेब डेमो प्रदान नहीं किया गया है।",
+        "iconAlt": "लैब रैट भूलभुलैया एस्केप: डार्क भूलभुलैया आइकन"
       }
     },
     "status": {
