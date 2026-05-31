@@ -18,6 +18,11 @@ const playLinks = {
     appId: "call-the-ufo",
     baseUrl: "https://play.google.com/store/apps/details?id=com.call_the_ufo",
     campaign: "call_the_ufo"
+  },
+  darkMaze: {
+    appId: "dark-maze",
+    baseUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze",
+    campaign: "darkmaze"
   }
 };
 

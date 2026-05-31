@@ -110,9 +110,9 @@ window.NEOKIM_I18N = (() => {
     "en-US": {
       seo: {
         title: "NeoKIM App Lab | Free Android Mini Apps",
-        description: "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+        description: "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
         ogTitle: "NeoKIM App Lab | Android Mini Apps",
-        ogDescription: "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+        ogDescription: "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
       },
       skip: {
         apps: "Skip to app list"
@@ -147,42 +147,42 @@ window.NEOKIM_I18N = (() => {
         eyebrow: "Android mini app collection",
         title: "NeoKIM App Lab",
         subtitle: "Small Android apps made for quick fun and sharing",
-        description: "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+        description: "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
         primaryCta: "Install Featured App",
-        primaryAria: "Install Color Master 2 on Google Play",
+        primaryAria: "Install Find Odd Color: Color Master 2 on Google Play",
         secondaryCta: "Browse Apps",
-        visualAria: "Phone mockup with Color Master 2 icon and color tiles",
+        visualAria: "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
         badges: ["Free Apps", "Android", "No Sign-up Required", "Made by NeoKIM"]
       },
       featured: {
         kicker: "FEATURED APP",
         title: "Install This First Today",
         badge: "Featured",
-        appName: "Color Master 2",
-        short: "Find the different color in 10 seconds.",
-        description: "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+        appName: "Find Odd Color: Color Master 2",
+        short: "Find the one different color in 10 seconds.",
+        description: "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
         primaryCta: "Install on Google Play",
-        primaryAria: "Install Color Master 2 on Google Play",
+        primaryAria: "Install Find Odd Color: Color Master 2 on Google Play",
         secondaryCta: "Browse Apps",
-        visualAria: "Color Master 2 color tile challenge phone mockup"
+        visualAria: "Find Odd Color: Color Master 2 tile challenge phone mockup"
       },
       apps: {
         kicker: "APP CATALOG",
         title: "All Apps",
         description: "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
         colorMaster2: {
-          name: "Color Master 2",
-          category: "Color puzzle",
-          tagline: "Find the different color in 10 seconds.",
-          description: "One mistake ends the run. A short, addictive color perception challenge.",
+          name: "Find Odd Color: Color Master 2",
+          category: "Odd-color puzzle game",
+          tagline: "Find the one different color in 10 seconds.",
+          description: "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
           highlights: ["10-second limit", "One-life run", "Leaderboard", "Colorblind aid"],
-          primaryCta: "Install Color Master 2",
+          primaryCta: "Install Find Odd Color",
           detailCta: "Try Web Demo",
           statusNote: "Available now on Google Play.",
-          iconAlt: "Color Master 2 icon"
+          iconAlt: "Find Odd Color: Color Master 2 icon"
         },
         galaxyCode: {
-          name: "Galacticode",
+          name: "Alien Text Maker: Galaxy Code",
           category: "Secret message app",
           tagline: "Create alien-like secret messages that need a share key to decode.",
           description: "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -190,29 +190,29 @@ window.NEOKIM_I18N = (() => {
           primaryCta: "Create Secret Messages",
           detailCta: "Try Web Demo",
           statusNote: "Available now on Google Play.",
-          iconAlt: "Galacticode icon"
+          iconAlt: "Alien Text Maker: Galaxy Code icon"
         },
         ufoSignal: {
-          name: "Call the UFO",
-          category: "Immersive fun app",
-          tagline: "A mysterious UFO calling experience for fun.",
-          description: "Press the button, hear the signal, and imagine something listening from space.",
-          highlights: ["Interactive button", "Mystery sounds", "Animation", "No sign-up"],
-          primaryCta: "Call the UFO",
-          detailCta: "Try Web Demo",
-          statusNote: "Available now on Google Play.",
-          iconAlt: "Call the UFO icon"
+          name: "UFO Signal Simulator",
+          category: "Mystery signal entertainment app",
+          tagline: "Send a playful space signal and enjoy the UFO mood.",
+          description: "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
+          highlights: ["Signal button", "Mystery sounds", "Mood animation", "No sign-up"],
+          primaryCta: "Install UFO Signal Simulator",
+          detailCta: "View App Details",
+          statusNote: "View the app details, then install it from Google Play.",
+          iconAlt: "UFO Signal Simulator icon"
         },
         colorMasterClassic: {
-          name: "Color Master",
-          category: "Classic color puzzle",
-          tagline: "The original color-focus challenge: find the answer among similar colors.",
-          description: "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+          name: "Color Sense Test: Color Master",
+          category: "Classic color sense game",
+          tagline: "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+          description: "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
           highlights: ["Original feel", "Color focus", "Quick play", "Install now"],
-          primaryCta: "Install Color Master",
+          primaryCta: "Install Color Sense Test",
           detailCta: "Try Web Demo",
           statusNote: "Try it on the web first, then install it from Google Play.",
-          iconAlt: "Color Master icon"
+          iconAlt: "Color Sense Test: Color Master icon"
         },
         koreanRandomDefense: {
           name: "Korean Random Defense: Siege",
@@ -243,7 +243,8 @@ window.NEOKIM_I18N = (() => {
           description: "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
           highlights: ["Released May 28, 2026", "Maze escape", "Items", "Dark survival"],
           primaryCta: "Install on Google Play",
-          statusNote: "Now available on Google Play. No web demo is provided for this app.",
+          detailCta: "View App Details",
+          statusNote: "View the app details, then install it from Google Play. No web demo is provided for this app.",
           iconAlt: "Lab Rat Maze Escape: Dark Maze icon"
         }
       },
@@ -261,18 +262,18 @@ window.NEOKIM_I18N = (() => {
         kicker: "SHORTS IDEAS",
         title: "Try Them Like This",
         colorMaster2: {
-          app: "Color Master 2",
-          title: "“If you see this color difference, your eyes are sharp.”",
+          app: "Find Odd Color: Color Master 2",
+          title: "“If you spot this odd color, your eyes are sharp.”",
           description: "Compete with friends in a 10-second challenge."
         },
         galaxyCode: {
-          app: "Galacticode",
+          app: "Alien Text Maker: Galaxy Code",
           title: "“Send your friend an alien message they cannot decode.”",
           description: "Leave secret messages that only share-key holders can decode."
         },
         ufoSignal: {
-          app: "Call the UFO",
-          title: "“What happens if you press the UFO button at dawn?”",
+          app: "UFO Signal Simulator",
+          title: "“What happens if you send a UFO signal at dawn?”",
           description: "Enjoy the sounds and animation in a dark room."
         }
       },
@@ -289,7 +290,7 @@ window.NEOKIM_I18N = (() => {
         },
         first: {
           question: "Which app should I install first?",
-          answer: "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+          answer: "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
         },
         privateTest: {
           question: "How do I join private test apps?",
@@ -300,9 +301,10 @@ window.NEOKIM_I18N = (() => {
         madeBy: "Made by NeoKIM",
         lastUpdated: "Last updated: 2026.05.31",
         googlePlay: "Google Play Apps",
-        colorTest: "Color Test",
-        alienText: "Alien Text Generator",
-        ufoApp: "UFO App",
+        colorTest: "Find Odd Color",
+        alienText: "Alien Text Maker",
+        ufoApp: "UFO Signal Simulator",
+        darkMaze: "Dark Maze",
         privacyPolicy: "Privacy Policy",
         appAds: "app-ads.txt",
         contact: "Contact"
@@ -326,9 +328,9 @@ window.NEOKIM_I18N = (() => {
     ko: {
       seo: {
         title: "NeoKIM App Lab | 무료 Android 미니앱 컬렉션",
-        description: "컬러마스터2, 은하코드, UFO 호출기, 실험쥐 미로탈출: 다크메이즈, 운빨 카드 랜덤디펜스 등 Android 미니앱을 설치하거나 비공개 테스트로 체험해보세요.",
+        description: "다른 색 찾기: 컬러 마스터2, 외계어 변환기: 은하코드, UFO 호출기: 우주 신호 놀이, 색감 테스트: 컬러 마스터, 실험쥐 미로탈출: 다크메이즈 등 Android 미니앱을 설치하거나 비공개 테스트로 체험해보세요.",
         ogTitle: "NeoKIM App Lab | Android 미니앱",
-        ogDescription: "색감 테스트, 공유키 기반 외계어 메시지, UFO 호출 체험, 실험쥐 미로탈출: 다크메이즈 출시작과 비공개 테스트까지. 짧게 즐기는 Android 앱 컬렉션."
+        ogDescription: "다른 색 찾기, 외계어 메시지, UFO 우주 신호 놀이, 실험쥐 미로탈출 출시작과 비공개 테스트까지. 짧게 즐기는 Android 앱 컬렉션."
       },
       skip: {
         apps: "앱 목록으로 이동"
@@ -363,42 +365,42 @@ window.NEOKIM_I18N = (() => {
         eyebrow: "Android mini app collection",
         title: "NeoKIM App Lab",
         subtitle: "짧게 즐기고 바로 공유하는 안드로이드 미니앱 컬렉션",
-        description: "색감 테스트, 외계어 메시지, UFO 호출 체험까지. 가볍게 설치하고 1분 안에 즐길 수 있는 앱들을 모았습니다.",
+        description: "다른 색 찾기, 외계어 메시지, UFO 우주 신호 놀이, 어둠 속 미로탈출까지. 가볍게 설치하고 1분 안에 즐길 수 있는 앱들을 모았습니다.",
         primaryCta: "추천 앱 설치하기",
-        primaryAria: "컬러마스터2 Google Play에서 설치",
+        primaryAria: "다른 색 찾기: 컬러 마스터2 Google Play에서 설치",
         secondaryCta: "전체 앱 보기",
-        visualAria: "컬러마스터2 앱 아이콘과 색상 타일로 구성된 휴대폰 목업",
+        visualAria: "다른 색 찾기: 컬러 마스터2 앱 아이콘과 색상 타일로 구성된 휴대폰 목업",
         badges: ["Free Apps", "Android", "회원가입 없음", "Made by NeoKIM"]
       },
       featured: {
         kicker: "FEATURED APP",
         title: "오늘 먼저 설치해볼 앱",
         badge: "추천",
-        appName: "컬러마스터2",
+        appName: "다른 색 찾기: 컬러 마스터2",
         short: "10초 안에 다른 색을 찾아보세요.",
         description: "한 번 틀리면 끝나는 원라이프 색상 판별 퍼즐입니다. 짧게 시작하지만, 기록을 깨고 싶어서 계속 다시 하게 되는 구조입니다.",
         primaryCta: "Google Play에서 설치",
-        primaryAria: "컬러마스터2 Google Play에서 설치",
+        primaryAria: "다른 색 찾기: 컬러 마스터2 Google Play에서 설치",
         secondaryCta: "전체 앱 보기",
-        visualAria: "컬러마스터2 색상 타일 챌린지 휴대폰 목업"
+        visualAria: "다른 색 찾기: 컬러 마스터2 색상 타일 챌린지 휴대폰 목업"
       },
       apps: {
         kicker: "APP CATALOG",
         title: "전체 앱",
         description: "공개 앱은 바로 설치하고, 비공개 테스트 앱은 문의 메일을 보낸 뒤 테스터 등록이 완료되면 테스트 참여 버튼으로 설치할 수 있습니다.",
         colorMaster2: {
-          name: "컬러마스터2",
+          name: "다른 색 찾기: 컬러 마스터2",
           category: "색상 판별 퍼즐",
           tagline: "10초 안에 다른 색을 찾는 원라이프 색감 챌린지",
           description: "한 번 틀리면 끝. 색감, 집중력, 순발력을 시험하는 짧고 중독성 있는 퍼즐 게임입니다.",
           highlights: ["10초 제한", "원라이프", "랭킹 지원", "색약 보조"],
-          primaryCta: "컬러마스터2 설치",
+          primaryCta: "다른 색 찾기 설치",
           detailCta: "웹에서 먼저 체험",
           statusNote: "Google Play에서 바로 설치할 수 있습니다.",
-          iconAlt: "컬러마스터2 아이콘"
+          iconAlt: "다른 색 찾기: 컬러 마스터2 아이콘"
         },
         galaxyCode: {
-          name: "은하코드",
+          name: "외계어 변환기: 은하코드",
           category: "비밀 메시지 생성기",
           tagline: "공유키 없이는 읽기 어려운 나만의 외계어 비밀 메시지",
           description: "나만의 은하 언어 규칙을 만들고, 공유키를 받은 사람만 같은 규칙으로 메시지를 해독할 수 있습니다. 원문과 변환 규칙은 서버로 보내지 않습니다.",
@@ -406,29 +408,29 @@ window.NEOKIM_I18N = (() => {
           primaryCta: "비밀 메시지 만들기",
           detailCta: "웹에서 먼저 체험",
           statusNote: "Google Play에서 바로 설치할 수 있습니다.",
-          iconAlt: "은하코드 아이콘"
+          iconAlt: "외계어 변환기: 은하코드 아이콘"
         },
         ufoSignal: {
-          name: "UFO 호출기",
+          name: "UFO 호출기: 우주 신호 놀이",
           category: "몰입형 체험 앱",
-          tagline: "밤에 누르면 더 재밌는 미스터리 UFO 호출 체험",
+          tagline: "밤에 누르면 더 재밌는 미스터리 우주 신호 놀이",
           description: "버튼, 사운드, 애니메이션으로 우주에 신호를 보내는 듯한 상상 체험을 제공합니다.",
-          highlights: ["인터랙티브 버튼", "미스터리 사운드", "애니메이션", "회원가입 없음"],
-          primaryCta: "UFO 호출해보기",
-          detailCta: "웹에서 먼저 체험",
-          statusNote: "Google Play에서 바로 설치할 수 있습니다.",
-          iconAlt: "UFO 호출기 아이콘"
+          highlights: ["신호 버튼", "미스터리 사운드", "무드 애니메이션", "회원가입 없음"],
+          primaryCta: "UFO 호출기 설치",
+          detailCta: "살펴보기",
+          statusNote: "앱 소개를 살펴보고 Google Play에서 설치할 수 있습니다.",
+          iconAlt: "UFO 호출기: 우주 신호 놀이 아이콘"
         },
         colorMasterClassic: {
-          name: "컬러 마스터",
+          name: "색감 테스트: 컬러 마스터",
           category: "클래식 색상 판별 게임",
           tagline: "비슷한 색상 속에서 정답을 찾는 원작 색감 집중력 테스트",
-          description: "컬러마스터2 이전에 만든 원작 버전입니다. 웹에서 먼저 체험해보고, Google Play에서 설치할 수 있습니다.",
+          description: "다른 색 찾기: 컬러 마스터2 이전에 만든 원작 버전입니다. 웹에서 먼저 체험해보고, Google Play에서 설치할 수 있습니다.",
           highlights: ["원작 감성", "색상 집중력", "짧은 플레이", "바로 설치"],
-          primaryCta: "컬러 마스터 설치",
+          primaryCta: "색감 테스트 설치",
           detailCta: "웹에서 먼저 체험",
           statusNote: "웹에서 먼저 체험해보고, Google Play에서 설치할 수 있습니다.",
-          iconAlt: "컬러 마스터 아이콘"
+          iconAlt: "색감 테스트: 컬러 마스터 아이콘"
         },
         koreanRandomDefense: {
           name: "한국사 랜덤 디펜스: 수성전",
@@ -459,7 +461,8 @@ window.NEOKIM_I18N = (() => {
           description: "2026년 5월 28일 Google Play에 출시했습니다. 어둠 속 미로를 이동하고 아이템을 활용해 출구를 찾아 탈출하세요.",
           highlights: ["2026년 5월 28일 출시", "미로 탈출", "아이템", "어둠 속 생존"],
           primaryCta: "Google Play에서 설치",
-          statusNote: "현재 Google Play에서 설치할 수 있습니다. 이 앱은 웹 미리해보기를 제공하지 않습니다.",
+          detailCta: "살펴보기",
+          statusNote: "앱 소개를 살펴보고 Google Play에서 설치할 수 있습니다. 이 앱은 웹 미리해보기를 제공하지 않습니다.",
           iconAlt: "실험쥐 미로탈출: 다크메이즈 아이콘"
         }
       },
@@ -477,18 +480,18 @@ window.NEOKIM_I18N = (() => {
         kicker: "SHORTS IDEAS",
         title: "이렇게 즐겨보세요",
         colorMaster2: {
-          app: "컬러마스터2",
+          app: "다른 색 찾기: 컬러 마스터2",
           title: "“이 색 차이 보이면 눈 좋은 사람”",
           description: "10초 챌린지로 친구와 기록 경쟁하기"
         },
         galaxyCode: {
-          app: "은하코드",
+          app: "외계어 변환기: 은하코드",
           title: "“친구에게 해독 못 하는 외계어 보내기”",
           description: "공유키를 받은 사람만 풀 수 있는 비밀 메시지 남기기"
         },
         ufoSignal: {
-          app: "UFO 호출기",
-          title: "“새벽에 UFO 호출 버튼 누르면?”",
+          app: "UFO 호출기: 우주 신호 놀이",
+          title: "“새벽에 UFO 신호를 보내면?”",
           description: "어두운 방에서 사운드와 애니메이션 즐기기"
         }
       },
@@ -505,7 +508,7 @@ window.NEOKIM_I18N = (() => {
         },
         first: {
           question: "어떤 앱을 먼저 설치하면 좋나요?",
-          answer: "처음 방문했다면 컬러마스터2를 추천합니다. 짧게 플레이할 수 있고 기록 경쟁이 가능하기 때문입니다."
+          answer: "처음 방문했다면 다른 색 찾기: 컬러 마스터2를 추천합니다. 짧게 플레이할 수 있고 기록 경쟁이 가능하기 때문입니다."
         },
         privateTest: {
           question: "비공개 테스트 앱은 어떻게 참여하나요?",
@@ -516,9 +519,10 @@ window.NEOKIM_I18N = (() => {
         madeBy: "Made by NeoKIM",
         lastUpdated: "Last updated: 2026.05.31",
         googlePlay: "Google Play 앱 목록",
-        colorTest: "색감 테스트",
-        alienText: "외계어 생성기",
-        ufoApp: "UFO 호출 앱",
+        colorTest: "다른 색 찾기",
+        alienText: "외계어 변환기",
+        ufoApp: "UFO 호출기",
+        darkMaze: "다크메이즈",
         privacyPolicy: "Privacy Policy",
         appAds: "app-ads.txt",
         contact: "Contact"

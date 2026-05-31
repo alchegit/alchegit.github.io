@@ -2,9 +2,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "gl-ES": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicacións gratuítas de Android",
-      "description": "Instala Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e probas privadas para Lucky Card Random Defense e máis mini aplicacións de Android.",
+      "description": "Instala Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze e probas privadas para obter máis miniaplicacións de Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplicacións",
-      "ogDescription": "Desafíos de cores, mensaxes secretas extraterrestres, experiencias de chamadas de ovnis, Lab Rat Maze Escape: Dark Maze e probas privadas para divertirse rapidamente con Android."
+      "ogDescription": "Busca cores estrañas, fai texto secreto de estilo alieníxena, envía sinais de ovnis divertidos, escapa de labirintos escuros e únete a probas privadas para divertirse rapidamente con Android."
     },
     "skip": {
       "apps": "Saltar á lista de aplicacións"
@@ -39,11 +39,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Colección de mini aplicacións Android",
       "title": "Laboratorio de aplicacións NeoKIM",
       "subtitle": "Pequenas aplicacións Android creadas para divertirse e compartir rapidamente",
-      "description": "Desafíos de cores, mensaxes secretas extraterrestres e experiencias de chamadas de ovnis. Instalar lixeiramente. Goza en menos dun minuto.",
+      "description": "Desafíos de cores estrañas, mensaxes secretas de estilo alieníxena, reprodución de sinais OVNI e escapes de labirinto escuro. Instalar lixeiramente. Goza en menos dun minuto.",
       "primaryCta": "Instala a aplicación destacada",
-      "primaryAria": "Instala Color Master 2 en Google Play",
+      "primaryAria": "Instala Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicacións",
-      "visualAria": "Maqueta do teléfono coa icona de Color Master 2 e mosaicos de cores",
+      "visualAria": "Maqueta do teléfono coa icona de Find Odd Color: Color Master 2 e mosaicos de cores",
       "badges": [
         "Aplicacións gratuítas",
         "Android",
@@ -55,36 +55,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICACIÓN DESTACADA",
       "title": "Instala isto primeiro hoxe",
       "badge": "Destacado",
-      "appName": "Color Master 2",
-      "short": "Busca a cor diferente en 10 segundos.",
-      "description": "Un crebacabezas de cores dunha soa vida onde un erro remata a carreira. Comeza rápido, despois segue tirando para atrás para bater o seu récord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Busca a única cor diferente en 10 segundos.",
+      "description": "Un crebacabezas de cores estrañas dunha soa vida onde un erro remata a carreira. Comeza rápido, despois segue tirando para atrás para bater o seu récord.",
       "primaryCta": "Instalar en Google Play",
-      "primaryAria": "Instala Color Master 2 en Google Play",
+      "primaryAria": "Instala Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicacións",
-      "visualAria": "Maqueta de teléfono de desafío de mosaicos de cores Color Master 2"
+      "visualAria": "Maqueta de teléfono de desafío de mosaicos Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÁLOGO DE APLICACIÓNS",
       "title": "Todas as aplicacións",
       "description": "Instala aplicacións públicas directamente. Para probas privadas, primeiro envíe unha solicitude por correo electrónico; despois de engadir o acceso do probador, use o botón Unirse á proba.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Crebacabezas de cores",
-        "tagline": "Busca a cor diferente en 10 segundos.",
-        "description": "Un erro remata a carreira. Un reto curto e adictivo de percepción da cor.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Xogo de crebacabezas de cores estrañas",
+        "tagline": "Busca a única cor diferente en 10 segundos.",
+        "description": "Un erro remata a carreira. Un reto curto e adictivo de cores estrañas para o enfoque e a percepción da cor.",
         "highlights": [
           "Límite de 10 segundos",
           "Carreira dunha vida",
           "Taboleiro de clasificación",
           "Axuda para daltónicos"
         ],
-        "primaryCta": "Instalar Color Master 2",
+        "primaryCta": "Instala Find Odd Color",
         "detailCta": "Proba a demostración web",
         "statusNote": "Dispoñible agora en Google Play.",
-        "iconAlt": "Icona Color Master 2"
+        "iconAlt": "Icona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicación de mensaxes secretas",
         "tagline": "Crea mensaxes secretas parecidas a un alieníxena que precisan dunha clave de uso compartido para decodificar.",
         "description": "Crea as túas propias regras de linguaxe galáctica. Só as persoas que teñan a túa clave de uso compartido poden recrear as mesmas regras e o texto orixinal non se carga nun servidor.",
@@ -97,39 +97,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crea mensaxes secretas",
         "detailCta": "Proba a demostración web",
         "statusNote": "Dispoñible agora en Google Play.",
-        "iconAlt": "Icona Galacticode"
+        "iconAlt": "Icona de Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Chama o OVNI",
-        "category": "Aplicación divertida e inmersiva",
-        "tagline": "Unha misteriosa experiencia de chamada OVNI por diversión.",
-        "description": "Preme o botón, escoita o sinal e imaxina algo escoitando desde o espazo.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicación de entretemento con sinal misterioso",
+        "tagline": "Envía un sinal espacial lúdico e goza do estado de ánimo OVNI.",
+        "description": "Abre a aplicación, preme o botón de sinal e goza de son e animación que fan que o momento se sinta como un pequeno ritual OVNI.",
         "highlights": [
-          "Botón interactivo",
+          "Botón de sinal",
           "Sons de misterio",
-          "Animación",
+          "Animación de humor",
           "Sen rexistro"
         ],
-        "primaryCta": "Chama o OVNI",
-        "detailCta": "Proba a demostración web",
-        "statusNote": "Dispoñible agora en Google Play.",
-        "iconAlt": "Chama a icona OVNI"
+        "primaryCta": "Instala UFO Signal Simulator",
+        "detailCta": "Ver detalles da aplicación",
+        "statusNote": "Consulta os detalles da aplicación e instálaa desde Google Play.",
+        "iconAlt": "Icona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mestre da cor",
-        "category": "Puzzle clásico de cores",
-        "tagline": "O desafío orixinal de enfoque de cores: atopa a resposta entre cores similares.",
-        "description": "A versión orixinal anterior a Color Master 2. Probao na web primeiro e despois instálao desde Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Xogo clásico de sentido da cor",
+        "tagline": "O desafío orixinal de enfoque de cores: lembra a cor da resposta e escóllea entre cores similares.",
+        "description": "A proba de detección da cor orixinal antes de Find Odd Color: Color Master 2. Probao na web primeiro e despois instálao desde Google Play.",
         "highlights": [
           "Sensación orixinal",
           "Foco de cor",
           "Xogo rápido",
           "Instala agora"
         ],
-        "primaryCta": "Instala Color Master",
+        "primaryCta": "Instalar a proba de sentido da cor",
         "detailCta": "Proba a demostración web",
         "statusNote": "Probao na web primeiro e despois instálao desde Google Play.",
-        "iconAlt": "Icona mestre de cores"
+        "iconAlt": "Icona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana: asedio",
@@ -167,16 +167,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Xogo de escape do labirinto lanzado",
         "tagline": "Guía unha rata de laboratorio polo escuro labirinto e atopa a saída.",
-        "description": "Publicado en Google Play o 28 de maio de 2026. Móvete polo escuro labirinto, usa elementos e escapa antes de que se peche o camiño.",
+        "description": "Lanzado en Google Play o 28 de maio de 2026. Móvete polo escuro labirinto, usa elementos e escapa antes de que se peche o camiño.",
         "highlights": [
           "Publicado o 28 de maio de 2026",
           "Escape do labirinto",
           "Elementos",
           "Supervivencia escura"
         ],
-        "primaryCta": "Instalar en Google Play",
-        "statusNote": "Agora dispoñible en Google Play. Non se ofrece ningunha demostración web para esta aplicación.",
-        "iconAlt": "Lab Rat Maze Escape: Icona Dark Maze"
+        "primaryCta": "Instala en Google Play",
+        "statusNote": "Consulta os detalles da aplicación e instálaa desde Google Play. Non se ofrece ningunha demostración web para esta aplicación.",
+        "iconAlt": "Icona de Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Ver detalles da aplicación"
       }
     },
     "status": {
@@ -193,18 +194,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEAS CURTAS",
       "title": "Probaos así",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"Se ves esta diferenza de cor, os teus ollos son nítidos\".",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Se detectas esta cor estraña, os teus ollos son nítidos\".",
         "description": "Compite cos amigos nun desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envía ao teu amigo unha mensaxe alieníxena que non poden decodificar\".",
         "description": "Deixa mensaxes secretas que só poden descodificar os posuidores da chave compartida."
       },
       "ufoSignal": {
-        "app": "Chama o OVNI",
-        "title": "\"Que pasa se premes o botón OVNI ao amencer?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Que pasa se envías un sinal OVNI ao amencer?\"",
         "description": "Goza dos sons e da animación nun cuarto escuro."
       }
     },
@@ -221,7 +222,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Que aplicación debo instalar primeiro?",
-        "answer": "Se esta é a túa primeira visita, proba primeiro Color Master 2. É rápido de xogar e fácil de reproducir para obter unha mellor puntuación."
+        "answer": "Se esta é a túa primeira visita, proba primeiro Find Odd Color: Color Master 2. É rápido de xogar e fácil de reproducir para obter unha mellor puntuación."
       },
       "privateTest": {
         "question": "Como me unir a aplicacións de proba privadas?",
@@ -232,12 +233,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Feito por NeoKIM",
       "lastUpdated": "Última actualización: 31/05/2026",
       "googlePlay": "Aplicacións Google Play",
-      "colorTest": "Proba de cor",
-      "alienText": "Xerador de texto alieníxena",
-      "ufoApp": "Aplicación UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de privacidade",
       "appAds": "app-ads.txt",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Rexistro de probador privado",
@@ -258,9 +260,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "gu": {
     "seo": {
       "title": "NeoKIM એપ લેબ | મફત Android મીની એપ્સ",
-      "description": "કલર માસ્ટર 2, ગેલેક્ટીકોડ, કૉલ ધ યુએફઓ, લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ અને લકી કાર્ડ રેન્ડમ ડિફેન્સ માટે ખાનગી પરીક્ષણો અને વધુ Android મીની એપ્લિકેશન્સ ઇન્સ્ટોલ કરો.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, અને વધુ Android મિની એપ્સ માટે ખાનગી પરીક્ષણો ઇન્સ્ટોલ કરો.",
       "ogTitle": "NeoKIM એપ લેબ | Android મીની એપ્સ",
-      "ogDescription": "રંગ પડકારો, એલિયન જેવા ગુપ્ત સંદેશાઓ, UFO કૉલિંગ અનુભવો, લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ અને ઝડપી એન્ડ્રોઇડ આનંદ માટે ખાનગી પરીક્ષણો."
+      "ogDescription": "વિચિત્ર રંગો શોધો, એલિયન-શૈલી ગુપ્ત ટેક્સ્ટ બનાવો, રમતિયાળ UFO સિગ્નલ મોકલો, શ્યામ મેઝથી બચો અને ઝડપી Android આનંદ માટે ખાનગી પરીક્ષણોમાં જોડાઓ."
     },
     "skip": {
       "apps": "એપ્લિકેશન સૂચિ પર જાઓ"
@@ -295,11 +297,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android મીની એપ્લિકેશન સંગ્રહ",
       "title": "NeoKIM એપ લેબ",
       "subtitle": "ઝડપી આનંદ અને શેરિંગ માટે બનાવેલ નાની Android એપ્લિકેશન્સ",
-      "description": "રંગ પડકારો, એલિયન જેવા ગુપ્ત સંદેશાઓ અને UFO કૉલિંગ અનુભવો. હળવાશથી ઇન્સ્ટોલ કરો. એક મિનિટમાં આનંદ લો.",
+      "description": "ઓડ-કલર પડકારો, એલિયન-શૈલીના ગુપ્ત સંદેશાઓ, UFO સિગ્નલ પ્લે અને ડાર્ક મેઝ એસ્કેપ્સ. હળવાશથી ઇન્સ્ટોલ કરો. એક મિનિટમાં આનંદ લો.",
       "primaryCta": "ફીચર્ડ એપ ઇન્સ્ટોલ કરો",
-      "primaryAria": "Google Play પર કલર માસ્ટર 2 ઇન્સ્ટોલ કરો",
+      "primaryAria": "Find Odd Color: Color Master 2 ને Google Play પર ઇન્સ્ટોલ કરો",
       "secondaryCta": "એપ્લિકેશન્સ બ્રાઉઝ કરો",
-      "visualAria": "કલર માસ્ટર 2 આઇકન અને કલર ટાઇલ્સ સાથે ફોન મોકઅપ",
+      "visualAria": "Find Odd Color: Color Master 2 આઇકન અને રંગીન ટાઇલ્સ સાથે ફોન મોકઅપ",
       "badges": [
         "મફત એપ્લિકેશન્સ",
         "Android",
@@ -311,36 +313,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ફીચર્ડ એપ્લિકેશન",
       "title": "આ પ્રથમ આજે જ ઇન્સ્ટોલ કરો",
       "badge": "ફીચર્ડ",
-      "appName": "કલર માસ્ટર 2",
-      "short": "10 સેકન્ડમાં વિવિધ રંગ શોધો.",
-      "description": "એક-જીવન રંગીન કોયડો જ્યાં એક ભૂલથી દોડનો અંત આવે છે. તે ઝડપથી શરૂ થાય છે, પછી તમારા રેકોર્ડને હરાવવા માટે તમને પાછા ખેંચે છે.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 સેકન્ડમાં એક અલગ રંગ શોધો.",
+      "description": "એક-જીવનની વિચિત્ર-રંગની પઝલ જ્યાં એક ભૂલથી દોડનો અંત આવે છે. તે ઝડપથી શરૂ થાય છે, પછી તમારા રેકોર્ડને હરાવવા માટે તમને પાછા ખેંચે છે.",
       "primaryCta": "Google Play પર ઇન્સ્ટોલ કરો",
-      "primaryAria": "Google Play પર કલર માસ્ટર 2 ઇન્સ્ટોલ કરો",
+      "primaryAria": "Find Odd Color: Color Master 2 ને Google Play પર ઇન્સ્ટોલ કરો",
       "secondaryCta": "એપ્લિકેશન્સ બ્રાઉઝ કરો",
-      "visualAria": "કલર માસ્ટર 2 કલર ટાઇલ ચેલેન્જ ફોન મોકઅપ"
+      "visualAria": "Find Odd Color: Color Master 2 ટાઇલ ચેલેન્જ ફોન મોકઅપ"
     },
     "apps": {
       "kicker": "એપ્લિકેશન કેટલોગ",
       "title": "બધી એપ્સ",
       "description": "સાર્વજનિક એપ્લિકેશનો સીધી ઇન્સ્ટોલ કરો. ખાનગી પરીક્ષણો માટે, પ્રથમ વિનંતી ઇમેઇલ કરો; ટેસ્ટર એક્સેસ ઉમેર્યા પછી, જોડાઓ ટેસ્ટ બટનનો ઉપયોગ કરો.",
       "colorMaster2": {
-        "name": "કલર માસ્ટર 2",
-        "category": "રંગ પઝલ",
-        "tagline": "10 સેકન્ડમાં વિવિધ રંગ શોધો.",
-        "description": "એક ભૂલ રન સમાપ્ત કરે છે. ટૂંકી, વ્યસનયુક્ત રંગ ધારણા પડકાર.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "વિચિત્ર રંગની પઝલ ગેમ",
+        "tagline": "10 સેકન્ડમાં એક અલગ રંગ શોધો.",
+        "description": "એક ભૂલ રન સમાપ્ત કરે છે. ફોકસ અને રંગની ધારણા માટે ટૂંકો, વ્યસનકારક ઓડ-કલર પડકાર.",
         "highlights": [
           "10-સેકન્ડની મર્યાદા",
           "વન-લાઇફ રન",
           "લીડરબોર્ડ",
           "કલર બ્લાઇન્ડ સહાય"
         ],
-        "primaryCta": "કલર માસ્ટર 2 ઇન્સ્ટોલ કરો",
+        "primaryCta": "વિચિત્ર રંગ શોધો ઇન્સ્ટોલ કરો",
         "detailCta": "વેબ ડેમો અજમાવી જુઓ",
         "statusNote": "Google Play પર હવે ઉપલબ્ધ છે.",
-        "iconAlt": "કલર માસ્ટર 2 આઇકન"
+        "iconAlt": "Find Odd Color: Color Master 2 ચિહ્ન"
       },
       "galaxyCode": {
-        "name": "ગેલેક્ટીકોડ",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "ગુપ્ત સંદેશ એપ્લિકેશન",
         "tagline": "એલિયન જેવા ગુપ્ત સંદેશાઓ બનાવો જેને ડીકોડ કરવા માટે શેર કીની જરૂર હોય.",
         "description": "તમારા પોતાના ગેલેક્ટીક ભાષાના નિયમો બનાવો. ફક્ત તમારી શેર કી ધરાવતા લોકો જ સમાન નિયમોને ફરીથી બનાવી શકે છે, અને મૂળ ટેક્સ્ટ સર્વર પર અપલોડ થતો નથી.",
@@ -353,39 +355,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ગુપ્ત સંદેશાઓ બનાવો",
         "detailCta": "વેબ ડેમો અજમાવી જુઓ",
         "statusNote": "Google Play પર હવે ઉપલબ્ધ છે.",
-        "iconAlt": "ગેલેક્ટીકોડ આઇકન"
+        "iconAlt": "Alien Text Maker: Galaxy Code આઇકન"
       },
       "ufoSignal": {
-        "name": "UFO ને કૉલ કરો",
-        "category": "ઇમર્સિવ ફન એપ્લિકેશન",
-        "tagline": "આનંદ માટે એક રહસ્યમય UFO કૉલિંગ અનુભવ.",
-        "description": "બટન દબાવો, સિગ્નલ સાંભળો અને અવકાશમાંથી કંઈક સાંભળવાની કલ્પના કરો.",
+        "name": "UFO Signal Simulator",
+        "category": "મિસ્ટ્રી સિગ્નલ મનોરંજન એપ્લિકેશન",
+        "tagline": "રમતિયાળ સ્પેસ સિગ્નલ મોકલો અને UFO મૂડનો આનંદ માણો.",
+        "description": "એપ્લિકેશન ખોલો, સિગ્નલ બટન દબાવો અને અવાજ અને એનિમેશનનો આનંદ માણો જે ક્ષણને નાની UFO વિધિ જેવો અનુભવ કરાવે છે.",
         "highlights": [
-          "ઇન્ટરેક્ટિવ બટન",
+          "સિગ્નલ બટન",
           "રહસ્યમય અવાજ",
-          "એનિમેશન",
+          "મૂડ એનિમેશન",
           "કોઈ સાઇન અપ નથી"
         ],
-        "primaryCta": "UFO ને કૉલ કરો",
-        "detailCta": "વેબ ડેમો અજમાવી જુઓ",
-        "statusNote": "Google Play પર હવે ઉપલબ્ધ છે.",
-        "iconAlt": "યુએફઓ આઇકોન પર કૉલ કરો"
+        "primaryCta": "UFO Signal Simulator ઇન્સ્ટોલ કરો",
+        "detailCta": "એપ્લિકેશન વિગતો જુઓ",
+        "statusNote": "એપ્લિકેશન વિગતો જુઓ, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
+        "iconAlt": "UFO Signal Simulator આઇકન"
       },
       "colorMasterClassic": {
-        "name": "રંગ માસ્ટર",
-        "category": "ક્લાસિક રંગ પઝલ",
-        "tagline": "મૂળ રંગ-ફોકસ પડકાર: સમાન રંગો વચ્ચે જવાબ શોધો.",
-        "description": "કલર માસ્ટર 2 પહેલાનું મૂળ સંસ્કરણ. પહેલા તેને વેબ પર અજમાવો, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
+        "name": "Color Sense Test: Color Master",
+        "category": "ક્લાસિક કલર સેન્સ ગેમ",
+        "tagline": "મૂળ રંગ-ફોકસ પડકાર: જવાબનો રંગ યાદ રાખો અને તેને સમાન રંગોમાંથી પસંદ કરો.",
+        "description": "Find Odd Color: Color Master 2 પહેલાં મૂળ કલર સેન્સ ટેસ્ટ. પહેલા તેને વેબ પર અજમાવો, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
         "highlights": [
           "મૂળ અનુભૂતિ",
           "રંગ ફોકસ",
           "ઝડપી રમત",
           "હવે ઇન્સ્ટોલ કરો"
         ],
-        "primaryCta": "કલર માસ્ટર ઇન્સ્ટોલ કરો",
+        "primaryCta": "કલર સેન્સ ટેસ્ટ ઇન્સ્ટોલ કરો",
         "detailCta": "વેબ ડેમો અજમાવી જુઓ",
         "statusNote": "પહેલા તેને વેબ પર અજમાવો, પછી તેને Google Play થી ઇન્સ્ટોલ કરો.",
-        "iconAlt": "કલર માસ્ટર આઇકન"
+        "iconAlt": "Color Sense Test: Color Master આઇકન"
       },
       "koreanRandomDefense": {
         "name": "કોરિયન રેન્ડમ સંરક્ષણ: ઘેરો",
@@ -420,7 +422,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "લકી કાર્ડ રેન્ડમ ડિફેન્સ આઇકન"
       },
       "darkMaze": {
-        "name": "લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "મેઝ એસ્કેપ ગેમ રીલીઝ કરી",
         "tagline": "ડાર્ક મેઝમાંથી લેબ ઉંદરને માર્ગદર્શન આપો અને બહાર નીકળો.",
         "description": "28 મે, 2026 ના રોજ Google Play પર રીલિઝ થયું. ડાર્ક મેઝમાંથી આગળ વધો, વસ્તુઓનો ઉપયોગ કરો અને રસ્તો બંધ થાય તે પહેલાં ભાગી જાઓ.",
@@ -431,8 +433,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "શ્યામ અસ્તિત્વ"
         ],
         "primaryCta": "Google Play પર ઇન્સ્ટોલ કરો",
-        "statusNote": "હવે Google Play પર ઉપલબ્ધ છે. આ એપ માટે કોઈ વેબ ડેમો આપવામાં આવેલ નથી.",
-        "iconAlt": "લેબ રેટ મેઝ એસ્કેપ: ડાર્ક મેઝ આઇકન"
+        "statusNote": "એપ્લિકેશન વિગતો જુઓ, પછી તેને Google Play થી ઇન્સ્ટોલ કરો. આ એપ માટે કોઈ વેબ ડેમો આપવામાં આવેલ નથી.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze આઇકન",
+        "detailCta": "એપ્લિકેશન વિગતો જુઓ"
       }
     },
     "status": {
@@ -449,18 +452,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "શોર્ટ આઈડિયાઝ",
       "title": "તેમને આની જેમ અજમાવો",
       "colorMaster2": {
-        "app": "કલર માસ્ટર 2",
-        "title": "\"જો તમે આ રંગનો તફાવત જોશો, તો તમારી આંખો તીક્ષ્ણ છે.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"જો તમે આ વિચિત્ર રંગને જોશો, તો તમારી આંખો તીક્ષ્ણ છે.\"",
         "description": "10-સેકન્ડના પડકારમાં મિત્રો સાથે હરીફાઈ કરો."
       },
       "galaxyCode": {
-        "app": "ગેલેક્ટીકોડ",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"તમારા મિત્રને એક એલિયન સંદેશ મોકલો જે તેઓ ડીકોડ કરી શકતા નથી.\"",
         "description": "ગુપ્ત સંદેશાઓ છોડો જે ફક્ત શેર-કી ધારકો જ ડીકોડ કરી શકે."
       },
       "ufoSignal": {
-        "app": "UFO ને કૉલ કરો",
-        "title": "\"જો તમે પરોઢિયે UFO બટન દબાવો તો શું થશે?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"જો તમે પરોઢિયે UFO સિગ્નલ મોકલો તો શું થશે?\"",
         "description": "ડાર્ક રૂમમાં અવાજો અને એનિમેશનનો આનંદ લો."
       }
     },
@@ -477,7 +480,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "મારે કઈ એપ્લિકેશન પહેલા ઇન્સ્ટોલ કરવી જોઈએ?",
-        "answer": "જો આ તમારી પ્રથમ મુલાકાત છે, તો પહેલા કલર માસ્ટર 2 અજમાવો. તે રમવા માટે ઝડપી છે અને વધુ સારા સ્કોર માટે ફરીથી ચલાવવું સરળ છે."
+        "answer": "જો આ તમારી પ્રથમ મુલાકાત છે, તો પહેલા Find Odd Color: Color Master 2 અજમાવી જુઓ. તે રમવા માટે ઝડપી છે અને વધુ સારા સ્કોર માટે ફરીથી ચલાવવું સરળ છે."
       },
       "privateTest": {
         "question": "હું ખાનગી પરીક્ષણ એપ્લિકેશન્સમાં કેવી રીતે જોડાઈ શકું?",
@@ -488,12 +491,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM દ્વારા બનાવવામાં આવ્યું હતું",
       "lastUpdated": "છેલ્લે અપડેટ કર્યું: 2026.05.31",
       "googlePlay": "Google Play એપ્સ",
-      "colorTest": "રંગ પરીક્ષણ",
-      "alienText": "એલિયન ટેક્સ્ટ જનરેટર",
-      "ufoApp": "યુએફઓ એપ્લિકેશન",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "ગોપનીયતા નીતિ",
       "appAds": "app-ads.txt",
-      "contact": "સંપર્ક કરો"
+      "contact": "સંપર્ક કરો",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ખાનગી પરીક્ષક સાઇનઅપ",
@@ -514,9 +518,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "el-GR": {
     "seo": {
       "title": "NeoKIM App Lab | Δωρεάν εφαρμογές Android Mini",
-      "description": "Εγκαταστήστε το Color Master 2, το Galacticode, το Call the UFO, το Lab Rat Maze Escape: Dark Maze και ιδιωτικές δοκιμές για Lucky Card Random Defense και περισσότερες mini εφαρμογές Android.",
+      "description": "Εγκαταστήστε τα Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze και ιδιωτικές δοκιμές για περισσότερες μίνι εφαρμογές Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Προκλήσεις χρωμάτων, μυστικά μηνύματα που θυμίζουν εξωγήινους, εμπειρίες κλήσης UFO, Lab Rat Maze Escape: Dark Maze και ιδιωτικές δοκιμές για γρήγορη διασκέδαση στο Android."
+      "ogDescription": "Βρείτε περίεργα χρώματα, δημιουργήστε μυστικό κείμενο εξωγήινου, στείλτε παιχνιδιάρικα σήματα UFO, ξεφύγετε από σκοτεινούς λαβύρινθους και συμμετάσχετε σε ιδιωτικές δοκιμές για γρήγορη διασκέδαση Android."
     },
     "skip": {
       "apps": "Μετάβαση στη λίστα εφαρμογών"
@@ -551,11 +555,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Συλλογή μίνι εφαρμογών Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Μικρές εφαρμογές Android για γρήγορη διασκέδαση και κοινή χρήση",
-      "description": "Προκλήσεις χρωμάτων, μυστικά μηνύματα που θυμίζουν εξωγήινους και εμπειρίες κλήσης UFO. Εγκαταστήστε ελαφρά. Απολαύστε το σε λιγότερο από ένα λεπτό.",
+      "description": "Προκλήσεις περίεργων χρωμάτων, μυστικά μηνύματα εξωγήινου στυλ, παιχνίδι σημάτων UFO και σκοτεινές αποδράσεις από λαβύρινθο. Εγκαταστήστε ελαφρά. Απολαύστε το σε λιγότερο από ένα λεπτό.",
       "primaryCta": "Εγκαταστήστε την Επιλεγμένη εφαρμογή",
-      "primaryAria": "Εγκαταστήστε το Color Master 2 στο Google Play",
+      "primaryAria": "Εγκαταστήστε το Find Odd Color: Color Master 2 στο Google Play",
       "secondaryCta": "Περιήγηση σε εφαρμογές",
-      "visualAria": "Μακέτα τηλεφώνου με εικονίδιο Color Master 2 και έγχρωμα πλακίδια",
+      "visualAria": "Μακέτα τηλεφώνου με εικονίδιο Find Odd Color: Color Master 2 και έγχρωμα πλακίδια",
       "badges": [
         "Δωρεάν Εφαρμογές",
         "Android",
@@ -567,36 +571,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ΕΠΙΛΟΓΗ ΕΦΑΡΜΟΓΗ",
       "title": "Εγκαταστήστε αυτό το πρώτο σήμερα",
       "badge": "Προτεινόμενα",
-      "appName": "Color Master 2",
-      "short": "Βρείτε το διαφορετικό χρώμα σε 10 δευτερόλεπτα.",
-      "description": "Ένα έγχρωμο παζλ μιας ζωής όπου ένα λάθος τελειώνει το τρέξιμο. Ξεκινά γρήγορα και μετά σε τραβάει προς τα πίσω για να ξεπεράσεις το ρεκόρ σου.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Βρείτε το ένα διαφορετικό χρώμα σε 10 δευτερόλεπτα.",
+      "description": "Ένα παζλ με περίεργα χρώματα, όπου ένα λάθος τελειώνει το τρέξιμο. Ξεκινά γρήγορα και μετά σε τραβάει προς τα πίσω για να ξεπεράσεις το ρεκόρ σου.",
       "primaryCta": "Εγκαταστήστε στο Google Play",
-      "primaryAria": "Εγκαταστήστε το Color Master 2 στο Google Play",
+      "primaryAria": "Εγκαταστήστε το Find Odd Color: Color Master 2 στο Google Play",
       "secondaryCta": "Περιήγηση σε εφαρμογές",
-      "visualAria": "Μακέτα τηλεφώνου Color Master 2 πλακιδίων χρωμάτων"
+      "visualAria": "Μακέτα τηλεφώνου πρόκλησης πλακιδίων Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "ΚΑΤΑΛΟΓΟΣ ΕΦΑΡΜΟΓΩΝ",
       "title": "Όλες οι εφαρμογές",
       "description": "Εγκαταστήστε απευθείας δημόσιες εφαρμογές. Για ιδιωτικές δοκιμές, στείλτε πρώτα ένα αίτημα μέσω email. Αφού προστεθεί η πρόσβαση του ελεγκτή, χρησιμοποιήστε το κουμπί Συμμετοχή στη δοκιμή.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Έγχρωμο παζλ",
-        "tagline": "Βρείτε το διαφορετικό χρώμα σε 10 δευτερόλεπτα.",
-        "description": "Ένα λάθος τελειώνει το τρέξιμο. Μια σύντομη, εθιστική πρόκληση αντίληψης χρώματος.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Παιχνίδι παζλ με περίεργα χρώματα",
+        "tagline": "Βρείτε το ένα διαφορετικό χρώμα σε 10 δευτερόλεπτα.",
+        "description": "Ένα λάθος τελειώνει το τρέξιμο. Μια σύντομη, εθιστική πρόκληση περίεργων χρωμάτων για εστίαση και αντίληψη χρωμάτων.",
         "highlights": [
           "Όριο 10 δευτερολέπτων",
           "Τρέξιμο μιας ζωής",
           "Leaderboard",
           "Βοήθημα αχρωματοψίας"
         ],
-        "primaryCta": "Εγκαταστήστε το Color Master 2",
+        "primaryCta": "Εγκαταστήστε το Find Odd Color",
         "detailCta": "Δοκιμάστε το Web Demo",
         "statusNote": "Διαθέσιμο τώρα στο Google Play.",
-        "iconAlt": "Εικονίδιο Color Master 2"
+        "iconAlt": "Εικονίδιο Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Γαλαξιακός κώδικας",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Εφαρμογή μυστικών μηνυμάτων",
         "tagline": "Δημιουργήστε μυστικά μηνύματα που μοιάζουν με εξωγήινους που χρειάζονται κοινό κλειδί για αποκωδικοποίηση.",
         "description": "Δημιουργήστε τους δικούς σας κανόνες γαλαξιακής γλώσσας. Μόνο άτομα με το κοινόχρηστο κλειδί σας μπορούν να δημιουργήσουν εκ νέου τους ίδιους κανόνες και το αρχικό κείμενο δεν μεταφορτώνεται σε διακομιστή.",
@@ -609,39 +613,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Δημιουργήστε μυστικά μηνύματα",
         "detailCta": "Δοκιμάστε το Web Demo",
         "statusNote": "Διαθέσιμο τώρα στο Google Play.",
-        "iconAlt": "Εικονίδιο γαλαξιακού κώδικα"
+        "iconAlt": "Εικονίδιο Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Καλέστε το UFO",
-        "category": "Καθηλωτική διασκεδαστική εφαρμογή",
-        "tagline": "Μια μυστηριώδης εμπειρία κλήσης UFO για διασκέδαση.",
-        "description": "Πατήστε το κουμπί, ακούστε το σήμα και φανταστείτε κάτι να ακούει από το διάστημα.",
+        "name": "UFO Signal Simulator",
+        "category": "Εφαρμογή ψυχαγωγίας σήματος μυστηρίου",
+        "tagline": "Στείλτε ένα παιχνιδιάρικο διαστημικό σήμα και απολαύστε τη διάθεση UFO.",
+        "description": "Ανοίξτε την εφαρμογή, πατήστε το κουμπί σήματος και απολαύστε ήχο και κινούμενα σχέδια που κάνουν τη στιγμή να μοιάζει με ένα μικρό τελετουργικό UFO.",
         "highlights": [
-          "Διαδραστικό κουμπί",
+          "Κουμπί σήματος",
           "Ήχοι μυστηρίου",
-          "Κινούμενα σχέδια",
+          "Κινούμενη εικόνα διάθεσης",
           "Χωρίς εγγραφή"
         ],
-        "primaryCta": "Καλέστε το UFO",
-        "detailCta": "Δοκιμάστε το Web Demo",
-        "statusNote": "Διαθέσιμο τώρα στο Google Play.",
-        "iconAlt": "Καλέστε το εικονίδιο UFO"
+        "primaryCta": "Εγκαταστήστε το UFO Signal Simulator",
+        "detailCta": "Προβολή λεπτομερειών εφαρμογής",
+        "statusNote": "Δείτε τις λεπτομέρειες της εφαρμογής και, στη συνέχεια, εγκαταστήστε την από το Google Play.",
+        "iconAlt": "Εικονίδιο UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Κλασικό χρωματικό παζλ",
-        "tagline": "Η αρχική πρόκληση εστίασης χρώματος: βρείτε την απάντηση ανάμεσα σε παρόμοια χρώματα.",
-        "description": "Η αρχική έκδοση πριν από το Color Master 2. Δοκιμάστε το πρώτα στον Ιστό και μετά εγκαταστήστε το από το Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Κλασικό παιχνίδι αίσθησης χρώματος",
+        "tagline": "Η αρχική πρόκληση εστίασης χρώματος: θυμηθείτε το χρώμα της απάντησης και επιλέξτε το από παρόμοια χρώματα.",
+        "description": "Το αρχικό τεστ αίσθησης χρώματος πριν από το Find Odd Color: Color Master 2. Δοκιμάστε το πρώτα στον Ιστό και μετά εγκαταστήστε το από το Google Play.",
         "highlights": [
           "Πρωτότυπη αίσθηση",
           "Εστίαση χρώματος",
           "Γρήγορο παιχνίδι",
           "Εγκαταστήστε τώρα"
         ],
-        "primaryCta": "Εγκαταστήστε το Color Master",
+        "primaryCta": "Εγκαταστήστε το Color Sense Test",
         "detailCta": "Δοκιμάστε το Web Demo",
         "statusNote": "Δοκιμάστε το πρώτα στον Ιστό και μετά εγκαταστήστε το από το Google Play.",
-        "iconAlt": "Χρώμα κύριο εικονίδιο"
+        "iconAlt": "Εικονίδιο Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Κορεάτικη τυχαία άμυνα: Πολιορκία",
@@ -687,8 +691,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Σκοτεινή επιβίωση"
         ],
         "primaryCta": "Εγκατάσταση στο Google Play",
-        "statusNote": "Τώρα διαθέσιμο στο Google Play. Δεν παρέχεται επίδειξη ιστού για αυτήν την εφαρμογή.",
-        "iconAlt": "Lab Rat Maze Escape: Εικονίδιο Dark Maze"
+        "statusNote": "Δείτε τις λεπτομέρειες της εφαρμογής και, στη συνέχεια, εγκαταστήστε την από το Google Play. Δεν παρέχεται επίδειξη ιστού για αυτήν την εφαρμογή.",
+        "iconAlt": "Εικονίδιο Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Προβολή λεπτομερειών εφαρμογής"
       }
     },
     "status": {
@@ -705,18 +710,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ΣΥΝΤΟΜΕΣ ΙΔΕΕΣ",
       "title": "Δοκιμάστε τα σαν αυτό",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "«Αν δείτε αυτή τη διαφορά χρώματος, τα μάτια σας είναι αιχμηρά».",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "«Αν εντοπίσεις αυτό το περίεργο χρώμα, τα μάτια σου είναι αιχμηρά».",
         "description": "Ανταγωνιστείτε με φίλους σε μια πρόκληση 10 δευτερολέπτων."
       },
       "galaxyCode": {
-        "app": "Γαλαξιακός κώδικας",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "«Στείλτε στον φίλο σας ένα εξωγήινο μήνυμα που δεν μπορεί να αποκωδικοποιήσει».",
         "description": "Αφήστε μυστικά μηνύματα που μόνο οι κάτοχοι κλειδιού κοινής χρήσης μπορούν να αποκωδικοποιήσουν."
       },
       "ufoSignal": {
-        "app": "Καλέστε το UFO",
-        "title": "«Τι θα συμβεί αν πατήσετε το κουμπί UFO την αυγή;»",
+        "app": "UFO Signal Simulator",
+        "title": "«Τι θα συμβεί αν στείλετε ένα σήμα UFO την αυγή;»",
         "description": "Απολαύστε τους ήχους και τα κινούμενα σχέδια σε ένα σκοτεινό δωμάτιο."
       }
     },
@@ -733,7 +738,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Ποια εφαρμογή πρέπει να εγκαταστήσω πρώτα;",
-        "answer": "Εάν αυτή είναι η πρώτη σας επίσκεψη, δοκιμάστε πρώτα το Color Master 2. Παίζεται γρήγορα και επαναλαμβάνεται εύκολα για καλύτερο σκορ."
+        "answer": "Εάν αυτή είναι η πρώτη σας επίσκεψη, δοκιμάστε πρώτα το Find Odd Color: Color Master 2. Παίζεται γρήγορα και επαναλαμβάνεται εύκολα για καλύτερο σκορ."
       },
       "privateTest": {
         "question": "Πώς μπορώ να συμμετάσχω σε ιδιωτικές δοκιμαστικές εφαρμογές;",
@@ -744,12 +749,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Κατασκευάστηκε από την NeoKIM",
       "lastUpdated": "Τελευταία ενημέρωση: 31.05.2026",
       "googlePlay": "Εφαρμογές Google Play",
-      "colorTest": "Δοκιμή χρώματος",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "Εφαρμογή UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Πολιτική Απορρήτου",
       "appAds": "app-ads.txt",
-      "contact": "Επικοινωνία"
+      "contact": "Επικοινωνία",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Εγγραφή ιδιωτικού δοκιμαστή",
@@ -770,9 +776,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "nl-NL": {
     "seo": {
       "title": "NeoKIM App-lab | Gratis Android Mini-apps",
-      "description": "Installeer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze en privétests voor Lucky Card Random Defense en meer Android-mini-apps.",
+      "description": "Installeer Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze en privétests voor meer Android mini-apps.",
       "ogTitle": "NeoKIM App-lab | Android Mini-apps",
-      "ogDescription": "Kleuruitdagingen, buitenaardse geheime berichten, UFO-oproepervaringen, Lab Rat Maze Escape: Dark Maze en privétests voor snel Android-plezier."
+      "ogDescription": "Vind vreemde kleuren, maak geheime tekst in buitenaardse stijl, stuur speelse UFO-signalen, ontsnap uit donkere doolhoven en doe mee aan privétests voor snel Android-plezier."
     },
     "skip": {
       "apps": "Ga naar de applijst"
@@ -807,11 +813,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini-app-collectie",
       "title": "NeoKIM App-lab",
       "subtitle": "Kleine Android-apps gemaakt voor snel plezier en delen",
-      "description": "Kleuruitdagingen, buitenaardse geheime berichten en UFO-oproepervaringen. Licht installeren. Geniet in minder dan een minuut.",
+      "description": "Uitdagingen met vreemde kleuren, geheime berichten in buitenaardse stijl, UFO-signaalspel en ontsnappingen in een donker doolhof. Licht installeren. Geniet in minder dan een minuut.",
       "primaryCta": "Installeer de aanbevolen app",
-      "primaryAria": "Installeer Color Master 2 op Google Play",
+      "primaryAria": "Installeer Find Odd Color: Color Master 2 op Google Play",
       "secondaryCta": "Blader door apps",
-      "visualAria": "Telefoonmodel met Color Master 2-pictogram en kleurentegels",
+      "visualAria": "Telefoonmodel met Find Odd Color: Color Master 2-pictogram en kleurtegels",
       "badges": [
         "Gratis apps",
         "Android",
@@ -823,36 +829,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "AANBEVOLEN APP",
       "title": "Installeer dit vandaag eerst",
       "badge": "Uitgelicht",
-      "appName": "Kleurenmaster 2",
-      "short": "Vind de andere kleur in 10 seconden.",
-      "description": "Een kleurenpuzzel van één leven waarbij één fout de run beëindigt. Het begint snel en blijft je terugtrekken om je record te verbeteren.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Vind de ene andere kleur in 10 seconden.",
+      "description": "Een one-life puzzel met vreemde kleuren waarbij één fout de run beëindigt. Het begint snel en blijft je terugtrekken om je record te verbeteren.",
       "primaryCta": "Installeer op Google Play",
-      "primaryAria": "Installeer Color Master 2 op Google Play",
+      "primaryAria": "Installeer Find Odd Color: Color Master 2 op Google Play",
       "secondaryCta": "Blader door apps",
-      "visualAria": "Color Master 2 kleurentegeluitdaging telefoonmodel"
+      "visualAria": "Find Odd Color: Color Master 2 tegeluitdaging telefoonmodel"
     },
     "apps": {
       "kicker": "APP-CATALOGUS",
       "title": "Alle apps",
       "description": "Installeer openbare apps rechtstreeks. Voor privétesten kunt u eerst een verzoek per e-mail versturen; nadat testertoegang is toegevoegd, gebruikt u de knop Deelnemen aan test.",
       "colorMaster2": {
-        "name": "Kleurenmaster 2",
-        "category": "Kleur puzzel",
-        "tagline": "Vind de andere kleur in 10 seconden.",
-        "description": "Eén fout maakt een einde aan de run. Een korte, verslavende uitdaging voor kleurwaarneming.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Puzzelspel met vreemde kleuren",
+        "tagline": "Vind de ene andere kleur in 10 seconden.",
+        "description": "Eén fout maakt een einde aan de run. Een korte, verslavende uitdaging met vreemde kleuren voor focus en kleurperceptie.",
         "highlights": [
           "Limiet van 10 seconden",
           "Een leven lang rennen",
           "Leiderbord",
           "Kleurenblind hulpmiddel"
         ],
-        "primaryCta": "Installeer ColorMaster 2",
+        "primaryCta": "Installeer Vind vreemde kleuren",
         "detailCta": "Probeer de webdemo",
         "statusNote": "Nu beschikbaar op Google Play.",
-        "iconAlt": "Kleur Master 2-pictogram"
+        "iconAlt": "Find Odd Color: Color Master 2-pictogram"
       },
       "galaxyCode": {
-        "name": "Galactische code",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Geheime berichten-app",
         "tagline": "Creëer buitenaardse geheime berichten die een deelsleutel nodig hebben om te decoderen.",
         "description": "Creëer je eigen galactische taalregels. Alleen mensen met uw deelsleutel kunnen dezelfde regels opnieuw maken, en de originele tekst wordt niet naar een server geüpload.",
@@ -865,39 +871,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Creëer geheime berichten",
         "detailCta": "Probeer de webdemo",
         "statusNote": "Nu beschikbaar op Google Play.",
-        "iconAlt": "Galacticode-pictogram"
+        "iconAlt": "Alien Text Maker: Galaxy Code-pictogram"
       },
       "ufoSignal": {
-        "name": "Bel de UFO",
-        "category": "Meeslepende leuke app",
-        "tagline": "Een mysterieuze UFO-oproepervaring voor de lol.",
-        "description": "Druk op de knop, hoor het signaal en stel je voor dat er iets vanuit de ruimte luistert.",
+        "name": "UFO Signal Simulator",
+        "category": "Entertainment-app voor mysteriesignalen",
+        "tagline": "Stuur een speels ruimtesignaal en geniet van de UFO-sfeer.",
+        "description": "Open de app, druk op de signaalknop en geniet van geluid en animatie die het moment laten aanvoelen als een klein UFO-ritueel.",
         "highlights": [
-          "Interactieve knop",
+          "Signaalknop",
           "Mysterieuze geluiden",
-          "Animatie",
+          "Stemmingsanimatie",
           "Geen aanmelding"
         ],
-        "primaryCta": "Bel de UFO",
-        "detailCta": "Probeer de webdemo",
-        "statusNote": "Nu beschikbaar op Google Play.",
-        "iconAlt": "Roep het UFO-pictogram op"
+        "primaryCta": "Installeer UFO Signal Simulator",
+        "detailCta": "Bekijk app-details",
+        "statusNote": "Bekijk de app-details en installeer deze vervolgens vanaf Google Play.",
+        "iconAlt": "UFO Signal Simulator-pictogram"
       },
       "colorMasterClassic": {
-        "name": "Kleur meester",
-        "category": "Klassieke kleurenpuzzel",
-        "tagline": "De originele kleurfocus-uitdaging: vind het antwoord tussen vergelijkbare kleuren.",
-        "description": "De originele versie vóór Color Master 2. Probeer het eerst op internet en installeer het vervolgens vanaf Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassiek kleurgevoelspel",
+        "tagline": "De originele kleurfocusuitdaging: onthoud de antwoordkleur en kies deze uit vergelijkbare kleuren.",
+        "description": "De originele kleurgevoeligheidstest vóór Find Odd Color: Color Master 2. Probeer het eerst op internet en installeer het vervolgens vanaf Google Play.",
         "highlights": [
           "Origineel gevoel",
           "Kleurfocus",
           "Snel spelen",
           "Installeer nu"
         ],
-        "primaryCta": "Installeer ColorMaster",
+        "primaryCta": "Installeer de Kleurwaarnemingstest",
         "detailCta": "Probeer de webdemo",
-        "statusNote": "Probeer het eerst op internet en installeer het vervolgens vanuit Google Play.",
-        "iconAlt": "Kleur Master-pictogram"
+        "statusNote": "Probeer het eerst op internet en installeer het vervolgens vanaf Google Play.",
+        "iconAlt": "Color Sense Test: Color Master-pictogram"
       },
       "koreanRandomDefense": {
         "name": "Koreaanse willekeurige verdediging: belegering",
@@ -932,7 +938,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Willekeurig verdedigingspictogram"
       },
       "darkMaze": {
-        "name": "Lab Rat Doolhof Ontsnapping: Donker Doolhof",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Uitgebracht doolhof ontsnappingsspel",
         "tagline": "Leid een laboratoriumrat door het donkere doolhof en vind de uitgang.",
         "description": "Uitgebracht op Google Play op 28 mei 2026. Beweeg door het donkere doolhof, gebruik items en ontsnap voordat het pad dichterbij komt.",
@@ -943,8 +949,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Duistere overleving"
         ],
         "primaryCta": "Installeer op Google Play",
-        "statusNote": "Nu beschikbaar op Google Play. Er is geen webdemo beschikbaar voor deze app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-pictogram"
+        "statusNote": "Bekijk de app-details en installeer deze vervolgens vanaf Google Play. Er is geen webdemo beschikbaar voor deze app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-pictogram",
+        "detailCta": "Bekijk app-details"
       }
     },
     "status": {
@@ -961,18 +968,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KORTE IDEEËN",
       "title": "Probeer ze zo",
       "colorMaster2": {
-        "app": "Kleurenmaster 2",
-        "title": "“Als je dit kleurverschil ziet, zijn je ogen scherp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Als je deze vreemde kleur ziet, zijn je ogen scherp.\"",
         "description": "Concurreer met vrienden in een uitdaging van 10 seconden."
       },
       "galaxyCode": {
-        "app": "Galactische code",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Stuur je vriend een buitenaards bericht dat hij niet kan decoderen.\"",
         "description": "Laat geheime berichten achter die alleen houders van een gedeelde sleutel kunnen decoderen."
       },
       "ufoSignal": {
-        "app": "Bel de UFO",
-        "title": "“Wat gebeurt er als je bij zonsopgang op de UFO-knop drukt?”",
+        "app": "UFO Signal Simulator",
+        "title": "“Wat gebeurt er als je bij zonsopgang een UFO-signaal verzendt?”",
         "description": "Geniet van de geluiden en animatie in een donkere kamer."
       }
     },
@@ -989,7 +996,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Welke app moet ik eerst installeren?",
-        "answer": "Als dit uw eerste bezoek is, probeer dan eerst Color Master 2. Het is snel te spelen en gemakkelijk opnieuw te spelen voor een betere score."
+        "answer": "Als dit uw eerste bezoek is, probeer dan eerst Find Odd Color: Color Master 2. Het is snel te spelen en gemakkelijk opnieuw te spelen voor een betere score."
       },
       "privateTest": {
         "question": "Hoe kan ik deelnemen aan privétest-apps?",
@@ -1000,12 +1007,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Gemaakt door NeoKIM",
       "lastUpdated": "Laatst bijgewerkt: 31.05.2026",
       "googlePlay": "Google Play-apps",
-      "colorTest": "Kleurtest",
-      "alienText": "Buitenaardse tekstgenerator",
-      "ufoApp": "UFO-app",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacybeleid",
       "appAds": "app-ads.txt",
-      "contact": "Contacteer"
+      "contact": "Contacteer",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Privé-testeraanmelding",
@@ -1026,9 +1034,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ne-NP": {
     "seo": {
       "title": "NeoKIM एप ल्याब | नि: शुल्क Android मिनी एपहरू",
-      "description": "कलर मास्टर २, ग्यालेक्टिकोड, कल द यूएफओ, ल्याब रेट मेज एस्केप: डार्क मेज, र लक्की कार्ड अनियमित रक्षा र थप एन्ड्रोइड मिनी एपहरूको लागि निजी परीक्षणहरू स्थापना गर्नुहोस्।",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, र थप Android मिनी एपहरूको लागि निजी परीक्षणहरू स्थापना गर्नुहोस्।",
       "ogTitle": "NeoKIM एप ल्याब | Android मिनी एपहरू",
-      "ogDescription": "रङ चुनौतीहरू, एलियन जस्तो गोप्य सन्देशहरू, UFO कल गर्ने अनुभवहरू, ल्याब रेट मेज एस्केप: डार्क मेज, र द्रुत एन्ड्रोइड रमाइलोको लागि निजी परीक्षणहरू।"
+      "ogDescription": "विचित्र रंगहरू फेला पार्नुहोस्, एलियन-शैली गोप्य पाठ बनाउनुहोस्, चंचल UFO संकेतहरू पठाउनुहोस्, अँध्यारो भूलभुलैयाहरूबाट भाग्नुहोस्, र द्रुत Android रमाइलोको लागि निजी परीक्षणहरूमा सामेल हुनुहोस्।"
     },
     "skip": {
       "apps": "एप सूचीमा जानुहोस्"
@@ -1063,11 +1071,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android मिनी एप संग्रह",
       "title": "NeoKIM एप ल्याब",
       "subtitle": "द्रुत रमाइलो र साझेदारीको लागि बनाइएको सानो Android अनुप्रयोगहरू",
-      "description": "रङ चुनौतीहरू, एलियन जस्तो गोप्य सन्देशहरू, र UFO कलिङ अनुभवहरू। हल्का स्थापना गर्नुहोस्। एक मिनेट भित्र रमाइलो गर्नुहोस्।",
+      "description": "अजीब-रङ चुनौतीहरू, एलियन-शैली गोप्य सन्देशहरू, UFO सिग्नल प्ले, र गाढा भूलभुलैया एस्केपहरू। हल्का स्थापना गर्नुहोस्। एक मिनेट भित्र रमाइलो गर्नुहोस्।",
       "primaryCta": "विशेष एप स्थापना गर्नुहोस्",
-      "primaryAria": "Google Play मा कलर मास्टर 2 स्थापना गर्नुहोस्",
+      "primaryAria": "Find Odd Color: Color Master 2 Google Play मा स्थापना गर्नुहोस्",
       "secondaryCta": "एप्स ब्राउज गर्नुहोस्",
-      "visualAria": "कलर मास्टर २ आइकन र रङ टाइल्सको साथ फोन मकअप",
+      "visualAria": "Find Odd Color: Color Master 2 आइकन र रङ टाईलहरूसँग फोन मकअप",
       "badges": [
         "नि: शुल्क अनुप्रयोगहरू",
         "Android",
@@ -1079,36 +1087,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "विशेष एप",
       "title": "यो पहिलो आज स्थापना गर्नुहोस्",
       "badge": "चित्रित",
-      "appName": "रङ मास्टर 2",
-      "short": "१० सेकेन्डमा फरक रंग फेला पार्नुहोस्।",
-      "description": "एक-जीवन रंग पहेली जहाँ एक गल्ती रन समाप्त हुन्छ। यो छिटो सुरु हुन्छ, त्यसपछि तपाइँलाई तपाइँको रेकर्ड हराउन को लागी फिर्ता तान्छ।",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "१० सेकेन्डमा एउटा फरक रंग फेला पार्नुहोस्।",
+      "description": "एक-जीवन अजीब-रङ पहेली जहाँ एक गल्ती रन समाप्त हुन्छ। यो छिटो सुरु हुन्छ, त्यसपछि तपाइँलाई तपाइँको रेकर्ड हराउन को लागी फिर्ता तान्छ।",
       "primaryCta": "Google Play मा स्थापना गर्नुहोस्",
-      "primaryAria": "Google Play मा कलर मास्टर 2 स्थापना गर्नुहोस्",
+      "primaryAria": "Find Odd Color: Color Master 2 Google Play मा स्थापना गर्नुहोस्",
       "secondaryCta": "एप्स ब्राउज गर्नुहोस्",
-      "visualAria": "कलर मास्टर २ रङ टाइल चुनौती फोन मकअप"
+      "visualAria": "Find Odd Color: Color Master 2 टाइल चुनौती फोन मकअप"
     },
     "apps": {
       "kicker": "एप क्याटलग",
       "title": "सबै एपहरू",
       "description": "सार्वजनिक अनुप्रयोगहरू सिधै स्थापना गर्नुहोस्। निजी परीक्षणहरूको लागि, पहिले एउटा अनुरोध इमेल गर्नुहोस्; परीक्षक पहुँच थपिएपछि, परीक्षणमा सामेल हुनुहोस् बटन प्रयोग गर्नुहोस्।",
       "colorMaster2": {
-        "name": "रङ मास्टर 2",
-        "category": "रंग पजल",
-        "tagline": "१० सेकेन्डमा फरक रंग फेला पार्नुहोस्।",
-        "description": "एउटा गल्तीले रन समाप्त हुन्छ। छोटो, लत रंग धारणा चुनौती।",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "अजीब-रङ पहेली खेल",
+        "tagline": "१० सेकेन्डमा एउटा फरक रंग फेला पार्नुहोस्।",
+        "description": "एउटा गल्तीले रन समाप्त हुन्छ। फोकस र रङ धारणाको लागि छोटो, लत अजीब-रङ चुनौती।",
         "highlights": [
           "10-सेकेन्ड सीमा",
           "एक-जीवन दौड",
           "लिडरबोर्ड",
           "Colorblind सहायता"
         ],
-        "primaryCta": "रङ मास्टर 2 स्थापना गर्नुहोस्",
+        "primaryCta": "अनौठो रङ खोज्नुहोस् स्थापना गर्नुहोस्",
         "detailCta": "वेब डेमो प्रयास गर्नुहोस्",
-        "statusNote": "अहिले Google Play मा उपलब्ध छ।",
-        "iconAlt": "रङ मास्टर २ आइकन"
+        "statusNote": "Google Play मा अब उपलब्ध छ।",
+        "iconAlt": "Find Odd Color: Color Master 2 आइकन"
       },
       "galaxyCode": {
-        "name": "ग्यालेक्टिकोड",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "गोप्य सन्देश अनुप्रयोग",
         "tagline": "डिकोड गर्न साझा कुञ्जी चाहिने विदेशी जस्तो गोप्य सन्देशहरू सिर्जना गर्नुहोस्।",
         "description": "तपाईंको आफ्नै ग्यालेक्टिक भाषा नियमहरू सिर्जना गर्नुहोस्। तपाईंको साझा कुञ्जी भएका व्यक्तिहरूले मात्र समान नियमहरू पुन: सिर्जना गर्न सक्छन्, र मूल पाठ सर्भरमा अपलोड गरिएको छैन।",
@@ -1120,40 +1128,40 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         ],
         "primaryCta": "गोप्य सन्देशहरू सिर्जना गर्नुहोस्",
         "detailCta": "वेब डेमो प्रयास गर्नुहोस्",
-        "statusNote": "अहिले Google Play मा उपलब्ध छ।",
-        "iconAlt": "Galactico आइकन"
+        "statusNote": "Google Play मा अब उपलब्ध छ।",
+        "iconAlt": "Alien Text Maker: Galaxy Code आइकन"
       },
       "ufoSignal": {
-        "name": "UFO लाई कल गर्नुहोस्",
-        "category": "इमर्सिभ रमाईलो एप",
-        "tagline": "रमाइलोको लागि एक रहस्यमय UFO कलिङ अनुभव।",
-        "description": "बटन थिच्नुहोस्, संकेत सुन्नुहोस्, र अन्तरिक्षबाट केही सुनिरहेको कल्पना गर्नुहोस्।",
+        "name": "UFO Signal Simulator",
+        "category": "रहस्य संकेत मनोरन्जन अनुप्रयोग",
+        "tagline": "एक चंचल स्पेस सिग्नल पठाउनुहोस् र UFO मूडको आनन्द लिनुहोस्।",
+        "description": "एप खोल्नुहोस्, सिग्नल बटन थिच्नुहोस्, र ध्वनि र एनिमेसनको मजा लिनुहोस् जसले क्षणलाई सानो UFO अनुष्ठान जस्तो महसुस गराउँदछ।",
         "highlights": [
-          "अन्तरक्रियात्मक बटन",
+          "सिग्नल बटन",
           "रहस्यमय आवाजहरू",
-          "एनिमेसन",
+          "मूड एनिमेसन",
           "साइन अप छैन"
         ],
-        "primaryCta": "UFO लाई कल गर्नुहोस्",
-        "detailCta": "वेब डेमो प्रयास गर्नुहोस्",
-        "statusNote": "अहिले Google Play मा उपलब्ध छ।",
-        "iconAlt": "UFO आइकनमा कल गर्नुहोस्"
+        "primaryCta": "UFO Signal Simulator स्थापना गर्नुहोस्",
+        "detailCta": "एप विवरणहरू हेर्नुहोस्",
+        "statusNote": "एप विवरणहरू हेर्नुहोस्, त्यसपछि यसलाई Google Play बाट स्थापना गर्नुहोस्।",
+        "iconAlt": "UFO Signal Simulator आइकन"
       },
       "colorMasterClassic": {
-        "name": "रङ मास्टर",
-        "category": "क्लासिक रंग पहेली",
-        "tagline": "मूल रङ-फोकस चुनौती: समान रङहरू बीच जवाफ खोज्नुहोस्।",
-        "description": "Color Master 2 अघिको मूल संस्करण। पहिले यसलाई वेबमा प्रयास गर्नुहोस्, त्यसपछि Google Play बाट स्थापना गर्नुहोस्।",
+        "name": "Color Sense Test: Color Master",
+        "category": "क्लासिक रंग भावना खेल",
+        "tagline": "मूल रङ-फोकस चुनौती: जवाफको रङ सम्झनुहोस् र समान रङहरूबाट छान्नुहोस्।",
+        "description": "Find Odd Color: Color Master 2 अघि मूल रंग ज्ञान परीक्षण। यसलाई पहिले वेबमा प्रयास गर्नुहोस्, त्यसपछि यसलाई Google Play बाट स्थापना गर्नुहोस्।",
         "highlights": [
           "मौलिक अनुभूति",
           "रङ फोकस",
           "द्रुत खेल",
           "अहिले स्थापना गर्नुहोस्"
         ],
-        "primaryCta": "रङ मास्टर स्थापना गर्नुहोस्",
+        "primaryCta": "कलर सेन्स टेस्ट स्थापना गर्नुहोस्",
         "detailCta": "वेब डेमो प्रयास गर्नुहोस्",
-        "statusNote": "यसलाई पहिले वेबमा प्रयास गर्नुहोस्, त्यसपछि Google Play बाट स्थापना गर्नुहोस्।",
-        "iconAlt": "रङ मास्टर आइकन"
+        "statusNote": "यसलाई पहिले वेबमा प्रयास गर्नुहोस्, त्यसपछि यसलाई Google Play बाट स्थापना गर्नुहोस्।",
+        "iconAlt": "Color Sense Test: Color Master आइकन"
       },
       "koreanRandomDefense": {
         "name": "कोरियाली अनियमित रक्षा: घेराबन्दी",
@@ -1188,10 +1196,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "भाग्यशाली कार्ड अनियमित रक्षा प्रतिमा"
       },
       "darkMaze": {
-        "name": "ल्याब रेट भूलभुलैया एस्केप: गाढा भूलभुलैया",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "जारी भूलभुलैया एस्केप खेल",
         "tagline": "अँध्यारो भूलभुलैया मार्फत प्रयोगशाला मुसालाई मार्गदर्शन गर्नुहोस् र बाहिर निस्कनुहोस्।",
-        "description": "28 मे, 2026 मा Google Play मा रिलीज। अँध्यारो भूलभुलैयामा जानुहोस्, वस्तुहरू प्रयोग गर्नुहोस् र बाटो बन्द हुनु अघि भाग्नुहोस्।",
+        "description": "मे २८, २०२६ मा Google Play मा रिलीज। अँध्यारो भूलभुलैयामा जानुहोस्, वस्तुहरू प्रयोग गर्नुहोस्, र बाटो बन्द हुनु अघि भाग्नुहोस्।",
         "highlights": [
           "मे 28, 2026 मा जारी गरियो",
           "भूलभुलैया एस्केप",
@@ -1199,8 +1207,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "अँध्यारो अस्तित्व"
         ],
         "primaryCta": "Google Play मा स्थापना गर्नुहोस्",
-        "statusNote": "अब Google Play मा उपलब्ध छ। यो एपको लागि कुनै वेब डेमो प्रदान गरिएको छैन।",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze आइकन"
+        "statusNote": "एप विवरणहरू हेर्नुहोस्, त्यसपछि यसलाई Google Play बाट स्थापना गर्नुहोस्। यो एपको लागि कुनै वेब डेमो प्रदान गरिएको छैन।",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze आइकन",
+        "detailCta": "एप विवरणहरू हेर्नुहोस्"
       }
     },
     "status": {
@@ -1217,18 +1226,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "छोटो विचारहरू",
       "title": "तिनीहरूलाई यो जस्तै प्रयास गर्नुहोस्",
       "colorMaster2": {
-        "app": "रङ मास्टर 2",
-        "title": "\"यदि तपाईंले यो रंग फरक देख्नुभयो भने, तपाईंको आँखा तीखो छ।\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"यदि तपाईंले यो अनौठो रंग देख्नुभयो भने, तपाईंको आँखा तीखो छ।\"",
         "description": "१० सेकेन्डको चुनौतीमा साथीहरूसँग प्रतिस्पर्धा गर्नुहोस्।"
       },
       "galaxyCode": {
-        "app": "ग्यालेक्टिकोड",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"तपाईंको साथीलाई एक विदेशी सन्देश पठाउनुहोस् जुन तिनीहरू डिकोड गर्न सक्दैनन्।\"",
         "description": "सेयर-कुञ्जी धारकहरूले मात्र डिकोड गर्न सक्ने गोप्य सन्देशहरू छोड्नुहोस्।"
       },
       "ufoSignal": {
-        "app": "UFO लाई कल गर्नुहोस्",
-        "title": "\"तपाईंले बिहानको समयमा UFO बटन थिच्नुभयो भने के हुन्छ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"यदि तपाईंले बिहानको समयमा UFO सिग्नल पठाउनुभयो भने के हुन्छ?\"",
         "description": "अँध्यारो कोठामा ध्वनि र एनिमेसनको आनन्द लिनुहोस्।"
       }
     },
@@ -1245,7 +1254,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "मैले कुन एप पहिले स्थापना गर्नुपर्छ?",
-        "answer": "यदि यो तपाइँको पहिलो भ्रमण हो भने, पहिले रङ मास्टर 2 प्रयास गर्नुहोस्। यो खेल्न छिटो छ र राम्रो स्कोरको लागि पुन: प्ले गर्न सजिलो छ।"
+        "answer": "यदि यो तपाइँको पहिलो भ्रमण हो भने, पहिले Find Odd Color: Color Master 2 प्रयास गर्नुहोस्। यो खेल्न छिटो छ र राम्रो स्कोरको लागि पुन: प्ले गर्न सजिलो छ।"
       },
       "privateTest": {
         "question": "म कसरी निजी परीक्षण एपहरूमा सामेल हुन सक्छु?",
@@ -1256,12 +1265,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM द्वारा बनाईएको",
       "lastUpdated": "पछिल्लो अपडेट: २०२६.०५.३१",
       "googlePlay": "Google Play अनुप्रयोगहरू",
-      "colorTest": "रंग परीक्षण",
-      "alienText": "विदेशी पाठ जेनरेटर",
-      "ufoApp": "UFO एप",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "गोपनीयता नीति",
       "appAds": "app-ads.txt",
-      "contact": "सम्पर्क गर्नुहोस्"
+      "contact": "सम्पर्क गर्नुहोस्",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "निजी परीक्षक साइनअप",
@@ -1282,9 +1292,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "no-NO": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-apper",
-      "description": "Installer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze og private tester for Lucky Card Random Defense og flere Android-miniapper.",
+      "description": "Installer Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze og private tester for flere Android miniapper.",
       "ogTitle": "NeoKIM App Lab | Android Mini-apper",
-      "ogDescription": "Fargeutfordringer, romvesenlignende hemmelige meldinger, UFO-ringeopplevelser, Lab Rat Maze Escape: Dark Maze og private tester for rask Android-moro."
+      "ogDescription": "Finn rare farger, lag hemmelig tekst i alien-stil, send lekne UFO-signaler, unnslipp mørke labyrinter og bli med i private tester for rask Android-moro."
     },
     "skip": {
       "apps": "Hopp til applisten"
@@ -1319,11 +1329,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini-appsamling",
       "title": "NeoKIM App Lab",
       "subtitle": "Små Android-apper laget for rask moro og deling",
-      "description": "Fargeutfordringer, romvesenlignende hemmelige meldinger og UFO-anropsopplevelser. Installer lett. Nyt på under ett minutt.",
+      "description": "Utfordringer i merkelige farger, hemmelige meldinger i alien-stil, spill av UFO-signaler og rømming av mørke labyrint. Installer lett. Nyt på under ett minutt.",
       "primaryCta": "Installer fremhevet app",
-      "primaryAria": "Installer Color Master 2 på Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 på Google Play",
       "secondaryCta": "Bla gjennom apper",
-      "visualAria": "Telefonmockup med Color Master 2-ikon og fargefliser",
+      "visualAria": "Telefonmockup med Find Odd Color: Color Master 2-ikon og fargefliser",
       "badges": [
         "Gratis apper",
         "Android",
@@ -1335,36 +1345,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "UTVALGT APP",
       "title": "Installer dette først i dag",
       "badge": "Utvalgte",
-      "appName": "Fargemester 2",
-      "short": "Finn den forskjellige fargen på 10 sekunder.",
-      "description": "Et fargepuslespill med ett liv der én feil avslutter løpeturen. Den starter raskt, og fortsetter å trekke deg tilbake for å slå rekorden din.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Finn en annen farge på 10 sekunder.",
+      "description": "Et ett-livs puslespill i ulike farger der én feil avslutter løpet. Den starter raskt, og fortsetter å trekke deg tilbake for å slå rekorden din.",
       "primaryCta": "Installer på Google Play",
-      "primaryAria": "Installer Color Master 2 på Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 på Google Play",
       "secondaryCta": "Bla gjennom apper",
-      "visualAria": "Color Master 2-farget flisutfordring telefonmockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge telefonmockup"
     },
     "apps": {
       "kicker": "APPKATALOG",
       "title": "Alle apper",
       "description": "Installer offentlige apper direkte. For private tester, send en e-post med en forespørsel først; etter at testertilgang er lagt til, bruk Bli med i test-knappen.",
       "colorMaster2": {
-        "name": "Fargemester 2",
-        "category": "Fargepuslespill",
-        "tagline": "Finn den forskjellige fargen på 10 sekunder.",
-        "description": "En feil avslutter løpet. En kort, vanedannende fargeoppfattelsesutfordring.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Puslespill med merkelige farger",
+        "tagline": "Finn en annen farge på 10 sekunder.",
+        "description": "En feil avslutter løpet. En kort, vanedannende utfordring med ulike farger for fokus og fargeoppfatning.",
         "highlights": [
           "10-sekunders grense",
           "Ett-livsløp",
           "Leaderboard",
           "Fargeblind hjelpemiddel"
         ],
-        "primaryCta": "Installer Color Master 2",
+        "primaryCta": "Installer Finn Odd Color",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Tilgjengelig nå på Google Play.",
-        "iconAlt": "Color Master 2-ikon"
+        "iconAlt": "Find Odd Color: Color Master 2-ikon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "App for hemmelig melding",
         "tagline": "Lag romvesenlignende hemmelige meldinger som trenger en delingsnøkkel for å dekode.",
         "description": "Lag dine egne galaktiske språkregler. Bare personer med delingsnøkkelen din kan gjenskape de samme reglene, og den originale teksten lastes ikke opp til en server.",
@@ -1377,39 +1387,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Lag hemmelige meldinger",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Tilgjengelig nå på Google Play.",
-        "iconAlt": "Galacticode-ikon"
+        "iconAlt": "Alien Text Maker: Galaxy Code-ikon"
       },
       "ufoSignal": {
-        "name": "Ring UFOen",
-        "category": "Oppslukende morsom app",
-        "tagline": "En mystisk UFO-anropsopplevelse for moro skyld.",
-        "description": "Trykk på knappen, hør signalet og forestill deg noe som lytter fra verdensrommet.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal underholdning app",
+        "tagline": "Send et lekent romsignal og nyt UFO-stemningen.",
+        "description": "Åpne appen, trykk på signalknappen, og nyt lyd og animasjon som får øyeblikket til å føles som et lite UFO-ritual.",
         "highlights": [
-          "Interaktiv knapp",
+          "Signalknapp",
           "Mystiske lyder",
-          "Animasjon",
+          "Stemningsanimasjon",
           "Ingen påmelding"
         ],
-        "primaryCta": "Ring UFOen",
-        "detailCta": "Prøv Web Demo",
-        "statusNote": "Tilgjengelig nå på Google Play.",
-        "iconAlt": "Ring UFO-ikonet"
+        "primaryCta": "Installer UFO Signal Simulator",
+        "detailCta": "Se appdetaljer",
+        "statusNote": "Se appdetaljene, og installer den fra Google Play.",
+        "iconAlt": "UFO Signal Simulator-ikon"
       },
       "colorMasterClassic": {
-        "name": "Fargemester",
-        "category": "Klassisk fargepuslespill",
-        "tagline": "Den originale fargefokusutfordringen: Finn svaret blant lignende farger.",
-        "description": "Den originale versjonen før Color Master 2. Prøv den på nettet først, og installer den deretter fra Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassisk fargesansspill",
+        "tagline": "Den originale fargefokusutfordringen: husk svarfargen og velg den fra lignende farger.",
+        "description": "Den originale fargesansetesten før Find Odd Color: Color Master 2. Prøv det på nettet først, og installer det deretter fra Google Play.",
         "highlights": [
           "Original følelse",
           "Fargefokus",
           "Raskt spill",
           "Installer nå"
         ],
-        "primaryCta": "Installer Color Master",
+        "primaryCta": "Installer Color Sense Test",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Prøv det på nettet først, og installer det deretter fra Google Play.",
-        "iconAlt": "Fargemesterikon"
+        "iconAlt": "Color Sense Test: Color Master-ikon"
       },
       "koreanRandomDefense": {
         "name": "Koreansk tilfeldig forsvar: Siege",
@@ -1447,7 +1457,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Utgitt labyrint escape-spill",
         "tagline": "Led en laboratorierotte gjennom den mørke labyrinten og finn utgangen.",
-        "description": "Utgitt på Google Play 28. mai 2026. Beveg deg gjennom den mørke labyrinten, bruk gjenstander og flykt før stien nærmer seg.",
+        "description": "Utgitt på Google Play 28. mai 2026. Beveg deg gjennom den mørke labyrinten, bruk gjenstander og flykt før stien lukker seg.",
         "highlights": [
           "Utgitt 28. mai 2026",
           "Labyrintflukt",
@@ -1455,8 +1465,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mørk overlevelse"
         ],
         "primaryCta": "Installer på Google Play",
-        "statusNote": "Nå tilgjengelig på Google Play. Ingen nettdemo er gitt for denne appen.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon"
+        "statusNote": "Se appdetaljene, og installer den fra Google Play. Ingen nettdemo er gitt for denne appen.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon",
+        "detailCta": "Se appdetaljer"
       }
     },
     "status": {
@@ -1473,18 +1484,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KORTE IDÉER",
       "title": "Prøv dem slik",
       "colorMaster2": {
-        "app": "Fargemester 2",
-        "title": "\"Hvis du ser denne fargeforskjellen, er øynene dine skarpe.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Hvis du ser denne merkelige fargen, er øynene dine skarpe.\"",
         "description": "Konkurrer med venner i en 10-sekunders utfordring."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Send din venn en fremmedmelding de ikke kan dekode.\"",
-        "description": "Legg igjen hemmelige meldinger som bare aksjenøkkeleiere kan dekode."
+        "description": "Legg igjen hemmelige meldinger som bare eiere av aksjenøkkel kan avkode."
       },
       "ufoSignal": {
-        "app": "Ring UFOen",
-        "title": "\"Hva skjer hvis du trykker på UFO-knappen ved daggry?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Hva skjer hvis du sender et UFO-signal ved daggry?\"",
         "description": "Nyt lydene og animasjonen i et mørkt rom."
       }
     },
@@ -1501,7 +1512,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Hvilken app bør jeg installere først?",
-        "answer": "Hvis dette er ditt første besøk, prøv Color Master 2 først. Det er raskt å spille og enkelt å spille om for en bedre poengsum."
+        "answer": "Hvis dette er ditt første besøk, prøv Find Odd Color: Color Master 2 først. Det er raskt å spille og enkelt å spille om for en bedre poengsum."
       },
       "privateTest": {
         "question": "Hvordan blir jeg med i private testapper?",
@@ -1512,12 +1523,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Laget av NeoKIM",
       "lastUpdated": "Sist oppdatert: 2026.05.31",
       "googlePlay": "Google Play-apper",
-      "colorTest": "Fargetest",
-      "alienText": "Generator for fremmede tekster",
-      "ufoApp": "UFO-app",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Personvernerklæring",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registrering for privat tester",
@@ -1538,9 +1550,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "da-DK": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini Apps",
-      "description": "Installer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze og private tests for Lucky Card Random Defense og flere Android-miniapps.",
+      "description": "Installer Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze og private tests for flere Android mini-apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Farveudfordringer, alien-lignende hemmelige beskeder, UFO-opkaldsoplevelser, Lab Rat Maze Escape: Dark Maze og private tests for hurtig Android-sjov."
+      "ogDescription": "Find mærkelige farver, lav hemmelig tekst i alien-stil, send legende UFO-signaler, undslippe mørke labyrinter, og deltag i private tests for hurtig Android-sjov."
     },
     "skip": {
       "apps": "Spring til applisten"
@@ -1575,11 +1587,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app samling",
       "title": "NeoKIM App Lab",
       "subtitle": "Små Android apps lavet til hurtig sjov og deling",
-      "description": "Farveudfordringer, alien-lignende hemmelige beskeder og UFO-opkaldsoplevelser. Installer let. Nyd på under et minut.",
+      "description": "Udfordringer i ulige farver, hemmelige budskaber i alien-stil, UFO-signalspil og undslippe fra mørke labyrint. Installer let. Nyd på under et minut.",
       "primaryCta": "Installer Udvalgte App",
-      "primaryAria": "Installer Color Master 2 på Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 på Google Play",
       "secondaryCta": "Gennemse apps",
-      "visualAria": "Telefonmockup med Color Master 2-ikon og farvefliser",
+      "visualAria": "Telefonmockup med Find Odd Color: Color Master 2-ikon og farvefliser",
       "badges": [
         "Gratis apps",
         "Android",
@@ -1591,36 +1603,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "UDVALGTE APP",
       "title": "Installer dette først i dag",
       "badge": "Udvalgte",
-      "appName": "Farvemester 2",
-      "short": "Find den anden farve på 10 sekunder.",
-      "description": "Et farvepuslespil med ét liv, hvor én fejl afslutter løbet. Den starter hurtigt og trækker dig derefter tilbage for at slå din rekord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find den ene anden farve på 10 sekunder.",
+      "description": "Et et-livs puslespil i ulige farver, hvor én fejl afslutter løbet. Den starter hurtigt og trækker dig derefter tilbage for at slå din rekord.",
       "primaryCta": "Installer på Google Play",
-      "primaryAria": "Installer Color Master 2 på Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 på Google Play",
       "secondaryCta": "Gennemse apps",
-      "visualAria": "Color Master 2 farve flise udfordring telefon mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge telefon mockup"
     },
     "apps": {
       "kicker": "APP KATALOG",
       "title": "Alle apps",
       "description": "Installer offentlige apps direkte. For private tests, e-mail en anmodning først; efter at der er tilføjet testadgang, skal du bruge knappen Deltag i test.",
       "colorMaster2": {
-        "name": "Farvemester 2",
-        "category": "Farvepuslespil",
-        "tagline": "Find den anden farve på 10 sekunder.",
-        "description": "En fejl afslutter løbet. En kort, vanedannende farveopfattelsesudfordring.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Puslespil i ulige farver",
+        "tagline": "Find den ene anden farve på 10 sekunder.",
+        "description": "En fejl afslutter løbet. En kort, vanedannende udfordring i ulige farver til fokus og farveopfattelse.",
         "highlights": [
           "10 sekunders grænse",
           "Et-livs løb",
           "Leaderboard",
           "Farveblinde hjælpemiddel"
         ],
-        "primaryCta": "Installer Color Master 2",
+        "primaryCta": "Installer Find Odd Color",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Tilgængelig nu på Google Play.",
-        "iconAlt": "Color Master 2 ikon"
+        "iconAlt": "Find Odd Color: Color Master 2 ikon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "App til hemmelig besked",
         "tagline": "Opret alien-lignende hemmelige beskeder, der skal bruge en delenøgle for at afkode.",
         "description": "Lav dine egne galaktiske sprogregler. Kun personer med din delenøgle kan genskabe de samme regler, og den originale tekst uploades ikke til en server.",
@@ -1633,39 +1645,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Opret hemmelige beskeder",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Tilgængelig nu på Google Play.",
-        "iconAlt": "Galacticode-ikon"
+        "iconAlt": "Alien Text Maker: Galaxy Code ikon"
       },
       "ufoSignal": {
-        "name": "Ring til UFO'en",
-        "category": "Fordybende sjov app",
-        "tagline": "En mystisk UFO-kaldeoplevelse for sjov.",
-        "description": "Tryk på knappen, hør signalet, og forestil dig noget, der lytter fra rummet.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal underholdning app",
+        "tagline": "Send et legende rumsignal og nyd UFO-stemningen.",
+        "description": "Åbn appen, tryk på signalknappen, og nyd lyd og animation, der får øjeblikket til at føles som et lille UFO-ritual.",
         "highlights": [
-          "Interaktiv knap",
+          "Signal knap",
           "Mystiske lyder",
-          "Animation",
+          "Stemningsanimation",
           "Ingen tilmelding"
         ],
-        "primaryCta": "Ring til UFO'en",
-        "detailCta": "Prøv Web Demo",
-        "statusNote": "Tilgængelig nu på Google Play.",
-        "iconAlt": "Ring til UFO-ikonet"
+        "primaryCta": "Installer UFO Signal Simulator",
+        "detailCta": "Se appdetaljer",
+        "statusNote": "Se appdetaljerne, og installer den derefter fra Google Play.",
+        "iconAlt": "UFO Signal Simulator ikon"
       },
       "colorMasterClassic": {
-        "name": "Farvemester",
-        "category": "Klassisk farvepuslespil",
-        "tagline": "Den originale farvefokusudfordring: find svaret blandt lignende farver.",
-        "description": "Den originale version før Color Master 2. Prøv den på nettet først, og installer den derefter fra Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassisk farvesansspil",
+        "tagline": "Den originale farvefokusudfordring: husk svarfarven og vælg den fra lignende farver.",
+        "description": "Den originale farvesanstest før Find Odd Color: Color Master 2. Prøv det på nettet først, og installer det derefter fra Google Play.",
         "highlights": [
           "Original følelse",
           "Farvefokus",
           "Hurtigt spil",
           "Installer nu"
         ],
-        "primaryCta": "Installer Color Master",
+        "primaryCta": "Installer Color Sense Test",
         "detailCta": "Prøv Web Demo",
         "statusNote": "Prøv det på nettet først, og installer det derefter fra Google Play.",
-        "iconAlt": "Farve Master ikon"
+        "iconAlt": "Color Sense Test: Color Master ikon"
       },
       "koreanRandomDefense": {
         "name": "Koreansk Random Defense: Siege",
@@ -1711,8 +1723,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mørk overlevelse"
         ],
         "primaryCta": "Installer på Google Play",
-        "statusNote": "Nu tilgængelig på Google Play. Der er ingen webdemo til denne app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon"
+        "statusNote": "Se appdetaljerne, og installer den derefter fra Google Play. Der er ingen webdemo til denne app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikon",
+        "detailCta": "Se appdetaljer"
       }
     },
     "status": {
@@ -1729,18 +1742,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KORTE IDÉER",
       "title": "Prøv dem sådan her",
       "colorMaster2": {
-        "app": "Farvemester 2",
-        "title": "\"Hvis du ser denne farveforskel, er dine øjne skarpe.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Hvis du ser denne mærkelige farve, er dine øjne skarpe.\"",
         "description": "Konkurrer med venner i en 10 sekunders udfordring."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Send din ven en alien-besked, de ikke kan afkode.\"",
         "description": "Efterlad hemmelige beskeder, som kun aktienøgleindehavere kan afkode."
       },
       "ufoSignal": {
-        "app": "Ring til UFO'en",
-        "title": "\"Hvad sker der, hvis du trykker på UFO-knappen ved daggry?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Hvad sker der, hvis du sender et UFO-signal ved daggry?\"",
         "description": "Nyd lydene og animationen i et mørkt rum."
       }
     },
@@ -1757,7 +1770,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Hvilken app skal jeg installere først?",
-        "answer": "Hvis dette er dit første besøg, så prøv Color Master 2 først. Det er hurtigt at spille og nemt at genspille for en bedre score."
+        "answer": "Hvis dette er dit første besøg, så prøv Find Odd Color: Color Master 2 først. Det er hurtigt at spille og nemt at genspille for en bedre score."
       },
       "privateTest": {
         "question": "Hvordan tilmelder jeg mig private testapps?",
@@ -1768,12 +1781,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Lavet af NeoKIM",
       "lastUpdated": "Sidst opdateret: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Farvetest",
-      "alienText": "Generator for fremmede tekster",
-      "ufoApp": "UFO app",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privatlivspolitik",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Tilmelding til privat tester",
@@ -1794,9 +1808,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "de-DE": {
     "seo": {
       "title": "NeoKIM App Lab | Kostenlose Android Mini-Apps",
-      "description": "Installieren Sie Color Master 2, Galacticcode, Call the UFO, Lab Rat Maze Escape: Dark Maze und private Tests für Lucky Card Random Defense und weitere Android-Mini-Apps.",
+      "description": "Installieren Sie Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze und private Tests für weitere Android-Mini-Apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini-Apps",
-      "ogDescription": "Farbherausforderungen, außerirdische Geheimbotschaften, UFO-Anruferlebnisse, Lab Rat Maze Escape: Dark Maze und private Tests für schnellen Android-Spaß."
+      "ogDescription": "Finden Sie seltsame Farben, erstellen Sie geheime Texte im Alien-Stil, senden Sie verspielte UFO-Signale, entkommen Sie dunklen Labyrinthen und nehmen Sie an privaten Tests teil, um schnellen Android-Spaß zu haben."
     },
     "skip": {
       "apps": "Zur App-Liste springen"
@@ -1831,11 +1845,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android Mini-App-Sammlung",
       "title": "NeoKIM App Lab",
       "subtitle": "Kleine Android-Apps für schnellen Spaß und Austausch",
-      "description": "Farbherausforderungen, außerirdische Geheimbotschaften und UFO-Anruferlebnisse. Leicht installieren. Genießen Sie es in weniger als einer Minute.",
+      "description": "Herausforderungen in seltsamen Farben, geheime Botschaften im Alien-Stil, UFO-Signalspiele und Fluchten aus dunklen Labyrinthen. Leicht installieren. Genießen Sie es in weniger als einer Minute.",
       "primaryCta": "Empfohlene App installieren",
-      "primaryAria": "Installieren Sie Color Master 2 auf Google Play",
+      "primaryAria": "Installieren Sie Find Odd Color: Color Master 2 auf Google Play",
       "secondaryCta": "Durchsuchen Sie Apps",
-      "visualAria": "Telefonmodell mit Color Master 2-Symbol und Farbkacheln",
+      "visualAria": "Telefonmodell mit Find Odd Color: Color Master 2-Symbol und Farbkacheln",
       "badges": [
         "Kostenlose Apps",
         "Android",
@@ -1847,81 +1861,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "AUSGEWÄHLTE APP",
       "title": "Installieren Sie dies noch heute als Erstes",
       "badge": "Hervorgehoben",
-      "appName": "Farbmeister 2",
-      "short": "Finden Sie die andere Farbe in 10 Sekunden.",
-      "description": "Ein Ein-Leben-Farbrätsel, bei dem ein Fehler den Lauf beendet. Es beginnt schnell und zieht Sie dann immer wieder zurück, um Ihren Rekord zu brechen.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Finden Sie in 10 Sekunden die eine andere Farbe.",
+      "description": "Ein Ein-Leben-Rätsel mit ungeraden Farben, bei dem ein Fehler den Lauf beendet. Es beginnt schnell und zieht Sie dann immer wieder zurück, um Ihren Rekord zu brechen.",
       "primaryCta": "Auf Google Play installieren",
-      "primaryAria": "Installieren Sie Color Master 2 auf Google Play",
+      "primaryAria": "Installieren Sie Find Odd Color: Color Master 2 auf Google Play",
       "secondaryCta": "Durchsuchen Sie Apps",
-      "visualAria": "Color Master 2 Farbkachel-Challenge-Telefonmodell"
+      "visualAria": "Find Odd Color: Color Master 2 Kachel-Challenge-Telefonmodell"
     },
     "apps": {
       "kicker": "APP-KATALOG",
       "title": "Alle Apps",
       "description": "Öffentliche Apps direkt installieren. Für private Tests senden Sie zunächst eine Anfrage per E-Mail. Nachdem der Testerzugriff hinzugefügt wurde, verwenden Sie die Schaltfläche „Test beitreten“.",
       "colorMaster2": {
-        "name": "Farbmeister 2",
-        "category": "Farbpuzzle",
-        "tagline": "Finden Sie die andere Farbe in 10 Sekunden.",
-        "description": "Ein Fehler beendet den Lauf. Eine kurze, süchtig machende Herausforderung zur Farbwahrnehmung.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Puzzlespiel mit seltsamen Farben",
+        "tagline": "Finden Sie in 10 Sekunden die eine andere Farbe.",
+        "description": "Ein Fehler beendet den Lauf. Eine kurze, süchtig machende Herausforderung mit seltsamen Farben für Fokus und Farbwahrnehmung.",
         "highlights": [
           "10-Sekunden-Limit",
           "One-Life-Lauf",
           "Bestenliste",
           "Hilfe bei Farbenblindheit"
         ],
-        "primaryCta": "Installieren Sie Color Master 2",
+        "primaryCta": "Installieren Sie „Ungerade Farbe suchen“.",
         "detailCta": "Probieren Sie die Webdemo aus",
-        "statusNote": "Jetzt verfügbar auf Google Play.",
-        "iconAlt": "Color Master 2-Symbol"
+        "statusNote": "Ab sofort auf Google Play verfügbar.",
+        "iconAlt": "Find Odd Color: Color Master 2-Symbol"
       },
       "galaxyCode": {
-        "name": "Galaktischer Code",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Geheimnachrichten-App",
         "tagline": "Erstellen Sie außerirdische Geheimnachrichten, die zum Entschlüsseln einen gemeinsamen Schlüssel benötigen.",
         "description": "Erstellen Sie Ihre eigenen galaktischen Sprachregeln. Nur Personen mit Ihrem Freigabeschlüssel können dieselben Regeln neu erstellen und der Originaltext wird nicht auf einen Server hochgeladen.",
         "highlights": [
           "Share-Key-basiert",
           "Persönliche Regeln",
-          "SNS-bereit",
+          "SNS-fähig",
           "Kein Server-Upload"
         ],
         "primaryCta": "Erstellen Sie geheime Nachrichten",
         "detailCta": "Probieren Sie die Webdemo aus",
-        "statusNote": "Jetzt verfügbar auf Google Play.",
-        "iconAlt": "Galacticcode-Symbol"
+        "statusNote": "Ab sofort auf Google Play verfügbar.",
+        "iconAlt": "Alien Text Maker: Galaxy Code-Symbol"
       },
       "ufoSignal": {
-        "name": "Rufen Sie das UFO an",
-        "category": "Fesselnde Spaß-App",
-        "tagline": "Ein mysteriöses UFO-Ruf-Erlebnis zum Spaß.",
-        "description": "Drücken Sie den Knopf, hören Sie das Signal und stellen Sie sich vor, dass etwas aus dem Weltraum zuhört.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery Signal-Unterhaltungs-App",
+        "tagline": "Senden Sie ein spielerisches Weltraumsignal und genießen Sie die UFO-Stimmung.",
+        "description": "Öffnen Sie die App, drücken Sie die Signaltaste und genießen Sie Sound und Animationen, die den Moment wie ein kleines UFO-Ritual wirken lassen.",
         "highlights": [
-          "Interaktive Schaltfläche",
+          "Signaltaste",
           "Geheimnisvolle Klänge",
-          "Animation",
+          "Stimmungsanimation",
           "Keine Anmeldung"
         ],
-        "primaryCta": "Rufen Sie das UFO an",
-        "detailCta": "Probieren Sie die Webdemo aus",
-        "statusNote": "Jetzt verfügbar auf Google Play.",
-        "iconAlt": "Rufen Sie das UFO-Symbol an"
+        "primaryCta": "Installieren Sie UFO Signal Simulator",
+        "detailCta": "App-Details anzeigen",
+        "statusNote": "Sehen Sie sich die App-Details an und installieren Sie sie dann über Google Play.",
+        "iconAlt": "UFO Signal Simulator-Symbol"
       },
       "colorMasterClassic": {
-        "name": "Farbmeister",
-        "category": "Klassisches Farbrätsel",
-        "tagline": "Die ursprüngliche Farbfokus-Herausforderung: Finden Sie die Antwort unter ähnlichen Farben.",
-        "description": "Die Originalversion vor Color Master 2. Probieren Sie es zuerst im Internet aus und installieren Sie es dann von Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassisches Farbsinnspiel",
+        "tagline": "Die ursprüngliche Farbfokus-Herausforderung: Merken Sie sich die Antwortfarbe und wählen Sie sie aus ähnlichen Farben aus.",
+        "description": "Der ursprüngliche Farbsinntest vor Find Odd Color: Color Master 2. Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
         "highlights": [
           "Ursprüngliches Gefühl",
           "Farbfokus",
           "Schnelles Spiel",
           "Jetzt installieren"
         ],
-        "primaryCta": "Installieren Sie Color Master",
+        "primaryCta": "Installieren Sie den Farbsinntest",
         "detailCta": "Probieren Sie die Webdemo aus",
         "statusNote": "Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
-        "iconAlt": "Farbmaster-Symbol"
+        "iconAlt": "Color Sense Test: Color Master-Symbol"
       },
       "koreanRandomDefense": {
         "name": "Koreanische Zufallsverteidigung: Siege",
@@ -1956,19 +1970,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Glückskarten-Zufallsverteidigungssymbol"
       },
       "darkMaze": {
-        "name": "Lab Rat Maze Escape: Dunkles Labyrinth",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Labyrinth-Fluchtspiel veröffentlicht",
         "tagline": "Führe eine Laborratte durch das dunkle Labyrinth und finde den Ausgang.",
-        "description": "Veröffentlicht am 28. Mai 2026 bei Google Play. Bewegen Sie sich durch das dunkle Labyrinth, verwenden Sie Gegenstände und entkommen Sie, bevor der Weg zuschließt.",
+        "description": "Veröffentlicht auf Google Play am 28. Mai 2026. Bewegen Sie sich durch das dunkle Labyrinth, verwenden Sie Gegenstände und entkommen Sie, bevor sich der Weg verengt.",
         "highlights": [
           "Veröffentlicht am 28. Mai 2026",
           "Flucht aus dem Labyrinth",
           "Artikel",
           "Dunkles Überleben"
         ],
-        "primaryCta": "Bei Google Play installieren",
-        "statusNote": "Jetzt bei Google Play verfügbar. Für diese App wird keine Webdemo bereitgestellt.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-Symbol"
+        "primaryCta": "Auf Google Play installieren",
+        "statusNote": "Sehen Sie sich die App-Details an und installieren Sie sie dann über Google Play. Für diese App wird keine Webdemo bereitgestellt.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-Symbol",
+        "detailCta": "App-Details anzeigen"
       }
     },
     "status": {
@@ -1985,18 +2000,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS-IDEEN",
       "title": "Probieren Sie sie so aus",
       "colorMaster2": {
-        "app": "Farbmeister 2",
-        "title": "„Wenn Sie diesen Farbunterschied sehen, sind Ihre Augen scharf.“",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Wenn Sie diese seltsame Farbe entdecken, sind Ihre Augen scharf.“",
         "description": "Messen Sie sich mit Freunden in einer 10-Sekunden-Challenge."
       },
       "galaxyCode": {
-        "app": "Galaktischer Code",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Senden Sie Ihrem Freund eine Alien-Nachricht, die er nicht entschlüsseln kann.“",
         "description": "Hinterlassen Sie geheime Nachrichten, die nur Share-Key-Inhaber entschlüsseln können."
       },
       "ufoSignal": {
-        "app": "Rufen Sie das UFO an",
-        "title": "„Was passiert, wenn man im Morgengrauen den UFO-Knopf drückt?“",
+        "app": "UFO Signal Simulator",
+        "title": "„Was passiert, wenn Sie im Morgengrauen ein UFO-Signal senden?“",
         "description": "Genießen Sie die Geräusche und Animationen in einem dunklen Raum."
       }
     },
@@ -2013,7 +2028,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Welche App soll ich zuerst installieren?",
-        "answer": "Wenn dies Ihr erster Besuch ist, probieren Sie zunächst Color Master 2 aus. Es ist schnell zu spielen und lässt sich leicht wiederholen, um ein besseres Ergebnis zu erzielen."
+        "answer": "Wenn dies Ihr erster Besuch ist, probieren Sie zuerst Find Odd Color: Color Master 2 aus. Es ist schnell zu spielen und lässt sich leicht wiederholen, um ein besseres Ergebnis zu erzielen."
       },
       "privateTest": {
         "question": "Wie trete ich privaten Test-Apps bei?",
@@ -2024,12 +2039,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Hergestellt von NeoKIM",
       "lastUpdated": "Letzte Aktualisierung: 31.05.2026",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Farbtest",
-      "alienText": "Alien-Textgenerator",
-      "ufoApp": "UFO-App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Datenschutzrichtlinie",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Anmeldung für private Tester",
@@ -2050,9 +2066,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lo-LA": {
     "seo": {
       "title": "NeoKIM App Lab | ແອັບ Android Mini ຟຣີ",
-      "description": "ຕິດຕັ້ງ Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, ແລະການທົດສອບສ່ວນຕົວສຳລັບ Lucky Card Random Defense ແລະແອັບຯ Android mini ອື່ນໆອີກ.",
+      "description": "ຕິດຕັ້ງ Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, ແລະການທົດສອບສ່ວນຕົວສຳລັບແອັບ mini Android ເພີ່ມເຕີມ.",
       "ogTitle": "NeoKIM App Lab | ແອັບ Android Mini",
-      "ogDescription": "ການທ້າທາຍສີ, ຂໍ້ຄວາມລັບທີ່ຄ້າຍຄືກັບມະນຸດຕ່າງດາວ, ປະສົບການການໂທ UFO, Lab Rat Maze Escape: Dark Maze, ແລະການທົດສອບສ່ວນຕົວເພື່ອຄວາມມ່ວນໄວຂອງ Android."
+      "ogDescription": "ຊອກຫາສີແປກໆ, ສ້າງຂໍ້ຄວາມລັບແບບມະນຸດຕ່າງດາວ, ສົ່ງສັນຍານ UFO ມ່ວນໆ, ໜີຈາກບ່ອນມືດ, ແລະເຂົ້າຮ່ວມການທົດສອບສ່ວນຕົວເພື່ອຄວາມມ່ວນໄວຂອງ Android."
     },
     "skip": {
       "apps": "ຂ້າມໄປຫາລາຍການແອັບ"
@@ -2087,11 +2103,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android ການເກັບກໍາ mini app",
       "title": "NeoKIM App Lab",
       "subtitle": "ແອັບ Android ຂະໜາດນ້ອຍທີ່ສ້າງຂຶ້ນເພື່ອຄວາມມ່ວນ ແລະ ການແບ່ງປັນໄວ",
-      "description": "ການທ້າທາຍສີ, ຂໍ້ຄວາມລັບຄ້າຍຄືມະນຸດຕ່າງດາວ, ແລະປະສົບການການໂທ UFO. ຕິດຕັ້ງເບົາໆ. ເພີດເພີນໄປກັບພາຍໃນໜຶ່ງນາທີ.",
+      "description": "ສິ່ງທ້າທາຍທີ່ມີສີແປກໆ, ຂໍ້ຄວາມລັບແບບມະນຸດຕ່າງດາວ, ການຫຼິ້ນສັນຍານ UFO, ແລະການຫລົບຫນີໃນ maze ມືດ. ຕິດຕັ້ງເບົາໆ. ເພີດເພີນໄປກັບພາຍໃນໜຶ່ງນາທີ.",
       "primaryCta": "ຕິດຕັ້ງແອັບທີ່ແນະນຳ",
-      "primaryAria": "ຕິດຕັ້ງ Color Master 2 ໃນ Google Play",
+      "primaryAria": "ຕິດຕັ້ງ Find Odd Color: Color Master 2 ໃນ Google Play",
       "secondaryCta": "ຊອກຫາແອັບ",
-      "visualAria": "ຮູບແບບໂທລະສັບທີ່ມີໄອຄອນ Color Master 2 ແລະແຜ່ນສີ",
+      "visualAria": "ຮູບແບບໂທລະສັບທີ່ມີໄອຄອນ Find Odd Color: Color Master 2 ແລະແຜ່ນສີ",
       "badges": [
         "ແອັບຟຣີ",
         "Android",
@@ -2103,36 +2119,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ແອັບທີ່ໂດດເດັ່ນ",
       "title": "ຕິດຕັ້ງອັນທໍາອິດມື້ນີ້",
       "badge": "ແນະນຳ",
-      "appName": "ອາຈານສີ 2",
-      "short": "ຊອກຫາສີທີ່ແຕກຕ່າງກັນໃນ 10 ວິນາທີ.",
-      "description": "ເກມປິດສະໜາສີໜຶ່ງຊີວິດທີ່ຄວາມຜິດພາດອັນໜຶ່ງສິ້ນສຸດການແລ່ນ. ມັນເລີ່ມໄວ, ຈາກນັ້ນດຶງເຈົ້າກັບມາເພື່ອຕີສະຖິຕິຂອງເຈົ້າ.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "ຊອກຫາສີທີ່ແຕກຕ່າງກັນພາຍໃນ 10 ວິນາທີ.",
+      "description": "ເກມປິດສະໜາສີແປກໜຶ່ງຊີວິດທີ່ຄວາມຜິດພາດອັນໜຶ່ງສິ້ນສຸດການແລ່ນ. ມັນເລີ່ມໄວ, ຈາກນັ້ນດຶງເຈົ້າກັບມາເພື່ອຕີສະຖິຕິຂອງເຈົ້າ.",
       "primaryCta": "ຕິດຕັ້ງໃນ Google Play",
-      "primaryAria": "ຕິດຕັ້ງ Color Master 2 ໃນ Google Play",
+      "primaryAria": "ຕິດຕັ້ງ Find Odd Color: Color Master 2 ໃນ Google Play",
       "secondaryCta": "ຊອກຫາແອັບ",
-      "visualAria": "Color Master 2 ສີທີ່ທ້າທາຍໂທລະສັບ mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "ແອັບທັງໝົດ",
       "description": "ຕິດຕັ້ງແອັບຯສາທາລະນະໂດຍກົງ. ສໍາລັບການທົດສອບສ່ວນຕົວ, ສົ່ງອີເມວຄໍາຮ້ອງຂໍກ່ອນ; ຫຼັງ​ຈາກ​ການ​ເຂົ້າ​ເຖິງ​ຜູ້​ທົດ​ສອບ​ໄດ້​ຖືກ​ເພີ່ມ​, ໃຫ້​ໃຊ້​ປຸ່ມ​ການ​ເຂົ້າ​ຮ່ວມ​ການ​ທົດ​ສອບ​.",
       "colorMaster2": {
-        "name": "ອາຈານສີ 2",
-        "category": "ປິດສີ",
-        "tagline": "ຊອກຫາສີທີ່ແຕກຕ່າງກັນໃນ 10 ວິນາທີ.",
-        "description": "ຄວາມຜິດພາດອັນໜຶ່ງເຮັດໃຫ້ການແລ່ນໄດ້ສິ້ນສຸດລົງ. ສິ່ງທ້າທາຍການຮັບຮູ້ສີທີ່ເສບຕິດສັ້ນ.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ເກມປິດສະໜາສີແປກ",
+        "tagline": "ຊອກຫາສີທີ່ແຕກຕ່າງກັນພາຍໃນ 10 ວິນາທີ.",
+        "description": "ຄວາມຜິດພາດອັນໜຶ່ງເຮັດໃຫ້ການແລ່ນໄດ້ສິ້ນສຸດລົງ. ສັ້ນ, ສິ່ງທ້າທາຍສີຄີກທີ່ເສບຕິດສໍາລັບການສຸມໃສ່ແລະການຮັບຮູ້ສີ.",
         "highlights": [
           "ຈຳກັດ 10 ວິນາທີ",
           "ແລ່ນໜຶ່ງຊີວິດ",
           "ກະດານຈັດອັນດັບ",
           "ການຊ່ວຍເຫຼືອຄົນຕາບອດສີ"
         ],
-        "primaryCta": "ຕິດຕັ້ງ Color Master 2",
+        "primaryCta": "ຕິດຕັ້ງ Find Odd Color",
         "detailCta": "ລອງໃຊ້ Web Demo",
         "statusNote": "ມີໃຫ້ແລ້ວໃນ Google Play.",
-        "iconAlt": "ໄອຄອນ Color Master 2"
+        "iconAlt": "ໄອຄອນ Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "ແອັບຯຂໍ້ຄວາມລັບ",
         "tagline": "ສ້າງຂໍ້ຄວາມລັບທີ່ຄ້າຍຄືກັບມະນຸດຕ່າງດາວທີ່ຕ້ອງການລະຫັດແບ່ງປັນເພື່ອຖອດລະຫັດ.",
         "description": "ສ້າງກົດລະບຽບພາສາກາລັກຊີຂອງທ່ານເອງ. ມີພຽງແຕ່ຄົນທີ່ມີກະແຈການແບ່ງປັນຂອງເຈົ້າສາມາດສ້າງກົດລະບຽບດຽວກັນໄດ້, ແລະຂໍ້ຄວາມຕົ້ນສະບັບບໍ່ໄດ້ຖືກອັບໂຫລດໃສ່ເຄື່ອງແມ່ຂ່າຍ.",
@@ -2145,39 +2161,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ສ້າງຂໍ້ຄວາມລັບ",
         "detailCta": "ລອງໃຊ້ Web Demo",
         "statusNote": "ມີໃຫ້ແລ້ວໃນ Google Play.",
-        "iconAlt": "ໄອຄອນ Galacticode"
+        "iconAlt": "ໄອຄອນ Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "ໂທຫາ UFO",
-        "category": "ແອັບ​ທີ່​ມ່ວນ​ຊື່ນ",
-        "tagline": "ປະສົບການການໂທ UFO ທີ່ລຶກລັບເພື່ອຄວາມມ່ວນຊື່ນ.",
-        "description": "ກົດປຸ່ມ, ໄດ້ຍິນສັນຍານ, ແລະຈິນຕະນາການບາງສິ່ງບາງຢ່າງທີ່ຟັງຈາກອາວະກາດ.",
+        "name": "UFO Signal Simulator",
+        "category": "ແອັບບັນເທີງສັນຍານຄວາມລຶກລັບ",
+        "tagline": "ສົ່ງສັນຍານຊ່ອງທີ່ຫຼິ້ນແລະມ່ວນຊື່ນກັບອາລົມ UFO.",
+        "description": "ເປີດແອັບ, ກົດປຸ່ມສັນຍານ, ແລະເພີດເພີນໄປກັບສຽງ ແລະພາບເຄື່ອນໄຫວທີ່ເຮັດໃຫ້ເວລານີ້ຮູ້ສຶກຄືກັບພິທີກຳ UFO ຂະໜາດນ້ອຍ.",
         "highlights": [
-          "ປຸ່ມໂຕ້ຕອບ",
+          "ປຸ່ມສັນຍານ",
           "ສຽງລຶກລັບ",
-          "ພາບເຄື່ອນໄຫວ",
+          "ອານິເມຊັນອາລົມ",
           "ບໍ່ມີການລົງທະບຽນ"
         ],
-        "primaryCta": "ໂທຫາ UFO",
-        "detailCta": "ລອງໃຊ້ Web Demo",
-        "statusNote": "ມີໃຫ້ແລ້ວໃນ Google Play.",
-        "iconAlt": "ໂທຫາໄອຄອນ UFO"
+        "primaryCta": "ຕິດຕັ້ງ UFO Signal Simulator",
+        "detailCta": "ເບິ່ງລາຍລະອຽດແອັບ",
+        "statusNote": "ເບິ່ງລາຍລະອຽດແອັບ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
+        "iconAlt": "ໄອຄອນ UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "ອາຈານສີ",
-        "category": "ປິດສີຄລາສສິກ",
-        "tagline": "ສິ່ງທ້າທາຍການສຸມໃສ່ສີຕົ້ນສະບັບ: ຊອກຫາຄໍາຕອບໃນບັນດາສີທີ່ຄ້າຍຄືກັນ.",
-        "description": "ເວີຊັນຕົ້ນສະບັບກ່ອນ Color Master 2. ລອງໃຊ້ໃນເວັບກ່ອນ, ຈາກນັ້ນຕິດຕັ້ງຈາກ Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "ເກມຄວາມຮູ້ສຶກສີຄລາສສິກ",
+        "tagline": "ສິ່ງທ້າທາຍການສຸມໃສ່ສີຕົ້ນສະບັບ: ຈື່ສີຄໍາຕອບແລະເລືອກເອົາມັນຈາກສີທີ່ຄ້າຍຄືກັນ.",
+        "description": "ການທົດສອບຄວາມຮູ້ສຶກສີຕົ້ນສະບັບກ່ອນ Find Odd Color: Color Master 2. ລອງໃຊ້ມັນຢູ່ໃນເວັບກ່ອນ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
         "highlights": [
           "ຄວາມຮູ້ສຶກຕົ້ນສະບັບ",
           "ເນັ້ນສີ",
           "ຫຼິ້ນໄວ",
           "ຕິດຕັ້ງດຽວນີ້"
         ],
-        "primaryCta": "ຕິດຕັ້ງ Color Master",
+        "primaryCta": "ຕິດຕັ້ງ Color Sense Test",
         "detailCta": "ລອງໃຊ້ Web Demo",
         "statusNote": "ລອງໃຊ້ມັນຢູ່ໃນເວັບກ່ອນ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play.",
-        "iconAlt": "ໄອຄອນສີແມ່ບົດ"
+        "iconAlt": "ໄອຄອນ Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "ເກົາຫຼີ Random ປ້ອງກັນ: Siege",
@@ -2215,7 +2231,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "ເກມ escape maze ປ່ອຍອອກມາ",
         "tagline": "ແນະນໍາຫນູຫ້ອງທົດລອງຜ່ານ maze ຊ້ໍາແລະຊອກຫາທາງອອກ.",
-        "description": "ປ່ອຍອອກມາເມື່ອ Google Play ໃນວັນທີ 28 ພຶດສະພາ 2026. ຍ້າຍຜ່ານ maze ມືດ, ໃຊ້ລາຍການຕ່າງໆ ແລະ ໜີກ່ອນທີ່ເສັ້ນທາງຈະປິດລົງ.",
+        "description": "ປ່ອຍອອກມາເມື່ອ Google Play ໃນວັນທີ 28 ພຶດສະພາ 2026. ຍ້າຍຜ່ານ maze ມືດ, ໃຊ້ລາຍການ, ແລະ ໜີ ກ່ອນທີ່ເສັ້ນທາງຈະປິດລົງ.",
         "highlights": [
           "ປ່ອຍອອກມາເມື່ອ 28 ພຶດສະພາ 2026",
           "ຫນີ Maze",
@@ -2223,8 +2239,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ຄວາມຢູ່ລອດຊ້ໍາ"
         ],
         "primaryCta": "ຕິດຕັ້ງຢູ່ໃນ Google Play",
-        "statusNote": "ຕອນນີ້ມີໃຫ້ຢູ່ໃນ Google Play. ບໍ່​ມີ​ການ​ສາ​ທິດ​ເວັບ​ໄດ້​ສະ​ຫນອງ​ໃຫ້​ສໍາ​ລັບ app ນີ້​.",
-        "iconAlt": "Lab Rat Maze Escape: ໄອຄອນ Maze ມືດ"
+        "statusNote": "ເບິ່ງລາຍລະອຽດແອັບ, ຈາກນັ້ນຕິດຕັ້ງມັນຈາກ Google Play. ບໍ່​ມີ​ການ​ສາ​ທິດ​ເວັບ​ໄດ້​ສະ​ຫນອງ​ໃຫ້​ສໍາ​ລັບ app ນີ້​.",
+        "iconAlt": "ໄອຄອນ Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "ເບິ່ງລາຍລະອຽດແອັບ"
       }
     },
     "status": {
@@ -2241,18 +2258,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ໄອເດຍສັ້ນ",
       "title": "ລອງໃຊ້ພວກມັນແບບນີ້",
       "colorMaster2": {
-        "app": "ອາຈານສີ 2",
-        "title": "\"ຖ້າທ່ານເຫັນຄວາມແຕກຕ່າງຂອງສີນີ້, ຕາຂອງເຈົ້າແມ່ນແຫຼມ.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ຖ້າທ່ານເຫັນສີແປກນີ້, ຕາຂອງເຈົ້າຈະຄົມຊັດ.\"",
         "description": "ແຂ່ງຂັນກັບຫມູ່ເພື່ອນໃນສິ່ງທ້າທາຍ 10 ວິນາທີ."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"ສົ່ງຂໍ້ຄວາມມະນຸດຕ່າງດາວໃຫ້ເພື່ອນຂອງເຈົ້າທີ່ພວກເຂົາບໍ່ສາມາດຖອດລະຫັດໄດ້.\"",
         "description": "ປ່ອຍໃຫ້ຂໍ້ຄວາມລັບທີ່ມີພຽງແຕ່ຜູ້ຖືຫຸ້ນສາມາດຖອດລະຫັດໄດ້."
       },
       "ufoSignal": {
-        "app": "ໂທຫາ UFO",
-        "title": "\"ຈະເກີດຫຍັງຂຶ້ນຖ້າທ່ານກົດປຸ່ມ UFO ໃນຕອນເຊົ້າ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"ຈະເກີດຫຍັງຂຶ້ນຖ້າທ່ານສົ່ງສັນຍານ UFO ໃນຕອນເຊົ້າ?\"",
         "description": "ເພີດເພີນໄປກັບສຽງ ແລະພາບເຄື່ອນໄຫວຢູ່ໃນຫ້ອງມືດ."
       }
     },
@@ -2269,7 +2286,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ຂ້ອຍຄວນຕິດຕັ້ງແອັບໃດກ່ອນ?",
-        "answer": "ຖ້ານີ້ເປັນຄັ້ງທຳອິດຂອງເຈົ້າ, ລອງໃຊ້ Color Master 2 ກ່ອນ. ມັນໄວໃນການຫຼິ້ນ ແລະງ່າຍທີ່ຈະຫຼິ້ນຄືນເພື່ອຄະແນນທີ່ດີກວ່າ."
+        "answer": "ຖ້ານີ້ເປັນຄັ້ງທຳອິດຂອງເຈົ້າ, ລອງໃຊ້ Find Odd Color: Color Master 2 ກ່ອນ. ມັນໄວໃນການຫຼິ້ນ ແລະງ່າຍທີ່ຈະຫຼິ້ນຄືນເພື່ອຄະແນນທີ່ດີກວ່າ."
       },
       "privateTest": {
         "question": "ຂ້ອຍຈະເຂົ້າຮ່ວມແອັບທົດສອບສ່ວນຕົວໄດ້ແນວໃດ?",
@@ -2280,12 +2297,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "ເຮັດໂດຍ NeoKIM",
       "lastUpdated": "ອັບເດດຫຼ້າສຸດ: 2026.05.31",
       "googlePlay": "ແອັບ Google Play",
-      "colorTest": "ການທົດສອບສີ",
-      "alienText": "ຕົວສ້າງຂໍ້ຄວາມມະນຸດຕ່າງດາວ",
-      "ufoApp": "ແອັບ UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
       "appAds": "app-ads.txt",
-      "contact": "ຕິດຕໍ່"
+      "contact": "ຕິດຕໍ່",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ລົງທະບຽນຜູ້ທົດສອບສ່ວນຕົວ",
@@ -2306,9 +2324,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lv": {
     "seo": {
       "title": "NeoKIM App Lab | Bezmaksas Android mini lietotnes",
-      "description": "Instalējiet Color Master 2, Galacticode, Call the NLO, Lab Rat Maze Escape: Dark Maze un privātos testus Lucky Card Random Defense un citām Android mini lietotnēm.",
+      "description": "Instalējiet Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze un privātos testus citām Android mini lietotnēm.",
       "ogTitle": "NeoKIM App Lab | Android mini lietotnes",
-      "ogDescription": "Krāsu izaicinājumi, citplanētiešiem līdzīgi slepeni ziņojumi, NLO zvanīšanas pieredze, Lab Rat Maze Escape: Dark Maze un privāti testi ātrai Android izklaidei."
+      "ogDescription": "Atrodiet nepāra krāsas, veidojiet svešzemju stila slepenu tekstu, sūtiet rotaļīgus NLO signālus, izvairieties no tumšiem labirintiem un pievienojieties privātiem testiem, lai ātri izklaidētos ar Android."
     },
     "skip": {
       "apps": "Pāriet uz lietotņu sarakstu"
@@ -2343,11 +2361,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini lietotņu kolekcija",
       "title": "NeoKIM lietotņu laboratorija",
       "subtitle": "Mazas Android lietotnes, kas paredzētas ātrai jautrībai un kopīgošanai",
-      "description": "Krāsu izaicinājumi, citplanētiešiem līdzīgi slepenie ziņojumi un NLO zvanīšanas pieredze. Uzstādiet viegli. Izbaudiet mazāk nekā minūtes laikā.",
+      "description": "Neparastu krāsu izaicinājumi, citplanētiešu stila slepenie ziņojumi, NLO signālu spēle un tumšā labirinta bēgšana. Uzstādiet viegli. Izbaudiet mazāk nekā minūtes laikā.",
       "primaryCta": "Instalējiet piedāvāto lietotni",
-      "primaryAria": "Instalējiet Color Master 2 vietnē Google Play",
+      "primaryAria": "Instalējiet Find Odd Color: Color Master 2 vietnē Google Play",
       "secondaryCta": "Pārlūkojiet lietotnes",
-      "visualAria": "Tālruņa makets ar Color Master 2 ikonu un krāsu flīzēm",
+      "visualAria": "Tālruņa makets ar Find Odd Color: Color Master 2 ikonu un krāsu flīzēm",
       "badges": [
         "Bezmaksas lietotnes",
         "Android",
@@ -2359,36 +2377,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "Piedāvātā lietotne",
       "title": "Instalējiet šo pirmo šodien",
       "badge": "Piedāvātie",
-      "appName": "Krāsu meistars 2",
-      "short": "Atrodiet citu krāsu 10 sekundēs.",
-      "description": "Vienas dzīves krāsu mīkla, kurā viena kļūda beidz skrējienu. Tas sākas ātri, pēc tam turpina jūs atvilkt, lai pārspētu savu rekordu.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Atrodiet vienu atšķirīgu krāsu 10 sekundēs.",
+      "description": "Vienas dzīves nepāra krāsu mīkla, kurā viena kļūda beidz skrējienu. Tas sākas ātri, pēc tam turpina jūs atvilkt, lai pārspētu savu rekordu.",
       "primaryCta": "Instalējiet vietnē Google Play",
-      "primaryAria": "Instalējiet Color Master 2 vietnē Google Play",
+      "primaryAria": "Instalējiet Find Odd Color: Color Master 2 vietnē Google Play",
       "secondaryCta": "Pārlūkojiet lietotnes",
-      "visualAria": "Color Master 2 krāsu flīžu izaicinājuma tālruņa makets"
+      "visualAria": "Find Odd Color: Color Master 2 flīžu izaicinājuma tālruņa makets"
     },
     "apps": {
       "kicker": "APP KATALOGS",
       "title": "Visas lietotnes",
       "description": "Instalējiet publiskās lietotnes tieši. Privātiem testiem vispirms nosūtiet pieprasījumu pa e-pastu; pēc testētāja piekļuves pievienošanas izmantojiet pogu Pievienoties pārbaudei.",
       "colorMaster2": {
-        "name": "Krāsu meistars 2",
-        "category": "Krāsu puzle",
-        "tagline": "Atrodiet citu krāsu 10 sekundēs.",
-        "description": "Viena kļūda beidz skrējienu. Īss, aizraujošs krāsu uztveres izaicinājums.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Neparastu krāsu puzzle spēle",
+        "tagline": "Atrodiet vienu atšķirīgu krāsu 10 sekundēs.",
+        "description": "Viena kļūda beidz skrējienu. Īss, aizraujošs nepāra krāsu izaicinājums fokusam un krāsu uztverei.",
         "highlights": [
           "10 sekunžu ierobežojums",
           "Vienas dzīves skrējiens",
           "Līderu saraksts",
           "Krāsaklā palīglīdzeklis"
         ],
-        "primaryCta": "Instalējiet Color Master 2",
+        "primaryCta": "Instalējiet Find Odd Color",
         "detailCta": "Izmēģiniet tīmekļa demonstrāciju",
         "statusNote": "Tagad pieejams vietnē Google Play.",
-        "iconAlt": "Color Master 2 ikona"
+        "iconAlt": "Find Odd Color: Color Master 2 ikona"
       },
       "galaxyCode": {
-        "name": "Galaktikas kods",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Slepeno ziņojumu lietotne",
         "tagline": "Izveidojiet citplanētiešiem līdzīgus slepenus ziņojumus, kuru atšifrēšanai nepieciešama koplietošanas atslēga.",
         "description": "Izveidojiet savus galaktikas valodas noteikumus. Tikai personas, kurām ir jūsu koplietošanas atslēga, var atkārtoti izveidot tos pašus noteikumus, un sākotnējais teksts netiek augšupielādēts serverī.",
@@ -2401,39 +2419,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Izveidojiet slepenus ziņojumus",
         "detailCta": "Izmēģiniet tīmekļa demonstrāciju",
         "statusNote": "Tagad pieejams vietnē Google Play.",
-        "iconAlt": "Galacticode ikona"
+        "iconAlt": "Alien Text Maker: Galaxy Code ikona"
       },
       "ufoSignal": {
-        "name": "Zvaniet NLO",
-        "category": "Iespaidīga jautra lietotne",
-        "tagline": "Noslēpumaina NLO zvanīšanas pieredze jautrībai.",
-        "description": "Nospiediet pogu, dzirdiet signālu un iedomājieties, ka kaut kas klausās no kosmosa.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signāla izklaides lietotne",
+        "tagline": "Sūtiet rotaļīgu kosmosa signālu un izbaudiet NLO noskaņu.",
+        "description": "Atveriet lietotni, nospiediet signāla pogu un izbaudiet skaņu un animāciju, kas liek mirklim justies kā mazam NLO rituālam.",
         "highlights": [
-          "Interaktīvā poga",
+          "Signāla poga",
           "Noslēpumainas skaņas",
-          "Animācija",
+          "Garastāvokļa animācija",
           "Nav pierakstīšanās"
         ],
-        "primaryCta": "Zvaniet NLO",
-        "detailCta": "Izmēģiniet tīmekļa demonstrāciju",
-        "statusNote": "Tagad pieejams vietnē Google Play.",
-        "iconAlt": "Zvaniet uz NLO ikonu"
+        "primaryCta": "Instalējiet UFO Signal Simulator",
+        "detailCta": "Skatīt lietotnes informāciju",
+        "statusNote": "Skatiet lietotnes informāciju un pēc tam instalējiet to no Google Play.",
+        "iconAlt": "UFO Signal Simulator ikona"
       },
       "colorMasterClassic": {
-        "name": "Krāsu meistars",
-        "category": "Klasiskā krāsu puzle",
-        "tagline": "Sākotnējais krāsu fokusa izaicinājums: atrodiet atbildi starp līdzīgām krāsām.",
-        "description": "Sākotnējā versija pirms Color Master 2. Vispirms izmēģiniet to tīmeklī un pēc tam instalējiet to no Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasiska krāsu izjūtu spēle",
+        "tagline": "Sākotnējais krāsu fokusa izaicinājums: atcerieties atbildes krāsu un izvēlieties to no līdzīgām krāsām.",
+        "description": "Sākotnējā krāsu sajūtas pārbaude pirms Find Odd Color: Color Master 2. Vispirms izmēģiniet to tīmeklī un pēc tam instalējiet no Google Play.",
         "highlights": [
           "Oriģināla sajūta",
           "Krāsu fokuss",
           "Ātra spēle",
           "Instalējiet tūlīt"
         ],
-        "primaryCta": "Instalējiet Color Master",
+        "primaryCta": "Instalējiet Color Sense Test",
         "detailCta": "Izmēģiniet tīmekļa demonstrāciju",
-        "statusNote": "Vispirms izmēģiniet to tīmeklī un pēc tam instalējiet to no Google Play.",
-        "iconAlt": "Krāsu meistara ikona"
+        "statusNote": "Vispirms izmēģiniet to tīmeklī un pēc tam instalējiet no Google Play.",
+        "iconAlt": "Color Sense Test: Color Master ikona"
       },
       "koreanRandomDefense": {
         "name": "Korejas izlases aizsardzība: aplenkums",
@@ -2468,19 +2486,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Laimīgās kartes izlases aizsardzības ikona"
       },
       "darkMaze": {
-        "name": "Laboratorijas žurku labirinta bēgšana: tumšais labirints",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Izlaista labirinta bēgšanas spēle",
         "tagline": "Vadi laboratorijas žurku pa tumšo labirintu un atrodi izeju.",
-        "description": "Izlaists pakalpojumā Google Play 2026. gada 28. maijā. Pārvietojieties tumšajā labirintā, izmantojiet priekšmetus un aizbēgiet, pirms ceļš noslēdzas.",
+        "description": "Izlaists vietnē Google Play 2026. gada 28. maijā. Pārvietojieties tumšajā labirintā, izmantojiet priekšmetus un aizbēgiet, pirms ceļš aizveras.",
         "highlights": [
           "Publicēts 2026. gada 28. maijā",
           "Labirints bēgšana",
           "Preces",
           "Tumšā izdzīvošana"
         ],
-        "primaryCta": "Instalējiet pakalpojumā Google Play",
-        "statusNote": "Tagad pieejams pakalpojumā Google Play. Šai lietotnei nav nodrošināta tīmekļa demonstrācija.",
-        "iconAlt": "Laboratorijas žurku labirinta bēgšana: tumšā labirinta ikona"
+        "primaryCta": "Instalējiet vietnē Google Play",
+        "statusNote": "Skatiet lietotnes informāciju un pēc tam instalējiet to no Google Play. Šai lietotnei nav nodrošināta tīmekļa demonstrācija.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikona",
+        "detailCta": "Skatīt lietotnes informāciju"
       }
     },
     "status": {
@@ -2497,18 +2516,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ŠORTU IDEJAS",
       "title": "Izmēģiniet tos šādi",
       "colorMaster2": {
-        "app": "Krāsu meistars 2",
-        "title": "\"Ja redzat šo krāsu atšķirību, jūsu acis ir asas.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Ja pamanāt šo dīvaino krāsu, jūsu acis ir asas.\"",
         "description": "Sacentieties ar draugiem 10 sekunžu izaicinājumā."
       },
       "galaxyCode": {
-        "app": "Galaktikas kods",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Nosūtiet savam draugam svešzemju ziņojumu, ko viņš nevar atšifrēt.\"",
         "description": "Atstājiet slepenus ziņojumus, kurus var atšifrēt tikai akciju atslēgu īpašnieki."
       },
       "ufoSignal": {
-        "app": "Zvaniet NLO",
-        "title": "\"Kas notiek, ja rītausmā nospiedīsit NLO pogu?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Kas notiek, ja rītausmā nosūtīsit NLO signālu?\"",
         "description": "Izbaudiet skaņas un animāciju tumšā telpā."
       }
     },
@@ -2525,7 +2544,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Kura lietotne man jāinstalē vispirms?",
-        "answer": "Ja šī ir jūsu pirmā vizīte, vispirms izmēģiniet Color Master 2. Tas ir ātri spēlējams un viegli atspēlējams, lai iegūtu labāku rezultātu."
+        "answer": "Ja šī ir jūsu pirmā vizīte, vispirms izmēģiniet Find Odd Color: Color Master 2. Tas ir ātri spēlējams un viegli atspēlējams, lai iegūtu labāku rezultātu."
       },
       "privateTest": {
         "question": "Kā pievienoties privātām testa lietotnēm?",
@@ -2536,12 +2555,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Izgatavots NeoKIM",
       "lastUpdated": "Pēdējo reizi atjaunināts: 2026.05.31",
       "googlePlay": "Google Play lietotnes",
-      "colorTest": "Krāsu pārbaude",
-      "alienText": "Ārzemju teksta ģenerators",
-      "ufoApp": "NLO lietotne",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privātuma politika",
       "appAds": "app-ads.txt",
-      "contact": "Sazināties"
+      "contact": "Sazināties",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Privāta testētāja reģistrēšanās",
@@ -2562,9 +2582,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ru-RU": {
     "seo": {
       "title": "Лаборатория приложений NeoKIM | Бесплатные мини-приложения Android",
-      "description": "Установите Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, а также частные тесты Lucky Card Random Defense и другие мини-приложения для Android.",
+      "description": "Установите Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze и частные тесты для получения дополнительных мини-приложений Android.",
       "ogTitle": "Лаборатория приложений NeoKIM | Мини-приложения Android",
-      "ogDescription": "Цветные испытания, секретные сообщения, похожие на инопланетные, вызов НЛО, побег из лабиринта лабораторной крысы: Темный лабиринт и частные тесты для быстрого развлечения на Android."
+      "ogDescription": "Находите странные цвета, создавайте секретный текст в стиле инопланетян, отправляйте игривые сигналы НЛО, выходите из темных лабиринтов и присоединяйтесь к частным тестам, чтобы быстро развлечься с Android."
     },
     "skip": {
       "apps": "Перейти к списку приложений"
@@ -2599,11 +2619,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Коллекция мини-приложений Android",
       "title": "Лаборатория приложений NeoKIM",
       "subtitle": "Небольшие приложения Android, созданные для быстрого развлечения и обмена информацией.",
-      "description": "Цветовые испытания, секретные сообщения, похожие на инопланетные, и опыт вызова НЛО. Устанавливайте легко. Наслаждайтесь менее чем за минуту.",
+      "description": "Испытания необычных цветов, секретные сообщения в стиле инопланетян, игра сигналов НЛО и выходы из темного лабиринта. Устанавливайте легко. Наслаждайтесь менее чем за минуту.",
       "primaryCta": "Установить рекомендуемое приложение",
-      "primaryAria": "Установите Color Master 2 на Google Play.",
+      "primaryAria": "Установите Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Просмотр приложений",
-      "visualAria": "Макет телефона со значком Color Master 2 и цветными плитками",
+      "visualAria": "Макет телефона со значком Find Odd Color: Color Master 2 и цветными плитками",
       "badges": [
         "Бесплатные приложения",
         "Android",
@@ -2615,81 +2635,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "Рекомендуемое приложение",
       "title": "Установите это первым сегодня",
       "badge": "Рекомендуемые",
-      "appName": "Мастер цвета 2",
-      "short": "Найдите другой цвет за 10 секунд.",
-      "description": "Цветная головоломка на одну жизнь, в которой одна ошибка заканчивает бег. Он начинается быстро, а затем продолжает тянуть вас назад, чтобы побить ваш рекорд.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Найдите один другой цвет за 10 секунд.",
+      "description": "Головоломка нечетного цвета на одну жизнь, в которой одна ошибка завершает серию. Он начинается быстро, а затем продолжает тянуть вас назад, чтобы побить ваш рекорд.",
       "primaryCta": "Установить на Google Play",
-      "primaryAria": "Установите Color Master 2 на Google Play.",
+      "primaryAria": "Установите Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Просмотр приложений",
-      "visualAria": "Макет телефона Color Master 2 с цветной плиткой"
+      "visualAria": "Find Odd Color: Color Master 2 макет телефона для вызова плитки"
     },
     "apps": {
       "kicker": "КАТАЛОГ ПРИЛОЖЕНИЙ",
       "title": "Все приложения",
       "description": "Устанавливайте общедоступные приложения напрямую. Для частных тестов сначала отправьте запрос по электронной почте; после добавления доступа тестера используйте кнопку «Присоединиться к тесту».",
       "colorMaster2": {
-        "name": "Мастер цвета 2",
-        "category": "Цветная головоломка",
-        "tagline": "Найдите другой цвет за 10 секунд.",
-        "description": "Одна ошибка завершает забег. Короткая увлекательная задача на восприятие цвета.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Игра-головоломка с необычными цветами",
+        "tagline": "Найдите один другой цвет за 10 секунд.",
+        "description": "Одна ошибка завершает забег. Короткое увлекательное задание с необычными цветами для развития внимания и цветовосприятия.",
         "highlights": [
           "10-секундный лимит",
           "Забег на одну жизнь",
           "Таблица лидеров",
           "Помощь дальтоникам"
         ],
-        "primaryCta": "Установите Колор Мастер 2",
+        "primaryCta": "Установить «Найти нечетный цвет»",
         "detailCta": "Попробуйте веб-демо",
         "statusNote": "Доступно сейчас на Google Play.",
-        "iconAlt": "Значок «Мастер цвета 2»"
+        "iconAlt": "Значок Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Галактический код",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Приложение для секретных сообщений",
         "tagline": "Создавайте секретные сообщения, похожие на инопланетян, для декодирования которых требуется общий ключ.",
         "description": "Создайте свои собственные правила галактического языка. Только люди с вашим общим ключом могут воссоздать те же правила, а исходный текст не загружается на сервер.",
         "highlights": [
           "На основе общего ключа",
           "Персональные правила",
-          "Поддержка SNS",
+          "Поддержка социальных сетей",
           "Нет загрузки на сервер"
         ],
         "primaryCta": "Создавайте секретные сообщения",
         "detailCta": "Попробуйте веб-демо",
         "statusNote": "Доступно сейчас на Google Play.",
-        "iconAlt": "Значок Галактического кода"
+        "iconAlt": "Значок Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Вызов НЛО",
-        "category": "Захватывающее веселое приложение",
-        "tagline": "Таинственный вызов НЛО для развлечения.",
-        "description": "Нажмите кнопку, услышьте сигнал и представьте, что что-то слышит из космоса.",
+        "name": "UFO Signal Simulator",
+        "category": "Развлекательное приложение Mystery Signal",
+        "tagline": "Отправьте игривый космический сигнал и наслаждайтесь настроением НЛО.",
+        "description": "Откройте приложение, нажмите кнопку сигнала и наслаждайтесь звуком и анимацией, которые сделают этот момент похожим на небольшой ритуал НЛО.",
         "highlights": [
-          "Интерактивная кнопка",
+          "Кнопка сигнала",
           "Таинственные звуки",
-          "Анимация",
+          "Анимация настроения",
           "Нет регистрации"
         ],
-        "primaryCta": "Вызов НЛО",
-        "detailCta": "Попробуйте веб-демо",
-        "statusNote": "Доступно сейчас на Google Play.",
-        "iconAlt": "Вызовите значок НЛО"
+        "primaryCta": "Установить UFO Signal Simulator",
+        "detailCta": "Просмотр сведений о приложении",
+        "statusNote": "Просмотрите сведения о приложении, а затем установите его с Google Play.",
+        "iconAlt": "Значок UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Мастер цвета",
-        "category": "Классическая цветная головоломка",
-        "tagline": "Оригинальная задача по цветовому фокусу: найдите ответ среди похожих цветов.",
-        "description": "Исходная версия до Color Master 2. Сначала попробуйте ее в Интернете, а затем установите с Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Классическая игра на определение цвета",
+        "tagline": "Оригинальная задача по цветовому фокусу: запомни цвет ответа и выбери его среди похожих цветов.",
+        "description": "Оригинальный тест на восприятие цвета до Find Odd Color: Color Master 2. Сначала попробуйте его через Интернет, а затем установите с Google Play.",
         "highlights": [
           "Оригинальное ощущение",
           "Цветовой фокус",
           "Быстрая игра",
           "Установить сейчас"
         ],
-        "primaryCta": "Установить Мастер цвета",
+        "primaryCta": "Установите тест цветовосприятия",
         "detailCta": "Попробуйте веб-демо",
-        "statusNote": "Сначала попробуйте его в Интернете, а затем установите с Google Play.",
-        "iconAlt": "Значок «Мастер цвета»"
+        "statusNote": "Сначала попробуйте его через Интернет, а затем установите с Google Play.",
+        "iconAlt": "Значок Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Корейская случайная защита: Осада",
@@ -2724,19 +2744,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Значок случайной защиты счастливой карты"
       },
       "darkMaze": {
-        "name": "Побег из лабиринта лабораторной крысы: Темный лабиринт",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Выпущена игра о побеге из лабиринта",
         "tagline": "Проведите лабораторную крысу через темный лабиринт и найдите выход.",
-        "description": "Выпущено в Google Play 28 мая 2026 года. Двигайтесь по темному лабиринту, используйте предметы и убегайте, прежде чем путь закроется.",
+        "description": "Выпущено на Google Play 28 мая 2026 г. Двигайтесь по темному лабиринту, используйте предметы и убегайте, прежде чем путь закроется.",
         "highlights": [
           "Выпущено 28 мая 2026 г.",
           "Побег из лабиринта",
           "Предметы",
           "Темное выживание"
         ],
-        "primaryCta": "Установить в Google Play",
-        "statusNote": "Теперь доступно в Google Play. Для этого приложения не предусмотрена веб-демо.",
-        "iconAlt": "Побег из лабиринта лабораторной крысы: значок темного лабиринта"
+        "primaryCta": "Установить на Google Play",
+        "statusNote": "Просмотрите сведения о приложении, а затем установите его с Google Play. Для этого приложения не предусмотрена веб-демо.",
+        "iconAlt": "Значок Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Просмотр сведений о приложении"
       }
     },
     "status": {
@@ -2753,18 +2774,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ИДЕИ ШОРТ",
       "title": "Попробуйте их вот так",
       "colorMaster2": {
-        "app": "Мастер цвета 2",
-        "title": "«Если вы видите эту разницу в цвете, значит, у вас острые глаза».",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "«Если вы заметили этот странный цвет, значит, ваши глаза зоркие».",
         "description": "Соревнуйтесь с друзьями в 10-секундном испытании."
       },
       "galaxyCode": {
-        "app": "Галактический код",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "«Отправь своему другу инопланетное сообщение, которое он не сможет расшифровать».",
         "description": "Оставляйте секретные сообщения, которые смогут расшифровать только обладатели общих ключей."
       },
       "ufoSignal": {
-        "app": "Вызов НЛО",
-        "title": "«Что произойдет, если нажать кнопку НЛО на рассвете?»",
+        "app": "UFO Signal Simulator",
+        "title": "«Что произойдет, если на рассвете послать сигнал НЛО?»",
         "description": "Наслаждайтесь звуками и анимацией в темной комнате."
       }
     },
@@ -2781,7 +2802,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Какое приложение мне следует установить первым?",
-        "answer": "Если это ваш первый визит, сначала попробуйте Color Master 2. В нее можно быстро играть, и ее легко переиграть, чтобы получить лучший результат."
+        "answer": "Если это ваш первый визит, сначала попробуйте Find Odd Color: Color Master 2. В нее можно быстро играть, и ее легко переиграть, чтобы получить лучший результат."
       },
       "privateTest": {
         "question": "Как мне присоединиться к частным тестовым приложениям?",
@@ -2792,12 +2813,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Сделано NeoKIM",
       "lastUpdated": "Последнее обновление: 2026.05.31.",
       "googlePlay": "Приложения Google Play",
-      "colorTest": "Цветовой тест",
-      "alienText": "Генератор инопланетного текста",
-      "ufoApp": "Приложение НЛО",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Политика конфиденциальности",
       "appAds": "app-ads.txt",
-      "contact": "Контакт"
+      "contact": "Контакт",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Регистрация частного тестера",
@@ -2818,9 +2840,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "rm": {
     "seo": {
       "title": "NeoKIM App Lab | Kostenlose Android Mini-Apps",
-      "description": "Installieren Sie Color Master 2, Galacticcode, Call the UFO, Lab Rat Maze Escape: Dark Maze und private Tests für Lucky Card Random Defense und weitere Android-Mini-Apps.",
+      "description": "Installieren Sie Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze und private Tests für weitere Android-Mini-Apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini-Apps",
-      "ogDescription": "Farbherausforderungen, außerirdische Geheimbotschaften, UFO-Anruferlebnisse, Lab Rat Maze Escape: Dark Maze und private Tests für schnellen Android-Spaß."
+      "ogDescription": "Finden Sie seltsame Farben, erstellen Sie geheime Texte im Alien-Stil, senden Sie verspielte UFO-Signale, entkommen Sie dunklen Labyrinthen und nehmen Sie an privaten Tests teil, um schnellen Android-Spaß zu haben."
     },
     "skip": {
       "apps": "Zur App-Liste springen"
@@ -2855,11 +2877,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android Mini-App-Sammlung",
       "title": "NeoKIM App Lab",
       "subtitle": "Kleine Android-Apps für schnellen Spaß und Austausch",
-      "description": "Farbherausforderungen, außerirdische Geheimbotschaften und UFO-Anruferlebnisse. Leicht installieren. Genießen Sie es in weniger als einer Minute.",
+      "description": "Herausforderungen in seltsamen Farben, geheime Botschaften im Alien-Stil, UFO-Signalspiele und Fluchten aus dunklen Labyrinthen. Leicht installieren. Genießen Sie es in weniger als einer Minute.",
       "primaryCta": "Empfohlene App installieren",
-      "primaryAria": "Installieren Sie Color Master 2 auf Google Play",
+      "primaryAria": "Installieren Sie Find Odd Color: Color Master 2 auf Google Play",
       "secondaryCta": "Durchsuchen Sie Apps",
-      "visualAria": "Telefonmodell mit Color Master 2-Symbol und Farbkacheln",
+      "visualAria": "Telefonmodell mit Find Odd Color: Color Master 2-Symbol und Farbkacheln",
       "badges": [
         "Kostenlose Apps",
         "Android",
@@ -2871,81 +2893,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "AUSGEWÄHLTE APP",
       "title": "Installieren Sie dies noch heute als Erstes",
       "badge": "Hervorgehoben",
-      "appName": "Farbmeister 2",
-      "short": "Finden Sie die andere Farbe in 10 Sekunden.",
-      "description": "Ein Ein-Leben-Farbrätsel, bei dem ein Fehler den Lauf beendet. Es beginnt schnell und zieht Sie dann immer wieder zurück, um Ihren Rekord zu brechen.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Finden Sie in 10 Sekunden die eine andere Farbe.",
+      "description": "Ein Ein-Leben-Rätsel mit ungeraden Farben, bei dem ein Fehler den Lauf beendet. Es beginnt schnell und zieht Sie dann immer wieder zurück, um Ihren Rekord zu brechen.",
       "primaryCta": "Auf Google Play installieren",
-      "primaryAria": "Installieren Sie Color Master 2 auf Google Play",
+      "primaryAria": "Installieren Sie Find Odd Color: Color Master 2 auf Google Play",
       "secondaryCta": "Durchsuchen Sie Apps",
-      "visualAria": "Color Master 2 Farbkachel-Challenge-Telefonmodell"
+      "visualAria": "Find Odd Color: Color Master 2 Kachel-Challenge-Telefonmodell"
     },
     "apps": {
       "kicker": "APP-KATALOG",
       "title": "Alle Apps",
       "description": "Öffentliche Apps direkt installieren. Für private Tests senden Sie zunächst eine Anfrage per E-Mail. Nachdem der Testerzugriff hinzugefügt wurde, verwenden Sie die Schaltfläche „Test beitreten“.",
       "colorMaster2": {
-        "name": "Farbmeister 2",
-        "category": "Farbpuzzle",
-        "tagline": "Finden Sie die andere Farbe in 10 Sekunden.",
-        "description": "Ein Fehler beendet den Lauf. Eine kurze, süchtig machende Herausforderung zur Farbwahrnehmung.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Puzzlespiel mit seltsamen Farben",
+        "tagline": "Finden Sie in 10 Sekunden die eine andere Farbe.",
+        "description": "Ein Fehler beendet den Lauf. Eine kurze, süchtig machende Herausforderung mit seltsamen Farben für Fokus und Farbwahrnehmung.",
         "highlights": [
           "10-Sekunden-Limit",
           "One-Life-Lauf",
           "Bestenliste",
           "Hilfe bei Farbenblindheit"
         ],
-        "primaryCta": "Installieren Sie Color Master 2",
+        "primaryCta": "Installieren Sie „Ungerade Farbe suchen“.",
         "detailCta": "Probieren Sie die Webdemo aus",
-        "statusNote": "Jetzt verfügbar auf Google Play.",
-        "iconAlt": "Color Master 2-Symbol"
+        "statusNote": "Ab sofort auf Google Play verfügbar.",
+        "iconAlt": "Find Odd Color: Color Master 2-Symbol"
       },
       "galaxyCode": {
-        "name": "Galaktischer Code",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Geheimnachrichten-App",
         "tagline": "Erstellen Sie außerirdische Geheimnachrichten, die zum Entschlüsseln einen gemeinsamen Schlüssel benötigen.",
         "description": "Erstellen Sie Ihre eigenen galaktischen Sprachregeln. Nur Personen mit Ihrem Freigabeschlüssel können dieselben Regeln neu erstellen und der Originaltext wird nicht auf einen Server hochgeladen.",
         "highlights": [
           "Share-Key-basiert",
           "Persönliche Regeln",
-          "SNS-bereit",
+          "SNS-fähig",
           "Kein Server-Upload"
         ],
         "primaryCta": "Erstellen Sie geheime Nachrichten",
         "detailCta": "Probieren Sie die Webdemo aus",
-        "statusNote": "Jetzt verfügbar auf Google Play.",
-        "iconAlt": "Galacticcode-Symbol"
+        "statusNote": "Ab sofort auf Google Play verfügbar.",
+        "iconAlt": "Alien Text Maker: Galaxy Code-Symbol"
       },
       "ufoSignal": {
-        "name": "Rufen Sie das UFO an",
-        "category": "Fesselnde Spaß-App",
-        "tagline": "Ein mysteriöses UFO-Ruf-Erlebnis zum Spaß.",
-        "description": "Drücken Sie den Knopf, hören Sie das Signal und stellen Sie sich vor, dass etwas aus dem Weltraum zuhört.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery Signal-Unterhaltungs-App",
+        "tagline": "Senden Sie ein spielerisches Weltraumsignal und genießen Sie die UFO-Stimmung.",
+        "description": "Öffnen Sie die App, drücken Sie die Signaltaste und genießen Sie Sound und Animationen, die den Moment wie ein kleines UFO-Ritual wirken lassen.",
         "highlights": [
-          "Interaktive Schaltfläche",
+          "Signaltaste",
           "Geheimnisvolle Klänge",
-          "Animation",
+          "Stimmungsanimation",
           "Keine Anmeldung"
         ],
-        "primaryCta": "Rufen Sie das UFO an",
-        "detailCta": "Probieren Sie die Webdemo aus",
-        "statusNote": "Jetzt verfügbar auf Google Play.",
-        "iconAlt": "Rufen Sie das UFO-Symbol an"
+        "primaryCta": "Installieren Sie UFO Signal Simulator",
+        "detailCta": "App-Details anzeigen",
+        "statusNote": "Sehen Sie sich die App-Details an und installieren Sie sie dann über Google Play.",
+        "iconAlt": "UFO Signal Simulator-Symbol"
       },
       "colorMasterClassic": {
-        "name": "Farbmeister",
-        "category": "Klassisches Farbrätsel",
-        "tagline": "Die ursprüngliche Farbfokus-Herausforderung: Finden Sie die Antwort unter ähnlichen Farben.",
-        "description": "Die Originalversion vor Color Master 2. Probieren Sie es zuerst im Internet aus und installieren Sie es dann von Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassisches Farbsinnspiel",
+        "tagline": "Die ursprüngliche Farbfokus-Herausforderung: Merken Sie sich die Antwortfarbe und wählen Sie sie aus ähnlichen Farben aus.",
+        "description": "Der ursprüngliche Farbsinntest vor Find Odd Color: Color Master 2. Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
         "highlights": [
           "Ursprüngliches Gefühl",
           "Farbfokus",
           "Schnelles Spiel",
           "Jetzt installieren"
         ],
-        "primaryCta": "Installieren Sie Color Master",
+        "primaryCta": "Installieren Sie den Farbsinntest",
         "detailCta": "Probieren Sie die Webdemo aus",
         "statusNote": "Probieren Sie es zuerst im Internet aus und installieren Sie es dann über Google Play.",
-        "iconAlt": "Farbmaster-Symbol"
+        "iconAlt": "Color Sense Test: Color Master-Symbol"
       },
       "koreanRandomDefense": {
         "name": "Koreanische Zufallsverteidigung: Siege",
@@ -2980,19 +3002,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Glückskarten-Zufallsverteidigungssymbol"
       },
       "darkMaze": {
-        "name": "Lab Rat Maze Escape: Dunkles Labyrinth",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Labyrinth-Fluchtspiel veröffentlicht",
         "tagline": "Führe eine Laborratte durch das dunkle Labyrinth und finde den Ausgang.",
-        "description": "Veröffentlicht am 28. Mai 2026 bei Google Play. Bewegen Sie sich durch das dunkle Labyrinth, verwenden Sie Gegenstände und entkommen Sie, bevor der Weg zuschließt.",
+        "description": "Veröffentlicht auf Google Play am 28. Mai 2026. Bewegen Sie sich durch das dunkle Labyrinth, verwenden Sie Gegenstände und entkommen Sie, bevor sich der Weg verengt.",
         "highlights": [
           "Veröffentlicht am 28. Mai 2026",
           "Flucht aus dem Labyrinth",
           "Artikel",
           "Dunkles Überleben"
         ],
-        "primaryCta": "Bei Google Play installieren",
-        "statusNote": "Jetzt bei Google Play verfügbar. Für diese App wird keine Webdemo bereitgestellt.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-Symbol"
+        "primaryCta": "Auf Google Play installieren",
+        "statusNote": "Sehen Sie sich die App-Details an und installieren Sie sie dann über Google Play. Für diese App wird keine Webdemo bereitgestellt.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-Symbol",
+        "detailCta": "App-Details anzeigen"
       }
     },
     "status": {
@@ -3009,18 +3032,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS-IDEEN",
       "title": "Probieren Sie sie so aus",
       "colorMaster2": {
-        "app": "Farbmeister 2",
-        "title": "„Wenn Sie diesen Farbunterschied sehen, sind Ihre Augen scharf.“",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Wenn Sie diese seltsame Farbe entdecken, sind Ihre Augen scharf.“",
         "description": "Messen Sie sich mit Freunden in einer 10-Sekunden-Challenge."
       },
       "galaxyCode": {
-        "app": "Galaktischer Code",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Senden Sie Ihrem Freund eine Alien-Nachricht, die er nicht entschlüsseln kann.“",
         "description": "Hinterlassen Sie geheime Nachrichten, die nur Share-Key-Inhaber entschlüsseln können."
       },
       "ufoSignal": {
-        "app": "Rufen Sie das UFO an",
-        "title": "„Was passiert, wenn man im Morgengrauen den UFO-Knopf drückt?“",
+        "app": "UFO Signal Simulator",
+        "title": "„Was passiert, wenn Sie im Morgengrauen ein UFO-Signal senden?“",
         "description": "Genießen Sie die Geräusche und Animationen in einem dunklen Raum."
       }
     },
@@ -3037,7 +3060,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Welche App soll ich zuerst installieren?",
-        "answer": "Wenn dies Ihr erster Besuch ist, probieren Sie zunächst Color Master 2 aus. Es ist schnell zu spielen und lässt sich leicht wiederholen, um ein besseres Ergebnis zu erzielen."
+        "answer": "Wenn dies Ihr erster Besuch ist, probieren Sie zuerst Find Odd Color: Color Master 2 aus. Es ist schnell zu spielen und lässt sich leicht wiederholen, um ein besseres Ergebnis zu erzielen."
       },
       "privateTest": {
         "question": "Wie trete ich privaten Test-Apps bei?",
@@ -3048,12 +3071,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Hergestellt von NeoKIM",
       "lastUpdated": "Letzte Aktualisierung: 31.05.2026",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Farbtest",
-      "alienText": "Alien-Textgenerator",
-      "ufoApp": "UFO-App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Datenschutzrichtlinie",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Anmeldung für private Tester",
@@ -3074,9 +3098,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ro": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicații gratuite Android",
-      "description": "Instalați Color Master 2, Galacticode, Call the OZN, Lab Rat Maze Escape: Dark Maze și teste private pentru Lucky Card Random Defense și mai multe mini-aplicații Android.",
+      "description": "Instalați Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze și teste private pentru mai multe mini-aplicații Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Aplicații",
-      "ogDescription": "Provocări de culoare, mesaje secrete asemănătoare extratereștrilor, experiențe de apelare OZN, Lab Rat Maze Escape: Dark Maze și teste private pentru distracția rapidă cu Android."
+      "ogDescription": "Găsiți culori ciudate, creați text secret în stil extraterestru, trimiteți semnale jucăușe OZN, scăpați din labirinturi întunecate și alăturați-vă testelor private pentru distracția rapidă cu Android."
     },
     "skip": {
       "apps": "Treci la lista de aplicații"
@@ -3111,11 +3135,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Mini colecție de aplicații Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Mici aplicații Android create pentru distracție și partajare rapidă",
-      "description": "Provocări de culoare, mesaje secrete asemănătoare extratereștrilor și experiențe de apelare OZN. Instalați ușor. Bucurați-vă în mai puțin de un minut.",
+      "description": "Provocări de culori ciudate, mesaje secrete în stil extraterestru, joc de semnale OZN și evadări întunecate labirinturi. Instalați ușor. Bucurați-vă în mai puțin de un minut.",
       "primaryCta": "Instalați aplicația recomandată",
-      "primaryAria": "Instalați Color Master 2 pe Google Play",
+      "primaryAria": "Instalați Find Odd Color: Color Master 2 pe Google Play",
       "secondaryCta": "Răsfoiți aplicații",
-      "visualAria": "Model de telefon cu pictograma Color Master 2 și plăci colorate",
+      "visualAria": "Model de telefon cu pictograma Find Odd Color: Color Master 2 și plăci colorate",
       "badges": [
         "Aplicații gratuite",
         "Android",
@@ -3127,81 +3151,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICAȚIE PREZENTATĂ",
       "title": "Instalați asta mai întâi astăzi",
       "badge": "Prezentare",
-      "appName": "Color Master 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Găsiți culoarea diferită în 10 secunde.",
-      "description": "Un puzzle color cu o singură viață în care o singură greșeală pune capăt alergării. Începe rapid, apoi te trage înapoi pentru a-ți bate recordul.",
+      "description": "Un puzzle cu o singură viață de culoare ciudată în care o singură greșeală pune capăt cursei. Începe rapid, apoi te trage înapoi pentru a-ți bate recordul.",
       "primaryCta": "Instalați pe Google Play",
-      "primaryAria": "Instalați Color Master 2 pe Google Play",
+      "primaryAria": "Instalați Find Odd Color: Color Master 2 pe Google Play",
       "secondaryCta": "Răsfoiți aplicații",
-      "visualAria": "Macheta de telefon de provocare Color Master 2 culori"
+      "visualAria": "Find Odd Color: Color Master 2 machetă de telefon de provocare"
     },
     "apps": {
       "kicker": "CATALOG APLICAȚIE",
       "title": "Toate aplicațiile",
       "description": "Instalați direct aplicații publice. Pentru testele private, trimiteți mai întâi o solicitare prin e-mail; după ce accesul testerului este adăugat, utilizați butonul Join Test.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Puzzle de culori",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Joc de puzzle cu culori ciudate",
         "tagline": "Găsiți culoarea diferită în 10 secunde.",
-        "description": "O greșeală pune capăt alergării. O provocare scurtă și captivantă de percepție a culorilor.",
+        "description": "O greșeală pune capăt alergării. O provocare scurtă și captivantă de culori ciudate pentru concentrare și percepție a culorii.",
         "highlights": [
           "Limită de 10 secunde",
           "Fuga de o singură viață",
           "Clasament",
           "Ajutor pentru daltonism"
         ],
-        "primaryCta": "Instalați Color Master 2",
+        "primaryCta": "Instalați Find Odd Color",
         "detailCta": "Încercați Demo Web",
         "statusNote": "Disponibil acum pe Google Play.",
-        "iconAlt": "Pictograma Color Master 2"
+        "iconAlt": "pictograma Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicație pentru mesaje secrete",
         "tagline": "Creați mesaje secrete asemănătoare extraterestre care au nevoie de o cheie de partajare pentru a decoda.",
         "description": "Creați-vă propriile reguli de limbaj galactic. Numai persoanele cu cheia de partajare pot recrea aceleași reguli, iar textul original nu este încărcat pe un server.",
         "highlights": [
           "Bazat pe cheie de partajare",
           "Reguli personale",
-          "SNS-gata",
+          "Pregătit pentru SNS",
           "Nicio încărcare pe server"
         ],
         "primaryCta": "Creați mesaje secrete",
         "detailCta": "Încercați Demo Web",
         "statusNote": "Disponibil acum pe Google Play.",
-        "iconAlt": "Pictograma Galacticode"
+        "iconAlt": "Pictograma Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Sună OZN-ul",
-        "category": "Aplicație distractivă captivantă",
-        "tagline": "O experiență misterioasă de chemare a OZN-urilor pentru distracție.",
-        "description": "Apăsați butonul, auziți semnalul și imaginați-vă ceva ascultând din spațiu.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicație de divertisment cu semnal misterios",
+        "tagline": "Trimiteți un semnal spațial jucăuș și bucurați-vă de starea de spirit OZN.",
+        "description": "Deschideți aplicația, apăsați butonul de semnal și bucurați-vă de sunet și animație care fac momentul să se simtă ca un mic ritual OZN.",
         "highlights": [
-          "Buton interactiv",
+          "Buton de semnal",
           "Sunete de mister",
-          "Animație",
+          "Animație de dispoziție",
           "Fără înscriere"
         ],
-        "primaryCta": "Sună OZN-ul",
-        "detailCta": "Încercați Demo Web",
-        "statusNote": "Disponibil acum pe Google Play.",
-        "iconAlt": "Apelați pictograma OZN"
+        "primaryCta": "Instalați UFO Signal Simulator",
+        "detailCta": "Vedeți detaliile aplicației",
+        "statusNote": "Vizualizați detaliile aplicației, apoi instalați-o din Google Play.",
+        "iconAlt": "Pictograma UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maestru de culoare",
-        "category": "Puzzle clasic de culori",
-        "tagline": "Provocarea originală de focalizare pe culoare: găsiți răspunsul printre culori similare.",
-        "description": "Versiunea originală înainte de Color Master 2. Încercați-o mai întâi pe web, apoi instalați-o de pe Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Joc clasic de simț al culorilor",
+        "tagline": "Provocarea originală de focalizare pe culoare: amintiți-vă culoarea răspunsului și alegeți-o din culori similare.",
+        "description": "Testul original de sens al culorii înainte de Find Odd Color: Color Master 2. Încercați mai întâi pe web, apoi instalați-l din Google Play.",
         "highlights": [
           "Senzație originală",
           "Focalizare de culoare",
           "Joacă rapidă",
           "Instalați acum"
         ],
-        "primaryCta": "Instalați Color Master",
+        "primaryCta": "Instalați Color Sense Test",
         "detailCta": "Încercați Demo Web",
-        "statusNote": "Încercați mai întâi pe web, apoi instalați-l de pe Google Play.",
-        "iconAlt": "Pictograma Color Master"
+        "statusNote": "Încercați mai întâi pe web, apoi instalați-l din Google Play.",
+        "iconAlt": "pictograma Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Apărare aleatorie coreeană: asediu",
@@ -3247,8 +3271,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Supraviețuire întunecată"
         ],
         "primaryCta": "Instalați pe Google Play",
-        "statusNote": "Acum disponibil pe Google Play. Nu este oferită nicio demonstrație web pentru această aplicație.",
-        "iconAlt": "Lab Rat Maze Escape: pictograma Dark Maze"
+        "statusNote": "Vizualizați detaliile aplicației, apoi instalați-o din Google Play. Nu este oferită nicio demonstrație web pentru această aplicație.",
+        "iconAlt": "pictograma Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Vedeți detaliile aplicației"
       }
     },
     "status": {
@@ -3265,18 +3290,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEI SCURTATE",
       "title": "Încercați-le așa",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "„Dacă vezi această diferență de culoare, ochii tăi sunt ascuțiți.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Dacă observi această culoare ciudată, ochii tăi sunt ascuțiți.”",
         "description": "Concurează cu prietenii într-o provocare de 10 secunde."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Trimite prietenului tău un mesaj extraterestru pe care nu-l poate decoda.”",
         "description": "Lăsați mesaje secrete pe care doar deținătorii de chei de acționare le pot decoda."
       },
       "ufoSignal": {
-        "app": "Sună OZN-ul",
-        "title": "„Ce se întâmplă dacă apăsați butonul OZN în zori?”",
+        "app": "UFO Signal Simulator",
+        "title": "„Ce se întâmplă dacă trimiți un semnal OZN în zori?”",
         "description": "Bucurați-vă de sunetele și animația într-o cameră întunecată."
       }
     },
@@ -3293,7 +3318,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Ce aplicație ar trebui să instalez mai întâi?",
-        "answer": "Dacă aceasta este prima ta vizită, încearcă mai întâi Color Master 2. Este rapid de jucat și ușor de rejucat pentru un scor mai bun."
+        "answer": "Dacă aceasta este prima ta vizită, încearcă mai întâi Find Odd Color: Color Master 2. Este rapid de jucat și ușor de rejucat pentru un scor mai bun."
       },
       "privateTest": {
         "question": "Cum mă alătur aplicațiilor private de testare?",
@@ -3304,12 +3329,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Realizat de NeoKIM",
       "lastUpdated": "Ultima actualizare: 31.05.2026",
       "googlePlay": "Aplicații Google Play",
-      "colorTest": "Test de culoare",
-      "alienText": "Generator de text străin",
-      "ufoApp": "Aplicația OZN",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Politica de confidențialitate",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Înregistrare pentru tester privat",
@@ -3330,9 +3356,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "lt": {
     "seo": {
       "title": "NeoKIM App Lab | Nemokamos Android mini programos",
-      "description": "Įdiekite „Color Master 2“, „Galacticode“, „Call the UFO“, „Lab Rat Maze Escape: Dark Maze“ ir privačius „Lucky Card Random Defense“ testus ir daugiau „Android“ mini programų.",
+      "description": "Įdiekite Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze ir privačius testus, kad gautumėte daugiau Android mini programų.",
       "ogTitle": "NeoKIM App Lab | Android mini programos",
-      "ogDescription": "Spalvų iššūkiai, į ateivius panašios slaptos žinutės, NSO skambučių patirtis, pabėgimas iš laboratorijos žiurkių labirinto: tamsus labirintas ir privatūs testai, skirti greitai pasimėgauti „Android“."
+      "ogDescription": "Raskite keistų spalvų, kurkite ateivių stiliaus slaptą tekstą, siųskite žaismingus NSO signalus, pabėgkite iš tamsių labirintų ir prisijunkite prie privačių testų, kad greitai pasilinksmintumėte Android."
     },
     "skip": {
       "apps": "Pereiti prie programų sąrašo"
@@ -3367,11 +3393,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini programų kolekcija",
       "title": "„NeoKIM“ programų laboratorija",
       "subtitle": "Mažos Android programos, skirtos greitai linksmintis ir dalytis",
-      "description": "Spalvų iššūkiai, ateivius primenančios slaptos žinutės ir NSO skambinimo patirtis. Lengvai montuokite. Mėgaukitės per mažiau nei minutę.",
+      "description": "Neįprastų spalvų iššūkiai, ateivių stiliaus slapti pranešimai, NSO signalų žaismas ir pabėgimai iš tamsaus labirinto. Lengvai montuokite. Mėgaukitės per mažiau nei minutę.",
       "primaryCta": "Įdiekite siūlomą programą",
-      "primaryAria": "Įdiekite „Color Master 2“ Google Play",
+      "primaryAria": "Įdiekite Find Odd Color: Color Master 2 Google Play",
       "secondaryCta": "Naršyti programas",
-      "visualAria": "Telefono maketas su Color Master 2 piktograma ir spalvų plytelėmis",
+      "visualAria": "Telefono maketas su Find Odd Color: Color Master 2 piktograma ir spalvų plytelėmis",
       "badges": [
         "Nemokamos programos",
         "Android",
@@ -3383,81 +3409,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "PASTABA APP",
       "title": "Įdiekite tai pirmiausia šiandien",
       "badge": "Teminiai",
-      "appName": "Spalvų meistras 2",
-      "short": "Raskite kitą spalvą per 10 sekundžių.",
-      "description": "Vieno gyvenimo spalvų galvosūkis, kuriame viena klaida baigia bėgimą. Jis prasideda greitai, o paskui vis traukia jus atgal, kad pasiektumėte rekordą.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Raskite vieną skirtingą spalvą per 10 sekundžių.",
+      "description": "Vieno gyvenimo keistų spalvų galvosūkis, kuriame viena klaida baigia bėgimą. Jis prasideda greitai, o paskui vis traukia jus atgal, kad pasiektumėte rekordą.",
       "primaryCta": "Įdiekite Google Play",
-      "primaryAria": "Įdiekite „Color Master 2“ Google Play",
+      "primaryAria": "Įdiekite Find Odd Color: Color Master 2 Google Play",
       "secondaryCta": "Naršyti programas",
-      "visualAria": "Color Master 2 spalvų plytelių iššūkio telefono maketas"
+      "visualAria": "Find Odd Color: Color Master 2 plytelių iššūkio telefono maketas"
     },
     "apps": {
       "kicker": "APP KATALOGAS",
       "title": "Visos programos",
       "description": "Įdiekite viešąsias programas tiesiogiai. Jei norite atlikti privačius testus, pirmiausia atsiųskite užklausą el. paštu; pridėję bandytojo prieigą, naudokite mygtuką Prisijungti prie testo.",
       "colorMaster2": {
-        "name": "Spalvų meistras 2",
-        "category": "Spalvų dėlionė",
-        "tagline": "Raskite kitą spalvą per 10 sekundžių.",
-        "description": "Viena klaida baigia bėgimą. Trumpas, priklausomybę sukeliantis spalvų suvokimo iššūkis.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Neįprastų spalvų galvosūkių žaidimas",
+        "tagline": "Raskite vieną skirtingą spalvą per 10 sekundžių.",
+        "description": "Viena klaida baigia bėgimą. Trumpas, įtraukiantis keistų spalvų iššūkis fokusavimui ir spalvų suvokimui.",
         "highlights": [
           "10 sekundžių riba",
           "Vieno gyvenimo bėgimas",
           "Lyderių lentelė",
           "Pagalba daltonikai"
         ],
-        "primaryCta": "Įdiekite Color Master 2",
+        "primaryCta": "Įdiekite „Find Odd Color“.",
         "detailCta": "Išbandykite žiniatinklio demonstraciją",
         "statusNote": "Dabar pasiekiama Google Play.",
-        "iconAlt": "„Color Master 2“ piktograma"
+        "iconAlt": "Find Odd Color: Color Master 2 piktograma"
       },
       "galaxyCode": {
-        "name": "Galaktikoskodas",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Slapto pranešimo programa",
         "tagline": "Kurkite į ateivius panašius slaptus pranešimus, kuriems norint iššifruoti reikia bendrinimo rakto.",
         "description": "Sukurkite savo galaktikos kalbos taisykles. Tik žmonės, turintys jūsų bendrinimo raktą, gali atkurti tas pačias taisykles, o originalus tekstas neįkeliamas į serverį.",
         "highlights": [
           "Pagrįsta bendrinimo raktu",
           "Asmeninės taisyklės",
-          "SNS paruošta",
+          "SNS paruoštas",
           "Nėra įkėlimo į serverį"
         ],
         "primaryCta": "Sukurkite slaptus pranešimus",
         "detailCta": "Išbandykite žiniatinklio demonstraciją",
         "statusNote": "Dabar pasiekiama Google Play.",
-        "iconAlt": "Galacticcode piktograma"
+        "iconAlt": "Alien Text Maker: Galaxy Code piktograma"
       },
       "ufoSignal": {
-        "name": "Paskambink NSO",
-        "category": "Įtraukianti linksma programėlė",
-        "tagline": "Paslaptinga NSO skambinimo patirtis pramogai.",
-        "description": "Paspauskite mygtuką, išgirskite signalą ir įsivaizduokite, kad kažkas klausosi iš kosmoso.",
+        "name": "UFO Signal Simulator",
+        "category": "Paslaptingo signalo pramogų programa",
+        "tagline": "Siųskite žaismingą erdvės signalą ir mėgaukitės NSO nuotaika.",
+        "description": "Atidarykite programėlę, paspauskite signalo mygtuką ir mėgaukitės garsu bei animacija, kurios akimirką pajus kaip mažą NSO ritualą.",
         "highlights": [
-          "Interaktyvus mygtukas",
+          "Signalo mygtukas",
           "Paslaptingi garsai",
-          "Animacija",
+          "Nuotaikos animacija",
           "Nėra registracijos"
         ],
-        "primaryCta": "Paskambink NSO",
-        "detailCta": "Išbandykite žiniatinklio demonstraciją",
-        "statusNote": "Dabar pasiekiama Google Play.",
-        "iconAlt": "Paskambinkite NSO piktogramai"
+        "primaryCta": "Įdiekite UFO Signal Simulator",
+        "detailCta": "Peržiūrėkite išsamią programos informaciją",
+        "statusNote": "Peržiūrėkite išsamią programos informaciją, tada įdiekite ją iš Google Play.",
+        "iconAlt": "UFO Signal Simulator piktograma"
       },
       "colorMasterClassic": {
-        "name": "Spalvų meistras",
-        "category": "Klasikinis spalvų galvosūkis",
-        "tagline": "Originalus spalvų fokusavimo iššūkis: raskite atsakymą tarp panašių spalvų.",
-        "description": "Originali versija prieš Color Master 2. Pirmiausia išbandykite ją žiniatinklyje, tada įdiekite iš Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasikinis spalvų pojūčio žaidimas",
+        "tagline": "Originalus spalvų fokusavimo iššūkis: prisiminkite atsakymo spalvą ir pasirinkite ją iš panašių spalvų.",
+        "description": "Originalus spalvų jutimo testas prieš Find Odd Color: Color Master 2. Pirmiausia išbandykite žiniatinklyje, tada įdiekite iš Google Play.",
         "highlights": [
           "Originalus jausmas",
           "Spalvų fokusavimas",
           "Greitas žaidimas",
           "Įdiekite dabar"
         ],
-        "primaryCta": "Įdiekite Color Master",
+        "primaryCta": "Įdiekite spalvų jutimo testą",
         "detailCta": "Išbandykite žiniatinklio demonstraciją",
         "statusNote": "Pirmiausia išbandykite žiniatinklyje, tada įdiekite iš Google Play.",
-        "iconAlt": "Spalvų meistro piktograma"
+        "iconAlt": "Color Sense Test: Color Master piktograma"
       },
       "koreanRandomDefense": {
         "name": "Korėjos atsitiktinė gynyba: apgultis",
@@ -3492,19 +3518,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Laimingos kortelės atsitiktinės gynybos piktograma"
       },
       "darkMaze": {
-        "name": "Laboratorinių žiurkių labirinto pabėgimas: tamsus labirintas",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Išleistas labirinto pabėgimo žaidimas",
         "tagline": "Nuveskite laboratorinę žiurkę tamsiu labirintu ir raskite išėjimą.",
-        "description": "Išleistas „Google Play“ 2026 m. gegužės 28 d. Judėkite tamsiu labirintu, naudokitės daiktais ir pabėgkite, kol takas neužsivers.",
+        "description": "Išleista Google Play 2026 m. gegužės 28 d. Eikite tamsiu labirintu, naudokitės daiktais ir pabėgkite, kol takas neužsidarys.",
         "highlights": [
           "Išleista 2026 m. gegužės 28 d",
           "Pabėgimas iš labirinto",
           "Daiktai",
           "Tamsus išgyvenimas"
         ],
-        "primaryCta": "Įdiekite „Google Play“.",
-        "statusNote": "Dabar pasiekiama „Google Play“. Šiai programai žiniatinklio demonstracinė versija nepateikiama.",
-        "iconAlt": "Laboratorinių žiurkių labirinto pabėgimas: tamsaus labirinto piktograma"
+        "primaryCta": "Įdiekite Google Play",
+        "statusNote": "Peržiūrėkite išsamią programos informaciją, tada įdiekite ją iš Google Play. Šiai programai žiniatinklio demonstracinė versija nepateikiama.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze piktograma",
+        "detailCta": "Peržiūrėkite išsamią programos informaciją"
       }
     },
     "status": {
@@ -3521,18 +3548,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ŠORTAI IDĖJOS",
       "title": "Išbandykite juos taip",
       "colorMaster2": {
-        "app": "Spalvų meistras 2",
-        "title": "\"Jei matote šį spalvų skirtumą, jūsų akys yra aštrios.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Jei pastebėsite šią keistą spalvą, jūsų akys bus aštrios.\"",
         "description": "Konkuruokite su draugais 10 sekundžių iššūkyje."
       },
       "galaxyCode": {
-        "app": "Galaktikoskodas",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Siųsk savo draugui žinutę ateiviui, kurio jis negali iššifruoti“.",
         "description": "Palikite slaptus pranešimus, kuriuos gali iššifruoti tik akcijų raktų turėtojai."
       },
       "ufoSignal": {
-        "app": "Paskambink NSO",
-        "title": "„Kas nutiks, jei auštant paspausite NSO mygtuką?",
+        "app": "UFO Signal Simulator",
+        "title": "„Kas atsitiks, jei auštant pasiųsi NSO signalą?",
         "description": "Mėgaukitės garsais ir animacija tamsiame kambaryje."
       }
     },
@@ -3549,7 +3576,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Kurią programą turėčiau įdiegti pirmiausia?",
-        "answer": "Jei lankotės pirmą kartą, pirmiausia išbandykite Color Master 2. Tai greitai žaidžiama ir lengvai atkuriama siekiant geresnio rezultato."
+        "answer": "Jei lankotės pirmą kartą, pirmiausia išbandykite Find Odd Color: Color Master 2. Tai greitai žaidžiama ir lengvai atkuriama siekiant geresnio rezultato."
       },
       "privateTest": {
         "question": "Kaip prisijungti prie privačių bandomųjų programų?",
@@ -3560,12 +3587,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Pagaminta NeoKIM",
       "lastUpdated": "Paskutinį kartą atnaujinta: 2026-05-31",
       "googlePlay": "Google Play programos",
-      "colorTest": "Spalvų testas",
-      "alienText": "Svetimų tekstų generatorius",
-      "ufoApp": "NSO programa",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privatumo politika",
       "appAds": "app-ads.txt",
-      "contact": "Susisiekite"
+      "contact": "Susisiekite",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Privatus bandytojo registravimas",
@@ -3586,9 +3614,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mr-IN": {
     "seo": {
       "title": "NeoKIM ॲप लॅब | मोफत Android मिनी ॲप्स",
-      "description": "कलर मास्टर 2, गॅलॅक्टिकोड, कॉल द यूएफओ, लॅब रॅट मेझ एस्केप: डार्क मेझ आणि लकी कार्ड रँडम डिफेन्ससाठी खाजगी चाचण्या आणि अधिक Android मिनी ॲप्स स्थापित करा.",
+      "description": "अधिक Android मिनी ॲप्ससाठी Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze आणि खाजगी चाचण्या स्थापित करा.",
       "ogTitle": "NeoKIM ॲप लॅब | Android मिनी ॲप्स",
-      "ogDescription": "रंगीत आव्हाने, एलियनसारखे गुप्त संदेश, UFO कॉलिंग अनुभव, लॅब रॅट मेझ एस्केप: डार्क मेझ आणि द्रुत Android मजा साठी खाजगी चाचण्या."
+      "ogDescription": "विचित्र रंग शोधा, एलियन-शैलीतील गुप्त मजकूर बनवा, खेळकर UFO सिग्नल पाठवा, गडद चक्रव्यूहातून बाहेर पडा आणि द्रुत Android मनोरंजनासाठी खाजगी चाचण्यांमध्ये सामील व्हा."
     },
     "skip": {
       "apps": "ॲप सूचीवर जा"
@@ -3623,11 +3651,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android मिनी ॲप कलेक्शन",
       "title": "NeoKIM ॲप लॅब",
       "subtitle": "लहान Android ॲप्स जलद मजा आणि शेअरिंगसाठी बनवले आहेत",
-      "description": "रंगीत आव्हाने, एलियनसारखे गुप्त संदेश आणि UFO कॉलिंग अनुभव. हलके स्थापित करा. एका मिनिटात आनंद घ्या.",
+      "description": "विचित्र-रंगाची आव्हाने, एलियन-शैलीतील गुप्त संदेश, UFO सिग्नल प्ले आणि गडद चक्रव्यूहातून सुटणे. हलके स्थापित करा. एका मिनिटात आनंद घ्या.",
       "primaryCta": "वैशिष्ट्यीकृत ॲप स्थापित करा",
-      "primaryAria": "Google Play वर कलर मास्टर 2 स्थापित करा",
+      "primaryAria": "Find Odd Color: Color Master 2 Google Play वर स्थापित करा",
       "secondaryCta": "ॲप्स ब्राउझ करा",
-      "visualAria": "कलर मास्टर 2 आयकॉन आणि कलर टाइल्ससह फोन मॉकअप",
+      "visualAria": "Find Odd Color: Color Master 2 चिन्ह आणि रंगीत टाइलसह फोन मॉकअप",
       "badges": [
         "मोफत ॲप्स",
         "Android",
@@ -3639,36 +3667,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "वैशिष्ट्यीकृत ॲप",
       "title": "हे आजच प्रथम स्थापित करा",
       "badge": "वैशिष्ट्यीकृत",
-      "appName": "कलर मास्टर २",
-      "short": "10 सेकंदात भिन्न रंग शोधा.",
-      "description": "एक-जीवन रंगीत कोडे जिथे एका चुकीने धाव संपते. ते जलद सुरू होते, नंतर तुमचा रेकॉर्ड मोडण्यासाठी तुम्हाला मागे खेचत राहते.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 सेकंदात एक वेगळा रंग शोधा.",
+      "description": "एक-जीवन विचित्र-रंगीत कोडे जिथे एका चुकीने धाव संपते. ते जलद सुरू होते, नंतर तुमचा रेकॉर्ड मोडण्यासाठी तुम्हाला मागे खेचत राहते.",
       "primaryCta": "Google Play वर स्थापित करा",
-      "primaryAria": "Google Play वर कलर मास्टर 2 स्थापित करा",
+      "primaryAria": "Find Odd Color: Color Master 2 Google Play वर स्थापित करा",
       "secondaryCta": "ॲप्स ब्राउझ करा",
-      "visualAria": "कलर मास्टर 2 कलर टाइल चॅलेंज फोन मॉकअप"
+      "visualAria": "Find Odd Color: Color Master 2 टाइल आव्हान फोन मॉकअप"
     },
     "apps": {
       "kicker": "ॲप कॅटलॉग",
       "title": "सर्व ॲप्स",
       "description": "सार्वजनिक ॲप्स थेट स्थापित करा. खाजगी चाचण्यांसाठी, प्रथम विनंती ईमेल करा; परीक्षक प्रवेश जोडल्यानंतर, चाचणीमध्ये सामील व्हा बटण वापरा.",
       "colorMaster2": {
-        "name": "कलर मास्टर २",
-        "category": "रंगीत कोडे",
-        "tagline": "10 सेकंदात भिन्न रंग शोधा.",
-        "description": "एका चुकीमुळे धाव संपते. एक लहान, व्यसनाधीन रंग समज आव्हान.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "विषम-रंगीत कोडे खेळ",
+        "tagline": "10 सेकंदात एक वेगळा रंग शोधा.",
+        "description": "एका चुकीमुळे धाव संपते. फोकस आणि रंग समजण्यासाठी एक लहान, व्यसनाधीन विषम-रंग आव्हान.",
         "highlights": [
           "10-सेकंद मर्यादा",
           "एक-जीवन धाव",
           "लीडरबोर्ड",
           "कलरब्लाइंड मदत"
         ],
-        "primaryCta": "कलर मास्टर 2 स्थापित करा",
+        "primaryCta": "विषम रंग शोधा स्थापित करा",
         "detailCta": "वेब डेमो वापरून पहा",
         "statusNote": "Google Play वर आता उपलब्ध.",
-        "iconAlt": "कलर मास्टर 2 चिन्ह"
+        "iconAlt": "Find Odd Color: Color Master 2 चिन्ह"
       },
       "galaxyCode": {
-        "name": "गॅलॅक्टिकोड",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "गुप्त संदेश ॲप",
         "tagline": "एलियनसारखे गुप्त संदेश तयार करा ज्यांना डीकोड करण्यासाठी शेअर की आवश्यक आहे.",
         "description": "तुमचे स्वतःचे गॅलेक्टिक भाषेचे नियम तयार करा. फक्त तुमची शेअर की असलेले लोक समान नियम पुन्हा तयार करू शकतात आणि मूळ मजकूर सर्व्हरवर अपलोड केला जात नाही.",
@@ -3681,39 +3709,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "गुप्त संदेश तयार करा",
         "detailCta": "वेब डेमो वापरून पहा",
         "statusNote": "Google Play वर आता उपलब्ध.",
-        "iconAlt": "गॅलॅक्टिकोड चिन्ह"
+        "iconAlt": "Alien Text Maker: Galaxy Code चिन्ह"
       },
       "ufoSignal": {
-        "name": "UFO ला कॉल करा",
-        "category": "इमर्सिव मजेदार ॲप",
-        "tagline": "मजा करण्यासाठी एक रहस्यमय UFO कॉलिंग अनुभव.",
-        "description": "बटण दाबा, सिग्नल ऐका आणि अवकाशातून काहीतरी ऐकत असल्याची कल्पना करा.",
+        "name": "UFO Signal Simulator",
+        "category": "मिस्ट्री सिग्नल मनोरंजन ॲप",
+        "tagline": "एक खेळकर स्पेस सिग्नल पाठवा आणि UFO मूडचा आनंद घ्या.",
+        "description": "ॲप उघडा, सिग्नल बटण दाबा आणि आवाज आणि ॲनिमेशनचा आनंद घ्या ज्यामुळे क्षण लहान UFO विधीसारखा वाटेल.",
         "highlights": [
-          "परस्परसंवादी बटण",
+          "सिग्नल बटण",
           "गूढ नाद",
-          "ॲनिमेशन",
+          "मूड ॲनिमेशन",
           "साइन-अप नाही"
         ],
-        "primaryCta": "UFO ला कॉल करा",
-        "detailCta": "वेब डेमो वापरून पहा",
-        "statusNote": "Google Play वर आता उपलब्ध.",
-        "iconAlt": "UFO चिन्हावर कॉल करा"
+        "primaryCta": "UFO Signal Simulator स्थापित करा",
+        "detailCta": "ॲप तपशील पहा",
+        "statusNote": "ॲप तपशील पहा, नंतर ते Google Play वरून स्थापित करा.",
+        "iconAlt": "UFO Signal Simulator चिन्ह"
       },
       "colorMasterClassic": {
-        "name": "कलर मास्टर",
-        "category": "क्लासिक रंग कोडे",
-        "tagline": "मूळ रंग-फोकस आव्हान: समान रंगांमध्ये उत्तर शोधा.",
-        "description": "कलर मास्टर २ पूर्वीची मूळ आवृत्ती. प्रथम वेबवर वापरून पहा, नंतर Google Play वरून स्थापित करा.",
+        "name": "Color Sense Test: Color Master",
+        "category": "क्लासिक कलर सेन्स गेम",
+        "tagline": "मूळ रंग-फोकस आव्हान: उत्तर रंग लक्षात ठेवा आणि समान रंगांमधून निवडा.",
+        "description": "Find Odd Color: Color Master 2 पूर्वी मूळ रंग ज्ञान चाचणी. प्रथम ते वेबवर वापरून पहा, नंतर ते Google Play वरून स्थापित करा.",
         "highlights": [
           "मूळ भावना",
           "रंग फोकस",
           "जलद खेळ",
           "आता स्थापित करा"
         ],
-        "primaryCta": "कलर मास्टर स्थापित करा",
+        "primaryCta": "कलर सेन्स टेस्ट स्थापित करा",
         "detailCta": "वेब डेमो वापरून पहा",
         "statusNote": "प्रथम ते वेबवर वापरून पहा, नंतर ते Google Play वरून स्थापित करा.",
-        "iconAlt": "कलर मास्टर आयकॉन"
+        "iconAlt": "Color Sense Test: Color Master चिन्ह"
       },
       "koreanRandomDefense": {
         "name": "कोरियन यादृच्छिक संरक्षण: वेढा",
@@ -3748,7 +3776,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "लकी कार्ड यादृच्छिक संरक्षण चिन्ह"
       },
       "darkMaze": {
-        "name": "लॅब रॅट मेझ एस्केप: गडद चक्रव्यूह",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "भूलभुलैया सुटलेला खेळ सोडला",
         "tagline": "गडद चक्रव्यूहातून प्रयोगशाळेतील उंदराला मार्गदर्शन करा आणि बाहेर पडा.",
         "description": "28 मे 2026 रोजी Google Play वर रिलीझ झाले. गडद चक्रव्यूहातून जा, आयटम वापरा आणि मार्ग बंद होण्यापूर्वी बाहेर पडा.",
@@ -3759,8 +3787,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "गडद जगणे"
         ],
         "primaryCta": "Google Play वर स्थापित करा",
-        "statusNote": "आता Google Play वर उपलब्ध आहे. या ॲपसाठी कोणताही वेब डेमो प्रदान केलेला नाही.",
-        "iconAlt": "लॅब रॅट मेझ एस्केप: गडद चक्रव्यूह चिन्ह"
+        "statusNote": "ॲप तपशील पहा, नंतर ते Google Play वरून स्थापित करा. या ॲपसाठी कोणताही वेब डेमो प्रदान केलेला नाही.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze चिन्ह",
+        "detailCta": "ॲप तपशील पहा"
       }
     },
     "status": {
@@ -3777,18 +3806,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "लहान कल्पना",
       "title": "त्यांना याप्रमाणे वापरून पहा",
       "colorMaster2": {
-        "app": "कलर मास्टर २",
-        "title": "\"जर तुम्हाला हा रंग फरक दिसला तर तुमचे डोळे तीक्ष्ण आहेत.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"जर तुम्हाला हा विचित्र रंग दिसला तर तुमचे डोळे तीक्ष्ण आहेत.\"",
         "description": "10-सेकंदांच्या आव्हानात मित्रांसह स्पर्धा करा."
       },
       "galaxyCode": {
-        "app": "गॅलॅक्टिकोड",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"तुमच्या मित्राला एलियन मेसेज पाठवा जो ते डीकोड करू शकत नाहीत.\"",
         "description": "गुप्त संदेश सोडा जे फक्त शेअर-की धारक डीकोड करू शकतात."
       },
       "ufoSignal": {
-        "app": "UFO ला कॉल करा",
-        "title": "\"तुम्ही पहाटे UFO बटण दाबल्यास काय होईल?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"तुम्ही पहाटे UFO सिग्नल पाठवल्यास काय होईल?\"",
         "description": "गडद खोलीत आवाज आणि ॲनिमेशनचा आनंद घ्या."
       }
     },
@@ -3805,7 +3834,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "मी प्रथम कोणते ॲप स्थापित करावे?",
-        "answer": "ही तुमची पहिली भेट असल्यास, प्रथम कलर मास्टर 2 वापरून पहा. चांगल्या स्कोअरसाठी ते खेळणे जलद आणि रिप्ले करणे सोपे आहे."
+        "answer": "ही तुमची पहिली भेट असल्यास, प्रथम Find Odd Color: Color Master 2 वापरून पहा. चांगल्या स्कोअरसाठी ते खेळणे जलद आणि रिप्ले करणे सोपे आहे."
       },
       "privateTest": {
         "question": "मी खाजगी चाचणी ॲप्समध्ये कसे सामील होऊ?",
@@ -3816,12 +3845,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM ने बनवले",
       "lastUpdated": "शेवटचे अपडेट: 2026.05.31",
       "googlePlay": "Google Play ॲप्स",
-      "colorTest": "रंग चाचणी",
-      "alienText": "एलियन मजकूर जनरेटर",
-      "ufoApp": "UFO ॲप",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "गोपनीयता धोरण",
       "appAds": "app-ads.txt",
-      "contact": "संपर्क करा"
+      "contact": "संपर्क करा",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "खाजगी परीक्षक साइनअप",
@@ -3842,9 +3872,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mk-MK": {
     "seo": {
       "title": "NeoKIM App Lab | Бесплатни апликации Android Mini",
-      "description": "Инсталирајте Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze и приватни тестови за Lucky Card Random Defense и повеќе мини апликации за Android.",
+      "description": "Инсталирајте Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze и приватни тестови за повеќе мини апликации Android.",
       "ogTitle": "NeoKIM App Lab | Android мини апликации",
-      "ogDescription": "Предизвици во боја, тајни пораки слични на вонземјани, искуства со повикување НЛО, Lab Rat Maze Escape: Dark Maze и приватни тестови за брза забава со Android."
+      "ogDescription": "Најдете чудни бои, направете таен текст во вонземјански стил, испраќајте разиграни сигнали за НЛО, избегајте од темните лавиринти и придружете се на приватни тестови за брза забава Android."
     },
     "skip": {
       "apps": "Прескокнете на списокот со апликации"
@@ -3879,11 +3909,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Збирка на мини апликации Android",
       "title": "Лабораторија за апликации NeoKIM",
       "subtitle": "Мали Android апликации направени за брза забава и споделување",
-      "description": "Предизвици во боја, тајни пораки слични на вонземјани и искуства со повикување на НЛО. Инсталирајте лесно. Уживајте за помалку од една минута.",
+      "description": "Предизвици со чудни бои, тајни пораки во вонземјански стил, игра со сигнали за НЛО и бегства од темни лавиринти. Инсталирајте лесно. Уживајте за помалку од една минута.",
       "primaryCta": "Инсталирајте ја избраната апликација",
-      "primaryAria": "Инсталирајте Color Master 2 на Google Play",
+      "primaryAria": "Инсталирајте Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Прелистувајте апликации",
-      "visualAria": "Телефонски модел со икона Color Master 2 и плочки во боја",
+      "visualAria": "Макет на телефон со икона Find Odd Color: Color Master 2 и плочки во боја",
       "badges": [
         "Бесплатни апликации",
         "Android",
@@ -3895,81 +3925,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ИСКЛУЧЕНА АПЛИКАЦИЈА",
       "title": "Инсталирајте го ова прво денес",
       "badge": "Избрано",
-      "appName": "Боја мајстор 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Најдете ја различната боја за 10 секунди.",
-      "description": "Едноживотна загатка во боја каде што една грешка го завршува бегството. Започнува брзо, а потоа продолжува да ве влече назад за да го подобрите вашиот рекорд.",
+      "description": "Едноживотна загатка со чудни бои каде што една грешка го завршува бегството. Започнува брзо, а потоа продолжува да ве влече назад за да го подобрите вашиот рекорд.",
       "primaryCta": "Инсталирајте на Google Play",
-      "primaryAria": "Инсталирајте Color Master 2 на Google Play",
+      "primaryAria": "Инсталирајте Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Прелистувајте апликации",
-      "visualAria": "Телефонски модел за предизвик со плочка во боја во боја Master 2"
+      "visualAria": "Find Odd Color: Color Master 2 модел на телефон со предизвик за плочки"
     },
     "apps": {
       "kicker": "КАТАЛОГ НА АПЛИКАЦИИ",
       "title": "Сите апликации",
       "description": "Директно инсталирајте јавни апликации. За приватни тестови, прво е-пошта барање; откако ќе се додаде пристапот до тестерот, користете го копчето Join Test.",
       "colorMaster2": {
-        "name": "Боја мајстор 2",
-        "category": "Загатка во боја",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Загатка игра со непарни бои",
         "tagline": "Најдете ја различната боја за 10 секунди.",
-        "description": "Една грешка го завршува бегството. Краток, зависен предизвик за перцепција на бојата.",
+        "description": "Една грешка го завршува бегството. Краток, зависен предизвик со непарни бои за фокус и перцепција на боите.",
         "highlights": [
           "Ограничување од 10 секунди",
           "Едноживотно трчање",
           "Табла на водачи",
           "Помош за далтонисти"
         ],
-        "primaryCta": "Инсталирајте Color Master 2",
+        "primaryCta": "Инсталирајте Find Odd Color",
         "detailCta": "Обидете се со веб-демо",
         "statusNote": "Достапно сега на Google Play.",
-        "iconAlt": "Икона во боја Master 2"
+        "iconAlt": "Икона Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Галактикод",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Апликација за тајни пораки",
         "tagline": "Создадете тајни пораки слични на вонземјани на кои им е потребен клуч за споделување за декодирање.",
         "description": "Создадете свои правила за галактички јазик. Само луѓето со вашиот клуч за споделување можат повторно да ги креираат истите правила, а оригиналниот текст не се поставува на сервер.",
         "highlights": [
           "Врз основа на клуч за споделување",
           "Лични правила",
-          "SNS-подготвен",
+          "Подготвен за SNS",
           "Нема прикачување на серверот"
         ],
         "primaryCta": "Создадете тајни пораки",
         "detailCta": "Обидете се со веб-демо",
         "statusNote": "Достапно сега на Google Play.",
-        "iconAlt": "Икона за галактикод"
+        "iconAlt": "Икона Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Повикајте го НЛО",
-        "category": "Извонредна забавна апликација",
-        "tagline": "Мистериозно искуство со повикување НЛО за забава.",
-        "description": "Притиснете го копчето, слушнете го сигналот и замислете нешто што слуша од вселената.",
+        "name": "UFO Signal Simulator",
+        "category": "Апликација за забава со мистериозни сигнали",
+        "tagline": "Испратете разигран вселенски сигнал и уживајте во расположението за НЛО.",
+        "description": "Отворете ја апликацијата, притиснете го копчето за сигнал и уживајте во звукот и анимацијата што прават моментот да се чувствува како мал ритуал на НЛО.",
         "highlights": [
-          "Интерактивно копче",
+          "Копче за сигнал",
           "Мистериозни звуци",
-          "Анимација",
+          "Анимација за расположение",
           "Нема пријавување"
         ],
-        "primaryCta": "Повикајте го НЛО",
-        "detailCta": "Обидете се со веб-демо",
-        "statusNote": "Достапно сега на Google Play.",
-        "iconAlt": "Јавете се на иконата за НЛО"
+        "primaryCta": "Инсталирајте UFO Signal Simulator",
+        "detailCta": "Погледнете ги деталите за апликацијата",
+        "statusNote": "Погледнете ги деталите за апликацијата, а потоа инсталирајте ја од Google Play.",
+        "iconAlt": "Икона UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Боја мајстор",
-        "category": "Класична загатка во боја",
-        "tagline": "Оригинален предизвик за фокусирање на бојата: најдете го одговорот меѓу сличните бои.",
-        "description": "Оригиналната верзија пред Color Master 2. Прво пробајте ја на веб, а потоа инсталирајте ја од Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Класична игра со чувство за боја",
+        "tagline": "Оригиналниот предизвик за фокусирање на бојата: запомнете ја бојата на одговорот и изберете ја од слични бои.",
+        "description": "Оригиналниот тест за чувство за боја пред Find Odd Color: Color Master 2. Прво пробајте го на веб, а потоа инсталирајте го од Google Play.",
         "highlights": [
           "Оригинално чувство",
           "Фокус во боја",
           "Брза игра",
           "Инсталирајте сега"
         ],
-        "primaryCta": "Инсталирајте Color Master",
+        "primaryCta": "Инсталирајте тест за чувство на боја",
         "detailCta": "Обидете се со веб-демо",
         "statusNote": "Прво пробајте го на веб, а потоа инсталирајте го од Google Play.",
-        "iconAlt": "Главна икона во боја"
+        "iconAlt": "Икона Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Корејска одбрана од случаен избор: опсада",
@@ -4004,7 +4034,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Случајна одбрана икона за среќна картичка"
       },
       "darkMaze": {
-        "name": "Лабораториски стаорец лавиринт Бегство: темен лавиринт",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Објавена игра за бегство од лавиринт",
         "tagline": "Водете лабораториски стаорец низ темниот лавиринт и пронајдете го излезот.",
         "description": "Објавено на Google Play на 28 мај 2026 година. Движете се низ темниот лавиринт, користете ставки и бегајте пред да се затвори патеката.",
@@ -4015,8 +4045,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Темно преживување"
         ],
         "primaryCta": "Инсталирајте на Google Play",
-        "statusNote": "Сега е достапен на Google Play. Не е обезбедено веб демо за оваа апликација.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze икона"
+        "statusNote": "Погледнете ги деталите за апликацијата, а потоа инсталирајте ја од Google Play. Не е обезбедено веб демо за оваа апликација.",
+        "iconAlt": "Икона Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Погледнете ги деталите за апликацијата"
       }
     },
     "status": {
@@ -4033,18 +4064,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "КРАТОКИ ИДЕИ",
       "title": "Пробајте ги вака",
       "colorMaster2": {
-        "app": "Боја мајстор 2",
-        "title": "„Ако ја видите оваа разлика во боја, очите ви се остри“.",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Ако ја забележите оваа чудна боја, очите ви се остри“.",
         "description": "Натпреварувајте се со пријателите во предизвик од 10 секунди."
       },
       "galaxyCode": {
-        "app": "Галактикод",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Испратете му на вашиот пријател порака од вонземјани која не може да ја декодира.",
         "description": "Оставете тајни пораки што може да ги декодираат само сопствениците на заеднички клуч."
       },
       "ufoSignal": {
-        "app": "Повикајте го НЛО",
-        "title": "„Што ќе се случи ако го притиснете копчето за НЛО во зори?",
+        "app": "UFO Signal Simulator",
+        "title": "„Што ќе се случи ако испратите сигнал за НЛО во зори?",
         "description": "Уживајте во звуците и анимацијата во темна соба."
       }
     },
@@ -4061,7 +4092,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Која апликација прво да ја инсталирам?",
-        "answer": "Ако ова е вашата прва посета, прво пробајте го Color Master 2. Брзо се игра и лесно се повторува за подобар резултат."
+        "answer": "Ако ова е вашата прва посета, прво пробајте го Find Odd Color: Color Master 2. Брзо се игра и лесно се повторува за подобар резултат."
       },
       "privateTest": {
         "question": "Како да се приклучам на приватни тест апликации?",
@@ -4072,12 +4103,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Направено од NeoKIM",
       "lastUpdated": "Последно ажурирање: 31.05.2026",
       "googlePlay": "Google Play апликации",
-      "colorTest": "Тест на боја",
-      "alienText": "Генератор на вонземски текст",
-      "ufoApp": "Апликација за НЛО",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Политика за приватност",
       "appAds": "app-ads.txt",
-      "contact": "Контакт"
+      "contact": "Контакт",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Пријавување приватен тестер",
@@ -4098,9 +4130,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ml-IN": {
     "seo": {
       "title": "NeoKIM ആപ്പ് ലാബ് | സൗജന്യ Android മിനി ആപ്പുകൾ",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, Lucky Card Random Defense-നും കൂടുതൽ Android മിനി ആപ്പുകൾക്കുമുള്ള സ്വകാര്യ പരിശോധനകൾ എന്നിവ ഇൻസ്റ്റാൾ ചെയ്യുക.",
+      "description": "കൂടുതൽ Android മിനി ആപ്പുകൾക്കായി Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze എന്നിവയും സ്വകാര്യ ടെസ്റ്റുകളും ഇൻസ്റ്റാൾ ചെയ്യുക.",
       "ogTitle": "NeoKIM ആപ്പ് ലാബ് | Android മിനി ആപ്പുകൾ",
-      "ogDescription": "വർണ്ണ വെല്ലുവിളികൾ, അന്യഗ്രഹജീവികളെപ്പോലെയുള്ള രഹസ്യ സന്ദേശങ്ങൾ, UFO കോളിംഗ് അനുഭവങ്ങൾ, ലാബ് റാറ്റ് മേസ് എസ്‌കേപ്പ്: ഡാർക്ക് മേസ്, ദ്രുത Android വിനോദത്തിനുള്ള സ്വകാര്യ പരിശോധനകൾ."
+      "ogDescription": "വിചിത്രമായ നിറങ്ങൾ കണ്ടെത്തുക, അന്യഗ്രഹ ശൈലിയിലുള്ള രഹസ്യ വാചകം ഉണ്ടാക്കുക, കളിയായ UFO സിഗ്നലുകൾ അയയ്‌ക്കുക, ഇരുണ്ട മായാജാലങ്ങളിൽ നിന്ന് രക്ഷപ്പെടുക, വേഗത്തിലുള്ള Android വിനോദത്തിനായി സ്വകാര്യ പരിശോധനകളിൽ ചേരുക."
     },
     "skip": {
       "apps": "ആപ്പ് ലിസ്റ്റിലേക്ക് പോകുക"
@@ -4135,11 +4167,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android മിനി അപ്ലിക്കേഷൻ ശേഖരം",
       "title": "NeoKIM ആപ്പ് ലാബ്",
       "subtitle": "ചെറിയ Android ആപ്പുകൾ പെട്ടെന്നുള്ള വിനോദത്തിനും പങ്കിടലിനും വേണ്ടി നിർമ്മിച്ചതാണ്",
-      "description": "വർണ്ണ വെല്ലുവിളികൾ, അന്യഗ്രഹജീവികളെപ്പോലെയുള്ള രഹസ്യ സന്ദേശങ്ങൾ, UFO കോളിംഗ് അനുഭവങ്ങൾ. ലഘുവായി ഇൻസ്റ്റാൾ ചെയ്യുക. ഒരു മിനിറ്റിനുള്ളിൽ ആസ്വദിക്കൂ.",
+      "description": "വിചിത്ര വർണ്ണ വെല്ലുവിളികൾ, അന്യഗ്രഹ ശൈലിയിലുള്ള രഹസ്യ സന്ദേശങ്ങൾ, UFO സിഗ്നൽ പ്ലേ, ഡാർക്ക് മേസ് എസ്കേപ്പുകൾ. ലഘുവായി ഇൻസ്റ്റാൾ ചെയ്യുക. ഒരു മിനിറ്റിനുള്ളിൽ ആസ്വദിക്കൂ.",
       "primaryCta": "ഫീച്ചർ ചെയ്ത ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്യുക",
-      "primaryAria": "Google Play-ൽ കളർ മാസ്റ്റർ 2 ഇൻസ്റ്റാൾ ചെയ്യുക",
+      "primaryAria": "Google Play-ൽ Find Odd Color: Color Master 2 ഇൻസ്റ്റാൾ ചെയ്യുക",
       "secondaryCta": "ആപ്പുകൾ ബ്രൗസ് ചെയ്യുക",
-      "visualAria": "കളർ മാസ്റ്റർ 2 ഐക്കണും കളർ ടൈലുകളും ഉള്ള ഫോൺ മോക്കപ്പ്",
+      "visualAria": "Find Odd Color: Color Master 2 ഐക്കണും കളർ ടൈലുകളും ഉള്ള ഫോൺ മോക്കപ്പ്",
       "badges": [
         "സൗജന്യ ആപ്പുകൾ",
         "Android",
@@ -4151,36 +4183,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ഫീച്ചർ ചെയ്ത ആപ്പ്",
       "title": "ഇന്ന് ആദ്യം ഇത് ഇൻസ്റ്റാൾ ചെയ്യുക",
       "badge": "ഫീച്ചർ ചെയ്തു",
-      "appName": "കളർ മാസ്റ്റർ 2",
-      "short": "10 സെക്കൻഡിനുള്ളിൽ വ്യത്യസ്ത നിറം കണ്ടെത്തുക.",
-      "description": "ഒരു തെറ്റ് ഓട്ടം അവസാനിപ്പിക്കുന്ന ഒരു ജീവിത വർണ്ണ പസിൽ. ഇത് വേഗത്തിൽ ആരംഭിക്കുന്നു, തുടർന്ന് നിങ്ങളുടെ റെക്കോർഡിനെ മറികടക്കാൻ നിങ്ങളെ പിന്നോട്ട് വലിക്കുന്നു.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 സെക്കൻഡിനുള്ളിൽ ഒരു വ്യത്യസ്ത നിറം കണ്ടെത്തുക.",
+      "description": "ഒരു തെറ്റ് ഓട്ടം അവസാനിപ്പിക്കുന്ന ഒരു ജീവിത വിചിത്ര-വർണ്ണ പസിൽ. ഇത് വേഗത്തിൽ ആരംഭിക്കുന്നു, തുടർന്ന് നിങ്ങളുടെ റെക്കോർഡിനെ മറികടക്കാൻ നിങ്ങളെ പിന്നോട്ട് വലിക്കുന്നു.",
       "primaryCta": "Google Play-ൽ ഇൻസ്റ്റാൾ ചെയ്യുക",
-      "primaryAria": "Google Play-ൽ കളർ മാസ്റ്റർ 2 ഇൻസ്റ്റാൾ ചെയ്യുക",
+      "primaryAria": "Google Play-ൽ Find Odd Color: Color Master 2 ഇൻസ്റ്റാൾ ചെയ്യുക",
       "secondaryCta": "ആപ്പുകൾ ബ്രൗസ് ചെയ്യുക",
-      "visualAria": "കളർ മാസ്റ്റർ 2 കളർ ടൈൽ ചലഞ്ച് ഫോൺ മോക്കപ്പ്"
+      "visualAria": "Find Odd Color: Color Master 2 ടൈൽ ചലഞ്ച് ഫോൺ മോക്കപ്പ്"
     },
     "apps": {
       "kicker": "ആപ്പ് കാറ്റലോഗ്",
       "title": "എല്ലാ ആപ്പുകളും",
       "description": "പൊതു ആപ്പുകൾ നേരിട്ട് ഇൻസ്റ്റാൾ ചെയ്യുക. സ്വകാര്യ പരിശോധനകൾക്കായി, ആദ്യം ഒരു അഭ്യർത്ഥന ഇമെയിൽ ചെയ്യുക; ടെസ്റ്റർ ആക്‌സസ് ചേർത്ത ശേഷം, ജോയിൻ ടെസ്റ്റ് ബട്ടൺ ഉപയോഗിക്കുക.",
       "colorMaster2": {
-        "name": "കളർ മാസ്റ്റർ 2",
-        "category": "വർണ്ണ പസിൽ",
-        "tagline": "10 സെക്കൻഡിനുള്ളിൽ വ്യത്യസ്ത നിറം കണ്ടെത്തുക.",
-        "description": "ഒരു തെറ്റ് ഓട്ടം അവസാനിപ്പിക്കുന്നു. ഒരു ഹ്രസ്വ, ആസക്തി നിറഞ്ഞ വർണ്ണ ധാരണ വെല്ലുവിളി.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "വിചിത്ര വർണ്ണ പസിൽ ഗെയിം",
+        "tagline": "10 സെക്കൻഡിനുള്ളിൽ ഒരു വ്യത്യസ്ത നിറം കണ്ടെത്തുക.",
+        "description": "ഒരു തെറ്റ് ഓട്ടം അവസാനിപ്പിക്കുന്നു. ഫോക്കസിനും വർണ്ണ ധാരണയ്ക്കും വേണ്ടിയുള്ള ഹ്രസ്വവും ആസക്തി നിറഞ്ഞതുമായ ഒറ്റ-നിറ വെല്ലുവിളി.",
         "highlights": [
           "10-സെക്കൻഡ് പരിധി",
           "ഒറ്റ ജീവിത ഓട്ടം",
           "ലീഡർബോർഡ്",
           "വർണ്ണ അന്ധമായ സഹായം"
         ],
-        "primaryCta": "കളർ മാസ്റ്റർ 2 ഇൻസ്റ്റാൾ ചെയ്യുക",
+        "primaryCta": "ഫൈൻഡ് ഓഡ് കളർ ഇൻസ്റ്റാൾ ചെയ്യുക",
         "detailCta": "വെബ് ഡെമോ പരീക്ഷിക്കുക",
         "statusNote": "Google Play-ൽ ഇപ്പോൾ ലഭ്യമാണ്.",
-        "iconAlt": "കളർ മാസ്റ്റർ 2 ഐക്കൺ"
+        "iconAlt": "Find Odd Color: Color Master 2 ഐക്കൺ"
       },
       "galaxyCode": {
-        "name": "ഗാലക്‌ടികോഡ്",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "രഹസ്യ സന്ദേശ ആപ്പ്",
         "tagline": "ഡീകോഡ് ചെയ്യാൻ ഒരു ഷെയർ കീ ആവശ്യമുള്ള അന്യഗ്രഹജീവിയെപ്പോലെയുള്ള രഹസ്യ സന്ദേശങ്ങൾ സൃഷ്‌ടിക്കുക.",
         "description": "നിങ്ങളുടെ സ്വന്തം ഗാലക്സി ഭാഷാ നിയമങ്ങൾ സൃഷ്ടിക്കുക. നിങ്ങളുടെ ഷെയർ കീ ഉള്ള ആളുകൾക്ക് മാത്രമേ സമാന നിയമങ്ങൾ പുനഃസൃഷ്‌ടിക്കാനാകൂ, യഥാർത്ഥ ടെക്‌സ്‌റ്റ് ഒരു സെർവറിലേക്ക് അപ്‌ലോഡ് ചെയ്യില്ല.",
@@ -4193,39 +4225,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "രഹസ്യ സന്ദേശങ്ങൾ സൃഷ്ടിക്കുക",
         "detailCta": "വെബ് ഡെമോ പരീക്ഷിക്കുക",
         "statusNote": "Google Play-ൽ ഇപ്പോൾ ലഭ്യമാണ്.",
-        "iconAlt": "Galacticode ഐക്കൺ"
+        "iconAlt": "Alien Text Maker: Galaxy Code ഐക്കൺ"
       },
       "ufoSignal": {
-        "name": "UFO-യെ വിളിക്കുക",
-        "category": "രസകരമായ ആപ്പ്",
-        "tagline": "വിനോദത്തിനായി നിഗൂഢമായ UFO കോളിംഗ് അനുഭവം.",
-        "description": "ബട്ടൺ അമർത്തുക, സിഗ്നൽ കേൾക്കുക, ബഹിരാകാശത്ത് നിന്ന് എന്തെങ്കിലും കേൾക്കുന്നതായി സങ്കൽപ്പിക്കുക.",
+        "name": "UFO Signal Simulator",
+        "category": "മിസ്റ്ററി സിഗ്നൽ വിനോദ ആപ്പ്",
+        "tagline": "കളിയായ സ്പേസ് സിഗ്നൽ അയച്ച് UFO മൂഡ് ആസ്വദിക്കൂ.",
+        "description": "ആപ്പ് തുറക്കുക, സിഗ്നൽ ബട്ടൺ അമർത്തുക, നിമിഷം ഒരു ചെറിയ UFO ആചാരം പോലെ തോന്നിപ്പിക്കുന്ന ശബ്ദവും ആനിമേഷനും ആസ്വദിക്കൂ.",
         "highlights": [
-          "ഇൻ്ററാക്ടീവ് ബട്ടൺ",
+          "സിഗ്നൽ ബട്ടൺ",
           "നിഗൂഢ ശബ്ദങ്ങൾ",
-          "ആനിമേഷൻ",
+          "മൂഡ് ആനിമേഷൻ",
           "സൈൻ അപ്പ് ഇല്ല"
         ],
-        "primaryCta": "UFO-യെ വിളിക്കുക",
-        "detailCta": "വെബ് ഡെമോ പരീക്ഷിക്കുക",
-        "statusNote": "Google Play-ൽ ഇപ്പോൾ ലഭ്യമാണ്.",
-        "iconAlt": "UFO ഐക്കണിലേക്ക് വിളിക്കുക"
+        "primaryCta": "UFO Signal Simulator ഇൻസ്റ്റാൾ ചെയ്യുക",
+        "detailCta": "ആപ്പ് വിശദാംശങ്ങൾ കാണുക",
+        "statusNote": "ആപ്പ് വിശദാംശങ്ങൾ കാണുക, തുടർന്ന് അത് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക.",
+        "iconAlt": "UFO Signal Simulator ഐക്കൺ"
       },
       "colorMasterClassic": {
-        "name": "കളർ മാസ്റ്റർ",
-        "category": "ക്ലാസിക് വർണ്ണ പസിൽ",
-        "tagline": "യഥാർത്ഥ കളർ-ഫോക്കസ് വെല്ലുവിളി: സമാന നിറങ്ങൾക്കിടയിൽ ഉത്തരം കണ്ടെത്തുക.",
-        "description": "കളർ മാസ്റ്റർ 2-ന് മുമ്പുള്ള യഥാർത്ഥ പതിപ്പ്. ആദ്യം ഇത് വെബിൽ പരീക്ഷിക്കുക, തുടർന്ന് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക.",
+        "name": "Color Sense Test: Color Master",
+        "category": "ക്ലാസിക് കളർ സെൻസ് ഗെയിം",
+        "tagline": "യഥാർത്ഥ കളർ-ഫോക്കസ് ചലഞ്ച്: ഉത്തരത്തിൻ്റെ നിറം ഓർത്ത് സമാന നിറങ്ങളിൽ നിന്ന് അത് തിരഞ്ഞെടുക്കുക.",
+        "description": "Find Odd Color: Color Master 2-ന് മുമ്പുള്ള യഥാർത്ഥ വർണ്ണ സെൻസ് ടെസ്റ്റ്. ആദ്യം വെബിൽ ഇത് പരീക്ഷിക്കുക, തുടർന്ന് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക.",
         "highlights": [
           "യഥാർത്ഥ വികാരം",
           "കളർ ഫോക്കസ്",
           "പെട്ടെന്നുള്ള കളി",
           "ഇപ്പോൾ ഇൻസ്റ്റാൾ ചെയ്യുക"
         ],
-        "primaryCta": "കളർ മാസ്റ്റർ ഇൻസ്റ്റാൾ ചെയ്യുക",
+        "primaryCta": "കളർ സെൻസ് ടെസ്റ്റ് ഇൻസ്റ്റാൾ ചെയ്യുക",
         "detailCta": "വെബ് ഡെമോ പരീക്ഷിക്കുക",
         "statusNote": "ആദ്യം വെബിൽ ഇത് പരീക്ഷിക്കുക, തുടർന്ന് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക.",
-        "iconAlt": "കളർ മാസ്റ്റർ ഐക്കൺ"
+        "iconAlt": "Color Sense Test: Color Master ഐക്കൺ"
       },
       "koreanRandomDefense": {
         "name": "കൊറിയൻ റാൻഡം ഡിഫൻസ്: ഉപരോധം",
@@ -4260,19 +4292,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ലക്കി കാർഡ് റാൻഡം ഡിഫൻസ് ഐക്കൺ"
       },
       "darkMaze": {
-        "name": "ലാബ് റാറ്റ് മെയ്സ് എസ്കേപ്പ്: ഡാർക്ക് മേസ്",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "റിലീസ് ചെയ്‌ത മാസി എസ്‌കേപ്പ് ഗെയിം",
         "tagline": "ഇരുണ്ട മട്ടിലൂടെ ഒരു ലാബ് എലിയെ നയിച്ച് പുറത്തുകടക്കുക.",
-        "description": "2026 മെയ് 28-ന് Google Play-യിൽ റിലീസ് ചെയ്‌തു. ഇരുണ്ട മുനമ്പിലൂടെ നീങ്ങുക, ഇനങ്ങൾ ഉപയോഗിക്കുക, പാത അടയ്ക്കുന്നതിന് മുമ്പ് രക്ഷപ്പെടുക.",
+        "description": "2026 മെയ് 28-ന് Google Play-ൽ റിലീസ് ചെയ്‌തു. ഇരുണ്ട മട്ടുപ്പാവിലൂടെ നീങ്ങുക, ഇനങ്ങൾ ഉപയോഗിക്കുക, പാത അടയ്ക്കുന്നതിന് മുമ്പ് രക്ഷപ്പെടുക.",
         "highlights": [
           "2026 മെയ് 28-ന് റിലീസ് ചെയ്തു",
           "Maze രക്ഷപ്പെടൽ",
           "ഇനങ്ങൾ",
           "ഇരുണ്ട അതിജീവനം"
         ],
-        "primaryCta": "Google Play-യിൽ ഇൻസ്റ്റാൾ ചെയ്യുക",
-        "statusNote": "ഇപ്പോൾ Google Play-യിൽ ലഭ്യമാണ്. ഈ ആപ്പിനായി വെബ് ഡെമോ ഒന്നും നൽകിയിട്ടില്ല.",
-        "iconAlt": "ലാബ് റാറ്റ് മെയ്സ് എസ്കേപ്പ്: ഡാർക്ക് മേസ് ഐക്കൺ"
+        "primaryCta": "Google Play-ൽ ഇൻസ്റ്റാൾ ചെയ്യുക",
+        "statusNote": "ആപ്പ് വിശദാംശങ്ങൾ കാണുക, തുടർന്ന് അത് Google Play-ൽ നിന്ന് ഇൻസ്റ്റാൾ ചെയ്യുക. ഈ ആപ്പിനായി വെബ് ഡെമോ ഒന്നും നൽകിയിട്ടില്ല.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ഐക്കൺ",
+        "detailCta": "ആപ്പ് വിശദാംശങ്ങൾ കാണുക"
       }
     },
     "status": {
@@ -4289,18 +4322,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ഷോർട്ട്സ് ആശയങ്ങൾ",
       "title": "അവരെ ഇതുപോലെ പരീക്ഷിക്കുക",
       "colorMaster2": {
-        "app": "കളർ മാസ്റ്റർ 2",
-        "title": "\"ഈ നിറവ്യത്യാസം കാണുകയാണെങ്കിൽ, നിങ്ങളുടെ കണ്ണുകൾ മൂർച്ചയുള്ളതാണ്.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ഈ വിചിത്രമായ നിറം നിങ്ങൾ കണ്ടെത്തുകയാണെങ്കിൽ, നിങ്ങളുടെ കണ്ണുകൾ മൂർച്ചയുള്ളതാണ്.\"",
         "description": "10 സെക്കൻഡ് ചലഞ്ചിൽ സുഹൃത്തുക്കളുമായി മത്സരിക്കുക."
       },
       "galaxyCode": {
-        "app": "ഗാലക്‌ടികോഡ്",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"നിങ്ങളുടെ സുഹൃത്തിന് ഡീകോഡ് ചെയ്യാൻ കഴിയാത്ത ഒരു അന്യഗ്രഹ സന്ദേശം അയയ്ക്കുക.\"",
         "description": "ഷെയർ-കീ ഹോൾഡർമാർക്ക് മാത്രം ഡീകോഡ് ചെയ്യാൻ കഴിയുന്ന രഹസ്യ സന്ദേശങ്ങൾ ഇടുക."
       },
       "ufoSignal": {
-        "app": "UFO-യെ വിളിക്കുക",
-        "title": "\"പുലർച്ചെ UFO ബട്ടൺ അമർത്തിയാൽ എന്ത് സംഭവിക്കും?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"പുലർച്ചെ നിങ്ങൾ ഒരു UFO സിഗ്നൽ അയച്ചാൽ എന്ത് സംഭവിക്കും?\"",
         "description": "ഇരുണ്ട മുറിയിൽ ശബ്ദങ്ങളും ആനിമേഷനും ആസ്വദിക്കൂ."
       }
     },
@@ -4317,7 +4350,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ഏത് ആപ്പ് ആണ് ഞാൻ ആദ്യം ഇൻസ്റ്റാൾ ചെയ്യേണ്ടത്?",
-        "answer": "ഇത് നിങ്ങളുടെ ആദ്യ സന്ദർശനമാണെങ്കിൽ, ആദ്യം കളർ മാസ്റ്റർ 2 പരീക്ഷിക്കുക. ഇത് വേഗത്തിൽ കളിക്കാനും മികച്ച സ്‌കോറിനായി റീപ്ലേ ചെയ്യാനും എളുപ്പമാണ്."
+        "answer": "ഇത് നിങ്ങളുടെ ആദ്യ സന്ദർശനമാണെങ്കിൽ, ആദ്യം Find Odd Color: Color Master 2 പരീക്ഷിക്കുക. ഇത് വേഗത്തിൽ കളിക്കാനും മികച്ച സ്‌കോറിനായി റീപ്ലേ ചെയ്യാനും എളുപ്പമാണ്."
       },
       "privateTest": {
         "question": "സ്വകാര്യ ടെസ്റ്റ് ആപ്പുകളിൽ ഞാൻ എങ്ങനെ ചേരും?",
@@ -4328,12 +4361,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM നിർമ്മിച്ചത്",
       "lastUpdated": "അവസാനം അപ്ഡേറ്റ് ചെയ്തത്: 2026.05.31",
       "googlePlay": "Google Play ആപ്പുകൾ",
-      "colorTest": "കളർ ടെസ്റ്റ്",
-      "alienText": "ഏലിയൻ ടെക്സ്റ്റ് ജനറേറ്റർ",
-      "ufoApp": "UFO ആപ്പ്",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "സ്വകാര്യതാ നയം",
       "appAds": "app-ads.txt",
-      "contact": "ബന്ധപ്പെടുക"
+      "contact": "ബന്ധപ്പെടുക",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "സ്വകാര്യ ടെസ്റ്റർ സൈൻഅപ്പ്",
@@ -4354,9 +4388,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ms": {
     "seo": {
       "title": "Makmal Apl NeoKIM | Apl Mini Android percuma",
-      "description": "Pasang Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, dan ujian peribadi untuk Lucky Card Random Defense dan banyak lagi apl mini Android.",
+      "description": "Pasang Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze dan ujian peribadi untuk lebih banyak apl mini Android.",
       "ogTitle": "Makmal Apl NeoKIM | Apl Mini Android",
-      "ogDescription": "Cabaran warna, mesej rahsia seperti makhluk asing, pengalaman panggilan UFO, Lab Rat Maze Escape: Dark Maze dan ujian peribadi untuk keseronokan Android yang pantas."
+      "ogDescription": "Cari warna ganjil, buat teks rahsia gaya asing, hantar isyarat UFO yang suka bermain, lari dari labirin gelap dan sertai ujian peribadi untuk keseronokan Android yang pantas."
     },
     "skip": {
       "apps": "Langkau ke senarai apl"
@@ -4391,11 +4425,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Koleksi aplikasi mini Android",
       "title": "Makmal Apl NeoKIM",
       "subtitle": "Apl Android kecil dibuat untuk keseronokan dan perkongsian pantas",
-      "description": "Cabaran warna, mesej rahsia seperti makhluk asing dan pengalaman panggilan UFO. Pasang ringan. Nikmati dalam masa kurang seminit.",
+      "description": "Cabaran warna ganjil, mesej rahsia gaya makhluk asing, permainan isyarat UFO dan pelarian maze gelap. Pasang ringan. Nikmati dalam masa kurang seminit.",
       "primaryCta": "Pasang Apl Ditampilkan",
-      "primaryAria": "Pasang Color Master 2 pada Google Play",
+      "primaryAria": "Pasang Find Odd Color: Color Master 2 pada Google Play",
       "secondaryCta": "Semak imbas Apl",
-      "visualAria": "Mockup telefon dengan ikon Color Master 2 dan jubin warna",
+      "visualAria": "Mockup telefon dengan ikon Find Odd Color: Color Master 2 dan jubin warna",
       "badges": [
         "Apl Percuma",
         "Android",
@@ -4407,36 +4441,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APP DITAMPILKAN",
       "title": "Pasang Ini Pertama Hari Ini",
       "badge": "Ditampilkan",
-      "appName": "Guru Warna 2",
-      "short": "Cari warna yang berbeza dalam 10 saat.",
-      "description": "Teka-teki warna satu hayat di mana satu kesilapan menamatkan larian. Ia bermula dengan pantas, kemudian terus menarik anda kembali untuk mengalahkan rekod anda.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Cari satu warna berbeza dalam masa 10 saat.",
+      "description": "Teka-teki warna ganjil satu hayat di mana satu kesilapan menamatkan larian. Ia bermula dengan pantas, kemudian terus menarik anda kembali untuk mengalahkan rekod anda.",
       "primaryCta": "Pasang pada Google Play",
-      "primaryAria": "Pasang Color Master 2 pada Google Play",
+      "primaryAria": "Pasang Find Odd Color: Color Master 2 pada Google Play",
       "secondaryCta": "Semak imbas Apl",
-      "visualAria": "Mockup telefon cabaran jubin warna Master 2 warna"
+      "visualAria": "mockup telefon cabaran jubin Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALOG APL",
       "title": "Semua Apl",
       "description": "Pasang apl awam secara langsung. Untuk ujian peribadi, e-mel permintaan dahulu; selepas akses penguji ditambah, gunakan butang Sertai Ujian.",
       "colorMaster2": {
-        "name": "Guru Warna 2",
-        "category": "Teka-teki warna",
-        "tagline": "Cari warna yang berbeza dalam 10 saat.",
-        "description": "Satu kesilapan menamatkan larian. Cabaran persepsi warna yang singkat dan ketagihan.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Permainan teka-teki warna ganjil",
+        "tagline": "Cari satu warna berbeza dalam masa 10 saat.",
+        "description": "Satu kesilapan menamatkan larian. Cabaran warna ganjil yang singkat dan ketagihan untuk fokus dan persepsi warna.",
         "highlights": [
           "Had 10 saat",
           "Larian satu hayat",
           "Papan pendahulu",
           "Bantuan buta warna"
         ],
-        "primaryCta": "Pasang Master Warna 2",
+        "primaryCta": "Pasang Cari Warna Ganjil",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon Master 2 Warna"
+        "iconAlt": "Ikon Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "kod galaksi",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Apl mesej rahsia",
         "tagline": "Buat mesej rahsia seperti makhluk asing yang memerlukan kunci kongsi untuk menyahkod.",
         "description": "Cipta peraturan bahasa galaksi anda sendiri. Hanya orang yang mempunyai kunci kongsi anda boleh mencipta semula peraturan yang sama dan teks asal tidak dimuat naik ke pelayan.",
@@ -4449,39 +4483,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Cipta Mesej Rahsia",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon kod galaksi"
+        "iconAlt": "Ikon Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Panggil UFO",
-        "category": "Apl menyeronokkan yang mengasyikkan",
-        "tagline": "Pengalaman panggilan UFO yang misteri untuk keseronokan.",
-        "description": "Tekan butang, dengar isyarat dan bayangkan sesuatu mendengar dari angkasa.",
+        "name": "UFO Signal Simulator",
+        "category": "Apl hiburan isyarat misteri",
+        "tagline": "Hantar isyarat ruang yang suka bermain dan nikmati suasana UFO.",
+        "description": "Buka apl, tekan butang isyarat, dan nikmati bunyi serta animasi yang menjadikan masa itu terasa seperti upacara kecil UFO.",
         "highlights": [
-          "Butang interaktif",
+          "Butang isyarat",
           "Misteri berbunyi",
-          "Animasi",
+          "Animasi mood",
           "Tiada pendaftaran"
         ],
-        "primaryCta": "Panggil UFO",
-        "detailCta": "Cuba Web Demo",
-        "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Panggil ikon UFO"
+        "primaryCta": "Pasang UFO Signal Simulator",
+        "detailCta": "Lihat Butiran Apl",
+        "statusNote": "Lihat butiran apl, kemudian pasangkannya daripada Google Play.",
+        "iconAlt": "Ikon UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Guru Warna",
-        "category": "Teka-teki warna klasik",
-        "tagline": "Cabaran fokus warna asal: cari jawapan antara warna yang serupa.",
-        "description": "Versi asal sebelum Color Master 2. Cuba di web dahulu, kemudian pasang dari Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Permainan deria warna klasik",
+        "tagline": "Cabaran fokus warna asal: ingat warna jawapan dan pilih daripada warna yang serupa.",
+        "description": "Ujian deria warna asal sebelum Find Odd Color: Color Master 2. Cuba di web dahulu, kemudian pasang dari Google Play.",
         "highlights": [
           "Rasa asli",
           "Fokus warna",
           "Main cepat",
           "Pasang sekarang"
         ],
-        "primaryCta": "Pasang Master Warna",
+        "primaryCta": "Pasang Ujian Deria Warna",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Cuba di web dahulu, kemudian pasang dari Google Play.",
-        "iconAlt": "Ikon Master warna"
+        "iconAlt": "Ikon Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Pertahanan Rawak Korea: Pengepungan",
@@ -4516,19 +4550,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Pertahanan Rawak Kad Bertuah"
       },
       "darkMaze": {
-        "name": "Labirin Tikus Lab Melarikan Diri: Labirin Gelap",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Permainan melarikan diri maze yang dikeluarkan",
         "tagline": "Bimbing tikus makmal melalui labirin yang gelap dan cari jalan keluar.",
-        "description": "Dikeluarkan di Google Play pada 28 Mei 2026. Bergerak melalui labirin gelap, gunakan item dan melarikan diri sebelum laluan ditutup.",
+        "description": "Dikeluarkan pada Google Play pada 28 Mei 2026. Bergerak melalui labirin gelap, gunakan item dan melarikan diri sebelum laluan ditutup.",
         "highlights": [
           "Dikeluarkan pada 28 Mei 2026",
           "melarikan diri labirin",
           "barang",
           "Kelangsungan hidup gelap"
         ],
-        "primaryCta": "Pasang di Google Play",
-        "statusNote": "Kini tersedia di Google Play. Tiada demo web disediakan untuk apl ini.",
-        "iconAlt": "Lab Rat Maze Melarikan diri: Ikon Maze Gelap"
+        "primaryCta": "Pasang pada Google Play",
+        "statusNote": "Lihat butiran apl, kemudian pasangkannya daripada Google Play. Tiada demo web disediakan untuk apl ini.",
+        "iconAlt": "Ikon Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Lihat Butiran Apl"
       }
     },
     "status": {
@@ -4545,18 +4580,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEA PENDEK",
       "title": "Cuba Mereka Seperti Ini",
       "colorMaster2": {
-        "app": "Guru Warna 2",
-        "title": "\"Jika anda melihat perbezaan warna ini, mata anda tajam.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Jika anda melihat warna ganjil ini, mata anda tajam.\"",
         "description": "Bersaing dengan rakan dalam cabaran 10 saat."
       },
       "galaxyCode": {
-        "app": "kod galaksi",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Hantar rakan anda mesej asing yang mereka tidak boleh dekod.\"",
         "description": "Tinggalkan mesej rahsia yang hanya pemegang kunci kongsi boleh menyahkod."
       },
       "ufoSignal": {
-        "app": "Panggil UFO",
-        "title": "\"Apa yang berlaku jika anda menekan butang UFO pada waktu subuh?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Apa yang berlaku jika anda menghantar isyarat UFO pada waktu subuh?\"",
         "description": "Nikmati bunyi dan animasi dalam bilik gelap."
       }
     },
@@ -4573,7 +4608,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Apl manakah yang perlu saya pasang dahulu?",
-        "answer": "Jika ini lawatan pertama anda, cuba Color Master 2 dahulu. Ia pantas untuk dimainkan dan mudah dimainkan semula untuk skor yang lebih baik."
+        "answer": "Jika ini adalah lawatan pertama anda, cuba Find Odd Color: Color Master 2 dahulu. Ia pantas untuk dimainkan dan mudah dimainkan semula untuk skor yang lebih baik."
       },
       "privateTest": {
         "question": "Bagaimanakah saya boleh menyertai apl ujian peribadi?",
@@ -4584,12 +4619,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Dibuat oleh NeoKIM",
       "lastUpdated": "Kemas kini terakhir: 2026.05.31",
       "googlePlay": "Apl Google Play",
-      "colorTest": "Ujian Warna",
-      "alienText": "Penjana Teks Alien",
-      "ufoApp": "Apl UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Dasar Privasi",
       "appAds": "app-ads.txt",
-      "contact": "Kenalan"
+      "contact": "Kenalan",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Pendaftaran Penguji Peribadi",
@@ -4610,9 +4646,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ms-MY": {
     "seo": {
       "title": "Makmal Apl NeoKIM | Apl Mini Android percuma",
-      "description": "Pasang Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, dan ujian peribadi untuk Lucky Card Random Defense dan banyak lagi apl mini Android.",
+      "description": "Pasang Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze dan ujian peribadi untuk lebih banyak apl mini Android.",
       "ogTitle": "Makmal Apl NeoKIM | Apl Mini Android",
-      "ogDescription": "Cabaran warna, mesej rahsia seperti makhluk asing, pengalaman panggilan UFO, Lab Rat Maze Escape: Dark Maze dan ujian peribadi untuk keseronokan Android yang pantas."
+      "ogDescription": "Cari warna ganjil, buat teks rahsia gaya asing, hantar isyarat UFO yang suka bermain, lari dari labirin gelap dan sertai ujian peribadi untuk keseronokan Android yang pantas."
     },
     "skip": {
       "apps": "Langkau ke senarai apl"
@@ -4647,11 +4683,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Koleksi aplikasi mini Android",
       "title": "Makmal Apl NeoKIM",
       "subtitle": "Apl Android kecil dibuat untuk keseronokan dan perkongsian pantas",
-      "description": "Cabaran warna, mesej rahsia seperti makhluk asing dan pengalaman panggilan UFO. Pasang ringan. Nikmati dalam masa kurang seminit.",
+      "description": "Cabaran warna ganjil, mesej rahsia gaya makhluk asing, permainan isyarat UFO dan pelarian maze gelap. Pasang ringan. Nikmati dalam masa kurang seminit.",
       "primaryCta": "Pasang Apl Ditampilkan",
-      "primaryAria": "Pasang Color Master 2 pada Google Play",
+      "primaryAria": "Pasang Find Odd Color: Color Master 2 pada Google Play",
       "secondaryCta": "Semak imbas Apl",
-      "visualAria": "Mockup telefon dengan ikon Color Master 2 dan jubin warna",
+      "visualAria": "Mockup telefon dengan ikon Find Odd Color: Color Master 2 dan jubin warna",
       "badges": [
         "Apl Percuma",
         "Android",
@@ -4663,36 +4699,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APP DITAMPILKAN",
       "title": "Pasang Ini Pertama Hari Ini",
       "badge": "Ditampilkan",
-      "appName": "Guru Warna 2",
-      "short": "Cari warna yang berbeza dalam 10 saat.",
-      "description": "Teka-teki warna satu hayat di mana satu kesilapan menamatkan larian. Ia bermula dengan pantas, kemudian terus menarik anda kembali untuk mengalahkan rekod anda.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Cari satu warna berbeza dalam masa 10 saat.",
+      "description": "Teka-teki warna ganjil satu hayat di mana satu kesilapan menamatkan larian. Ia bermula dengan pantas, kemudian terus menarik anda kembali untuk mengalahkan rekod anda.",
       "primaryCta": "Pasang pada Google Play",
-      "primaryAria": "Pasang Color Master 2 pada Google Play",
+      "primaryAria": "Pasang Find Odd Color: Color Master 2 pada Google Play",
       "secondaryCta": "Semak imbas Apl",
-      "visualAria": "Mockup telefon cabaran jubin warna Master 2 warna"
+      "visualAria": "mockup telefon cabaran jubin Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALOG APL",
       "title": "Semua Apl",
       "description": "Pasang apl awam secara langsung. Untuk ujian peribadi, e-mel permintaan dahulu; selepas akses penguji ditambah, gunakan butang Sertai Ujian.",
       "colorMaster2": {
-        "name": "Guru Warna 2",
-        "category": "Teka-teki warna",
-        "tagline": "Cari warna yang berbeza dalam 10 saat.",
-        "description": "Satu kesilapan menamatkan larian. Cabaran persepsi warna yang singkat dan ketagihan.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Permainan teka-teki warna ganjil",
+        "tagline": "Cari satu warna berbeza dalam masa 10 saat.",
+        "description": "Satu kesilapan menamatkan larian. Cabaran warna ganjil yang singkat dan ketagihan untuk fokus dan persepsi warna.",
         "highlights": [
           "Had 10 saat",
           "Larian satu hayat",
           "Papan pendahulu",
           "Bantuan buta warna"
         ],
-        "primaryCta": "Pasang Master Warna 2",
+        "primaryCta": "Pasang Cari Warna Ganjil",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon Master 2 Warna"
+        "iconAlt": "Ikon Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "kod galaksi",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Apl mesej rahsia",
         "tagline": "Buat mesej rahsia seperti makhluk asing yang memerlukan kunci kongsi untuk menyahkod.",
         "description": "Cipta peraturan bahasa galaksi anda sendiri. Hanya orang yang mempunyai kunci kongsi anda boleh mencipta semula peraturan yang sama dan teks asal tidak dimuat naik ke pelayan.",
@@ -4705,39 +4741,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Cipta Mesej Rahsia",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon kod galaksi"
+        "iconAlt": "Ikon Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Panggil UFO",
-        "category": "Apl menyeronokkan yang mengasyikkan",
-        "tagline": "Pengalaman panggilan UFO yang misteri untuk keseronokan.",
-        "description": "Tekan butang, dengar isyarat dan bayangkan sesuatu mendengar dari angkasa.",
+        "name": "UFO Signal Simulator",
+        "category": "Apl hiburan isyarat misteri",
+        "tagline": "Hantar isyarat ruang yang suka bermain dan nikmati suasana UFO.",
+        "description": "Buka apl, tekan butang isyarat, dan nikmati bunyi serta animasi yang menjadikan masa itu terasa seperti upacara kecil UFO.",
         "highlights": [
-          "Butang interaktif",
+          "Butang isyarat",
           "Misteri berbunyi",
-          "Animasi",
+          "Animasi mood",
           "Tiada pendaftaran"
         ],
-        "primaryCta": "Panggil UFO",
-        "detailCta": "Cuba Web Demo",
-        "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Panggil ikon UFO"
+        "primaryCta": "Pasang UFO Signal Simulator",
+        "detailCta": "Lihat Butiran Apl",
+        "statusNote": "Lihat butiran apl, kemudian pasangkannya daripada Google Play.",
+        "iconAlt": "Ikon UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Guru Warna",
-        "category": "Teka-teki warna klasik",
-        "tagline": "Cabaran fokus warna asal: cari jawapan antara warna yang serupa.",
-        "description": "Versi asal sebelum Color Master 2. Cuba di web dahulu, kemudian pasang dari Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Permainan deria warna klasik",
+        "tagline": "Cabaran fokus warna asal: ingat warna jawapan dan pilih daripada warna yang serupa.",
+        "description": "Ujian deria warna asal sebelum Find Odd Color: Color Master 2. Cuba di web dahulu, kemudian pasang dari Google Play.",
         "highlights": [
           "Rasa asli",
           "Fokus warna",
           "Main cepat",
           "Pasang sekarang"
         ],
-        "primaryCta": "Pasang Master Warna",
+        "primaryCta": "Pasang Ujian Deria Warna",
         "detailCta": "Cuba Web Demo",
         "statusNote": "Cuba di web dahulu, kemudian pasang dari Google Play.",
-        "iconAlt": "Ikon Master warna"
+        "iconAlt": "Ikon Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Pertahanan Rawak Korea: Pengepungan",
@@ -4772,19 +4808,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Pertahanan Rawak Kad Bertuah"
       },
       "darkMaze": {
-        "name": "Labirin Tikus Lab Melarikan Diri: Labirin Gelap",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Permainan melarikan diri maze yang dikeluarkan",
         "tagline": "Bimbing tikus makmal melalui labirin yang gelap dan cari jalan keluar.",
-        "description": "Dikeluarkan di Google Play pada 28 Mei 2026. Bergerak melalui labirin gelap, gunakan item dan melarikan diri sebelum laluan ditutup.",
+        "description": "Dikeluarkan pada Google Play pada 28 Mei 2026. Bergerak melalui labirin gelap, gunakan item dan melarikan diri sebelum laluan ditutup.",
         "highlights": [
           "Dikeluarkan pada 28 Mei 2026",
           "melarikan diri labirin",
           "barang",
           "Kelangsungan hidup gelap"
         ],
-        "primaryCta": "Pasang di Google Play",
-        "statusNote": "Kini tersedia di Google Play. Tiada demo web disediakan untuk apl ini.",
-        "iconAlt": "Lab Rat Maze Melarikan diri: Ikon Maze Gelap"
+        "primaryCta": "Pasang pada Google Play",
+        "statusNote": "Lihat butiran apl, kemudian pasangkannya daripada Google Play. Tiada demo web disediakan untuk apl ini.",
+        "iconAlt": "Ikon Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Lihat Butiran Apl"
       }
     },
     "status": {
@@ -4801,18 +4838,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEA PENDEK",
       "title": "Cuba Mereka Seperti Ini",
       "colorMaster2": {
-        "app": "Guru Warna 2",
-        "title": "\"Jika anda melihat perbezaan warna ini, mata anda tajam.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Jika anda melihat warna ganjil ini, mata anda tajam.\"",
         "description": "Bersaing dengan rakan dalam cabaran 10 saat."
       },
       "galaxyCode": {
-        "app": "kod galaksi",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Hantar rakan anda mesej asing yang mereka tidak boleh dekod.\"",
         "description": "Tinggalkan mesej rahsia yang hanya pemegang kunci kongsi boleh menyahkod."
       },
       "ufoSignal": {
-        "app": "Panggil UFO",
-        "title": "\"Apa yang berlaku jika anda menekan butang UFO pada waktu subuh?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Apa yang berlaku jika anda menghantar isyarat UFO pada waktu subuh?\"",
         "description": "Nikmati bunyi dan animasi dalam bilik gelap."
       }
     },
@@ -4829,7 +4866,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Apl manakah yang perlu saya pasang dahulu?",
-        "answer": "Jika ini lawatan pertama anda, cuba Color Master 2 dahulu. Ia pantas untuk dimainkan dan mudah dimainkan semula untuk skor yang lebih baik."
+        "answer": "Jika ini adalah lawatan pertama anda, cuba Find Odd Color: Color Master 2 dahulu. Ia pantas untuk dimainkan dan mudah dimainkan semula untuk skor yang lebih baik."
       },
       "privateTest": {
         "question": "Bagaimanakah saya boleh menyertai apl ujian peribadi?",
@@ -4840,12 +4877,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Dibuat oleh NeoKIM",
       "lastUpdated": "Kemas kini terakhir: 2026.05.31",
       "googlePlay": "Apl Google Play",
-      "colorTest": "Ujian Warna",
-      "alienText": "Penjana Teks Alien",
-      "ufoApp": "Apl UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Dasar Privasi",
       "appAds": "app-ads.txt",
-      "contact": "Kenalan"
+      "contact": "Kenalan",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Pendaftaran Penguji Peribadi",
@@ -4866,9 +4904,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "mn-MN": {
     "seo": {
       "title": "NeoKIM App Lab | Үнэгүй Android Mini програмууд",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze болон Азтай картын санамсаргүй хамгаалалт болон бусад Android мини програмуудыг суулгаарай.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze болон бусад Android мини программуудын хувийн тестүүдийг суулгаарай.",
       "ogTitle": "NeoKIM App Lab | Android мини програмууд",
-      "ogDescription": "Өнгөт сорилтууд, харь гаригийнх шиг нууц мессежүүд, Нисдэг Үл нисдэг биетүүдийг дуудах туршлага, Lab Rat Maze Escape: Dark Maze болон Android-г хурдан зугаацуулах хувийн тестүүд."
+      "ogDescription": "Android-ийг хурдан зугаацуулахын тулд хачирхалтай өнгийг олж, харь гарагийн хэв маягийн нууц бичвэр бичиж, хөгжилтэй Нисдэг Үл Мэдэгдэх дохио илгээж, харанхуй төөрдөг байшингаас зугтаж, хувийн тестүүдэд нэгдээрэй."
     },
     "skip": {
       "apps": "Програмын жагсаалт руу алгасах"
@@ -4903,11 +4941,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android мини програмын цуглуулга",
       "title": "NeoKIM App Lab",
       "subtitle": "Жижиг Android програмууд нь хурдан зугаацаж, хуваалцахад зориулагдсан",
-      "description": "Өнгөт сорилтууд, харь гаригийнх шиг нууц мессежүүд, Нисдэг Үл нисдэг биетүүдийг дуудах туршлага. Хөнгөн суулгаарай. Нэг минутын дотор сайхан өнгөрүүлээрэй.",
+      "description": "Хачирхалтай өнгөт сорилтууд, харь гарагийн хэв маягийн нууц мессеж, Нисдэг Үл Мэдэгдэх дохионы тоглоом, харанхуй төөрдөг байшингаас зугтах. Хөнгөн суулгаарай. Нэг минутын дотор сайхан өнгөрүүлээрэй.",
       "primaryCta": "Онцлох програмыг суулгана уу",
-      "primaryAria": "Google Play дээр Color Master 2 суулгаарай",
+      "primaryAria": "Find Odd Color: Color Master 2-г Google Play дээр суулгана уу",
       "secondaryCta": "Апп-уудыг үзэх",
-      "visualAria": "Color Master 2 дүрс болон өнгөт хавтан бүхий утасны загвар",
+      "visualAria": "Find Odd Color: Color Master 2 дүрс болон өнгөт хавтан бүхий утасны загвар",
       "badges": [
         "Үнэгүй програмууд",
         "Android",
@@ -4919,81 +4957,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ОНЦЛОХ АПП",
       "title": "Өнөөдөр эхлээд үүнийг суулгаарай",
       "badge": "Онцолсон",
-      "appName": "Өнгөний мастер 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "10 секундын дотор өөр өнгийг олоорой.",
-      "description": "Нэг алдаа гүйлтийг дуусгадаг нэг амьдралтай өнгөт оньсого. Энэ нь хурдан эхэлж, дараа нь таны рекордыг эвдэхийн тулд таныг буцааж татдаг.",
+      "description": "Нэг алдаа гүйлтийг дуусгадаг нэг амьдралын хачирхалтай өнгөт оньсого. Энэ нь хурдан эхэлж, дараа нь таны рекордыг эвдэхийн тулд таныг буцааж татдаг.",
       "primaryCta": "Google Play дээр суулгана уу",
-      "primaryAria": "Google Play дээр Color Master 2 суулгаарай",
+      "primaryAria": "Find Odd Color: Color Master 2-г Google Play дээр суулгана уу",
       "secondaryCta": "Апп-уудыг үзэх",
-      "visualAria": "Color Master 2 өнгөт хавтангийн сорилтын утасны загвар"
+      "visualAria": "Find Odd Color: Color Master 2 хавтанцар сорилтын утасны загвар"
     },
     "apps": {
       "kicker": "APP КАТАЛОГ",
       "title": "Бүх програмууд",
       "description": "Олон нийтийн програмуудыг шууд суулгаарай. Хувийн тестийн хувьд эхлээд хүсэлтийг имэйлээр илгээнэ үү; шалгагчийн хандалт нэмэгдсэний дараа, Join Test товчийг ашиглана уу.",
       "colorMaster2": {
-        "name": "Өнгөний мастер 2",
-        "category": "Өнгөт оньсого",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Сонирхолтой өнгийн тааварт тоглоом",
         "tagline": "10 секундын дотор өөр өнгийг олоорой.",
-        "description": "Нэг алдаа гүйлтийг дуусгана. Богино, донтуулдаг өнгөний талаарх сорилт.",
+        "description": "Нэг алдаа гүйлтийг дуусгана. Анхаарал төвлөрүүлэх, өнгө мэдрэхэд зориулсан богино, донтуулдаг сондгой өнгө сорилт.",
         "highlights": [
           "10 секундын хязгаар",
           "Нэг амьдралын гүйлт",
           "Тэргүүлэгчдийн самбар",
           "Өнгөний сохор тусламж"
         ],
-        "primaryCta": "Color Master 2-г суулгана уу",
+        "primaryCta": "Find Odd Color програмыг суулгаарай",
         "detailCta": "Вэб Демо туршиж үзээрэй",
-        "statusNote": "Одоо Google Play дээр ашиглах боломжтой.",
-        "iconAlt": "Өнгөт мастер 2 дүрс"
+        "statusNote": "Google Play дээр одоо ашиглах боломжтой.",
+        "iconAlt": "Find Odd Color: Color Master 2 дүрс"
       },
       "galaxyCode": {
-        "name": "Галактик код",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Нууц мессежийн програм",
         "tagline": "Шифрийг тайлахад хуваалцах түлхүүр шаардлагатай харь гаригийнх шиг нууц мессеж үүсгэ.",
         "description": "Өөрийнхөө галактик хэлний дүрмийг бий болго. Зөвхөн таны хуваалцах түлхүүртэй хүмүүс ижил дүрмийг дахин үүсгэх боломжтой бөгөөд эх текстийг серверт байршуулдаггүй.",
         "highlights": [
           "Түлхүүрийг хуваалцах",
           "Хувийн дүрэм",
-          "SNS-бэлэн",
+          "SNS-д бэлэн",
           "Сервер байршуулах боломжгүй"
         ],
         "primaryCta": "Нууц мессеж үүсгэх",
         "detailCta": "Вэб Демо туршиж үзээрэй",
-        "statusNote": "Одоо Google Play дээр ашиглах боломжтой.",
-        "iconAlt": "Галактикийн дүрс тэмдэг"
+        "statusNote": "Google Play дээр одоо ашиглах боломжтой.",
+        "iconAlt": "Alien Text Maker: Galaxy Code дүрс"
       },
       "ufoSignal": {
-        "name": "Нисдэг Үл Мэдэгдэх газар руу залга",
-        "category": "Сэтгэл хөдөлгөм хөгжилтэй програм",
-        "tagline": "Хөгжилтэй байхын тулд нууцлаг Нисдэг Үл мэдэгдэх нисдэг биетүүдийг дуудах туршлага.",
-        "description": "Товчлуур дээр дарж, дохиог сонсож, ямар нэг зүйл сансраас сонсож байна гэж төсөөл.",
+        "name": "UFO Signal Simulator",
+        "category": "Нууц дохионы зугаа цэнгэлийн програм",
+        "tagline": "Хөгжилтэй сансрын дохио илгээж, Нисдэг Үл Мэдэгдэх уур амьсгалыг сайхан өнгөрүүлээрэй.",
+        "description": "Аппликейшнийг нээж, дохионы товчлуурыг дарж, тэр агшинд Нисдэг Үл Мэдэгдэх жижиг зан үйл мэт мэдрэмж төрүүлэх дуу, хөдөлгөөнт дүрсийг таашаа.",
         "highlights": [
-          "Интерактив товчлуур",
+          "Дохионы товчлуур",
           "Нууцлаг сонсогдож байна",
-          "Хөдөлгөөнт дүрс",
+          "Сэтгэлийн хөдөлгөөн",
           "Бүртгүүлэхгүй"
         ],
-        "primaryCta": "Нисдэг Үл Мэдэгдэх газар руу залга",
-        "detailCta": "Вэб Демо туршиж үзээрэй",
-        "statusNote": "Одоо Google Play дээр ашиглах боломжтой.",
-        "iconAlt": "Нисдэг Үл Мэдэгдэх дүрсийг дууд"
+        "primaryCta": "UFO Signal Simulator суулгана уу",
+        "detailCta": "Аппликешны дэлгэрэнгүй мэдээллийг харах",
+        "statusNote": "Програмын дэлгэрэнгүй мэдээллийг үзээд Google Play-с суулгана уу.",
+        "iconAlt": "UFO Signal Simulator дүрс"
       },
       "colorMasterClassic": {
-        "name": "Өнгөний мастер",
-        "category": "Сонгодог өнгөт оньсого",
-        "tagline": "Анхны өнгөт анхаарлаа төвлөрүүлэх сорилт: ижил төстэй өнгөний хариултыг олоорой.",
-        "description": "Color Master 2-ын өмнөх анхны хувилбар. Эхлээд вэб дээр туршиж үзээд Google Play-с суулгана уу.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Сонгодог өнгө мэдрэх тоглоом",
+        "tagline": "Анхны өнгөт анхаарлаа төвлөрүүлэх сорилт: хариултын өнгийг санаж, ижил төстэй өнгөнөөс сонго.",
+        "description": "Find Odd Color: Color Master 2-ийн өмнөх анхны өнгө мэдрэх тест. Эхлээд вэб дээр туршаад дараа нь Google Play-с суулгаарай.",
         "highlights": [
           "Жинхэнэ мэдрэмж",
           "Өнгөний анхаарал",
           "Түргэн тоглох",
           "Одоо суулгана уу"
         ],
-        "primaryCta": "Color Master програмыг суулгана уу",
+        "primaryCta": "Өнгө мэдрэх тестийг суулгана уу",
         "detailCta": "Вэб Демо туршиж үзээрэй",
         "statusNote": "Эхлээд вэб дээр туршаад дараа нь Google Play-с суулгаарай.",
-        "iconAlt": "Өнгөт мастер дүрс"
+        "iconAlt": "Color Sense Test: Color Master дүрс"
       },
       "koreanRandomDefense": {
         "name": "Солонгосын санамсаргүй хамгаалалт: Бүслэлт",
@@ -5028,10 +5066,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Азын картын санамсаргүй хамгаалалтын дүрс тэмдэг"
       },
       "darkMaze": {
-        "name": "Лабораторийн хархнаас зугтах: Харанхуй төөрдөг байшин",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Төөрдөг байшингаас зугтах тоглоомыг гаргасан",
         "tagline": "Лабораторийн хархыг харанхуй төөрдөг байшингаар хөтөлж, гарцыг олоорой.",
-        "description": "2026 оны 5-р сарын 28-нд Google Play дээр гарсан. Зам хаагдахаас өмнө харанхуй төөрдөг байшингаар хөдөлж, эд зүйлсийг ашиглаж, зугт.",
+        "description": "2026 оны 5-р сарын 28-нд Google Play дээр гарлаа. Зам хаагдахаас өмнө харанхуй төөрдөг байшингаар хөдөлж, эд зүйлсийг ашигла, зугт.",
         "highlights": [
           "2026 оны тавдугаар сарын 28-нд гарсан",
           "Төөрдөг байшингаас зугтах",
@@ -5039,8 +5077,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Харанхуй амьд үлдэх"
         ],
         "primaryCta": "Google Play дээр суулгана уу",
-        "statusNote": "Одоо Google Play дээр ашиглах боломжтой. Энэ апп-д зориулсан вэб демо байхгүй.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze дүрс"
+        "statusNote": "Програмын дэлгэрэнгүй мэдээллийг үзээд Google Play-с суулгана уу. Энэ апп-д зориулсан вэб демо байхгүй.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze дүрс",
+        "detailCta": "Аппликешны дэлгэрэнгүй мэдээллийг харах"
       }
     },
     "status": {
@@ -5057,18 +5096,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "Богинохон санаанууд",
       "title": "Тэднийг ингэж туршаад үзээрэй",
       "colorMaster2": {
-        "app": "Өнгөний мастер 2",
-        "title": "\"Хэрэв та энэ өнгөний ялгааг харвал таны нүд хурц байна.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Хэрэв та энэ хачин өнгийг олж харвал нүд чинь хурц байна.\"",
         "description": "Найзуудтайгаа 10 секундын сорилтоор өрсөлдөөрэй."
       },
       "galaxyCode": {
-        "app": "Галактик код",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Найздаа тайлж чадахгүй харь гаригийн мессеж илгээ.\"",
         "description": "Зөвхөн хувьцаа эзэмшигчид тайлж чадах нууц мессежийг үлдээгээрэй."
       },
       "ufoSignal": {
-        "app": "Нисдэг Үл Мэдэгдэх газар руу залга",
-        "title": "\"Хэрэв та үүрээр Нисдэг Үл Мэдэгдэх товчийг дарвал юу болох вэ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Хэрэв та үүрээр Нисдэг Үл Мэдэгдэх дохио илгээвэл яах вэ?\"",
         "description": "Харанхуй өрөөнд дуу чимээ, хөдөлгөөнт дүрсийг сайхан өнгөрүүлээрэй."
       }
     },
@@ -5085,7 +5124,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Би эхлээд аль програмыг суулгах ёстой вэ?",
-        "answer": "Хэрэв та анх удаа ирж байгаа бол эхлээд Color Master 2-г туршиж үзээрэй. Тоглоход хурдан бөгөөд илүү сайн оноо авахын тулд дахин тоглоход хялбар байдаг."
+        "answer": "Хэрэв энэ нь таны анхны айлчлал бол эхлээд Find Odd Color: Color Master 2-г туршиж үзээрэй. Тоглоход хурдан бөгөөд илүү сайн оноо авахын тулд дахин тоглоход хялбар байдаг."
       },
       "privateTest": {
         "question": "Би хэрхэн хувийн тестийн програмуудад нэгдэх вэ?",
@@ -5096,12 +5135,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM хийсэн",
       "lastUpdated": "Сүүлд шинэчлэгдсэн: 2026.05.31",
       "googlePlay": "Google Play програмууд",
-      "colorTest": "Өнгөний тест",
-      "alienText": "Харь гарагийн текст үүсгэгч",
-      "ufoApp": "UFO програм",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Нууцлалын бодлого",
       "appAds": "app-ads.txt",
-      "contact": "Холбоо барих"
+      "contact": "Холбоо барих",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Хувийн тестерийн бүртгэл",
@@ -5122,9 +5162,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "eu-ES": {
     "seo": {
       "title": "NeoKIM App Lab | Doako Android Mini aplikazioak",
-      "description": "Instalatu Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze eta proba pribatuak Lucky Card Random Defense eta Android mini-aplikazio gehiagorako.",
+      "description": "Instalatu Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze eta proba pribatuak Android aplikazio txiki gehiago lortzeko.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplikazioak",
-      "ogDescription": "Kolore-erronkak, alien antzeko mezu sekretuak, UFO deien esperientziak, Lab Rat Maze Escape: Dark Maze eta proba pribatuak Android azkar dibertitzeko."
+      "ogDescription": "Aurkitu kolore bitxiak, egin alien estiloko testu sekretua, bidali UFO seinale jostagarriak, ihes labirinto ilunetik eta batu proba pribatuetan Android azkar dibertitzeko."
     },
     "skip": {
       "apps": "Saltatu aplikazioen zerrendara"
@@ -5159,11 +5199,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android aplikazio txikien bilduma",
       "title": "NeoKIM App Lab",
       "subtitle": "Android aplikazio txikiak dibertitzeko eta partekatzeko egina",
-      "description": "Koloreen erronkak, alien antzeko mezu sekretuak eta UFO deien esperientziak. Instalatu arinki. Gozatu minutu batean.",
+      "description": "Kolore bitxien erronkak, alien estiloko mezu sekretuak, UFO seinaleen jolasa eta labirinto iluneko ihesak. Instalatu arinki. Gozatu minutu batean.",
       "primaryCta": "Instalatu Nabarmendutako aplikazioa",
-      "primaryAria": "Instalatu Color Master 2 Google Play-n",
+      "primaryAria": "Instalatu Find Odd Color: Color Master 2 Google Play-en",
       "secondaryCta": "Arakatu aplikazioak",
-      "visualAria": "Telefonoaren maketa Color Master 2 ikonoarekin eta kolore lauzekin",
+      "visualAria": "Telefonoaren maketa Find Odd Color: Color Master 2 ikonoarekin eta kolore-lauzekin",
       "badges": [
         "Doako aplikazioak",
         "Android",
@@ -5175,81 +5215,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "EZAUGARRI APLIKAZIOA",
       "title": "Instalatu hau lehenik gaur",
       "badge": "Nabarmena",
-      "appName": "Kolore maisua 2",
-      "short": "Aurkitu kolore ezberdina 10 segundotan.",
-      "description": "Bizitza bakarreko koloretako puzzlea, non akats batek lasterketa amaitzen duen. Azkar hasten da, eta gero atzera botatzen zaitu zure errekorra gainditzeko.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Aurkitu kolore desberdina 10 segundotan.",
+      "description": "Bizitza bakarreko kolore bitxiko puzzlea, non akats batek lasterketa amaitzen duen. Azkar hasten da, eta gero atzera botatzen zaitu zure errekorra gainditzeko.",
       "primaryCta": "Instalatu Google Play-n",
-      "primaryAria": "Instalatu Color Master 2 Google Play-n",
+      "primaryAria": "Instalatu Find Odd Color: Color Master 2 Google Play-en",
       "secondaryCta": "Arakatu aplikazioak",
-      "visualAria": "Color Master 2 koloreko fitxa erronka telefonoaren maketa"
+      "visualAria": "Find Odd Color: Color Master 2 fitxa erronka telefonoaren maketa"
     },
     "apps": {
       "kicker": "APLIKAZIOEN KATALOGOA",
       "title": "Aplikazio guztiak",
       "description": "Instalatu aplikazio publikoak zuzenean. Proba pribatuetarako, bidali eskaera bat posta elektronikoz lehenik; Tester sarbidea gehitu ondoren, erabili Bat egin proba botoia.",
       "colorMaster2": {
-        "name": "Kolore maisua 2",
-        "category": "Koloreen puzzlea",
-        "tagline": "Aurkitu kolore ezberdina 10 segundotan.",
-        "description": "Akats batek lasterketa amaitzen du. Koloreak hautemateko erronka labur eta adiktiboa.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Kolore bitxien puzzle jokoa",
+        "tagline": "Aurkitu kolore desberdina 10 segundotan.",
+        "description": "Akats batek lasterketa amaitzen du. Kolore bitxien erronka labur eta mendekotasuna fokatzeko eta koloreen pertzepziorako.",
         "highlights": [
           "10 segundoko muga",
           "Bizitza bakarreko korrika",
           "Leaderboard",
           "Daltonismoaren laguntza"
         ],
-        "primaryCta": "Instalatu Color Master 2",
+        "primaryCta": "Instalatu Find Odd Color",
         "detailCta": "Saiatu Web Demo",
-        "statusNote": "Orain eskuragarri Google Play-n.",
-        "iconAlt": "Color Master 2 ikonoa"
+        "statusNote": "Orain eskuragarri Google Play-en.",
+        "iconAlt": "Find Odd Color: Color Master 2 ikonoa"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Mezu sekretuen aplikazioa",
         "tagline": "Sortu deskodetzeko partekatzeko gako bat behar duten alien antzeko mezu sekretuak.",
         "description": "Sortu zure hizkuntza galaktikoko arauak. Zure partekatzeko gakoa duten pertsonek soilik birsor ditzakete arau berdinak, eta jatorrizko testua ez da zerbitzari batera kargatzen.",
         "highlights": [
           "Partekatu gakoetan oinarrituta",
           "Arau pertsonalak",
-          "SNS prest",
+          "SNS prest dago",
           "Ez dago zerbitzaririk kargatu"
         ],
         "primaryCta": "Sortu mezu sekretuak",
         "detailCta": "Saiatu Web Demo",
-        "statusNote": "Orain eskuragarri Google Play-n.",
-        "iconAlt": "Galacticcode ikonoa"
+        "statusNote": "Orain eskuragarri Google Play-en.",
+        "iconAlt": "Alien Text Maker: Galaxy Code ikonoa"
       },
       "ufoSignal": {
-        "name": "Deitu UFOari",
-        "category": "Aplikazio dibertigarri murgilgarria",
-        "tagline": "UFO deiak egiteko esperientzia misteriotsu bat dibertitzeko.",
-        "description": "Sakatu botoia, entzun seinalea eta imajinatu zerbait espaziotik entzuten.",
+        "name": "UFO Signal Simulator",
+        "category": "Misterioko seinale entretenimendurako aplikazioa",
+        "tagline": "Bidali espazio-seinale ludiko bat eta gozatu UFO aldarteaz.",
+        "description": "Ireki aplikazioa, sakatu seinale-botoia eta gozatu unea UFO erritual txiki bat bezala sentiarazten duten soinu eta animazioz.",
         "highlights": [
-          "Botoi interaktiboa",
+          "Seinale botoia",
           "Misteriozko soinuak",
-          "Animazioa",
+          "Aldarte animazioa",
           "Izen-ematerik ez"
         ],
-        "primaryCta": "Deitu UFOari",
-        "detailCta": "Saiatu Web Demo",
-        "statusNote": "Orain eskuragarri Google Play-n.",
-        "iconAlt": "Deitu UFO ikonora"
+        "primaryCta": "Instalatu UFO Signal Simulator",
+        "detailCta": "Ikusi aplikazioaren xehetasunak",
+        "statusNote": "Ikusi aplikazioaren xehetasunak, eta instalatu Google Play-etik.",
+        "iconAlt": "UFO Signal Simulator ikonoa"
       },
       "colorMasterClassic": {
-        "name": "Kolore maisua",
-        "category": "Koloreen puzzle klasikoa",
-        "tagline": "Jatorrizko kolore-foku erronka: aurkitu erantzuna antzeko koloreen artean.",
-        "description": "Color Master 2-ren aurreko jatorrizko bertsioa. Saiatu lehenik sarean, eta gero instalatu Google Play-tik.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Kolore zentzuzko joko klasikoa",
+        "tagline": "Jatorrizko kolore-foku erronka: gogoratu erantzunaren kolorea eta hautatu antzeko koloreetatik.",
+        "description": "Find Odd Color: Color Master 2 baino lehen kolorearen zentzuaren jatorrizko proba. Saiatu lehenik sarean, gero instalatu Google Play-etik.",
         "highlights": [
           "Jatorrizko sentsazioa",
           "Kolore fokua",
           "Jolas azkarra",
           "Instalatu orain"
         ],
-        "primaryCta": "Instalatu Color Master",
+        "primaryCta": "Instalatu Color Sense Test",
         "detailCta": "Saiatu Web Demo",
-        "statusNote": "Saiatu lehenik sarean, eta gero instalatu Google Play-tik.",
-        "iconAlt": "Color Master ikonoa"
+        "statusNote": "Saiatu lehenik sarean, gero instalatu Google Play-etik.",
+        "iconAlt": "Color Sense Test: Color Master ikonoa"
       },
       "koreanRandomDefense": {
         "name": "Koreako ausazko defentsa: setioa",
@@ -5287,16 +5327,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Labirintoko ihes jokoa kaleratu da",
         "tagline": "Gidatu laborategiko arratoi bat labirinto ilunean zehar eta aurkitu irteera.",
-        "description": "2026ko maiatzaren 28an kaleratu zen Google Play-n. Mugitu labirinto ilunean, erabili elementuak eta ihes egin bidea itxi baino lehen.",
+        "description": "2026ko maiatzaren 28an kaleratu zen Google Play. Mugitu labirinto ilunean zehar, erabili elementuak eta ihes egin bidea itxi aurretik.",
         "highlights": [
           "2026ko maiatzaren 28an kaleratua",
           "Maze ihesa",
           "Elementuak",
           "Biziraupen iluna"
         ],
-        "primaryCta": "Instalatu Google Play-n",
-        "statusNote": "Orain eskuragarri Google Play-n. Ez da web demorik eskaintzen aplikazio honetarako.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikonoa"
+        "primaryCta": "Instalatu Google Play-en",
+        "statusNote": "Ikusi aplikazioaren xehetasunak, eta instalatu Google Play-etik. Ez da web demorik eskaintzen aplikazio honetarako.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikonoa",
+        "detailCta": "Ikusi aplikazioaren xehetasunak"
       }
     },
     "status": {
@@ -5313,18 +5354,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEIA LABURRAK",
       "title": "Saiatu Honela",
       "colorMaster2": {
-        "app": "Kolore maisua 2",
-        "title": "\"Kolore-desberdintasun hori ikusten baduzu, zure begiak zorrotzak dira\".",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Kolore bitxi hau ikusten baduzu, zure begiak zorrotzak dira\".",
         "description": "Lehiatu lagunekin 10 segundoko erronka batean."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Bidali zure lagunari deskodetu ezin duen mezu arrotz bat\".",
         "description": "Utzi gakoen jabeek soilik deskodetu ditzaketen mezu sekretuak."
       },
       "ufoSignal": {
-        "app": "Deitu UFOari",
-        "title": "\"Zer gertatzen da egunsentian UFO botoia sakatzen baduzu?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Zer gertatzen da egunsentian UFO seinalea bidaltzen baduzu?\"",
         "description": "Gozatu soinuez eta animazioez gela ilun batean."
       }
     },
@@ -5341,7 +5382,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Zein aplikazio instalatu behar dut lehenik?",
-        "answer": "Hau zure lehen bisita bada, probatu lehenik Color Master 2. Jokatzeko bizkorra da eta erreproduzitzeko erraza da puntuazio hobea lortzeko."
+        "answer": "Hau zure lehen bisita bada, probatu lehenik Find Odd Color: Color Master 2. Jokatzeko bizkorra da eta erreproduzitzeko erraza da puntuazio hobea lortzeko."
       },
       "privateTest": {
         "question": "Nola sartzen naiz proba pribatuko aplikazioetan?",
@@ -5352,12 +5393,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIMk egina",
       "lastUpdated": "Azken eguneratzea: 31/05/2026",
       "googlePlay": "Google Play Aplikazioak",
-      "colorTest": "Kolore Proba",
-      "alienText": "Alien Testu Sortzailea",
-      "ufoApp": "UFO aplikazioa",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Pribatutasun-politika",
       "appAds": "app-ads.txt",
-      "contact": "Kontaktua"
+      "contact": "Kontaktua",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Tester pribatuaren izen-ematea",
@@ -5378,9 +5420,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "my-MM": {
     "seo": {
       "title": "NeoKIM App Lab | အခမဲ့ Android Mini အက်ပ်များ",
-      "description": "Color Master 2၊ Galacticode၊ UFO ကိုခေါ်ဆိုပါ၊ Lab Rat Maze Escape- Dark Maze နှင့် Lucky Card Random Defense နှင့် အခြား Android mini အက်ပ်များအတွက် သီးသန့်စမ်းသပ်မှုများကို ထည့်သွင်းပါ။",
+      "description": "Find Odd Color: Color Master 2၊ Alien Text Maker: Galaxy Code၊ UFO Signal Simulator၊ Color Sense Test: Color Master၊ Lab Rat Maze Escape: Dark Maze နှင့် နောက်ထပ် Android အသေးစားအက်ပ်များအတွက် သီးသန့်စမ်းသပ်မှုများကို ထည့်သွင်းပါ။",
       "ogTitle": "NeoKIM App Lab | Android Mini အက်ပ်များ",
-      "ogDescription": "အရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားများကဲ့သို့ လျှို့ဝှက်စာတိုများ၊ UFO ခေါ်ဆိုမှုအတွေ့အကြုံများ၊ Lab Rat Maze Escape- Dark Maze နှင့် အမြန် Android ပျော်ရွှင်မှုအတွက် သီးသန့်စမ်းသပ်မှုများ။"
+      "ogDescription": "ထူးဆန်းသောအရောင်များကိုရှာပါ၊ ဂြိုလ်သားပုံစံလျှို့ဝှက်စာတိုကိုဖန်တီးပါ၊ ရယ်စရာကောင်းသော UFO အချက်ပြမှုများကိုပေးပို့ပါ၊ မှောင်မိုက်ဝင်္ကပါများမှလွတ်မြောက်ကာ Android အမြန်ပျော်စရာအတွက်သီးသန့်စမ်းသပ်မှုများတွင်ပါဝင်ပါ။"
     },
     "skip": {
       "apps": "အက်ပ်စာရင်းသို့ ကျော်သွားပါ။"
@@ -5415,11 +5457,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android အသေးစားအက်ပ်စုဆောင်းမှု",
       "title": "NeoKIM အက်ပ်ဓာတ်ခွဲခန်း",
       "subtitle": "လျင်မြန်စွာ ပျော်စရာနှင့် မျှဝေရန် ဖန်တီးထားသည့် Android အက်ပ်အသေးများ",
-      "description": "အရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားကဲ့သို့လျှို့ဝှက်စာတိုများနှင့် UFO ခေါ်ဆိုမှုအတွေ့အကြုံများ။ ပေါ့ပေါ့ပါးပါး တပ်ဆင်ပါ။ တစ်မိနစ်အတွင်း ခံစားလိုက်ပါ။",
+      "description": "ထူးဆန်းသောအရောင်စိန်ခေါ်မှုများ၊ ဂြိုလ်သားပုံစံလျှို့ဝှက်စာတိုများ၊ UFO အချက်ပြကစားခြင်းနှင့် မှောင်မိုက်ဝင်္ကပါမှ လွတ်မြောက်ခြင်း။ ပေါ့ပေါ့ပါးပါး တပ်ဆင်ပါ။ တစ်မိနစ်အတွင်း ခံစားလိုက်ပါ။",
       "primaryCta": "အထူးပြုအက်ပ်ကို ထည့်သွင်းပါ။",
-      "primaryAria": "Google Play တွင် Color Master 2 ကို ထည့်သွင်းပါ။",
+      "primaryAria": "Find Odd Color: Color Master 2 ကို Google Play တွင် ထည့်သွင်းပါ။",
       "secondaryCta": "အက်ပ်များကို ရှာဖွေပါ။",
-      "visualAria": "Color Master 2 အိုင်ကွန်နှင့် အရောင်အကွက်များပါသော ဖုန်းပုံစံကို ပုံဖော်ပါ။",
+      "visualAria": "Find Odd Color: Color Master 2 အိုင်ကွန်နှင့် အရောင်အကွက်များပါသော ဖုန်းပုံသဏ္ဍန်",
       "badges": [
         "အခမဲ့အက်ပ်များ",
         "Android",
@@ -5431,36 +5473,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "အထူးအသားပေးအက်ပ်",
       "title": "ဤအရာကို ယနေ့တွင် ပထမဆုံး ထည့်သွင်းပါ။",
       "badge": "အသားပေး",
-      "appName": "Color Master ၂",
-      "short": "မတူညီသောအရောင်ကို 10 စက္ကန့်အတွင်းရှာဖွေပါ။",
-      "description": "အမှားတစ်ခုက ပြေးတာကိုအဆုံးသတ်တဲ့ တစ်ဘဝရောင်ပဟေဠိတစ်ခု။ ၎င်းသည် လျှင်မြန်စွာ စတင်သည်၊ ထို့နောက် သင့်စံချိန်ကို ကျော်ဖြတ်ရန် သင့်အား နောက်သို့ ဆွဲတင်သည်။",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 စက္ကန့်အတွင်း မတူညီသောအရောင်တစ်ခုကို ရှာပါ။",
+      "description": "အမှားတစ်ခုက ပြေးတာကို အဆုံးသတ်တဲ့ တစ်ဘဝစာ ထူးဆန်းတဲ့ အရောင်ပဟေဋ္ဌိတစ်ခု။ ၎င်းသည် လျှင်မြန်စွာ စတင်သည်၊ ထို့နောက် သင့်စံချိန်ကို ကျော်ဖြတ်ရန် သင့်အား နောက်သို့ ဆွဲတင်သည်။",
       "primaryCta": "Google Play တွင် ထည့်သွင်းပါ။",
-      "primaryAria": "Google Play တွင် Color Master 2 ကို ထည့်သွင်းပါ။",
+      "primaryAria": "Find Odd Color: Color Master 2 ကို Google Play တွင် ထည့်သွင်းပါ။",
       "secondaryCta": "အက်ပ်များကို ရှာဖွေပါ။",
-      "visualAria": "Color Master 2 ရောင်စုံ အကွက်စိန်ခေါ်မှု ဖုန်းပုံသဏ္ဍန်"
+      "visualAria": "Find Odd Color: Color Master 2 အကွက်စိန်ခေါ်မှု ဖုန်းပုံသဏ္ဍန်"
     },
     "apps": {
       "kicker": "အက်ပ်ကက်တလော့",
       "title": "အက်ပ်များအားလုံး",
       "description": "အများသူငှာ အက်ပ်များကို တိုက်ရိုက် ထည့်သွင်းပါ။ သီးသန့်စမ်းသပ်မှုများအတွက် ပထမဦးဆုံး တောင်းဆိုချက်ကို အီးမေးလ်ပို့ပါ။ စမ်းသပ်အသုံးပြုခွင့်ကို ပေါင်းထည့်ပြီးနောက်၊ Join Test ခလုတ်ကို အသုံးပြုပါ။",
       "colorMaster2": {
-        "name": "Color Master ၂",
-        "category": "အရောင်ပဟေဠိ",
-        "tagline": "မတူညီသောအရောင်ကို 10 စက္ကန့်အတွင်းရှာဖွေပါ။",
-        "description": "အမှားတစ်ခုက ပြေးတာကို အဆုံးသတ်တယ်။ တိုတောင်းသော၊ စွဲလမ်းသောအရောင်ခံယူချက်စိန်ခေါ်မှု။",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ထူးဆန်းသောအရောင်ပဟေဠိဂိမ်း",
+        "tagline": "10 စက္ကန့်အတွင်း မတူညီသောအရောင်တစ်ခုကို ရှာပါ။",
+        "description": "အမှားတစ်ခုက ပြေးတာကို အဆုံးသတ်တယ်။ အာရုံစူးစိုက်မှုနှင့် အရောင်ခံယူမှုအတွက် တိုတောင်းသော၊ စွဲလမ်းစေသော ထူးဆန်းသောအရောင်စိန်ခေါ်မှု။",
         "highlights": [
           "10 စက္ကန့်ကန့်သတ်ချက်",
           "တစ်ဘဝလုံးပြေးတယ်။",
           "ဦးဆောင်သူ",
           "အရောင်ကန်းအကူအညီ"
         ],
-        "primaryCta": "Color Master 2 ကို install လုပ်ပါ။",
+        "primaryCta": "Find Odd Color ကို ထည့်သွင်းပါ။",
         "detailCta": "Web Demo စမ်းကြည့်ပါ။",
         "statusNote": "Google Play တွင် ယခုရရှိနိုင်ပါပြီ။",
-        "iconAlt": "Color Master 2 သင်္ကေတ"
+        "iconAlt": "Find Odd Color: Color Master 2 သင်္ကေတ"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "လျှို့ဝှက်စာတိုအက်ပ်",
         "tagline": "ကုဒ်ဖွင့်ရန် မျှဝေသော့လိုအပ်သော ဂြိုလ်သားကဲ့သို့ လျှို့ဝှက်စာတိုများကို ဖန်တီးပါ။",
         "description": "သင့်ကိုယ်ပိုင် ဂလက်တစ်ဘာသာစကား စည်းမျဉ်းများကို ဖန်တီးပါ။ သင်၏ မျှဝေသော့ကို ကိုင်ဆောင်ထားသူများသာ တူညီသော စည်းမျဉ်းများကို ပြန်လည်ဖန်တီးနိုင်ပြီး မူရင်းစာသားကို ဆာဗာသို့ အပ်လုဒ်မလုပ်ပါ။",
@@ -5473,39 +5515,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "လျှို့ဝှက်စာတိုများ ဖန်တီးပါ။",
         "detailCta": "Web Demo စမ်းကြည့်ပါ။",
         "statusNote": "Google Play တွင် ယခုရရှိနိုင်ပါပြီ။",
-        "iconAlt": "Galacticode သင်္ကေတ"
+        "iconAlt": "Alien Text Maker: Galaxy Code သင်္ကေတ"
       },
       "ufoSignal": {
-        "name": "UFO ကိုခေါ်ပါ။",
-        "category": "နှစ်မြှုပ်ပျော်စရာအက်ပ်",
-        "tagline": "ပျော်စရာအတွက် လျှို့ဝှက်ဆန်းကြယ်သော UFO ခေါ်ဆိုမှုအတွေ့အကြုံ။",
-        "description": "ခလုတ်ကို နှိပ်ပါ၊ အချက်ပြသံကို ကြားကာ အာကာသမှ နားထောင်နေသည့် အရာတစ်ခုကို စိတ်ကူးကြည့်ပါ။",
+        "name": "UFO Signal Simulator",
+        "category": "လျှို့ဝှက်ဆန်းကြယ်အချက်ပြဖျော်ဖြေရေးအက်ပ်",
+        "tagline": "ဆော့ကစားနိုင်သော အာကာသအချက်ပြမှုကို ပေးပို့ပြီး UFO ခံစားချက်ကို ခံစားလိုက်ပါ။",
+        "description": "အက်ပ်ကိုဖွင့်ပါ၊ အချက်ပြခလုတ်ကို နှိပ်ပါ၊ အခိုက်အတန့်လေးကို UFO ထုံးတမ်းတစ်ခုလို ခံစားစေမည့် အသံနှင့် ကာတွန်းကို ခံစားလိုက်ပါ။",
         "highlights": [
-          "အပြန်အလှန်အကျိုးသက်ရောက်မှုခလုတ်",
+          "အချက်ပြခလုတ်",
           "လျှို့ဝှက်ဆန်းကြယ်အသံများ",
-          "ကာတွန်း",
+          "ခံစားချက် ကာတွန်း",
           "စာရင်းသွင်းခြင်း မရှိပါ။"
         ],
-        "primaryCta": "UFO ကိုခေါ်ပါ။",
-        "detailCta": "Web Demo စမ်းကြည့်ပါ။",
-        "statusNote": "Google Play တွင် ယခုရရှိနိုင်ပါပြီ။",
-        "iconAlt": "UFO အိုင်ကွန်ကို ခေါ်ပါ။"
+        "primaryCta": "UFO Signal Simulator ကို ထည့်သွင်းပါ။",
+        "detailCta": "အက်ပ်အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုပါ။",
+        "statusNote": "အက်ပ်အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုပြီးနောက် Google Play မှ ထည့်သွင်းပါ။",
+        "iconAlt": "UFO Signal Simulator သင်္ကေတ"
       },
       "colorMasterClassic": {
-        "name": "အရောင်ဆရာကြီး",
-        "category": "ဂန္ထဝင်အရောင်ပဟေဠိ",
-        "tagline": "မူရင်းအရောင်-အာရုံစူးစိုက်မှုစိန်ခေါ်မှု- အလားတူအရောင်များကြားတွင် အဖြေကိုရှာဖွေပါ။",
-        "description": "Color Master 2 မတိုင်မီ မူရင်းဗားရှင်း။ ၎င်းကို ဝဘ်ပေါ်တွင် ဦးစွာ စမ်းသုံးပါ၊ ထို့နောက် Google Play မှ ထည့်သွင်းပါ။",
+        "name": "Color Sense Test: Color Master",
+        "category": "ဂန္တဝင်အရောင်အာရုံခံဂိမ်း",
+        "tagline": "မူရင်းအရောင်-အာရုံစူးစိုက်မှုစိန်ခေါ်မှု- အဖြေအရောင်ကို မှတ်မိပြီး အလားတူအရောင်များမှ ရွေးပါ။",
+        "description": "Find Odd Color: Color Master 2 မတိုင်မီ မူလအရောင်အာရုံခံစမ်းသပ်မှု။ ဝဘ်ပေါ်တွင် ဦးစွာ စမ်းသုံးကြည့်ပြီး Google Play မှ ထည့်သွင်းပါ။",
         "highlights": [
           "မူရင်းခံစားချက်",
           "အရောင်အာရုံ",
           "အမြန်ကစားပါ။",
           "ယခုထည့်သွင်းပါ။"
         ],
-        "primaryCta": "Color Master ကို install လုပ်ပါ။",
+        "primaryCta": "Color Sense Test ကို ထည့်သွင်းပါ။",
         "detailCta": "Web Demo စမ်းကြည့်ပါ။",
         "statusNote": "ဝဘ်ပေါ်တွင် ဦးစွာ စမ်းသုံးကြည့်ပြီး Google Play မှ ထည့်သွင်းပါ။",
-        "iconAlt": "အရောင်မာစတာ သင်္ကေတ"
+        "iconAlt": "Color Sense Test: Color Master သင်္ကေတ"
       },
       "koreanRandomDefense": {
         "name": "ကိုရီးယား ကျပန်း ကာကွယ်ရေး- ဝိုင်းရံထားသည်။",
@@ -5540,10 +5582,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card ကျပန်းကာကွယ်ရေးသင်္ကေတ"
       },
       "darkMaze": {
-        "name": "Lab Rat Maze Escape- Dark Maze",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "ထုတ်ပြန်ထားသော ဝင်္ကပါလွတ်မြောက်ဂိမ်း",
         "tagline": "ဓာတ်ခွဲခန်းကြွက်တစ်ကောင်ကို အမှောင်ဝင်္ကပါလမ်းပြပြီး ထွက်ပေါက်ကိုရှာပါ။",
-        "description": "မေလ 28 ရက်၊ 2026 တွင် Google Play တွင် ထုတ်ဝေခဲ့သည်။ မှောင်မိုက်သော ဝင်္ကပါကို ဖြတ်ကျော်ကာ လမ်းကြောင်းမပိတ်မီ ပစ္စည်းများအသုံးပြုကာ ထွက်ပြေးပါ။",
+        "description": "Google Play တွင် မေလ 28 ရက်၊ 2026 ခုနှစ်တွင် ထုတ်ပြန်ခဲ့သည်။ မှောင်မိုက်သော ဝင်္ကပါကို ဖြတ်ကျော်ကာ လမ်းကြောင်းမပိတ်မီ ပစ္စည်းများအသုံးပြုကာ ထွက်ပြေးပါ။",
         "highlights": [
           "မေလ 28 ရက် 2026 တွင်ထုတ်ဝေခဲ့သည်။",
           "ဝင်္ကပါ မလွတ်",
@@ -5551,8 +5593,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "အမှောင်ရှင်သန်မှု"
         ],
         "primaryCta": "Google Play တွင် ထည့်သွင်းပါ။",
-        "statusNote": "Google Play တွင် ယခုရရှိနိုင်ပါပြီ။ ဤအက်ပ်အတွက် ဝဘ်သရုပ်ပြပေးမထားပါ။",
-        "iconAlt": "Lab Rat Maze Escape- Dark Maze သင်္ကေတ"
+        "statusNote": "အက်ပ်အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုပြီးနောက် Google Play မှ ထည့်သွင်းပါ။ ဤအက်ပ်အတွက် ဝဘ်သရုပ်ပြပေးမထားပါ။",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze သင်္ကေတ",
+        "detailCta": "အက်ပ်အသေးစိတ်အချက်အလက်များကို ကြည့်ရှုပါ။"
       }
     },
     "status": {
@@ -5569,18 +5612,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "အိုင်ဒီယာတိုများ",
       "title": "ဤကဲ့သို့ စမ်းကြည့်ပါ။",
       "colorMaster2": {
-        "app": "Color Master ၂",
-        "title": "\"ဒီအရောင် ခြားနားချက်ကို မင်းမြင်ရင် မင်းမျက်လုံးတွေက ပြတ်သားတယ်\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ဒီအရောင်အဆန်းတွေကို တွေ့ရင် မင်းမျက်လုံးတွေက ပြတ်သားတယ်။\"",
         "description": "10 စက္ကန့်စိန်ခေါ်မှုတွင် သူငယ်ချင်းများနှင့် ယှဉ်ပြိုင်ပါ။"
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“သင့်သူငယ်ချင်းကို သူတို့ ကုဒ်မတတ်နိုင်တဲ့ ဂြိုလ်သားမက်ဆေ့ခ်ျ ပို့ပါ။”",
         "description": "share-key ကိုင်ဆောင်သူများသာ decode လုပ်နိုင်သော လျှို့ဝှက်စာတိုများကို ထားခဲ့ပါ။"
       },
       "ufoSignal": {
-        "app": "UFO ကိုခေါ်ပါ။",
-        "title": "\"မိုးလင်းရင် UFO ခလုတ်ကို နှိပ်ရင် ဘာဖြစ်မလဲ။\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"မနက်မိုးလင်းရင် UFO အချက်ပြရင် ဘာဖြစ်မလဲ။\"",
         "description": "အမှောင်ခန်းထဲတွင် အသံများနှင့် ကာတွန်းများကို ခံစားလိုက်ပါ။"
       }
     },
@@ -5597,7 +5640,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ဘယ်အက်ပ်ကို အရင်ထည့်သွင်းရမလဲ။",
-        "answer": "ဤသည်မှာ သင်ပထမဆုံးလာရောက်လည်ပတ်ခြင်းဖြစ်ပါက၊ Color Master 2 ကို ဦးစွာ စမ်းကြည့်ပါ။ ကစားရတာ မြန်ဆန်ပြီး ပိုကောင်းတဲ့ရမှတ်အတွက် ပြန်ကစားရတာ လွယ်ကူပါတယ်။"
+        "answer": "၎င်းသည် သင့်ပထမဆုံးလာရောက်လည်ပတ်ခြင်းဖြစ်ပါက Find Odd Color: Color Master 2 ကို ဦးစွာကြိုးစားပါ။ ကစားရတာ မြန်ဆန်ပြီး ပိုကောင်းတဲ့ရမှတ်အတွက် ပြန်ကစားရတာ လွယ်ကူပါတယ်။"
       },
       "privateTest": {
         "question": "သီးသန့်စမ်းသပ်အက်ပ်များကို မည်သို့ပါဝင်နိုင်မည်နည်း။",
@@ -5608,12 +5651,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM မှပြုလုပ်သည်။",
       "lastUpdated": "နောက်ဆုံးမွမ်းမံမှု- 2026.05.31",
       "googlePlay": "Google Play အက်ပ်များ",
-      "colorTest": "အရောင်စမ်းသပ်မှု",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO အက်ပ်",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "ကိုယ်ရေးကိုယ်တာမူဝါဒ",
       "appAds": "app-ads.txt",
-      "contact": "ဆက်သွယ်ရန်"
+      "contact": "ဆက်သွယ်ရန်",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "သီးသန့် Tester အကောင့်ဖွင့်ပါ။",
@@ -5634,9 +5678,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "vi": {
     "seo": {
       "title": "Phòng thí nghiệm ứng dụng NeoKIM | Ứng dụng nhỏ Android miễn phí",
-      "description": "Cài đặt Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze và các thử nghiệm riêng cho Phòng thủ ngẫu nhiên thẻ may mắn và nhiều ứng dụng Android mini khác.",
+      "description": "Cài đặt Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze và các thử nghiệm riêng tư để có thêm ứng dụng nhỏ Android.",
       "ogTitle": "Phòng thí nghiệm ứng dụng NeoKIM | Ứng dụng nhỏ Android",
-      "ogDescription": "Thử thách màu sắc, tin nhắn bí mật giống người ngoài hành tinh, trải nghiệm gọi UFO, Thoát khỏi mê cung Lab Rat: Mê cung đen tối và các thử nghiệm riêng tư để giải trí nhanh chóng trên Android."
+      "ogDescription": "Tìm các màu sắc kỳ lạ, tạo văn bản bí mật theo phong cách người ngoài hành tinh, gửi tín hiệu UFO vui nhộn, thoát khỏi mê cung tối tăm và tham gia các thử nghiệm riêng tư để nhanh chóng giải trí Android."
     },
     "skip": {
       "apps": "Chuyển đến danh sách ứng dụng"
@@ -5671,11 +5715,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Bộ sưu tập ứng dụng nhỏ Android",
       "title": "Phòng thí nghiệm ứng dụng NeoKIM",
       "subtitle": "Các ứng dụng Android nhỏ được tạo ra để giải trí và chia sẻ nhanh chóng",
-      "description": "Thử thách màu sắc, tin nhắn bí mật giống người ngoài hành tinh và trải nghiệm gọi điện bằng UFO. Cài đặt nhẹ nhàng. Thưởng thức trong vòng chưa đầy một phút.",
+      "description": "Những thử thách có màu sắc kỳ lạ, thông điệp bí mật kiểu người ngoài hành tinh, phát tín hiệu UFO và lối thoát trong mê cung tối tăm. Cài đặt nhẹ nhàng. Thưởng thức trong vòng chưa đầy một phút.",
       "primaryCta": "Cài đặt ứng dụng nổi bật",
-      "primaryAria": "Cài đặt Color Master 2 trên Google Play",
+      "primaryAria": "Cài đặt Find Odd Color: Color Master 2 trên Google Play",
       "secondaryCta": "Duyệt ứng dụng",
-      "visualAria": "Mô hình điện thoại với biểu tượng Color Master 2 và các ô màu",
+      "visualAria": "Mô hình điện thoại có biểu tượng Find Odd Color: Color Master 2 và các ô màu",
       "badges": [
         "Ứng dụng miễn phí",
         "Android",
@@ -5687,81 +5731,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ỨNG DỤNG NỔI BẬT",
       "title": "Cài đặt cái này đầu tiên ngay hôm nay",
       "badge": "Nổi bật",
-      "appName": "Bậc thầy màu sắc 2",
-      "short": "Tìm màu khác trong 10 giây.",
-      "description": "Câu đố màu sắc duy nhất trong đó một sai lầm sẽ kết thúc cuộc chạy. Nó bắt đầu nhanh, sau đó tiếp tục kéo bạn trở lại để đánh bại kỷ lục của bạn.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Tìm một màu khác trong 10 giây.",
+      "description": "Câu đố có màu sắc kỳ lạ chỉ có một cuộc đời trong đó một sai lầm sẽ kết thúc cuộc chạy. Nó bắt đầu nhanh, sau đó tiếp tục kéo bạn trở lại để đánh bại kỷ lục của bạn.",
       "primaryCta": "Cài đặt trên Google Play",
-      "primaryAria": "Cài đặt Color Master 2 trên Google Play",
+      "primaryAria": "Cài đặt Find Odd Color: Color Master 2 trên Google Play",
       "secondaryCta": "Duyệt ứng dụng",
-      "visualAria": "Mô hình điện thoại thử thách ô màu Color Master 2"
+      "visualAria": "Mô hình điện thoại thử thách gạch Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "DANH MỤC ỨNG DỤNG",
       "title": "Tất cả ứng dụng",
       "description": "Cài đặt trực tiếp các ứng dụng công cộng. Đối với các bài kiểm tra riêng tư, trước tiên hãy gửi yêu cầu qua email; sau khi quyền truy cập của người thử nghiệm được thêm vào, hãy sử dụng nút Tham gia thử nghiệm.",
       "colorMaster2": {
-        "name": "Bậc thầy màu sắc 2",
-        "category": "Câu đố màu sắc",
-        "tagline": "Tìm màu khác trong 10 giây.",
-        "description": "Một sai lầm kết thúc cuộc chạy. Một thử thách nhận thức màu sắc ngắn và gây nghiện.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Trò chơi giải đố nhiều màu sắc",
+        "tagline": "Tìm một màu khác trong 10 giây.",
+        "description": "Một sai lầm kết thúc cuộc chạy. Một thử thách ngắn và gây nghiện về màu sắc kỳ lạ để tập trung và nhận biết màu sắc.",
         "highlights": [
           "Giới hạn 10 giây",
           "Chạy một đời",
           "Bảng xếp hạng",
           "Hỗ trợ mù màu"
         ],
-        "primaryCta": "Cài đặt Color Master 2",
+        "primaryCta": "Cài đặt Tìm màu lẻ",
         "detailCta": "Dùng thử bản trình diễn web",
         "statusNote": "Hiện có sẵn trên Google Play.",
-        "iconAlt": "Biểu tượng Color Master 2"
+        "iconAlt": "Biểu tượng Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Mã thiên hà",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Ứng dụng tin nhắn bí mật",
         "tagline": "Tạo những tin nhắn bí mật giống người ngoài hành tinh cần có khóa chia sẻ để giải mã.",
         "description": "Tạo quy tắc ngôn ngữ thiên hà của riêng bạn. Chỉ những người có khóa chia sẻ của bạn mới có thể tạo lại các quy tắc tương tự và văn bản gốc không được tải lên máy chủ.",
         "highlights": [
           "Dựa trên khóa chia sẻ",
           "Quy tắc cá nhân",
-          "Sẵn sàng cho SNS",
+          "SNS sẵn sàng",
           "Không tải lên máy chủ"
         ],
         "primaryCta": "Tạo tin nhắn bí mật",
         "detailCta": "Dùng thử bản trình diễn web",
         "statusNote": "Hiện có sẵn trên Google Play.",
-        "iconAlt": "Biểu tượng mã thiên hà"
+        "iconAlt": "Biểu tượng Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Gọi cho UFO",
-        "category": "Ứng dụng giải trí hấp dẫn",
-        "tagline": "Một trải nghiệm gọi UFO bí ẩn cho vui.",
-        "description": "Nhấn nút, nghe tín hiệu và tưởng tượng có thứ gì đó đang lắng nghe từ không gian.",
+        "name": "UFO Signal Simulator",
+        "category": "Ứng dụng giải trí tín hiệu bí ẩn",
+        "tagline": "Gửi tín hiệu không gian vui tươi và tận hưởng tâm trạng UFO.",
+        "description": "Mở ứng dụng, nhấn nút tín hiệu và thưởng thức âm thanh cũng như hoạt ảnh khiến khoảnh khắc này giống như một nghi lễ UFO nhỏ.",
         "highlights": [
-          "Nút tương tác",
+          "Nút tín hiệu",
           "Âm thanh bí ẩn",
-          "Hoạt hình",
+          "Hoạt hình tâm trạng",
           "Không đăng ký"
         ],
-        "primaryCta": "Gọi cho UFO",
-        "detailCta": "Dùng thử bản trình diễn web",
-        "statusNote": "Hiện có sẵn trên Google Play.",
-        "iconAlt": "Gọi biểu tượng UFO"
+        "primaryCta": "Cài đặt UFO Signal Simulator",
+        "detailCta": "Xem chi tiết ứng dụng",
+        "statusNote": "Xem chi tiết ứng dụng, sau đó cài đặt nó từ Google Play.",
+        "iconAlt": "Biểu tượng UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Bậc thầy màu sắc",
-        "category": "Câu đố màu sắc cổ điển",
-        "tagline": "Thử thách tập trung vào màu sắc ban đầu: tìm câu trả lời giữa các màu tương tự.",
-        "description": "Phiên bản gốc trước Color Master 2. Hãy dùng thử trên web trước, sau đó cài đặt từ Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Trò chơi cảm nhận màu sắc cổ điển",
+        "tagline": "Thử thách tập trung vào màu sắc ban đầu: ghi nhớ màu câu trả lời và chọn nó từ các màu tương tự.",
+        "description": "Thử nghiệm cảm nhận màu sắc ban đầu trước Find Odd Color: Color Master 2. Trước tiên hãy dùng thử trên web, sau đó cài đặt nó từ Google Play.",
         "highlights": [
           "Cảm giác ban đầu",
           "Tiêu điểm màu",
           "Chơi nhanh",
           "Cài đặt ngay bây giờ"
         ],
-        "primaryCta": "Cài đặt Color Master",
+        "primaryCta": "Cài đặt thử nghiệm cảm nhận màu sắc",
         "detailCta": "Dùng thử bản trình diễn web",
-        "statusNote": "Trước tiên hãy thử nó trên web, sau đó cài đặt nó từ Google Play.",
-        "iconAlt": "Biểu tượng Bậc thầy màu sắc"
+        "statusNote": "Trước tiên hãy dùng thử trên web, sau đó cài đặt nó từ Google Play.",
+        "iconAlt": "Biểu tượng Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Phòng thủ ngẫu nhiên của Hàn Quốc: Cuộc vây hãm",
@@ -5796,7 +5840,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Biểu tượng phòng thủ ngẫu nhiên thẻ may mắn"
       },
       "darkMaze": {
-        "name": "Phòng thí nghiệm thoát khỏi mê cung chuột: Mê cung tối",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Ra mắt game thoát khỏi mê cung",
         "tagline": "Hướng dẫn một con chuột thí nghiệm xuyên qua mê cung tối tăm và tìm lối ra.",
         "description": "Được phát hành trên Google Play vào ngày 28 tháng 5 năm 2026. Di chuyển qua mê cung tối tăm, sử dụng vật phẩm và trốn thoát trước khi con đường đóng lại.",
@@ -5807,8 +5851,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Sinh tồn đen tối"
         ],
         "primaryCta": "Cài đặt trên Google Play",
-        "statusNote": "Hiện đã có trên Google Play. Không có bản demo web nào được cung cấp cho ứng dụng này.",
-        "iconAlt": "Lab Rat Maze Escape: Biểu tượng Mê cung tối"
+        "statusNote": "Xem chi tiết ứng dụng, sau đó cài đặt nó từ Google Play. Không có bản demo web nào được cung cấp cho ứng dụng này.",
+        "iconAlt": "Biểu tượng Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Xem chi tiết ứng dụng"
       }
     },
     "status": {
@@ -5825,18 +5870,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "Ý TƯỞNG NGẮN",
       "title": "Hãy thử chúng như thế này",
       "colorMaster2": {
-        "app": "Bậc thầy màu sắc 2",
-        "title": "“Nếu bạn nhìn thấy sự khác biệt màu sắc này thì mắt bạn rất tinh.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“Nếu bạn phát hiện ra màu sắc kỳ lạ này thì mắt bạn rất tinh.”",
         "description": "Cạnh tranh với bạn bè trong thử thách 10 giây."
       },
       "galaxyCode": {
-        "app": "Mã thiên hà",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Gửi cho bạn của bạn một tin nhắn của người ngoài hành tinh mà họ không thể giải mã được.”",
         "description": "Để lại những tin nhắn bí mật mà chỉ những người nắm giữ chìa khóa chia sẻ mới có thể giải mã được."
       },
       "ufoSignal": {
-        "app": "Gọi cho UFO",
-        "title": "“Điều gì xảy ra nếu bạn nhấn nút UFO vào lúc bình minh?”",
+        "app": "UFO Signal Simulator",
+        "title": "“Điều gì xảy ra nếu bạn gửi tín hiệu UFO vào lúc bình minh?”",
         "description": "Thưởng thức âm thanh và hình ảnh động trong phòng tối."
       }
     },
@@ -5853,7 +5898,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Tôi nên cài đặt ứng dụng nào trước?",
-        "answer": "Nếu đây là lần đầu tiên bạn ghé thăm, hãy thử Color Master 2 trước. Nó nhanh chóng để chơi và dễ dàng chơi lại để có điểm cao hơn."
+        "answer": "Nếu đây là lần đầu tiên bạn truy cập, hãy thử Find Odd Color: Color Master 2 trước. Nó nhanh chóng để chơi và dễ dàng chơi lại để có điểm cao hơn."
       },
       "privateTest": {
         "question": "Làm cách nào để tham gia các ứng dụng thử nghiệm riêng tư?",
@@ -5864,12 +5909,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Được thực hiện bởi NeoKIM",
       "lastUpdated": "Cập nhật lần cuối: 2026.05.31",
       "googlePlay": "Ứng dụng Google Play",
-      "colorTest": "Kiểm tra màu sắc",
-      "alienText": "Trình tạo văn bản ngoài hành tinh",
-      "ufoApp": "Ứng dụng UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Chính sách bảo mật",
       "appAds": "app-ads.txt",
-      "contact": "Liên hệ"
+      "contact": "Liên hệ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Đăng ký người thử nghiệm riêng",
@@ -5890,9 +5936,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "be": {
     "seo": {
       "title": "NeoKIM App Lab | Бясплатныя міні-праграмы Android",
-      "description": "Усталюйце Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze і прыватныя тэсты для Lucky Card Random Defense і іншыя міні-праграмы Android.",
+      "description": "Усталюйце Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze і прыватныя тэсты, каб атрымаць больш міні-прыкладанняў Android.",
       "ogTitle": "NeoKIM App Lab | Міні-праграмы Android",
-      "ogDescription": "Каляровыя выпрабаванні, сакрэтныя паведамленні, падобныя на іншапланецян, выклікі НЛА, уцёкі з лабірынтаў пацукоў: Цёмны лабірынт і прыватныя тэсты для хуткага задавальнення Android."
+      "ogDescription": "Знайдзіце дзіўныя колеры, стварайце сакрэтны тэкст у стылі іншапланецян, адпраўляйце жартаўлівыя сігналы НЛА, пазбягайце цёмных лабірынтаў і далучайцеся да прыватных тэстаў для хуткай забавы Android."
     },
     "skip": {
       "apps": "Перайсці да спісу праграм"
@@ -5927,11 +5973,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Калекцыя міні-праграм Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Невялікія праграмы Android, створаныя для хуткай забавы і абмену",
-      "description": "Каляровыя выклікі, сакрэтныя паведамленні, падобныя на прышэльцаў, і выклікі НЛА. Усталюйце злёгку. Атрымлівайце асалоду менш чым за хвіліну.",
+      "description": "Выклікі дзіўных колераў, сакрэтныя паведамленні ў стылі іншапланецян, гульня сігналу НЛА і ўцёкі з цёмнага лабірынта. Усталюйце злёгку. Атрымлівайце асалоду менш чым за хвіліну.",
       "primaryCta": "Усталяваць абранае прыкладанне",
-      "primaryAria": "Усталюйце Color Master 2 на Google Play",
+      "primaryAria": "Усталюйце Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Агляд праграм",
-      "visualAria": "Макет тэлефона са значком Color Master 2 і каляровымі пліткамі",
+      "visualAria": "Макет тэлефона са значком Find Odd Color: Color Master 2 і каляровымі пліткамі",
       "badges": [
         "Бясплатныя праграмы",
         "Android",
@@ -5943,81 +5989,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ПРЭКАМЕНТАНЫЯ APP",
       "title": "Усталюйце гэта спачатку сёння",
       "badge": "Рэкамендаваны",
-      "appName": "Майстар колеру 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Знайдзіце іншы колер за 10 секунд.",
-      "description": "Каляровая галаваломка на адно жыццё, у якой адна памылка завяршае серыю. Ён пачынаецца хутка, потым працягвае цягнуць вас назад, каб пабіць ваш рэкорд.",
+      "description": "Галаваломка рознага колеру на адно жыццё, у якой адна памылка завяршае серыю. Ён пачынаецца хутка, потым працягвае цягнуць вас назад, каб пабіць ваш рэкорд.",
       "primaryCta": "Усталяваць на Google Play",
-      "primaryAria": "Усталюйце Color Master 2 на Google Play",
+      "primaryAria": "Усталюйце Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Агляд праграм",
-      "visualAria": "Макет тэлефона Color Master 2 з каляровай пліткай"
+      "visualAria": "Find Odd Color: Color Master 2 пліткавы спаборніцтва макет тэлефона"
     },
     "apps": {
       "kicker": "КАТАЛОГ ПРАГРАМ",
       "title": "Усе праграмы",
       "description": "Усталёўвайце агульнадаступныя праграмы непасрэдна. Для прыватных тэстаў спачатку адпраўце запыт па электроннай пошце; пасля дадання доступу тэстара выкарыстоўвайце кнопку «Далучыцца да тэсту».",
       "colorMaster2": {
-        "name": "Майстар колеру 2",
-        "category": "Каляровая галаваломка",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Гульня-галаваломка няцотных колераў",
         "tagline": "Знайдзіце іншы колер за 10 секунд.",
-        "description": "Адна памылка завяршае бег. Кароткая, захапляльная задача ўспрымання колеру.",
+        "description": "Адна памылка завяршае бег. Кароткае, захапляльнае выпрабаванне дзіўных колераў для канцэнтрацыі ўвагі і ўспрымання колеру.",
         "highlights": [
           "10-секундны ліміт",
           "Бег на адно жыццё",
           "Табліца лідэраў",
           "Дапаможнік для дальтоніка"
         ],
-        "primaryCta": "Усталюйце Color Master 2",
+        "primaryCta": "Усталюйце Find Odd Color",
         "detailCta": "Паспрабуйце Web Demo",
         "statusNote": "Зараз даступны на Google Play.",
-        "iconAlt": "Значок Color Master 2"
+        "iconAlt": "Значок Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Галактычны код",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Прыкладанне для сакрэтных паведамленняў",
         "tagline": "Стварайце сакрэтныя паведамленні, падобныя на прышэльцаў, для дэкадавання якіх патрабуецца агульны ключ.",
         "description": "Стварыце ўласныя правілы галактычнай мовы. Толькі людзі з вашым агульным ключом могуць аднавіць тыя ж правілы, і зыходны тэкст не загружаецца на сервер.",
         "highlights": [
           "На аснове агульнага ключа",
           "Асабістыя правілы",
-          "SNS-гатовы",
+          "Гатовы да SNS",
           "Няма загрузкі на сервер"
         ],
         "primaryCta": "Стварайце сакрэтныя паведамленні",
         "detailCta": "Паспрабуйце Web Demo",
         "statusNote": "Зараз даступны на Google Play.",
-        "iconAlt": "Значок Galacticode"
+        "iconAlt": "Значок Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Выклік НЛА",
-        "category": "Захапляльнае вясёлае прыкладанне",
-        "tagline": "Загадкавы выклік НЛА для забавы.",
-        "description": "Націсніце кнопку, пачуйце сігнал і ўявіце, што нешта слухае з космасу.",
+        "name": "UFO Signal Simulator",
+        "category": "Забаўляльнае прыкладанне Mystery Signal",
+        "tagline": "Адпраўце гуллівы касмічны сігнал і атрымлівайце асалоду ад настрою НЛА.",
+        "description": "Адкрыйце праграму, націсніце кнопку сігналу і атрымлівайце асалоду ад гуку і анімацыі, якія робяць гэты момант падобным на маленькі рытуал НЛА.",
         "highlights": [
-          "Інтэрактыўная кнопка",
+          "Кнопка сігналу",
           "Таямнічыя гукі",
-          "Анімацыя",
+          "Анімацыя настрою",
           "Няма рэгістрацыі"
         ],
-        "primaryCta": "Выклік НЛА",
-        "detailCta": "Паспрабуйце Web Demo",
-        "statusNote": "Зараз даступны на Google Play.",
-        "iconAlt": "Выклік НЛА значок"
+        "primaryCta": "Усталюйце UFO Signal Simulator",
+        "detailCta": "Прагляд падрабязнасцей праграмы",
+        "statusNote": "Праглядзіце падрабязную інфармацыю пра праграму, затым усталюйце яе з Google Play.",
+        "iconAlt": "Значок UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Майстар колеру",
-        "category": "Класічны каляровы пазл",
-        "tagline": "Арыгінальная задача па факусіроўцы колеру: знайдзіце адказ сярод падобных колераў.",
-        "description": "Арыгінальная версія да Color Master 2. Паспрабуйце спачатку ў Інтэрнэце, потым усталюйце з Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Класічная гульня па адчуванні колеру",
+        "tagline": "Арыгінальнае заданне па колеры: запомніце колер адказу і выберыце яго з падобных колераў.",
+        "description": "Арыгінальны тэст адчування колеру перад Find Odd Color: Color Master 2. Спачатку паспрабуйце ў Інтэрнэце, потым усталюйце з Google Play.",
         "highlights": [
           "Арыгінальнае адчуванне",
           "Каляровы фокус",
           "Хуткая гульня",
           "Усталяваць зараз"
         ],
-        "primaryCta": "Усталюйце Color Master",
+        "primaryCta": "Усталюйце Color Sense Test",
         "detailCta": "Паспрабуйце Web Demo",
-        "statusNote": "Паспрабуйце спачатку ў Інтэрнэце, потым усталюйце з Google Play.",
-        "iconAlt": "Значок Color Master"
+        "statusNote": "Спачатку паспрабуйце ў Інтэрнэце, потым усталюйце з Google Play.",
+        "iconAlt": "Значок Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Карэйская выпадковая абарона: аблога",
@@ -6055,7 +6101,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Выпушчаная гульня ўцёкі з лабірынта",
         "tagline": "Правядзіце лабараторную пацука праз цёмны лабірынт і знайдзіце выхад.",
-        "description": "Выпушчана ў Google Play 28 мая 2026 г. Перамяшчайцеся па цёмным лабірынце, выкарыстоўвайце прадметы і ратуйцеся, перш чым шлях наблізіцца.",
+        "description": "Выпушчана на Google Play 28 мая 2026 г. Перамяшчайцеся па цёмным лабірынце, выкарыстоўвайце прадметы і ратуйцеся, перш чым шлях зачыніцца.",
         "highlights": [
           "Вызвалены 28 мая 2026 г",
           "Ўцёкі з лабірынта",
@@ -6063,8 +6109,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Цёмнае выжыванне"
         ],
         "primaryCta": "Усталяваць на Google Play",
-        "statusNote": "Цяпер даступны ў Google Play. Для гэтай праграмы няма вэб-дэманстрацыі.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze значок"
+        "statusNote": "Праглядзіце падрабязную інфармацыю пра праграму, затым усталюйце яе з Google Play. Для гэтай праграмы няма вэб-дэманстрацыі.",
+        "iconAlt": "Значок Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Прагляд падрабязнасцей праграмы"
       }
     },
     "status": {
@@ -6081,18 +6128,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ІДЭІ ШОРТЫ",
       "title": "Паспрабуйце іх такім чынам",
       "colorMaster2": {
-        "app": "Майстар колеру 2",
-        "title": "«Калі вы бачыце гэтую розніцу ў колеры, вашы вочы вострыя».",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "«Калі вы заўважыце гэты дзіўны колер, вашы вочы вострыя».",
         "description": "Спаборнічайце з сябрамі ў 10-секундным спаборніцтве."
       },
       "galaxyCode": {
-        "app": "Галактычны код",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "«Адпраўце вашаму сябру паведамленне іншапланецян, якое яны не могуць расшыфраваць».",
         "description": "Пакідайце сакрэтныя паведамленні, якія могуць расшыфраваць толькі ўладальнікі ключоў акцый."
       },
       "ufoSignal": {
-        "app": "Выклік НЛА",
-        "title": "«Што адбудзецца, калі на досвітку націснуць кнопку НЛА?»",
+        "app": "UFO Signal Simulator",
+        "title": "«Што адбудзецца, калі вы адправіце сігнал НЛА на досвітку?»",
         "description": "Атрымлівайце асалоду ад гукаў і анімацыі ў цёмным пакоі."
       }
     },
@@ -6109,7 +6156,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Якую праграму я павінен усталяваць у першую чаргу?",
-        "answer": "Калі гэта ваш першы візіт, спачатку паспрабуйце Color Master 2. Гэта хутка гуляць і лёгка прайграваць для лепшага выніку."
+        "answer": "Калі гэта ваш першы візіт, спачатку паспрабуйце Find Odd Color: Color Master 2. Гэта хутка гуляць і лёгка прайграваць для лепшага выніку."
       },
       "privateTest": {
         "question": "Як мне далучыцца да прыватных тэставых праграм?",
@@ -6120,12 +6167,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Зроблена NeoKIM",
       "lastUpdated": "Апошняе абнаўленне: 31.05.2026",
       "googlePlay": "Праграмы Google Play",
-      "colorTest": "Каляровы тэст",
-      "alienText": "Генератар іншапланетнага тэксту",
-      "ufoApp": "Прыкладанне НЛА",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Палітыка прыватнасці",
       "appAds": "app-ads.txt",
-      "contact": "Кантакт"
+      "contact": "Кантакт",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Рэгістрацыя прыватнага тэсціроўшчыка",
@@ -6146,9 +6194,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "bn-BD": {
     "seo": {
       "title": "NeoKIM অ্যাপ ল্যাব | বিনামূল্যে Android মিনি অ্যাপস",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, এবং Lucky Card Random Defence এবং আরও Android মিনি অ্যাপের জন্য ব্যক্তিগত পরীক্ষা ইনস্টল করুন।",
+      "description": "আরও Android মিনি অ্যাপের জন্য Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze এবং ব্যক্তিগত পরীক্ষা ইনস্টল করুন৷",
       "ogTitle": "NeoKIM অ্যাপ ল্যাব | Android মিনি অ্যাপস",
-      "ogDescription": "রঙের চ্যালেঞ্জ, এলিয়েনের মতো গোপন বার্তা, ইউএফও কল করার অভিজ্ঞতা, ল্যাব র্যাট মেজ এস্কেপ: ডার্ক মেজ এবং দ্রুত অ্যান্ড্রয়েড মজার জন্য ব্যক্তিগত পরীক্ষা।"
+      "ogDescription": "অদ্ভুত রঙ খুঁজুন, এলিয়েন-স্টাইলের গোপন পাঠ্য তৈরি করুন, ক্রীড়নক UFO সংকেত পাঠান, অন্ধকার গোলকধাঁধা থেকে এড়িয়ে যান এবং দ্রুত Android মজার জন্য ব্যক্তিগত পরীক্ষায় যোগ দিন।"
     },
     "skip": {
       "apps": "অ্যাপ তালিকা এড়িয়ে যান"
@@ -6183,11 +6231,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android মিনি অ্যাপ সংগ্রহ",
       "title": "NeoKIM অ্যাপ ল্যাব",
       "subtitle": "ছোট Android অ্যাপগুলি দ্রুত মজা এবং শেয়ার করার জন্য তৈরি",
-      "description": "রঙিন চ্যালেঞ্জ, এলিয়েনের মতো গোপন বার্তা এবং ইউএফও কল করার অভিজ্ঞতা। হালকাভাবে ইনস্টল করুন। এক মিনিটের মধ্যে উপভোগ করুন।",
+      "description": "অদ্ভুত-রঙের চ্যালেঞ্জ, এলিয়েন-স্টাইলের গোপন বার্তা, ইউএফও সিগন্যাল প্লে এবং গাঢ় গোলকধাঁধা পালানো। হালকাভাবে ইনস্টল করুন। এক মিনিটের মধ্যে উপভোগ করুন।",
       "primaryCta": "বৈশিষ্ট্যযুক্ত অ্যাপ ইনস্টল করুন",
-      "primaryAria": "Google Play-এ কালার মাস্টার 2 ইনস্টল করুন",
+      "primaryAria": "Google Play-এ Find Odd Color: Color Master 2 ইনস্টল করুন",
       "secondaryCta": "অ্যাপস ব্রাউজ করুন",
-      "visualAria": "কালার মাস্টার 2 আইকন এবং রঙের টাইলস সহ ফোন মকআপ",
+      "visualAria": "Find Odd Color: Color Master 2 আইকন এবং রঙের টাইলস সহ ফোন মকআপ",
       "badges": [
         "বিনামূল্যের অ্যাপস",
         "Android",
@@ -6199,36 +6247,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "বৈশিষ্ট্যযুক্ত অ্যাপ",
       "title": "আজই প্রথম ইন্সটল করুন",
       "badge": "বৈশিষ্ট্যযুক্ত",
-      "appName": "কালার মাস্টার 2",
-      "short": "10 সেকেন্ডের মধ্যে বিভিন্ন রঙ খুঁজুন।",
-      "description": "একটি এক-জীবন রঙের ধাঁধা যেখানে একটি ভুল রান শেষ করে। এটি দ্রুত শুরু হয়, তারপরে আপনার রেকর্ডকে হারাতে আপনাকে পিছনে টানতে থাকে।",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 সেকেন্ডের মধ্যে একটি ভিন্ন রঙ খুঁজুন।",
+      "description": "এক-জীবনের বিজোড় রঙের ধাঁধা যেখানে একটি ভুল রান শেষ করে। এটি দ্রুত শুরু হয়, তারপরে আপনার রেকর্ডকে হারাতে আপনাকে পিছনে টানতে থাকে।",
       "primaryCta": "Google Play এ ইনস্টল করুন",
-      "primaryAria": "Google Play-এ কালার মাস্টার 2 ইনস্টল করুন",
+      "primaryAria": "Google Play-এ Find Odd Color: Color Master 2 ইনস্টল করুন",
       "secondaryCta": "অ্যাপস ব্রাউজ করুন",
-      "visualAria": "কালার মাস্টার 2 কালার টাইল চ্যালেঞ্জ ফোন মকআপ"
+      "visualAria": "Find Odd Color: Color Master 2 টাইল চ্যালেঞ্জ ফোন মকআপ"
     },
     "apps": {
       "kicker": "অ্যাপ ক্যাটালগ",
       "title": "সব অ্যাপ",
       "description": "সরাসরি পাবলিক অ্যাপ ইনস্টল করুন। ব্যক্তিগত পরীক্ষার জন্য, প্রথমে একটি অনুরোধ ইমেল করুন; পরীক্ষক অ্যাক্সেস যোগ করার পরে, পরীক্ষায় যোগদান বোতামটি ব্যবহার করুন।",
       "colorMaster2": {
-        "name": "কালার মাস্টার 2",
-        "category": "রঙের ধাঁধা",
-        "tagline": "10 সেকেন্ডের মধ্যে বিভিন্ন রঙ খুঁজুন।",
-        "description": "একটি ভুল রান শেষ করে দেয়। একটি সংক্ষিপ্ত, আসক্তিযুক্ত রঙ উপলব্ধি চ্যালেঞ্জ।",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "অদ্ভুত রঙের ধাঁধা খেলা",
+        "tagline": "10 সেকেন্ডের মধ্যে একটি ভিন্ন রঙ খুঁজুন।",
+        "description": "একটি ভুল রান শেষ করে দেয়। ফোকাস এবং রঙ উপলব্ধির জন্য একটি সংক্ষিপ্ত, আসক্তিমূলক বিজোড়-রঙের চ্যালেঞ্জ।",
         "highlights": [
           "10-সেকেন্ডের সীমা",
           "ওয়ান-লাইফ রান",
           "লিডারবোর্ড",
           "কালারব্লাইন্ড সাহায্য"
         ],
-        "primaryCta": "কালার মাস্টার 2 ইনস্টল করুন",
+        "primaryCta": "বিজোড় রঙ খুঁজুন ইনস্টল করুন",
         "detailCta": "ওয়েব ডেমো চেষ্টা করুন",
-        "statusNote": "এখন Google Play এ উপলব্ধ৷",
-        "iconAlt": "কালার মাস্টার 2 আইকন"
+        "statusNote": "Google Play-এ এখন উপলব্ধ৷",
+        "iconAlt": "Find Odd Color: Color Master 2 আইকন"
       },
       "galaxyCode": {
-        "name": "গ্যালাক্টিকোড",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "গোপন বার্তা অ্যাপ",
         "tagline": "ডিকোড করার জন্য একটি শেয়ার কী প্রয়োজন এলিয়েনের মতো গোপন বার্তা তৈরি করুন।",
         "description": "আপনার নিজস্ব গ্যালাকটিক ভাষার নিয়ম তৈরি করুন। শুধুমাত্র আপনার শেয়ার কী সহ লোকেরা একই নিয়মগুলি পুনরায় তৈরি করতে পারে এবং মূল পাঠ্যটি কোনও সার্ভারে আপলোড করা হয় না৷",
@@ -6240,40 +6288,40 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         ],
         "primaryCta": "গোপন বার্তা তৈরি করুন",
         "detailCta": "ওয়েব ডেমো চেষ্টা করুন",
-        "statusNote": "এখন Google Play এ উপলব্ধ৷",
-        "iconAlt": "গ্যালাক্টিকোড আইকন"
+        "statusNote": "Google Play-এ এখন উপলব্ধ৷",
+        "iconAlt": "Alien Text Maker: Galaxy Code আইকন"
       },
       "ufoSignal": {
-        "name": "UFO কল করুন",
-        "category": "ইমারসিভ মজার অ্যাপ",
-        "tagline": "মজা করার জন্য একটি রহস্যময় UFO কলিং অভিজ্ঞতা।",
-        "description": "বোতাম টিপুন, সংকেত শুনুন এবং মহাকাশ থেকে কিছু শোনার কথা কল্পনা করুন।",
+        "name": "UFO Signal Simulator",
+        "category": "রহস্য সংকেত বিনোদন অ্যাপ্লিকেশন",
+        "tagline": "একটি কৌতুকপূর্ণ স্থান সংকেত পাঠান এবং UFO মেজাজ উপভোগ করুন.",
+        "description": "অ্যাপটি খুলুন, সিগন্যাল বোতাম টিপুন এবং শব্দ এবং অ্যানিমেশন উপভোগ করুন যা মুহূর্তটিকে একটি ছোট UFO আচারের মতো মনে করে।",
         "highlights": [
-          "ইন্টারেক্টিভ বোতাম",
+          "সিগন্যাল বোতাম",
           "রহস্যময় শব্দ",
-          "অ্যানিমেশন",
+          "মুড অ্যানিমেশন",
           "কোন সাইন আপ"
         ],
-        "primaryCta": "UFO কল করুন",
-        "detailCta": "ওয়েব ডেমো চেষ্টা করুন",
-        "statusNote": "এখন Google Play এ উপলব্ধ৷",
-        "iconAlt": "UFO আইকনে কল করুন"
+        "primaryCta": "UFO Signal Simulator ইনস্টল করুন",
+        "detailCta": "অ্যাপের বিবরণ দেখুন",
+        "statusNote": "অ্যাপের বিবরণ দেখুন, তারপর Google Play থেকে ইনস্টল করুন।",
+        "iconAlt": "UFO Signal Simulator আইকন"
       },
       "colorMasterClassic": {
-        "name": "কালার মাস্টার",
-        "category": "ক্লাসিক রঙের ধাঁধা",
-        "tagline": "মূল রঙ-ফোকাস চ্যালেঞ্জ: অনুরূপ রঙের মধ্যে উত্তর খুঁজুন।",
-        "description": "কালার মাস্টার 2 এর আগে আসল সংস্করণ। প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর এটি Google Play থেকে ইনস্টল করুন।",
+        "name": "Color Sense Test: Color Master",
+        "category": "ক্লাসিক কালার সেন্স গেম",
+        "tagline": "আসল রঙ-ফোকাস চ্যালেঞ্জ: উত্তরের রঙটি মনে রাখবেন এবং একই রঙ থেকে এটি বেছে নিন।",
+        "description": "Find Odd Color: Color Master 2-এর আগে আসল কালার সেন্স টেস্ট। প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর Google Play থেকে এটি ইনস্টল করুন৷",
         "highlights": [
           "আসল অনুভূতি",
           "রঙ ফোকাস",
           "দ্রুত খেলা",
           "এখন ইন্সটল করুন"
         ],
-        "primaryCta": "কালার মাস্টার ইনস্টল করুন",
+        "primaryCta": "কালার সেন্স টেস্ট ইনস্টল করুন",
         "detailCta": "ওয়েব ডেমো চেষ্টা করুন",
-        "statusNote": "প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর এটি Google Play থেকে ইনস্টল করুন৷",
-        "iconAlt": "কালার মাস্টার আইকন"
+        "statusNote": "প্রথমে এটি ওয়েবে চেষ্টা করুন, তারপর Google Play থেকে এটি ইনস্টল করুন৷",
+        "iconAlt": "Color Sense Test: Color Master আইকন"
       },
       "koreanRandomDefense": {
         "name": "কোরিয়ান এলোমেলো প্রতিরক্ষা: অবরোধ",
@@ -6308,19 +6356,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "লাকি কার্ড র্যান্ডম ডিফেন্স আইকন"
       },
       "darkMaze": {
-        "name": "ল্যাব ইঁদুর গোলকধাঁধা এস্কেপ: ডার্ক মেজ",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "ম্যাজ এস্কেপ গেম রিলিজ হয়েছে",
         "tagline": "অন্ধকার গোলকধাঁধা দিয়ে একটি ল্যাব ইঁদুরকে গাইড করুন এবং প্রস্থান করুন।",
-        "description": "28 মে, 2026-এ Google Play-তে রিলিজ হয়েছে। অন্ধকার গোলকধাঁধার মধ্য দিয়ে যান, আইটেম ব্যবহার করুন এবং পথ বন্ধ হওয়ার আগে পালিয়ে যান।",
+        "description": "28 মে, 2026-এ Google Play-এ প্রকাশিত হয়েছে। অন্ধকার গোলকধাঁধায় চলে যান, আইটেম ব্যবহার করুন এবং পথ বন্ধ হওয়ার আগে পালিয়ে যান।",
         "highlights": [
           "28 মে, 2026 এ প্রকাশিত হয়েছে",
           "গোলকধাঁধা পলায়ন",
           "আইটেম",
           "অন্ধকার বেঁচে থাকা"
         ],
-        "primaryCta": "গুগল প্লেতে ইনস্টল করুন",
-        "statusNote": "এখন Google Play এ উপলব্ধ। এই অ্যাপের জন্য কোনো ওয়েব ডেমো দেওয়া হয় না।",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze আইকন"
+        "primaryCta": "Google Play-এ ইনস্টল করুন",
+        "statusNote": "অ্যাপের বিবরণ দেখুন, তারপর Google Play থেকে ইনস্টল করুন। এই অ্যাপের জন্য কোনো ওয়েব ডেমো দেওয়া হয় না।",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze আইকন",
+        "detailCta": "অ্যাপের বিবরণ দেখুন"
       }
     },
     "status": {
@@ -6337,18 +6386,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "শর্ট আইডিয়াস",
       "title": "এই মত তাদের চেষ্টা করুন",
       "colorMaster2": {
-        "app": "কালার মাস্টার 2",
-        "title": "\"আপনি যদি এই রঙের পার্থক্য দেখতে পান তবে আপনার চোখ তীক্ষ্ণ।\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"আপনি যদি এই অদ্ভুত রঙটি দেখতে পান তবে আপনার চোখ তীক্ষ্ণ।\"",
         "description": "10-সেকেন্ডের চ্যালেঞ্জে বন্ধুদের সাথে প্রতিযোগিতা করুন।"
       },
       "galaxyCode": {
-        "app": "গ্যালাক্টিকোড",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"আপনার বন্ধুকে একটি এলিয়েন বার্তা পাঠান যে তারা ডিকোড করতে পারে না।\"",
         "description": "গোপন বার্তাগুলি ছেড়ে দিন যা শুধুমাত্র শেয়ার-কী হোল্ডাররা ডিকোড করতে পারে।"
       },
       "ufoSignal": {
-        "app": "UFO কল করুন",
-        "title": "\"আপনি ভোরবেলা ইউএফও বোতাম টিপলে কি হবে?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"আপনি যদি ভোরবেলা একটি UFO সংকেত পাঠান তাহলে কি হবে?\"",
         "description": "একটি অন্ধকার ঘরে শব্দ এবং অ্যানিমেশন উপভোগ করুন।"
       }
     },
@@ -6365,7 +6414,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "আমি প্রথমে কোন অ্যাপ ইনস্টল করব?",
-        "answer": "এটি আপনার প্রথম দর্শন হলে, প্রথমে কালার মাস্টার 2 চেষ্টা করুন। এটি খেলার জন্য দ্রুত এবং একটি ভাল স্কোর জন্য পুনরায় খেলা সহজ."
+        "answer": "যদি এটি আপনার প্রথম দর্শন হয়, প্রথমে Find Odd Color: Color Master 2 ব্যবহার করে দেখুন। এটি খেলার জন্য দ্রুত এবং একটি ভাল স্কোর জন্য পুনরায় খেলা সহজ."
       },
       "privateTest": {
         "question": "আমি কিভাবে ব্যক্তিগত পরীক্ষা অ্যাপে যোগ দিতে পারি?",
@@ -6376,12 +6425,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM দ্বারা তৈরি",
       "lastUpdated": "সর্বশেষ আপডেট: 2026.05.31",
       "googlePlay": "Google Play অ্যাপস",
-      "colorTest": "রঙ পরীক্ষা",
-      "alienText": "এলিয়েন টেক্সট জেনারেটর",
-      "ufoApp": "UFO অ্যাপ",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "গোপনীয়তা নীতি",
       "appAds": "app-ads.txt",
-      "contact": "যোগাযোগ"
+      "contact": "যোগাযোগ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ব্যক্তিগত পরীক্ষক সাইন আপ",
@@ -6402,9 +6452,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "bg": {
     "seo": {
       "title": "NeoKIM App Lab | Безплатни мини приложения Android",
-      "description": "Инсталирайте Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze и частни тестове за Lucky Card Random Defense и още мини приложения за Android.",
+      "description": "Инсталирайте Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze и частни тестове за още мини приложения Android.",
       "ogTitle": "NeoKIM App Lab | Android Мини приложения",
-      "ogDescription": "Цветни предизвикателства, тайни съобщения, подобни на извънземни, изживявания при обаждане на НЛО, Lab Rat Maze Escape: Dark Maze и частни тестове за бързо забавление с Android."
+      "ogDescription": "Намерете странни цветове, създайте таен текст в извънземен стил, изпращайте игриви НЛО сигнали, избягайте от тъмни лабиринти и се присъединете към частни тестове за бързо Android забавление."
     },
     "skip": {
       "apps": "Преминете към списъка с приложения"
@@ -6439,11 +6489,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android мини колекция от приложения",
       "title": "NeoKIM App Lab",
       "subtitle": "Малки Android приложения, създадени за бързо забавление и споделяне",
-      "description": "Цветни предизвикателства, подобни на извънземни тайни съобщения и изживявания с извикване на НЛО. Инсталирайте леко. Насладете се за по-малко от минута.",
+      "description": "Предизвикателства със странни цветове, тайни съобщения в извънземен стил, игра на НЛО сигнали и бягства от тъмен лабиринт. Инсталирайте леко. Насладете се за по-малко от минута.",
       "primaryCta": "Инсталирайте представено приложение",
-      "primaryAria": "Инсталирайте Color Master 2 на Google Play",
+      "primaryAria": "Инсталирайте Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Преглед на приложения",
-      "visualAria": "Макет на телефон с икона на Color Master 2 и цветни плочки",
+      "visualAria": "Макет на телефон с икона Find Odd Color: Color Master 2 и цветни плочки",
       "badges": [
         "Безплатни приложения",
         "Android",
@@ -6455,81 +6505,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ПРЕПОРЪЧАНО ПРИЛОЖЕНИЕ",
       "title": "Инсталирайте това първо днес",
       "badge": "Представено",
-      "appName": "Color Master 2",
-      "short": "Намерете различния цвят за 10 секунди.",
-      "description": "Цветен пъзел за един живот, където една грешка слага край на серията. Започва бързо, след което продължава да те дърпа назад, за да победи рекорда ти.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Намерете един различен цвят за 10 секунди.",
+      "description": "Пъзел с един живот в нечетни цветове, където една грешка слага край на серията. Започва бързо, след което продължава да те дърпа назад, за да победи рекорда ти.",
       "primaryCta": "Инсталирайте на Google Play",
-      "primaryAria": "Инсталирайте Color Master 2 на Google Play",
+      "primaryAria": "Инсталирайте Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Преглед на приложения",
-      "visualAria": "Макет на предизвикателството за телефон с цветни плочки Color Master 2"
+      "visualAria": "Find Odd Color: Color Master 2 телефонен модел на предизвикателство с плочки"
     },
     "apps": {
       "kicker": "КАТАЛОГ НА ПРИЛОЖЕНИЯТА",
       "title": "Всички приложения",
       "description": "Инсталирайте публични приложения директно. За частни тестове първо изпратете заявка по имейл; след като се добави достъп на тестер, използвайте бутона Присъединете се към теста.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Цветен пъзел",
-        "tagline": "Намерете различния цвят за 10 секунди.",
-        "description": "Една грешка слага край на бягането. Кратко, пристрастяващо предизвикателство за възприемане на цветовете.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Пъзел игра с нечетни цветове",
+        "tagline": "Намерете един различен цвят за 10 секунди.",
+        "description": "Една грешка слага край на бягането. Кратко, пристрастяващо предизвикателство със странни цветове за фокусиране и цветово възприятие.",
         "highlights": [
           "Ограничение от 10 секунди",
           "Бягане с един живот",
           "класация",
           "Помощ за далтонисти"
         ],
-        "primaryCta": "Инсталирайте Color Master 2",
+        "primaryCta": "Инсталирайте Find Odd Color",
         "detailCta": "Опитайте уеб демонстрация",
-        "statusNote": "Предлага се сега в Google Play.",
-        "iconAlt": "Икона Color Master 2"
+        "statusNote": "Предлага се сега на Google Play.",
+        "iconAlt": "Икона Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Галактикод",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Приложение за тайни съобщения",
         "tagline": "Създавайте подобни на извънземни тайни съобщения, които се нуждаят от ключ за споделяне, за да ги декодират.",
         "description": "Създайте свои собствени галактически езикови правила. Само хора с вашия ключ за споделяне могат да пресъздадат същите правила и оригиналният текст не се качва на сървър.",
         "highlights": [
           "Базиран на споделен ключ",
           "Лични правила",
-          "SNS-готов",
+          "Готов за SNS",
           "Няма качване на сървъра"
         ],
         "primaryCta": "Създайте тайни съобщения",
         "detailCta": "Опитайте уеб демонстрация",
-        "statusNote": "Предлага се сега в Google Play.",
-        "iconAlt": "Икона на Galacticode"
+        "statusNote": "Предлага се сега на Google Play.",
+        "iconAlt": "Икона Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Обадете се на НЛО",
-        "category": "Завладяващо забавно приложение",
-        "tagline": "Мистериозно изживяване при обаждане на НЛО за забавление.",
-        "description": "Натиснете бутона, чуйте сигнала и си представете, че нещо слуша от космоса.",
+        "name": "UFO Signal Simulator",
+        "category": "Приложение за забавление с мистериозен сигнал",
+        "tagline": "Изпратете игрив космически сигнал и се насладете на НЛО настроението.",
+        "description": "Отворете приложението, натиснете бутона за сигнал и се насладете на звук и анимация, които карат момента да се чувства като малък НЛО ритуал.",
         "highlights": [
-          "Интерактивен бутон",
+          "Бутон за сигнал",
           "Мистериозни звуци",
-          "Анимация",
+          "Анимация за настроение",
           "Без записване"
         ],
-        "primaryCta": "Обадете се на НЛО",
-        "detailCta": "Опитайте уеб демонстрация",
-        "statusNote": "Предлага се сега в Google Play.",
-        "iconAlt": "Извикайте иконата на НЛО"
+        "primaryCta": "Инсталирайте UFO Signal Simulator",
+        "detailCta": "Вижте подробности за приложението",
+        "statusNote": "Вижте подробностите за приложението, след което го инсталирайте от Google Play.",
+        "iconAlt": "Икона UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Класически цветен пъзел",
-        "tagline": "Оригиналното предизвикателство за фокусиране на цветовете: намерете отговора сред подобни цветове.",
-        "description": "Оригиналната версия преди Color Master 2. Опитайте я първо в мрежата, след това я инсталирайте от Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Класическа игра за усещане на цветовете",
+        "tagline": "Оригиналното предизвикателство за фокусиране на цвета: запомнете цвета на отговора и го изберете от подобни цветове.",
+        "description": "Оригиналният тест за цветово усещане преди Find Odd Color: Color Master 2. Първо го изпробвайте в мрежата, след това го инсталирайте от Google Play.",
         "highlights": [
           "Оригинално усещане",
           "Цветен фокус",
           "Бърза игра",
           "Инсталирайте сега"
         ],
-        "primaryCta": "Инсталирайте Color Master",
+        "primaryCta": "Инсталирайте Color Sense Test",
         "detailCta": "Опитайте уеб демонстрация",
         "statusNote": "Първо го изпробвайте в мрежата, след това го инсталирайте от Google Play.",
-        "iconAlt": "Икона Color Master"
+        "iconAlt": "Икона Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Корейска случайна защита: Обсада",
@@ -6567,16 +6617,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Издадена игра за бягство в лабиринта",
         "tagline": "Преведете лабораторен плъх през тъмния лабиринт и намерете изхода.",
-        "description": "Пуснато в Google Play на 28 май 2026 г. Придвижвайте се през тъмния лабиринт, използвайте предмети и избягайте, преди пътят да се е затворил.",
+        "description": "Издаден на Google Play на 28 май 2026 г. Придвижете се през тъмния лабиринт, използвайте предмети и избягайте, преди пътят да се затвори.",
         "highlights": [
           "Издаден на 28 май 2026 г",
           "Бягство от лабиринта",
           "Предмети",
           "Тъмно оцеляване"
         ],
-        "primaryCta": "Инсталирайте в Google Play",
-        "statusNote": "Вече се предлага в Google Play. За това приложение не е предоставена уеб демонстрация.",
-        "iconAlt": "Lab Rat Maze Escape: Икона на тъмен лабиринт"
+        "primaryCta": "Инсталирайте на Google Play",
+        "statusNote": "Вижте подробностите за приложението, след което го инсталирайте от Google Play. За това приложение не е предоставена уеб демонстрация.",
+        "iconAlt": "Икона Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Вижте подробности за приложението"
       }
     },
     "status": {
@@ -6593,18 +6644,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ИДЕИ ЗА КЪСОТО",
       "title": "Опитайте ги така",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "„Ако видите тази цветова разлика, очите ви са остри.“",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Ако забележите този странен цвят, очите ви са остри.“",
         "description": "Състезавайте се с приятели в 10-секундно предизвикателство."
       },
       "galaxyCode": {
-        "app": "Галактикод",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Изпратете на приятел извънземно съобщение, което той не може да декодира.“",
         "description": "Оставете тайни съобщения, които само притежателите на акционерен ключ могат да декодират."
       },
       "ufoSignal": {
-        "app": "Обадете се на НЛО",
-        "title": "„Какво ще се случи, ако натиснете бутона НЛО призори?“",
+        "app": "UFO Signal Simulator",
+        "title": "„Какво се случва, ако изпратите сигнал за НЛО на зазоряване?“",
         "description": "Насладете се на звуците и анимацията в тъмна стая."
       }
     },
@@ -6621,7 +6672,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Кое приложение трябва да инсталирам първо?",
-        "answer": "Ако това е първото ви посещение, опитайте първо Color Master 2. Играе се бързо и се преиграва лесно за по-добър резултат."
+        "answer": "Ако това е първото ви посещение, опитайте първо Find Odd Color: Color Master 2. Играе се бързо и се преиграва лесно за по-добър резултат."
       },
       "privateTest": {
         "question": "Как да се присъединя към частни тестови приложения?",
@@ -6632,12 +6683,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Произведено от NeoKIM",
       "lastUpdated": "Последна актуализация: 2026.05.31",
       "googlePlay": "Google Play приложения",
-      "colorTest": "Цветен тест",
-      "alienText": "Генератор на извънземен текст",
-      "ufoApp": "Приложение НЛО",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Политика за поверителност",
       "appAds": "app-ads.txt",
-      "contact": "Контакт"
+      "contact": "Контакт",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Регистрация на частен тестер",
@@ -6658,9 +6710,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sr": {
     "seo": {
       "title": "NeoKIM Апп Лаб | Бесплатне Android Мини апликације",
-      "description": "Инсталирајте Цолор Мастер 2, Галацтицоде, Цалл тхе УФО, Лаб Рат Мазе Есцапе: Дарк Мазе и приватне тестове за Луцки Цард Рандом Дефенсе и више Андроид мини апликација.",
+      "description": "Инсталирајте НЕОКИМПРОДУЦТ0ТОКЕН, НЕОКИМПРОДУЦТ1ТОКЕН, НЕОКИМПРОДУЦТ2ТОКЕН, НЕОКИМПРОДУЦТ3ТОКЕН, НЕОКИМПРОДУЦТ4ТОКЕН и приватне тестове за више НЕОКИМПРОДУЦТ9ТОКЕН мини апликација.",
       "ogTitle": "NeoKIM Апп Лаб | Android Мини апликације",
-      "ogDescription": "Изазови у боји, тајне поруке налик ванземаљцима, искуства са НЛО позивањем, бекство из лабораторијског пацова из лавиринта: Мрачни лавиринт и приватни тестови за брзу забаву на Андроиду."
+      "ogDescription": "Пронађите чудне боје, направите тајни текст у стилу ванземаљаца, пошаљите разигране НЛО сигнале, побегните из мрачних лавиринта и придружите се приватним тестовима за брзу забаву НЕОКИМПРОДУЦТ9ТОКЕН."
     },
     "skip": {
       "apps": "Прескочи на листу апликација"
@@ -6695,11 +6747,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android колекција мини апликација",
       "title": "NeoKIM Апп Лаб",
       "subtitle": "Мале Android апликације направљене за брзу забаву и дељење",
-      "description": "Изазови у боји, тајне поруке налик ванземаљцима и искуства са НЛО позивањем. Лагано инсталирајте. Уживајте за мање од једног минута.",
+      "description": "Изазови у чудним бојама, тајне поруке у стилу ванземаљаца, играње НЛО сигнала и бекства из мрачног лавиринта. Лагано инсталирајте. Уживајте за мање од једног минута.",
       "primaryCta": "Инсталирајте Истакнуту апликацију",
-      "primaryAria": "Инсталирајте Цолор Мастер 2 на Google Play",
+      "primaryAria": "Инсталирајте НЕОКИМПРОДУЦТ0ТОКЕН на НЕОКИМПРОДУЦТ7ТОКЕН",
       "secondaryCta": "Прегледајте апликације",
-      "visualAria": "Макета телефона са иконом Цолор Мастер 2 и плочицама у боји",
+      "visualAria": "Макета телефона са иконом НЕОКИМПРОДУЦТ0ТОКЕН и плочицама у боји",
       "badges": [
         "Бесплатне апликације",
         "Android",
@@ -6711,81 +6763,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ПРЕДСТАВЉЕНА АПП",
       "title": "Инсталирајте ово прво данас",
       "badge": "Феатуред",
-      "appName": "Мајстор боја 2",
-      "short": "Пронађите другу боју за 10 секунди.",
-      "description": "Слагалица са бојама за један живот у којој једна грешка завршава трку. Почиње брзо, а затим вас стално вуче да бисте оборили свој рекорд.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Пронађите једну другу боју за 10 секунди.",
+      "description": "Једноживотна слагалица у чудним бојама у којој једна грешка завршава трку. Почиње брзо, а затим вас стално вуче да бисте оборили свој рекорд.",
       "primaryCta": "Инсталирајте на Google Play",
-      "primaryAria": "Инсталирајте Цолор Мастер 2 на Google Play",
+      "primaryAria": "Инсталирајте НЕОКИМПРОДУЦТ0ТОКЕН на НЕОКИМПРОДУЦТ7ТОКЕН",
       "secondaryCta": "Прегледајте апликације",
-      "visualAria": "Цолор Мастер 2 макета телефона са изазовним плочицама у боји"
+      "visualAria": "НЕОКИМПРОДУЦТ0ТОКЕН модел плочица изазовног телефона"
     },
     "apps": {
       "kicker": "КАТАЛОГ АПП",
       "title": "Све апликације",
       "description": "Инсталирајте јавне апликације директно. За приватне тестове прво пошаљите захтев е-поштом; након додавања приступа тестеру, користите дугме Јоин Тест.",
       "colorMaster2": {
-        "name": "Мајстор боја 2",
-        "category": "Слагалица у боји",
-        "tagline": "Пронађите другу боју за 10 секунди.",
-        "description": "Једна грешка завршава трку. Кратак изазов за перцепцију боја који изазива зависност.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Игра слагалице чудних боја",
+        "tagline": "Пронађите једну другу боју за 10 секунди.",
+        "description": "Једна грешка завршава трку. Кратак, заразан изазов непарних боја за фокус и перцепцију боја.",
         "highlights": [
           "Ограничење од 10 секунди",
           "Трчање једног живота",
           "Леадербоард",
           "Помоћ за далтонисте"
         ],
-        "primaryCta": "Инсталирајте Цолор Мастер 2",
+        "primaryCta": "Инсталирајте Финд Одд Цолор",
         "detailCta": "Испробајте веб демо",
-        "statusNote": "Доступно сада на Google Play.",
-        "iconAlt": "Цолор Мастер 2 икона"
+        "statusNote": "Доступно сада на НЕОКИМПРОДУЦТ7ТОКЕН.",
+        "iconAlt": "Икона НЕОКИМПРОДУЦТ0ТОКЕН"
       },
       "galaxyCode": {
-        "name": "Галацтицоде",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Апликација за тајне поруке",
         "tagline": "Креирајте тајне поруке попут ванземаљаца којима је за декодирање потребан дељени кључ.",
         "description": "Креирајте сопствена правила галактичког језика. Само људи са вашим кључем за дељење могу поново да направе иста правила, а оригинални текст се не отпрема на сервер.",
         "highlights": [
           "Заснован на кључу за дељење",
           "Лична правила",
-          "SNS-спреман",
+          "СНС-спреман",
           "Нема отпремања сервера"
         ],
         "primaryCta": "Креирајте тајне поруке",
         "detailCta": "Испробајте веб демо",
-        "statusNote": "Доступно сада на Google Play.",
-        "iconAlt": "Икона Галактикода"
+        "statusNote": "Доступно сада на НЕОКИМПРОДУЦТ7ТОКЕН.",
+        "iconAlt": "Икона НЕОКИМПРОДУЦТ1ТОКЕН"
       },
       "ufoSignal": {
-        "name": "Позовите НЛО",
-        "category": "Имерзивна забавна апликација",
-        "tagline": "Мистериозно искуство НЛО позива за забаву.",
-        "description": "Притисните дугме, чујете сигнал и замислите да нешто слуша из свемира.",
+        "name": "UFO Signal Simulator",
+        "category": "Апликација за забаву Мистери сигнал",
+        "tagline": "Пошаљите разиграни свемирски сигнал и уживајте у НЛО расположењу.",
+        "description": "Отворите апликацију, притисните дугме за сигнал и уживајте у звуку и анимацији због којих се тренутак осећа као мали НЛО ритуал.",
         "highlights": [
-          "Интерактивно дугме",
+          "Дугме за сигнал",
           "Звуци мистерије",
-          "Анимација",
+          "Анимација расположења",
           "Нема пријаве"
         ],
-        "primaryCta": "Позовите НЛО",
-        "detailCta": "Испробајте веб демо",
-        "statusNote": "Доступно сада на Google Play.",
-        "iconAlt": "Позовите икону НЛО"
+        "primaryCta": "Инсталирајте НЕОКИМПРОДУЦТ2ТОКЕН",
+        "detailCta": "Погледајте детаље о апликацији",
+        "statusNote": "Погледајте детаље апликације, а затим је инсталирајте са НЕОКИМПРОДУЦТ7ТОКЕН.",
+        "iconAlt": "Икона НЕОКИМПРОДУЦТ2ТОКЕН"
       },
       "colorMasterClassic": {
-        "name": "Цолор Мастер",
-        "category": "Класична слагалица у боји",
-        "tagline": "Оригинални изазов фокусирања на боје: пронађите одговор међу сличним бојама.",
-        "description": "Оригинална верзија пре Цолор Мастер 2. Прво је испробајте на вебу, а затим је инсталирајте са Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Класична игра осећаја боја",
+        "tagline": "Оригинални изазов фокусирања на боје: запамтите боју одговора и изаберите је из сличних боја.",
+        "description": "Оригинални тест чула боја пре НЕОКИМПРОДУЦТ0ТОКЕН-а. Прво га испробајте на вебу, а затим га инсталирајте са НЕОКИМПРОДУЦТ7ТОКЕН-а.",
         "highlights": [
           "Оригинални осећај",
           "Фокус у боји",
           "Брза игра",
           "Инсталирајте одмах"
         ],
-        "primaryCta": "Инсталирајте Цолор Мастер",
+        "primaryCta": "Инсталирајте Цолор Сенсе Тест",
         "detailCta": "Испробајте веб демо",
-        "statusNote": "Прво га испробајте на вебу, а затим га инсталирајте са Google Play.",
-        "iconAlt": "Икона Мастер боје"
+        "statusNote": "Прво га испробајте на вебу, а затим га инсталирајте са НЕОКИМПРОДУЦТ7ТОКЕН-а.",
+        "iconAlt": "НЕОКИМПРОДУЦТ3ТОКЕН икона"
       },
       "koreanRandomDefense": {
         "name": "Корејска насумична одбрана: опсада",
@@ -6820,19 +6872,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Срећна карта икона случајне одбране"
       },
       "darkMaze": {
-        "name": "Побег из лабораторијског пацова из лавиринта: мрачни лабиринт",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Објављена игра бекства из лавиринта",
         "tagline": "Водите лабораторијског пацова кроз мрачни лавиринт и пронађите излаз.",
-        "description": "Објављено на Гоогле Плаи-у 28. маја 2026. Крећите се кроз мрачни лавиринт, користите ставке и бежите пре него што се стаза затвори.",
+        "description": "Објављено на НЕОКИМПРОДУЦТ7ТОКЕН 28. маја 2026. Крећите се кроз мрачни лавиринт, користите предмете и бежите пре него што се стаза затвори.",
         "highlights": [
           "Објављено 28. маја 2026",
           "Бекство из лавиринта",
           "Предмети",
           "Мрачно преживљавање"
         ],
-        "primaryCta": "Инсталирајте на Гоогле Плаи",
-        "statusNote": "Сада доступно на Гоогле Плаи-у. За ову апликацију није обезбеђен веб демо.",
-        "iconAlt": "Бекство из лабораторијског пацова из лавиринта: икона тамног лавиринта"
+        "primaryCta": "Инсталирајте на НЕОКИМПРОДУЦТ7ТОКЕН",
+        "statusNote": "Погледајте детаље апликације, а затим је инсталирајте са НЕОКИМПРОДУЦТ7ТОКЕН. За ову апликацију није обезбеђен веб демо.",
+        "iconAlt": "НЕОКИМПРОДУЦТ4ТОКЕН икона",
+        "detailCta": "Погледајте детаље о апликацији"
       }
     },
     "status": {
@@ -6849,18 +6902,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "КРАТКЕ ИДЕЈЕ",
       "title": "Пробајте их овако",
       "colorMaster2": {
-        "app": "Мајстор боја 2",
-        "title": "\"Ако видите ову разлику у боји, ваше очи су оштре.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Ако приметите ову чудну боју, очи су вам оштре.\"",
         "description": "Такмичите се са пријатељима у изазову од 10 секунди."
       },
       "galaxyCode": {
-        "app": "Галацтицоде",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Пошаљите свом пријатељу поруку ванземаљаца коју не могу декодирати.",
         "description": "Оставите тајне поруке које само власници дешифрованих кључева могу да декодирају."
       },
       "ufoSignal": {
-        "app": "Позовите НЛО",
-        "title": "„Шта се дешава ако притиснете дугме НЛО у зору?“",
+        "app": "UFO Signal Simulator",
+        "title": "„Шта се дешава ако пошаљете НЛО сигнал у зору?“",
         "description": "Уживајте у звуцима и анимацији у мрачној просторији."
       }
     },
@@ -6877,7 +6930,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Коју апликацију прво да инсталирам?",
-        "answer": "Ако је ово ваша прва посета, прво испробајте Цолор Мастер 2. Брзо се игра и лако се игра за бољи резултат."
+        "answer": "Ако је ово ваша прва посета, прво испробајте НЕОКИМПРОДУЦТ0ТОКЕН. Брзо се игра и лако се игра за бољи резултат."
       },
       "privateTest": {
         "question": "Како да се придружим приватним апликацијама за тестирање?",
@@ -6888,12 +6941,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Направио NeoKIM",
       "lastUpdated": "Последње ажурирање: 31.05.2026",
       "googlePlay": "Google Play Аппс",
-      "colorTest": "Тест боје",
-      "alienText": "Алиен Тект Генератор",
-      "ufoApp": "НЛО Апп",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Политика приватности",
       "appAds": "app-ads.txt",
-      "contact": "Контакт"
+      "contact": "Контакт",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Регистрација приватног тестера",
@@ -6914,9 +6968,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sw": {
     "seo": {
       "title": "Maabara ya Programu ya NeoKIM | Programu Ndogo za Android Zisizolipishwa",
-      "description": "Sakinisha Color Master 2, Galacticode, Call UFO, Lab Rat Maze Escape: Dark Maze, na majaribio ya faragha ya Lucky Card Random Defense na programu zaidi za mini za Android.",
+      "description": "Sakinisha Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, na majaribio ya faragha kwa programu zaidi ndogo za Android.",
       "ogTitle": "Maabara ya Programu ya NeoKIM | Programu Ndogo za Android",
-      "ogDescription": "Changamoto za rangi, ujumbe wa siri kama mgeni, hali ya kupiga simu kwenye UFO, Lab Rat Maze Escape: Dark Maze na majaribio ya faragha kwa ajili ya kufurahisha Android kwa haraka."
+      "ogDescription": "Pata rangi zisizo za kawaida, tengeneza maandishi ya siri ya mtindo wa kigeni, tuma mawimbi ya mchezo wa UFO, epuka mawimbi meusi, na ujiunge na majaribio ya faragha kwa furaha ya haraka ya Android."
     },
     "skip": {
       "apps": "Ruka hadi kwenye orodha ya programu"
@@ -6951,11 +7005,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Mkusanyiko wa programu ndogo ya Android",
       "title": "Maabara ya Programu ya NeoKIM",
       "subtitle": "Programu ndogo za Android zimeundwa kwa ajili ya kufurahisha na kushiriki kwa haraka",
-      "description": "Changamoto za rangi, ujumbe wa siri kama mgeni, na uzoefu wa kupiga simu kwenye UFO. Sakinisha kwa urahisi. Furahiya chini ya dakika moja.",
+      "description": "Changamoto za rangi isiyo ya kawaida, jumbe za siri za mtindo wa kigeni, uchezaji wa mawimbi ya UFO, na kutoroka kwa maze meusi. Sakinisha kwa urahisi. Furahiya chini ya dakika moja.",
       "primaryCta": "Sakinisha Programu Iliyoangaziwa",
-      "primaryAria": "Sakinisha Color Master 2 kwenye Google Play",
+      "primaryAria": "Sakinisha Find Odd Color: Color Master 2 kwenye Google Play",
       "secondaryCta": "Vinjari Programu",
-      "visualAria": "Nakala ya simu iliyo na ikoni ya Color Master 2 na vigae vya rangi",
+      "visualAria": "Nakala ya simu iliyo na aikoni ya Find Odd Color: Color Master 2 na vigae vya rangi",
       "badges": [
         "Programu za Bure",
         "Android",
@@ -6967,36 +7021,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APP ILIYOAngaziwa",
       "title": "Sakinisha Hii Kwanza Leo",
       "badge": "Iliyoangaziwa",
-      "appName": "Mwalimu wa rangi 2",
-      "short": "Pata rangi tofauti katika sekunde 10.",
-      "description": "Fumbo la rangi ya maisha moja ambapo kosa moja humaliza kukimbia. Huanza haraka, kisha huendelea kukurudisha nyuma ili kushinda rekodi yako.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Pata rangi moja tofauti katika sekunde 10.",
+      "description": "Fumbo la maisha moja la rangi isiyo ya kawaida ambapo kosa moja humaliza kukimbia. Huanza haraka, kisha huendelea kukurudisha nyuma ili kushinda rekodi yako.",
       "primaryCta": "Sakinisha kwenye Google Play",
-      "primaryAria": "Sakinisha Color Master 2 kwenye Google Play",
+      "primaryAria": "Sakinisha Find Odd Color: Color Master 2 kwenye Google Play",
       "secondaryCta": "Vinjari Programu",
-      "visualAria": "Rangi Master 2 rangi tile changamoto mfano wa simu"
+      "visualAria": "Find Odd Color: Color Master 2 shindano la vigae kwenye simu ya kuiga"
     },
     "apps": {
       "kicker": "KATALOGU YA APP",
       "title": "Programu Zote",
       "description": "Sakinisha programu za umma moja kwa moja. Kwa majaribio ya faragha, tuma ombi kwa barua pepe kwanza; baada ya ufikiaji wa kijaribu kuongezwa, tumia kitufe cha Jiunge na Jaribio.",
       "colorMaster2": {
-        "name": "Mwalimu wa rangi 2",
-        "category": "Rangi puzzle",
-        "tagline": "Pata rangi tofauti katika sekunde 10.",
-        "description": "Kosa moja linamaliza kukimbia. Changamoto fupi ya mtazamo wa rangi.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Mchezo wa mafumbo ya rangi isiyo ya kawaida",
+        "tagline": "Pata rangi moja tofauti katika sekunde 10.",
+        "description": "Kosa moja linamaliza kukimbia. Changamoto fupi ya kuvutia ya rangi isiyo ya kawaida kwa umakini na mtazamo wa rangi.",
         "highlights": [
           "Kikomo cha sekunde 10",
           "Kukimbia kwa maisha moja",
           "Ubao wa wanaoongoza",
           "Msaada wa upofu wa rangi"
         ],
-        "primaryCta": "Weka Rangi Master 2",
+        "primaryCta": "Sakinisha Tafuta Rangi Isiyo ya Kawaida",
         "detailCta": "Jaribu Onyesho la Wavuti",
         "statusNote": "Inapatikana sasa kwenye Google Play.",
-        "iconAlt": "Aikoni ya Mwalimu wa Rangi 2"
+        "iconAlt": "ikoni ya Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Programu ya ujumbe wa siri",
         "tagline": "Unda ujumbe wa siri kama mgeni ambao unahitaji ufunguo wa kushiriki ili kusimbua.",
         "description": "Unda sheria zako za lugha ya galactic. Watu walio na ufunguo wako wa kushiriki pekee ndio wanaoweza kuunda upya sheria sawa, na maandishi asilia hayajapakiwa kwenye seva.",
@@ -7009,39 +7063,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Unda Ujumbe wa Siri",
         "detailCta": "Jaribu Onyesho la Wavuti",
         "statusNote": "Inapatikana sasa kwenye Google Play.",
-        "iconAlt": "Aikoni ya galacticode"
+        "iconAlt": "ikoni ya Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Piga simu UFO",
-        "category": "Programu ya kufurahisha sana",
-        "tagline": "Uzoefu wa ajabu wa kupiga simu kwa UFO kwa kujifurahisha.",
-        "description": "Bonyeza kitufe, sikia ishara, na uwazie kitu kikisikiliza kutoka angani.",
+        "name": "UFO Signal Simulator",
+        "category": "Programu ya burudani ya ishara ya siri",
+        "tagline": "Tuma ishara ya kucheza nafasi na ufurahie hali ya UFO.",
+        "description": "Fungua programu, bonyeza kitufe cha mawimbi, na ufurahie sauti na uhuishaji unaofanya wakati huu kuhisi kama tambiko ndogo ya UFO.",
         "highlights": [
-          "Kitufe cha kuingiliana",
+          "Kitufe cha ishara",
           "Sauti za siri",
-          "Uhuishaji",
+          "Uhuishaji wa hisia",
           "Hakuna kujiandikisha"
         ],
-        "primaryCta": "Piga simu UFO",
-        "detailCta": "Jaribu Onyesho la Wavuti",
-        "statusNote": "Inapatikana sasa kwenye Google Play.",
-        "iconAlt": "Piga ikoni ya UFO"
+        "primaryCta": "Sakinisha UFO Signal Simulator",
+        "detailCta": "Tazama Maelezo ya Programu",
+        "statusNote": "Tazama maelezo ya programu, kisha uisakinishe kutoka Google Play.",
+        "iconAlt": "ikoni ya UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mwalimu wa rangi",
-        "category": "Classic rangi puzzle",
-        "tagline": "Changamoto asili ya kulenga rangi: pata jibu kati ya rangi zinazofanana.",
-        "description": "Toleo asili kabla ya Color Master 2. Ijaribu kwenye wavuti kwanza, kisha uisakinishe kutoka Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Mchezo wa kawaida wa hisia za rangi",
+        "tagline": "Changamoto asili ya kulenga rangi: kumbuka rangi ya jibu na uchague kutoka kwa rangi zinazofanana.",
+        "description": "Jaribio la asili la kuhisi rangi kabla ya Find Odd Color: Color Master 2. Ijaribu kwenye wavuti kwanza, kisha isakinishe kutoka Google Play.",
         "highlights": [
           "Hisia asili",
           "Mtazamo wa rangi",
           "Mchezo wa haraka",
           "Sakinisha sasa"
         ],
-        "primaryCta": "Sakinisha Mwalimu wa Rangi",
+        "primaryCta": "Sakinisha Jaribio la Kuhisi Rangi",
         "detailCta": "Jaribu Onyesho la Wavuti",
         "statusNote": "Ijaribu kwenye wavuti kwanza, kisha isakinishe kutoka Google Play.",
-        "iconAlt": "Aikoni ya Mwalimu wa Rangi"
+        "iconAlt": "ikoni ya Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Ulinzi wa Kikorea bila mpangilio: Kuzingirwa",
@@ -7076,10 +7130,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Aikoni ya Kadi ya Bahati Nasibu ya Ulinzi"
       },
       "darkMaze": {
-        "name": "Lab Panya Maze Escape: Dark Maze",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Mchezo uliotolewa wa kutoroka wa maze",
         "tagline": "Mwongoze panya wa maabara kupitia msururu wa giza na utafute njia ya kutoka.",
-        "description": "Ilizinduliwa kwenye Google Play mnamo Mei 28, 2026. Sogeza kwenye eneo lenye giza, tumia vipengee na utoroke kabla njia haijafungwa.",
+        "description": "Ilizinduliwa kwenye Google Play mnamo Mei 28, 2026. Sogeza kwenye msururu wa giza, tumia vipengee na utoroke kabla njia haijafungwa.",
         "highlights": [
           "Ilizinduliwa Mei 28, 2026",
           "Maze kutoroka",
@@ -7087,8 +7141,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Uhai wa giza"
         ],
         "primaryCta": "Sakinisha kwenye Google Play",
-        "statusNote": "Sasa inapatikana kwenye Google Play. Hakuna onyesho la wavuti linalotolewa kwa programu hii.",
-        "iconAlt": "Lab Panya Maze Escape: Dark Maze ikoni"
+        "statusNote": "Tazama maelezo ya programu, kisha uisakinishe kutoka Google Play. Hakuna onyesho la wavuti linalotolewa kwa programu hii.",
+        "iconAlt": "ikoni ya Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Tazama Maelezo ya Programu"
       }
     },
     "status": {
@@ -7105,18 +7160,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "MAWAZO MAFUPI",
       "title": "Zijaribu Kama Hivi",
       "colorMaster2": {
-        "app": "Mwalimu wa rangi 2",
-        "title": "\"Ukiona tofauti hii ya rangi, macho yako ni makali.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Ukiona rangi hii isiyo ya kawaida, macho yako ni makali.\"",
         "description": "Shindana na marafiki katika shindano la sekunde 10."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Tuma rafiki yako ujumbe wa kigeni ambao hawawezi kuutambua.\"",
         "description": "Acha ujumbe wa siri ambao ni wamiliki wa ufunguo wa kushiriki pekee wanaweza kusimbua."
       },
       "ufoSignal": {
-        "app": "Piga simu UFO",
-        "title": "\"Ni nini hufanyika ikiwa utabonyeza kitufe cha UFO alfajiri?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Ni nini kitatokea ikiwa utatuma ishara ya UFO alfajiri?\"",
         "description": "Furahia sauti na uhuishaji katika chumba chenye giza."
       }
     },
@@ -7133,7 +7188,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Je, ni lazima nisakinishe programu gani kwanza?",
-        "answer": "Ikiwa hii ni ziara yako ya kwanza, jaribu Rangi Master 2 kwanza. Ni haraka kucheza na rahisi kucheza tena ili kupata alama bora."
+        "answer": "Ikiwa hii ni ziara yako ya kwanza, jaribu Find Odd Color: Color Master 2 kwanza. Ni haraka kucheza na rahisi kucheza tena ili kupata alama bora."
       },
       "privateTest": {
         "question": "Je, ninawezaje kujiunga na programu za majaribio ya faragha?",
@@ -7144,12 +7199,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Imetengenezwa na NeoKIM",
       "lastUpdated": "Ilisasishwa mwisho: 2026.05.31",
       "googlePlay": "Programu za Google Play",
-      "colorTest": "Mtihani wa Rangi",
-      "alienText": "Jenereta ya maandishi ya mgeni",
-      "ufoApp": "Programu ya UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Sera ya Faragha",
       "appAds": "app-ads.txt",
-      "contact": "Wasiliana"
+      "contact": "Wasiliana",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Usajili wa Kibinafsi wa Kijaribu",
@@ -7170,9 +7226,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sv-SE": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-appar",
-      "description": "Installera Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze och privata tester för Lucky Card Random Defense och fler Android-miniappar.",
+      "description": "Installera Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze och privata tester för fler Android-miniappar.",
       "ogTitle": "NeoKIM App Lab | Android Mini-appar",
-      "ogDescription": "Färgutmaningar, utomjordingarliknande hemliga meddelanden, UFO-anropsupplevelser, Lab Rat Maze Escape: Dark Maze och privata tester för snabbt Android-kul."
+      "ogDescription": "Hitta udda färger, skapa hemlig text i utomjordisk stil, skicka lekfulla UFO-signaler, fly mörka labyrinter och gå med i privata tester för snabbt Android-kul."
     },
     "skip": {
       "apps": "Hoppa till applistan"
@@ -7207,11 +7263,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini appsamling",
       "title": "NeoKIM App Lab",
       "subtitle": "Små Android-appar gjorda för snabb nöje och delning",
-      "description": "Färgutmaningar, utomjordingarliknande hemliga meddelanden och UFO-anropsupplevelser. Installera lätt. Njut på under en minut.",
+      "description": "Utmaningar i udda färger, hemliga meddelanden i utomjordisk stil, UFO-signalspel och mörka labyrintflykter. Installera lätt. Njut på under en minut.",
       "primaryCta": "Installera utvald app",
-      "primaryAria": "Installera Color Master 2 på Google Play",
+      "primaryAria": "Installera Find Odd Color: Color Master 2 på Google Play",
       "secondaryCta": "Bläddra bland appar",
-      "visualAria": "Telefonmockup med Color Master 2-ikon och färgplattor",
+      "visualAria": "Telefonmockup med Find Odd Color: Color Master 2-ikon och färgplattor",
       "badges": [
         "Gratis appar",
         "Android",
@@ -7223,36 +7279,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "UTVALGAD APP",
       "title": "Installera detta först idag",
       "badge": "Utvalda",
-      "appName": "Färgmästare 2",
-      "short": "Hitta den andra färgen på 10 sekunder.",
-      "description": "Ett färgpussel i ett liv där ett misstag avslutar körningen. Det börjar snabbt och drar dig sedan tillbaka för att slå ditt rekord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Hitta en annan färg på 10 sekunder.",
+      "description": "Ett pussel med udda färger i ett liv där ett misstag avslutar körningen. Det börjar snabbt och drar dig sedan tillbaka för att slå ditt rekord.",
       "primaryCta": "Installera på Google Play",
-      "primaryAria": "Installera Color Master 2 på Google Play",
+      "primaryAria": "Installera Find Odd Color: Color Master 2 på Google Play",
       "secondaryCta": "Bläddra bland appar",
-      "visualAria": "Color Master 2 färg kakel utmaning telefon mockup"
+      "visualAria": "Find Odd Color: Color Master 2 kakelutmaning telefonmockup"
     },
     "apps": {
       "kicker": "APPKATALOG",
       "title": "Alla appar",
       "description": "Installera offentliga appar direkt. För privata tester, maila en förfrågan först; efter att testare har lagts till, använd knappen Gå med i testet.",
       "colorMaster2": {
-        "name": "Färgmästare 2",
-        "category": "Färgpussel",
-        "tagline": "Hitta den andra färgen på 10 sekunder.",
-        "description": "Ett misstag avslutar körningen. En kort, beroendeframkallande utmaning för färguppfattning.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Pusselspel med udda färger",
+        "tagline": "Hitta en annan färg på 10 sekunder.",
+        "description": "Ett misstag avslutar körningen. En kort, beroendeframkallande utmaning i udda färger för fokus och färguppfattning.",
         "highlights": [
           "10 sekunders gräns",
           "Ett livslopp",
           "Leaderboard",
           "Färgblind hjälpmedel"
         ],
-        "primaryCta": "Installera Color Master 2",
+        "primaryCta": "Installera Hitta udda färg",
         "detailCta": "Prova webbdemo",
         "statusNote": "Tillgänglig nu på Google Play.",
-        "iconAlt": "Color Master 2 ikon"
+        "iconAlt": "Find Odd Color: Color Master 2-ikonen"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "App för hemliga meddelanden",
         "tagline": "Skapa utomjordiska hemliga meddelanden som behöver en delningsnyckel för att avkoda.",
         "description": "Skapa dina egna galaktiska språkregler. Endast personer med din delningsnyckel kan återskapa samma regler, och originaltexten laddas inte upp till en server.",
@@ -7265,39 +7321,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Skapa hemliga meddelanden",
         "detailCta": "Prova webbdemo",
         "statusNote": "Tillgänglig nu på Google Play.",
-        "iconAlt": "Galacticode-ikonen"
+        "iconAlt": "Alien Text Maker: Galaxy Code-ikon"
       },
       "ufoSignal": {
-        "name": "Ring UFO",
-        "category": "Uppslukande rolig app",
-        "tagline": "En mystisk UFO-anropsupplevelse för skojs skull.",
-        "description": "Tryck på knappen, hör signalen och föreställ dig att något lyssnar från rymden.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal underhållning app",
+        "tagline": "Skicka en lekfull rymdsignal och njut av UFO-stämningen.",
+        "description": "Öppna appen, tryck på signalknappen och njut av ljud och animation som får ögonblicket att kännas som en liten UFO-ritual.",
         "highlights": [
-          "Interaktiv knapp",
+          "Signalknapp",
           "Mystiska låter",
-          "Animation",
+          "Stämningsanimation",
           "Ingen anmälan"
         ],
-        "primaryCta": "Ring UFO",
-        "detailCta": "Prova webbdemo",
-        "statusNote": "Tillgänglig nu på Google Play.",
-        "iconAlt": "Ring UFO-ikonen"
+        "primaryCta": "Installera UFO Signal Simulator",
+        "detailCta": "Visa appdetaljer",
+        "statusNote": "Se appinformationen och installera den sedan från Google Play.",
+        "iconAlt": "UFO Signal Simulator-ikonen"
       },
       "colorMasterClassic": {
-        "name": "Färgmästare",
-        "category": "Klassiskt färgpussel",
-        "tagline": "Den ursprungliga färgfokusutmaningen: hitta svaret bland liknande färger.",
-        "description": "Originalversionen före Color Master 2. Prova den på webben först och installera den sedan från Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassiskt färgsinnespel",
+        "tagline": "Den ursprungliga färgfokusutmaningen: kom ihåg svarsfärgen och välj den från liknande färger.",
+        "description": "Det ursprungliga färgavkänningstestet före Find Odd Color: Color Master 2. Prova det på webben först och installera det sedan från Google Play.",
         "highlights": [
           "Originalkänsla",
           "Färgfokus",
           "Snabbt spel",
           "Installera nu"
         ],
-        "primaryCta": "Installera Color Master",
+        "primaryCta": "Installera Color Sense Test",
         "detailCta": "Prova webbdemo",
-        "statusNote": "Prova det på webben först och installera det sedan från Google Play.",
-        "iconAlt": "Färg Master ikon"
+        "statusNote": "Testa det på webben först och installera det sedan från Google Play.",
+        "iconAlt": "Color Sense Test: Color Master-ikonen"
       },
       "koreanRandomDefense": {
         "name": "Koreanska Random Defense: Siege",
@@ -7335,7 +7391,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Släppt maze escape-spel",
         "tagline": "Led en labbråtta genom den mörka labyrinten och hitta utgången.",
-        "description": "Släpptes på Google Play den 28 maj 2026. Gå genom den mörka labyrinten, använd föremål och fly innan stigen sluter sig.",
+        "description": "Släppt på Google Play den 28 maj 2026. Flytta dig genom den mörka labyrinten, använd föremål och fly innan stigen sluter sig.",
         "highlights": [
           "Släppt 28 maj 2026",
           "Labyrint flykt",
@@ -7343,8 +7399,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mörk överlevnad"
         ],
         "primaryCta": "Installera på Google Play",
-        "statusNote": "Nu tillgänglig på Google Play. Ingen webbdemo tillhandahålls för denna app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikon"
+        "statusNote": "Se appinformationen och installera den sedan från Google Play. Ingen webbdemo tillhandahålls för denna app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikonen",
+        "detailCta": "Visa appdetaljer"
       }
     },
     "status": {
@@ -7361,18 +7418,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KORTA IDÉER",
       "title": "Prova dem så här",
       "colorMaster2": {
-        "app": "Färgmästare 2",
-        "title": "\"Om du ser den här färgskillnaden är dina ögon skarpa.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Om du ser den här udda färgen är dina ögon skarpa.\"",
         "description": "Tävla med vänner i en 10 sekunder lång utmaning."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Skicka ett utomjordiskt meddelande till din vän som de inte kan avkoda.\"",
         "description": "Lämna hemliga meddelanden som endast aktieägare kan avkoda."
       },
       "ufoSignal": {
-        "app": "Ring UFO",
-        "title": "\"Vad händer om du trycker på UFO-knappen i gryningen?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Vad händer om du skickar en UFO-signal i gryningen?\"",
         "description": "Njut av ljuden och animationen i ett mörkt rum."
       }
     },
@@ -7389,7 +7446,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Vilken app ska jag installera först?",
-        "answer": "Om detta är ditt första besök, prova Color Master 2 först. Det är snabbt att spela och lätt att spela om för ett bättre resultat."
+        "answer": "Om detta är ditt första besök, prova Find Odd Color: Color Master 2 först. Det är snabbt att spela och lätt att spela om för ett bättre resultat."
       },
       "privateTest": {
         "question": "Hur går jag med i privata testappar?",
@@ -7400,12 +7457,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Tillverkad av NeoKIM",
       "lastUpdated": "Senast uppdaterad: 2026.05.31",
       "googlePlay": "Google Play-appar",
-      "colorTest": "Färgtest",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO-app",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Sekretesspolicy",
       "appAds": "app-ads.txt",
-      "contact": "Kontakta"
+      "contact": "Kontakta",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registrering för privat testare",
@@ -7426,9 +7484,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-419": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze y pruebas privadas para Lucky Card Random Defense y más miniaplicaciones de Android.",
+      "description": "Instale Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze y pruebas privadas para obtener más miniaplicaciones Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
-      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis, Lab Rat Maze Escape: Dark Maze y pruebas privadas para una rápida diversión en Android."
+      "ogDescription": "Encuentra colores extraños, crea textos secretos de estilo alienígena, envía divertidas señales de ovnis, escapa de laberintos oscuros y únete a pruebas privadas para divertirte rápidamente con Android."
     },
     "skip": {
       "apps": "Saltar a la lista de aplicaciones"
@@ -7463,11 +7521,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Mini colección de aplicaciones Android",
       "title": "Laboratorio de aplicaciones NeoKIM",
       "subtitle": "Pequeñas aplicaciones de Android creadas para divertirse y compartir rápidamente",
-      "description": "Desafíos de color, mensajes secretos extraterrestres y experiencias de llamadas de ovnis. Instalar ligeramente. Disfrútalo en menos de un minuto.",
+      "description": "Desafíos de colores extraños, mensajes secretos de estilo alienígena, juego de señales de ovnis y escapes de laberintos oscuros. Instalar ligeramente. Disfrútalo en menos de un minuto.",
       "primaryCta": "Instalar aplicación destacada",
-      "primaryAria": "Instalar Color Master 2 en Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicaciones",
-      "visualAria": "Maqueta de teléfono con icono de Color Master 2 y mosaicos de colores",
+      "visualAria": "Maqueta de teléfono con ícono Find Odd Color: Color Master 2 y mosaicos de colores",
       "badges": [
         "Aplicaciones gratuitas",
         "Android",
@@ -7479,36 +7537,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICACIÓN DESTACADA",
       "title": "Instale esto primero hoy",
       "badge": "Destacado",
-      "appName": "Maestro de colores 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Encuentra el color diferente en 10 segundos.",
-      "description": "Un rompecabezas de colores de una sola vida donde un error pone fin a la carrera. Comienza rápido y luego te sigue empujando hacia atrás para batir tu récord.",
+      "description": "Un rompecabezas de colores extraños de una sola vida donde un error pone fin a la carrera. Comienza rápido y luego te sigue empujando hacia atrás para batir tu récord.",
       "primaryCta": "Instalar en Google Play",
-      "primaryAria": "Instalar Color Master 2 en Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicaciones",
-      "visualAria": "Maqueta de teléfono del desafío de mosaicos de colores Color Master 2"
+      "visualAria": "Maqueta de teléfono de desafío de mosaicos Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÁLOGO DE APLICACIONES",
       "title": "Todas las aplicaciones",
       "description": "Instale aplicaciones públicas directamente. Para pruebas privadas, envíe primero una solicitud por correo electrónico; Después de agregar el acceso del probador, use el botón Unirse a la prueba.",
       "colorMaster2": {
-        "name": "Maestro de colores 2",
-        "category": "rompecabezas de colores",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Juego de rompecabezas de colores extraños",
         "tagline": "Encuentra el color diferente en 10 segundos.",
-        "description": "Un error pone fin a la carrera. Un desafío breve y adictivo de percepción del color.",
+        "description": "Un error pone fin a la carrera. Un desafío breve y adictivo de colores extraños para el enfoque y la percepción del color.",
         "highlights": [
           "límite de 10 segundos",
           "carrera de una sola vida",
           "Tabla de clasificación",
           "Ayuda para daltónicos"
         ],
-        "primaryCta": "Instalar Color Master 2",
+        "primaryCta": "Instalar Buscar color extraño",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono de Color Master 2"
+        "iconAlt": "Icono Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "galácticodo",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicación de mensajes secretos",
         "tagline": "Crea mensajes secretos extraterrestres que necesitan una clave compartida para decodificarlos.",
         "description": "Crea tus propias reglas del lenguaje galáctico. Sólo las personas con su clave compartida pueden recrear las mismas reglas y el texto original no se carga en un servidor.",
@@ -7521,39 +7579,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crear mensajes secretos",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono galáctico"
+        "iconAlt": "Icono Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Llama al OVNI",
-        "category": "Aplicación divertida e inmersiva",
-        "tagline": "Una misteriosa experiencia de llamadas de OVNIs por diversión.",
-        "description": "Presione el botón, escuche la señal e imagine algo escuchando desde el espacio.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicación de entretenimiento de señal misteriosa.",
+        "tagline": "Envía una señal espacial divertida y disfruta del ambiente ovni.",
+        "description": "Abre la aplicación, presiona el botón de señal y disfruta del sonido y la animación que hacen que el momento parezca un pequeño ritual ovni.",
         "highlights": [
-          "Botón interactivo",
+          "Botón de señal",
           "sonidos misteriosos",
-          "Animación",
+          "Animación de humor",
           "Sin registro"
         ],
-        "primaryCta": "Llama al OVNI",
-        "detailCta": "Pruebe la demostración web",
-        "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Llama al icono OVNI"
+        "primaryCta": "Instalar UFO Signal Simulator",
+        "detailCta": "Ver detalles de la aplicación",
+        "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play.",
+        "iconAlt": "Icono UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maestro del color",
-        "category": "Rompecabezas de colores clásicos",
-        "tagline": "El desafío original del enfoque del color: encontrar la respuesta entre colores similares.",
-        "description": "La versión original anterior a Color Master 2. Pruébela primero en la web y luego instálela desde Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Juego clásico de sentido del color",
+        "tagline": "El desafío original de enfoque de color: recuerda el color de la respuesta y selecciónalo entre colores similares.",
+        "description": "La prueba de detección de color original antes de Find Odd Color: Color Master 2. Pruébelo primero en la web y luego instálelo desde Google Play.",
         "highlights": [
           "sensación original",
           "Enfoque de color",
           "juego rapido",
           "Instalar ahora"
         ],
-        "primaryCta": "Instalar color maestro",
+        "primaryCta": "Instalar la prueba de percepción del color",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Pruébelo primero en la web y luego instálelo desde Google Play.",
-        "iconAlt": "Icono de color maestro"
+        "iconAlt": "Icono Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana: asedio",
@@ -7588,7 +7646,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono de defensa aleatoria de cartas de la suerte"
       },
       "darkMaze": {
-        "name": "Escape del laberinto de ratas de laboratorio: Laberinto oscuro",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Lanzamiento del juego de escape del laberinto.",
         "tagline": "Guía a una rata de laboratorio a través del oscuro laberinto y encuentra la salida.",
         "description": "Lanzado en Google Play el 28 de mayo de 2026. Muévete por el oscuro laberinto, usa elementos y escapa antes de que el camino se cierre.",
@@ -7599,8 +7657,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Supervivencia oscura"
         ],
         "primaryCta": "Instalar en Google Play",
-        "statusNote": "Ahora disponible en Google Play. No se proporciona ninguna demostración web para esta aplicación.",
-        "iconAlt": "Lab Rat Maze Escape: Icono de Laberinto Oscuro"
+        "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play. No se proporciona ninguna demostración web para esta aplicación.",
+        "iconAlt": "Icono Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Ver detalles de la aplicación"
       }
     },
     "status": {
@@ -7617,18 +7676,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEAS CORTAS",
       "title": "Pruébalos así",
       "colorMaster2": {
-        "app": "Maestro de colores 2",
-        "title": "\"Si ves esta diferencia de color, tus ojos son agudos\".",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Si ves este color extraño, tus ojos son agudos\".",
         "description": "Compite con amigos en un desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "galácticodo",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envía a tu amigo un mensaje extraterrestre que no pueda descifrar\".",
         "description": "Deje mensajes secretos que sólo los poseedores de claves compartidas puedan descifrar."
       },
       "ufoSignal": {
-        "app": "Llama al OVNI",
-        "title": "“¿Qué pasa si presionas el botón OVNI al amanecer?”",
+        "app": "UFO Signal Simulator",
+        "title": "“¿Qué pasa si envías una señal OVNI al amanecer?”",
         "description": "Disfruta de los sonidos y la animación en una habitación oscura."
       }
     },
@@ -7645,7 +7704,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "¿Qué aplicación debo instalar primero?",
-        "answer": "Si esta es su primera visita, pruebe primero Color Master 2. Es rápido de jugar y fácil de repetir para obtener una mejor puntuación."
+        "answer": "Si esta es tu primera visita, prueba Find Odd Color: Color Master 2 primero. Es rápido de jugar y fácil de repetir para obtener una mejor puntuación."
       },
       "privateTest": {
         "question": "¿Cómo me uno a aplicaciones de prueba privadas?",
@@ -7656,12 +7715,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Hecho por NeoKIM",
       "lastUpdated": "Última actualización: 2026.05.31",
       "googlePlay": "Aplicaciones Google Play",
-      "colorTest": "Prueba de color",
-      "alienText": "Generador de texto alienígena",
-      "ufoApp": "Aplicación OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de privacidad",
       "appAds": "zxappadsx",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registro de probador privado",
@@ -7682,9 +7742,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-US": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze y pruebas privadas para Lucky Card Random Defense y más miniaplicaciones de Android.",
+      "description": "Instale Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze y pruebas privadas para obtener más miniaplicaciones Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
-      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis, Lab Rat Maze Escape: Dark Maze y pruebas privadas para una rápida diversión en Android."
+      "ogDescription": "Encuentra colores extraños, crea textos secretos de estilo alienígena, envía divertidas señales de ovnis, escapa de laberintos oscuros y únete a pruebas privadas para divertirte rápidamente con Android."
     },
     "skip": {
       "apps": "Saltar a la lista de aplicaciones"
@@ -7719,11 +7779,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Mini colección de aplicaciones Android",
       "title": "Laboratorio de aplicaciones NeoKIM",
       "subtitle": "Pequeñas aplicaciones de Android creadas para divertirse y compartir rápidamente",
-      "description": "Desafíos de color, mensajes secretos extraterrestres y experiencias de llamadas de ovnis. Instalar ligeramente. Disfrútalo en menos de un minuto.",
+      "description": "Desafíos de colores extraños, mensajes secretos de estilo alienígena, juego de señales de ovnis y escapes de laberintos oscuros. Instalar ligeramente. Disfrútalo en menos de un minuto.",
       "primaryCta": "Instalar aplicación destacada",
-      "primaryAria": "Instalar Color Master 2 en Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicaciones",
-      "visualAria": "Maqueta de teléfono con icono de Color Master 2 y mosaicos de colores",
+      "visualAria": "Maqueta de teléfono con ícono Find Odd Color: Color Master 2 y mosaicos de colores",
       "badges": [
         "Aplicaciones gratuitas",
         "Android",
@@ -7735,36 +7795,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICACIÓN DESTACADA",
       "title": "Instale esto primero hoy",
       "badge": "Destacado",
-      "appName": "Maestro de colores 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Encuentra el color diferente en 10 segundos.",
-      "description": "Un rompecabezas de colores de una sola vida donde un error pone fin a la carrera. Comienza rápido y luego te sigue empujando hacia atrás para batir tu récord.",
+      "description": "Un rompecabezas de colores extraños de una sola vida donde un error pone fin a la carrera. Comienza rápido y luego te sigue empujando hacia atrás para batir tu récord.",
       "primaryCta": "Instalar en Google Play",
-      "primaryAria": "Instalar Color Master 2 en Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicaciones",
-      "visualAria": "Maqueta de teléfono del desafío de mosaicos de colores Color Master 2"
+      "visualAria": "Maqueta de teléfono de desafío de mosaicos Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÁLOGO DE APLICACIONES",
       "title": "Todas las aplicaciones",
       "description": "Instale aplicaciones públicas directamente. Para pruebas privadas, envíe primero una solicitud por correo electrónico; Después de agregar el acceso del probador, use el botón Unirse a la prueba.",
       "colorMaster2": {
-        "name": "Maestro de colores 2",
-        "category": "rompecabezas de colores",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Juego de rompecabezas de colores extraños",
         "tagline": "Encuentra el color diferente en 10 segundos.",
-        "description": "Un error pone fin a la carrera. Un desafío breve y adictivo de percepción del color.",
+        "description": "Un error pone fin a la carrera. Un desafío breve y adictivo de colores extraños para el enfoque y la percepción del color.",
         "highlights": [
           "límite de 10 segundos",
           "carrera de una sola vida",
           "Tabla de clasificación",
           "Ayuda para daltónicos"
         ],
-        "primaryCta": "Instalar Color Master 2",
+        "primaryCta": "Instalar Buscar color extraño",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono de Color Master 2"
+        "iconAlt": "Icono Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "galácticodo",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicación de mensajes secretos",
         "tagline": "Crea mensajes secretos extraterrestres que necesitan una clave compartida para decodificarlos.",
         "description": "Crea tus propias reglas del lenguaje galáctico. Sólo las personas con su clave compartida pueden recrear las mismas reglas y el texto original no se carga en un servidor.",
@@ -7777,39 +7837,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crear mensajes secretos",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono galáctico"
+        "iconAlt": "Icono Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Llama al OVNI",
-        "category": "Aplicación divertida e inmersiva",
-        "tagline": "Una misteriosa experiencia de llamadas de OVNIs por diversión.",
-        "description": "Presione el botón, escuche la señal e imagine algo escuchando desde el espacio.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicación de entretenimiento de señal misteriosa.",
+        "tagline": "Envía una señal espacial divertida y disfruta del ambiente ovni.",
+        "description": "Abre la aplicación, presiona el botón de señal y disfruta del sonido y la animación que hacen que el momento parezca un pequeño ritual ovni.",
         "highlights": [
-          "Botón interactivo",
+          "Botón de señal",
           "sonidos misteriosos",
-          "Animación",
+          "Animación de humor",
           "Sin registro"
         ],
-        "primaryCta": "Llama al OVNI",
-        "detailCta": "Pruebe la demostración web",
-        "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Llama al icono OVNI"
+        "primaryCta": "Instalar UFO Signal Simulator",
+        "detailCta": "Ver detalles de la aplicación",
+        "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play.",
+        "iconAlt": "Icono UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maestro del color",
-        "category": "Rompecabezas de colores clásicos",
-        "tagline": "El desafío original del enfoque del color: encontrar la respuesta entre colores similares.",
-        "description": "La versión original anterior a Color Master 2. Pruébela primero en la web y luego instálela desde Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Juego clásico de sentido del color",
+        "tagline": "El desafío original de enfoque de color: recuerda el color de la respuesta y selecciónalo entre colores similares.",
+        "description": "La prueba de detección de color original antes de Find Odd Color: Color Master 2. Pruébelo primero en la web y luego instálelo desde Google Play.",
         "highlights": [
           "sensación original",
           "Enfoque de color",
           "juego rapido",
           "Instalar ahora"
         ],
-        "primaryCta": "Instalar color maestro",
+        "primaryCta": "Instalar la prueba de percepción del color",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Pruébelo primero en la web y luego instálelo desde Google Play.",
-        "iconAlt": "Icono de color maestro"
+        "iconAlt": "Icono Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana: asedio",
@@ -7844,7 +7904,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono de defensa aleatoria de cartas de la suerte"
       },
       "darkMaze": {
-        "name": "Escape del laberinto de ratas de laboratorio: Laberinto oscuro",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Lanzamiento del juego de escape del laberinto.",
         "tagline": "Guía a una rata de laboratorio a través del oscuro laberinto y encuentra la salida.",
         "description": "Lanzado en Google Play el 28 de mayo de 2026. Muévete por el oscuro laberinto, usa elementos y escapa antes de que el camino se cierre.",
@@ -7855,8 +7915,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Supervivencia oscura"
         ],
         "primaryCta": "Instalar en Google Play",
-        "statusNote": "Ahora disponible en Google Play. No se proporciona ninguna demostración web para esta aplicación.",
-        "iconAlt": "Lab Rat Maze Escape: Icono de Laberinto Oscuro"
+        "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play. No se proporciona ninguna demostración web para esta aplicación.",
+        "iconAlt": "Icono Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Ver detalles de la aplicación"
       }
     },
     "status": {
@@ -7873,18 +7934,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEAS CORTAS",
       "title": "Pruébalos así",
       "colorMaster2": {
-        "app": "Maestro de colores 2",
-        "title": "\"Si ves esta diferencia de color, tus ojos son agudos\".",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Si ves este color extraño, tus ojos son agudos\".",
         "description": "Compite con amigos en un desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "galácticodo",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envía a tu amigo un mensaje extraterrestre que no pueda descifrar\".",
         "description": "Deje mensajes secretos que sólo los poseedores de claves compartidas puedan descifrar."
       },
       "ufoSignal": {
-        "app": "Llama al OVNI",
-        "title": "“¿Qué pasa si presionas el botón OVNI al amanecer?”",
+        "app": "UFO Signal Simulator",
+        "title": "“¿Qué pasa si envías una señal OVNI al amanecer?”",
         "description": "Disfruta de los sonidos y la animación en una habitación oscura."
       }
     },
@@ -7901,7 +7962,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "¿Qué aplicación debo instalar primero?",
-        "answer": "Si esta es su primera visita, pruebe primero Color Master 2. Es rápido de jugar y fácil de repetir para obtener una mejor puntuación."
+        "answer": "Si esta es tu primera visita, prueba Find Odd Color: Color Master 2 primero. Es rápido de jugar y fácil de repetir para obtener una mejor puntuación."
       },
       "privateTest": {
         "question": "¿Cómo me uno a aplicaciones de prueba privadas?",
@@ -7912,12 +7973,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Hecho por NeoKIM",
       "lastUpdated": "Última actualización: 2026.05.31",
       "googlePlay": "Aplicaciones Google Play",
-      "colorTest": "Prueba de color",
-      "alienText": "Generador de texto alienígena",
-      "ufoApp": "Aplicación OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de privacidad",
       "appAds": "zxappadsx",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registro de probador privado",
@@ -7938,9 +8000,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "es-ES": {
     "seo": {
       "title": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android gratuitas",
-      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze y pruebas privadas para Lucky Card Random Defense y más miniaplicaciones de Android.",
+      "description": "Instale Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze y pruebas privadas para obtener más miniaplicaciones Android.",
       "ogTitle": "Laboratorio de aplicaciones NeoKIM | Mini aplicaciones Android",
-      "ogDescription": "Desafíos de color, mensajes secretos extraterrestres, experiencias de llamadas de ovnis, Lab Rat Maze Escape: Dark Maze y pruebas privadas para una rápida diversión en Android."
+      "ogDescription": "Encuentra colores extraños, crea textos secretos de estilo alienígena, envía divertidas señales de ovnis, escapa de laberintos oscuros y únete a pruebas privadas para divertirte rápidamente con Android."
     },
     "skip": {
       "apps": "Saltar a la lista de aplicaciones"
@@ -7975,11 +8037,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Mini colección de aplicaciones Android",
       "title": "Laboratorio de aplicaciones NeoKIM",
       "subtitle": "Pequeñas aplicaciones de Android creadas para divertirse y compartir rápidamente",
-      "description": "Desafíos de color, mensajes secretos extraterrestres y experiencias de llamadas de ovnis. Instalar ligeramente. Disfrútalo en menos de un minuto.",
+      "description": "Desafíos de colores extraños, mensajes secretos de estilo alienígena, juego de señales de ovnis y escapes de laberintos oscuros. Instalar ligeramente. Disfrútalo en menos de un minuto.",
       "primaryCta": "Instalar aplicación destacada",
-      "primaryAria": "Instalar Color Master 2 en Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicaciones",
-      "visualAria": "Maqueta de teléfono con icono de Color Master 2 y mosaicos de colores",
+      "visualAria": "Maqueta de teléfono con ícono Find Odd Color: Color Master 2 y mosaicos de colores",
       "badges": [
         "Aplicaciones gratuitas",
         "Android",
@@ -7991,36 +8053,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICACIÓN DESTACADA",
       "title": "Instale esto primero hoy",
       "badge": "Destacado",
-      "appName": "Maestro de colores 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Encuentra el color diferente en 10 segundos.",
-      "description": "Un rompecabezas de colores de una sola vida donde un error pone fin a la carrera. Comienza rápido y luego te sigue empujando hacia atrás para batir tu récord.",
+      "description": "Un rompecabezas de colores extraños de una sola vida donde un error pone fin a la carrera. Comienza rápido y luego te sigue empujando hacia atrás para batir tu récord.",
       "primaryCta": "Instalar en Google Play",
-      "primaryAria": "Instalar Color Master 2 en Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 en Google Play",
       "secondaryCta": "Explorar aplicaciones",
-      "visualAria": "Maqueta de teléfono del desafío de mosaicos de colores Color Master 2"
+      "visualAria": "Maqueta de teléfono de desafío de mosaicos Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÁLOGO DE APLICACIONES",
       "title": "Todas las aplicaciones",
       "description": "Instale aplicaciones públicas directamente. Para pruebas privadas, envíe primero una solicitud por correo electrónico; Después de agregar el acceso del probador, use el botón Unirse a la prueba.",
       "colorMaster2": {
-        "name": "Maestro de colores 2",
-        "category": "rompecabezas de colores",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Juego de rompecabezas de colores extraños",
         "tagline": "Encuentra el color diferente en 10 segundos.",
-        "description": "Un error pone fin a la carrera. Un desafío breve y adictivo de percepción del color.",
+        "description": "Un error pone fin a la carrera. Un desafío breve y adictivo de colores extraños para el enfoque y la percepción del color.",
         "highlights": [
           "límite de 10 segundos",
           "carrera de una sola vida",
           "Tabla de clasificación",
           "Ayuda para daltónicos"
         ],
-        "primaryCta": "Instalar Color Master 2",
+        "primaryCta": "Instalar Buscar color extraño",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono de Color Master 2"
+        "iconAlt": "Icono Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "galácticodo",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicación de mensajes secretos",
         "tagline": "Crea mensajes secretos extraterrestres que necesitan una clave compartida para decodificarlos.",
         "description": "Crea tus propias reglas del lenguaje galáctico. Sólo las personas con su clave compartida pueden recrear las mismas reglas y el texto original no se carga en un servidor.",
@@ -8033,39 +8095,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Crear mensajes secretos",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Icono galáctico"
+        "iconAlt": "Icono Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Llama al OVNI",
-        "category": "Aplicación divertida e inmersiva",
-        "tagline": "Una misteriosa experiencia de llamadas de OVNIs por diversión.",
-        "description": "Presione el botón, escuche la señal e imagine algo escuchando desde el espacio.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicación de entretenimiento de señal misteriosa.",
+        "tagline": "Envía una señal espacial divertida y disfruta del ambiente ovni.",
+        "description": "Abre la aplicación, presiona el botón de señal y disfruta del sonido y la animación que hacen que el momento parezca un pequeño ritual ovni.",
         "highlights": [
-          "Botón interactivo",
+          "Botón de señal",
           "sonidos misteriosos",
-          "Animación",
+          "Animación de humor",
           "Sin registro"
         ],
-        "primaryCta": "Llama al OVNI",
-        "detailCta": "Pruebe la demostración web",
-        "statusNote": "Disponible ahora en Google Play.",
-        "iconAlt": "Llama al icono OVNI"
+        "primaryCta": "Instalar UFO Signal Simulator",
+        "detailCta": "Ver detalles de la aplicación",
+        "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play.",
+        "iconAlt": "Icono UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maestro del color",
-        "category": "Rompecabezas de colores clásicos",
-        "tagline": "El desafío original del enfoque del color: encontrar la respuesta entre colores similares.",
-        "description": "La versión original anterior a Color Master 2. Pruébela primero en la web y luego instálela desde Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Juego clásico de sentido del color",
+        "tagline": "El desafío original de enfoque de color: recuerda el color de la respuesta y selecciónalo entre colores similares.",
+        "description": "La prueba de detección de color original antes de Find Odd Color: Color Master 2. Pruébelo primero en la web y luego instálelo desde Google Play.",
         "highlights": [
           "sensación original",
           "Enfoque de color",
           "juego rapido",
           "Instalar ahora"
         ],
-        "primaryCta": "Instalar color maestro",
+        "primaryCta": "Instalar la prueba de percepción del color",
         "detailCta": "Pruebe la demostración web",
         "statusNote": "Pruébelo primero en la web y luego instálelo desde Google Play.",
-        "iconAlt": "Icono de color maestro"
+        "iconAlt": "Icono Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatoria coreana: asedio",
@@ -8100,7 +8162,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icono de defensa aleatoria de cartas de la suerte"
       },
       "darkMaze": {
-        "name": "Escape del laberinto de ratas de laboratorio: Laberinto oscuro",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Lanzamiento del juego de escape del laberinto.",
         "tagline": "Guía a una rata de laboratorio a través del oscuro laberinto y encuentra la salida.",
         "description": "Lanzado en Google Play el 28 de mayo de 2026. Muévete por el oscuro laberinto, usa elementos y escapa antes de que el camino se cierre.",
@@ -8111,8 +8173,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Supervivencia oscura"
         ],
         "primaryCta": "Instalar en Google Play",
-        "statusNote": "Ahora disponible en Google Play. No se proporciona ninguna demostración web para esta aplicación.",
-        "iconAlt": "Lab Rat Maze Escape: Icono de Laberinto Oscuro"
+        "statusNote": "Vea los detalles de la aplicación y luego instálela desde Google Play. No se proporciona ninguna demostración web para esta aplicación.",
+        "iconAlt": "Icono Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Ver detalles de la aplicación"
       }
     },
     "status": {
@@ -8129,18 +8192,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEAS CORTAS",
       "title": "Pruébalos así",
       "colorMaster2": {
-        "app": "Maestro de colores 2",
-        "title": "\"Si ves esta diferencia de color, tus ojos son agudos\".",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Si ves este color extraño, tus ojos son agudos\".",
         "description": "Compite con amigos en un desafío de 10 segundos."
       },
       "galaxyCode": {
-        "app": "galácticodo",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envía a tu amigo un mensaje extraterrestre que no pueda descifrar\".",
         "description": "Deje mensajes secretos que sólo los poseedores de claves compartidas puedan descifrar."
       },
       "ufoSignal": {
-        "app": "Llama al OVNI",
-        "title": "“¿Qué pasa si presionas el botón OVNI al amanecer?”",
+        "app": "UFO Signal Simulator",
+        "title": "“¿Qué pasa si envías una señal OVNI al amanecer?”",
         "description": "Disfruta de los sonidos y la animación en una habitación oscura."
       }
     },
@@ -8157,7 +8220,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "¿Qué aplicación debo instalar primero?",
-        "answer": "Si esta es su primera visita, pruebe primero Color Master 2. Es rápido de jugar y fácil de repetir para obtener una mejor puntuación."
+        "answer": "Si esta es tu primera visita, prueba Find Odd Color: Color Master 2 primero. Es rápido de jugar y fácil de repetir para obtener una mejor puntuación."
       },
       "privateTest": {
         "question": "¿Cómo me uno a aplicaciones de prueba privadas?",
@@ -8168,12 +8231,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Hecho por NeoKIM",
       "lastUpdated": "Última actualización: 2026.05.31",
       "googlePlay": "Aplicaciones Google Play",
-      "colorTest": "Prueba de color",
-      "alienText": "Generador de texto alienígena",
-      "ufoApp": "Aplicación OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de privacidad",
       "appAds": "zxappadsx",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registro de probador privado",
@@ -8194,9 +8258,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sk": {
     "seo": {
       "title": "NeoKIM App Lab | Bezplatné miniaplikácie Android",
-      "description": "Nainštalujte si Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze a súkromné ​​testy pre Lucky Card Random Defense a ďalšie mini aplikácie pre Android.",
+      "description": "Nainštalujte si Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze a súkromné ​​testy pre ďalšie mini aplikácie Android.",
       "ogTitle": "NeoKIM App Lab | Miniaplikácie Android",
-      "ogDescription": "Farebné výzvy, tajné správy ako mimozemšťania, zážitky z volania UFO, Lab Rat Maze Escape: Dark Maze a súkromné testy pre rýchlu zábavu s Androidom."
+      "ogDescription": "Nájdite zvláštne farby, vytvorte tajný text v mimozemskom štýle, pošlite hravé signály UFO, uniknite z temných bludísk a zapojte sa do súkromných testov pre rýchlu zábavu Android."
     },
     "skip": {
       "apps": "Preskočiť na zoznam aplikácií"
@@ -8231,11 +8295,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Zbierka miniaplikácií Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Malé aplikácie Android vytvorené pre rýchlu zábavu a zdieľanie",
-      "description": "Farebné výzvy, mimozemské tajné správy a skúsenosti s volaním UFO. Nainštalujte zľahka. Užite si to za menej ako minútu.",
+      "description": "Výzvy so zvláštnymi farbami, tajné správy v mimozemskom štýle, hra so signálom UFO a úniky z temného bludiska. Nainštalujte zľahka. Užite si to za menej ako minútu.",
       "primaryCta": "Nainštalujte odporúčanú aplikáciu",
-      "primaryAria": "Nainštalujte Color Master 2 na Google Play",
+      "primaryAria": "Nainštalujte Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Prehľadávať aplikácie",
-      "visualAria": "Maketa telefónu s ikonou Color Master 2 a farebnými dlaždicami",
+      "visualAria": "Maketa telefónu s ikonou Find Odd Color: Color Master 2 a farebnými dlaždicami",
       "badges": [
         "Bezplatné aplikácie",
         "Android",
@@ -8247,81 +8311,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "VYBRANÁ APLIKÁCIA",
       "title": "Nainštalujte si tento prvý ešte dnes",
       "badge": "Odporúčané",
-      "appName": "Majster farieb 2",
-      "short": "Nájdite inú farbu za 10 sekúnd.",
-      "description": "Farebná skladačka na jeden život, kde jedna chyba končí beh. Začína to rýchlo, potom vás ťahá späť, aby ste prekonali svoj rekord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Nájdite jednu inú farbu za 10 sekúnd.",
+      "description": "Jednoživotná hádanka v nepárnej farbe, kde jedna chyba končí beh. Začína to rýchlo, potom vás ťahá späť, aby ste prekonali svoj rekord.",
       "primaryCta": "Inštalovať na Google Play",
-      "primaryAria": "Nainštalujte Color Master 2 na Google Play",
+      "primaryAria": "Nainštalujte Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Prehľadávať aplikácie",
-      "visualAria": "Color Master 2 farebné dlaždice výzva telefón maketa"
+      "visualAria": "Maketa telefónu s výzvou na dlaždice Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALÓG APLIKÁCIÍ",
       "title": "Všetky aplikácie",
       "description": "Nainštalujte verejné aplikácie priamo. V prípade súkromných testov najskôr odošlite žiadosť e-mailom; po pridaní prístupu k testerovi použite tlačidlo Pripojiť sa k testu.",
       "colorMaster2": {
-        "name": "Majster farieb 2",
-        "category": "Farebné puzzle",
-        "tagline": "Nájdite inú farbu za 10 sekúnd.",
-        "description": "Jedna chyba končí beh. Krátka, návyková výzva na vnímanie farieb.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Logická hra nepárnych farieb",
+        "tagline": "Nájdite jednu inú farbu za 10 sekúnd.",
+        "description": "Jedna chyba končí beh. Krátka, návyková výzva na sústredenie a vnímanie farieb.",
         "highlights": [
           "10-sekundový limit",
           "Beh na jeden život",
           "Rebríček",
           "Pomôcka pre farboslepých"
         ],
-        "primaryCta": "Nainštalujte Color Master 2",
+        "primaryCta": "Nainštalujte funkciu Nájsť nepárnu farbu",
         "detailCta": "Vyskúšajte Web Demo",
         "statusNote": "Teraz k dispozícii na Google Play.",
-        "iconAlt": "Ikona Color Master 2"
+        "iconAlt": "Ikona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galaktikód",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikácia tajných správ",
         "tagline": "Vytvárajte tajné správy podobné mimozemšťanom, ktoré potrebujú na dekódovanie zdieľaný kľúč.",
         "description": "Vytvorte si vlastné galaktické jazykové pravidlá. Rovnaké pravidlá môžu znova vytvoriť iba ľudia s vaším zdieľaným kľúčom a pôvodný text sa neodovzdá na server.",
         "highlights": [
           "Na základe zdieľaného kľúča",
           "Osobné pravidlá",
-          "Pripravené pre SNS",
+          "SNS-pripravený",
           "Žiadne nahrávanie na server"
         ],
         "primaryCta": "Vytvárajte tajné správy",
         "detailCta": "Vyskúšajte Web Demo",
         "statusNote": "Teraz k dispozícii na Google Play.",
-        "iconAlt": "Ikona galaktického kódu"
+        "iconAlt": "Ikona Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Zavolajte UFO",
-        "category": "Pohlcujúca zábavná aplikácia",
-        "tagline": "Záhadný zážitok z volania UFO pre zábavu.",
-        "description": "Stlačte tlačidlo, počujte signál a predstavte si, že niečo počúva z vesmíru.",
+        "name": "UFO Signal Simulator",
+        "category": "Zábavná aplikácia Mystery Sign",
+        "tagline": "Pošlite hravý vesmírny signál a vychutnajte si UFO náladu.",
+        "description": "Otvorte aplikáciu, stlačte signálne tlačidlo a vychutnajte si zvuk a animáciu, vďaka ktorej bude tento moment vyzerať ako malý rituál UFO.",
         "highlights": [
-          "Interaktívne tlačidlo",
+          "Signálne tlačidlo",
           "Tajomné zvuky",
-          "Animácia",
+          "Animácia nálady",
           "Žiadna registrácia"
         ],
-        "primaryCta": "Zavolajte UFO",
-        "detailCta": "Vyskúšajte Web Demo",
-        "statusNote": "Teraz k dispozícii na Google Play.",
-        "iconAlt": "Zavolajte ikonu UFO"
+        "primaryCta": "Nainštalujte UFO Signal Simulator",
+        "detailCta": "Zobraziť podrobnosti aplikácie",
+        "statusNote": "Pozrite si podrobnosti o aplikácii a potom ju nainštalujte z Google Play.",
+        "iconAlt": "Ikona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Majster farieb",
-        "category": "Klasické farebné puzzle",
-        "tagline": "Originálna výzva zameraná na farby: nájdite odpoveď medzi podobnými farbami.",
-        "description": "Pôvodná verzia pred Color Master 2. Najprv ju vyskúšajte na webe a potom si ju nainštalujte zo Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasická hra na vnímanie farieb",
+        "tagline": "Originálna výzva zameraná na farbu: zapamätajte si farbu odpovede a vyberte ju z podobných farieb.",
+        "description": "Pôvodný test vnímania farieb pred Find Odd Color: Color Master 2. Najprv si to vyskúšajte na webe a potom si ho nainštalujte z Google Play.",
         "highlights": [
           "Originálny pocit",
           "Farebné zameranie",
           "Rýchla hra",
           "Nainštalujte teraz"
         ],
-        "primaryCta": "Nainštalujte Color Master",
+        "primaryCta": "Nainštalujte Test citlivosti farieb",
         "detailCta": "Vyskúšajte Web Demo",
-        "statusNote": "Najprv si to vyskúšajte na webe a potom si ho nainštalujte zo Google Play.",
-        "iconAlt": "Ikona predlohy farieb"
+        "statusNote": "Najprv si to vyskúšajte na webe a potom si ho nainštalujte z Google Play.",
+        "iconAlt": "Ikona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Kórejská náhodná obrana: obliehanie",
@@ -8359,7 +8423,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Vydaná úniková hra z bludiska",
         "tagline": "Veďte laboratórnu krysu cez temné bludisko a nájdite východ.",
-        "description": "Vydané v službe Google Play 28. mája 2026. Pohybujte sa temným bludiskom, používajte predmety a utečte skôr, ako sa cesta uzavrie.",
+        "description": "Vydané na Google Play 28. mája 2026. Prechádzajte sa temným bludiskom, používajte predmety a utečte skôr, ako sa cesta uzavrie.",
         "highlights": [
           "Vydané 28. mája 2026",
           "Bludisko útek",
@@ -8367,8 +8431,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Temné prežitie"
         ],
         "primaryCta": "Nainštalujte na Google Play",
-        "statusNote": "Teraz k dispozícii na Google Play. Pre túto aplikáciu nie je k dispozícii žiadna webová ukážka.",
-        "iconAlt": "Lab Rat Maze Escape: Ikona Dark Maze"
+        "statusNote": "Pozrite si podrobnosti o aplikácii a potom ju nainštalujte z Google Play. Pre túto aplikáciu nie je k dispozícii žiadna webová ukážka.",
+        "iconAlt": "Ikona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Zobraziť podrobnosti aplikácie"
       }
     },
     "status": {
@@ -8385,18 +8450,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KRÁTKE NÁPADY",
       "title": "Skúste ich takto",
       "colorMaster2": {
-        "app": "Majster farieb 2",
-        "title": "\"Ak vidíte tento farebný rozdiel, vaše oči sú ostré.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Ak zbadáte túto zvláštnu farbu, vaše oči sú ostré.\"",
         "description": "Súťažte s priateľmi v 10-sekundovej výzve."
       },
       "galaxyCode": {
-        "app": "Galaktikód",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Pošlite svojmu priateľovi mimozemskú správu, ktorú nedokážu dekódovať.\"",
         "description": "Nechajte tajné správy, ktoré môžu dekódovať iba držitelia zdieľaných kľúčov."
       },
       "ufoSignal": {
-        "app": "Zavolajte UFO",
-        "title": "\"Čo sa stane, ak za úsvitu stlačíte tlačidlo UFO?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Čo sa stane, ak vyšlete signál UFO za úsvitu?\"",
         "description": "Vychutnajte si zvuky a animácie v tmavej miestnosti."
       }
     },
@@ -8413,7 +8478,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Ktorú aplikáciu si mám nainštalovať ako prvú?",
-        "answer": "Ak je to vaša prvá návšteva, vyskúšajte najskôr Color Master 2. Hrá sa rýchlo a ľahko sa prehráva pre lepšie skóre."
+        "answer": "Ak je toto vaša prvá návšteva, vyskúšajte najskôr Find Odd Color: Color Master 2. Hrá sa rýchlo a ľahko sa prehráva pre lepšie skóre."
       },
       "privateTest": {
         "question": "Ako sa pripojím k súkromným testovacím aplikáciám?",
@@ -8424,12 +8489,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Vyrobené spoločnosťou NeoKIM",
       "lastUpdated": "Posledná aktualizácia: 31.05.2026",
       "googlePlay": "Aplikácie Google Play",
-      "colorTest": "Farebný test",
-      "alienText": "Mimozemský textový generátor",
-      "ufoApp": "Aplikácia UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Zásady ochrany osobných údajov",
       "appAds": "app-ads.txt",
-      "contact": "Kontaktovať"
+      "contact": "Kontaktovať",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registrácia súkromného testera",
@@ -8450,9 +8516,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sl": {
     "seo": {
       "title": "NeoKIM App Lab | Brezplačne mini aplikacije Android",
-      "description": "Namestite Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze in zasebne teste za Lucky Card Random Defense in več mini aplikacij za Android.",
+      "description": "Namestite Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze in zasebne preizkuse za več mini aplikacij Android.",
       "ogTitle": "NeoKIM App Lab | Mini aplikacije Android",
-      "ogDescription": "Barvni izzivi, skrivna sporočila, podobna nezemljanom, izkušnje klicanja NLP-jev, pobeg iz Lab Rat Maze Escape: Dark Maze in zasebni testi za hitro zabavo Android."
+      "ogDescription": "Poiščite nenavadne barve, ustvarite skrivno besedilo v slogu nezemljanov, pošljite igrive NLP signale, pobegnite temnim labirintom in se pridružite zasebnim preizkusom za hitro Android zabavo."
     },
     "skip": {
       "apps": "Preskoči na seznam aplikacij"
@@ -8487,11 +8553,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Zbirka mini aplikacij Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Majhne aplikacije Android za hitro zabavo in skupno rabo",
-      "description": "Barvni izzivi, skrivna sporočila, podobna nezemljanom, in izkušnje klicev NLP. Namestite rahlo. Uživajte v manj kot minuti.",
+      "description": "Izzivi nenavadnih barv, skrivna sporočila v slogu nezemljanov, igra signala NLP in pobegi iz temnega labirinta. Namestite rahlo. Uživajte v manj kot minuti.",
       "primaryCta": "Namestite predstavljeno aplikacijo",
-      "primaryAria": "Namestite Color Master 2 na Google Play",
+      "primaryAria": "Namestite Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Brskanje po aplikacijah",
-      "visualAria": "Model telefona z ikono Color Master 2 in barvnimi ploščicami",
+      "visualAria": "Maketa telefona z ikono Find Odd Color: Color Master 2 in barvnimi ploščicami",
       "badges": [
         "Brezplačne aplikacije",
         "Android",
@@ -8503,81 +8569,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "PREDSTAVLJENA APLIKACIJA",
       "title": "Namestite to najprej danes",
       "badge": "Predstavljeno",
-      "appName": "Barvni mojster 2",
-      "short": "Poiščite drugo barvo v 10 sekundah.",
-      "description": "Barvna uganka za eno življenje, kjer ena napaka konča tek. Začne se hitro, nato pa vas kar naprej vleče nazaj, da premagate svoj rekord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Poišči eno drugo barvo v 10 sekundah.",
+      "description": "Uganka čudnih barv za eno življenje, kjer ena napaka konča tek. Začne se hitro, nato pa vas kar naprej vleče nazaj, da premagate svoj rekord.",
       "primaryCta": "Namestite na Google Play",
-      "primaryAria": "Namestite Color Master 2 na Google Play",
+      "primaryAria": "Namestite Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Brskanje po aplikacijah",
-      "visualAria": "Color Master 2 izziv barvne ploščice maketa telefona"
+      "visualAria": "Find Odd Color: Color Master 2 model izziva za ploščice telefona"
     },
     "apps": {
       "kicker": "KATALOG APLIKACIJ",
       "title": "Vse aplikacije",
       "description": "Neposredno namestite javne aplikacije. Za zasebne teste najprej pošljite zahtevo po e-pošti; ko je dodan dostop preizkuševalca, uporabite gumb Pridružite se preizkusu.",
       "colorMaster2": {
-        "name": "Barvni mojster 2",
-        "category": "Barvna uganka",
-        "tagline": "Poiščite drugo barvo v 10 sekundah.",
-        "description": "Ena napaka konča tek. Kratek, zasvojljiv izziv zaznavanja barv.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Uganka čudnih barv",
+        "tagline": "Poišči eno drugo barvo v 10 sekundah.",
+        "description": "Ena napaka konča tek. Kratek, zasvojljiv izziv z nenavadnimi barvami za osredotočenost in zaznavanje barv.",
         "highlights": [
           "10-sekundna omejitev",
           "Tek za eno življenje",
           "Lestvica najboljših",
           "Pomoč za daltoniste"
         ],
-        "primaryCta": "Namestite Color Master 2",
+        "primaryCta": "Namestite Find Odd Color",
         "detailCta": "Preizkusite spletno predstavitev",
         "statusNote": "Zdaj na voljo na Google Play.",
-        "iconAlt": "Ikona Color Master 2"
+        "iconAlt": "Ikona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikacija za tajna sporočila",
         "tagline": "Ustvarite skrivna sporočila, podobna nezemljanom, ki za dekodiranje potrebujejo ključ za skupno rabo.",
         "description": "Ustvarite svoja galaktična jezikovna pravila. Samo ljudje z vašim ključem za skupno rabo lahko znova ustvarijo ista pravila, izvirno besedilo pa se ne naloži na strežnik.",
         "highlights": [
           "Temelji na delniškem ključu",
           "Osebna pravila",
-          "SNS-pripravljeno",
+          "Pripravljen na SNS",
           "Brez nalaganja na strežnik"
         ],
         "primaryCta": "Ustvarite skrivna sporočila",
         "detailCta": "Preizkusite spletno predstavitev",
         "statusNote": "Zdaj na voljo na Google Play.",
-        "iconAlt": "Ikona Galacticode"
+        "iconAlt": "Ikona Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Pokličite NLP",
-        "category": "Poglobljena zabavna aplikacija",
-        "tagline": "Skrivnostna izkušnja klicanja NLP-jev za zabavo.",
-        "description": "Pritisnite gumb, zaslišite signal in si predstavljajte, da nekaj posluša iz vesolja.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplikacija za zabavo Mystery Signal",
+        "tagline": "Pošljite igriv vesoljski signal in uživajte v razpoloženju NLP.",
+        "description": "Odprite aplikacijo, pritisnite gumb za signal in uživajte v zvoku in animaciji, zaradi katerih se trenutek počuti kot majhen ritual NLP-ja.",
         "highlights": [
-          "Interaktivni gumb",
+          "Signalni gumb",
           "Skrivnostni zvoki",
-          "Animacija",
+          "Animacija razpoloženja",
           "Brez prijave"
         ],
-        "primaryCta": "Pokličite NLP",
-        "detailCta": "Preizkusite spletno predstavitev",
-        "statusNote": "Zdaj na voljo na Google Play.",
-        "iconAlt": "Pokličite ikono UFO"
+        "primaryCta": "Namestite UFO Signal Simulator",
+        "detailCta": "Oglejte si podrobnosti aplikacije",
+        "statusNote": "Oglejte si podrobnosti aplikacije in jo nato namestite iz Google Play.",
+        "iconAlt": "Ikona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Barvni mojster",
-        "category": "Klasična barvna uganka",
-        "tagline": "Izvirni izziv barvnega ostrenja: poiščite odgovor med podobnimi barvami.",
-        "description": "Prvotna različica pred Color Master 2. Najprej jo preizkusite na spletu, nato pa jo namestite iz Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasična igra zaznavanja barv",
+        "tagline": "Izvirni izziv osredotočanja na barvo: zapomnite si barvo odgovora in jo izberite med podobnimi barvami.",
+        "description": "Izvirni barvni preizkus pred Find Odd Color: Color Master 2. Najprej ga preizkusite v spletu, nato pa ga namestite iz Google Play.",
         "highlights": [
           "Izvirni občutek",
           "Barvni fokus",
           "Hitra igra",
           "Namestite zdaj"
         ],
-        "primaryCta": "Namestite Color Master",
+        "primaryCta": "Namestite Color Sense Test",
         "detailCta": "Preizkusite spletno predstavitev",
         "statusNote": "Najprej ga preizkusite v spletu, nato pa ga namestite iz Google Play.",
-        "iconAlt": "Ikona Color Master"
+        "iconAlt": "Ikona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Korejska naključna obramba: obleganje",
@@ -8612,19 +8678,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona naključne obrambe Lucky Card"
       },
       "darkMaze": {
-        "name": "Lab Lab Rat Maze Escape: Dark Maze",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Izdana igra pobeg iz labirinta",
         "tagline": "Vodite laboratorijsko podgano skozi temni labirint in poiščite izhod.",
-        "description": "Izdano v Googlu Play 28. maja 2026. Premaknite se skozi temni labirint, uporabite predmete in pobegnite, preden se pot zapre.",
+        "description": "Izdano na Google Play 28. maja 2026. Premaknite se skozi temen labirint, uporabite predmete in pobegnite, preden se pot zapre.",
         "highlights": [
           "Izdano 28. maja 2026",
           "Pobeg iz labirinta",
           "Predmeti",
           "Temno preživetje"
         ],
-        "primaryCta": "Namestite v Google Play",
-        "statusNote": "Zdaj na voljo v Googlu Play. Za to aplikacijo ni na voljo nobena spletna predstavitev.",
-        "iconAlt": "Lab Rat Maze Escape: ikona temnega labirinta"
+        "primaryCta": "Namestite na Google Play",
+        "statusNote": "Oglejte si podrobnosti aplikacije in jo nato namestite iz Google Play. Za to aplikacijo ni na voljo nobena spletna predstavitev.",
+        "iconAlt": "Ikona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Oglejte si podrobnosti aplikacije"
       }
     },
     "status": {
@@ -8641,18 +8708,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEJE ZA KRATKE HLAČE",
       "title": "Poskusite jih tako",
       "colorMaster2": {
-        "app": "Barvni mojster 2",
-        "title": "\"Če vidite to barvno razliko, so vaše oči ostre.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Če opazite to čudno barvo, so vaše oči ostre.\"",
         "description": "Tekmujte s prijatelji v 10-sekundnem izzivu."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Pošljite svojemu prijatelju sporočilo nezemljana, ki ga ne morejo dekodirati.\"",
         "description": "Pustite skrivna sporočila, ki jih lahko dekodirajo samo lastniki delniških ključev."
       },
       "ufoSignal": {
-        "app": "Pokličite NLP",
-        "title": "\"Kaj se zgodi, če ob zori pritisnete gumb UFO?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Kaj se zgodi, če ob zori pošljete signal NLP?\"",
         "description": "Uživajte v zvokih in animaciji v temni sobi."
       }
     },
@@ -8669,7 +8736,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Katero aplikacijo naj najprej namestim?",
-        "answer": "Če je to vaš prvi obisk, najprej preizkusite Color Master 2. Je hiter za igranje in enostaven za ponovno predvajanje za boljši rezultat."
+        "answer": "Če je to vaš prvi obisk, najprej preizkusite Find Odd Color: Color Master 2. Je hiter za igranje in enostaven za ponovno predvajanje za boljši rezultat."
       },
       "privateTest": {
         "question": "Kako se pridružim zasebnim testnim aplikacijam?",
@@ -8680,12 +8747,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Izdelal NeoKIM",
       "lastUpdated": "Zadnja posodobitev: 31.5.2026",
       "googlePlay": "Aplikacije Google Play",
-      "colorTest": "Barvni test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "Aplikacija UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Politika zasebnosti",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Prijava zasebnega preizkuševalca",
@@ -8706,9 +8774,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "si-LK": {
     "seo": {
       "title": "NeoKIM යෙදුම් විද්‍යාගාරය | නොමිලේ Android කුඩා යෙදුම්",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, සහ Lucky Card Random Defense සහ තවත් Android කුඩා යෙදුම් සඳහා පුද්ගලික පරීක්ෂණ ස්ථාපනය කරන්න.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, සහ තවත් Android කුඩා යෙදුම් සඳහා පුද්ගලික පරීක්ෂණ ස්ථාපනය කරන්න.",
       "ogTitle": "NeoKIM යෙදුම් විද්‍යාගාරය | Android කුඩා යෙදුම්",
-      "ogDescription": "වර්ණ අභියෝග, පිටසක්වල වැනි රහස් පණිවිඩ, UFO ඇමතුම් අත්දැකීම්, Lab Rat Maze Escape: Dark Maze, සහ ඉක්මන් Android විනෝදය සඳහා පුද්ගලික පරීක්ෂණ."
+      "ogDescription": "අමුතු වර්ණ සොයන්න, පිටසක්වල පන්නයේ රහස් පෙළ සාදන්න, සෙල්ලක්කාර UFO සංඥා යවන්න, අඳුරු වංකගිරියෙන් බේරෙන්න, සහ ඉක්මන් Android විනෝදය සඳහා පුද්ගලික පරීක්ෂණවලට සම්බන්ධ වන්න."
     },
     "skip": {
       "apps": "යෙදුම් ලැයිස්තුවට යන්න"
@@ -8743,11 +8811,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android කුඩා යෙදුම් එකතුව",
       "title": "NeoKIM යෙදුම් රසායනාගාරය",
       "subtitle": "ඉක්මන් විනෝදය සහ බෙදාගැනීම සඳහා සාදන ලද කුඩා Android යෙදුම්",
-      "description": "වර්ණ අභියෝග, පිටසක්වල වැනි රහස් පණිවිඩ, සහ UFO ඇමතුම් අත්දැකීම්. සැහැල්ලුවෙන් ස්ථාපනය කරන්න. විනාඩියකට අඩු කාලයකින් විනෝද වන්න.",
+      "description": "අමුතු වර්ණ අභියෝග, පිටසක්වල පන්නයේ රහස් පණිවිඩ, UFO සංඥා වාදනය, සහ අඳුරු වංකගිරි ගැලවී යාම. සැහැල්ලුවෙන් ස්ථාපනය කරන්න. විනාඩියකට අඩු කාලයකින් විනෝද වන්න.",
       "primaryCta": "විශේෂාංග යෙදුම ස්ථාපනය කරන්න",
-      "primaryAria": "Google Play හි වර්ණ මාස්ටර් 2 ස්ථාපනය කරන්න",
+      "primaryAria": "Google Play මත Find Odd Color: Color Master 2 ස්ථාපනය කරන්න",
       "secondaryCta": "යෙදුම් බ්‍රවුස් කරන්න",
-      "visualAria": "Color Master 2 නිරූපකය සහ වර්ණ ටයිල් සමග දුරකථන mockup",
+      "visualAria": "Find Odd Color: Color Master 2 නිරූපකය සහ වර්ණ ටයිල් සහිත දුරකථන මොක්අප්",
       "badges": [
         "නොමිලේ යෙදුම්",
         "Android",
@@ -8759,36 +8827,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "විශේෂාංගගත යෙදුම",
       "title": "මෙය මුලින්ම අදම ස්ථාපනය කරන්න",
       "badge": "විශේෂාංගගත",
-      "appName": "වර්ණ මාස්ටර් 2",
-      "short": "තත්පර 10 කින් වෙනස් වර්ණය සොයා ගන්න.",
-      "description": "එක් අත්වැරදීමකින් දිවීම අවසන් වන එක්-ජීවිත වර්ණ ප්‍රහේලිකාවකි. එය වේගයෙන් ආරම්භ වන අතර, පසුව ඔබේ වාර්තාව පරාජය කිරීමට ඔබව පසුපසට ඇද දමයි.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "තත්පර 10 කින් වෙනස් වර්ණයක් සොයා ගන්න.",
+      "description": "එක් අත්වැරදීමකින් දිවීම අවසන් වන එක්-ජීවිතයේ ඔත්තේ-වර්ණ ප්‍රහේලිකාවකි. එය වේගයෙන් ආරම්භ වන අතර, පසුව ඔබේ වාර්තාව පරාජය කිරීමට ඔබව පසුපසට ඇද දමයි.",
       "primaryCta": "Google Play මත ස්ථාපනය කරන්න",
-      "primaryAria": "Google Play හි වර්ණ මාස්ටර් 2 ස්ථාපනය කරන්න",
+      "primaryAria": "Google Play මත Find Odd Color: Color Master 2 ස්ථාපනය කරන්න",
       "secondaryCta": "යෙදුම් බ්‍රවුස් කරන්න",
-      "visualAria": "Color Master 2 වර්ණ ටයිල් අභියෝග දුරකථන mockup"
+      "visualAria": "Find Odd Color: Color Master 2 ටයිල් අභියෝග දුරකථන මොක්අප්"
     },
     "apps": {
       "kicker": "යෙදුම් නාමාවලිය",
       "title": "සියලුම යෙදුම්",
       "description": "පොදු යෙදුම් සෘජුවම ස්ථාපනය කරන්න. පුද්ගලික පරීක්ෂණ සඳහා, පළමුව ඉල්ලීමක් ඊමේල් කරන්න; පරීක්ෂක ප්‍රවේශය එක් කළ පසු, Join Test බොත්තම භාවිතා කරන්න.",
       "colorMaster2": {
-        "name": "වර්ණ මාස්ටර් 2",
-        "category": "වර්ණ ප්රහේලිකාව",
-        "tagline": "තත්පර 10 කින් වෙනස් වර්ණය සොයා ගන්න.",
-        "description": "එක් වැරැද්දක් ධාවනය අවසන් කරයි. කෙටි, ඇබ්බැහි වර්ණ සංජානන අභියෝගයක්.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ඔත්තේ වර්ණ ප්‍රහේලිකා ක්‍රීඩාව",
+        "tagline": "තත්පර 10 කින් වෙනස් වර්ණයක් සොයා ගන්න.",
+        "description": "එක් වැරැද්දක් ධාවනය අවසන් කරයි. අවධානය සහ වර්ණ සංජානනය සඳහා කෙටි, ඇබ්බැහි වූ අමුතු වර්ණ අභියෝගයක්.",
         "highlights": [
           "තත්පර 10 සීමාව",
           "එක්-ජීවිත ධාවනය",
           "ප්රමුඛ පුවරුව",
           "වර්ණ අන්ධ ආධාර"
         ],
-        "primaryCta": "වර්ණ මාස්ටර් 2 ස්ථාපනය කරන්න",
+        "primaryCta": "Find Odd Color ස්ථාපනය කරන්න",
         "detailCta": "Web Demo උත්සාහ කරන්න",
         "statusNote": "Google Play හි දැන් තිබේ.",
-        "iconAlt": "වර්ණ මාස්ටර් 2 නිරූපකය"
+        "iconAlt": "Find Odd Color: Color Master 2 නිරූපකය"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "රහස් පණිවිඩ යෙදුම",
         "tagline": "විකේතනය කිරීමට කොටස් යතුරක් අවශ්‍ය පිටසක්වල වැනි රහස් පණිවිඩ සාදන්න.",
         "description": "ඔබේම මන්දාකිණි භාෂා රීති සාදන්න. ඔබේ බෙදාගැනීමේ යතුර ඇති පුද්ගලයින්ට පමණක් එකම රීති නැවත නිර්මාණය කළ හැකි අතර මුල් පෙළ සේවාදායකයකට උඩුගත නොකෙරේ.",
@@ -8801,39 +8869,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "රහස් පණිවිඩ සාදන්න",
         "detailCta": "Web Demo උත්සාහ කරන්න",
         "statusNote": "Google Play හි දැන් තිබේ.",
-        "iconAlt": "Galacticode නිරූපකය"
+        "iconAlt": "Alien Text Maker: Galaxy Code නිරූපකය"
       },
       "ufoSignal": {
-        "name": "UFO අමතන්න",
-        "category": "ගිලී විනෝදජනක යෙදුම",
-        "tagline": "විනෝදය සඳහා අභිරහස් UFO ඇමතුම් අත්දැකීමක්.",
-        "description": "බොත්තම ඔබන්න, සංඥාව අසන්න, සහ අභ්යවකාශයේ සිට සවන් දෙන දෙයක් සිතන්න.",
+        "name": "UFO Signal Simulator",
+        "category": "අභිරහස් සංඥා විනෝදාස්වාද යෙදුම",
+        "tagline": "සෙල්ලක්කාර අභ්‍යවකාශ සංඥාවක් යවා UFO මනෝභාවය භුක්ති විඳින්න.",
+        "description": "යෙදුම විවෘත කරන්න, සංඥා බොත්තම ඔබන්න, සහ මොහොත කුඩා UFO චාරිත්රයක් ලෙස හැඟෙන ශබ්දය සහ සජීවිකරණය භුක්ති විඳින්න.",
         "highlights": [
-          "අන්තර් ක්රියාකාරී බොත්තම",
+          "සංඥා බොත්තම",
           "අභිරහස් ශබ්ද",
-          "සජීවීකරණය",
+          "මනෝ සජීවිකරණය",
           "ලියාපදිංචි වීමක් නැත"
         ],
-        "primaryCta": "UFO අමතන්න",
-        "detailCta": "Web Demo උත්සාහ කරන්න",
-        "statusNote": "Google Play හි දැන් තිබේ.",
-        "iconAlt": "UFO නිරූපකය අමතන්න"
+        "primaryCta": "UFO Signal Simulator ස්ථාපනය කරන්න",
+        "detailCta": "යෙදුම් විස්තර බලන්න",
+        "statusNote": "යෙදුම් විස්තර බලන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න.",
+        "iconAlt": "UFO Signal Simulator නිරූපකය"
       },
       "colorMasterClassic": {
-        "name": "වර්ණ මාස්ටර්",
-        "category": "සම්භාව්ය වර්ණ ප්රහේලිකාව",
-        "tagline": "මුල් වර්ණ නාභිගත අභියෝගය: සමාන වර්ණ අතර පිළිතුර සොයන්න.",
-        "description": "Color Master 2ට පෙර මුල් පිටපත. එය මුලින්ම වෙබයේ උත්සාහ කරන්න, ඉන්පසු Google Play වෙතින් එය ස්ථාපනය කරන්න.",
+        "name": "Color Sense Test: Color Master",
+        "category": "සම්භාව්‍ය වර්ණ සංවේද ක්‍රීඩාව",
+        "tagline": "මුල් වර්ණ නාභිගත අභියෝගය: පිළිතුරු වර්ණය මතක තබා ගෙන එය සමාන වර්ණවලින් තෝරන්න.",
+        "description": "Find Odd Color: Color Master 2 ට පෙර මුල් වර්ණ සංවේද පරීක්ෂණය. එය මුලින්ම වෙබයේ උත්සාහ කරන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න.",
         "highlights": [
           "මුල් හැඟීම",
           "වර්ණ අවධානය",
           "ඉක්මන් සෙල්ලම්",
           "දැන් ස්ථාපනය කරන්න"
         ],
-        "primaryCta": "වර්ණ මාස්ටර් ස්ථාපනය කරන්න",
+        "primaryCta": "වර්ණ සංවේද පරීක්ෂණය ස්ථාපනය කරන්න",
         "detailCta": "Web Demo උත්සාහ කරන්න",
         "statusNote": "එය මුලින්ම වෙබයේ උත්සාහ කරන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න.",
-        "iconAlt": "වර්ණ මාස්ටර් නිරූපකය"
+        "iconAlt": "Color Sense Test: Color Master නිරූපකය"
       },
       "koreanRandomDefense": {
         "name": "කොරියානු අහඹු ආරක්ෂක: වැටලීම",
@@ -8871,16 +8939,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "මුදා හරින ලද වංකගිරි ගැලවීමේ ක්‍රීඩාව",
         "tagline": "අඳුරු වංකගිරිය හරහා රසායනාගාර මීයෙකු මෙහෙයවා පිටවීම සොයා ගන්න.",
-        "description": "2026 මැයි 28 Google Play හි නිකුත් කරන ලදී. අඳුරු වංකගිරිය හරහා ගමන් කරන්න, අයිතම භාවිතා කරන්න, සහ මාර්ගය වැසීමට පෙර පැන යන්න.",
+        "description": "2026 මැයි 28 දින Google Play මත නිකුත් කරන ලදී. අඳුරු වංකගිරිය හරහා ගමන් කරන්න, අයිතම භාවිතා කරන්න, සහ මාර්ගය වැසීමට පෙර පැන යන්න.",
         "highlights": [
           "2026 මැයි 28 නිකුත් කරන ලදී",
           "වංකගිරි ගැලවීම",
           "භාණ්ඩ",
           "අඳුරු පැවැත්ම"
         ],
-        "primaryCta": "Google Play හි ස්ථාපනය කරන්න",
-        "statusNote": "දැන් Google Play හි ඇත. මෙම යෙදුම සඳහා කිසිදු වෙබ් ආදර්ශනයක් සපයා නැත.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze නිරූපකය"
+        "primaryCta": "Google Play මත ස්ථාපනය කරන්න",
+        "statusNote": "යෙදුම් විස්තර බලන්න, පසුව එය Google Play වෙතින් ස්ථාපනය කරන්න. මෙම යෙදුම සඳහා කිසිදු වෙබ් ආදර්ශනයක් සපයා නැත.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze නිරූපකය",
+        "detailCta": "යෙදුම් විස්තර බලන්න"
       }
     },
     "status": {
@@ -8897,18 +8966,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "කෙටි අදහස්",
       "title": "මේ වගේ ඒවා උත්සාහ කරන්න",
       "colorMaster2": {
-        "app": "වර්ණ මාස්ටර් 2",
-        "title": "\"මෙම වර්ණ වෙනස ඔබ දුටුවහොත්, ඔබේ ඇස් තියුණුය.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"මෙම අමුතු වර්ණය ඔබ දුටුවහොත්, ඔබේ ඇස් තියුණුය.\"",
         "description": "තත්පර 10ක අභියෝගයකදී මිතුරන් සමඟ තරඟ කරන්න."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"ඔබේ මිතුරාට විකේතනය කළ නොහැකි පිටසක්වල පණිවිඩයක් යවන්න.\"",
         "description": "කොටස්-යතුරු හිමියන්ට පමණක් විකේතනය කළ හැකි රහස් පණිවිඩ තබන්න."
       },
       "ufoSignal": {
-        "app": "UFO අමතන්න",
-        "title": "\"උදෑසන UFO බොත්තම එබුවොත් මොකද වෙන්නේ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"උදෑසන UFO සංඥාවක් යැවුවහොත් කුමක් සිදුවේද?\"",
         "description": "අඳුරු කාමරයක ශබ්ද සහ සජීවිකරණය භුක්ති විඳින්න."
       }
     },
@@ -8925,7 +8994,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "මම මුලින්ම ස්ථාපනය කළ යුත්තේ කුමන යෙදුමද?",
-        "answer": "මෙය ඔබගේ පළමු පැමිණීම නම්, පළමුව Color Master 2 උත්සාහ කරන්න. එය ක්‍රීඩා කිරීමට ඉක්මන් වන අතර වඩා හොඳ ලකුණු සඳහා නැවත ධාවනය කිරීමට පහසුය."
+        "answer": "මෙය ඔබගේ පළමු පැමිණීම නම්, පළමුව Find Odd Color: Color Master 2 උත්සාහ කරන්න. එය ක්‍රීඩා කිරීමට ඉක්මන් වන අතර වඩා හොඳ ලකුණු සඳහා නැවත ධාවනය කිරීමට පහසුය."
       },
       "privateTest": {
         "question": "මම පුද්ගලික පරීක්ෂණ යෙදුම්වලට සම්බන්ධ වන්නේ කෙසේද?",
@@ -8936,12 +9005,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM විසින් සාදන ලදී",
       "lastUpdated": "අවසන් වරට යාවත්කාලීන කළේ: 2026.05.31",
       "googlePlay": "Google Play යෙදුම්",
-      "colorTest": "වර්ණ පරීක්ෂණය",
-      "alienText": "පිටසක්වල පෙළ උත්පාදක යන්ත්රය",
-      "ufoApp": "UFO යෙදුම",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "රහස්‍යතා ප්‍රතිපත්තිය",
       "appAds": "app-ads.txt",
-      "contact": "අමතන්න"
+      "contact": "අමතන්න",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "පුද්ගලික පරීක්ෂක ලියාපදිංචිය",
@@ -8962,9 +9032,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ar": {
     "seo": {
       "title": "مختبر تطبيقات NeoKIM | تطبيقات Android المصغرة المجانية",
-      "description": "قم بتثبيت Color Master 2 وGalacticode وCall the UFO وLab Rat Maze Escape: Dark Maze والاختبارات الخاصة لـ Lucky Card Random Defense والمزيد من تطبيقات Android المصغرة.",
+      "description": "قم بتثبيت Find Odd Color: Color Master 2 وAlien Text Maker: Galaxy Code وUFO Signal Simulator وColor Sense Test: Color Master وLab Rat Maze Escape: Dark Maze والاختبارات الخاصة لمزيد من تطبيقات Android المصغرة.",
       "ogTitle": "مختبر تطبيقات NeoKIM | تطبيقات Android المصغرة",
-      "ogDescription": "تحديات الألوان، والرسائل السرية الشبيهة بالكائنات الفضائية، وتجارب الاتصال بالأجسام الطائرة المجهولة، وLab Rat Maze Escape: Dark Maze، والاختبارات الخاصة للمتعة السريعة على Android."
+      "ogDescription": "ابحث عن ألوان غريبة، وقم بإنشاء نص سري على الطراز الفضائي، وأرسل إشارات جسم غامض مرحة، واهرب من المتاهات المظلمة، وانضم إلى الاختبارات الخاصة للحصول على متعة Android السريعة."
     },
     "skip": {
       "apps": "انتقل إلى قائمة التطبيقات"
@@ -8999,11 +9069,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "مجموعة تطبيقات Android المصغرة",
       "title": "مختبر تطبيقات NeoKIM",
       "subtitle": "تطبيقات Android الصغيرة مصممة للمتعة والمشاركة السريعة",
-      "description": "تحديات الألوان والرسائل السرية الشبيهة بالكائنات الفضائية وتجارب الاتصال بالأجسام الطائرة المجهولة. تثبيت بخفة. استمتع في أقل من دقيقة.",
+      "description": "تحديات ذات ألوان غريبة، ورسائل سرية على الطراز الفضائي، وتشغيل إشارات الأجسام الطائرة المجهولة، والهروب من المتاهة المظلمة. تثبيت بخفة. استمتع في أقل من دقيقة.",
       "primaryCta": "تثبيت التطبيق المميز",
-      "primaryAria": "قم بتثبيت Color Master 2 على Google Play",
+      "primaryAria": "قم بتثبيت Find Odd Color: Color Master 2 على Google Play",
       "secondaryCta": "تصفح التطبيقات",
-      "visualAria": "نموذج هاتف بالحجم الطبيعي مع أيقونة Color Master 2 ومربعات ملونة",
+      "visualAria": "نموذج هاتف بالحجم الطبيعي مع أيقونة Find Odd Color: Color Master 2 ومربعات ملونة",
       "badges": [
         "تطبيقات مجانية",
         "Android",
@@ -9015,81 +9085,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "التطبيق المميز",
       "title": "قم بتثبيت هذا أولاً اليوم",
       "badge": "مميز",
-      "appName": "سيد الألوان 2",
-      "short": "العثور على لون مختلف في 10 ثانية.",
-      "description": "لغز ملون لحياة واحدة حيث يؤدي خطأ واحد إلى إنهاء السباق. يبدأ الأمر سريعًا، ثم يستمر في إعادتك لتحطيم الرقم القياسي الخاص بك.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "العثور على لون واحد مختلف في 10 ثانية.",
+      "description": "لغز ذو لون غريب لحياة واحدة حيث يؤدي خطأ واحد إلى إنهاء السباق. يبدأ الأمر سريعًا، ثم يستمر في إعادتك لتحطيم الرقم القياسي الخاص بك.",
       "primaryCta": "التثبيت على Google Play",
-      "primaryAria": "قم بتثبيت Color Master 2 على Google Play",
+      "primaryAria": "قم بتثبيت Find Odd Color: Color Master 2 على Google Play",
       "secondaryCta": "تصفح التطبيقات",
-      "visualAria": "نموذج هاتف تحدي البلاط الملون Color Master 2"
+      "visualAria": "نموذج هاتف تحدي البلاط Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "كتالوج التطبيقات",
       "title": "جميع التطبيقات",
       "description": "تثبيت التطبيقات العامة مباشرة. بالنسبة للاختبارات الخاصة، أرسل طلبًا عبر البريد الإلكتروني أولاً؛ بعد إضافة وصول المختبر، استخدم زر الانضمام إلى الاختبار.",
       "colorMaster2": {
-        "name": "سيد الألوان 2",
-        "category": "لغز اللون",
-        "tagline": "العثور على لون مختلف في 10 ثانية.",
-        "description": "خطأ واحد ينهي السباق. تحدي قصير ومسبب للإدمان في إدراك الألوان.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "لعبة ألغاز ذات ألوان غريبة",
+        "tagline": "العثور على لون واحد مختلف في 10 ثانية.",
+        "description": "خطأ واحد ينهي السباق. تحدي قصير ومسبب للإدمان للألوان الفردية للتركيز وإدراك الألوان.",
         "highlights": [
           "حد 10 ثواني",
           "تشغيل حياة واحدة",
           "المتصدرين",
           "مساعدات عمى الألوان"
         ],
-        "primaryCta": "تثبيت كولور ماستر 2",
+        "primaryCta": "تثبيت البحث عن اللون الغريب",
         "detailCta": "حاول عرض الويب",
         "statusNote": "متوفر الآن على Google Play.",
-        "iconAlt": "أيقونة اللون ماستر 2"
+        "iconAlt": "رمز Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "جالاكتيكود",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "تطبيق الرسائل السرية",
         "tagline": "أنشئ رسائل سرية تشبه الكائنات الفضائية وتحتاج إلى مفتاح مشاركة لفك تشفيرها.",
         "description": "قم بإنشاء قواعد اللغة المجرية الخاصة بك. يمكن فقط للأشخاص الذين لديهم مفتاح المشاركة الخاص بك إعادة إنشاء نفس القواعد، ولا يتم تحميل النص الأصلي إلى الخادم.",
         "highlights": [
           "تعتمد على مفتاح المشاركة",
           "القواعد الشخصية",
-          "SNS جاهز",
+          "جاهز لخدمة SNS",
           "لا يوجد تحميل الخادم"
         ],
         "primaryCta": "إنشاء رسائل سرية",
         "detailCta": "حاول عرض الويب",
         "statusNote": "متوفر الآن على Google Play.",
-        "iconAlt": "أيقونة المجرة"
+        "iconAlt": "رمز Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "اتصل بالجسم الغريب",
-        "category": "التطبيق متعة غامرة",
-        "tagline": "تجربة استدعاء جسم غامض غامض من أجل المتعة.",
-        "description": "اضغط على الزر، واسمع الإشارة، وتخيل شيئًا يستمع إليه من الفضاء.",
+        "name": "UFO Signal Simulator",
+        "category": "تطبيق ترفيهي للإشارة الغامضة",
+        "tagline": "أرسل إشارة فضائية مرحة واستمتع بمزاج الجسم الغريب.",
+        "description": "افتح التطبيق، واضغط على زر الإشارة، واستمتع بالصوت والرسوم المتحركة التي تجعل اللحظة تبدو وكأنها طقوس صغيرة لجسم غامض.",
         "highlights": [
-          "الزر التفاعلي",
+          "زر الإشارة",
           "أصوات غامضة",
-          "الرسوم المتحركة",
+          "الرسوم المتحركة المزاجية",
           "لا الاشتراك"
         ],
-        "primaryCta": "اتصل بالجسم الغريب",
-        "detailCta": "حاول عرض الويب",
-        "statusNote": "متوفر الآن على Google Play.",
-        "iconAlt": "اتصل برمز الجسم الغريب"
+        "primaryCta": "قم بتثبيت UFO Signal Simulator",
+        "detailCta": "عرض تفاصيل التطبيق",
+        "statusNote": "اعرض تفاصيل التطبيق، ثم قم بتثبيته من Google Play.",
+        "iconAlt": "رمز UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "سيد اللون",
-        "category": "لغز اللون الكلاسيكي",
-        "tagline": "تحدي التركيز على الألوان الأصلي: ابحث عن الإجابة بين الألوان المتشابهة.",
-        "description": "الإصدار الأصلي قبل Color Master 2. جربه على الويب أولاً، ثم قم بتثبيته من Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "لعبة حس اللون الكلاسيكية",
+        "tagline": "تحدي التركيز على اللون الأصلي: تذكر لون الإجابة واختره من الألوان المشابهة.",
+        "description": "اختبار تحسس اللون الأصلي قبل Find Odd Color: Color Master 2. جربه على الويب أولاً، ثم قم بتثبيته من Google Play.",
         "highlights": [
           "يشعر الأصلي",
           "تركيز اللون",
           "اللعب السريع",
           "التثبيت الآن"
         ],
-        "primaryCta": "قم بتثبيت Color Master",
+        "primaryCta": "تثبيت اختبار تحسس اللون",
         "detailCta": "حاول عرض الويب",
         "statusNote": "جربه على الويب أولاً، ثم قم بتثبيته من Google Play.",
-        "iconAlt": "أيقونة اللون الرئيسي"
+        "iconAlt": "رمز Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "الدفاع الكوري العشوائي: الحصار",
@@ -9124,19 +9194,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "أيقونة الدفاع العشوائي لبطاقة الحظ"
       },
       "darkMaze": {
-        "name": "الهروب من متاهة فأر المختبر: المتاهة المظلمة",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "تم إصدار لعبة الهروب من المتاهة",
         "tagline": "قم بتوجيه فأر المختبر عبر المتاهة المظلمة وابحث عن المخرج.",
-        "description": "تم إصدارها على Google Play في 28 مايو 2026. تحرك عبر المتاهة المظلمة واستخدم العناصر واهرب قبل أن يُغلق المسار.",
+        "description": "تم إصداره على Google Play في 28 مايو 2026. تحرك عبر المتاهة المظلمة، واستخدم العناصر، واهرب قبل أن يُغلق المسار.",
         "highlights": [
           "تم الإصدار في 28 مايو 2026",
           "الهروب من المتاهة",
           "العناصر",
           "البقاء على قيد الحياة الظلام"
         ],
-        "primaryCta": "التثبيت على جوجل بلاي",
-        "statusNote": "متوفر الآن على جوجل بلاي. لم يتم توفير عرض ويب لهذا التطبيق.",
-        "iconAlt": "الهروب من متاهة الفئران المختبرية: أيقونة المتاهة المظلمة"
+        "primaryCta": "التثبيت على Google Play",
+        "statusNote": "اعرض تفاصيل التطبيق، ثم قم بتثبيته من Google Play. لم يتم توفير عرض ويب لهذا التطبيق.",
+        "iconAlt": "رمز Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "عرض تفاصيل التطبيق"
       }
     },
     "status": {
@@ -9153,18 +9224,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "أفكار للسراويل القصيرة",
       "title": "جربهم مثل هذا",
       "colorMaster2": {
-        "app": "سيد الألوان 2",
-        "title": "\"إذا رأيت هذا الاختلاف في اللون، فإن عيناك حادتان.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"إذا لاحظت هذا اللون الغريب، فإن عيناك حادتان.\"",
         "description": "تنافس مع الأصدقاء في تحدي مدته 10 ثوانٍ."
       },
       "galaxyCode": {
-        "app": "جالاكتيكود",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"أرسل إلى صديقك رسالة كائن فضائي لا يستطيع فك شفرتها.\"",
         "description": "اترك رسائل سرية لا يستطيع فك تشفيرها إلا أصحاب المفاتيح المشتركة."
       },
       "ufoSignal": {
-        "app": "اتصل بالجسم الغريب",
-        "title": "\"ماذا يحدث إذا ضغطت على زر الجسم الغريب عند الفجر؟\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"ماذا يحدث إذا أرسلت إشارة جسم غامض عند الفجر؟\"",
         "description": "استمتع بالأصوات والرسوم المتحركة في غرفة مظلمة."
       }
     },
@@ -9181,7 +9252,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ما التطبيق الذي يجب علي تثبيته أولاً؟",
-        "answer": "إذا كانت هذه هي زيارتك الأولى، فجرب Color Master 2 أولاً. إنها سريعة اللعب وسهلة الإعادة للحصول على نتيجة أفضل."
+        "answer": "إذا كانت هذه هي زيارتك الأولى، فجرّب Find Odd Color: Color Master 2 أولاً. إنها سريعة اللعب وسهلة الإعادة للحصول على نتيجة أفضل."
       },
       "privateTest": {
         "question": "كيف يمكنني الانضمام إلى تطبيقات الاختبار الخاصة؟",
@@ -9192,12 +9263,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "صُنع بواسطة NeoKIM",
       "lastUpdated": "آخر تحديث: 2026.05.31",
       "googlePlay": "تطبيقات Google Play",
-      "colorTest": "اختبار اللون",
-      "alienText": "مولد النص الغريبة",
-      "ufoApp": "تطبيق الجسم الغريب",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "سياسة الخصوصية",
       "appAds": "app-ads.txt",
-      "contact": "الاتصال"
+      "contact": "الاتصال",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "الاشتراك في اختبار خاص",
@@ -9218,9 +9290,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hy-AM": {
     "seo": {
       "title": "NeoKIM հավելվածի լաբորատորիա | Անվճար Android Mini հավելվածներ",
-      "description": "Տեղադրեք Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape. Dark Maze և մասնավոր թեստեր Lucky Card Random Defense-ի և ավելի շատ Android mini հավելվածների համար:",
+      "description": "Տեղադրեք Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze և մասնավոր թեստեր ավելի շատ Android մինի հավելվածների համար:",
       "ogTitle": "NeoKIM հավելվածի լաբորատորիա | Android մինի հավելվածներ",
-      "ogDescription": "Գունավոր մարտահրավերներ, այլմոլորակայինների նման գաղտնի հաղորդագրություններ, ՉԹՕ-ի զանգերի փորձառություններ, Lab Rat Maze Escape. Dark Maze և անձնական թեստեր՝ արագ Android-ով զվարճանալու համար:"
+      "ogDescription": "Գտեք տարօրինակ գույներ, պատրաստեք այլմոլորակայինների ոճով գաղտնի տեքստ, ուղարկեք ՉԹՕ-ի զվարճալի ազդանշաններ, փախեք մութ լաբիրինթոսներից և միացեք մասնավոր թեստերին՝ Android արագ զվարճանալու համար:"
     },
     "skip": {
       "apps": "Բաց թողնել հավելվածների ցանկը"
@@ -9255,11 +9327,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android մինի հավելվածների հավաքածու",
       "title": "NeoKIM հավելվածի լաբորատորիա",
       "subtitle": "Փոքր Android հավելվածներ, որոնք ստեղծված են արագ զվարճանալու և կիսվելու համար",
-      "description": "Գունավոր մարտահրավերներ, այլմոլորակայինների նման գաղտնի հաղորդագրություններ և ՉԹՕ-ի զանգերի փորձառություններ: Թեթև տեղադրեք: Վայելեք մեկ րոպեի ընթացքում:",
+      "description": "Տարօրինակ գույների մարտահրավերներ, այլմոլորակայինների ոճով գաղտնի հաղորդագրություններ, ՉԹՕ ազդանշանների խաղ և մութ լաբիրինթոս փախուստներ: Թեթև տեղադրեք: Վայելեք մեկ րոպեի ընթացքում:",
       "primaryCta": "Տեղադրեք Հատկանշված հավելվածը",
-      "primaryAria": "Տեղադրեք Color Master 2-ը Google Play-ում",
+      "primaryAria": "Տեղադրեք Find Odd Color: Color Master 2-ը Google Play-ում",
       "secondaryCta": "Զննեք հավելվածները",
-      "visualAria": "Հեռախոսի մոդել Color Master 2 պատկերակով և գունավոր սալիկներով",
+      "visualAria": "Հեռախոսի մոդել Find Odd Color: Color Master 2 պատկերակով և գունավոր սալիկներով",
       "badges": [
         "Անվճար հավելվածներ",
         "Android",
@@ -9271,81 +9343,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ՀԱՏՈՒԿ ՀԱՎԵԼՎԱԾ",
       "title": "Տեղադրեք This First Today",
       "badge": "Հատկանշված",
-      "appName": "Գույնի վարպետ 2",
-      "short": "Գտեք տարբեր գույները 10 վայրկյանում:",
-      "description": "Միանգամյա գունավոր գլուխկոտրուկ, որտեղ մեկ սխալն ավարտում է վազքը: Այն արագ է սկսվում, այնուհետև շարունակում է ձեզ հետ քաշել՝ ձեր ռեկորդը գերազանցելու համար:",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Գտեք մեկ այլ գույն 10 վայրկյանում:",
+      "description": "Մեկ կյանքի տարօրինակ գույների գլուխկոտրուկ, որտեղ մեկ սխալն ավարտում է վազքը: Այն արագ է սկսվում, այնուհետև շարունակում է ձեզ հետ քաշել՝ ձեր ռեկորդը գերազանցելու համար:",
       "primaryCta": "Տեղադրեք Google Play-ում",
-      "primaryAria": "Տեղադրեք Color Master 2-ը Google Play-ում",
+      "primaryAria": "Տեղադրեք Find Odd Color: Color Master 2-ը Google Play-ում",
       "secondaryCta": "Զննեք հավելվածները",
-      "visualAria": "Color Master 2 գունավոր սալիկի մարտահրավեր հեռախոսի մոդել"
+      "visualAria": "Find Odd Color: Color Master 2 սալիկի մարտահրավեր հեռախոսի մոդել"
     },
     "apps": {
       "kicker": "ՀԱՎԵԼՎԱԾՔՆԵՐԻ ԿԱՏԱԼՈԳ",
       "title": "Բոլոր հավելվածները",
       "description": "Անմիջապես տեղադրեք հանրային հավելվածներ: Մասնավոր թեստերի համար նախ հարցումը ուղարկեք էլեկտրոնային փոստով. Փորձարկողի մուտքն ավելացնելուց հետո օգտագործեք Միանալ փորձարկման կոճակը:",
       "colorMaster2": {
-        "name": "Գույնի վարպետ 2",
-        "category": "Գունավոր հանելուկ",
-        "tagline": "Գտեք տարբեր գույները 10 վայրկյանում:",
-        "description": "Մեկ սխալն ավարտում է վազքը: Կարճ, կախվածություն առաջացնող գունային ընկալման մարտահրավեր:",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Տարօրինակ գույներով հանելուկ խաղ",
+        "tagline": "Գտեք մեկ այլ գույն 10 վայրկյանում:",
+        "description": "Մեկ սխալն ավարտում է վազքը: Կարճ, կախվածություն առաջացնող տարօրինակ գույների մարտահրավեր կենտրոնացման և գույնի ընկալման համար:",
         "highlights": [
           "10 վայրկյան սահմանաչափ",
           "Մեկ կյանքի վազք",
           "Առաջատար աղյուսակ",
           "Դալտոնիկ օգնություն"
         ],
-        "primaryCta": "Տեղադրեք Color Master 2-ը",
+        "primaryCta": "Տեղադրեք Find Odd Color",
         "detailCta": "Փորձեք Web Demo",
         "statusNote": "Այժմ հասանելի է Google Play-ում:",
-        "iconAlt": "Գունավոր Master 2 պատկերակ"
+        "iconAlt": "Find Odd Color: Color Master 2 պատկերակ"
       },
       "galaxyCode": {
-        "name": "Գալակտիկոդ",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Գաղտնի հաղորդագրությունների հավելված",
         "tagline": "Ստեղծեք այլմոլորակայինների նման գաղտնի հաղորդագրություններ, որոնց ապակոդավորման համար անհրաժեշտ է համօգտագործման բանալի:",
         "description": "Ստեղծեք ձեր սեփական գալակտիկական լեզվի կանոնները: Միայն ձեր համօգտագործման բանալին ունեցող մարդիկ կարող են վերստեղծել նույն կանոնները, և բնօրինակ տեքստը չի վերբեռնվում սերվեր:",
         "highlights": [
           "Համօգտագործվող բանալիների հիման վրա",
           "Անձնական կանոններ",
-          "SNS-պատրաստ է",
+          "SNS-ի պատրաստ",
           "Սերվերի վերբեռնում չկա"
         ],
         "primaryCta": "Ստեղծեք գաղտնի հաղորդագրություններ",
         "detailCta": "Փորձեք Web Demo",
         "statusNote": "Այժմ հասանելի է Google Play-ում:",
-        "iconAlt": "Գալակտիկոդի պատկերակ"
+        "iconAlt": "Alien Text Maker: Galaxy Code պատկերակ"
       },
       "ufoSignal": {
-        "name": "Զանգահարեք ՉԹՕ-ին",
-        "category": "Ընկղմվող զվարճալի հավելված",
-        "tagline": "Խորհրդավոր ՉԹՕ կանչելու փորձ՝ զվարճանքի համար:",
-        "description": "Սեղմեք կոճակը, լսեք ազդանշանը և պատկերացրեք, որ ինչ-որ բան լսում է տիեզերքից:",
+        "name": "UFO Signal Simulator",
+        "category": "Առեղծվածային ազդանշանային զվարճանքի հավելված",
+        "tagline": "Ուղարկեք զվարճալի տիեզերական ազդանշան և վայելեք ՉԹՕ-ի տրամադրությունը:",
+        "description": "Բացեք հավելվածը, սեղմեք ազդանշանի կոճակը և վայելեք ձայնն ու անիմացիաները, որոնք պահը դարձնում են ՉԹՕ-ի փոքրիկ ծես:",
         "highlights": [
-          "Ինտերակտիվ կոճակ",
+          "Ազդանշանի կոճակ",
           "Առեղծվածային հնչյուններ",
-          "Անիմացիա",
+          "Տրամադրության անիմացիա",
           "Ոչ մի գրանցում"
         ],
-        "primaryCta": "Զանգահարեք ՉԹՕ-ին",
-        "detailCta": "Փորձեք Web Demo",
-        "statusNote": "Այժմ հասանելի է Google Play-ում:",
-        "iconAlt": "Զանգահարեք ՉԹՕ պատկերակը"
+        "primaryCta": "Տեղադրեք UFO Signal Simulator",
+        "detailCta": "Դիտեք հավելվածի մանրամասները",
+        "statusNote": "Դիտեք հավելվածի մանրամասները, այնուհետև տեղադրեք այն Google Play-ից:",
+        "iconAlt": "UFO Signal Simulator պատկերակ"
       },
       "colorMasterClassic": {
-        "name": "Գունավոր վարպետ",
-        "category": "Դասական գունավոր հանելուկ",
-        "tagline": "Բնօրինակ գույնի կենտրոնացման մարտահրավեր. գտնել պատասխանը նմանատիպ գույների մեջ:",
-        "description": "Սկզբնական տարբերակը նախքան Color Master 2-ը: Փորձեք այն նախ համացանցում, ապա տեղադրեք այն Google Play-ից:",
+        "name": "Color Sense Test: Color Master",
+        "category": "Դասական գունային իմաստով խաղ",
+        "tagline": "Գույնի կենտրոնացման բնօրինակ մարտահրավեր. հիշեք պատասխանի գույնը և ընտրեք այն նմանատիպ գույներից:",
+        "description": "Գույնի զգացողության բնօրինակ թեստը Find Odd Color: Color Master 2-ից առաջ: Նախ փորձեք այն համացանցում, ապա տեղադրեք այն Google Play-ից:",
         "highlights": [
           "Օրիգինալ զգացողություն",
           "Գույնի ֆոկուս",
           "Արագ խաղ",
           "Տեղադրեք հիմա"
         ],
-        "primaryCta": "Տեղադրեք Color Master-ը",
+        "primaryCta": "Տեղադրեք Color Sense Test-ը",
         "detailCta": "Փորձեք Web Demo",
-        "statusNote": "Փորձեք այն նախ համացանցում, ապա տեղադրեք այն Google Play-ից:",
-        "iconAlt": "Գույնի վարպետ պատկերակը"
+        "statusNote": "Նախ փորձեք այն համացանցում, ապա տեղադրեք այն Google Play-ից:",
+        "iconAlt": "Color Sense Test: Color Master պատկերակ"
       },
       "koreanRandomDefense": {
         "name": "Կորեական պատահական պաշտպանություն. պաշարում",
@@ -9380,10 +9452,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Պատահական պաշտպանության պատկերակ"
       },
       "darkMaze": {
-        "name": "Lab Rat Maze Escape. Dark Maze",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Թողարկված լաբիրինթոս փախուստի խաղ",
         "tagline": "Առաջնորդեք լաբորատոր առնետին մութ լաբիրինթոսով և գտեք ելքը:",
-        "description": "Թողարկվել է Google Play-ում 2026 թվականի մայիսի 28-ին: Շարժվեք մութ լաբիրինթոսով, օգտագործեք իրեր և փախեք մինչև ճանապարհի փակվելը:",
+        "description": "Թողարկվել է Google Play-ում 2026 թվականի մայիսի 28-ին: Շարժվեք մութ լաբիրինթոսով, օգտագործեք իրերը և փախեք մինչև ճանապարհի փակվելը:",
         "highlights": [
           "Թողարկվել է 2026 թվականի մայիսի 28-ին",
           "Լաբիրինթոս փախուստ",
@@ -9391,8 +9463,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Մութ գոյատեւում"
         ],
         "primaryCta": "Տեղադրեք Google Play-ում",
-        "statusNote": "Այժմ հասանելի է Google Play-ում: Այս հավելվածի համար վեբ ցուցադրություն չի տրամադրվում:",
-        "iconAlt": "Lab Rat Maze Escape. Dark Maze պատկերակը"
+        "statusNote": "Դիտեք հավելվածի մանրամասները, այնուհետև տեղադրեք այն Google Play-ից: Այս հավելվածի համար վեբ ցուցադրություն չի տրամադրվում:",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze պատկերակ",
+        "detailCta": "Դիտեք հավելվածի մանրամասները"
       }
     },
     "status": {
@@ -9409,18 +9482,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ԿԱՐՃ ԳԱՂԱՓԱՐՆԵՐ",
       "title": "Փորձեք նրանց նման",
       "colorMaster2": {
-        "app": "Գույնի վարպետ 2",
-        "title": "«Եթե տեսնում եք այս գույնի տարբերությունը, ձեր աչքերը սուր են»:",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "«Եթե դուք նկատում եք այս տարօրինակ գույնը, ձեր աչքերը սուր են»:",
         "description": "Մրցակցեք ընկերների հետ 10 վայրկյան տեւողությամբ մարտահրավերում:"
       },
       "galaxyCode": {
-        "app": "Գալակտիկոդ",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "«Ձեր ընկերոջը ուղարկեք այլմոլորակային հաղորդագրություն, որը նրանք չեն կարող վերծանել»:",
         "description": "Թողեք գաղտնի հաղորդագրություններ, որոնք կարող են վերծանել միայն համօգտագործվող բանալիների սեփականատերերը:"
       },
       "ufoSignal": {
-        "app": "Զանգահարեք ՉԹՕ-ին",
-        "title": "«Ի՞նչ կլինի, եթե լուսադեմին սեղմեք ՉԹՕ-ի կոճակը»:",
+        "app": "UFO Signal Simulator",
+        "title": "«Ի՞նչ կլինի, եթե լուսադեմին ՉԹՕ ազդանշան ուղարկեք»:",
         "description": "Վայելեք ձայները և անիմացիաները մութ սենյակում:"
       }
     },
@@ -9437,7 +9510,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Ո՞ր հավելվածը պետք է առաջինը տեղադրեմ:",
-        "answer": "Եթե սա ձեր առաջին այցելությունն է, նախ փորձեք Color Master 2-ը: Այն արագ է խաղում և հեշտ է վերախաղարկել ավելի լավ հաշիվ ստանալու համար:"
+        "answer": "Եթե սա ձեր առաջին այցելությունն է, նախ փորձեք Find Odd Color: Color Master 2-ը: Այն արագ է խաղում և հեշտ է վերախաղարկել ավելի լավ հաշիվ ստանալու համար:"
       },
       "privateTest": {
         "question": "Ինչպե՞ս միանալ մասնավոր թեստային հավելվածներին:",
@@ -9448,12 +9521,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Պատրաստված է NeoKIM-ի կողմից",
       "lastUpdated": "Վերջին թարմացումը՝ 2026.05.31",
       "googlePlay": "Google Play հավելվածներ",
-      "colorTest": "Գույնի թեստ",
-      "alienText": "Այլմոլորակային տեքստի գեներատոր",
-      "ufoApp": "UFO հավելված",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Գաղտնիության քաղաքականություն",
       "appAds": "app-ads.txt",
-      "contact": "Կապ"
+      "contact": "Կապ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Մասնավոր փորձարկողի գրանցում",
@@ -9474,9 +9548,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "is-IS": {
     "seo": {
       "title": "NeoKIM App Lab | Ókeypis Android Mini Apps",
-      "description": "Settu upp Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze og einkapróf fyrir Lucky Card Random Defense og fleiri Android smáforrit.",
+      "description": "Settu upp Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze og einkapróf fyrir fleiri Android smáforrit.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Litaáskoranir, geimverulík leyndarmál, upplifun af UFO-símtölum, Lab Rat Maze Escape: Dark Maze og einkapróf fyrir fljótlegt Android gaman."
+      "ogDescription": "Finndu skrýtna liti, búðu til leynilegan texta í geimverumstíl, sendu fjörug UFO-merki, slepptu dimmum völundarhúsum og taktu þátt í einkaprófum fyrir fljótlega Android skemmtun."
     },
     "skip": {
       "apps": "Farðu í forritalista"
@@ -9511,11 +9585,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android smáforritasafn",
       "title": "NeoKIM App Lab",
       "subtitle": "Lítil Android öpp gerð fyrir skjót skemmtun og deilingu",
-      "description": "Litaáskoranir, geimverulík leynileg skilaboð og upplifun UFO-símtala. Settu létt upp. Njóttu á innan við mínútu.",
+      "description": "Áskoranir í undarlegum litum, leyniskilaboð í geimveru-stíl, UFO-merkjaleikur og dökk völundarhússflótti. Settu létt upp. Njóttu á innan við mínútu.",
       "primaryCta": "Settu upp valinn app",
-      "primaryAria": "Settu upp Color Master 2 á Google Play",
+      "primaryAria": "Settu upp Find Odd Color: Color Master 2 á Google Play",
       "secondaryCta": "Skoðaðu forrit",
-      "visualAria": "Símaútgáfa með Color Master 2 tákni og litaflísum",
+      "visualAria": "Símalíkan með Find Odd Color: Color Master 2 tákni og litaflísum",
       "badges": [
         "Ókeypis forrit",
         "Android",
@@ -9527,81 +9601,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "AUKAÐ APP",
       "title": "Settu upp þetta fyrst í dag",
       "badge": "Valið",
-      "appName": "Litameistari 2",
-      "short": "Finndu mismunandi lit á 10 sekúndum.",
-      "description": "Einlífs litaþraut þar sem ein mistök endar hlaupið. Það byrjar hratt og heldur svo áfram að draga þig til baka til að slá metið þitt.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Finndu einn annan lit á 10 sekúndum.",
+      "description": "Einlífs púsluspil þar sem ein mistök endar hlaupið. Það byrjar hratt og heldur svo áfram að draga þig til baka til að slá metið þitt.",
       "primaryCta": "Settu upp á Google Play",
-      "primaryAria": "Settu upp Color Master 2 á Google Play",
+      "primaryAria": "Settu upp Find Odd Color: Color Master 2 á Google Play",
       "secondaryCta": "Skoðaðu forrit",
-      "visualAria": "Color Master 2 lita flísar áskorun símalíki"
+      "visualAria": "Find Odd Color: Color Master 2 flísaráskorunarsímalíki"
     },
     "apps": {
       "kicker": "APP VÖRUVÖRK",
       "title": "Öll forrit",
       "description": "Settu upp opinber forrit beint. Fyrir einkapróf, sendu tölvupóst með beiðni fyrst; eftir að prófunaraðgangi hefur verið bætt við skaltu nota hnappinn Join Test.",
       "colorMaster2": {
-        "name": "Litameistari 2",
-        "category": "Litaþraut",
-        "tagline": "Finndu mismunandi lit á 10 sekúndum.",
-        "description": "Ein mistök binda enda á hlaupið. Stutt, ávanabindandi litaskynjunaráskorun.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-lita ráðgáta leikur",
+        "tagline": "Finndu einn annan lit á 10 sekúndum.",
+        "description": "Ein mistök binda enda á hlaupið. Stutt, ávanabindandi áskorun í undarlegum litum fyrir fókus og litaskynjun.",
         "highlights": [
           "10 sekúndna hámark",
           "Eins lífshlaup",
           "Topplisti",
           "Litblind hjálp"
         ],
-        "primaryCta": "Settu upp Color Master 2",
+        "primaryCta": "Settu upp Find Odd Color",
         "detailCta": "Prófaðu Web Demo",
-        "statusNote": "Í boði núna á Google Play.",
-        "iconAlt": "Litameistari 2 táknmynd"
+        "statusNote": "Fáanlegt núna á Google Play.",
+        "iconAlt": "Find Odd Color: Color Master 2 táknmynd"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Leyniskilaboðaforrit",
         "tagline": "Búðu til geimverulík leyndarmál skilaboð sem þurfa deilingarlykil til að afkóða.",
         "description": "Búðu til þínar eigin galactic tungumálareglur. Aðeins fólk með deilingarlykilinn þinn getur endurskapað sömu reglur og upprunalega textanum er ekki hlaðið upp á netþjón.",
         "highlights": [
           "Byggt á deililykli",
           "Persónulegar reglur",
-          "SNS-tilbúinn",
+          "SNS-tilbúið",
           "Engin upphleðsla á netþjóni"
         ],
         "primaryCta": "Búðu til leyniskilaboð",
         "detailCta": "Prófaðu Web Demo",
-        "statusNote": "Í boði núna á Google Play.",
-        "iconAlt": "Galacticode táknið"
+        "statusNote": "Fáanlegt núna á Google Play.",
+        "iconAlt": "Alien Text Maker: Galaxy Code táknmynd"
       },
       "ufoSignal": {
-        "name": "Hringdu í UFO",
-        "category": "Yfirgripsmikið skemmtilegt app",
-        "tagline": "Dularfull UFO kallaupplifun til skemmtunar.",
-        "description": "Ýttu á hnappinn, heyrðu merkið og ímyndaðu þér að eitthvað hlusti úr geimnum.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal afþreyingarforrit",
+        "tagline": "Sendu fjörugt geimmerki og njóttu UFO-stemningarinnar.",
+        "description": "Opnaðu appið, ýttu á merkjahnappinn og njóttu hljóðs og hreyfimyndar sem láta augnablikið líða eins og lítið UFO-ritual.",
         "highlights": [
-          "Gagnvirkur hnappur",
+          "Merkjahnappur",
           "Dulúð hljómar",
-          "Hreyfimynd",
+          "Mood fjör",
           "Engin skráning"
         ],
-        "primaryCta": "Hringdu í UFO",
-        "detailCta": "Prófaðu Web Demo",
-        "statusNote": "Í boði núna á Google Play.",
-        "iconAlt": "Hringdu í UFO táknið"
+        "primaryCta": "Settu upp UFO Signal Simulator",
+        "detailCta": "Skoða upplýsingar um forrit",
+        "statusNote": "Skoðaðu smáatriði forritsins og settu það síðan upp frá Google Play.",
+        "iconAlt": "UFO Signal Simulator táknmynd"
       },
       "colorMasterClassic": {
-        "name": "Litameistari",
-        "category": "Klassískt litaþraut",
-        "tagline": "Upprunalega litafókusáskorunin: finndu svarið meðal svipaðra lita.",
-        "description": "Upprunalega útgáfan fyrir Color Master 2. Prófaðu hana fyrst á vefnum, settu hana síðan upp frá Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassískur litaskynsleikur",
+        "tagline": "Upprunalega litafókusáskorunin: mundu svarlitinn og veldu hann úr svipuðum litum.",
+        "description": "Upprunalega litskynjunarprófið fyrir Find Odd Color: Color Master 2. Prófaðu það fyrst á vefnum og settu það síðan upp frá Google Play.",
         "highlights": [
           "Frumleg tilfinning",
           "Lita fókus",
           "Fljótur leikur",
           "Settu upp núna"
         ],
-        "primaryCta": "Settu upp Color Master",
+        "primaryCta": "Settu upp Color Sense Test",
         "detailCta": "Prófaðu Web Demo",
-        "statusNote": "Prófaðu það fyrst á vefnum, settu það síðan upp frá Google Play.",
-        "iconAlt": "Litameistaratákn"
+        "statusNote": "Prófaðu það fyrst á vefnum og settu það síðan upp frá Google Play.",
+        "iconAlt": "Color Sense Test: Color Master táknmynd"
       },
       "koreanRandomDefense": {
         "name": "Kóresk tilviljunarkennd vörn: Siege",
@@ -9647,8 +9721,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Myrkur lifun"
         ],
         "primaryCta": "Settu upp á Google Play",
-        "statusNote": "Nú fáanlegt á Google Play. Engin kynning á vefnum er veitt fyrir þetta forrit.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze táknið"
+        "statusNote": "Skoðaðu smáatriði forritsins og settu það síðan upp frá Google Play. Engin kynning á vefnum er veitt fyrir þetta forrit.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze táknmynd",
+        "detailCta": "Skoða upplýsingar um forrit"
       }
     },
     "status": {
@@ -9665,18 +9740,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "HUGMYNDIR",
       "title": "Prófaðu þá svona",
       "colorMaster2": {
-        "app": "Litameistari 2",
-        "title": "\"Ef þú sérð þennan litamun eru augun þín skörp.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Ef þú kemur auga á þennan skrítna lit eru augu þín skörp.",
         "description": "Kepptu við vini í 10 sekúndna áskorun."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Sendu vini þínum geimveruskilaboð sem hann getur ekki afkóða.",
         "description": "Skildu eftir leynileg skilaboð sem aðeins hluthafar geta afkóðað."
       },
       "ufoSignal": {
-        "app": "Hringdu í UFO",
-        "title": "\"Hvað gerist ef þú ýtir á UFO hnappinn í dögun?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Hvað gerist ef þú sendir UFO merki í dögun?\"",
         "description": "Njóttu hljóðanna og fjörsins í dimmu herbergi."
       }
     },
@@ -9693,7 +9768,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Hvaða app ætti ég að setja upp fyrst?",
-        "answer": "Ef þetta er fyrsta heimsókn þín skaltu prófa Color Master 2 fyrst. Það er fljótlegt að spila og auðvelt að spila aftur til að fá betri einkunn."
+        "answer": "Ef þetta er fyrsta heimsókn þín skaltu prófa Find Odd Color: Color Master 2 fyrst. Það er fljótlegt að spila og auðvelt að spila aftur til að fá betri einkunn."
       },
       "privateTest": {
         "question": "Hvernig tengist ég einkaprófunaröppum?",
@@ -9704,12 +9779,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Framleitt af NeoKIM",
       "lastUpdated": "Síðast uppfært: 2026.05.31",
       "googlePlay": "Google Play forrit",
-      "colorTest": "Litapróf",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO app",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Persónuverndarstefna",
       "appAds": "app-ads.txt",
-      "contact": "Hafðu samband"
+      "contact": "Hafðu samband",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Skráning einkaprófara",
@@ -9730,9 +9806,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "az-AZ": {
     "seo": {
       "title": "NeoKIM Tətbiq Laboratoriyası | Pulsuz Android Mini Proqramları",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze və Lucky Card Random Defense üçün şəxsi testləri və daha çox Android mini proqramlarını quraşdırın.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze və daha çox Android mini proqramları üçün şəxsi testləri quraşdırın.",
       "ogTitle": "NeoKIM Tətbiq Laboratoriyası | Android Mini Proqramlar",
-      "ogDescription": "Rəng problemləri, yadplanetlilərə bənzər gizli mesajlar, UFO çağırış təcrübələri, Lab Rat Maze Escape: Dark Maze və sürətli Android əyləncəsi üçün şəxsi testlər."
+      "ogDescription": "Qeyri-adi rənglər tapın, yadplanetli tipli gizli mətn yaradın, oynaq UFO siqnalları göndərin, qaranlıq labirintlərdən qaçın və sürətli Android əyləncəsi üçün şəxsi testlərə qoşulun."
     },
     "skip": {
       "apps": "Proqram siyahısına keçin"
@@ -9767,11 +9843,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini proqramlar kolleksiyası",
       "title": "NeoKIM Tətbiq Laboratoriyası",
       "subtitle": "Sürətli əylənmək və paylaşmaq üçün hazırlanmış kiçik Android proqramları",
-      "description": "Rəng problemləri, yadplanetlilərə bənzər gizli mesajlar və UFO çağırış təcrübələri. Yüngül şəkildə quraşdırın. Bir dəqiqədən az müddətdə həzz alın.",
+      "description": "Qəribə rəngli problemlər, yadplanetli tipli gizli mesajlar, UFO siqnal oyunu və qaranlıq labirint qaçışları. Yüngül şəkildə quraşdırın. Bir dəqiqədən az müddətdə həzz alın.",
       "primaryCta": "Seçilmiş Proqramı quraşdırın",
-      "primaryAria": "Google Play-də Color Master 2-ni quraşdırın",
+      "primaryAria": "Find Odd Color: Color Master 2-i Google Play-də quraşdırın",
       "secondaryCta": "Proqramları nəzərdən keçirin",
-      "visualAria": "Color Master 2 simvolu və rəngli plitələrlə telefon maketi",
+      "visualAria": "Find Odd Color: Color Master 2 simvolu və rəngli plitələrlə telefon maketi",
       "badges": [
         "Pulsuz Proqramlar",
         "Android",
@@ -9783,36 +9859,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SEÇİLƏN TƏTBİQ",
       "title": "Bu gün ilk olaraq quraşdırın",
       "badge": "Seçilmiş",
-      "appName": "Rəng ustası 2",
-      "short": "10 saniyə ərzində fərqli rəng tapın.",
-      "description": "Bir səhv qaçışa son qoyduğu bir ömürlük rəngli tapmaca. Sürətlə başlayır, sonra rekordunuzu qırmaq üçün sizi geri çəkməyə davam edir.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 saniyə ərzində fərqli bir rəng tapın.",
+      "description": "Bir səhv qaçışa son qoyduğu bir ömürlük qəribə rəngli tapmaca. Sürətlə başlayır, sonra rekordunuzu qırmaq üçün sizi geri çəkməyə davam edir.",
       "primaryCta": "Google Play-də quraşdırın",
-      "primaryAria": "Google Play-də Color Master 2-ni quraşdırın",
+      "primaryAria": "Find Odd Color: Color Master 2-i Google Play-də quraşdırın",
       "secondaryCta": "Proqramları nəzərdən keçirin",
-      "visualAria": "Color Master 2 rəngli kafel problem telefon maketi"
+      "visualAria": "Find Odd Color: Color Master 2 kafel problemi telefon maketi"
     },
     "apps": {
       "kicker": "TƏTBİQ KATALOQU",
       "title": "Bütün Proqramlar",
       "description": "İctimai proqramları birbaşa quraşdırın. Şəxsi testlər üçün əvvəlcə sorğu göndərin; tester girişi əlavə edildikdən sonra Testə qoşul düyməsini istifadə edin.",
       "colorMaster2": {
-        "name": "Rəng ustası 2",
-        "category": "Rəng tapmacası",
-        "tagline": "10 saniyə ərzində fərqli rəng tapın.",
-        "description": "Bir səhv qaçışa son qoyur. Qısa, asılılıq yaradan rəng qavrayışı problemi.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Qəribə rəngli puzzle oyunu",
+        "tagline": "10 saniyə ərzində fərqli bir rəng tapın.",
+        "description": "Bir səhv qaçışa son qoyur. Diqqət və rəng qavrayışı üçün qısa, asılılıq yaradan qəribə rəng problemi.",
         "highlights": [
           "10 saniyə limiti",
           "Bir ömürlük qaçış",
           "Liderlər lövhəsi",
           "Rəng korluğuna kömək"
         ],
-        "primaryCta": "Color Master 2 quraşdırın",
+        "primaryCta": "Qəribə Rəng tap quraşdırın",
         "detailCta": "Veb nümayişini sınayın",
         "statusNote": "İndi Google Play-də mövcuddur.",
-        "iconAlt": "Rəng Ustası 2 ikonası"
+        "iconAlt": "Find Odd Color: Color Master 2 ikonası"
       },
       "galaxyCode": {
-        "name": "Qalaktik kod",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Gizli mesaj proqramı",
         "tagline": "Şifrəni açmaq üçün paylaşma açarına ehtiyacı olan yadplanetlilərə bənzər gizli mesajlar yaradın.",
         "description": "Öz qalaktik dil qaydalarınızı yaradın. Yalnız paylaşma açarınız olan insanlar eyni qaydaları yenidən yarada bilər və orijinal mətn serverə yüklənmir.",
@@ -9825,39 +9901,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Gizli Mesajlar yaradın",
         "detailCta": "Veb nümayişini sınayın",
         "statusNote": "İndi Google Play-də mövcuddur.",
-        "iconAlt": "Qalaktikod ikonası"
+        "iconAlt": "Alien Text Maker: Galaxy Code ikonası"
       },
       "ufoSignal": {
-        "name": "UFO-ya zəng edin",
-        "category": "Əyləncəli proqram",
-        "tagline": "Əyləncə üçün sirli UFO zəng təcrübəsi.",
-        "description": "Düyməni basın, siqnalı eşidin və kosmosdan nəyinsə dinlədiyini təsəvvür edin.",
+        "name": "UFO Signal Simulator",
+        "category": "Sirli siqnal əyləncə proqramı",
+        "tagline": "Oynaq kosmos siqnalı göndərin və UFO əhvalından həzz alın.",
+        "description": "Proqramı açın, siqnal düyməsini basın və anı kiçik bir UFO ritualı kimi hiss etdirən səs və animasiyadan həzz alın.",
         "highlights": [
-          "İnteraktiv düymə",
+          "Siqnal düyməsi",
           "Sirr səslənir",
-          "Animasiya",
+          "Əhval animasiyası",
           "Qeydiyyat yoxdur"
         ],
-        "primaryCta": "UFO-ya zəng edin",
-        "detailCta": "Veb nümayişini sınayın",
-        "statusNote": "İndi Google Play-də mövcuddur.",
-        "iconAlt": "UFO simvoluna zəng edin"
+        "primaryCta": "UFO Signal Simulator quraşdırın",
+        "detailCta": "Tətbiq Təfərrüatlarına Baxın",
+        "statusNote": "Tətbiq təfərrüatlarına baxın, sonra onu Google Play-dən quraşdırın.",
+        "iconAlt": "UFO Signal Simulator ikonası"
       },
       "colorMasterClassic": {
-        "name": "Rəng Ustası",
-        "category": "Klassik rəng tapmacası",
-        "tagline": "Orijinal rəng fokus problemi: oxşar rənglər arasında cavab tapın.",
-        "description": "Color Master 2-dən əvvəlki orijinal versiya. Əvvəlcə onu internetdə sınayın, sonra Google Play-dən quraşdırın.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassik rəng hissi oyunu",
+        "tagline": "Orijinal rəng fokus problemi: cavab rəngini xatırlayın və onu oxşar rənglərdən seçin.",
+        "description": "Find Odd Color: Color Master 2-dən əvvəl orijinal rəng hissi testi. Əvvəlcə onu internetdə sınayın, sonra Google Play-dən quraşdırın.",
         "highlights": [
           "Orijinal hiss",
           "Rəng diqqəti",
           "Sürətli oyun",
           "İndi quraşdırın"
         ],
-        "primaryCta": "Color Master-ı quraşdırın",
+        "primaryCta": "Rəng hissi testini quraşdırın",
         "detailCta": "Veb nümayişini sınayın",
         "statusNote": "Əvvəlcə onu internetdə sınayın, sonra Google Play-dən quraşdırın.",
-        "iconAlt": "Rəng Ustası nişanı"
+        "iconAlt": "Color Sense Test: Color Master ikonası"
       },
       "koreanRandomDefense": {
         "name": "Koreyanın Təsadüfi Müdafiəsi: Mühasirə",
@@ -9892,10 +9968,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Şanslı Kart Təsadüfi Müdafiə simvolu"
       },
       "darkMaze": {
-        "name": "Laboratoriya siçovullarından qaçış: Qaranlıq labirint",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Labirentdən qaçış oyunu buraxıldı",
         "tagline": "Laboratoriya siçovulunu qaranlıq labirintdən keçirin və çıxış yolunu tapın.",
-        "description": "28 may 2026-cı ildə Google Play-də buraxıldı. Qaranlıq labirintdə hərəkət edin, elementlərdən istifadə edin və yol bağlanana qədər qaçın.",
+        "description": "28 may 2026-cı il tarixində Google Play-də buraxıldı. Qaranlıq labirintdə hərəkət edin, elementlərdən istifadə edin və yol bağlanana qədər qaçın.",
         "highlights": [
           "28 may 2026-cı ildə buraxılmışdır",
           "Labirentdən qaçış",
@@ -9903,8 +9979,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Qaranlıq sağ qalma"
         ],
         "primaryCta": "Google Play-də quraşdırın",
-        "statusNote": "İndi Google Play-də mövcuddur. Bu proqram üçün heç bir veb demo təqdim edilməyib.",
-        "iconAlt": "Laboratoriya Siçovullarından Qaçış: Qaranlıq Maze ikonu"
+        "statusNote": "Tətbiq təfərrüatlarına baxın, sonra onu Google Play-dən quraşdırın. Bu proqram üçün heç bir veb demo təqdim edilməyib.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikonası",
+        "detailCta": "Tətbiq Təfərrüatlarına Baxın"
       }
     },
     "status": {
@@ -9921,18 +9998,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "QISA FİKİRLƏR",
       "title": "Onları belə sınayın",
       "colorMaster2": {
-        "app": "Rəng ustası 2",
-        "title": "\"Bu rəng fərqini görürsənsə, gözlərin itidir.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Bu qəribə rəngi görürsənsə, gözləriniz itidir.\"",
         "description": "10 saniyəlik problemdə dostlarınızla yarışın."
       },
       "galaxyCode": {
-        "app": "Qalaktik kod",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Dostunuza deşifrə edə bilməyəcəyi yadplanetli mesaj göndərin.”",
         "description": "Yalnız pay sahibinin deşifrə edə biləcəyi gizli mesajlar buraxın."
       },
       "ufoSignal": {
-        "app": "UFO-ya zəng edin",
-        "title": "\"Sübh çağı UFO düyməsini bassanız nə olar?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Sübh çağı UFO siqnalı göndərsəniz nə olar?\"",
         "description": "Qaranlıq otaqda səslərdən və animasiyadan həzz alın."
       }
     },
@@ -9949,7 +10026,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Əvvəlcə hansı proqramı quraşdırmalıyam?",
-        "answer": "Bu, ilk səfərinizdirsə, əvvəlcə Color Master 2-ni sınayın. Oynamaq tezdir və daha yaxşı hesab üçün təkrar oynamaq asandır."
+        "answer": "Əgər bu ilk səfərinizdirsə, əvvəlcə Find Odd Color: Color Master 2-i sınayın. Oynamaq tezdir və daha yaxşı hesab üçün təkrar oynamaq asandır."
       },
       "privateTest": {
         "question": "Şəxsi test proqramlarına necə qoşula bilərəm?",
@@ -9960,12 +10037,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM tərəfindən hazırlanmışdır",
       "lastUpdated": "Son yeniləmə: 31.05.2026",
       "googlePlay": "Google Play Proqramları",
-      "colorTest": "Rəng Testi",
-      "alienText": "Alien Mətn Generator",
-      "ufoApp": "UFO Proqramı",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Məxfilik Siyasəti",
       "appAds": "app-ads.txt",
-      "contact": "Əlaqə"
+      "contact": "Əlaqə",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Şəxsi Tester Qeydiyyatı",
@@ -9986,9 +10064,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "af": {
     "seo": {
       "title": "NeoKIM App Lab | Gratis Android Mini-toepassings",
-      "description": "Installeer Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, en privaat toetse vir Lucky Card Random Defense en meer Android-mini-toepassings.",
+      "description": "Installeer Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, en privaat toetse vir nog Android mini-toepassings.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Kleuruitdagings, vreemdelingagtige geheime boodskappe, UFO-oproepervarings, Lab Rat Maze Escape: Dark Maze, en privaat toetse vir vinnige Android-pret."
+      "ogDescription": "Soek vreemde kleure, maak geheime teks in uitheemse styl, stuur speelse UFO-seine, ontsnap donker doolhowe, en sluit aan by privaat toetse vir vinnige Android-pret."
     },
     "skip": {
       "apps": "Slaan oor na toepassinglys"
@@ -10023,11 +10101,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini-appversameling",
       "title": "NeoKIM App Lab",
       "subtitle": "Klein Android-toepassings gemaak vir vinnige pret en deel",
-      "description": "Kleuruitdagings, vreemdelingagtige geheime boodskappe en UFO-oproepervarings. Installeer liggies. Geniet dit binne minder as 'n minuut.",
+      "description": "Uitdagings met vreemde kleure, geheime boodskappe in uitheemse styl, UFO-seinspel en donker doolhof-ontsnappings. Installeer liggies. Geniet dit binne minder as 'n minuut.",
       "primaryCta": "Installeer Uitgestalde App",
-      "primaryAria": "Installeer Color Master 2 op Google Play",
+      "primaryAria": "Installeer Find Odd Color: Color Master 2 op Google Play",
       "secondaryCta": "Blaai deur toepassings",
-      "visualAria": "Telefoonmodel met Color Master 2-ikoon en kleurteëls",
+      "visualAria": "Telefoonmodel met Find Odd Color: Color Master 2-ikoon en kleurteëls",
       "badges": [
         "Gratis toepassings",
         "Android",
@@ -10039,36 +10117,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "UITSTEKENDE APP",
       "title": "Installeer dit vandag eers",
       "badge": "Uitgestalte",
-      "appName": "Kleurmeester 2",
-      "short": "Vind die verskillende kleur in 10 sekondes.",
-      "description": "'n Een-lewe kleur legkaart waar een fout die lopie beëindig. Dit begin vinnig en trek jou dan aanhou terug om jou rekord te klop.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Vind die een ander kleur in 10 sekondes.",
+      "description": "'n Een-lewe onewe kleur legkaart waar een fout die lopie beëindig. Dit begin vinnig en trek jou dan aanhou terug om jou rekord te klop.",
       "primaryCta": "Installeer op Google Play",
-      "primaryAria": "Installeer Color Master 2 op Google Play",
+      "primaryAria": "Installeer Find Odd Color: Color Master 2 op Google Play",
       "secondaryCta": "Blaai deur toepassings",
-      "visualAria": "Kleur Meester 2 kleur teël uitdaging telefoon mockup"
+      "visualAria": "Find Odd Color: Color Master 2-teëluitdaging-foonmodel"
     },
     "apps": {
       "kicker": "APP KATALOGUS",
       "title": "Alle toepassings",
       "description": "Installeer publieke toepassings direk. Vir privaat toetse, e-pos eers 'n versoek; nadat toetsertoegang bygevoeg is, gebruik die Sluit aan by toets-knoppie.",
       "colorMaster2": {
-        "name": "Kleurmeester 2",
-        "category": "Kleur legkaart",
-        "tagline": "Vind die verskillende kleur in 10 sekondes.",
-        "description": "Een fout maak 'n einde aan die lopie. 'n Kort, verslawende kleurpersepsie-uitdaging.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Puzzelspel met vreemde kleure",
+        "tagline": "Vind die een ander kleur in 10 sekondes.",
+        "description": "Een fout maak 'n einde aan die lopie. 'n Kort, verslawende vreemde kleur-uitdaging vir fokus en kleurpersepsie.",
         "highlights": [
           "10-sekonde limiet",
           "Een-lewe hardloop",
           "Ranglys",
           "Kleurblinde hulp"
         ],
-        "primaryCta": "Installeer Color Master 2",
+        "primaryCta": "Installeer Find Odd Color",
         "detailCta": "Probeer Web Demo",
         "statusNote": "Nou beskikbaar op Google Play.",
-        "iconAlt": "Color Master 2-ikoon"
+        "iconAlt": "Find Odd Color: Color Master 2-ikoon"
       },
       "galaxyCode": {
-        "name": "Galaktikode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Geheime boodskap-app",
         "tagline": "Skep uitheemse geheime boodskappe wat 'n deelsleutel nodig het om te dekodeer.",
         "description": "Skep jou eie galaktiese taalreëls. Slegs mense met jou deelsleutel kan dieselfde reëls herskep, en die oorspronklike teks word nie na 'n bediener opgelaai nie.",
@@ -10081,39 +10159,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Skep geheime boodskappe",
         "detailCta": "Probeer Web Demo",
         "statusNote": "Nou beskikbaar op Google Play.",
-        "iconAlt": "Galacticode-ikoon"
+        "iconAlt": "Alien Text Maker: Galaxy Code-ikoon"
       },
       "ufoSignal": {
-        "name": "Bel die UFO",
-        "category": "Meeslepende prettige app",
-        "tagline": "'n Geheimsinnige UFO-belervaring vir pret.",
-        "description": "Druk die knoppie, hoor die sein, en stel jou voor dat iets uit die ruimte luister.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery sein vermaak app",
+        "tagline": "Stuur 'n speelse ruimtesein en geniet die UFO-bui.",
+        "description": "Maak die toepassing oop, druk die seinknoppie en geniet klank en animasie wat die oomblik soos 'n klein UFO-ritueel laat voel.",
         "highlights": [
-          "Interaktiewe knoppie",
+          "Seinknoppie",
           "Geheimsinnige klanke",
-          "Animasie",
+          "Gemoedsanimasie",
           "Geen aanmelding nie"
         ],
-        "primaryCta": "Bel die UFO",
-        "detailCta": "Probeer Web Demo",
-        "statusNote": "Nou beskikbaar op Google Play.",
-        "iconAlt": "Bel die UFO-ikoon"
+        "primaryCta": "Installeer UFO Signal Simulator",
+        "detailCta": "Bekyk App Besonderhede",
+        "statusNote": "Bekyk die toepassingbesonderhede en installeer dit dan vanaf Google Play.",
+        "iconAlt": "UFO Signal Simulator-ikoon"
       },
       "colorMasterClassic": {
-        "name": "Kleur Meester",
-        "category": "Klassieke kleur legkaart",
-        "tagline": "Die oorspronklike kleurfokus-uitdaging: vind die antwoord tussen soortgelyke kleure.",
-        "description": "Die oorspronklike weergawe voor Color Master 2. Probeer dit eers op die web, installeer dit dan vanaf Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassieke kleursinspel",
+        "tagline": "Die oorspronklike kleurfokus-uitdaging: onthou die antwoordkleur en kies dit uit soortgelyke kleure.",
+        "description": "Die oorspronklike kleursintoets voor Find Odd Color: Color Master 2. Probeer dit eers op die web en installeer dit dan vanaf Google Play.",
         "highlights": [
           "Oorspronklike gevoel",
           "Kleur fokus",
           "Vinnige speel",
           "Installeer nou"
         ],
-        "primaryCta": "Installeer Color Master",
+        "primaryCta": "Installeer Color Sense Test",
         "detailCta": "Probeer Web Demo",
-        "statusNote": "Probeer dit eers op die web, installeer dit dan vanaf Google Play.",
-        "iconAlt": "Kleurmeester-ikoon"
+        "statusNote": "Probeer dit eers op die web en installeer dit dan vanaf Google Play.",
+        "iconAlt": "Color Sense Test: Color Master-ikoon"
       },
       "koreanRandomDefense": {
         "name": "Koreaanse ewekansige verdediging: beleg",
@@ -10159,8 +10237,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Donker oorlewing"
         ],
         "primaryCta": "Installeer op Google Play",
-        "statusNote": "Nou beskikbaar op Google Play. Geen webdemo word vir hierdie toepassing verskaf nie.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikoon"
+        "statusNote": "Bekyk die toepassingbesonderhede en installeer dit dan vanaf Google Play. Geen webdemo word vir hierdie toepassing verskaf nie.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze-ikoon",
+        "detailCta": "Bekyk App Besonderhede"
       }
     },
     "status": {
@@ -10177,18 +10256,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KORTKORT IDEES",
       "title": "Probeer hulle so",
       "colorMaster2": {
-        "app": "Kleurmeester 2",
-        "title": "\"As jy hierdie kleurverskil sien, is jou oë skerp.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"As jy hierdie vreemde kleur sien, is jou oë skerp.\"",
         "description": "Kompeteer met vriende in 'n 10-sekonde-uitdaging."
       },
       "galaxyCode": {
-        "app": "Galaktikode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Stuur vir jou vriend 'n vreemdelingboodskap wat hulle nie kan dekodeer nie.\"",
         "description": "Los geheime boodskappe wat slegs aandeelsleutelhouers kan dekodeer."
       },
       "ufoSignal": {
-        "app": "Bel die UFO",
-        "title": "\"Wat gebeur as jy die UFO-knoppie teen dagbreek druk?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Wat gebeur as jy 'n UFO-sein teen dagbreek stuur?\"",
         "description": "Geniet die klanke en animasie in 'n donker kamer."
       }
     },
@@ -10205,7 +10284,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Watter toepassing moet ek eerste installeer?",
-        "answer": "As dit jou eerste besoek is, probeer eers Color Master 2. Dit is vinnig om te speel en maklik om te herspeel vir 'n beter telling."
+        "answer": "As dit jou eerste besoek is, probeer eers Find Odd Color: Color Master 2. Dit is vinnig om te speel en maklik om te herspeel vir 'n beter telling."
       },
       "privateTest": {
         "question": "Hoe sluit ek by private toetsprogramme aan?",
@@ -10216,12 +10295,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Gemaak deur NeoKIM",
       "lastUpdated": "Laas opgedateer: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Kleur toets",
-      "alienText": "Uitheemse teksgenerator",
-      "ufoApp": "UFO-toepassing",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privaatheidsbeleid",
       "appAds": "app-ads.txt",
-      "contact": "Kontak"
+      "contact": "Kontak",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Privaat toetser-aanmelding",
@@ -10242,9 +10322,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "sq": {
     "seo": {
       "title": "NeoKIM App Lab | Aplikacionet falas të Android Mini",
-      "description": "Instaloni Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze dhe teste private për Lucky Card Random Defense dhe më shumë aplikacione mini Android.",
+      "description": "Instaloni Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze dhe teste private për më shumë mini aplikacione Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Sfida me ngjyra, mesazhe sekrete të ngjashme me alienët, përvoja të thirrjeve të UFO-ve, Labirint Labirint Lab Rat: Dark Maze dhe teste private për argëtim të shpejtë në Android."
+      "ogDescription": "Gjeni ngjyra të çuditshme, bëni tekst sekret të stilit alien, dërgoni sinjale UFO-je lozonjare, shpëtoni nga labirintet e errëta dhe bashkohuni me testet private për argëtim të shpejtë Android."
     },
     "skip": {
       "apps": "Kalo te lista e aplikacioneve"
@@ -10279,11 +10359,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Koleksioni i mini aplikacioneve Android",
       "title": "Laboratori i aplikacioneve NeoKIM",
       "subtitle": "Aplikacione të vogla Android të krijuara për argëtim dhe ndarje të shpejtë",
-      "description": "Sfida me ngjyra, mesazhe sekrete të ngjashme me të huajt dhe përvoja të thirrjeve të UFO-ve. Instaloni lehtë. Shijojeni në më pak se një minutë.",
+      "description": "Sfida me ngjyra të çuditshme, mesazhe sekrete të stilit alien, lojë me sinjale të UFO-ve dhe arratisje nga labirinti i errët. Instaloni lehtë. Shijojeni në më pak se një minutë.",
       "primaryCta": "Instaloni aplikacionin e veçuar",
-      "primaryAria": "Instaloni Color Master 2 në Google Play",
+      "primaryAria": "Instalo Find Odd Color: Color Master 2 në Google Play",
       "secondaryCta": "Shfletoni aplikacionet",
-      "visualAria": "Modeli i telefonit me ikonën Color Master 2 dhe pllaka me ngjyra",
+      "visualAria": "Modeli i telefonit me ikonën Find Odd Color: Color Master 2 dhe pllaka me ngjyra",
       "badges": [
         "Aplikacione falas",
         "Android",
@@ -10295,36 +10375,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLIKACIONI I PARAQITUR",
       "title": "Instaloni këtë të parë sot",
       "badge": "Të paraqitura",
-      "appName": "Master i ngjyrave 2",
-      "short": "Gjeni ngjyrën e ndryshme në 10 sekonda.",
-      "description": "Një enigmë me ngjyra të një jete ku një gabim përfundon vrapimin. Fillon shpejt, pastaj vazhdon t'ju tërheqë prapa për të mposhtur rekordin tuaj.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Gjeni një ngjyrë të ndryshme në 10 sekonda.",
+      "description": "Një enigmë e vetme me ngjyra të çuditshme ku një gabim përfundon vrapimin. Fillon shpejt, pastaj vazhdon t'ju tërheqë prapa për të mposhtur rekordin tuaj.",
       "primaryCta": "Instaloni në Google Play",
-      "primaryAria": "Instaloni Color Master 2 në Google Play",
+      "primaryAria": "Instalo Find Odd Color: Color Master 2 në Google Play",
       "secondaryCta": "Shfletoni aplikacionet",
-      "visualAria": "Modeli i telefonit sfidues me ngjyra Master 2 me pllaka"
+      "visualAria": "Modeli i telefonit sfidues me pllaka Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALOGJI I APLIKACIONIT",
       "title": "Të gjitha aplikacionet",
       "description": "Instaloni drejtpërdrejt aplikacionet publike. Për teste private, fillimisht dërgoni një kërkesë me email; pasi të shtohet aksesi i testuesit, përdorni butonin Join Test.",
       "colorMaster2": {
-        "name": "Master i ngjyrave 2",
-        "category": "Puzzle me ngjyra",
-        "tagline": "Gjeni ngjyrën e ndryshme në 10 sekonda.",
-        "description": "Një gabim i jep fund vrapimit. Një sfidë e shkurtër, problematike e perceptimit të ngjyrave.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Lojë puzzle me ngjyra të çuditshme",
+        "tagline": "Gjeni një ngjyrë të ndryshme në 10 sekonda.",
+        "description": "Një gabim i jep fund vrapimit. Një sfidë e shkurtër, problematike me ngjyra të çuditshme për fokusimin dhe perceptimin e ngjyrave.",
         "highlights": [
           "Kufiri prej 10 sekondash",
           "Vrapim me një jetë",
           "Tabela drejtuese",
           "Ndihmë për të verbërit e ngjyrave"
         ],
-        "primaryCta": "Instaloni Color Master 2",
+        "primaryCta": "Instaloni Find Color Odd",
         "detailCta": "Provoni Web Demo",
         "statusNote": "Në dispozicion tani në Google Play.",
-        "iconAlt": "Ikona Color Master 2"
+        "iconAlt": "Ikona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galaktikodi",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikacioni i mesazheve sekrete",
         "tagline": "Krijoni mesazhe sekrete të ngjashme me alienët që kanë nevojë për një çelës share për t'i deshifruar.",
         "description": "Krijoni rregullat tuaja të gjuhës galaktike. Vetëm njerëzit me çelësin tuaj të ndarjes mund të rikrijojnë të njëjtat rregulla dhe teksti origjinal nuk ngarkohet në një server.",
@@ -10337,39 +10417,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Krijoni mesazhe sekrete",
         "detailCta": "Provoni Web Demo",
         "statusNote": "Në dispozicion tani në Google Play.",
-        "iconAlt": "Ikona e galaktikodit"
+        "iconAlt": "Ikona Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Thirrni UFO-n",
-        "category": "Aplikacion argëtues gjithëpërfshirës",
-        "tagline": "Një përvojë misterioze thirrjesh UFO për argëtim.",
-        "description": "Shtypni butonin, dëgjoni sinjalin dhe imagjinoni diçka duke dëgjuar nga hapësira.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplikacioni argëtues me sinjal misterioz",
+        "tagline": "Dërgoni një sinjal hapësinor të këndshëm dhe shijoni disponimin e UFO-ve.",
+        "description": "Hapni aplikacionin, shtypni butonin e sinjalit dhe shijoni tingujt dhe animacionet që e bëjnë momentin të duket si një ritual i vogël UFO-sh.",
         "highlights": [
-          "Butoni interaktiv",
+          "Butoni i sinjalit",
           "Tinguj mister",
-          "Animacion",
+          "Animacion i humorit",
           "Asnjë regjistrim"
         ],
-        "primaryCta": "Thirrni UFO-n",
-        "detailCta": "Provoni Web Demo",
-        "statusNote": "Në dispozicion tani në Google Play.",
-        "iconAlt": "Thirrni ikonën e UFO-ve"
+        "primaryCta": "Instaloni UFO Signal Simulator",
+        "detailCta": "Shikoni detajet e aplikacionit",
+        "statusNote": "Shikoni detajet e aplikacionit, më pas instaloni atë nga Google Play.",
+        "iconAlt": "Ikona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Master i ngjyrave",
-        "category": "Puzzle me ngjyra klasike",
-        "tagline": "Sfida origjinale e fokusimit të ngjyrave: gjeni përgjigjen midis ngjyrave të ngjashme.",
-        "description": "Versioni origjinal përpara Color Master 2. Provojeni fillimisht në ueb, më pas instalojeni nga Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Lojë klasike e sensit të ngjyrave",
+        "tagline": "Sfida origjinale e fokusimit të ngjyrave: mbani mend ngjyrën e përgjigjes dhe zgjidhni atë nga ngjyra të ngjashme.",
+        "description": "Testi origjinal i sensit të ngjyrës përpara Find Odd Color: Color Master 2. Provojeni fillimisht në ueb, më pas instalojeni nga Google Play.",
         "highlights": [
           "Ndjenja origjinale",
           "Fokusi i ngjyrave",
           "Lojë e shpejtë",
           "Instalo tani"
         ],
-        "primaryCta": "Instaloni Color Master",
+        "primaryCta": "Instaloni Testin e Ndjesisë së Ngjyrave",
         "detailCta": "Provoni Web Demo",
         "statusNote": "Provojeni fillimisht në ueb, më pas instalojeni nga Google Play.",
-        "iconAlt": "Ikona Master i ngjyrave"
+        "iconAlt": "Ikona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Mbrojtja e rastësishme Koreane: Rrethimi",
@@ -10404,10 +10484,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona e mbrojtjes së rastësishme të kartës me fat"
       },
       "darkMaze": {
-        "name": "Labirint Lab Rat Arratisjes: Dark Maze",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Lëshuar lojë arratisje labirint",
         "tagline": "Drejtoni një miu laboratori nëpër labirintin e errët dhe gjeni daljen.",
-        "description": "Lëshuar në Google Play më 28 maj 2026. Lëvizni nëpër labirintin e errët, përdorni artikujt dhe ikni përpara se shtegu të mbyllet.",
+        "description": "Publikuar në Google Play më 28 maj 2026. Lëvizni nëpër labirintin e errët, përdorni artikujt dhe ikni përpara se shtegu të mbyllet.",
         "highlights": [
           "Publikuar më 28 maj 2026",
           "Ikja me labirint",
@@ -10415,8 +10495,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mbijetesë e errët"
         ],
         "primaryCta": "Instaloni në Google Play",
-        "statusNote": "Tani disponohet në Google Play. Asnjë demonstrim në ueb nuk ofrohet për këtë aplikacion.",
-        "iconAlt": "Arratisja e labirintit të miut të laboratorit: Ikona e labirintit të errët"
+        "statusNote": "Shikoni detajet e aplikacionit, më pas instaloni atë nga Google Play. Asnjë demonstrim në ueb nuk ofrohet për këtë aplikacion.",
+        "iconAlt": "Ikona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Shikoni detajet e aplikacionit"
       }
     },
     "status": {
@@ -10433,18 +10514,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDE TË SHKURTRA",
       "title": "Provojini si kjo",
       "colorMaster2": {
-        "app": "Master i ngjyrave 2",
-        "title": "\"Nëse e shihni këtë ndryshim ngjyrash, sytë tuaj janë të mprehtë.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Nëse e dalloni këtë ngjyrë të çuditshme, sytë tuaj janë të mprehtë.\"",
         "description": "Konkurroni me miqtë në një sfidë 10 sekondash."
       },
       "galaxyCode": {
-        "app": "Galaktikodi",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Dërgoji mikut tënd një mesazh alien që nuk mund ta deshifrojë.”",
         "description": "Lini mesazhe sekrete që vetëm mbajtësit e çelësave të përbashkët mund t'i deshifrojnë."
       },
       "ufoSignal": {
-        "app": "Thirrni UFO-n",
-        "title": "\"Çfarë ndodh nëse shtypni butonin UFO në agim?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Çfarë ndodh nëse dërgoni një sinjal UFO në agim?\"",
         "description": "Shijoni tingujt dhe animacionin në një dhomë të errët."
       }
     },
@@ -10461,7 +10542,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Cilin aplikacion duhet të instaloj së pari?",
-        "answer": "Nëse kjo është vizita juaj e parë, provoni së pari Color Master 2. Është i shpejtë për t'u luajtur dhe i lehtë për t'u ripërsëritur për një rezultat më të mirë."
+        "answer": "Nëse kjo është vizita juaj e parë, provoni fillimisht Find Odd Color: Color Master 2. Është i shpejtë për t'u luajtur dhe i lehtë për t'u ripërsëritur për një rezultat më të mirë."
       },
       "privateTest": {
         "question": "Si t'i bashkohem aplikacioneve private të testimit?",
@@ -10472,12 +10553,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Bërë nga NeoKIM",
       "lastUpdated": "Përditësimi i fundit: 31.05.2026",
       "googlePlay": "Aplikacionet Google Play",
-      "colorTest": "Test me ngjyra",
-      "alienText": "Gjeneratori i tekstit të huaj",
-      "ufoApp": "Aplikacioni UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Politika e privatësisë",
       "appAds": "app-ads.txt",
-      "contact": "Kontaktoni"
+      "contact": "Kontaktoni",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Regjistrimi i testuesit privat",
@@ -10498,9 +10580,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "am": {
     "seo": {
       "title": "NeoKIM መተግበሪያ ቤተ ሙከራ | ነጻ Android ሚኒ መተግበሪያዎች",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze እና የግል ሙከራዎች ለ Lucky Card Random Defence እና ለሌሎችም የአንድሮይድ ሚኒ መተግበሪያዎች።",
+      "description": "ለተጨማሪ Android ሚኒ መተግበሪያዎች Find Odd Color: Color Master 2፣ Alien Text Maker: Galaxy Code፣ UFO Signal Simulator፣ Color Sense Test: Color Master፣ Lab Rat Maze Escape: Dark Maze እና የግል ሙከራዎችን ጫን።",
       "ogTitle": "NeoKIM መተግበሪያ ቤተ ሙከራ | Android ሚኒ መተግበሪያዎች",
-      "ogDescription": "የቀለም ፈተናዎች፣ ባዕድ መሰል ሚስጥራዊ መልእክቶች፣ የ UFO የጥሪ ተሞክሮዎች፣ የላብ ራት ማዝ ማምለጫ፡ ጨለማ ማዝ እና ለፈጣን አንድሮይድ መዝናኛ የግል ሙከራዎች።"
+      "ogDescription": "ያልተለመዱ ቀለሞችን ያግኙ፣ የባዕድ ቅጥ የሚስጥር ጽሑፍ ይስሩ፣ ተጫዋች የሆኑ የዩፎ ምልክቶችን ይላኩ፣ ከጨለማ ቀውሶች ያመልጡ፣ እና ለፈጣን Android አዝናኝ የግል ሙከራዎችን ይቀላቀሉ።"
     },
     "skip": {
       "apps": "ወደ መተግበሪያ ዝርዝር ዝለል"
@@ -10535,11 +10617,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android አነስተኛ መተግበሪያ ስብስብ",
       "title": "NeoKIM መተግበሪያ ቤተ ሙከራ",
       "subtitle": "ለፈጣን መዝናኛ እና መጋራት የተሰሩ ትናንሽ የAndroid መተግበሪያዎች",
-      "description": "የቀለም ተግዳሮቶች፣ ባዕድ መሰል ሚስጥራዊ መልዕክቶች እና የዩፎ ጥሪ ተሞክሮዎች። በትንሹ ጫን። ከአንድ ደቂቃ በታች ይደሰቱ።",
+      "description": "ያልተለመደ ቀለም ተግዳሮቶች፣ የባዕድ አይነት ሚስጥራዊ መልዕክቶች፣ የዩፎ ሲግናል ጨዋታ እና ከጨለማ ማዝ ያመልጣሉ። በትንሹ ጫን። ከአንድ ደቂቃ በታች ይደሰቱ።",
       "primaryCta": "ተለይቶ የቀረበ መተግበሪያን ጫን",
-      "primaryAria": "ቀለም ማስተር 2ን በGoogle Play ላይ ጫን",
+      "primaryAria": "Google Play ላይ Find Odd Color: Color Master 2 ጫን",
       "secondaryCta": "መተግበሪያዎችን ያስሱ",
-      "visualAria": "ከቀለም ማስተር 2 አዶ እና የቀለም ሰቆች ጋር የስልክ ማሾፍ",
+      "visualAria": "በFind Odd Color: Color Master 2 አዶ እና ባለቀለም ሰቆች የስልክ ማሾፍ",
       "badges": [
         "ነጻ መተግበሪያዎች",
         "Android",
@@ -10551,36 +10633,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ተለይቶ የቀረበ መተግበሪያ",
       "title": "ዛሬ ይህን መጀመሪያ ይጫኑ",
       "badge": "ተለይቶ የቀረበ",
-      "appName": "የቀለም ማስተር 2",
-      "short": "በ 10 ሰከንድ ውስጥ የተለያየ ቀለም ያግኙ.",
-      "description": "አንድ ስህተት ሩጫውን የሚያቆምበት የአንድ ህይወት ቀለም እንቆቅልሽ። በፍጥነት ይጀምራል፣ ከዚያ ሪከርድዎን ለማሸነፍ ወደ ኋላ መጎተትዎን ይቀጥላል።",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "በ 10 ሰከንድ ውስጥ አንዱን የተለየ ቀለም ያግኙ.",
+      "description": "አንድ ስህተት ሩጫውን የሚጨርስበት የአንድ ህይወት ያልተለመደ ቀለም እንቆቅልሽ። በፍጥነት ይጀምራል፣ ከዚያ ሪከርድዎን ለማሸነፍ ወደ ኋላ መጎተትዎን ይቀጥላል።",
       "primaryCta": "በGoogle Play ላይ ጫን",
-      "primaryAria": "ቀለም ማስተር 2ን በGoogle Play ላይ ጫን",
+      "primaryAria": "Google Play ላይ Find Odd Color: Color Master 2 ጫን",
       "secondaryCta": "መተግበሪያዎችን ያስሱ",
-      "visualAria": "የቀለም ማስተር 2 የቀለም ንጣፍ ውድድር የስልክ ማሾፍ"
+      "visualAria": "Find Odd Color: Color Master 2 ንጣፍ ፈታኝ የስልክ ማሾፍ"
     },
     "apps": {
       "kicker": "የAPP ካታሎግ",
       "title": "ሁሉም መተግበሪያዎች",
       "description": "ይፋዊ መተግበሪያዎችን በቀጥታ ይጫኑ። ለግል ሙከራዎች በመጀመሪያ ጥያቄ በኢሜል ይላኩ; የሞካሪ መዳረሻ ከተጨመረ በኋላ የሙከራ መቀላቀል የሚለውን ቁልፍ ይጠቀሙ።",
       "colorMaster2": {
-        "name": "የቀለም ማስተር 2",
-        "category": "የቀለም እንቆቅልሽ",
-        "tagline": "በ 10 ሰከንድ ውስጥ የተለያየ ቀለም ያግኙ.",
-        "description": "አንድ ስህተት ሩጫውን ያበቃል። አጭር፣ ሱስ የሚያስይዝ የቀለም ግንዛቤ ፈተና።",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ያልተለመደ ቀለም የእንቆቅልሽ ጨዋታ",
+        "tagline": "በ 10 ሰከንድ ውስጥ አንዱን የተለየ ቀለም ያግኙ.",
+        "description": "አንድ ስህተት ሩጫውን ያበቃል። ለትኩረት እና ለቀለም ግንዛቤ አጭር፣ ሱስ የሚያስይዝ ያልተለመደ ቀለም ፈተና።",
         "highlights": [
           "የ 10 ሰከንድ ገደብ",
           "የአንድ ህይወት ሩጫ",
           "መሪ ሰሌዳ",
           "የቀለም ዕውር እርዳታ"
         ],
-        "primaryCta": "የቀለም ማስተር 2 ን ይጫኑ",
+        "primaryCta": "እንግዳ ቀለም አግኝ ጫን",
         "detailCta": "የድር ማሳያን ይሞክሩ",
         "statusNote": "አሁን በGoogle Play ላይ ይገኛል።",
-        "iconAlt": "የቀለም ማስተር 2 አዶ"
+        "iconAlt": "Find Odd Color: Color Master 2 አዶ"
       },
       "galaxyCode": {
-        "name": "ጋላክሲኮድ",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "ሚስጥራዊ መልእክት መተግበሪያ",
         "tagline": "ኮድ ለመፍታት የማጋሪያ ቁልፍ የሚያስፈልጋቸው ባዕድ የሚመስሉ ሚስጥራዊ መልዕክቶችን ይፍጠሩ።",
         "description": "የራስዎን የጋላክሲ ቋንቋ ህጎች ይፍጠሩ። የእርስዎን የማጋሪያ ቁልፍ ያላቸው ሰዎች ብቻ ተመሳሳዩን ደንቦችን መፍጠር ይችላሉ፣ እና ዋናው ጽሑፍ ወደ አገልጋይ አይሰቀልም።",
@@ -10593,39 +10675,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ሚስጥራዊ መልዕክቶችን ይፍጠሩ",
         "detailCta": "የድር ማሳያን ይሞክሩ",
         "statusNote": "አሁን በGoogle Play ላይ ይገኛል።",
-        "iconAlt": "የጋላክሲኮድ አዶ"
+        "iconAlt": "Alien Text Maker: Galaxy Code አዶ"
       },
       "ufoSignal": {
-        "name": "ወደ UFO ይደውሉ",
-        "category": "መሳጭ አዝናኝ መተግበሪያ",
-        "tagline": "ለመዝናናት ሚስጥራዊ የዩፎ ጥሪ ተሞክሮ።",
-        "description": "ቁልፉን ተጫን፣ ምልክቱን አዳምጥ እና የሆነ ነገር ከጠፈር ላይ የሚያዳምጥ አስብ።",
+        "name": "UFO Signal Simulator",
+        "category": "ሚስጥራዊ ምልክት መዝናኛ መተግበሪያ",
+        "tagline": "ተጫዋች የጠፈር ምልክት ይላኩ እና በ UFO ስሜት ይደሰቱ።",
+        "description": "መተግበሪያውን ይክፈቱ፣ የሲግናል አዝራሩን ይጫኑ እና በድምጽ እና በአኒሜሽን ይደሰቱ ይህም ቅፅበት እንደ ትንሽ የዩፎ ሥነ ሥርዓት እንዲሰማው ያደርጋል።",
         "highlights": [
-          "በይነተገናኝ አዝራር",
+          "የምልክት ቁልፍ",
           "ሚስጥራዊ ድምፆች",
-          "አኒሜሽን",
+          "ስሜት እነማ",
           "ምንም ምዝገባ የለም።"
         ],
-        "primaryCta": "ወደ UFO ይደውሉ",
-        "detailCta": "የድር ማሳያን ይሞክሩ",
-        "statusNote": "አሁን በGoogle Play ላይ ይገኛል።",
-        "iconAlt": "የ UFO አዶን ይደውሉ"
+        "primaryCta": "UFO Signal Simulator ጫን",
+        "detailCta": "የመተግበሪያ ዝርዝሮችን ይመልከቱ",
+        "statusNote": "የመተግበሪያውን ዝርዝሮች ይመልከቱ፣ ከዚያ ከGoogle Play ይጫኑት።",
+        "iconAlt": "UFO Signal Simulator አዶ"
       },
       "colorMasterClassic": {
-        "name": "የቀለም ማስተር",
-        "category": "ክላሲክ ቀለም እንቆቅልሽ",
-        "tagline": "ዋናው የቀለም-ማተኮር ተግዳሮት-በተመሳሳይ ቀለሞች መካከል መልሱን ያግኙ።",
-        "description": "ከቀለም ማስተር 2 በፊት ያለው ኦሪጅናል ስሪት። መጀመሪያ በድሩ ላይ ይሞክሩት፣ ከዚያ ከGoogle Play ይጫኑት።",
+        "name": "Color Sense Test: Color Master",
+        "category": "ክላሲክ የቀለም ስሜት ጨዋታ",
+        "tagline": "ዋናው የቀለም ትኩረት ፈተና: የመልሱን ቀለም አስታውሱ እና ከተመሳሳይ ቀለሞች ይምረጡት.",
+        "description": "ከFind Odd Color: Color Master 2 በፊት የመጀመሪያው የቀለም ስሜት ሙከራ። መጀመሪያ በድሩ ላይ ይሞክሩት፣ ከዚያ ከGoogle Play ይጫኑት።",
         "highlights": [
           "ኦሪጅናል ስሜት",
           "የቀለም ትኩረት",
           "ፈጣን ጨዋታ",
           "አሁን ጫን"
         ],
-        "primaryCta": "የቀለም ማስተር ጫን",
+        "primaryCta": "የቀለም ስሜት ሙከራን ጫን",
         "detailCta": "የድር ማሳያን ይሞክሩ",
         "statusNote": "መጀመሪያ በድሩ ላይ ይሞክሩት፣ ከዚያ ከGoogle Play ይጫኑት።",
-        "iconAlt": "የቀለም ማስተር አዶ"
+        "iconAlt": "Color Sense Test: Color Master አዶ"
       },
       "koreanRandomDefense": {
         "name": "የኮሪያ የዘፈቀደ መከላከያ፡ ከበባ",
@@ -10660,10 +10742,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ዕድለኛ ካርድ የዘፈቀደ መከላከያ አዶ"
       },
       "darkMaze": {
-        "name": "የላብራቶሪ አይጥ ማዝ አምልጥ፡ ጥቁር ማዝ",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "የተለቀቀ የሜዝ ማምለጫ ጨዋታ",
         "tagline": "የላብራቶሪ አይጥ በጨለማው ግርግር ውስጥ ይምራው እና መውጫውን ያግኙ።",
-        "description": "በሜይ 28፣ 2026 በጎግል ፕሌይ ላይ የተለቀቀ። በጨለማው ግርግር ይለፉ፣ ንጥሎችን ይጠቀሙ እና መንገዱ ከመዘጋቱ በፊት ያመልጡ።",
+        "description": "በGoogle Play ላይ የተለቀቀው በሜይ 28፣ 2026 ነው። በጨለማው ግርግር ይሂዱ፣ እቃዎችን ይጠቀሙ እና መንገዱ ከመዘጋቱ በፊት ያመልጡ።",
         "highlights": [
           "በሜይ 28፣ 2026 ተለቋል",
           "ማዝ ማምለጥ",
@@ -10671,8 +10753,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "የጨለማ መትረፍ"
         ],
         "primaryCta": "Google Play ላይ ጫን",
-        "statusNote": "አሁን በጎግል ፕሌይ ላይ ይገኛል። ለዚህ መተግበሪያ ምንም የድር ማሳያ አልተሰጠም።",
-        "iconAlt": "Lab Rat Maze Escape፡ የጨለማ ማዝ አዶ"
+        "statusNote": "የመተግበሪያውን ዝርዝሮች ይመልከቱ፣ ከዚያ ከGoogle Play ይጫኑት። ለዚህ መተግበሪያ ምንም የድር ማሳያ አልተሰጠም።",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze አዶ",
+        "detailCta": "የመተግበሪያ ዝርዝሮችን ይመልከቱ"
       }
     },
     "status": {
@@ -10689,18 +10772,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "አጭር ሐሳቦች",
       "title": "እንደዚህ ሞክራቸው",
       "colorMaster2": {
-        "app": "የቀለም ማስተር 2",
-        "title": "\"ይህን የቀለም ልዩነት ካዩ ዓይኖችዎ ስለታም ናቸው.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ይህን ያልተለመደ ቀለም ካዩ ዓይኖችዎ ስለታም ናቸው.\"",
         "description": "በ10 ሰከንድ ፈተና ከጓደኞች ጋር ይወዳደሩ።"
       },
       "galaxyCode": {
-        "app": "ጋላክሲኮድ",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"ለጓደኛዎ ኮድ መፍታት የማይችሉትን የውጭ መልእክት ይላኩ።\"",
         "description": "የተጋሩ ቁልፍ ያዢዎች ብቻ ኮድ መፍታት የሚችሉት ሚስጥራዊ መልዕክቶችን ይተዉ።"
       },
       "ufoSignal": {
-        "app": "ወደ UFO ይደውሉ",
-        "title": "ጎህ ሲቀድ የ UFO ቁልፍን ከተጫኑ ምን ይከሰታል?",
+        "app": "UFO Signal Simulator",
+        "title": "\" ጎህ ሲቀድ የ UFO ምልክት ከላኩ ምን ይሆናል?\"",
         "description": "በጨለማ ክፍል ውስጥ ባሉ ድምጾች እና እነማ ይደሰቱ።"
       }
     },
@@ -10717,7 +10800,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "መጀመሪያ የትኛውን መተግበሪያ መጫን አለብኝ?",
-        "answer": "ይህ የመጀመሪያ ጉብኝትዎ ከሆነ በመጀመሪያ Color Master 2ን ይሞክሩ። ለተሻለ ውጤት ለመጫወት ፈጣን እና ቀላል ነው።"
+        "answer": "ይህ የመጀመሪያ ጉብኝትዎ ከሆነ መጀመሪያ Find Odd Color: Color Master 2ን ይሞክሩ። ለተሻለ ውጤት ለመጫወት ፈጣን እና ቀላል ነው።"
       },
       "privateTest": {
         "question": "የግል የሙከራ መተግበሪያዎችን እንዴት መቀላቀል እችላለሁ?",
@@ -10728,12 +10811,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "በNeoKIM የተሰራ",
       "lastUpdated": "መጨረሻ የዘመነው: 2026.05.31",
       "googlePlay": "Google Play መተግበሪያዎች",
-      "colorTest": "የቀለም ሙከራ",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO መተግበሪያ",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "የግላዊነት ፖሊሲ",
       "appAds": "app-ads.txt",
-      "contact": "ተገናኝ"
+      "contact": "ተገናኝ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "የግል ሞካሪ ምዝገባ",
@@ -10754,9 +10838,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "et": {
     "seo": {
       "title": "NeoKIM App Lab | Tasuta Android minirakendused",
-      "description": "Installige Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze ning Lucky Card Random Defense ja muude Androidi minirakenduste privaatsed testid.",
+      "description": "Installige Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze ja privaatsed testid rohkemate Android minirakenduste jaoks.",
       "ogTitle": "NeoKIM App Lab | Android minirakendused",
-      "ogDescription": "Värviväljakutsed, tulnukatega sarnased salasõnumid, UFO-kõnede kogemused, Lab Rat Maze Escape: Dark Maze ja privaatsed testid Androidi kiireks lõbuks."
+      "ogDescription": "Leidke veidraid värve, koostage tulnukate stiilis salatekste, saatke mängulisi UFO-signaale, põgenege pimedatest labürintidest ja liituge privaatsete testidega, et Android kiiresti lõbutseda."
     },
     "skip": {
       "apps": "Liikuge rakenduste loendisse"
@@ -10791,11 +10875,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android minirakenduste kollektsioon",
       "title": "NeoKIM App Lab",
       "subtitle": "Väikesed Android rakendused on loodud kiireks lõbutsemiseks ja jagamiseks",
-      "description": "Värvilised väljakutsed, tulnukatega sarnased salasõnumid ja UFO-kutsumise kogemused. Paigaldage kergelt. Nautige vähem kui minuti pärast.",
+      "description": "Kummaliste värvidega väljakutsed, tulnukate stiilis salasõnumid, UFO signaalide mängimine ja pimedas labürindis põgenemine. Paigaldage kergelt. Nautige vähem kui minuti pärast.",
       "primaryCta": "Installige esiletõstetud rakendus",
-      "primaryAria": "Installige Color Master 2 saidile Google Play",
+      "primaryAria": "Installige Find Odd Color: Color Master 2 saidile Google Play",
       "secondaryCta": "Sirvige rakendusi",
-      "visualAria": "Telefoni makett Color Master 2 ikooni ja värviplaatidega",
+      "visualAria": "Telefoni makett Find Odd Color: Color Master 2 ikooni ja värviplaatidega",
       "badges": [
         "Tasuta rakendused",
         "Android",
@@ -10807,81 +10891,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ESITATUD RAKENDUS",
       "title": "Installige see kõigepealt täna",
       "badge": "Esiletõstetud",
-      "appName": "Värvimeister 2",
-      "short": "Leidke erinev värv 10 sekundiga.",
-      "description": "Ühe elu värvipusle, kus üks viga lõpetab jooksu. See algab kiiresti, seejärel tõmbab teid pidevalt tagasi, et oma rekordit ületada.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Leidke 10 sekundiga üks erinev värv.",
+      "description": "Ühe elu paaritu värvi pusle, kus üks viga lõpetab jooksu. See algab kiiresti, seejärel tõmbab teid pidevalt tagasi, et oma rekordit ületada.",
       "primaryCta": "Installige saidile Google Play",
-      "primaryAria": "Installige Color Master 2 saidile Google Play",
+      "primaryAria": "Installige Find Odd Color: Color Master 2 saidile Google Play",
       "secondaryCta": "Sirvige rakendusi",
-      "visualAria": "Color Master 2 värviplaatide väljakutse telefoni makett"
+      "visualAria": "Find Odd Color: Color Master 2 plaatide väljakutse telefoni makett"
     },
     "apps": {
       "kicker": "RAKENDUSTE KATALOOG",
       "title": "Kõik rakendused",
       "description": "Installige avalikud rakendused otse. Privaatsete testide jaoks saatke esmalt taotlus meiliga; pärast testija juurdepääsu lisamist kasutage nuppu Liitu testiga.",
       "colorMaster2": {
-        "name": "Värvimeister 2",
-        "category": "Värviline pusle",
-        "tagline": "Leidke erinev värv 10 sekundiga.",
-        "description": "Üks viga lõpetab jooksu. Lühike sõltuvust tekitav värvitaju väljakutse.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Paaritu värvi puslemäng",
+        "tagline": "Leidke 10 sekundiga üks erinev värv.",
+        "description": "Üks viga lõpetab jooksu. Lühike sõltuvust tekitav paaritu värvi väljakutse fookuse ja värvide tajumiseks.",
         "highlights": [
           "10-sekundiline piirang",
           "Ühe elu jooks",
           "Edetabel",
           "Värvipime abi"
         ],
-        "primaryCta": "Installige Color Master 2",
+        "primaryCta": "Installige Find Odd Color",
         "detailCta": "Proovige veebidemot",
-        "statusNote": "Nüüd saadaval Google Play-is.",
-        "iconAlt": "Color Master 2 ikoon"
+        "statusNote": "Nüüd saadaval saidil Google Play.",
+        "iconAlt": "Find Odd Color: Color Master 2 ikoon"
       },
       "galaxyCode": {
-        "name": "Galaktikakood",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Salasõnumite rakendus",
         "tagline": "Looge tulnukatega sarnaseid salasõnumeid, mis vajavad dekodeerimiseks jagamisvõtit.",
         "description": "Looge oma galaktilise keele reeglid. Ainult teie jagamisvõtmega inimesed saavad samu reegleid uuesti luua ja algset teksti ei laadita serverisse üles.",
         "highlights": [
           "Jagamisvõtmepõhine",
           "Isiklikud reeglid",
-          "SNS-valmis",
+          "SNS-i valmis",
           "Serverisse üleslaadimine puudub"
         ],
         "primaryCta": "Looge salasõnumeid",
         "detailCta": "Proovige veebidemot",
-        "statusNote": "Nüüd saadaval Google Play-is.",
-        "iconAlt": "Galaktikakoodi ikoon"
+        "statusNote": "Nüüd saadaval saidil Google Play.",
+        "iconAlt": "Alien Text Maker: Galaxy Code ikoon"
       },
       "ufoSignal": {
-        "name": "Helista UFO-le",
-        "category": "Kaasahaarav lõbus rakendus",
-        "tagline": "Salapärane UFO-kutsumise kogemus lõbu pärast.",
-        "description": "Vajutage nuppu, kuulake signaali ja kujutage ette, et midagi kuulab kosmosest.",
+        "name": "UFO Signal Simulator",
+        "category": "Salapärase signaali meelelahutusrakendus",
+        "tagline": "Saada mänguline kosmosesignaal ja naudi UFO-meeleolu.",
+        "description": "Avage rakendus, vajutage signaalinuppu ning nautige heli ja animatsioone, mis panevad hetke tunduma väikese UFO-rituaalina.",
         "highlights": [
-          "Interaktiivne nupp",
+          "Signaali nupp",
           "Salapärased helid",
-          "Animatsioon",
+          "Meeleolu animatsioon",
           "Registreerumine puudub"
         ],
-        "primaryCta": "Helista UFO-le",
-        "detailCta": "Proovige veebidemot",
-        "statusNote": "Nüüd saadaval Google Play-is.",
-        "iconAlt": "Helista UFO ikoonile"
+        "primaryCta": "Installige UFO Signal Simulator",
+        "detailCta": "Vaadake rakenduse üksikasju",
+        "statusNote": "Vaadake rakenduse üksikasju ja installige see saidilt Google Play.",
+        "iconAlt": "UFO Signal Simulator ikoon"
       },
       "colorMasterClassic": {
-        "name": "Värvimeister",
-        "category": "Klassikaline värviline pusle",
-        "tagline": "Algne värvifookuse väljakutse: leidke vastus sarnaste värvide hulgast.",
-        "description": "Algne versioon enne Color Master 2. Proovige seda esmalt veebis ja seejärel installige see saidilt Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassikaline värvitaju mäng",
+        "tagline": "Algne värvifookuse väljakutse: jäta vastuse värv meelde ja vali see sarnaste värvide hulgast.",
+        "description": "Algne värvitaju test enne Find Odd Color: Color Master 2I. Proovige seda esmalt veebis ja seejärel installige see saidilt Google Play.",
         "highlights": [
           "Originaalne tunne",
           "Värvi fookus",
           "Kiire mängimine",
           "Installige kohe"
         ],
-        "primaryCta": "Installige Color Master",
+        "primaryCta": "Installige Color Sense Test",
         "detailCta": "Proovige veebidemot",
         "statusNote": "Proovige seda esmalt veebis ja seejärel installige see saidilt Google Play.",
-        "iconAlt": "Värvimeistri ikoon"
+        "iconAlt": "Color Sense Test: Color Master ikoon"
       },
       "koreanRandomDefense": {
         "name": "Korea juhuslik kaitse: piiramine",
@@ -10916,19 +11000,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Õnnekaardi juhusliku kaitse ikoon"
       },
       "darkMaze": {
-        "name": "Labrotilabürindi põgenemine: tume labürint",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Välja antud labürindi põgenemismäng",
         "tagline": "Juhtige laborirott läbi pimeda labürindi ja leidke väljapääs.",
-        "description": "Ilmus Google Plays 28. mail 2026. Liikuge läbi pimeda labürindi, kasutage üksusi ja põgenege enne, kui rada sulgub.",
+        "description": "Välja antud Google Playis 28. mail 2026. Liikuge läbi pimeda labürindi, kasutage esemeid ja põgenege enne, kui tee sulgub.",
         "highlights": [
           "Välja antud 28. mail 2026",
           "Labürindi põgenemine",
           "Üksused",
           "Tume ellujäämine"
         ],
-        "primaryCta": "Installige Google Playst",
-        "statusNote": "Nüüd saadaval Google Plays. Selle rakenduse jaoks ei pakuta veebidemot.",
-        "iconAlt": "Labroti labürinti põgenemine: tumeda labürindi ikoon"
+        "primaryCta": "Installige teenusesse Google Play",
+        "statusNote": "Vaadake rakenduse üksikasju ja installige see saidilt Google Play. Selle rakenduse jaoks ei pakuta veebidemot.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikoon",
+        "detailCta": "Vaadake rakenduse üksikasju"
       }
     },
     "status": {
@@ -10945,18 +11030,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "LÜHIKESTE IDEED",
       "title": "Proovige neid niimoodi",
       "colorMaster2": {
-        "app": "Värvimeister 2",
-        "title": "\"Kui näete seda värvierinevust, on teie silmad teravad.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Kui märkate seda veidrat värvi, on teie silmad teravad.\"",
         "description": "Võistelge sõpradega 10-sekundilises väljakutses."
       },
       "galaxyCode": {
-        "app": "Galaktikakood",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Saada oma sõbrale tulnuka sõnum, mida ta ei suuda dekodeerida.\"",
         "description": "Jätke salajased sõnumid, mida saavad dekodeerida ainult aktsiate võtmeomanikud."
       },
       "ufoSignal": {
-        "app": "Helista UFO-le",
-        "title": "\"Mis juhtub, kui vajutate koidikul UFO-nuppu?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Mis juhtub, kui saadate koidikul UFO-signaali?\"",
         "description": "Nautige helisid ja animatsiooni pimedas ruumis."
       }
     },
@@ -10973,7 +11058,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Millise rakenduse peaksin kõigepealt installima?",
-        "answer": "Kui see on teie esimene külastus, proovige kõigepealt Color Master 2. Seda on kiire mängida ja parema tulemuse saamiseks lihtne uuesti mängida."
+        "answer": "Kui see on teie esimene külastus, proovige esmalt Find Odd Color: Color Master 2. Seda on kiire mängida ja parema tulemuse saamiseks lihtne uuesti mängida."
       },
       "privateTest": {
         "question": "Kuidas liituda privaatsete testrakendustega?",
@@ -10984,12 +11069,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Tootja NeoKIM",
       "lastUpdated": "Viimati uuendatud: 2026.05.31",
       "googlePlay": "Google Play rakendused",
-      "colorTest": "Värvi test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO rakendus",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privaatsuspoliitika",
       "appAds": "app-ads.txt",
-      "contact": "Võtke ühendust"
+      "contact": "Võtke ühendust",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Privaatne testija registreerumine",
@@ -11010,9 +11096,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-IN": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+      "description": "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+      "ogDescription": "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11047,11 +11133,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Small Android apps made for quick fun and sharing",
-      "description": "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+      "description": "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
       "primaryCta": "Install Featured App",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Phone mockup with Color Master 2 icon and color tiles",
+      "visualAria": "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
       "badges": [
         "Free Apps",
         "Android",
@@ -11063,36 +11149,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "FEATURED APP",
       "title": "Install This First Today",
       "badge": "Featured",
-      "appName": "Color Master 2",
-      "short": "Find the different color in 10 seconds.",
-      "description": "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find the one different color in 10 seconds.",
+      "description": "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
       "primaryCta": "Install on Google Play",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "All Apps",
       "description": "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Color puzzle",
-        "tagline": "Find the different color in 10 seconds.",
-        "description": "One mistake ends the run. A short, addictive color perception challenge.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-color puzzle game",
+        "tagline": "Find the one different color in 10 seconds.",
+        "description": "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
         "highlights": [
           "10-second limit",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "Install Color Master 2",
+        "primaryCta": "Install Find Odd Color",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Color Master 2 icon"
+        "iconAlt": "Find Odd Color: Color Master 2 icon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Secret message app",
         "tagline": "Create alien-like secret messages that need a share key to decode.",
         "description": "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -11105,39 +11191,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Create Secret Messages",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Galacticode icon"
+        "iconAlt": "Alien Text Maker: Galaxy Code icon"
       },
       "ufoSignal": {
-        "name": "Call the UFO",
-        "category": "Immersive fun app",
-        "tagline": "A mysterious UFO calling experience for fun.",
-        "description": "Press the button, hear the signal, and imagine something listening from space.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal entertainment app",
+        "tagline": "Send a playful space signal and enjoy the UFO mood.",
+        "description": "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
         "highlights": [
-          "Interactive button",
+          "Signal button",
           "Mystery sounds",
-          "Animation",
+          "Mood animation",
           "No sign-up"
         ],
-        "primaryCta": "Call the UFO",
-        "detailCta": "Try Web Demo",
-        "statusNote": "Available now on Google Play.",
-        "iconAlt": "Call the UFO icon"
+        "primaryCta": "Install UFO Signal Simulator",
+        "detailCta": "View App Details",
+        "statusNote": "View the app details, then install it from Google Play.",
+        "iconAlt": "UFO Signal Simulator icon"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Classic color puzzle",
-        "tagline": "The original color-focus challenge: find the answer among similar colors.",
-        "description": "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classic color sense game",
+        "tagline": "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+        "description": "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
         "highlights": [
           "Original feel",
           "Color focus",
           "Quick play",
           "Install now"
         ],
-        "primaryCta": "Install Color Master",
+        "primaryCta": "Install Color Sense Test",
         "detailCta": "Try Web Demo",
         "statusNote": "Try it on the web first, then install it from Google Play.",
-        "iconAlt": "Color Master icon"
+        "iconAlt": "Color Sense Test: Color Master icon"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Siege",
@@ -11183,8 +11269,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Dark survival"
         ],
         "primaryCta": "Install on Google Play",
-        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "View the app details, then install it from Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon",
+        "detailCta": "View App Details"
       }
     },
     "status": {
@@ -11201,18 +11288,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS IDEAS",
       "title": "Try Them Like This",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "“If you see this color difference, your eyes are sharp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“If you spot this odd color, your eyes are sharp.”",
         "description": "Compete with friends in a 10-second challenge."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Send your friend an alien message they cannot decode.”",
         "description": "Leave secret messages that only share-key holders can decode."
       },
       "ufoSignal": {
-        "app": "Call the UFO",
-        "title": "“What happens if you press the UFO button at dawn?”",
+        "app": "UFO Signal Simulator",
+        "title": "“What happens if you send a UFO signal at dawn?”",
         "description": "Enjoy the sounds and animation in a dark room."
       }
     },
@@ -11229,7 +11316,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Which app should I install first?",
-        "answer": "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+        "answer": "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
       },
       "privateTest": {
         "question": "How do I join private test apps?",
@@ -11240,12 +11327,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Made by NeoKIM",
       "lastUpdated": "Last updated: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Color Test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacy Policy",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -11266,9 +11354,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-SG": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+      "description": "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+      "ogDescription": "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11303,11 +11391,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Small Android apps made for quick fun and sharing",
-      "description": "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+      "description": "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
       "primaryCta": "Install Featured App",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Phone mockup with Color Master 2 icon and color tiles",
+      "visualAria": "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
       "badges": [
         "Free Apps",
         "Android",
@@ -11319,36 +11407,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "FEATURED APP",
       "title": "Install This First Today",
       "badge": "Featured",
-      "appName": "Color Master 2",
-      "short": "Find the different color in 10 seconds.",
-      "description": "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find the one different color in 10 seconds.",
+      "description": "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
       "primaryCta": "Install on Google Play",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "All Apps",
       "description": "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Color puzzle",
-        "tagline": "Find the different color in 10 seconds.",
-        "description": "One mistake ends the run. A short, addictive color perception challenge.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-color puzzle game",
+        "tagline": "Find the one different color in 10 seconds.",
+        "description": "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
         "highlights": [
           "10-second limit",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "Install Color Master 2",
+        "primaryCta": "Install Find Odd Color",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Color Master 2 icon"
+        "iconAlt": "Find Odd Color: Color Master 2 icon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Secret message app",
         "tagline": "Create alien-like secret messages that need a share key to decode.",
         "description": "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -11361,39 +11449,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Create Secret Messages",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Galacticode icon"
+        "iconAlt": "Alien Text Maker: Galaxy Code icon"
       },
       "ufoSignal": {
-        "name": "Call the UFO",
-        "category": "Immersive fun app",
-        "tagline": "A mysterious UFO calling experience for fun.",
-        "description": "Press the button, hear the signal, and imagine something listening from space.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal entertainment app",
+        "tagline": "Send a playful space signal and enjoy the UFO mood.",
+        "description": "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
         "highlights": [
-          "Interactive button",
+          "Signal button",
           "Mystery sounds",
-          "Animation",
+          "Mood animation",
           "No sign-up"
         ],
-        "primaryCta": "Call the UFO",
-        "detailCta": "Try Web Demo",
-        "statusNote": "Available now on Google Play.",
-        "iconAlt": "Call the UFO icon"
+        "primaryCta": "Install UFO Signal Simulator",
+        "detailCta": "View App Details",
+        "statusNote": "View the app details, then install it from Google Play.",
+        "iconAlt": "UFO Signal Simulator icon"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Classic color puzzle",
-        "tagline": "The original color-focus challenge: find the answer among similar colors.",
-        "description": "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classic color sense game",
+        "tagline": "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+        "description": "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
         "highlights": [
           "Original feel",
           "Color focus",
           "Quick play",
           "Install now"
         ],
-        "primaryCta": "Install Color Master",
+        "primaryCta": "Install Color Sense Test",
         "detailCta": "Try Web Demo",
         "statusNote": "Try it on the web first, then install it from Google Play.",
-        "iconAlt": "Color Master icon"
+        "iconAlt": "Color Sense Test: Color Master icon"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Siege",
@@ -11439,8 +11527,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Dark survival"
         ],
         "primaryCta": "Install on Google Play",
-        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "View the app details, then install it from Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon",
+        "detailCta": "View App Details"
       }
     },
     "status": {
@@ -11457,18 +11546,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS IDEAS",
       "title": "Try Them Like This",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "“If you see this color difference, your eyes are sharp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“If you spot this odd color, your eyes are sharp.”",
         "description": "Compete with friends in a 10-second challenge."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Send your friend an alien message they cannot decode.”",
         "description": "Leave secret messages that only share-key holders can decode."
       },
       "ufoSignal": {
-        "app": "Call the UFO",
-        "title": "“What happens if you press the UFO button at dawn?”",
+        "app": "UFO Signal Simulator",
+        "title": "“What happens if you send a UFO signal at dawn?”",
         "description": "Enjoy the sounds and animation in a dark room."
       }
     },
@@ -11485,7 +11574,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Which app should I install first?",
-        "answer": "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+        "answer": "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
       },
       "privateTest": {
         "question": "How do I join private test apps?",
@@ -11496,12 +11585,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Made by NeoKIM",
       "lastUpdated": "Last updated: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Color Test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacy Policy",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -11522,9 +11612,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-ZA": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+      "description": "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+      "ogDescription": "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11559,11 +11649,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Small Android apps made for quick fun and sharing",
-      "description": "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+      "description": "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
       "primaryCta": "Install Featured App",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Phone mockup with Color Master 2 icon and color tiles",
+      "visualAria": "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
       "badges": [
         "Free Apps",
         "Android",
@@ -11575,36 +11665,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "FEATURED APP",
       "title": "Install This First Today",
       "badge": "Featured",
-      "appName": "Color Master 2",
-      "short": "Find the different color in 10 seconds.",
-      "description": "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find the one different color in 10 seconds.",
+      "description": "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
       "primaryCta": "Install on Google Play",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "All Apps",
       "description": "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Color puzzle",
-        "tagline": "Find the different color in 10 seconds.",
-        "description": "One mistake ends the run. A short, addictive color perception challenge.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-color puzzle game",
+        "tagline": "Find the one different color in 10 seconds.",
+        "description": "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
         "highlights": [
           "10-second limit",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "Install Color Master 2",
+        "primaryCta": "Install Find Odd Color",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Color Master 2 icon"
+        "iconAlt": "Find Odd Color: Color Master 2 icon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Secret message app",
         "tagline": "Create alien-like secret messages that need a share key to decode.",
         "description": "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -11617,39 +11707,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Create Secret Messages",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Galacticode icon"
+        "iconAlt": "Alien Text Maker: Galaxy Code icon"
       },
       "ufoSignal": {
-        "name": "Call the UFO",
-        "category": "Immersive fun app",
-        "tagline": "A mysterious UFO calling experience for fun.",
-        "description": "Press the button, hear the signal, and imagine something listening from space.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal entertainment app",
+        "tagline": "Send a playful space signal and enjoy the UFO mood.",
+        "description": "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
         "highlights": [
-          "Interactive button",
+          "Signal button",
           "Mystery sounds",
-          "Animation",
+          "Mood animation",
           "No sign-up"
         ],
-        "primaryCta": "Call the UFO",
-        "detailCta": "Try Web Demo",
-        "statusNote": "Available now on Google Play.",
-        "iconAlt": "Call the UFO icon"
+        "primaryCta": "Install UFO Signal Simulator",
+        "detailCta": "View App Details",
+        "statusNote": "View the app details, then install it from Google Play.",
+        "iconAlt": "UFO Signal Simulator icon"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Classic color puzzle",
-        "tagline": "The original color-focus challenge: find the answer among similar colors.",
-        "description": "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classic color sense game",
+        "tagline": "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+        "description": "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
         "highlights": [
           "Original feel",
           "Color focus",
           "Quick play",
           "Install now"
         ],
-        "primaryCta": "Install Color Master",
+        "primaryCta": "Install Color Sense Test",
         "detailCta": "Try Web Demo",
         "statusNote": "Try it on the web first, then install it from Google Play.",
-        "iconAlt": "Color Master icon"
+        "iconAlt": "Color Sense Test: Color Master icon"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Siege",
@@ -11695,8 +11785,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Dark survival"
         ],
         "primaryCta": "Install on Google Play",
-        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "View the app details, then install it from Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon",
+        "detailCta": "View App Details"
       }
     },
     "status": {
@@ -11713,18 +11804,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS IDEAS",
       "title": "Try Them Like This",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "“If you see this color difference, your eyes are sharp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“If you spot this odd color, your eyes are sharp.”",
         "description": "Compete with friends in a 10-second challenge."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Send your friend an alien message they cannot decode.”",
         "description": "Leave secret messages that only share-key holders can decode."
       },
       "ufoSignal": {
-        "app": "Call the UFO",
-        "title": "“What happens if you press the UFO button at dawn?”",
+        "app": "UFO Signal Simulator",
+        "title": "“What happens if you send a UFO signal at dawn?”",
         "description": "Enjoy the sounds and animation in a dark room."
       }
     },
@@ -11741,7 +11832,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Which app should I install first?",
-        "answer": "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+        "answer": "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
       },
       "privateTest": {
         "question": "How do I join private test apps?",
@@ -11752,12 +11843,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Made by NeoKIM",
       "lastUpdated": "Last updated: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Color Test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacy Policy",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -11778,9 +11870,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-GB": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+      "description": "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+      "ogDescription": "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -11815,11 +11907,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Small Android apps made for quick fun and sharing",
-      "description": "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+      "description": "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
       "primaryCta": "Install Featured App",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Phone mockup with Color Master 2 icon and color tiles",
+      "visualAria": "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
       "badges": [
         "Free Apps",
         "Android",
@@ -11831,36 +11923,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "FEATURED APP",
       "title": "Install This First Today",
       "badge": "Featured",
-      "appName": "Color Master 2",
-      "short": "Find the different color in 10 seconds.",
-      "description": "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find the one different color in 10 seconds.",
+      "description": "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
       "primaryCta": "Install on Google Play",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "All Apps",
       "description": "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Color puzzle",
-        "tagline": "Find the different color in 10 seconds.",
-        "description": "One mistake ends the run. A short, addictive color perception challenge.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-color puzzle game",
+        "tagline": "Find the one different color in 10 seconds.",
+        "description": "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
         "highlights": [
           "10-second limit",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "Install Color Master 2",
+        "primaryCta": "Install Find Odd Color",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Color Master 2 icon"
+        "iconAlt": "Find Odd Color: Color Master 2 icon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Secret message app",
         "tagline": "Create alien-like secret messages that need a share key to decode.",
         "description": "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -11873,39 +11965,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Create Secret Messages",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Galacticode icon"
+        "iconAlt": "Alien Text Maker: Galaxy Code icon"
       },
       "ufoSignal": {
-        "name": "Call the UFO",
-        "category": "Immersive fun app",
-        "tagline": "A mysterious UFO calling experience for fun.",
-        "description": "Press the button, hear the signal, and imagine something listening from space.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal entertainment app",
+        "tagline": "Send a playful space signal and enjoy the UFO mood.",
+        "description": "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
         "highlights": [
-          "Interactive button",
+          "Signal button",
           "Mystery sounds",
-          "Animation",
+          "Mood animation",
           "No sign-up"
         ],
-        "primaryCta": "Call the UFO",
-        "detailCta": "Try Web Demo",
-        "statusNote": "Available now on Google Play.",
-        "iconAlt": "Call the UFO icon"
+        "primaryCta": "Install UFO Signal Simulator",
+        "detailCta": "View App Details",
+        "statusNote": "View the app details, then install it from Google Play.",
+        "iconAlt": "UFO Signal Simulator icon"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Classic color puzzle",
-        "tagline": "The original color-focus challenge: find the answer among similar colors.",
-        "description": "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classic color sense game",
+        "tagline": "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+        "description": "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
         "highlights": [
           "Original feel",
           "Color focus",
           "Quick play",
           "Install now"
         ],
-        "primaryCta": "Install Color Master",
+        "primaryCta": "Install Color Sense Test",
         "detailCta": "Try Web Demo",
         "statusNote": "Try it on the web first, then install it from Google Play.",
-        "iconAlt": "Color Master icon"
+        "iconAlt": "Color Sense Test: Color Master icon"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Siege",
@@ -11951,8 +12043,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Dark survival"
         ],
         "primaryCta": "Install on Google Play",
-        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "View the app details, then install it from Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon",
+        "detailCta": "View App Details"
       }
     },
     "status": {
@@ -11969,18 +12062,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS IDEAS",
       "title": "Try Them Like This",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "“If you see this color difference, your eyes are sharp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“If you spot this odd color, your eyes are sharp.”",
         "description": "Compete with friends in a 10-second challenge."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Send your friend an alien message they cannot decode.”",
         "description": "Leave secret messages that only share-key holders can decode."
       },
       "ufoSignal": {
-        "app": "Call the UFO",
-        "title": "“What happens if you press the UFO button at dawn?”",
+        "app": "UFO Signal Simulator",
+        "title": "“What happens if you send a UFO signal at dawn?”",
         "description": "Enjoy the sounds and animation in a dark room."
       }
     },
@@ -11997,7 +12090,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Which app should I install first?",
-        "answer": "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+        "answer": "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
       },
       "privateTest": {
         "question": "How do I join private test apps?",
@@ -12008,12 +12101,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Made by NeoKIM",
       "lastUpdated": "Last updated: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Color Test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacy Policy",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -12034,9 +12128,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-AU": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+      "description": "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+      "ogDescription": "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -12071,11 +12165,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Small Android apps made for quick fun and sharing",
-      "description": "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+      "description": "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
       "primaryCta": "Install Featured App",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Phone mockup with Color Master 2 icon and color tiles",
+      "visualAria": "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
       "badges": [
         "Free Apps",
         "Android",
@@ -12087,36 +12181,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "FEATURED APP",
       "title": "Install This First Today",
       "badge": "Featured",
-      "appName": "Color Master 2",
-      "short": "Find the different color in 10 seconds.",
-      "description": "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find the one different color in 10 seconds.",
+      "description": "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
       "primaryCta": "Install on Google Play",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "All Apps",
       "description": "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Color puzzle",
-        "tagline": "Find the different color in 10 seconds.",
-        "description": "One mistake ends the run. A short, addictive color perception challenge.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-color puzzle game",
+        "tagline": "Find the one different color in 10 seconds.",
+        "description": "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
         "highlights": [
           "10-second limit",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "Install Color Master 2",
+        "primaryCta": "Install Find Odd Color",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Color Master 2 icon"
+        "iconAlt": "Find Odd Color: Color Master 2 icon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Secret message app",
         "tagline": "Create alien-like secret messages that need a share key to decode.",
         "description": "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -12129,39 +12223,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Create Secret Messages",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Galacticode icon"
+        "iconAlt": "Alien Text Maker: Galaxy Code icon"
       },
       "ufoSignal": {
-        "name": "Call the UFO",
-        "category": "Immersive fun app",
-        "tagline": "A mysterious UFO calling experience for fun.",
-        "description": "Press the button, hear the signal, and imagine something listening from space.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal entertainment app",
+        "tagline": "Send a playful space signal and enjoy the UFO mood.",
+        "description": "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
         "highlights": [
-          "Interactive button",
+          "Signal button",
           "Mystery sounds",
-          "Animation",
+          "Mood animation",
           "No sign-up"
         ],
-        "primaryCta": "Call the UFO",
-        "detailCta": "Try Web Demo",
-        "statusNote": "Available now on Google Play.",
-        "iconAlt": "Call the UFO icon"
+        "primaryCta": "Install UFO Signal Simulator",
+        "detailCta": "View App Details",
+        "statusNote": "View the app details, then install it from Google Play.",
+        "iconAlt": "UFO Signal Simulator icon"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Classic color puzzle",
-        "tagline": "The original color-focus challenge: find the answer among similar colors.",
-        "description": "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classic color sense game",
+        "tagline": "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+        "description": "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
         "highlights": [
           "Original feel",
           "Color focus",
           "Quick play",
           "Install now"
         ],
-        "primaryCta": "Install Color Master",
+        "primaryCta": "Install Color Sense Test",
         "detailCta": "Try Web Demo",
         "statusNote": "Try it on the web first, then install it from Google Play.",
-        "iconAlt": "Color Master icon"
+        "iconAlt": "Color Sense Test: Color Master icon"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Siege",
@@ -12207,8 +12301,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Dark survival"
         ],
         "primaryCta": "Install on Google Play",
-        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "View the app details, then install it from Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon",
+        "detailCta": "View App Details"
       }
     },
     "status": {
@@ -12225,18 +12320,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS IDEAS",
       "title": "Try Them Like This",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "“If you see this color difference, your eyes are sharp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“If you spot this odd color, your eyes are sharp.”",
         "description": "Compete with friends in a 10-second challenge."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Send your friend an alien message they cannot decode.”",
         "description": "Leave secret messages that only share-key holders can decode."
       },
       "ufoSignal": {
-        "app": "Call the UFO",
-        "title": "“What happens if you press the UFO button at dawn?”",
+        "app": "UFO Signal Simulator",
+        "title": "“What happens if you send a UFO signal at dawn?”",
         "description": "Enjoy the sounds and animation in a dark room."
       }
     },
@@ -12253,7 +12348,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Which app should I install first?",
-        "answer": "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+        "answer": "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
       },
       "privateTest": {
         "question": "How do I join private test apps?",
@@ -12264,12 +12359,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Made by NeoKIM",
       "lastUpdated": "Last updated: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Color Test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacy Policy",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -12290,9 +12386,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "en-CA": {
     "seo": {
       "title": "NeoKIM App Lab | Free Android Mini Apps",
-      "description": "Install Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, and private tests for Lucky Card Random Defense and more Android mini apps.",
+      "description": "Install Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, and private tests for more Android mini apps.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Color challenges, alien-like secret messages, UFO calling experiences, Lab Rat Maze Escape: Dark Maze, and private tests for quick Android fun."
+      "ogDescription": "Find odd colors, make alien-style secret text, send playful UFO signals, escape dark mazes, and join private tests for quick Android fun."
     },
     "skip": {
       "apps": "Skip to app list"
@@ -12327,11 +12423,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Small Android apps made for quick fun and sharing",
-      "description": "Color challenges, alien-like secret messages, and UFO calling experiences. Install lightly. Enjoy in under a minute.",
+      "description": "Odd-color challenges, alien-style secret messages, UFO signal play, and dark maze escapes. Install lightly. Enjoy in under a minute.",
       "primaryCta": "Install Featured App",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Phone mockup with Color Master 2 icon and color tiles",
+      "visualAria": "Phone mockup with Find Odd Color: Color Master 2 icon and color tiles",
       "badges": [
         "Free Apps",
         "Android",
@@ -12343,36 +12439,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "FEATURED APP",
       "title": "Install This First Today",
       "badge": "Featured",
-      "appName": "Color Master 2",
-      "short": "Find the different color in 10 seconds.",
-      "description": "A one-life color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Find the one different color in 10 seconds.",
+      "description": "A one-life odd-color puzzle where one mistake ends the run. It starts fast, then keeps pulling you back to beat your record.",
       "primaryCta": "Install on Google Play",
-      "primaryAria": "Install Color Master 2 on Google Play",
+      "primaryAria": "Install Find Odd Color: Color Master 2 on Google Play",
       "secondaryCta": "Browse Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "APP CATALOG",
       "title": "All Apps",
       "description": "Install public apps directly. For private tests, email a request first; after tester access is added, use the Join Test button.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Color puzzle",
-        "tagline": "Find the different color in 10 seconds.",
-        "description": "One mistake ends the run. A short, addictive color perception challenge.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Odd-color puzzle game",
+        "tagline": "Find the one different color in 10 seconds.",
+        "description": "One mistake ends the run. A short, addictive odd-color challenge for focus and color perception.",
         "highlights": [
           "10-second limit",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "Install Color Master 2",
+        "primaryCta": "Install Find Odd Color",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Color Master 2 icon"
+        "iconAlt": "Find Odd Color: Color Master 2 icon"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Secret message app",
         "tagline": "Create alien-like secret messages that need a share key to decode.",
         "description": "Create your own galactic language rules. Only people with your share key can recreate the same rules, and the original text is not uploaded to a server.",
@@ -12385,39 +12481,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Create Secret Messages",
         "detailCta": "Try Web Demo",
         "statusNote": "Available now on Google Play.",
-        "iconAlt": "Galacticode icon"
+        "iconAlt": "Alien Text Maker: Galaxy Code icon"
       },
       "ufoSignal": {
-        "name": "Call the UFO",
-        "category": "Immersive fun app",
-        "tagline": "A mysterious UFO calling experience for fun.",
-        "description": "Press the button, hear the signal, and imagine something listening from space.",
+        "name": "UFO Signal Simulator",
+        "category": "Mystery signal entertainment app",
+        "tagline": "Send a playful space signal and enjoy the UFO mood.",
+        "description": "Open the app, press the signal button, and enjoy sound and animation that make the moment feel like a small UFO ritual.",
         "highlights": [
-          "Interactive button",
+          "Signal button",
           "Mystery sounds",
-          "Animation",
+          "Mood animation",
           "No sign-up"
         ],
-        "primaryCta": "Call the UFO",
-        "detailCta": "Try Web Demo",
-        "statusNote": "Available now on Google Play.",
-        "iconAlt": "Call the UFO icon"
+        "primaryCta": "Install UFO Signal Simulator",
+        "detailCta": "View App Details",
+        "statusNote": "View the app details, then install it from Google Play.",
+        "iconAlt": "UFO Signal Simulator icon"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Classic color puzzle",
-        "tagline": "The original color-focus challenge: find the answer among similar colors.",
-        "description": "The original version before Color Master 2. Try it on the web first, then install it from Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classic color sense game",
+        "tagline": "The original color-focus challenge: remember the answer color and pick it from similar colors.",
+        "description": "The original color sense test before Find Odd Color: Color Master 2. Try it on the web first, then install it from Google Play.",
         "highlights": [
           "Original feel",
           "Color focus",
           "Quick play",
           "Install now"
         ],
-        "primaryCta": "Install Color Master",
+        "primaryCta": "Install Color Sense Test",
         "detailCta": "Try Web Demo",
         "statusNote": "Try it on the web first, then install it from Google Play.",
-        "iconAlt": "Color Master icon"
+        "iconAlt": "Color Sense Test: Color Master icon"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Siege",
@@ -12463,8 +12559,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Dark survival"
         ],
         "primaryCta": "Install on Google Play",
-        "statusNote": "Now available on Google Play. No web demo is provided for this app.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "View the app details, then install it from Google Play. No web demo is provided for this app.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon",
+        "detailCta": "View App Details"
       }
     },
     "status": {
@@ -12481,18 +12578,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS IDEAS",
       "title": "Try Them Like This",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "“If you see this color difference, your eyes are sharp.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“If you spot this odd color, your eyes are sharp.”",
         "description": "Compete with friends in a 10-second challenge."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Send your friend an alien message they cannot decode.”",
         "description": "Leave secret messages that only share-key holders can decode."
       },
       "ufoSignal": {
-        "app": "Call the UFO",
-        "title": "“What happens if you press the UFO button at dawn?”",
+        "app": "UFO Signal Simulator",
+        "title": "“What happens if you send a UFO signal at dawn?”",
         "description": "Enjoy the sounds and animation in a dark room."
       }
     },
@@ -12509,7 +12606,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Which app should I install first?",
-        "answer": "If this is your first visit, try Color Master 2 first. It is quick to play and easy to replay for a better score."
+        "answer": "If this is your first visit, try Find Odd Color: Color Master 2 first. It is quick to play and easy to replay for a better score."
       },
       "privateTest": {
         "question": "How do I join private test apps?",
@@ -12520,12 +12617,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Made by NeoKIM",
       "lastUpdated": "Last updated: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Color Test",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Privacy Policy",
       "appAds": "app-ads.txt",
-      "contact": "Contact"
+      "contact": "Contact",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -12546,9 +12644,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ur": {
     "seo": {
       "title": "NeoKIM ایپ لیب | مفت Android Mini ایپس",
-      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، اور Lucky Card Random Defence اور مزید Android mini ایپس کے لیے نجی ٹیسٹ انسٹال کریں۔",
+      "description": "مزید Android منی ایپس کے لیے Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze اور نجی ٹیسٹ انسٹال کریں۔",
       "ogTitle": "NeoKIM ایپ لیب | Android منی ایپس",
-      "ogDescription": "رنگین چیلنجز، اجنبی جیسے خفیہ پیغامات، UFO کالنگ کے تجربات، Lab Rat Maze Escape: Dark Maze، اور فوری Android تفریح کے لیے نجی ٹیسٹ۔"
+      "ogDescription": "عجیب رنگ تلاش کریں، اجنبی طرز کا خفیہ متن بنائیں، چنچل UFO سگنل بھیجیں، تاریک بھولبلییا سے بچیں، اور فوری Android تفریح ​​کے لیے نجی ٹیسٹوں میں شامل ہوں۔"
     },
     "skip": {
       "apps": "ایپ کی فہرست پر جائیں۔"
@@ -12583,11 +12681,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android منی ایپ کلیکشن",
       "title": "NeoKIM ایپ لیب",
       "subtitle": "چھوٹی Android ایپس جو فوری تفریح اور اشتراک کے لیے بنائی گئی ہیں۔",
-      "description": "رنگین چیلنجز، اجنبی جیسے خفیہ پیغامات، اور UFO کالنگ کے تجربات۔ ہلکے سے انسٹال کریں۔ ایک منٹ سے کم وقت میں لطف اٹھائیں۔",
+      "description": "عجیب رنگ کے چیلنجز، اجنبی طرز کے خفیہ پیغامات، UFO سگنل پلے، اور تاریک بھولبلییا سے فرار۔ ہلکے سے انسٹال کریں۔ ایک منٹ سے کم وقت میں لطف اٹھائیں۔",
       "primaryCta": "نمایاں ایپ انسٹال کریں۔",
-      "primaryAria": "Google Play پر کلر ماسٹر 2 انسٹال کریں۔",
+      "primaryAria": "Find Odd Color: Color Master 2 Google Play پر انسٹال کریں۔",
       "secondaryCta": "ایپس کو براؤز کریں۔",
-      "visualAria": "کلر ماسٹر 2 آئیکن اور کلر ٹائلز کے ساتھ فون مک اپ",
+      "visualAria": "Find Odd Color: Color Master 2 آئیکن اور رنگین ٹائلز کے ساتھ فون کا موک اپ",
       "badges": [
         "مفت ایپس",
         "Android",
@@ -12599,36 +12697,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "نمایاں ایپ",
       "title": "یہ سب سے پہلے آج ہی انسٹال کریں۔",
       "badge": "نمایاں",
-      "appName": "کلر ماسٹر 2",
-      "short": "10 سیکنڈ میں مختلف رنگ تلاش کریں۔",
-      "description": "ایک زندگی کی رنگین پہیلی جہاں ایک غلطی دوڑ کو ختم کر دیتی ہے۔ یہ تیزی سے شروع ہوتا ہے، پھر آپ کے ریکارڈ کو مات دینے کے لیے آپ کو پیچھے کھینچتا رہتا ہے۔",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 سیکنڈ میں ایک مختلف رنگ تلاش کریں۔",
+      "description": "ایک زندگی کی عجیب رنگ کی پہیلی جہاں ایک غلطی سے دوڑ ختم ہوجاتی ہے۔ یہ تیزی سے شروع ہوتا ہے، پھر آپ کے ریکارڈ کو مات دینے کے لیے آپ کو پیچھے کھینچتا رہتا ہے۔",
       "primaryCta": "Google Play پر انسٹال کریں۔",
-      "primaryAria": "Google Play پر کلر ماسٹر 2 انسٹال کریں۔",
+      "primaryAria": "Find Odd Color: Color Master 2 Google Play پر انسٹال کریں۔",
       "secondaryCta": "ایپس کو براؤز کریں۔",
-      "visualAria": "کلر ماسٹر 2 کلر ٹائل چیلنج فون موک اپ"
+      "visualAria": "Find Odd Color: Color Master 2 ٹائل چیلنج فون موک اپ"
     },
     "apps": {
       "kicker": "اے پی پی کیٹلاگ",
       "title": "تمام ایپس",
       "description": "عوامی ایپس کو براہ راست انسٹال کریں۔ نجی ٹیسٹوں کے لیے، پہلے ایک درخواست ای میل کریں۔ ٹیسٹر تک رسائی شامل کرنے کے بعد، جوائن ٹیسٹ بٹن کا استعمال کریں۔",
       "colorMaster2": {
-        "name": "کلر ماسٹر 2",
-        "category": "رنگین پہیلی",
-        "tagline": "10 سیکنڈ میں مختلف رنگ تلاش کریں۔",
-        "description": "ایک غلطی رن کو ختم کر دیتی ہے۔ ایک مختصر، لت رنگ کے ادراک کا چیلنج۔",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "عجیب رنگ کا پہیلی کھیل",
+        "tagline": "10 سیکنڈ میں ایک مختلف رنگ تلاش کریں۔",
+        "description": "ایک غلطی رن کو ختم کر دیتی ہے۔ توجہ اور رنگ کے ادراک کے لیے ایک مختصر، عادی عجیب رنگ کا چیلنج۔",
         "highlights": [
           "10 سیکنڈ کی حد",
           "ایک زندگی کی دوڑ",
           "لیڈر بورڈ",
           "کلر بلائنڈ امداد"
         ],
-        "primaryCta": "کلر ماسٹر 2 انسٹال کریں۔",
+        "primaryCta": "عجیب رنگ تلاش کریں انسٹال کریں۔",
         "detailCta": "ویب ڈیمو آزمائیں۔",
         "statusNote": "Google Play پر اب دستیاب ہے۔",
-        "iconAlt": "کلر ماسٹر 2 آئیکن"
+        "iconAlt": "Find Odd Color: Color Master 2 آئیکن"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "خفیہ پیغام ایپ",
         "tagline": "اجنبی جیسے خفیہ پیغامات بنائیں جنہیں ڈی کوڈ کرنے کے لیے شیئر کلید کی ضرورت ہے۔",
         "description": "اپنے کہکشاں زبان کے اصول بنائیں۔ صرف وہی لوگ جو آپ کی شیئر کلید والے ہیں وہی اصول دوبارہ بنا سکتے ہیں، اور اصل متن سرور پر اپ لوڈ نہیں ہوتا ہے۔",
@@ -12641,39 +12739,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "خفیہ پیغامات بنائیں",
         "detailCta": "ویب ڈیمو آزمائیں۔",
         "statusNote": "Google Play پر اب دستیاب ہے۔",
-        "iconAlt": "گیلیکٹیکوڈ آئیکن"
+        "iconAlt": "Alien Text Maker: Galaxy Code آئیکن"
       },
       "ufoSignal": {
-        "name": "UFO کو کال کریں۔",
-        "category": "عمیق تفریحی ایپ",
-        "tagline": "تفریح ​​کے لئے ایک پراسرار UFO کال کرنے کا تجربہ۔",
-        "description": "بٹن دبائیں، سگنل سنیں، اور خلا سے کچھ سننے کا تصور کریں۔",
+        "name": "UFO Signal Simulator",
+        "category": "اسرار سگنل تفریحی ایپ",
+        "tagline": "ایک چنچل خلائی سگنل بھیجیں اور UFO موڈ سے لطف اندوز ہوں۔",
+        "description": "ایپ کھولیں، سگنل بٹن دبائیں، اور آواز اور اینیمیشن سے لطف اندوز ہوں جو اس لمحے کو ایک چھوٹی UFO رسم کی طرح محسوس کریں۔",
         "highlights": [
-          "انٹرایکٹو بٹن",
+          "سگنل بٹن",
           "پراسرار آوازیں۔",
-          "حرکت پذیری",
+          "موڈ اینیمیشن",
           "کوئی سائن اپ نہیں۔"
         ],
-        "primaryCta": "UFO کو کال کریں۔",
-        "detailCta": "ویب ڈیمو آزمائیں۔",
-        "statusNote": "Google Play پر اب دستیاب ہے۔",
-        "iconAlt": "UFO آئیکن کو کال کریں۔"
+        "primaryCta": "UFO Signal Simulator انسٹال کریں۔",
+        "detailCta": "ایپ کی تفصیلات دیکھیں",
+        "statusNote": "ایپ کی تفصیلات دیکھیں، پھر اسے Google Play سے انسٹال کریں۔",
+        "iconAlt": "UFO Signal Simulator آئیکن"
       },
       "colorMasterClassic": {
-        "name": "کلر ماسٹر",
-        "category": "کلاسیکی رنگین پہیلی",
-        "tagline": "اصل کلر فوکس چیلنج: ملتے جلتے رنگوں کے درمیان جواب تلاش کریں۔",
-        "description": "کلر ماسٹر 2 سے پہلے کا اصل ورژن۔ پہلے اسے ویب پر آزمائیں، پھر اسے Google Play سے انسٹال کریں۔",
+        "name": "Color Sense Test: Color Master",
+        "category": "کلاسیکی کلر سینس گیم",
+        "tagline": "اصل کلر فوکس چیلنج: جواب کا رنگ یاد رکھیں اور اسے ملتے جلتے رنگوں سے چنیں۔",
+        "description": "Find Odd Color: Color Master 2 سے پہلے اصل کلر سینس ٹیسٹ۔ پہلے اسے ویب پر آزمائیں، پھر اسے Google Play سے انسٹال کریں۔",
         "highlights": [
           "اصل احساس",
           "رنگین فوکس",
           "فوری کھیل",
           "ابھی انسٹال کریں۔"
         ],
-        "primaryCta": "کلر ماسٹر انسٹال کریں۔",
+        "primaryCta": "کلر سینس ٹیسٹ انسٹال کریں۔",
         "detailCta": "ویب ڈیمو آزمائیں۔",
         "statusNote": "پہلے اسے ویب پر آزمائیں، پھر اسے Google Play سے انسٹال کریں۔",
-        "iconAlt": "کلر ماسٹر آئیکن"
+        "iconAlt": "Color Sense Test: Color Master آئیکن"
       },
       "koreanRandomDefense": {
         "name": "کورین رینڈم ڈیفنس: سیج",
@@ -12711,16 +12809,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "بھولبلییا سے فرار کا کھیل جاری کیا گیا۔",
         "tagline": "تاریک بھولبلییا کے ذریعے لیب کے چوہے کی رہنمائی کریں اور باہر نکلنے کا راستہ تلاش کریں۔",
-        "description": "28 مئی 2026 کو Google Play پر ریلیز ہوا۔ تاریک بھولبلییا سے گزریں، آئٹمز استعمال کریں اور راستہ بند ہونے سے پہلے فرار ہوں۔",
+        "description": "28 مئی 2026 کو Google Play پر ریلیز ہوا۔ تاریک بھولبلییا سے گزریں، اشیاء استعمال کریں، اور راستہ بند ہونے سے پہلے فرار ہوں۔",
         "highlights": [
           "28 مئی 2026 کو ریلیز ہوا۔",
           "بھولبلییا سے فرار",
           "اشیاء",
           "تاریک بقا"
         ],
-        "primaryCta": "گوگل پلے پر انسٹال کریں۔",
-        "statusNote": "اب گوگل پلے پر دستیاب ہے۔ اس ایپ کے لیے کوئی ویب ڈیمو فراہم نہیں کیا گیا ہے۔",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze کا آئیکن"
+        "primaryCta": "Google Play پر انسٹال کریں۔",
+        "statusNote": "ایپ کی تفصیلات دیکھیں، پھر اسے Google Play سے انسٹال کریں۔ اس ایپ کے لیے کوئی ویب ڈیمو فراہم نہیں کیا گیا ہے۔",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze آئیکن",
+        "detailCta": "ایپ کی تفصیلات دیکھیں"
       }
     },
     "status": {
@@ -12737,18 +12836,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "شارٹس آئیڈیاز",
       "title": "انہیں اس طرح آزمائیں",
       "colorMaster2": {
-        "app": "کلر ماسٹر 2",
-        "title": "\"اگر آپ رنگ کا یہ فرق دیکھتے ہیں تو آپ کی آنکھیں تیز ہیں۔\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"اگر آپ کو یہ عجیب رنگ نظر آتا ہے تو آپ کی آنکھیں تیز ہیں۔\"",
         "description": "10 سیکنڈ کے چیلنج میں دوستوں کے ساتھ مقابلہ کریں۔"
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"اپنے دوست کو ایک اجنبی پیغام بھیجیں جسے وہ ڈی کوڈ نہیں کر سکتا۔\"",
         "description": "ایسے خفیہ پیغامات چھوڑیں جنہیں صرف شیئر کلید رکھنے والے ہی ڈی کوڈ کر سکتے ہیں۔"
       },
       "ufoSignal": {
-        "app": "UFO کو کال کریں۔",
-        "title": "\"اگر آپ فجر کے وقت UFO بٹن دبائیں تو کیا ہوگا؟\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"اگر آپ فجر کے وقت UFO سگنل بھیجیں تو کیا ہوگا؟\"",
         "description": "تاریک کمرے میں آوازوں اور حرکت پذیری کا لطف اٹھائیں۔"
       }
     },
@@ -12765,7 +12864,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "مجھے پہلے کون سی ایپ انسٹال کرنی چاہیے؟",
-        "answer": "اگر یہ آپ کا پہلا دورہ ہے تو پہلے کلر ماسٹر 2 آزمائیں۔ یہ کھیلنا تیز ہے اور بہتر اسکور کے لیے دوبارہ چلانا آسان ہے۔"
+        "answer": "اگر یہ آپ کا پہلا دورہ ہے تو پہلے Find Odd Color: Color Master 2 آزمائیں۔ یہ کھیلنا تیز ہے اور بہتر اسکور کے لیے دوبارہ چلانا آسان ہے۔"
       },
       "privateTest": {
         "question": "میں نجی ٹیسٹ ایپس میں کیسے شامل ہوں؟",
@@ -12776,12 +12875,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM کے ذریعہ تیار کردہ",
       "lastUpdated": "آخری اپ ڈیٹ: 2026.05.31",
       "googlePlay": "Google Play ایپس",
-      "colorTest": "رنگین ٹیسٹ",
-      "alienText": "ایلین ٹیکسٹ جنریٹر",
-      "ufoApp": "UFO ایپ",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "رازداری کی پالیسی",
       "appAds": "app-ads.txt",
-      "contact": "رابطہ کریں۔"
+      "contact": "رابطہ کریں۔",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "پرائیویٹ ٹیسٹر سائن اپ",
@@ -12802,9 +12902,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "uk": {
     "seo": {
       "title": "NeoKIM App Lab | Безкоштовні міні-програми Android",
-      "description": "Встановіть Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze та приватні тести для Lucky Card Random Defense та інші міні-програми для Android.",
+      "description": "Установіть Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze і приватні тести, щоб отримати більше міні-програм Android.",
       "ogTitle": "NeoKIM App Lab | Міні-програми Android",
-      "ogDescription": "Кольорові випробування, таємні повідомлення, схожі на інопланетян, досвід виклику НЛО, втеча з лабіринту щурів у лабораторії: Темний лабіринт і приватні тести для швидкої розваги на Android."
+      "ogDescription": "Знаходьте незвичайні кольори, створюйте секретний текст у стилі інопланетян, надсилайте жартівливі сигнали НЛО, виходьте з темних лабіринтів і приєднуйтесь до приватних тестів, щоб отримати швидке задоволення від Android."
     },
     "skip": {
       "apps": "Перейти до списку програм"
@@ -12839,11 +12939,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Міні-колекція додатків Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Маленькі програми Android, створені для швидкого розваги та обміну",
-      "description": "Кольорові виклики, таємні повідомлення, схожі на прибульців, і виклики НЛО. Встановіть злегка. Насолоджуйтесь менш ніж за хвилину.",
+      "description": "Випробування дивних кольорів, таємні повідомлення у стилі інопланетян, відтворення сигналів НЛО та втечі з темного лабіринту. Встановіть злегка. Насолоджуйтесь менш ніж за хвилину.",
       "primaryCta": "Установіть Рекомендований додаток",
-      "primaryAria": "Встановіть Color Master 2 на Google Play",
+      "primaryAria": "Встановіть Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Огляд програм",
-      "visualAria": "Макет телефону зі значком Color Master 2 і кольоровими плитками",
+      "visualAria": "Макет телефону зі значком Find Odd Color: Color Master 2 і кольоровими плитками",
       "badges": [
         "Безкоштовні програми",
         "Android",
@@ -12855,81 +12955,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ПОПУЛЯРНИЙ ДОДАТОК",
       "title": "Установіть це спочатку сьогодні",
       "badge": "Рекомендовані",
-      "appName": "Майстер кольору 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Знайдіть інший колір за 10 секунд.",
-      "description": "Кольорова головоломка на одне життя, де одна помилка закінчує серію. Він починається швидко, потім продовжує тягне вас назад, щоб побити ваш рекорд.",
+      "description": "Головоломка різного кольору на одне життя, де одна помилка закінчує серію. Він починається швидко, потім продовжує тягне вас назад, щоб побити ваш рекорд.",
       "primaryCta": "Встановіть на Google Play",
-      "primaryAria": "Встановіть Color Master 2 на Google Play",
+      "primaryAria": "Встановіть Find Odd Color: Color Master 2 на Google Play",
       "secondaryCta": "Огляд програм",
-      "visualAria": "Color Master 2 кольорова плитка виклику макет телефону"
+      "visualAria": "Макет телефонного виклику Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "КАТАЛОГ ДОДАТКІВ",
       "title": "Усі додатки",
       "description": "Встановлюйте загальнодоступні програми безпосередньо. Для приватних тестів спочатку надішліть запит електронною поштою; після додавання доступу тестувальника скористайтеся кнопкою «Приєднатися до тесту».",
       "colorMaster2": {
-        "name": "Майстер кольору 2",
-        "category": "Кольоровий пазл",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Гра-головоломка незвичайних кольорів",
         "tagline": "Знайдіть інший колір за 10 секунд.",
-        "description": "Одна помилка закінчує пробіг. Коротке, захоплююче завдання сприйняття кольору.",
+        "description": "Одна помилка закінчує пробіг. Короткий, захоплюючий виклик дивних кольорів для фокусування та сприйняття кольорів.",
         "highlights": [
           "10-секундний ліміт",
           "Пробіг одного життя",
           "Таблиця лідерів",
           "Допомога для дальтоніків"
         ],
-        "primaryCta": "Встановіть Color Master 2",
+        "primaryCta": "Встановіть Find Odd Color",
         "detailCta": "Спробуйте веб-демо",
         "statusNote": "Зараз доступний на Google Play.",
-        "iconAlt": "Значок Color Master 2"
+        "iconAlt": "Значок Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Галактичний код",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Додаток для секретних повідомлень",
         "tagline": "Створюйте секретні повідомлення, схожі на прибульців, для декодування яких потрібен спільний ключ.",
         "description": "Створіть власні правила галактичної мови. Лише люди, які мають ваш спільний ключ, можуть відтворити ті самі правила, а вихідний текст не завантажується на сервер.",
         "highlights": [
           "На основі спільного ключа",
           "Особисті правила",
-          "SNS-готовий",
+          "Готовий до SNS",
           "Немає завантаження на сервер"
         ],
         "primaryCta": "Створення секретних повідомлень",
         "detailCta": "Спробуйте веб-демо",
         "statusNote": "Зараз доступний на Google Play.",
-        "iconAlt": "Значок Galacticode"
+        "iconAlt": "Значок Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Викличте НЛО",
-        "category": "Захоплюючий веселий додаток",
-        "tagline": "Таємничий виклик НЛО для розваги.",
-        "description": "Натисніть кнопку, почуйте сигнал і уявіть, що щось слухає з космосу.",
+        "name": "UFO Signal Simulator",
+        "category": "Розважальний додаток Mystery Signal",
+        "tagline": "Надішліть грайливий космічний сигнал і насолодіться настроєм НЛО.",
+        "description": "Відкрийте програму, натисніть кнопку сигналу та насолоджуйтесь звуком і анімацією, завдяки яким момент буде нагадувати маленький ритуал НЛО.",
         "highlights": [
-          "Інтерактивна кнопка",
+          "Сигнальна кнопка",
           "Таємничі звуки",
-          "Анімація",
+          "Анімація настрою",
           "Без реєстрації"
         ],
-        "primaryCta": "Викличте НЛО",
-        "detailCta": "Спробуйте веб-демо",
-        "statusNote": "Зараз доступний на Google Play.",
-        "iconAlt": "Викличте значок НЛО"
+        "primaryCta": "Встановіть UFO Signal Simulator",
+        "detailCta": "Переглянути деталі програми",
+        "statusNote": "Перегляньте деталі програми, а потім встановіть її з Google Play.",
+        "iconAlt": "Значок UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Майстер кольору",
-        "category": "Класичний кольоровий пазл",
-        "tagline": "Оригінальне завдання фокусування кольору: знайдіть відповідь серед схожих кольорів.",
-        "description": "Оригінальна версія до Color Master 2. Спершу спробуйте в Інтернеті, а потім установіть із Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Класична гра на відчуття кольору",
+        "tagline": "Оригінальне завдання з фокусуванням кольору: запам’ятайте колір відповіді та виберіть його зі схожих кольорів.",
+        "description": "Оригінальний тест відчуття кольору перед Find Odd Color: Color Master 2. Спершу спробуйте в Інтернеті, а потім встановіть із Google Play.",
         "highlights": [
           "Оригінальне відчуття",
           "Кольоровий фокус",
           "Швидка гра",
           "Встановити зараз"
         ],
-        "primaryCta": "Встановіть Color Master",
+        "primaryCta": "Встановіть Color Sense Test",
         "detailCta": "Спробуйте веб-демо",
-        "statusNote": "Спочатку спробуйте в Інтернеті, а потім встановіть із Google Play.",
-        "iconAlt": "Піктограма Color Master"
+        "statusNote": "Спершу спробуйте в Інтернеті, а потім встановіть із Google Play.",
+        "iconAlt": "Значок Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Корейська випадкова оборона: облога",
@@ -12967,16 +13067,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Випущена гра про втечу з лабіринту",
         "tagline": "Проведіть лабораторного щура через темний лабіринт і знайдіть вихід.",
-        "description": "Випущено в Google Play 28 травня 2026 року. Пересувайтеся темним лабіринтом, використовуйте предмети та тікайте, перш ніж шлях закриється.",
+        "description": "Випущено на Google Play 28 травня 2026 року. Пересувайтеся темним лабіринтом, використовуйте предмети та тікайте, перш ніж шлях закриється.",
         "highlights": [
           "Випущено 28 травня 2026 р",
           "Втеча з лабіринту",
           "Предмети",
           "Темне виживання"
         ],
-        "primaryCta": "Встановити в Google Play",
-        "statusNote": "Тепер доступно в Google Play. Для цієї програми не надається веб-демо.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze значок"
+        "primaryCta": "Встановіть на Google Play",
+        "statusNote": "Перегляньте деталі програми, а потім встановіть її з Google Play. Для цієї програми не надається веб-демо.",
+        "iconAlt": "Значок Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Переглянути деталі програми"
       }
     },
     "status": {
@@ -12993,18 +13094,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ІДЕЇ ШОРТІВ",
       "title": "Спробуйте їх так",
       "colorMaster2": {
-        "app": "Майстер кольору 2",
-        "title": "«Якщо ви бачите цю різницю кольорів, ваші очі гострі».",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "«Якщо ви помітили цей дивний колір, ваші очі гострі».",
         "description": "Змагайтеся з друзями в 10-секундному випробуванні."
       },
       "galaxyCode": {
-        "app": "Галактичний код",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "«Надішліть своєму другові повідомлення про прибульців, яке вони не можуть розшифрувати».",
         "description": "Залишайте секретні повідомлення, які можуть розшифрувати лише власники акцій."
       },
       "ufoSignal": {
-        "app": "Викличте НЛО",
-        "title": "«Що станеться, якщо на світанку натиснути кнопку НЛО?»",
+        "app": "UFO Signal Simulator",
+        "title": "«Що трапиться, якщо ви надішлете сигнал НЛО на світанку?»",
         "description": "Насолоджуйтеся звуками та анімацією в темній кімнаті."
       }
     },
@@ -13021,7 +13122,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Яку програму слід інсталювати першою?",
-        "answer": "Якщо це ваш перший візит, спочатку спробуйте Color Master 2. У неї швидко грати та легко відтворювати, щоб отримати кращий результат."
+        "answer": "Якщо це ваш перший візит, спочатку спробуйте Find Odd Color: Color Master 2. У неї швидко грати та легко відтворювати, щоб отримати кращий результат."
       },
       "privateTest": {
         "question": "Як приєднатися до програм для приватного тестування?",
@@ -13032,12 +13133,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Зроблено NeoKIM",
       "lastUpdated": "Останнє оновлення: 31.05.2026",
       "googlePlay": "Програми Google Play",
-      "colorTest": "Кольоровий тест",
-      "alienText": "Чужий текстовий генератор",
-      "ufoApp": "Додаток НЛО",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Політика конфіденційності",
       "appAds": "app-ads.txt",
-      "contact": "контакт"
+      "contact": "контакт",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Реєстрація приватного тестувальника",
@@ -13058,9 +13160,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "it-IT": {
     "seo": {
       "title": "Laboratorio dell'app NeoKIM | Mini app Android gratuite",
-      "description": "Installa Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e test privati ​​per Lucky Card Random Defense e altre mini app Android.",
+      "description": "Installa Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze e test privati ​​per altre mini app Android.",
       "ogTitle": "Laboratorio dell'app NeoKIM | Mini app Android",
-      "ogDescription": "Sfide di colori, messaggi segreti simili ad alieni, esperienze di chiamate UFO, Lab Rat Maze Escape: Dark Maze e test privati per un rapido divertimento Android."
+      "ogDescription": "Trova colori strani, crea testi segreti in stile alieno, invia segnali UFO giocosi, fuggi da labirinti oscuri e partecipa a test privati per un rapido divertimento Android."
     },
     "skip": {
       "apps": "Passa all'elenco delle app"
@@ -13095,11 +13197,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Raccolta di mini app Android",
       "title": "Laboratorio dell'app NeoKIM",
       "subtitle": "Piccole app Android realizzate per divertimento e condivisione rapidi",
-      "description": "Sfide colorate, messaggi segreti simili ad alieni ed esperienze di chiamata UFO. Installare leggermente. Divertiti in meno di un minuto.",
+      "description": "Sfide dai colori strani, messaggi segreti in stile alieno, giochi di segnali UFO e fughe da labirinti oscuri. Installare leggermente. Divertiti in meno di un minuto.",
       "primaryCta": "Installa l'app in primo piano",
-      "primaryAria": "Installa Color Master 2 su Google Play",
+      "primaryAria": "Installa Find Odd Color: Color Master 2 su Google Play",
       "secondaryCta": "Sfoglia le app",
-      "visualAria": "Mockup di telefono con icona Color Master 2 e riquadri colorati",
+      "visualAria": "Mockup di telefono con icona Find Odd Color: Color Master 2 e riquadri colorati",
       "badges": [
         "App gratuite",
         "Android",
@@ -13111,81 +13213,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APP IN PRIMO PIANO",
       "title": "Installalo per primo oggi",
       "badge": "In primo piano",
-      "appName": "Maestro del colore 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Trova il colore diverso in 10 secondi.",
-      "description": "Un puzzle a colori che dura una sola vita, in cui un errore pone fine alla corsa. Inizia velocemente, poi continua a trascinarti indietro per battere il tuo record.",
+      "description": "Un puzzle dai colori strani che riguarda una sola vita, in cui un errore mette fine alla corsa. Inizia velocemente, poi continua a trascinarti indietro per battere il tuo record.",
       "primaryCta": "Installa su Google Play",
-      "primaryAria": "Installa Color Master 2 su Google Play",
+      "primaryAria": "Installa Find Odd Color: Color Master 2 su Google Play",
       "secondaryCta": "Sfoglia le app",
-      "visualAria": "Mockup del telefono per la sfida delle piastrelle a colori Color Master 2"
+      "visualAria": "Mockup del telefono per la sfida delle piastrelle Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATALOGO DELL'APP",
       "title": "Tutte le app",
       "description": "Installa direttamente le app pubbliche. Per i test privati, inviare prima una richiesta tramite e-mail; dopo aver aggiunto l'accesso come tester, utilizzare il pulsante Partecipa al test.",
       "colorMaster2": {
-        "name": "Maestro del colore 2",
-        "category": "Puzzle di colori",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Gioco di puzzle dai colori strani",
         "tagline": "Trova il colore diverso in 10 secondi.",
-        "description": "Un errore pone fine alla corsa. Una breve e avvincente sfida sulla percezione del colore.",
+        "description": "Un errore pone fine alla corsa. Una breve e avvincente sfida con colori strani per la messa a fuoco e la percezione del colore.",
         "highlights": [
           "Limite di 10 secondi",
           "Corsa di una vita",
           "Classifica",
           "Aiuto daltonico"
         ],
-        "primaryCta": "Installa Color Master 2",
+        "primaryCta": "Installa Trova colore dispari",
         "detailCta": "Prova la demo web",
         "statusNote": "Disponibile ora su Google Play.",
-        "iconAlt": "Icona Color Master 2"
+        "iconAlt": "Icona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "App per messaggi segreti",
         "tagline": "Crea messaggi segreti simili ad alieni che necessitano di una chiave condivisa per essere decodificati.",
         "description": "Crea le tue regole linguistiche galattiche. Solo le persone con la tua chiave condivisa possono ricreare le stesse regole e il testo originale non viene caricato su un server.",
         "highlights": [
           "Basato su chiave condivisa",
           "Regole personali",
-          "Pronto per SNS",
+          "Predisposto per SNS",
           "Nessun caricamento sul server"
         ],
         "primaryCta": "Crea messaggi segreti",
         "detailCta": "Prova la demo web",
         "statusNote": "Disponibile ora su Google Play.",
-        "iconAlt": "Icona del codice galattico"
+        "iconAlt": "Icona Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Chiama l'UFO",
-        "category": "App divertente e coinvolgente",
-        "tagline": "Una misteriosa esperienza di chiamata UFO per divertimento.",
-        "description": "Premi il pulsante, ascolta il segnale e immagina qualcosa che ascolta dallo spazio.",
+        "name": "UFO Signal Simulator",
+        "category": "App di intrattenimento con segnali misteriosi",
+        "tagline": "Invia un segnale spaziale giocoso e goditi l'atmosfera UFO.",
+        "description": "Apri l'app, premi il pulsante del segnale e goditi il suono e l'animazione che trasformano il momento in un piccolo rituale UFO.",
         "highlights": [
-          "Pulsante interattivo",
+          "Pulsante del segnale",
           "Suoni misteriosi",
-          "Animazione",
+          "Animazione dell'umore",
           "Nessuna registrazione"
         ],
-        "primaryCta": "Chiama l'UFO",
-        "detailCta": "Prova la demo web",
-        "statusNote": "Disponibile ora su Google Play.",
-        "iconAlt": "Chiama l'icona dell'UFO"
+        "primaryCta": "Installa UFO Signal Simulator",
+        "detailCta": "Visualizza i dettagli dell'app",
+        "statusNote": "Visualizza i dettagli dell'app, quindi installala da Google Play.",
+        "iconAlt": "Icona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maestro del colore",
-        "category": "Puzzle di colori classico",
-        "tagline": "L'originale sfida del colore: trova la risposta tra colori simili.",
-        "description": "La versione originale prima di Color Master 2. Provala prima sul Web, quindi installala da Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Classico gioco di percezione del colore",
+        "tagline": "L'originale sfida del colore: ricorda il colore della risposta e sceglilo tra colori simili.",
+        "description": "Il test di rilevamento del colore originale prima di Find Odd Color: Color Master 2. Provalo prima sul Web, quindi installalo da Google Play.",
         "highlights": [
           "Sensazione originale",
           "Messa a fuoco del colore",
           "Gioco veloce",
           "Installa ora"
         ],
-        "primaryCta": "Installa Color Master",
+        "primaryCta": "Installa il test del senso del colore",
         "detailCta": "Prova la demo web",
         "statusNote": "Provalo prima sul Web, quindi installalo da Google Play.",
-        "iconAlt": "Icona Maestro colore"
+        "iconAlt": "Icona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Difesa casuale coreana: assedio",
@@ -13220,10 +13322,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icona di difesa casuale della carta fortunata"
       },
       "darkMaze": {
-        "name": "Fuga dal labirinto dei topi da laboratorio: labirinto oscuro",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Rilasciato il gioco di fuga dal labirinto",
         "tagline": "Guida un topo da laboratorio attraverso l'oscuro labirinto e trova l'uscita.",
-        "description": "Rilasciato su Google Play il 28 maggio 2026. Muoviti nel labirinto oscuro, usa gli oggetti e scappa prima che il percorso si chiuda.",
+        "description": "Pubblicato su Google Play il 28 maggio 2026. Muoviti attraverso il labirinto oscuro, usa gli oggetti e fuggi prima che il percorso si chiuda.",
         "highlights": [
           "Rilasciato il 28 maggio 2026",
           "Fuga nel labirinto",
@@ -13231,8 +13333,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Sopravvivenza oscura"
         ],
         "primaryCta": "Installa su Google Play",
-        "statusNote": "Ora disponibile su Google Play. Per questa app non viene fornita alcuna demo web.",
-        "iconAlt": "Lab Rat Maze Escape: icona del labirinto oscuro"
+        "statusNote": "Visualizza i dettagli dell'app, quindi installala da Google Play. Per questa app non viene fornita alcuna demo web.",
+        "iconAlt": "Icona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Visualizza i dettagli dell'app"
       }
     },
     "status": {
@@ -13249,18 +13352,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEE CORTI",
       "title": "Provali così",
       "colorMaster2": {
-        "app": "Maestro del colore 2",
-        "title": "\"Se vedi questa differenza di colore, i tuoi occhi sono acuti.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Se noti questo strano colore, i tuoi occhi sono acuti.\"",
         "description": "Competi con gli amici in una sfida di 10 secondi."
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Invia al tuo amico un messaggio alieno che non può decodificare.\"",
         "description": "Lascia messaggi segreti che solo i detentori della chiave condivisa possono decodificare."
       },
       "ufoSignal": {
-        "app": "Chiama l'UFO",
-        "title": "\"Cosa succede se premi il pulsante UFO all'alba?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Cosa succede se invii un segnale UFO all'alba?\"",
         "description": "Goditi i suoni e l'animazione in una stanza buia."
       }
     },
@@ -13277,7 +13380,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Quale app devo installare per prima?",
-        "answer": "Se questa è la tua prima visita, prova prima Color Master 2. È veloce da giocare e facile da riprodurre per ottenere un punteggio migliore."
+        "answer": "Se questa è la tua prima visita, prova prima Find Odd Color: Color Master 2. È veloce da giocare e facile da riprodurre per ottenere un punteggio migliore."
       },
       "privateTest": {
         "question": "Come posso iscrivermi alle app di test private?",
@@ -13288,12 +13391,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Realizzato da NeoKIM",
       "lastUpdated": "Ultimo aggiornamento: 31.05.2026",
       "googlePlay": "App Google Play",
-      "colorTest": "Prova del colore",
-      "alienText": "Generatore di testo alieno",
-      "ufoApp": "Applicazione sugli UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Informativa sulla privacy",
       "appAds": "app-ads.txt",
-      "contact": "Contatto"
+      "contact": "Contatto",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registrazione tester privato",
@@ -13314,9 +13418,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "id": {
     "seo": {
       "title": "Lab Aplikasi NeoKIM | Aplikasi Mini Android Gratis",
-      "description": "Instal Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, dan tes pribadi untuk Lucky Card Random Defense dan aplikasi mini Android lainnya.",
+      "description": "Instal Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, dan pengujian pribadi untuk aplikasi mini Android lainnya.",
       "ogTitle": "Lab Aplikasi NeoKIM | Aplikasi Mini Android",
-      "ogDescription": "Tantangan warna, pesan rahasia mirip alien, pengalaman menelepon UFO, Pelarian Labirin Tikus Lab: Labirin Gelap, dan tes pribadi untuk kesenangan cepat di Android."
+      "ogDescription": "Temukan warna-warna aneh, buat teks rahasia bergaya alien, kirim sinyal UFO yang lucu, keluar dari labirin gelap, dan ikuti tes pribadi untuk bersenang-senang Android dengan cepat."
     },
     "skip": {
       "apps": "Lewati ke daftar aplikasi"
@@ -13351,11 +13455,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Koleksi aplikasi mini Android",
       "title": "Lab Aplikasi NeoKIM",
       "subtitle": "Aplikasi Android kecil dibuat untuk bersenang-senang dan berbagi dengan cepat",
-      "description": "Tantangan warna, pesan rahasia mirip alien, dan pengalaman menelepon UFO. Instal dengan ringan. Nikmati dalam waktu kurang dari satu menit.",
+      "description": "Tantangan dengan warna yang aneh, pesan rahasia bergaya alien, permainan sinyal UFO, dan pelarian dari labirin gelap. Instal dengan ringan. Nikmati dalam waktu kurang dari satu menit.",
       "primaryCta": "Instal Aplikasi Unggulan",
-      "primaryAria": "Instal Color Master 2 di Google Play",
+      "primaryAria": "Instal Find Odd Color: Color Master 2 di Google Play",
       "secondaryCta": "Jelajahi Aplikasi",
-      "visualAria": "Maket telepon dengan ikon Color Master 2 dan ubin warna",
+      "visualAria": "Maket telepon dengan ikon Find Odd Color: Color Master 2 dan ubin warna",
       "badges": [
         "Aplikasi Gratis",
         "Android",
@@ -13367,81 +13471,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLIKASI UNGGULAN",
       "title": "Instal Ini Pertama Hari Ini",
       "badge": "Unggulan",
-      "appName": "Ahli Warna 2",
-      "short": "Temukan warna berbeda dalam 10 detik.",
-      "description": "Teka-teki warna satu kehidupan di mana satu kesalahan mengakhiri perjalanan. Ini dimulai dengan cepat, lalu terus menarik Anda kembali untuk memecahkan rekor Anda.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Temukan satu warna berbeda dalam 10 detik.",
+      "description": "Teka-teki satu kehidupan dengan warna aneh di mana satu kesalahan mengakhiri perjalanan. Ini dimulai dengan cepat, lalu terus menarik Anda kembali untuk memecahkan rekor Anda.",
       "primaryCta": "Instal di Google Play",
-      "primaryAria": "Instal Color Master 2 di Google Play",
+      "primaryAria": "Instal Find Odd Color: Color Master 2 di Google Play",
       "secondaryCta": "Jelajahi Aplikasi",
-      "visualAria": "Mockup telepon tantangan ubin warna Color Master 2"
+      "visualAria": "Maket telepon tantangan ubin Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALOG APLIKASI",
       "title": "Semua Aplikasi",
       "description": "Instal aplikasi publik secara langsung. Untuk tes pribadi, kirimkan permintaan melalui email terlebih dahulu; setelah akses penguji ditambahkan, gunakan tombol Gabung Tes.",
       "colorMaster2": {
-        "name": "Ahli Warna 2",
-        "category": "Teka-teki warna",
-        "tagline": "Temukan warna berbeda dalam 10 detik.",
-        "description": "Satu kesalahan mengakhiri perjalanan. Tantangan persepsi warna yang singkat dan membuat ketagihan.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Permainan puzzle dengan warna aneh",
+        "tagline": "Temukan satu warna berbeda dalam 10 detik.",
+        "description": "Satu kesalahan mengakhiri perjalanan. Tantangan warna aneh yang singkat dan membuat ketagihan untuk fokus dan persepsi warna.",
         "highlights": [
           "Batas 10 detik",
           "Lari sekali seumur hidup",
           "Papan peringkat",
           "Bantuan buta warna"
         ],
-        "primaryCta": "Instal Master Warna 2",
+        "primaryCta": "Instal Temukan Warna Aneh",
         "detailCta": "Coba Demo Web",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon Warna Master 2"
+        "iconAlt": "ikon Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "kode galaksi",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikasi pesan rahasia",
         "tagline": "Buat pesan rahasia seperti alien yang memerlukan kunci berbagi untuk memecahkan kodenya.",
         "description": "Buat aturan bahasa galaksi Anda sendiri. Hanya orang yang memiliki kunci berbagi Anda yang dapat membuat ulang aturan yang sama, dan teks asli tidak diunggah ke server.",
         "highlights": [
           "Berbasis kunci berbagi",
           "Aturan pribadi",
-          "SNS-siap",
+          "Siap SNS",
           "Tidak ada unggahan server"
         ],
         "primaryCta": "Buat Pesan Rahasia",
         "detailCta": "Coba Demo Web",
         "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Ikon kode galaksi"
+        "iconAlt": "ikon Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Panggil UFOnya",
-        "category": "Aplikasi menyenangkan yang mendalam",
-        "tagline": "Pengalaman panggilan UFO yang misterius untuk bersenang-senang.",
-        "description": "Tekan tombol, dengarkan sinyalnya, dan bayangkan sesuatu mendengarkan dari luar angkasa.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplikasi hiburan sinyal misteri",
+        "tagline": "Kirimkan sinyal luar angkasa yang menyenangkan dan nikmati suasana UFO.",
+        "description": "Buka aplikasinya, tekan tombol sinyal, dan nikmati suara dan animasi yang membuat momen terasa seperti ritual UFO kecil.",
         "highlights": [
-          "Tombol interaktif",
+          "Tombol sinyal",
           "Suara misteri",
-          "Animasi",
+          "Animasi suasana hati",
           "Tidak ada pendaftaran"
         ],
-        "primaryCta": "Panggil UFOnya",
-        "detailCta": "Coba Demo Web",
-        "statusNote": "Tersedia sekarang di Google Play.",
-        "iconAlt": "Panggil ikon UFO"
+        "primaryCta": "Instal UFO Signal Simulator",
+        "detailCta": "Lihat Detail Aplikasi",
+        "statusNote": "Lihat detail aplikasi, lalu instal dari Google Play.",
+        "iconAlt": "ikon UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Ahli Warna",
-        "category": "Teka-teki warna klasik",
-        "tagline": "Tantangan fokus warna yang orisinal: temukan jawabannya di antara warna-warna serupa.",
-        "description": "Versi asli sebelum Color Master 2. Coba dulu di web, lalu instal dari Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Permainan indera warna klasik",
+        "tagline": "Tantangan fokus warna yang asli: ingat warna jawaban dan pilih dari warna yang serupa.",
+        "description": "Tes indera warna asli sebelum Find Odd Color: Color Master 2. Coba dulu di web, lalu instal dari Google Play.",
         "highlights": [
           "Nuansa asli",
           "Fokus warna",
           "Putar cepat",
           "Instal sekarang"
         ],
-        "primaryCta": "Instal Master Warna",
+        "primaryCta": "Instal Tes Indra Warna",
         "detailCta": "Coba Demo Web",
         "statusNote": "Coba dulu di web, lalu instal dari Google Play.",
-        "iconAlt": "Ikon Master Warna"
+        "iconAlt": "ikon Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Pertahanan Acak Korea: Pengepungan",
@@ -13476,10 +13580,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikon Pertahanan Acak Kartu Keberuntungan"
       },
       "darkMaze": {
-        "name": "Pelarian Labirin Tikus Lab: Labirin Gelap",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Merilis game pelarian labirin",
         "tagline": "Pandu tikus laboratorium melewati labirin gelap dan temukan jalan keluar.",
-        "description": "Dirilis di Google Play pada 28 Mei 2026. Bergerak melewati labirin gelap, gunakan item, dan melarikan diri sebelum jalan ditutup.",
+        "description": "Dirilis di Google Play pada 28 Mei 2026. Bergerak melewati labirin gelap, gunakan item, dan keluar sebelum jalan ditutup.",
         "highlights": [
           "Dirilis 28 Mei 2026",
           "Pelarian labirin",
@@ -13487,8 +13591,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Kelangsungan hidup yang gelap"
         ],
         "primaryCta": "Instal di Google Play",
-        "statusNote": "Sekarang tersedia di Google Play. Tidak ada demo web yang disediakan untuk aplikasi ini.",
-        "iconAlt": "Pelarian Labirin Tikus Lab: Ikon Labirin Gelap"
+        "statusNote": "Lihat detail aplikasi, lalu instal dari Google Play. Tidak ada demo web yang disediakan untuk aplikasi ini.",
+        "iconAlt": "ikon Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Lihat Detail Aplikasi"
       }
     },
     "status": {
@@ -13505,18 +13610,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDE PENDEK",
       "title": "Cobalah Seperti Ini",
       "colorMaster2": {
-        "app": "Ahli Warna 2",
-        "title": "“Jika Anda melihat perbedaan warna ini, berarti mata Anda tajam.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“Jika kamu melihat warna aneh ini, matamu tajam.”",
         "description": "Bersaing dengan teman dalam tantangan 10 detik."
       },
       "galaxyCode": {
-        "app": "kode galaksi",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Kirimkan pesan alien kepada temanmu yang tidak dapat mereka pecahkan kodenya.”",
         "description": "Tinggalkan pesan rahasia yang hanya dapat dipecahkan oleh pemegang kunci bersama."
       },
       "ufoSignal": {
-        "app": "Panggil UFOnya",
-        "title": "“Apa yang terjadi jika Anda menekan tombol UFO saat fajar?”",
+        "app": "UFO Signal Simulator",
+        "title": "“Apa yang terjadi jika Anda mengirimkan sinyal UFO saat fajar?”",
         "description": "Nikmati suara dan animasi di ruangan gelap."
       }
     },
@@ -13533,7 +13638,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Aplikasi mana yang harus saya instal terlebih dahulu?",
-        "answer": "Jika ini kunjungan pertama Anda, cobalah Color Master 2 terlebih dahulu. Ini cepat dimainkan dan mudah diputar ulang untuk skor yang lebih baik."
+        "answer": "Jika ini kunjungan pertama Anda, coba Find Odd Color: Color Master 2 terlebih dahulu. Ini cepat dimainkan dan mudah diputar ulang untuk skor yang lebih baik."
       },
       "privateTest": {
         "question": "Bagaimana cara saya bergabung dengan aplikasi pengujian pribadi?",
@@ -13544,12 +13649,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Dibuat oleh NeoKIM",
       "lastUpdated": "Terakhir diperbarui: 2026.05.31",
       "googlePlay": "Aplikasi Google Play",
-      "colorTest": "Tes Warna",
-      "alienText": "Pembuat Teks Asing",
-      "ufoApp": "Aplikasi UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Kebijakan Privasi",
       "appAds": "app-ads.txt",
-      "contact": "Kontak"
+      "contact": "Kontak",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Pendaftaran Penguji Pribadi",
@@ -13570,9 +13676,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ja-JP": {
     "seo": {
       "title": "NeoKIMアプリラボ |無料のAndroidミニアプリ",
-      "description": "Color Master 2、Galaxycode、Call the UFO、Lab Rat Maze Escape: Dark Maze、Lucky Card Random Defense のプライベート テストなどの Android ミニ アプリをインストールします。",
+      "description": "Find Odd Color: Color Master 2、Alien Text Maker: Galaxy Code、UFO Signal Simulator、Color Sense Test: Color Master、Lab Rat Maze Escape: Dark Maze、およびその他の Android ミニ アプリのプライベート テストをインストールします。",
       "ogTitle": "NeoKIMアプリラボ | Android ミニアプリ",
-      "ogDescription": "カラー チャレンジ、エイリアンのような秘密のメッセージ、UFO 呼び出し体験、Lab Rat Maze Escape: Dark Maze、Android をすばやく楽しむためのプライベート テスト。"
+      "ogDescription": "奇妙な色を見つけたり、エイリアン風の秘密のテキストを作成したり、遊び心のある UFO 信号を送信したり、暗い迷路を脱出したり、Android をすばやく楽しむためのプライベート テストに参加したりできます。"
     },
     "skip": {
       "apps": "アプリリストにスキップ"
@@ -13607,11 +13713,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android ミニアプリコレクション",
       "title": "NeoKIMアプリラボ",
       "subtitle": "すばやく楽しく共有できるように作られた小さな Android アプリ",
-      "description": "カラーチャレンジ、宇宙人のような秘密メッセージ、UFO呼び出し体験など。軽く取り付けてください。 1分以内にお楽しみください。",
+      "description": "奇妙な色のチャレンジ、エイリアン風の秘密メッセージ、UFO 信号遊び、そして暗い迷路からの脱出。軽く取り付けてください。 1分以内にお楽しみください。",
       "primaryCta": "注目のアプリをインストールする",
-      "primaryAria": "カラーマスター 2 を Google Play にインストールする",
+      "primaryAria": "Find Odd Color: Color Master 2 を Google Play にインストールする",
       "secondaryCta": "アプリを参照する",
-      "visualAria": "Color Master 2 アイコンとカラー タイルを備えた携帯電話のモックアップ",
+      "visualAria": "Find Odd Color: Color Master 2 アイコンとカラー タイルを使用した電話モックアップ",
       "badges": [
         "無料アプリ",
         "ザンドロイドZ",
@@ -13623,36 +13729,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "注目のアプリ",
       "title": "今すぐこれをインストールしてください",
       "badge": "注目の",
-      "appName": "カラーマスター2",
-      "short": "10 秒以内に別の色を見つけてください。",
-      "description": "1 つの間違いでランが終了する、ワンライフ カラー パズル。速く始まり、記録を更新するためにあなたを引き戻し続けます。",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 秒以内に 1 つ異なる色を見つけてください。",
+      "description": "一つ間違えば終わりの、一度きりの奇数色のパズル。速く始まり、記録を更新するためにあなたを引き戻し続けます。",
       "primaryCta": "Google Playにインストールする",
-      "primaryAria": "カラーマスター 2 を Google Play にインストールする",
+      "primaryAria": "Find Odd Color: Color Master 2 を Google Play にインストールする",
       "secondaryCta": "アプリを参照する",
-      "visualAria": "カラー マスター 2 カラー タイル チャレンジ電話モックアップ"
+      "visualAria": "Find Odd Color: Color Master 2 タイル チャレンジ電話モックアップ"
     },
     "apps": {
       "kicker": "アプリカタログ",
       "title": "すべてのアプリ",
       "description": "公開アプリを直接インストールします。プライベート テストの場合は、まずリクエストを電子メールで送信してください。テスター アクセスが追加されたら、[テストに参加] ボタンを使用します。",
       "colorMaster2": {
-        "name": "カラーマスター2",
-        "category": "カラーパズル",
-        "tagline": "10 秒以内に別の色を見つけてください。",
-        "description": "一つのミスでランが終わってしまいます。短くてクセになる色認識チャレンジ。",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "奇数色のパズルゲーム",
+        "tagline": "10 秒以内に 1 つ異なる色を見つけてください。",
+        "description": "一つのミスでランが終わってしまいます。集中力と色の認識を高めるための、短くて中毒性のある奇妙な色のチャレンジ。",
         "highlights": [
           "10秒制限",
           "ワンライフラン",
           "リーダーボード",
           "色盲補助者"
         ],
-        "primaryCta": "カラーマスター2をインストールする",
+        "primaryCta": "奇数色の検索をインストールする",
         "detailCta": "ウェブデモを試す",
-        "statusNote": "Google Play で現在入手可能です。",
-        "iconAlt": "カラーマスター2アイコン"
+        "statusNote": "Google Play で入手可能になりました。",
+        "iconAlt": "Find Odd Color: Color Master 2 アイコン"
       },
       "galaxyCode": {
-        "name": "ギャラクティコード",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "秘密のメッセージアプリ",
         "tagline": "デコードするには共有キーが必要なエイリアンのような秘密メッセージを作成します。",
         "description": "独自の銀河言語ルールを作成します。共有キーを持っている人だけが同じルールを再作成でき、元のテキストはサーバーにアップロードされません。",
@@ -13664,40 +13770,40 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         ],
         "primaryCta": "秘密のメッセージを作成する",
         "detailCta": "ウェブデモを試す",
-        "statusNote": "Google Play で現在入手可能です。",
-        "iconAlt": "ギャラクティコードのアイコン"
+        "statusNote": "Google Play で入手可能になりました。",
+        "iconAlt": "Alien Text Maker: Galaxy Codeアイコン"
       },
       "ufoSignal": {
-        "name": "UFOを呼ぶ",
-        "category": "没入型の楽しいアプリ",
-        "tagline": "楽しい不思議なUFO呼び出し体験。",
-        "description": "ボタンを押して信号を聞いて、宇宙から何かが聞いていることを想像してください。",
+        "name": "UFO Signal Simulator",
+        "category": "ミステリーシグナルエンターテイメントアプリ",
+        "tagline": "遊び心のある宇宙信号を送ってUFO気分を楽しんでください。",
+        "description": "アプリを開いて信号ボタンを押すと、まるで小さな UFO の儀式のようなサウンドとアニメーションをお楽しみいただけます。",
         "highlights": [
-          "インタラクティブボタン",
+          "信号ボタン",
           "謎の音",
-          "アニメーション",
+          "ムードアニメーション",
           "サインアップなし"
         ],
-        "primaryCta": "UFOを呼ぶ",
-        "detailCta": "ウェブデモを試す",
-        "statusNote": "Google Play で現在入手可能です。",
-        "iconAlt": "UFOアイコンを呼び出します"
+        "primaryCta": "UFO Signal Simulatorをインストールする",
+        "detailCta": "アプリの詳細を表示",
+        "statusNote": "アプリの詳細を表示し、Google Playからインストールします。",
+        "iconAlt": "UFO Signal Simulator アイコン"
       },
       "colorMasterClassic": {
-        "name": "カラーマスター",
-        "category": "クラシックなカラーパズル",
-        "tagline": "オリジナルの色に焦点を当てた課題: 類似した色の中から答えを見つけます。",
-        "description": "Color Master 2 より前のオリジナル バージョン。まず Web で試してから、Google Play からインストールしてください。",
+        "name": "Color Sense Test: Color Master",
+        "category": "古典的な色彩感覚ゲーム",
+        "tagline": "オリジナルの色に焦点を当てるチャレンジ: 答えの色を覚えて、類似した色からそれを選びます。",
+        "description": "Find Odd Color: Color Master 2前のオリジナル色彩感覚テスト。まずはWeb上で試してから、Google Playからインストールしてください。",
         "highlights": [
           "オリジナルの感触",
           "カラーフォーカス",
           "クイックプレイ",
           "今すぐインストール"
         ],
-        "primaryCta": "カラーマスターをインストールする",
+        "primaryCta": "色彩感覚テストをインストールする",
         "detailCta": "ウェブデモを試す",
-        "statusNote": "まずはウェブ上で試してから、Google Play からインストールしてください。",
-        "iconAlt": "カラーマスターアイコン"
+        "statusNote": "まずはWeb上で試してから、Google Playからインストールしてください。",
+        "iconAlt": "Color Sense Test: Color Master アイコン"
       },
       "koreanRandomDefense": {
         "name": "韓国のランダム防御: 包囲",
@@ -13732,7 +13838,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ラッキーカードのランダム防御アイコン"
       },
       "darkMaze": {
-        "name": "実験室ネズミの迷路脱出: 暗い迷路",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "迷路脱出ゲームをリリース",
         "tagline": "実験用ネズミを暗い迷路に誘導し、出口を見つけてください。",
         "description": "2026 年 5 月 28 日に Google Play でリリースされました。暗い迷路を進み、アイテムを使用し、道が近づく前に脱出してください。",
@@ -13743,8 +13849,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ダークサバイバル"
         ],
         "primaryCta": "Google Play にインストールする",
-        "statusNote": "Google Play で入手可能になりました。このアプリには Web デモは提供されていません。",
-        "iconAlt": "研究室ネズミの迷路脱出: 暗い迷路アイコン"
+        "statusNote": "アプリの詳細を表示し、Google Playからインストールします。このアプリには Web デモは提供されていません。",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze アイコン",
+        "detailCta": "アプリの詳細を表示"
       }
     },
     "status": {
@@ -13761,18 +13868,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ショートのアイデア",
       "title": "このように試してみてください",
       "colorMaster2": {
-        "app": "カラーマスター2",
-        "title": "「この色の違いが見えたら、あなたの目は鋭いです。」",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "「この奇妙な色を見つけたら、あなたの目は鋭いです。」",
         "description": "10 秒間のチャレンジで友達と競争しましょう。"
       },
       "galaxyCode": {
-        "app": "ギャラクティコード",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "「友達には解読できないエイリアンのメッセージを送ってください。」",
         "description": "共有キーの所有者だけが解読できる秘密のメッセージを残します。"
       },
       "ufoSignal": {
-        "app": "UFOを呼ぶ",
-        "title": "「夜明けにUFOボタンを押したらどうなる？」",
+        "app": "UFO Signal Simulator",
+        "title": "「夜明けにUFO信号を送ったらどうなる？」",
         "description": "暗い部屋でサウンドとアニメーションをお楽しみください。"
       }
     },
@@ -13789,7 +13896,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "最初にどのアプリをインストールすればよいですか?",
-        "answer": "初めてアクセスする場合は、まずカラー マスター 2 を試してください。すぐにプレイでき、簡単にリプレイしてより良いスコアを獲得できます。"
+        "answer": "初めてアクセスする場合は、まず Find Odd Color: Color Master 2 を試してください。すぐにプレイでき、簡単にリプレイしてより良いスコアを獲得できます。"
       },
       "privateTest": {
         "question": "プライベート テスト アプリに参加するにはどうすればよいですか?",
@@ -13800,12 +13907,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM製",
       "lastUpdated": "最終更新日: 2026.05.31",
       "googlePlay": "Google Play アプリ",
-      "colorTest": "カラーテスト",
-      "alienText": "エイリアン テキスト ジェネレーター",
-      "ufoApp": "UFOアプリ",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "プライバシーポリシー",
       "appAds": "app-ads.txt",
-      "contact": "お問い合わせ"
+      "contact": "お問い合わせ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "プライベートテスターのサインアップ",
@@ -13826,9 +13934,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ka-GE": {
     "seo": {
       "title": "NeoKIM აპლიკაციის ლაბორატორია | უფასო Android მინი აპები",
-      "description": "დააინსტალირეთ Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze და პირადი ტესტები Lucky Card Random Defense და სხვა Android mini აპებისთვის.",
+      "description": "დააინსტალირეთ Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze და პირადი ტესტები მეტი Android მინი აპებისთვის.",
       "ogTitle": "NeoKIM აპლიკაციის ლაბორატორია | Android მინი აპები",
-      "ogDescription": "ფერების გამოწვევები, უცხოპლანეტელების მსგავსი საიდუმლო შეტყობინებები, უცხოპლანეტელებთან დარეკვის გამოცდილება, Lab Rat Maze Escape: Dark Maze და პირადი ტესტები სწრაფი Android გართობისთვის."
+      "ogDescription": "იპოვეთ უცნაური ფერები, შექმენით უცხოპლანეტელების სტილის საიდუმლო ტექსტი, გააგზავნეთ მხიარული უცხოპლანეტელები, გაექცეთ ბნელ ლაბირინთებს და შეუერთდით პირად ტესტებს Android სწრაფი გართობისთვის."
     },
     "skip": {
       "apps": "აპების სიაზე გადასვლა"
@@ -13863,11 +13971,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android მინი აპლიკაციების კოლექცია",
       "title": "NeoKIM აპლიკაციის ლაბორატორია",
       "subtitle": "მცირე Android აპები შექმნილია სწრაფი გართობისა და გაზიარებისთვის",
-      "description": "ფერების გამოწვევები, უცხოპლანეტელების მსგავსი საიდუმლო შეტყობინებები და უცხოპლანეტელები დარეკვის გამოცდილება. მსუბუქად დააინსტალირეთ. ისიამოვნეთ ერთ წუთში.",
+      "description": "უცნაური ფერების გამოწვევები, უცხოპლანეტელების სტილის საიდუმლო შეტყობინებები, უცხოპლანეტელები სიგნალის თამაში და ბნელი ლაბირინთიდან გაქცევა. მსუბუქად დააინსტალირეთ. ისიამოვნეთ ერთ წუთში.",
       "primaryCta": "დააინსტალირეთ გამორჩეული აპლიკაცია",
-      "primaryAria": "დააინსტალირეთ Color Master 2 Google Play-ზე",
+      "primaryAria": "დააინსტალირეთ Find Odd Color: Color Master 2 Google Play-ზე",
       "secondaryCta": "აპების დათვალიერება",
-      "visualAria": "ტელეფონის მაკეტი Color Master 2 ხატით და ფერადი ფილებით",
+      "visualAria": "ტელეფონის მაკეტი Find Odd Color: Color Master 2 ხატით და ფერადი ფილებით",
       "badges": [
         "უფასო აპლიკაციები",
         "Android",
@@ -13879,81 +13987,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "გამორჩეული აპლიკაცია",
       "title": "დააინსტალირეთ ეს პირველი დღეს",
       "badge": "გამორჩეული",
-      "appName": "ფერის ოსტატი 2",
-      "short": "იპოვეთ განსხვავებული ფერი 10 წამში.",
-      "description": "ერთი ცხოვრების ფერადი თავსატეხი, სადაც ერთი შეცდომა ამთავრებს სირბილს. ის სწრაფად იწყება, შემდეგ კვლავ გიბიძგებთ თქვენი რეკორდის დასაძლევად.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "იპოვეთ ერთი განსხვავებული ფერი 10 წამში.",
+      "description": "ერთჯერადი უცნაური ფერის თავსატეხი, სადაც ერთი შეცდომა ამთავრებს გარბენს. ის სწრაფად იწყება, შემდეგ კვლავ გიბიძგებთ თქვენი რეკორდის დასაძლევად.",
       "primaryCta": "დააინსტალირეთ Google Play-ზე",
-      "primaryAria": "დააინსტალირეთ Color Master 2 Google Play-ზე",
+      "primaryAria": "დააინსტალირეთ Find Odd Color: Color Master 2 Google Play-ზე",
       "secondaryCta": "აპების დათვალიერება",
-      "visualAria": "Color Master 2 ფერადი ფილა გამოწვევის ტელეფონის მაკეტი"
+      "visualAria": "Find Odd Color: Color Master 2 კრამიტის გამოწვევის ტელეფონის მაკეტი"
     },
     "apps": {
       "kicker": "აპების კატალოგი",
       "title": "ყველა აპლიკაცია",
       "description": "პირდაპირ დააინსტალირეთ საჯარო აპლიკაციები. პირადი ტესტებისთვის, ჯერ ელფოსტით გაგზავნეთ მოთხოვნა; ტესტერის წვდომის დამატების შემდეგ გამოიყენეთ ღილაკი Join Test.",
       "colorMaster2": {
-        "name": "ფერის ოსტატი 2",
-        "category": "ფერადი თავსატეხი",
-        "tagline": "იპოვეთ განსხვავებული ფერი 10 წამში.",
-        "description": "ერთი შეცდომა ამთავრებს რბენას. მოკლე, ნარკოტიკული ფერის აღქმის გამოწვევა.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "უცნაური ფერების თავსატეხი",
+        "tagline": "იპოვეთ ერთი განსხვავებული ფერი 10 წამში.",
+        "description": "ერთი შეცდომა ამთავრებს რბენას. მოკლე, ნარკოტიკული უცნაური ფერების გამოწვევა ფოკუსირებისა და ფერის აღქმისთვის.",
         "highlights": [
           "10 წამიანი ლიმიტი",
           "ერთჯერადი სირბილი",
           "ლიდერბორდი",
           "დალტონიკის დახმარება"
         ],
-        "primaryCta": "დააინსტალირეთ Color Master 2",
+        "primaryCta": "დააინსტალირეთ Find Odd Color",
         "detailCta": "სცადეთ ვებ დემო",
         "statusNote": "ახლა ხელმისაწვდომია Google Play-ზე.",
-        "iconAlt": "Color Master 2 ხატულა"
+        "iconAlt": "Find Odd Color: Color Master 2 ხატულა"
       },
       "galaxyCode": {
-        "name": "გალაქტიკოდი",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "საიდუმლო შეტყობინებების აპლიკაცია",
         "tagline": "შექმენით უცხოპლანეტელების მსგავსი საიდუმლო შეტყობინებები, რომელთა გაშიფვრისთვის საჭიროა გაზიარების გასაღები.",
         "description": "შექმენით თქვენი საკუთარი გალაქტიკური ენის წესები. მხოლოდ თქვენი გაზიარების გასაღების მქონე ადამიანებს შეუძლიათ იგივე წესების ხელახლა შექმნა და ორიგინალი ტექსტი არ აიტვირთება სერვერზე.",
         "highlights": [
           "გაზიარების გასაღების საფუძველზე",
           "პირადი წესები",
-          "SNS-მზადაა",
+          "SNS- მზადაა",
           "სერვერის ატვირთვა არ არის"
         ],
         "primaryCta": "შექმენით საიდუმლო შეტყობინებები",
         "detailCta": "სცადეთ ვებ დემო",
         "statusNote": "ახლა ხელმისაწვდომია Google Play-ზე.",
-        "iconAlt": "გალაქტიკოდის ხატულა"
+        "iconAlt": "Alien Text Maker: Galaxy Code ხატულა"
       },
       "ufoSignal": {
-        "name": "დაურეკეთ უცხოპლანეტელებს",
-        "category": "განსაცვიფრებელი სახალისო აპლიკაცია",
-        "tagline": "იდუმალი უცხოპლანეტელები ზარის გამოცდილება გასართობად.",
-        "description": "დააჭირეთ ღილაკს, მოისმინეთ სიგნალი და წარმოიდგინეთ, რომ რაღაც უსმენს კოსმოსიდან.",
+        "name": "UFO Signal Simulator",
+        "category": "საიდუმლო სიგნალის გასართობი აპლიკაცია",
+        "tagline": "გაგზავნეთ მხიარული კოსმოსური სიგნალი და ისიამოვნეთ უცხოპლანეტელების განწყობით.",
+        "description": "გახსენით აპლიკაცია, დააჭირეთ სიგნალის ღილაკს და ისიამოვნეთ ხმითა და ანიმაციით, რაც ამ მომენტს ემო-ს პატარა რიტუალს ჰგავს.",
         "highlights": [
-          "ინტერაქტიული ღილაკი",
+          "სიგნალის ღილაკი",
           "საიდუმლო ხმები",
-          "ანიმაცია",
+          "განწყობის ანიმაცია",
           "არანაირი რეგისტრაცია"
         ],
-        "primaryCta": "დაურეკეთ უცხოპლანეტელებს",
-        "detailCta": "სცადეთ ვებ დემო",
-        "statusNote": "ახლა ხელმისაწვდომია Google Play-ზე.",
-        "iconAlt": "დაურეკეთ უცხოპლანეტელების ხატს"
+        "primaryCta": "დააინსტალირეთ UFO Signal Simulator",
+        "detailCta": "აპლიკაციის დეტალების ნახვა",
+        "statusNote": "ნახეთ აპის დეტალები, შემდეგ დააინსტალირეთ Google Play-დან.",
+        "iconAlt": "UFO Signal Simulator ხატულა"
       },
       "colorMasterClassic": {
-        "name": "ფერის ოსტატი",
-        "category": "კლასიკური ფერის თავსატეხი",
-        "tagline": "ორიგინალური ფერის ფოკუსის გამოწვევა: იპოვნეთ პასუხი მსგავს ფერებს შორის.",
-        "description": "ორიგინალური ვერსია Color Master 2-მდე. სცადეთ ჯერ ვებში, შემდეგ დააინსტალირეთ Google Play-დან.",
+        "name": "Color Sense Test: Color Master",
+        "category": "კლასიკური ფერის გრძნობის თამაში",
+        "tagline": "ორიგინალური ფერის ფოკუსის გამოწვევა: დაიმახსოვრეთ პასუხის ფერი და შეარჩიეთ იგი მსგავსი ფერებიდან.",
+        "description": "ორიგინალური ფერის შეგრძნების ტესტი Find Odd Color: Color Master 2-მდე. სცადეთ ჯერ ვებში, შემდეგ დააინსტალირეთ Google Play-დან.",
         "highlights": [
           "ორიგინალური შეგრძნება",
           "ფერის ფოკუსი",
           "სწრაფი თამაში",
           "დააინსტალირეთ ახლა"
         ],
-        "primaryCta": "დააინსტალირეთ Color Master",
+        "primaryCta": "დააინსტალირეთ Color Sense Test",
         "detailCta": "სცადეთ ვებ დემო",
         "statusNote": "სცადეთ ჯერ ვებში, შემდეგ დააინსტალირეთ Google Play-დან.",
-        "iconAlt": "ფერადი სამაგისტრო ხატულა"
+        "iconAlt": "Color Sense Test: Color Master ხატულა"
       },
       "koreanRandomDefense": {
         "name": "კორეის შემთხვევითი დაცვა: ალყა",
@@ -13991,7 +14099,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "გამოვიდა ლაბირინთიდან გაქცევის თამაში",
         "tagline": "გაიარეთ ლაბორატორიული ვირთხა ბნელ ლაბირინთში და იპოვეთ გასასვლელი.",
-        "description": "გამოშვებულია Google Play-ზე 2026 წლის 28 მაისს. იმოძრავეთ ბნელ ლაბირინთში, გამოიყენეთ ნივთები და გაიქცეთ სანამ ბილიკი დაიხურება.",
+        "description": "გამოშვებულია Google Play-ზე 2026 წლის 28 მაისს. იმოძრავეთ ბნელ ლაბირინთში, გამოიყენეთ ნივთები და გაიქცეთ, სანამ ბილიკი დაიხურება.",
         "highlights": [
           "გამოშვებულია 2026 წლის 28 მაისს",
           "ლაბირინთიდან გაქცევა",
@@ -13999,8 +14107,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ბნელი გადარჩენა"
         ],
         "primaryCta": "დააინსტალირეთ Google Play-ზე",
-        "statusNote": "ახლა ხელმისაწვდომია Google Play-ზე. ამ აპისთვის ვებ დემო არ არის გათვალისწინებული.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze ხატულა"
+        "statusNote": "ნახეთ აპის დეტალები, შემდეგ დააინსტალირეთ Google Play-დან. ამ აპისთვის ვებ დემო არ არის გათვალისწინებული.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ხატულა",
+        "detailCta": "აპლიკაციის დეტალების ნახვა"
       }
     },
     "status": {
@@ -14017,18 +14126,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "მოკლე იდეები",
       "title": "სცადეთ ისინი ასე",
       "colorMaster2": {
-        "app": "ფერის ოსტატი 2",
-        "title": "\"თუ ხედავ ამ ფერთა განსხვავებას, შენი თვალები მკვეთრია.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "”თუ ამ უცნაურ ფერს შეამჩნევთ, თვალები მკვეთრია.”",
         "description": "შეეჯიბრეთ მეგობრებს 10 წამიან გამოწვევაში."
       },
       "galaxyCode": {
-        "app": "გალაქტიკოდი",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"გაუგზავნე მეგობარს უცხოპლანეტელი შეტყობინება, რომლის გაშიფვრა შეუძლებელია.\"",
         "description": "დატოვეთ საიდუმლო შეტყობინებები, რომელთა გაშიფვრა მხოლოდ საზიარო გასაღების მფლობელებს შეუძლიათ."
       },
       "ufoSignal": {
-        "app": "დაურეკეთ უცხოპლანეტელებს",
-        "title": "\"რა მოხდება, თუ გამთენიისას დააჭერთ UFO ღილაკს?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"რა მოხდება, თუ გამთენიისას გამოგიგზავნით უცხოპლანეტელების სიგნალს?\"",
         "description": "ისიამოვნეთ ბნელ ოთახში ხმებითა და ანიმაციით."
       }
     },
@@ -14045,7 +14154,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "რომელი აპი დავაინსტალირო პირველ რიგში?",
-        "answer": "თუ ეს თქვენი პირველი ვიზიტია, ჯერ სცადეთ Color Master 2. ის სწრაფად თამაშობს და ადვილად ითამაშებს უკეთესი ქულის მისაღებად."
+        "answer": "თუ ეს თქვენი პირველი ვიზიტია, ჯერ სცადეთ Find Odd Color: Color Master 2. ის სწრაფად თამაშობს და ადვილად ითამაშებს უკეთესი ქულის მისაღებად."
       },
       "privateTest": {
         "question": "როგორ შევუერთდე პირად სატესტო აპებს?",
@@ -14056,12 +14165,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "დამზადებულია NeoKIM-ის მიერ",
       "lastUpdated": "ბოლო განახლება: 2026.05.31",
       "googlePlay": "Google Play აპები",
-      "colorTest": "ფერის ტესტი",
-      "alienText": "უცხო ტექსტის გენერატორი",
-      "ufoApp": "UFO აპლიკაცია",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "კონფიდენციალურობის პოლიტიკა",
       "appAds": "app-ads.txt",
-      "contact": "კონტაქტი"
+      "contact": "კონტაქტი",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "პირადი ტესტერის რეგისტრაცია",
@@ -14082,9 +14192,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zu": {
     "seo": {
       "title": "NeoKIM App Lab | I-Android Mini Apps yamahhala",
-      "description": "Faka i-Colour Master 2, i-Galacticode, Shayela i-UFO, i-Lab Rat Maze Escape: I-Dark Maze, nokuhlolwa okuyimfihlo kwe-Lucky Card Random Defense nezinye izinhlelo zokusebenza ezincane ze-Android.\nI-",
+      "description": "Faka i-Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, nokuhlola okuyimfihlo ukuze uthole ezinye izinhlelo zokusebenza ezincane ze-Android.",
       "ogTitle": "NeoKIM App Lab | I-Android Mini Apps",
-      "ogDescription": "Izinselele zemibala, imilayezo eyimfihlo efana ne-alien, umuzwa wokushaya we-UFO, i-Lab Rat Maze Escape: I-Dark Maze, nokuhlolwa okuyimfihlo kokuzijabulisa okusheshayo kwe-Android."
+      "ogDescription": "Thola imibala engavamile, yenza umbhalo oyimfihlo wohlobo oluhlukile, thumela amasiginali e-UFO adlalayo, ubalekele ama-maze amnyama, futhi ujoyine izivivinyo eziyimfihlo ukuze uthole ukuzijabulisa okusheshayo kwe-Android."
     },
     "skip": {
       "apps": "Yeqela ohlwini lohlelo lokusebenza"
@@ -14119,11 +14229,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Iqoqo le-Android mini lokusebenza",
       "title": "I-NeoKIM App Lab",
       "subtitle": "Izinhlelo zokusebenza ezincane ze-Android ezenzelwe ukuzijabulisa nokwabelana okusheshayo",
-      "description": "Izinselele zombala, imilayezo eyimfihlo efana ne-alien, kanye nolwazi lokufona kwe-UFO. Faka kancane. Jabulela ngaphansi kweminithi.",
+      "description": "Izinselelo ezinombala ongajwayelekile, imilayezo eyimfihlo yesitayela esingaziwa, ukudlala isiginali ye-UFO, kanye nokuphunyuka kwe-maze emnyama. Faka kancane. Jabulela ngaphansi kweminithi.",
       "primaryCta": "Faka Uhlelo Lokusebenza Olufakiwe",
-      "primaryAria": "Faka i-Color Master 2 ku-Google Play",
+      "primaryAria": "Faka i-Find Odd Color: Color Master 2 ku-Google Play",
       "secondaryCta": "Phequlula Izinhlelo zokusebenza",
-      "visualAria": "Isifanekiso sefoni esinesithonjana se-Color Master 2 namathayili ombala",
+      "visualAria": "Isifanekiso sefoni esinesithonjana se-Find Odd Color: Color Master 2 namathayili ombala",
       "badges": [
         "Izinhlelo zokusebenza zamahhala",
         "Android",
@@ -14135,81 +14245,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "UHLELO LOKUSEBENZA OLUFIKIWE",
       "title": "Faka Lokhu Okokuqala Namuhla",
       "badge": "Okufakiwe",
-      "appName": "Umbala Master 2",
-      "short": "Thola umbala ohlukile ngemizuzwana eyi-10.",
-      "description": "Indida yombala wempilo eyodwa lapho iphutha elilodwa liqeda ukugijima. Iqala ngokushesha, bese ilokhu ikudonsela emuva ukuze ushaye irekhodi lakho.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Thola umbala owodwa ohlukile ngemizuzwana eyi-10.",
+      "description": "Indida yombala owodwa wempilo eyodwa lapho iphutha elilodwa liqeda ukugijima. Iqala ngokushesha, bese ilokhu ikudonsela emuva ukuze ushaye irekhodi lakho.",
       "primaryCta": "Faka ku-Google Play",
-      "primaryAria": "Faka i-Color Master 2 ku-Google Play",
+      "primaryAria": "Faka i-Find Odd Color: Color Master 2 ku-Google Play",
       "secondaryCta": "Phequlula Izinhlelo zokusebenza",
-      "visualAria": "Umbala we-Color Master 2 umbala we-tile inselele isifanekiso sefoni"
+      "visualAria": "I-Find Odd Color: Color Master 2 inselele kumfanekiso wefoni wethayela"
     },
     "apps": {
       "kicker": "IKHATHALOGU YOHLELO LOKUSEBENZA",
       "title": "Zonke Izinhlelo zokusebenza",
       "description": "Faka izinhlelo zokusebenza zomphakathi ngqo. Ngokuhlolwa okuyimfihlo, thumela i-imeyili isicelo kuqala; ngemva kokwengezwa kokufinyelela komhloli, sebenzisa inkinobho ethi Joyina Ukuhlola.",
       "colorMaster2": {
-        "name": "Umbala Master 2",
-        "category": "Iphazili yombala",
-        "tagline": "Thola umbala ohlukile ngemizuzwana eyi-10.",
-        "description": "Iphutha elilodwa liqeda ukugijima. Inselele yokubona umbala emfushane, omluthayo.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Umdlalo wephazili wombala ongajwayelekile",
+        "tagline": "Thola umbala owodwa ohlukile ngemizuzwana eyi-10.",
+        "description": "Iphutha elilodwa liqeda ukugijima. Inselele emfushane, eluthayo yombala ongajwayelekile wokugxila nokubonwa kombala.",
         "highlights": [
           "umkhawulo wamasekhondi angu-10",
           "Ukugijima kwempilo eyodwa",
           "Ibhodi yabaphambili",
           "Usizo lwe-Colorblind"
         ],
-        "primaryCta": "Faka I-Color Master 2",
+        "primaryCta": "Faka okuthi Thola Umbala Oyinqaba",
         "detailCta": "Zama iDemo Yewebhu",
         "statusNote": "Iyatholakala manje ku-Google Play.",
-        "iconAlt": "Isithonjana sombala ongu-Master 2"
+        "iconAlt": "Isithonjana se-Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "I-Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Uhlelo lokusebenza lomlayezo oyimfihlo",
         "tagline": "Dala imilayezo eyimfihlo efana ne-alien edinga ukhiye wokwabelana ukuze uhlukanise.",
         "description": "Dala imithetho yakho yolimi lwe-galactic. Abantu abanokhiye wakho wokwabelana kuphela abangakwazi ukudala kabusha imithetho efanayo, futhi umbhalo wangempela awulayishwa kuseva.",
         "highlights": [
           "Ukhiye wokwabelana usekelwe",
           "Imithetho yomuntu siqu",
-          "SNS-ilungile",
+          "I-SNS-ilungile",
           "Akukho ukulayishwa kweseva"
         ],
         "primaryCta": "Dala Imilayezo Eyimfihlo",
         "detailCta": "Zama iDemo Yewebhu",
         "statusNote": "Iyatholakala manje ku-Google Play.",
-        "iconAlt": "Isithonjana se-galacticode"
+        "iconAlt": "Isithonjana se-Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Shayela i-UFO",
-        "category": "Uhlelo lokusebenza olujabulisayo olugxilile",
-        "tagline": "Umuzwa wokushaya we-UFO ongaqondakali ukuze ujabule.",
-        "description": "Cindezela inkinobho, yizwa isignali, futhi ucabange okuthile okulalele usemkhathini.",
+        "name": "UFO Signal Simulator",
+        "category": "Uhlelo lokusebenza lokuzijabulisa lwesignali eyimfihlakalo",
+        "tagline": "Thumela isignali yesikhala esidlalayo futhi ujabulele isimo se-UFO.",
+        "description": "Vula uhlelo lokusebenza, cindezela inkinobho yesiginali, futhi ujabulele umsindo nokugqwayiza okwenza isikhathi sizizwe njengesiko elincane le-UFO.",
         "highlights": [
-          "Inkinobho yokusebenzisana",
+          "Inkinobho yesiginali",
           "Imisindo eyimfihlakalo",
-          "Opopayi",
+          "Ukugqwayiza kwemizwa",
           "Akukho ukubhalisa"
         ],
-        "primaryCta": "Shayela i-UFO",
-        "detailCta": "Zama iDemo Yewebhu",
-        "statusNote": "Iyatholakala manje ku-Google Play.",
-        "iconAlt": "Shayela isithonjana se-UFO"
+        "primaryCta": "Faka i-UFO Signal Simulator",
+        "detailCta": "Buka Imininingwane Yohlelo Lokusebenza",
+        "statusNote": "Buka imininingwane yohlelo lokusebenza, bese ulufaka ku-Google Play.",
+        "iconAlt": "Isithonjana se-UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Umbala Master",
-        "category": "Iphazili yombala yakudala",
-        "tagline": "Inselele yoqobo yokugxila kumbala: thola impendulo phakathi kwemibala efanayo.",
-        "description": "Inguqulo yasekuqaleni ngaphambi koMbala Omkhulu 2. Izame kuwebhu kuqala, bese uyayifaka ukusuka ku-Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Umdlalo we-Classic color sense",
+        "tagline": "Inselele yoqobo yokugxila kumbala: khumbula umbala wempendulo bese uwukhetha emibaleni efanayo.",
+        "description": "Ukuhlolwa komqondo wombala kwasekuqaleni ngaphambi kwe-Find Odd Color: Color Master 2. Yizame kuwebhu kuqala, bese uyayifaka isuka ku-Google Play.",
         "highlights": [
           "Umuzwa wangempela",
           "Ukugxila kombala",
           "Ukudlala okusheshayo",
           "Faka manje"
         ],
-        "primaryCta": "Faka I-Color Master",
+        "primaryCta": "Faka Ukuhlolwa Kwenzwa Yombala",
         "detailCta": "Zama iDemo Yewebhu",
-        "statusNote": "Izame kuwebhu kuqala, bese uyayifaka isuka ku-Google Play.",
-        "iconAlt": "Isithonjana sombala Oyinhloko"
+        "statusNote": "Yizame kuwebhu kuqala, bese uyayifaka isuka ku-Google Play.",
+        "iconAlt": "Isithonjana se-Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "I-Korean Random Defense: Siege",
@@ -14244,7 +14354,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Isithonjana Sekhadi Lenhlanhla Lokuvikela Okungahleliwe"
       },
       "darkMaze": {
-        "name": "I-Lab Rat Maze Escape: I-Maze Emnyama",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Ikhishwe umdlalo wokuphunyuka we-maze",
         "tagline": "Qondisa igundane laselabhu ku-maze emnyama futhi uthole indlela yokuphuma.",
         "description": "Ikhishwe ku-Google Play ngomhla ka-Meyi 28, 2026. Hamba ku-maze emnyama, sebenzisa izinto, futhi ubaleke ngaphambi kokuthi indlela ivalwe.",
@@ -14255,8 +14365,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Ukusinda okumnyama"
         ],
         "primaryCta": "Faka ku-Google Play",
-        "statusNote": "Manje iyatholakala ku-Google Play. Ayikho idemo yewebhu enikeziwe kulolu hlelo lokusebenza.",
-        "iconAlt": "I-Lab Rat Maze Escape: Isithonjana se-Dark Maze"
+        "statusNote": "Buka imininingwane yohlelo lokusebenza, bese ulufaka ku-Google Play. Ayikho idemo yewebhu enikeziwe kulolu hlelo lokusebenza.",
+        "iconAlt": "Isithonjana se-Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Buka Imininingwane Yohlelo Lokusebenza"
       }
     },
     "status": {
@@ -14273,18 +14384,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IMIBONO EMIFUSHANE",
       "title": "Zizame Kanje",
       "colorMaster2": {
-        "app": "Umbala Master 2",
-        "title": "\"Uma ubona lo mehluko wemibala, amehlo akho abukhali.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“Uma ubona lo mbala oyinqaba, amehlo akho abukhali.”",
         "description": "Qhudelana nabangani kwinselelo yamasekhondi ayi-10."
       },
       "galaxyCode": {
-        "app": "I-Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Thumela umngane wakho umlayezo ongaziwa abangakwazi ukuwuchaza.\"",
         "description": "Shiya imilayezo eyimfihlo abangabanikazi bokhiye wokwabelana kuphela abangayinquma."
       },
       "ufoSignal": {
-        "app": "Shayela i-UFO",
-        "title": "\"Kwenzekani uma ucindezela inkinobho ye-UFO ekuseni?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Kwenzekani uma uthumela isignali ye-UFO ekuseni?\"",
         "description": "Jabulela imisindo nokugqwayiza egumbini elimnyama."
       }
     },
@@ -14301,7 +14412,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Iluphi uhlelo lokusebenza okufanele ngilufake kuqala?",
-        "answer": "Uma lokhu kuwukuvakasha kwakho kokuqala, zama i-Color Master 2 kuqala. Iyashesha ukudlala futhi kulula ukuyidlala ukuze uthole amaphuzu angcono."
+        "answer": "Uma lokhu kuwukuvakasha kwakho kokuqala, zama i-Find Odd Color: Color Master 2 kuqala. Iyashesha ukudlala futhi kulula ukuyidlala ukuze uthole amaphuzu angcono."
       },
       "privateTest": {
         "question": "Ngizijoyina kanjani izinhlelo zokusebenza zokuhlola eziyimfihlo?",
@@ -14312,12 +14423,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Kwenziwe ngu-NeoKIM",
       "lastUpdated": "Kugcine ukubuyekezwa: 2026.05.31",
       "googlePlay": "Google Play Izinhlelo zokusebenza",
-      "colorTest": "Ukuhlolwa Kombala",
-      "alienText": "I-Alien Text Generator",
-      "ufoApp": "Uhlelo lokusebenza lwe-UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Inqubomgomo Yobumfihlo",
       "appAds": "I-app-ads.txt",
-      "contact": "Oxhumana naye"
+      "contact": "Oxhumana naye",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Ukubhalisela Umhloli Oyimfihlo",
@@ -14338,9 +14450,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-CN": {
     "seo": {
       "title": "NeoKIM应用实验室|免费 Android 迷你应用程序",
-      "description": "安装 Color Master 2、Galaicode、Call the UFO、Lab Rat Maze Escape: Dark Maze 以及 Lucky Card Random Defense 和更多 Android 迷你应用程序的私人测试。",
+      "description": "安装 Find Odd Color: Color Master 2、Alien Text Maker: Galaxy Code、UFO Signal Simulator、Color Sense Test: Color Master、Lab Rat Maze Escape: Dark Maze 以及更多 Android 迷你应用程序的私人测试。",
       "ogTitle": "NeoKIM应用实验室| Android 迷你应用程序",
-      "ogDescription": "颜色挑战、类似外星人的秘密消息、UFO 呼叫体验、实验室老鼠迷宫逃脱：黑暗迷宫以及快速享受 Android 乐趣的私人测试。"
+      "ogDescription": "寻找奇怪的颜色，制作外星人风格的秘密文本，发送有趣的 UFO 信号，逃离黑暗迷宫，并参加私人测试，享受快速 Android 的乐趣。"
     },
     "skip": {
       "apps": "跳至应用程序列表"
@@ -14375,11 +14487,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android迷你应用合集",
       "title": "NeoKIM应用实验室",
       "subtitle": "专为快速娱乐和分享而设计的小型 Android 应用程序",
-      "description": "颜色挑战、外星人般的秘密信息和 UFO 通话体验。安装轻。一分钟之内即可享用。",
+      "description": "奇怪的颜色挑战、外星人风格的秘密信息、UFO 信号游戏和黑暗迷宫逃脱。安装轻。一分钟之内即可享用。",
       "primaryCta": "安装特色应用程序",
-      "primaryAria": "在 Google Play 上安装 Color Master 2",
+      "primaryAria": "在 Google Play 上安装 Find Odd Color: Color Master 2",
       "secondaryCta": "浏览应用程序",
-      "visualAria": "带有 Color Master 2 图标和彩色图块的手机模型",
+      "visualAria": "带有 Find Odd Color: Color Master 2 图标和彩色图块的手机模型",
       "badges": [
         "免费应用程序",
         "ZX安卓DXZ",
@@ -14391,81 +14503,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "特色应用程序",
       "title": "今天先安装这个",
       "badge": "精选",
-      "appName": "色彩大师2",
-      "short": "10 秒内找到不同的颜色。",
-      "description": "这是一款一次性色彩谜题，一个错误就会结束游戏。它开始很快，然后不断拉着你打破你的记录。",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "在 10 秒内找到一种不同的颜色。",
+      "description": "这是一款单生命奇色拼图，一个错误就会结束游戏。它开始很快，然后不断拉着你打破你的记录。",
       "primaryCta": "在 Google Play 上安装",
-      "primaryAria": "在 Google Play 上安装 Color Master 2",
+      "primaryAria": "在 Google Play 上安装 Find Odd Color: Color Master 2",
       "secondaryCta": "浏览应用程序",
-      "visualAria": "Color Master 2 彩色瓷砖挑战手机样机"
+      "visualAria": "Find Odd Color: Color Master 2 瓷砖挑战手机模型"
     },
     "apps": {
       "kicker": "应用程序目录",
       "title": "所有应用程序",
       "description": "直接安装公共应用程序。对于私人测试，请先通过电子邮件发送请求；添加测试人员访问权限后，使用“加入测试”按钮。",
       "colorMaster2": {
-        "name": "色彩大师2",
-        "category": "彩色拼图",
-        "tagline": "10 秒内找到不同的颜色。",
-        "description": "一次失误就结束了比赛。一个简短的、令人上瘾的色彩感知挑战。",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "奇数色益智游戏",
+        "tagline": "在 10 秒内找到一种不同的颜色。",
+        "description": "一次失误就结束了比赛。一个简短的、令人上瘾的奇怪颜色挑战，针对焦点和颜色感知。",
         "highlights": [
           "10秒限制",
           "一生一跑",
           "排行榜",
           "色盲援助"
         ],
-        "primaryCta": "安装色彩大师2",
+        "primaryCta": "安装查找奇怪的颜色",
         "detailCta": "尝试网络演示",
-        "statusNote": "现已在 Google Play 上发售。",
-        "iconAlt": "色彩大师2图标"
+        "statusNote": "现已在 Google Play 上提供。",
+        "iconAlt": "Find Odd Color: Color Master 2 图标"
       },
       "galaxyCode": {
-        "name": "银河密码",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "秘密消息应用程序",
         "tagline": "创建类似外星人的秘密消息，需要共享密钥才能解码。",
         "description": "创建你自己的银河语言规则。只有拥有您的共享密钥的人才能重新创建相同的规则，并且原始文本不会上传到服务器。",
         "highlights": [
           "基于共享密钥",
           "个人规则",
-          "SNS-就绪",
+          "SNS 就绪",
           "没有服务器上传"
         ],
         "primaryCta": "创建秘密消息",
         "detailCta": "尝试网络演示",
-        "statusNote": "现已在 Google Play 上发售。",
-        "iconAlt": "银河代码图标"
+        "statusNote": "现已在 Google Play 上提供。",
+        "iconAlt": "Alien Text Maker: Galaxy Code 图标"
       },
       "ufoSignal": {
-        "name": "呼叫不明飞行物",
-        "category": "沉浸式趣味应用",
-        "tagline": "神秘的UFO召唤体验，乐趣无穷。",
-        "description": "按下按钮，听到信号，并想象有东西从太空中聆听。",
+        "name": "UFO Signal Simulator",
+        "category": "神秘信号娱乐应用",
+        "tagline": "发送俏皮的太空信号，享受 UFO 的心情。",
+        "description": "打开应用程序，按下信号按钮，然后享受声音和动画，让这一刻感觉就像一个小型的 UFO 仪式。",
         "highlights": [
-          "互动按钮",
+          "信号按钮",
           "神秘的声音",
-          "动画",
+          "心情动画",
           "无需注册"
         ],
-        "primaryCta": "呼叫不明飞行物",
-        "detailCta": "尝试网络演示",
-        "statusNote": "现已在 Google Play 上发售。",
-        "iconAlt": "调用 UFO 图标"
+        "primaryCta": "安装 UFO Signal Simulator",
+        "detailCta": "查看应用程序详细信息",
+        "statusNote": "查看应用程序详细信息，然后从 Google Play 安装它。",
+        "iconAlt": "UFO Signal Simulator 图标"
       },
       "colorMasterClassic": {
-        "name": "色彩大师",
-        "category": "经典色彩拼图",
-        "tagline": "最初的色彩焦点挑战：在相似的颜色中找到答案。",
-        "description": "Color Master 2之前的原始版本。先在网络上试用，然后从Google Play安装。",
+        "name": "Color Sense Test: Color Master",
+        "category": "经典色感游戏",
+        "tagline": "最初的颜色聚焦挑战：记住答案颜色并从相似的颜色中挑选它。",
+        "description": "Find Odd Color: Color Master 2之前的原版色感测试。首先在网络上尝试，然后从 Google Play 安装。",
         "highlights": [
           "原始的感觉",
           "色彩焦点",
           "快速播放",
           "立即安装"
         ],
-        "primaryCta": "安装色彩大师",
+        "primaryCta": "安装色感测试",
         "detailCta": "尝试网络演示",
         "statusNote": "首先在网络上尝试，然后从 Google Play 安装。",
-        "iconAlt": "色彩大师图标"
+        "iconAlt": "Color Sense Test: Color Master 图标"
       },
       "koreanRandomDefense": {
         "name": "朝鲜随机防御：围攻",
@@ -14500,7 +14612,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "幸运卡随机防御图标"
       },
       "darkMaze": {
-        "name": "实验室老鼠迷宫逃脱：黑暗迷宫",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "推出迷宫逃脱游戏",
         "tagline": "引导实验鼠穿过黑暗迷宫并找到出口。",
         "description": "于 2026 年 5 月 28 日在 Google Play 上发布。穿过黑暗迷宫，使用物品，并在路径关闭之前逃脱。",
@@ -14510,9 +14622,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "项目",
           "黑暗生存"
         ],
-        "primaryCta": "在 Google Play 上安装",
-        "statusNote": "现已在 Google Play 上架。没有为此应用程序提供网络演示。",
-        "iconAlt": "实验室老鼠迷宫逃脱：黑暗迷宫 图标"
+        "primaryCta": "安装在 Google Play 上",
+        "statusNote": "查看应用程序详细信息，然后从 Google Play 安装它。没有为此应用程序提供网络演示。",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze 图标",
+        "detailCta": "查看应用程序详细信息"
       }
     },
     "status": {
@@ -14529,18 +14642,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "短裤创意",
       "title": "像这样尝试一下",
       "colorMaster2": {
-        "app": "色彩大师2",
-        "title": "“如果你看到这种色差，说明你的眼睛很敏锐。”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“如果你发现这种奇怪的颜色，说明你的眼睛很敏锐。”",
         "description": "与朋友一起参加 10 秒挑战。"
       },
       "galaxyCode": {
-        "app": "银河密码",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“向你的朋友发送一条他们无法解码的外星人信息。”",
         "description": "留下只有共享密钥持有者才能解码的秘密消息。"
       },
       "ufoSignal": {
-        "app": "呼叫不明飞行物",
-        "title": "“如果你在黎明时按下UFO按钮会发生什么？”",
+        "app": "UFO Signal Simulator",
+        "title": "“如果你在黎明时发送 UFO 信号会发生什么？”",
         "description": "在黑暗的房间里享受声音和动画。"
       }
     },
@@ -14557,7 +14670,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "我应该先安装哪个应用程序？",
-        "answer": "如果这是您第一次访问，请先尝试 Color Master 2。玩起来很快并且很容易重玩以获得更好的分数。"
+        "answer": "如果这是您第一次访问，请先尝试 Find Odd Color: Color Master 2。玩起来很快并且很容易重玩以获得更好的分数。"
       },
       "privateTest": {
         "question": "如何加入私人测试应用程序？",
@@ -14568,12 +14681,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "由 NeoKIM 制作",
       "lastUpdated": "最后更新：2026.05.31",
       "googlePlay": "Google Play 应用程序",
-      "colorTest": "颜色测试",
-      "alienText": "外星人文本生成器",
-      "ufoApp": "不明飞行物应用程序",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "隐私政策",
       "appAds": "app-ads.txt",
-      "contact": "联系方式"
+      "contact": "联系方式",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "私人测试员注册",
@@ -14594,9 +14708,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-TW": {
     "seo": {
       "title": "NeoKIM應用實驗室|免費 Android 迷你應用程式",
-      "description": "安裝 Color Master 2、Galaicode、Call the UFO、Lab Rat Maze Escape: Dark Maze 以及 Lucky Card Random Defense 和更多 Android 迷你應用程式的私人測試。",
+      "description": "安裝 Find Odd Color: Color Master 2、Alien Text Maker: Galaxy Code、UFO Signal Simulator、Color Sense Test: Color Master、Lab Rat Maze Escape: Dark Maze 以及更多 Android 迷你應用程式的私人測試。",
       "ogTitle": "NeoKIM應用實驗室| Android 迷你應用程式",
-      "ogDescription": "顏色挑戰、類似外星人的秘密消息、UFO 呼叫體驗、實驗室老鼠迷宮逃脫：黑暗迷宮以及快速享受 Android 樂趣的私人測試。"
+      "ogDescription": "尋找奇怪的顏色，製作外星人風格的秘密文本，發送有趣的 UFO 信號，逃離黑暗迷宮，並參加私人測試，享受快速 Android 的樂趣。"
     },
     "skip": {
       "apps": "跳至應用程式列表"
@@ -14631,11 +14745,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android迷你應用程式集",
       "title": "NeoKIM應用實驗室",
       "subtitle": "專為快速娛樂和分享而設計的小型 Android 應用程式",
-      "description": "顏色挑戰、外星人般的秘密訊息和 UFO 通話體驗。安裝輕。一分鐘之內即可享用。",
+      "description": "奇怪的顏色挑戰、外星人風格的秘密訊息、UFO 信號遊戲和黑暗迷宮逃脫。安裝輕。一分鐘之內即可享用。",
       "primaryCta": "安裝特色應用程式",
-      "primaryAria": "在 Google Play 上安裝 Color Master 2",
+      "primaryAria": "在 Google Play 上安裝 Find Odd Color: Color Master 2",
       "secondaryCta": "瀏覽應用程式",
-      "visualAria": "帶有 Color Master 2 圖示和彩色圖塊的手機模型",
+      "visualAria": "帶有 Find Odd Color: Color Master 2 圖示和彩色圖塊的手機模型",
       "badges": [
         "免費應用程式",
         "ZX安卓DXZ",
@@ -14647,81 +14761,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "特色應用程式",
       "title": "今天先安裝這個",
       "badge": "精選",
-      "appName": "色彩大師2",
-      "short": "10 秒內找出不同的顏色。",
-      "description": "這是一款一次性色彩謎題，一個錯誤就會結束遊戲。它開始很快，然後不斷拉著你打破你的記錄。",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "在 10 秒內找到不同的顏色。",
+      "description": "這是一款單生命奇色拼圖，一個錯誤就會結束遊戲。它開始很快，然後不斷拉著你打破你的記錄。",
       "primaryCta": "在 Google Play 上安裝",
-      "primaryAria": "在 Google Play 上安裝 Color Master 2",
+      "primaryAria": "在 Google Play 上安裝 Find Odd Color: Color Master 2",
       "secondaryCta": "瀏覽應用程式",
-      "visualAria": "Color Master 2 彩色磁磚挑戰手機樣機"
+      "visualAria": "Find Odd Color: Color Master 2 磁磚挑戰手機模型"
     },
     "apps": {
       "kicker": "應用程式目錄",
       "title": "所有應用程式",
       "description": "直接安裝公共應用程式。對於私人測試，請先透過電子郵件發送請求；新增測試人員存取權限後，使用「加入測試」按鈕。",
       "colorMaster2": {
-        "name": "色彩大師2",
-        "category": "彩色拼圖",
-        "tagline": "10 秒內找出不同的顏色。",
-        "description": "一次失誤就結束了比賽。一個簡短的、令人上癮的色彩感知挑戰。",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "奇數色益智遊戲",
+        "tagline": "在 10 秒內找到不同的顏色。",
+        "description": "一次失誤就結束了比賽。一個簡短的、令人上癮的奇怪顏色挑戰，針對焦點和顏色感知。",
         "highlights": [
           "10秒限制",
           "一生一跑",
           "排行榜",
           "色盲援助"
         ],
-        "primaryCta": "安裝色彩大師2",
+        "primaryCta": "安裝尋找奇怪的顏色",
         "detailCta": "嘗試網路演示",
-        "statusNote": "現已在 Google Play 上發售。",
-        "iconAlt": "色彩大師2圖標"
+        "statusNote": "現已在 Google Play 上提供。",
+        "iconAlt": "Find Odd Color: Color Master 2 圖標"
       },
       "galaxyCode": {
-        "name": "銀河密碼",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "秘密訊息應用程式",
         "tagline": "創建類似外星人的秘密訊息，需要共享密鑰才能解碼。",
         "description": "創建你自己的銀河語言規則。只有擁有您的共用金鑰的人才能重新建立相同的規則，並且原始文字不會上傳到伺服器。",
         "highlights": [
           "基於共享金鑰",
           "個人規則",
-          "SNS-就緒",
+          "SNS 就緒",
           "沒有伺服器上傳"
         ],
         "primaryCta": "創建秘密訊息",
         "detailCta": "嘗試網路演示",
-        "statusNote": "現已在 Google Play 上發售。",
-        "iconAlt": "銀河代碼圖標"
+        "statusNote": "現已在 Google Play 上提供。",
+        "iconAlt": "Alien Text Maker: Galaxy Code 圖標"
       },
       "ufoSignal": {
-        "name": "呼叫不明飛行物",
-        "category": "沉浸式趣味應用",
-        "tagline": "神秘的UFO召喚體驗，樂趣無窮。",
-        "description": "按下按鈕，聽到訊號，想像有東西從太空中聆聽。",
+        "name": "UFO Signal Simulator",
+        "category": "神秘訊號娛樂應用",
+        "tagline": "發送俏皮的太空訊號，享受 UFO 的心情。",
+        "description": "打開應用程序，按下信號按鈕，然後享受聲音和動畫，讓這一刻感覺像一個小型的 UFO 儀式。",
         "highlights": [
-          "互動按鈕",
+          "訊號按鈕",
           "神秘的聲音",
-          "動畫",
+          "心情動畫",
           "無需註冊"
         ],
-        "primaryCta": "呼叫不明飛行物",
-        "detailCta": "嘗試網路演示",
-        "statusNote": "現已在 Google Play 上發售。",
-        "iconAlt": "調用 UFO 圖標"
+        "primaryCta": "安裝 UFO Signal Simulator",
+        "detailCta": "查看應用程式詳細信息",
+        "statusNote": "查看應用程式詳細信息，然後從 Google Play 安裝它。",
+        "iconAlt": "UFO Signal Simulator 圖標"
       },
       "colorMasterClassic": {
-        "name": "色彩大師",
-        "category": "經典色彩拼圖",
-        "tagline": "最初的色彩焦點挑戰：在相似的顏色中找到答案。",
-        "description": "Color Master 2之前的原始版本。先在網路上試用，然後從Google Play安裝。",
+        "name": "Color Sense Test: Color Master",
+        "category": "經典色感遊戲",
+        "tagline": "最初的顏色聚焦挑戰：記住答案顏色並從相似的顏色中挑選它。",
+        "description": "Find Odd Color: Color Master 2之前的原版色感測試。首先在網路上嘗試，然後從 Google Play 安裝。",
         "highlights": [
           "原始的感覺",
           "色彩焦點",
           "快速播放",
           "立即安裝"
         ],
-        "primaryCta": "安裝色彩大師",
+        "primaryCta": "安裝色感測試",
         "detailCta": "嘗試網路演示",
         "statusNote": "首先在網路上嘗試，然後從 Google Play 安裝。",
-        "iconAlt": "色彩大師圖標"
+        "iconAlt": "Color Sense Test: Color Master 圖標"
       },
       "koreanRandomDefense": {
         "name": "北韓隨機防禦：圍攻",
@@ -14756,7 +14870,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "幸運卡隨機防禦圖標"
       },
       "darkMaze": {
-        "name": "實驗室老鼠迷宮逃脫：黑暗迷宮",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "推出迷宮逃脫遊戲",
         "tagline": "引導實驗鼠穿過黑暗迷宮並找到出口。",
         "description": "於 2026 年 5 月 28 日在 Google Play 上發布。穿過黑暗迷宮，使用物品，並在路徑關閉之前逃脫。",
@@ -14766,9 +14880,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "專案",
           "黑暗生存"
         ],
-        "primaryCta": "在 Google Play 上安裝",
-        "statusNote": "現已在 Google Play 上架。沒有為此應用程式提供網路演示。",
-        "iconAlt": "實驗室老鼠迷宮逃脫：黑暗迷宮 圖標"
+        "primaryCta": "安裝在 Google Play 上",
+        "statusNote": "查看應用程式詳細信息，然後從 Google Play 安裝它。沒有為此應用程式提供網路演示。",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze 圖標",
+        "detailCta": "查看應用程式詳細信息"
       }
     },
     "status": {
@@ -14785,18 +14900,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "短褲創意",
       "title": "像這樣嘗試一下",
       "colorMaster2": {
-        "app": "色彩大師2",
-        "title": "“如果你看到這種色差，表示你的眼睛很敏銳。”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“如果你發現這種奇怪的顏色，表示你的眼睛很敏銳。”",
         "description": "與朋友一起參加 10 秒挑戰。"
       },
       "galaxyCode": {
-        "app": "銀河密碼",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“向你的朋友發送一條他們無法解碼的外星人信息。”",
         "description": "留下只有共享密鑰持有者才能解碼的秘密訊息。"
       },
       "ufoSignal": {
-        "app": "呼叫不明飛行物",
-        "title": "“如果你在黎明時按下UFO按鈕會發生什麼？”",
+        "app": "UFO Signal Simulator",
+        "title": "“如果你在黎明時發送 UFO 信號會發生什麼？”",
         "description": "在黑暗的房間裡享受聲音和動畫。"
       }
     },
@@ -14813,7 +14928,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "我應該先安裝哪個應用程式？",
-        "answer": "如果這是您第一次訪問，請先嘗試 Color Master 2。玩起來很快並且很容易重玩以獲得更好的分數。"
+        "answer": "如果這是您第一次訪問，請先嘗試 Find Odd Color: Color Master 2。玩起來很快並且很容易重玩以獲得更好的分數。"
       },
       "privateTest": {
         "question": "如何加入私人測試應用程式？",
@@ -14824,12 +14939,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "由 NeoKIM 製作",
       "lastUpdated": "最後更新：2026.05.31",
       "googlePlay": "Google Play 應用程式",
-      "colorTest": "顏色測試",
-      "alienText": "外星人文本生成器",
-      "ufoApp": "不明飛行物應用程式",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "隱私權政策",
       "appAds": "app-ads.txt",
-      "contact": "聯絡方式"
+      "contact": "聯絡方式",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "私人測試員註冊",
@@ -14850,9 +14966,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "zh-HK": {
     "seo": {
       "title": "NeoKIM應用實驗室|免費 Android 迷你應用程式",
-      "description": "安裝 Color Master 2、Galaicode、Call the UFO、Lab Rat Maze Escape: Dark Maze 以及 Lucky Card Random Defense 和更多 Android 迷你應用程式的私人測試。",
+      "description": "安裝 Find Odd Color: Color Master 2、Alien Text Maker: Galaxy Code、UFO Signal Simulator、Color Sense Test: Color Master、Lab Rat Maze Escape: Dark Maze 以及更多 Android 迷你應用程式的私人測試。",
       "ogTitle": "NeoKIM應用實驗室| Android 迷你應用程式",
-      "ogDescription": "顏色挑戰、類似外星人的秘密消息、UFO 呼叫體驗、實驗室老鼠迷宮逃脫：黑暗迷宮以及快速享受 Android 樂趣的私人測試。"
+      "ogDescription": "尋找奇怪的顏色，製作外星人風格的秘密文本，發送有趣的 UFO 信號，逃離黑暗迷宮，並參加私人測試，享受快速 Android 的樂趣。"
     },
     "skip": {
       "apps": "跳至應用程式列表"
@@ -14887,11 +15003,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android迷你應用程式集",
       "title": "NeoKIM應用實驗室",
       "subtitle": "專為快速娛樂和分享而設計的小型 Android 應用程式",
-      "description": "顏色挑戰、外星人般的秘密訊息和 UFO 通話體驗。安裝輕。一分鐘之內即可享用。",
+      "description": "奇怪的顏色挑戰、外星人風格的秘密訊息、UFO 信號遊戲和黑暗迷宮逃脫。安裝輕。一分鐘之內即可享用。",
       "primaryCta": "安裝特色應用程式",
-      "primaryAria": "在 Google Play 上安裝 Color Master 2",
+      "primaryAria": "在 Google Play 上安裝 Find Odd Color: Color Master 2",
       "secondaryCta": "瀏覽應用程式",
-      "visualAria": "帶有 Color Master 2 圖示和彩色圖塊的手機模型",
+      "visualAria": "帶有 Find Odd Color: Color Master 2 圖示和彩色圖塊的手機模型",
       "badges": [
         "免費應用程式",
         "ZX安卓DXZ",
@@ -14903,81 +15019,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "特色應用程式",
       "title": "今天先安裝這個",
       "badge": "精選",
-      "appName": "色彩大師2",
-      "short": "10 秒內找出不同的顏色。",
-      "description": "這是一款一次性色彩謎題，一個錯誤就會結束遊戲。它開始很快，然後不斷拉著你打破你的記錄。",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "在 10 秒內找到不同的顏色。",
+      "description": "這是一款單生命奇色拼圖，一個錯誤就會結束遊戲。它開始很快，然後不斷拉著你打破你的記錄。",
       "primaryCta": "在 Google Play 上安裝",
-      "primaryAria": "在 Google Play 上安裝 Color Master 2",
+      "primaryAria": "在 Google Play 上安裝 Find Odd Color: Color Master 2",
       "secondaryCta": "瀏覽應用程式",
-      "visualAria": "Color Master 2 彩色磁磚挑戰手機樣機"
+      "visualAria": "Find Odd Color: Color Master 2 磁磚挑戰手機模型"
     },
     "apps": {
       "kicker": "應用程式目錄",
       "title": "所有應用程式",
       "description": "直接安裝公共應用程式。對於私人測試，請先透過電子郵件發送請求；新增測試人員存取權限後，使用「加入測試」按鈕。",
       "colorMaster2": {
-        "name": "色彩大師2",
-        "category": "彩色拼圖",
-        "tagline": "10 秒內找出不同的顏色。",
-        "description": "一次失誤就結束了比賽。一個簡短的、令人上癮的色彩感知挑戰。",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "奇數色益智遊戲",
+        "tagline": "在 10 秒內找到不同的顏色。",
+        "description": "一次失誤就結束了比賽。一個簡短的、令人上癮的奇怪顏色挑戰，針對焦點和顏色感知。",
         "highlights": [
           "10秒限制",
           "一生一跑",
           "排行榜",
           "色盲援助"
         ],
-        "primaryCta": "安裝色彩大師2",
+        "primaryCta": "安裝尋找奇怪的顏色",
         "detailCta": "嘗試網路演示",
-        "statusNote": "現已在 Google Play 上發售。",
-        "iconAlt": "色彩大師2圖標"
+        "statusNote": "現已在 Google Play 上提供。",
+        "iconAlt": "Find Odd Color: Color Master 2 圖標"
       },
       "galaxyCode": {
-        "name": "銀河密碼",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "秘密訊息應用程式",
         "tagline": "創建類似外星人的秘密訊息，需要共享密鑰才能解碼。",
         "description": "創建你自己的銀河語言規則。只有擁有您的共用金鑰的人才能重新建立相同的規則，並且原始文字不會上傳到伺服器。",
         "highlights": [
           "基於共享金鑰",
           "個人規則",
-          "SNS-就緒",
+          "SNS 就緒",
           "沒有伺服器上傳"
         ],
         "primaryCta": "創建秘密訊息",
         "detailCta": "嘗試網路演示",
-        "statusNote": "現已在 Google Play 上發售。",
-        "iconAlt": "銀河代碼圖標"
+        "statusNote": "現已在 Google Play 上提供。",
+        "iconAlt": "Alien Text Maker: Galaxy Code 圖標"
       },
       "ufoSignal": {
-        "name": "呼叫不明飛行物",
-        "category": "沉浸式趣味應用",
-        "tagline": "神秘的UFO召喚體驗，樂趣無窮。",
-        "description": "按下按鈕，聽到訊號，想像有東西從太空中聆聽。",
+        "name": "UFO Signal Simulator",
+        "category": "神秘訊號娛樂應用",
+        "tagline": "發送俏皮的太空訊號，享受 UFO 的心情。",
+        "description": "打開應用程序，按下信號按鈕，然後享受聲音和動畫，讓這一刻感覺像一個小型的 UFO 儀式。",
         "highlights": [
-          "互動按鈕",
+          "訊號按鈕",
           "神秘的聲音",
-          "動畫",
+          "心情動畫",
           "無需註冊"
         ],
-        "primaryCta": "呼叫不明飛行物",
-        "detailCta": "嘗試網路演示",
-        "statusNote": "現已在 Google Play 上發售。",
-        "iconAlt": "調用 UFO 圖標"
+        "primaryCta": "安裝 UFO Signal Simulator",
+        "detailCta": "查看應用程式詳細信息",
+        "statusNote": "查看應用程式詳細信息，然後從 Google Play 安裝它。",
+        "iconAlt": "UFO Signal Simulator 圖標"
       },
       "colorMasterClassic": {
-        "name": "色彩大師",
-        "category": "經典色彩拼圖",
-        "tagline": "最初的色彩焦點挑戰：在相似的顏色中找到答案。",
-        "description": "Color Master 2之前的原始版本。先在網路上試用，然後從Google Play安裝。",
+        "name": "Color Sense Test: Color Master",
+        "category": "經典色感遊戲",
+        "tagline": "最初的顏色聚焦挑戰：記住答案顏色並從相似的顏色中挑選它。",
+        "description": "Find Odd Color: Color Master 2之前的原版色感測試。首先在網路上嘗試，然後從 Google Play 安裝。",
         "highlights": [
           "原始的感覺",
           "色彩焦點",
           "快速播放",
           "立即安裝"
         ],
-        "primaryCta": "安裝色彩大師",
+        "primaryCta": "安裝色感測試",
         "detailCta": "嘗試網路演示",
         "statusNote": "首先在網路上嘗試，然後從 Google Play 安裝。",
-        "iconAlt": "色彩大師圖標"
+        "iconAlt": "Color Sense Test: Color Master 圖標"
       },
       "koreanRandomDefense": {
         "name": "北韓隨機防禦：圍攻",
@@ -15012,7 +15128,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "幸運卡隨機防禦圖標"
       },
       "darkMaze": {
-        "name": "實驗室老鼠迷宮逃脫：黑暗迷宮",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "推出迷宮逃脫遊戲",
         "tagline": "引導實驗鼠穿過黑暗迷宮並找到出口。",
         "description": "於 2026 年 5 月 28 日在 Google Play 上發布。穿過黑暗迷宮，使用物品，並在路徑關閉之前逃脫。",
@@ -15022,9 +15138,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "專案",
           "黑暗生存"
         ],
-        "primaryCta": "在 Google Play 上安裝",
-        "statusNote": "現已在 Google Play 上架。沒有為此應用程式提供網路演示。",
-        "iconAlt": "實驗室老鼠迷宮逃脫：黑暗迷宮 圖標"
+        "primaryCta": "安裝在 Google Play 上",
+        "statusNote": "查看應用程式詳細信息，然後從 Google Play 安裝它。沒有為此應用程式提供網路演示。",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze 圖標",
+        "detailCta": "查看應用程式詳細信息"
       }
     },
     "status": {
@@ -15041,18 +15158,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "短褲創意",
       "title": "像這樣嘗試一下",
       "colorMaster2": {
-        "app": "色彩大師2",
-        "title": "“如果你看到這種色差，表示你的眼睛很敏銳。”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“如果你發現這種奇怪的顏色，表示你的眼睛很敏銳。”",
         "description": "與朋友一起參加 10 秒挑戰。"
       },
       "galaxyCode": {
-        "app": "銀河密碼",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“向你的朋友發送一條他們無法解碼的外星人信息。”",
         "description": "留下只有共享密鑰持有者才能解碼的秘密訊息。"
       },
       "ufoSignal": {
-        "app": "呼叫不明飛行物",
-        "title": "“如果你在黎明時按下UFO按鈕會發生什麼？”",
+        "app": "UFO Signal Simulator",
+        "title": "“如果你在黎明時發送 UFO 信號會發生什麼？”",
         "description": "在黑暗的房間裡享受聲音和動畫。"
       }
     },
@@ -15069,7 +15186,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "我應該先安裝哪個應用程式？",
-        "answer": "如果這是您第一次訪問，請先嘗試 Color Master 2。玩起來很快並且很容易重玩以獲得更好的分數。"
+        "answer": "如果這是您第一次訪問，請先嘗試 Find Odd Color: Color Master 2。玩起來很快並且很容易重玩以獲得更好的分數。"
       },
       "privateTest": {
         "question": "如何加入私人測試應用程式？",
@@ -15080,12 +15197,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "由 NeoKIM 製作",
       "lastUpdated": "最後更新：2026.05.31",
       "googlePlay": "Google Play 應用程式",
-      "colorTest": "顏色測試",
-      "alienText": "外星人文本生成器",
-      "ufoApp": "不明飛行物應用程式",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "隱私權政策",
       "appAds": "app-ads.txt",
-      "contact": "聯絡方式"
+      "contact": "聯絡方式",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "私人測試員註冊",
@@ -15106,9 +15224,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "cs-CZ": {
     "seo": {
       "title": "NeoKIM App Lab | Zdarma Android Mini Apps",
-      "description": "Nainstalujte si Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze a soukromé testy pro Lucky Card Random Defense a další mini aplikace pro Android.",
+      "description": "Nainstalujte si Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze a soukromé testy pro další mini aplikace Android.",
       "ogTitle": "NeoKIM App Lab | Mini aplikace Android",
-      "ogDescription": "Barevné výzvy, tajné zprávy jako mimozemšťané, zážitky z volání UFO, Lab Rat Maze Escape: Dark Maze a soukromé testy pro rychlou zábavu s Androidem."
+      "ogDescription": "Najděte zvláštní barvy, vytvořte tajný text ve stylu mimozemšťanů, posílejte hravé signály UFO, unikněte temným bludištím a připojte se k soukromým testům pro rychlou zábavu Android."
     },
     "skip": {
       "apps": "Přejít na seznam aplikací"
@@ -15143,11 +15261,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Kolekce mini aplikací Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Malé aplikace Android vytvořené pro rychlou zábavu a sdílení",
-      "description": "Barevné výzvy, tajné zprávy jako mimozemšťané a zážitky z volání UFO. Nainstalujte lehce. Užijte si to za méně než minutu.",
+      "description": "Výzvy v podivných barvách, tajné zprávy ve stylu mimozemšťanů, hraní signálů UFO a úniky z temného bludiště. Nainstalujte lehce. Užijte si to za méně než minutu.",
       "primaryCta": "Nainstalujte doporučenou aplikaci",
-      "primaryAria": "Nainstalujte Color Master 2 na Google Play",
+      "primaryAria": "Nainstalujte Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Procházet aplikace",
-      "visualAria": "Maketa telefonu s ikonou Color Master 2 a barevnými dlaždicemi",
+      "visualAria": "Maketa telefonu s ikonou Find Odd Color: Color Master 2 a barevnými dlaždicemi",
       "badges": [
         "Bezplatné aplikace",
         "Android",
@@ -15159,36 +15277,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "VYBRANÁ APP",
       "title": "Nejprve si nainstalujte ještě dnes",
       "badge": "Nejlepší",
-      "appName": "Mistr barev 2",
-      "short": "Najděte jinou barvu za 10 sekund.",
-      "description": "Barevné puzzle na jeden život, kde jedna chyba končí běh. Začíná to rychle, pak vás táhne zpět, abyste překonali svůj rekord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Najděte jednu jinou barvu za 10 sekund.",
+      "description": "Jednoživotní lichá barevná hádanka, kde jedna chyba končí běh. Začíná to rychle, pak vás táhne zpět, abyste překonali svůj rekord.",
       "primaryCta": "Nainstalujte na Google Play",
-      "primaryAria": "Nainstalujte Color Master 2 na Google Play",
+      "primaryAria": "Nainstalujte Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Procházet aplikace",
-      "visualAria": "Color Master 2 barevné dlaždice výzva telefonní maketa"
+      "visualAria": "Maketa telefonu výzvy Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALOG APLIKACE",
       "title": "Všechny aplikace",
       "description": "Nainstalujte veřejné aplikace přímo. U soukromých testů nejprve odešlete žádost e-mailem; po přidání přístupu k testeru použijte tlačítko Join Test.",
       "colorMaster2": {
-        "name": "Mistr barev 2",
-        "category": "Barevné puzzle",
-        "tagline": "Najděte jinou barvu za 10 sekund.",
-        "description": "Jedna chyba končí běh. Krátká, návyková výzva k vnímání barev.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Logická hra lichých barev",
+        "tagline": "Najděte jednu jinou barvu za 10 sekund.",
+        "description": "Jedna chyba končí běh. Krátká, návyková výzva v lichých barvách pro soustředění a vnímání barev.",
         "highlights": [
           "10sekundový limit",
           "Běh na jeden život",
           "Žebříček",
           "Barvoslepá pomoc"
         ],
-        "primaryCta": "Nainstalujte Color Master 2",
+        "primaryCta": "Nainstalujte Find Odd Color",
         "detailCta": "Vyzkoušejte Web Demo",
         "statusNote": "Nyní k dispozici na Google Play.",
-        "iconAlt": "Ikona Mistr barev 2"
+        "iconAlt": "Ikona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galaktikód",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikace tajných zpráv",
         "tagline": "Vytvářejte tajné zprávy podobné mimozemšťanům, které k dekódování potřebují sdílený klíč.",
         "description": "Vytvořte si vlastní galaktická jazyková pravidla. Stejná pravidla mohou znovu vytvořit pouze lidé s vaším sdíleným klíčem a původní text se nenahraje na server.",
@@ -15201,39 +15319,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Vytvářejte tajné zprávy",
         "detailCta": "Vyzkoušejte Web Demo",
         "statusNote": "Nyní k dispozici na Google Play.",
-        "iconAlt": "Ikona galaktického kódu"
+        "iconAlt": "Ikona Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Zavolejte UFO",
-        "category": "Pohlcující zábavná aplikace",
-        "tagline": "Tajemný zážitek z volání UFO pro zábavu.",
-        "description": "Stiskněte tlačítko, poslouchejte signál a představte si, že něco poslouchá z vesmíru.",
+        "name": "UFO Signal Simulator",
+        "category": "Zábavní aplikace se záhadným signálem",
+        "tagline": "Pošlete hravý vesmírný signál a užijte si UFO náladu.",
+        "description": "Otevřete aplikaci, stiskněte signální tlačítko a vychutnejte si zvuk a animaci, díky které bude tento okamžik vypadat jako malý rituál UFO.",
         "highlights": [
-          "Interaktivní tlačítko",
+          "Tlačítko signálu",
           "Tajemné zvuky",
-          "Animace",
+          "Animace nálady",
           "Žádná registrace"
         ],
-        "primaryCta": "Zavolejte UFO",
-        "detailCta": "Vyzkoušejte Web Demo",
-        "statusNote": "Nyní k dispozici na Google Play.",
-        "iconAlt": "Zavolejte ikonu UFO"
+        "primaryCta": "Nainstalujte UFO Signal Simulator",
+        "detailCta": "Zobrazit podrobnosti aplikace",
+        "statusNote": "Zobrazte podrobnosti o aplikaci a poté ji nainstalujte z Google Play.",
+        "iconAlt": "Ikona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mistr barev",
-        "category": "Klasické barevné puzzle",
-        "tagline": "Originální výzva k zaměření barev: najděte odpověď mezi podobnými barvami.",
-        "description": "Původní verze před Color Master 2. Nejprve ji vyzkoušejte na webu a poté ji nainstalujte ze Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasická hra se smyslem pro barvy",
+        "tagline": "Originální výzva k zaměření barev: zapamatujte si barvu odpovědi a vyberte ji z podobných barev.",
+        "description": "Původní test citlivosti barev před Find Odd Color: Color Master 2. Nejprve to vyzkoušejte na webu a poté si jej nainstalujte z Google Play.",
         "highlights": [
           "Originální pocit",
           "Barevné zaměření",
           "Rychlá hra",
           "Nainstalujte nyní"
         ],
-        "primaryCta": "Nainstalujte Color Master",
+        "primaryCta": "Nainstalujte Test citlivosti barev",
         "detailCta": "Vyzkoušejte Web Demo",
-        "statusNote": "Nejprve to vyzkoušejte na webu a poté si jej nainstalujte ze Google Play.",
-        "iconAlt": "Ikona předlohy barev"
+        "statusNote": "Nejprve to vyzkoušejte na webu a poté si jej nainstalujte z Google Play.",
+        "iconAlt": "Ikona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Korejská náhodná obrana: obležení",
@@ -15278,9 +15396,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Položky",
           "Temné přežití"
         ],
-        "primaryCta": "Nainstalovat na Google Play",
-        "statusNote": "Nyní k dispozici na Google Play. Pro tuto aplikaci není poskytována žádná webová ukázka.",
-        "iconAlt": "Lab Rat Maze Escape: Ikona Dark Maze"
+        "primaryCta": "Nainstalujte na Google Play",
+        "statusNote": "Zobrazte podrobnosti o aplikaci a poté ji nainstalujte z Google Play. Pro tuto aplikaci není poskytována žádná webová ukázka.",
+        "iconAlt": "Ikona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Zobrazit podrobnosti aplikace"
       }
     },
     "status": {
@@ -15297,18 +15416,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KRÁTKÉ NÁPADY",
       "title": "Zkuste je takhle",
       "colorMaster2": {
-        "app": "Mistr barev 2",
-        "title": "\"Pokud vidíte tento barevný rozdíl, vaše oči jsou ostré.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Pokud zaznamenáte tuto zvláštní barvu, vaše oči jsou ostré.\"",
         "description": "Soutěžte s přáteli v 10sekundové výzvě."
       },
       "galaxyCode": {
-        "app": "Galaktikód",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Pošlete svému příteli mimozemskou zprávu, kterou nemohou dekódovat.\"",
         "description": "Nechte tajné zprávy, které mohou dekódovat pouze držitelé sdílených klíčů."
       },
       "ufoSignal": {
-        "app": "Zavolejte UFO",
-        "title": "\"Co se stane, když za svítání stisknete tlačítko UFO?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Co se stane, když za úsvitu vyšleš signál UFO?\"",
         "description": "Užijte si zvuky a animace v temné místnosti."
       }
     },
@@ -15325,7 +15444,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Kterou aplikaci mám nainstalovat jako první?",
-        "answer": "Pokud je to vaše první návštěva, vyzkoušejte nejprve Color Master 2. Hraje se rychle a snadno se přehrává pro lepší skóre."
+        "answer": "Pokud je to vaše první návštěva, vyzkoušejte nejprve Find Odd Color: Color Master 2. Hraje se rychle a snadno se přehrává pro lepší skóre."
       },
       "privateTest": {
         "question": "Jak se připojím k soukromým testovacím aplikacím?",
@@ -15336,12 +15455,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Výrobce NeoKIM",
       "lastUpdated": "Poslední aktualizace: 31.05.2026",
       "googlePlay": "Aplikace Google Play",
-      "colorTest": "Test barev",
-      "alienText": "Mimozemský textový generátor",
-      "ufoApp": "Aplikace UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Zásady ochrany osobních údajů",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registrace soukromého testera",
@@ -15362,9 +15482,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "kk": {
     "seo": {
       "title": "NeoKIM қолданбалы зертханасы | Тегін Android шағын қолданбалары",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze және Lucky Card Random Defense үшін жеке сынақтарды және басқа да Android шағын қолданбаларын орнатыңыз.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze және қосымша Android шағын қолданбалары үшін жеке сынақтарды орнатыңыз.",
       "ogTitle": "NeoKIM қолданбалы зертханасы | Android шағын қолданбалары",
-      "ogDescription": "Түс сынақтары, бөтен планеталарға ұқсас құпия хабарлар, НЛО шақыру тәжірибесі, Lab Rat Maze Escape: Dark Maze және жылдам Android қызығына арналған жеке сынақтар."
+      "ogDescription": "Біртүрлі түстерді табыңыз, бөтен стильдегі құпия мәтін жасаңыз, ойнақы НЛО сигналдарын жіберіңіз, қараңғы лабиринттерден құтылыңыз және Android жылдам көңіл көтеру үшін жеке сынақтарға қосылыңыз."
     },
     "skip": {
       "apps": "Қолданбалар тізіміне өту"
@@ -15399,11 +15519,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android шағын қолданбалар жинағы",
       "title": "NeoKIM қолданбалы зертханасы",
       "subtitle": "Жылдам көңіл көтеру және бөлісу үшін жасалған шағын Android қолданбалары",
-      "description": "Түстік қиындықтар, бөтенге ұқсас құпия хабарламалар және НЛО шақыру тәжірибесі. Жеңіл орнатыңыз. Бір минуттың ішінде ләззат алыңыз.",
+      "description": "Біртүрлі түсті сынақтар, бөтен стильдегі құпия хабарламалар, UFO сигналын ойнау және қараңғы лабиринттен қашу. Жеңіл орнатыңыз. Бір минуттың ішінде ләззат алыңыз.",
       "primaryCta": "Таңдаулы қолданбаны орнатыңыз",
-      "primaryAria": "Google Play жүйесіне Color Master 2 орнатыңыз",
+      "primaryAria": "Google Play жүйесіне Find Odd Color: Color Master 2 орнатыңыз",
       "secondaryCta": "Қолданбаларды шолу",
-      "visualAria": "Color Master 2 белгішесі және түсті тақтайшалары бар телефон макети",
+      "visualAria": "Find Odd Color: Color Master 2 белгішесі және түсті тақтайшалары бар телефон макети",
       "badges": [
         "Тегін қолданбалар",
         "Android",
@@ -15415,81 +15535,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ТАҢДАУЛЫ ҚОЛДАНБА",
       "title": "Бүгін бірінші рет орнатыңыз",
       "badge": "Таңдаулы",
-      "appName": "Түс шебері 2",
-      "short": "10 секундта басқа түсті табыңыз.",
-      "description": "Бір қателік жүгіруді аяқтайтын бір өмірлік түсті басқатырғыш. Ол жылдам басталады, содан кейін рекордыңызды жаңарту үшін сізді артқа тартады.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 секундта бір түрлі түсті табыңыз.",
+      "description": "Бір қателік жүгіруді аяқтайтын бір өмірлік тақ түсті басқатырғыш. Ол жылдам басталады, содан кейін рекордыңызды жаңарту үшін сізді артқа тартады.",
       "primaryCta": "Google Play жүйесіне орнатыңыз",
-      "primaryAria": "Google Play жүйесіне Color Master 2 орнатыңыз",
+      "primaryAria": "Google Play жүйесіне Find Odd Color: Color Master 2 орнатыңыз",
       "secondaryCta": "Қолданбаларды шолу",
-      "visualAria": "Color Master 2 түсті плитка шақыру телефонының макети"
+      "visualAria": "Find Odd Color: Color Master 2 плиткалық сынақ телефонының макети"
     },
     "apps": {
       "kicker": "ҚОЛДАНБА КАТАЛОГЫ",
       "title": "Барлық қолданбалар",
       "description": "Қоғамдық қолданбаларды тікелей орнатыңыз. Жеке сынақтар үшін алдымен сұрауды электрондық пошта арқылы жіберіңіз; тестілеуші ​​рұқсаты қосылғаннан кейін «Тестке қосылу» түймесін пайдаланыңыз.",
       "colorMaster2": {
-        "name": "Түс шебері 2",
-        "category": "Түсті басқатырғыш",
-        "tagline": "10 секундта басқа түсті табыңыз.",
-        "description": "Бір қате жүгіруді аяқтайды. Түсті қабылдауға арналған қысқа, тәуелділік.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Біртүрлі түсті басқатырғыштар ойыны",
+        "tagline": "10 секундта бір түрлі түсті табыңыз.",
+        "description": "Бір қате жүгіруді аяқтайды. Фокус пен түстерді қабылдауға арналған қысқа, тәуелді тақ түсті сынақ.",
         "highlights": [
           "10 секундтық шектеу",
           "Бір өмірлік жүгіру",
           "Көшбасшылар тақтасы",
           "Түс соқырына көмек"
         ],
-        "primaryCta": "Color Master 2 орнатыңыз",
+        "primaryCta": "Find Odd Color қолданбасын орнатыңыз",
         "detailCta": "Веб-демо нұсқасын қолданып көріңіз",
-        "statusNote": "Қазір Google Play сайтында қолжетімді.",
-        "iconAlt": "Color Master 2 белгішесі"
+        "statusNote": "Қазір Google Play жүйесінде қол жетімді.",
+        "iconAlt": "Find Odd Color: Color Master 2 белгішесі"
       },
       "galaxyCode": {
-        "name": "Галактикод",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Құпия хабарлама қолданбасы",
         "tagline": "Дешифрлеу үшін ортақ кілтті қажет ететін шетелдіктерге ұқсас құпия хабарларды жасаңыз.",
         "description": "Өзіңіздің галактикалық тіл ережелеріңізді жасаңыз. Ортақ кілті бар адамдар ғана бірдей ережелерді қайта жасай алады және түпнұсқа мәтін серверге жүктеп салынбайды.",
         "highlights": [
           "Бөлісуге негізделген",
           "Жеке ережелер",
-          "SNS-дайын",
+          "SNS дайын",
           "Серверді жүктеп салу жоқ"
         ],
         "primaryCta": "Құпия хабарларды жасаңыз",
         "detailCta": "Веб-демо нұсқасын қолданып көріңіз",
-        "statusNote": "Қазір Google Play сайтында қолжетімді.",
-        "iconAlt": "Галактикод белгішесі"
+        "statusNote": "Қазір Google Play жүйесінде қол жетімді.",
+        "iconAlt": "Alien Text Maker: Galaxy Code белгішесі"
       },
       "ufoSignal": {
-        "name": "НЛО-ға қоңырау шалыңыз",
-        "category": "Қызықты қолданба",
-        "tagline": "Көңіл көтеру үшін жұмбақ НЛО шақыру тәжірибесі.",
-        "description": "Түймені басыңыз, сигналды тыңдаңыз және ғарыштан бір нәрсе тыңдап жатқанын елестетіңіз.",
+        "name": "UFO Signal Simulator",
+        "category": "Жұмбақ сигнал ойын-сауық қолданбасы",
+        "tagline": "Ойын ғарыштық сигнал жіберіп, UFO көңіл-күйінен ләззат алыңыз.",
+        "description": "Қолданбаны ашыңыз, сигнал түймешігін басыңыз және сәтті дыбыс пен анимациядан ләззат алыңыз, бұл сәтті кішкентай НЛО рәсімі сияқты сезінеді.",
         "highlights": [
-          "Интерактивті түйме",
+          "Сигнал түймесі",
           "Жұмбақ дыбыстар",
-          "Анимация",
+          "Көңіл-күй анимациясы",
           "Тіркелу жоқ"
         ],
-        "primaryCta": "НЛО-ға қоңырау шалыңыз",
-        "detailCta": "Веб-демо нұсқасын қолданып көріңіз",
-        "statusNote": "Қазір Google Play сайтында қолжетімді.",
-        "iconAlt": "НЛО белгішесін шақырыңыз"
+        "primaryCta": "UFO Signal Simulator орнатыңыз",
+        "detailCta": "Қолданба мәліметтерін көру",
+        "statusNote": "Қолданба мәліметтерін қараңыз, содан кейін оны Google Play ішінен орнатыңыз.",
+        "iconAlt": "UFO Signal Simulator белгішесі"
       },
       "colorMasterClassic": {
-        "name": "Түс шебері",
-        "category": "Классикалық түсті басқатырғыш",
-        "tagline": "Түпнұсқа түс фокусы мәселесі: ұқсас түстер арасында жауапты табыңыз.",
-        "description": "Color Master 2 қолданбасына дейінгі түпнұсқа нұсқасы. Алдымен оны интернетте көріңіз, содан кейін Google Play сайтынан орнатыңыз.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Классикалық түсті сезіну ойыны",
+        "tagline": "Түпнұсқа түс фокусы мәселесі: жауап түсін есте сақтаңыз және оны ұқсас түстерден таңдаңыз.",
+        "description": "Find Odd Color: Color Master 2 алдында түпнұсқа түс сезіну сынағы. Алдымен оны интернетте қолданып көріңіз, содан кейін Google Play ішінен орнатыңыз.",
         "highlights": [
           "Түпнұсқа сезім",
           "Түс фокусы",
           "Жылдам ойнау",
           "Қазір орнатыңыз"
         ],
-        "primaryCta": "Color Master бағдарламасын орнатыңыз",
+        "primaryCta": "Түсті сезу сынағын орнатыңыз",
         "detailCta": "Веб-демо нұсқасын қолданып көріңіз",
-        "statusNote": "Алдымен оны интернетте көріңіз, содан кейін Google Play сайтынан орнатыңыз.",
-        "iconAlt": "Түс шебері белгішесі"
+        "statusNote": "Алдымен оны интернетте қолданып көріңіз, содан кейін Google Play ішінен орнатыңыз.",
+        "iconAlt": "Color Sense Test: Color Master белгішесі"
       },
       "koreanRandomDefense": {
         "name": "Кореяның кездейсоқ қорғанысы: қоршау",
@@ -15524,19 +15644,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Бақытты карта кездейсоқ қорғаныс белгішесі"
       },
       "darkMaze": {
-        "name": "Зертханалық егеуқұйрық лабиринтінен қашу: қара лабиринт",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Лабиринттен қашу ойыны шығарылды",
         "tagline": "Зертханалық егеуқұйрықты қараңғы лабиринт арқылы жүргізіп, шығуды табыңыз.",
-        "description": "Google Play дүкенінде 2026 жылдың 28 мамырында шығарылды. Жол жабылмай тұрып, қараңғы лабиринт арқылы жылжыңыз, элементтерді пайдаланыңыз және қашыңыз.",
+        "description": "Google Play сайтында 2026 жылдың 28 мамырында шығарылды. Жол жабылмай тұрып, қараңғы лабиринт арқылы жылжыңыз, элементтерді пайдаланыңыз және қашыңыз.",
         "highlights": [
           "2026 жылдың 28 мамырында шығарылды",
           "Лабиринттен қашу",
           "Элементтер",
           "Қараңғы тірі қалу"
         ],
-        "primaryCta": "Google Play жүйесінде орнату",
-        "statusNote": "Қазір Google Play дүкенінде қолжетімді. Бұл қолданба үшін веб-демо көрсетілмеген.",
-        "iconAlt": "Зертханалық егеуқұйрық лабиринтінен қашу: қараңғы лабиринт белгішесі"
+        "primaryCta": "Google Play құрылғысына орнатыңыз",
+        "statusNote": "Қолданба мәліметтерін қараңыз, содан кейін оны Google Play ішінен орнатыңыз. Бұл қолданба үшін веб-демо көрсетілмеген.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze белгішесі",
+        "detailCta": "Қолданба мәліметтерін көру"
       }
     },
     "status": {
@@ -15553,18 +15674,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ҚЫСҚА ИДЕЯЛАР",
       "title": "Оларды осылай көріңіз",
       "colorMaster2": {
-        "app": "Түс шебері 2",
-        "title": "«Егер сіз бұл түс айырмашылығын көрсеңіз, сіздің көздеріңіз өткір болады».",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "«Егер сіз бұл біртүрлі түсті байқасаңыз, сіздің көздеріңіз өткір болады».",
         "description": "10 секундтық сынақта достарыңызбен жарысыңыз."
       },
       "galaxyCode": {
-        "app": "Галактикод",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "«Досыңызға кодты шеше алмайтын бөтен хабарды жіберіңіз.»",
         "description": "Тек ортақ кілт иелері кодты шеше алатын құпия хабарларды қалдырыңыз."
       },
       "ufoSignal": {
-        "app": "НЛО-ға қоңырау шалыңыз",
-        "title": "«Егер сіз таң атқанда UFO түймесін бассаңыз не болады?»",
+        "app": "UFO Signal Simulator",
+        "title": "«Егер сіз таң ата НЛО сигналын жіберсеңіз не болады?»",
         "description": "Қараңғы бөлмеде дыбыстар мен анимациядан ләззат алыңыз."
       }
     },
@@ -15581,7 +15702,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Алдымен қай қолданбаны орнатуым керек?",
-        "answer": "Бұл бірінші рет келуіңіз болса, алдымен Color Master 2 қолданбасын қолданып көріңіз. Жақсырақ ұпай алу үшін ойнау жылдам және қайталау оңай."
+        "answer": "Бұл бірінші рет келуіңіз болса, алдымен Find Odd Color: Color Master 2 қолданбасын қолданып көріңіз. Жақсырақ ұпай алу үшін ойнау жылдам және қайталау оңай."
       },
       "privateTest": {
         "question": "Жеке сынақ қолданбаларына қалай қосылуға болады?",
@@ -15592,12 +15713,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM жасаған",
       "lastUpdated": "Соңғы жаңартылған күні: 31.05.2026",
       "googlePlay": "Google Play қолданбалары",
-      "colorTest": "Түс сынағы",
-      "alienText": "Бөтен мәтін генераторы",
-      "ufoApp": "UFO қолданбасы",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Құпиялық саясаты",
       "appAds": "app-ads.txt",
-      "contact": "Байланыс"
+      "contact": "Байланыс",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Жеке сынақшыға тіркелу",
@@ -15618,9 +15740,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ca": {
     "seo": {
       "title": "NeoKIM App Lab | Mini aplicacions Android gratuïtes",
-      "description": "Instal·leu Color Master 2, Galacticode, Call the OVNI, Lab Rat Maze Escape: Dark Maze i proves privades per a Lucky Card Random Defense i més aplicacions mini d'Android.",
+      "description": "Instal·leu Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze i proves privades per a més miniaplicacions de Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini aplicacions",
-      "ogDescription": "Reptes de color, missatges secrets com alienígenes, experiències de trucades d'OVNI, Lab Rat Maze Escape: Dark Maze i proves privades per divertir-se ràpidament amb Android."
+      "ogDescription": "Troba colors estranys, fes text secret d'estil alienígena, envia senyals d'OVNI divertits, escapa dels laberints foscos i uneix-te a proves privades per divertir-te ràpidament amb Android."
     },
     "skip": {
       "apps": "Salta a la llista d'aplicacions"
@@ -15655,11 +15777,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Col·lecció de mini aplicacions Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Petites aplicacions Android creades per a la diversió i compartir ràpidament",
-      "description": "Reptes de color, missatges secrets com alienígenes i experiències de trucades OVNI. Instal·leu lleugerament. Gaudeix en menys d'un minut.",
+      "description": "Desafiaments de colors estranys, missatges secrets d'estil alienígena, reproducció de senyals OVNI i escapades de laberints foscos. Instal·leu lleugerament. Gaudeix en menys d'un minut.",
       "primaryCta": "Instal·leu l'aplicació destacada",
-      "primaryAria": "Instal·leu Color Master 2 a Google Play",
+      "primaryAria": "Instal·leu Find Odd Color: Color Master 2 a Google Play",
       "secondaryCta": "Navega per aplicacions",
-      "visualAria": "Maqueta del telèfon amb la icona de Color Master 2 i fitxes de colors",
+      "visualAria": "Maqueta del telèfon amb la icona Find Odd Color: Color Master 2 i fitxes de colors",
       "badges": [
         "Aplicacions gratuïtes",
         "Android",
@@ -15671,81 +15793,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APP DESTACAT",
       "title": "Instal·leu això primer avui",
       "badge": "Destacat",
-      "appName": "Color Master 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Troba el color diferent en 10 segons.",
-      "description": "Un trencaclosques de colors d'una sola vida on un error acaba la carrera. Comença ràpidament, després us continua tirant enrere per batre el vostre rècord.",
+      "description": "Un trencaclosques d'una vida d'un color estrany on un error acaba la carrera. Comença ràpidament, després us continua tirant enrere per batre el vostre rècord.",
       "primaryCta": "Instal·la a Google Play",
-      "primaryAria": "Instal·leu Color Master 2 a Google Play",
+      "primaryAria": "Instal·leu Find Odd Color: Color Master 2 a Google Play",
       "secondaryCta": "Navega per aplicacions",
-      "visualAria": "Maqueta de telèfon de desafiament de rajoles de color Color Master 2"
+      "visualAria": "Maqueta de telèfon de desafiament de fitxes Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÀLEG APP",
       "title": "Totes les aplicacions",
       "description": "Instal·leu aplicacions públiques directament. Per a proves privades, primer envieu una sol·licitud per correu electrònic; després d'afegir l'accés del provador, utilitzeu el botó Uniu-vos a la prova.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Trencaclosques de colors",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Joc de trencaclosques de colors estranys",
         "tagline": "Troba el color diferent en 10 segons.",
-        "description": "Un error acaba la carrera. Un repte de percepció del color curt i addictiu.",
+        "description": "Un error acaba la carrera. Un repte curt i addictiu de colors estranys per a l'enfocament i la percepció del color.",
         "highlights": [
           "Límit de 10 segons",
           "Carrera d'una vida",
           "Tauler de classificació",
           "Ajuda per daltònic"
         ],
-        "primaryCta": "Instal·leu Color Master 2",
+        "primaryCta": "Instal·leu Find Odd Color",
         "detailCta": "Proveu la demostració web",
         "statusNote": "Disponible ara a Google Play.",
-        "iconAlt": "Icona Color Master 2"
+        "iconAlt": "Icona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galàcticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicació de missatges secrets",
         "tagline": "Creeu missatges secrets semblants a alienígenes que necessiten una clau compartida per descodificar.",
         "description": "Crea les teves pròpies regles de llenguatge galàctic. Només les persones amb la vostra clau compartida poden recrear les mateixes regles i el text original no es penja a un servidor.",
         "highlights": [
           "Basat en clau compartida",
           "Normes personals",
-          "Preparat per SNS",
+          "Preparat per a SNS",
           "Sense càrrega del servidor"
         ],
         "primaryCta": "Crea missatges secrets",
         "detailCta": "Proveu la demostració web",
         "statusNote": "Disponible ara a Google Play.",
-        "iconAlt": "Icona de Galacticcode"
+        "iconAlt": "Icona de Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Truqueu a l'OVNI",
-        "category": "Aplicació divertida i immersiva",
-        "tagline": "Una misteriosa experiència de trucada OVNI per diversió.",
-        "description": "Premeu el botó, escolteu el senyal i imagineu alguna cosa escoltant des de l'espai.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicació d'entreteniment de senyal misteriós",
+        "tagline": "Envia un senyal d'espai lúdic i gaudeix de l'estat d'ànim OVNI.",
+        "description": "Obriu l'aplicació, premeu el botó de senyal i gaudiu del so i l'animació que fan que el moment se senti com un petit ritual OVNI.",
         "highlights": [
-          "Botó interactiu",
+          "Botó de senyal",
           "Sona de misteri",
-          "Animació",
+          "Animació d'estat d'ànim",
           "Sense inscripció"
         ],
-        "primaryCta": "Truqueu a l'OVNI",
-        "detailCta": "Proveu la demostració web",
-        "statusNote": "Disponible ara a Google Play.",
-        "iconAlt": "Truqueu a la icona OVNI"
+        "primaryCta": "Instal·leu UFO Signal Simulator",
+        "detailCta": "Mostra els detalls de l'aplicació",
+        "statusNote": "Consulteu els detalls de l'aplicació i, a continuació, instal·leu-la des de Google Play.",
+        "iconAlt": "Icona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mestre del color",
-        "category": "Trencaclosques de colors clàssics",
-        "tagline": "El repte original de l'enfocament del color: troba la resposta entre colors similars.",
-        "description": "La versió original abans de Color Master 2. Proveu-ho primer al web i després instal·leu-lo des de Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Joc clàssic del sentit del color",
+        "tagline": "El repte original de l'enfocament del color: recordeu el color de la resposta i trieu-lo entre colors similars.",
+        "description": "La prova original del sentit del color abans de Find Odd Color: Color Master 2. Proveu-ho primer al web i després instal·leu-lo des de Google Play.",
         "highlights": [
           "Sensació original",
           "Enfocament del color",
           "Joc ràpid",
           "Instal·leu ara"
         ],
-        "primaryCta": "Instal·leu Color Master",
+        "primaryCta": "Instal·leu la prova de sentit del color",
         "detailCta": "Proveu la demostració web",
         "statusNote": "Proveu-ho primer al web i després instal·leu-lo des de Google Play.",
-        "iconAlt": "Icona Color Master"
+        "iconAlt": "Icona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defensa aleatòria coreana: setge",
@@ -15783,16 +15905,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "S'ha llançat el joc d'escapament del laberint",
         "tagline": "Guia una rata de laboratori pel fosc laberint i troba la sortida.",
-        "description": "Publicat a Google Play el 28 de maig de 2026. Mou-te pel laberint fosc, utilitza objectes i escapa abans que el camí s'hi tanqui.",
+        "description": "Llançat a Google Play el 28 de maig de 2026. Mou-te pel laberint fosc, utilitza objectes i escapa abans que el camí s'hi tanqui.",
         "highlights": [
           "Publicat el 28 de maig de 2026",
           "Escapada del laberint",
           "Elements",
           "Supervivència fosca"
         ],
-        "primaryCta": "Instal·lar a Google Play",
-        "statusNote": "Ara disponible a Google Play. No es proporciona cap demostració web per a aquesta aplicació.",
-        "iconAlt": "Lab Rat Maze Escape: Icona Dark Maze"
+        "primaryCta": "Instal·la a Google Play",
+        "statusNote": "Consulteu els detalls de l'aplicació i, a continuació, instal·leu-la des de Google Play. No es proporciona cap demostració web per a aquesta aplicació.",
+        "iconAlt": "Icona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Mostra els detalls de l'aplicació"
       }
     },
     "status": {
@@ -15809,18 +15932,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEES CURTS",
       "title": "Proveu-los així",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"Si veus aquesta diferència de color, els teus ulls són nítids\".",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Si detectes aquest color estrany, els teus ulls són nítids\".",
         "description": "Competiu amb els amics en un repte de 10 segons."
       },
       "galaxyCode": {
-        "app": "Galàcticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envia al teu amic un missatge alienígena que no poden descodificar\".",
         "description": "Deixa missatges secrets que només els titulars de claus compartides poden descodificar."
       },
       "ufoSignal": {
-        "app": "Truqueu a l'OVNI",
-        "title": "\"Què passa si premeu el botó OVNI a l'alba?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Què passa si envieu un senyal d'OVNI a l'alba?\"",
         "description": "Gaudeix dels sons i l'animació en una habitació fosca."
       }
     },
@@ -15837,7 +15960,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Quina aplicació he d'instal·lar primer?",
-        "answer": "Si aquesta és la vostra primera visita, proveu primer Color Master 2. És ràpid de jugar i fàcil de reproduir per obtenir una millor puntuació."
+        "answer": "Si aquesta és la vostra primera visita, proveu primer Find Odd Color: Color Master 2. És ràpid de jugar i fàcil de reproduir per obtenir una millor puntuació."
       },
       "privateTest": {
         "question": "Com puc unir-me a aplicacions de prova privades?",
@@ -15848,12 +15971,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Fet per NeoKIM",
       "lastUpdated": "Última actualització: 31/05/2026",
       "googlePlay": "Aplicacions Google Play",
-      "colorTest": "Prova de color",
-      "alienText": "Generador de text alienígena",
-      "ufoApp": "Aplicació OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de privadesa",
       "appAds": "app-ads.txt",
-      "contact": "Contacte"
+      "contact": "Contacte",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Registre de provador privat",
@@ -15874,9 +15998,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "kn-IN": {
     "seo": {
       "title": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್ | ಉಚಿತ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "description": "ಕಲರ್ ಮಾಸ್ಟರ್ 2, ಗ್ಯಾಲಕ್ಟಿಕೋಡ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ, UFO ಗೆ ಕರೆ ಮಾಡಿ, ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್ ಮತ್ತು ಲಕ್ಕಿ ಕಾರ್ಡ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್ ಮತ್ತು ಹೆಚ್ಚಿನ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳು.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, ಮತ್ತು ಹೆಚ್ಚಿನ Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳನ್ನು ಸ್ಥಾಪಿಸಿ.",
       "ogTitle": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್ | Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "ogDescription": "ಬಣ್ಣದ ಸವಾಲುಗಳು, ಅನ್ಯಲೋಕದಂತಹ ರಹಸ್ಯ ಸಂದೇಶಗಳು, UFO ಕರೆ ಅನುಭವಗಳು, ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್ ಮತ್ತು ತ್ವರಿತ Android ವಿನೋದಕ್ಕಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳು."
+      "ogDescription": "ಬೆಸ ಬಣ್ಣಗಳನ್ನು ಹುಡುಕಿ, ಅನ್ಯಲೋಕದ ಶೈಲಿಯ ರಹಸ್ಯ ಪಠ್ಯವನ್ನು ರಚಿಸಿ, ತಮಾಷೆಯ UFO ಸಂಕೇತಗಳನ್ನು ಕಳುಹಿಸಿ, ಡಾರ್ಕ್ ಜಟಿಲಗಳಿಂದ ತಪ್ಪಿಸಿಕೊಳ್ಳಿ ಮತ್ತು ತ್ವರಿತ Android ವಿನೋದಕ್ಕಾಗಿ ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳಿಗೆ ಸೇರಿಕೊಳ್ಳಿ."
     },
     "skip": {
       "apps": "ಅಪ್ಲಿಕೇಶನ್ ಪಟ್ಟಿಗೆ ತೆರಳಿ"
@@ -15911,11 +16035,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android ಮಿನಿ ಅಪ್ಲಿಕೇಶನ್ ಸಂಗ್ರಹ",
       "title": "NeoKIM ಅಪ್ಲಿಕೇಶನ್ ಲ್ಯಾಬ್",
       "subtitle": "ತ್ವರಿತ ವಿನೋದ ಮತ್ತು ಹಂಚಿಕೆಗಾಗಿ ಮಾಡಲಾದ ಸಣ್ಣ Android ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "description": "ಬಣ್ಣದ ಸವಾಲುಗಳು, ಅನ್ಯಲೋಕದಂತಹ ರಹಸ್ಯ ಸಂದೇಶಗಳು ಮತ್ತು UFO ಕರೆ ಅನುಭವಗಳು. ಲಘುವಾಗಿ ಸ್ಥಾಪಿಸಿ. ಒಂದು ನಿಮಿಷದಲ್ಲಿ ಆನಂದಿಸಿ.",
+      "description": "ಬೆಸ-ಬಣ್ಣದ ಸವಾಲುಗಳು, ಅನ್ಯಲೋಕದ ಶೈಲಿಯ ರಹಸ್ಯ ಸಂದೇಶಗಳು, UFO ಸಿಗ್ನಲ್ ಪ್ಲೇ ಮತ್ತು ಡಾರ್ಕ್ ಜಟಿಲ ತಪ್ಪಿಸಿಕೊಳ್ಳುವಿಕೆ. ಲಘುವಾಗಿ ಸ್ಥಾಪಿಸಿ. ಒಂದು ನಿಮಿಷದಲ್ಲಿ ಆನಂದಿಸಿ.",
       "primaryCta": "ವೈಶಿಷ್ಟ್ಯಗೊಳಿಸಿದ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
-      "primaryAria": "Google Play ನಲ್ಲಿ ಬಣ್ಣ ಮಾಸ್ಟರ್ 2 ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
+      "primaryAria": "Find Odd Color: Color Master 2 ಅನ್ನು Google Play ನಲ್ಲಿ ಸ್ಥಾಪಿಸಿ",
       "secondaryCta": "ಅಪ್ಲಿಕೇಶನ್‌ಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ",
-      "visualAria": "ಕಲರ್ ಮಾಸ್ಟರ್ 2 ಐಕಾನ್ ಮತ್ತು ಬಣ್ಣದ ಟೈಲ್ಸ್‌ಗಳೊಂದಿಗೆ ಫೋನ್ ಮೋಕ್ಅಪ್",
+      "visualAria": "Find Odd Color: Color Master 2 ಐಕಾನ್ ಮತ್ತು ಬಣ್ಣದ ಅಂಚುಗಳೊಂದಿಗೆ ಫೋನ್ ಮೋಕ್ಅಪ್",
       "badges": [
         "ಉಚಿತ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
         "Android",
@@ -15927,36 +16051,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ವೈಶಿಷ್ಟ್ಯಗೊಳಿಸಿದ ಅಪ್ಲಿಕೇಶನ್",
       "title": "ಇಂದು ಇದನ್ನು ಮೊದಲು ಸ್ಥಾಪಿಸಿ",
       "badge": "ವೈಶಿಷ್ಟ್ಯಗೊಳಿಸಲಾಗಿದೆ",
-      "appName": "ಬಣ್ಣ ಮಾಸ್ಟರ್ 2",
-      "short": "10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ.",
-      "description": "ಒಂದು-ಜೀವನದ ಬಣ್ಣದ ಒಗಟು ಅಲ್ಲಿ ಒಂದು ತಪ್ಪು ಓಟವನ್ನು ಕೊನೆಗೊಳಿಸುತ್ತದೆ. ಇದು ವೇಗವಾಗಿ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ, ನಂತರ ನಿಮ್ಮ ದಾಖಲೆಯನ್ನು ಸೋಲಿಸಲು ನಿಮ್ಮನ್ನು ಹಿಂದಕ್ಕೆ ಎಳೆಯುತ್ತದೆ.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಒಂದು ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ.",
+      "description": "ಒಂದು-ಜೀವನದ ಬೆಸ-ಬಣ್ಣದ ಒಗಟು ಅಲ್ಲಿ ಒಂದು ತಪ್ಪು ಓಟವನ್ನು ಕೊನೆಗೊಳಿಸುತ್ತದೆ. ಇದು ವೇಗವಾಗಿ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ, ನಂತರ ನಿಮ್ಮ ದಾಖಲೆಯನ್ನು ಸೋಲಿಸಲು ನಿಮ್ಮನ್ನು ಹಿಂದಕ್ಕೆ ಎಳೆಯುತ್ತದೆ.",
       "primaryCta": "Google Play ನಲ್ಲಿ ಸ್ಥಾಪಿಸಿ",
-      "primaryAria": "Google Play ನಲ್ಲಿ ಬಣ್ಣ ಮಾಸ್ಟರ್ 2 ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
+      "primaryAria": "Find Odd Color: Color Master 2 ಅನ್ನು Google Play ನಲ್ಲಿ ಸ್ಥಾಪಿಸಿ",
       "secondaryCta": "ಅಪ್ಲಿಕೇಶನ್‌ಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ",
-      "visualAria": "ಕಲರ್ ಮಾಸ್ಟರ್ 2 ಬಣ್ಣದ ಟೈಲ್ ಚಾಲೆಂಜ್ ಫೋನ್ ಮೋಕ್ಅಪ್"
+      "visualAria": "Find Odd Color: Color Master 2 ಟೈಲ್ ಸವಾಲು ಫೋನ್ ಮೋಕ್ಅಪ್"
     },
     "apps": {
       "kicker": "ಅಪ್ಲಿಕೇಶನ್ ಕ್ಯಾಟಲಾಗ್",
       "title": "ಎಲ್ಲಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
       "description": "ಸಾರ್ವಜನಿಕ ಅಪ್ಲಿಕೇಶನ್‌ಗಳನ್ನು ನೇರವಾಗಿ ಸ್ಥಾಪಿಸಿ. ಖಾಸಗಿ ಪರೀಕ್ಷೆಗಳಿಗಾಗಿ, ಮೊದಲು ವಿನಂತಿಯನ್ನು ಇಮೇಲ್ ಮಾಡಿ; ಪರೀಕ್ಷಕ ಪ್ರವೇಶವನ್ನು ಸೇರಿಸಿದ ನಂತರ, ಪರೀಕ್ಷೆಗೆ ಸೇರು ಬಟನ್ ಅನ್ನು ಬಳಸಿ.",
       "colorMaster2": {
-        "name": "ಬಣ್ಣ ಮಾಸ್ಟರ್ 2",
-        "category": "ಬಣ್ಣದ ಒಗಟು",
-        "tagline": "10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ.",
-        "description": "ಒಂದು ತಪ್ಪು ಓಟವನ್ನು ಕೊನೆಗೊಳಿಸುತ್ತದೆ. ಸಣ್ಣ, ವ್ಯಸನಕಾರಿ ಬಣ್ಣ ಗ್ರಹಿಕೆ ಸವಾಲು.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ಬೆಸ-ಬಣ್ಣದ ಒಗಟು ಆಟ",
+        "tagline": "10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಒಂದು ವಿಭಿನ್ನ ಬಣ್ಣವನ್ನು ಹುಡುಕಿ.",
+        "description": "ಒಂದು ತಪ್ಪು ಓಟವನ್ನು ಕೊನೆಗೊಳಿಸುತ್ತದೆ. ಫೋಕಸ್ ಮತ್ತು ಬಣ್ಣ ಗ್ರಹಿಕೆಗಾಗಿ ಸಣ್ಣ, ವ್ಯಸನಕಾರಿ ಬೆಸ-ಬಣ್ಣದ ಸವಾಲು.",
         "highlights": [
           "10-ಸೆಕೆಂಡ್ ಮಿತಿ",
           "ಒನ್-ಲೈಫ್ ರನ್",
           "ಲೀಡರ್‌ಬೋರ್ಡ್",
           "ಬಣ್ಣಬಣ್ಣದ ನೆರವು"
         ],
-        "primaryCta": "ಕಲರ್ ಮಾಸ್ಟರ್ 2 ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
+        "primaryCta": "ಫೈಂಡ್ ಬೆಸ ಬಣ್ಣವನ್ನು ಸ್ಥಾಪಿಸಿ",
         "detailCta": "ವೆಬ್ ಡೆಮೊ ಪ್ರಯತ್ನಿಸಿ",
         "statusNote": "Google Play ನಲ್ಲಿ ಈಗ ಲಭ್ಯವಿದೆ.",
-        "iconAlt": "ಬಣ್ಣ ಮಾಸ್ಟರ್ 2 ಐಕಾನ್"
+        "iconAlt": "Find Odd Color: Color Master 2 ಐಕಾನ್"
       },
       "galaxyCode": {
-        "name": "ಗ್ಯಾಲಕ್ಟಿಕೋಡ್",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "ರಹಸ್ಯ ಸಂದೇಶ ಅಪ್ಲಿಕೇಶನ್",
         "tagline": "ಡಿಕೋಡ್ ಮಾಡಲು ಹಂಚಿಕೆ ಕೀ ಅಗತ್ಯವಿರುವ ಅನ್ಯಲೋಕದಂತಹ ರಹಸ್ಯ ಸಂದೇಶಗಳನ್ನು ರಚಿಸಿ.",
         "description": "ನಿಮ್ಮ ಸ್ವಂತ ಗ್ಯಾಲಕ್ಸಿಯ ಭಾಷಾ ನಿಯಮಗಳನ್ನು ರಚಿಸಿ. ನಿಮ್ಮ ಹಂಚಿಕೆ ಕೀ ಹೊಂದಿರುವ ಜನರು ಮಾತ್ರ ಅದೇ ನಿಯಮಗಳನ್ನು ಮರುಸೃಷ್ಟಿಸಬಹುದು ಮತ್ತು ಮೂಲ ಪಠ್ಯವನ್ನು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ.",
@@ -15969,39 +16093,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ರಹಸ್ಯ ಸಂದೇಶಗಳನ್ನು ರಚಿಸಿ",
         "detailCta": "ವೆಬ್ ಡೆಮೊ ಪ್ರಯತ್ನಿಸಿ",
         "statusNote": "Google Play ನಲ್ಲಿ ಈಗ ಲಭ್ಯವಿದೆ.",
-        "iconAlt": "ಗ್ಯಾಲಕ್ಟಿಕೋಡ್ ಐಕಾನ್"
+        "iconAlt": "Alien Text Maker: Galaxy Code ಐಕಾನ್"
       },
       "ufoSignal": {
-        "name": "UFO ಗೆ ಕರೆ ಮಾಡಿ",
-        "category": "ತಲ್ಲೀನಗೊಳಿಸುವ ಮೋಜಿನ ಅಪ್ಲಿಕೇಶನ್",
-        "tagline": "ವಿನೋದಕ್ಕಾಗಿ ಒಂದು ನಿಗೂಢ UFO ಕರೆ ಅನುಭವ.",
-        "description": "ಗುಂಡಿಯನ್ನು ಒತ್ತಿ, ಸಿಗ್ನಲ್ ಅನ್ನು ಕೇಳಿ ಮತ್ತು ಬಾಹ್ಯಾಕಾಶದಿಂದ ಏನನ್ನಾದರೂ ಕೇಳುವುದನ್ನು ಕಲ್ಪಿಸಿಕೊಳ್ಳಿ.",
+        "name": "UFO Signal Simulator",
+        "category": "ಮಿಸ್ಟರಿ ಸಿಗ್ನಲ್ ಎಂಟರ್ಟೈನ್ಮೆಂಟ್ ಅಪ್ಲಿಕೇಶನ್",
+        "tagline": "ತಮಾಷೆಯ ಬಾಹ್ಯಾಕಾಶ ಸಂಕೇತವನ್ನು ಕಳುಹಿಸಿ ಮತ್ತು UFO ಮನಸ್ಥಿತಿಯನ್ನು ಆನಂದಿಸಿ.",
+        "description": "ಅಪ್ಲಿಕೇಶನ್ ತೆರೆಯಿರಿ, ಸಿಗ್ನಲ್ ಬಟನ್ ಒತ್ತಿರಿ ಮತ್ತು ಧ್ವನಿ ಮತ್ತು ಅನಿಮೇಷನ್ ಅನ್ನು ಆನಂದಿಸಿ ಅದು ಕ್ಷಣವನ್ನು ಸಣ್ಣ UFO ಆಚರಣೆಯಂತೆ ಭಾಸವಾಗುತ್ತದೆ.",
         "highlights": [
-          "ಇಂಟರಾಕ್ಟಿವ್ ಬಟನ್",
+          "ಸಿಗ್ನಲ್ ಬಟನ್",
           "ನಿಗೂಢ ಶಬ್ದಗಳು",
-          "ಅನಿಮೇಷನ್",
+          "ಮೂಡ್ ಅನಿಮೇಷನ್",
           "ಸೈನ್ ಅಪ್ ಇಲ್ಲ"
         ],
-        "primaryCta": "UFO ಗೆ ಕರೆ ಮಾಡಿ",
-        "detailCta": "ವೆಬ್ ಡೆಮೊ ಪ್ರಯತ್ನಿಸಿ",
-        "statusNote": "Google Play ನಲ್ಲಿ ಈಗ ಲಭ್ಯವಿದೆ.",
-        "iconAlt": "UFO ಐಕಾನ್‌ಗೆ ಕರೆ ಮಾಡಿ"
+        "primaryCta": "UFO Signal Simulator ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
+        "detailCta": "ಅಪ್ಲಿಕೇಶನ್ ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+        "statusNote": "ಅಪ್ಲಿಕೇಶನ್ ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ.",
+        "iconAlt": "UFO Signal Simulator ಐಕಾನ್"
       },
       "colorMasterClassic": {
-        "name": "ಬಣ್ಣ ಮಾಸ್ಟರ್",
-        "category": "ಕ್ಲಾಸಿಕ್ ಬಣ್ಣದ ಒಗಟು",
-        "tagline": "ಮೂಲ ಬಣ್ಣ-ಕೇಂದ್ರಿತ ಸವಾಲು: ಒಂದೇ ರೀತಿಯ ಬಣ್ಣಗಳ ನಡುವೆ ಉತ್ತರವನ್ನು ಹುಡುಕಿ.",
-        "description": "ಕಲರ್ ಮಾಸ್ಟರ್ 2 ಕ್ಕಿಂತ ಮೊದಲು ಮೂಲ ಆವೃತ್ತಿ. ಇದನ್ನು ಮೊದಲು ವೆಬ್‌ನಲ್ಲಿ ಪ್ರಯತ್ನಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ.",
+        "name": "Color Sense Test: Color Master",
+        "category": "ಕ್ಲಾಸಿಕ್ ಕಲರ್ ಸೆನ್ಸ್ ಆಟ",
+        "tagline": "ಮೂಲ ಬಣ್ಣ-ಕೇಂದ್ರಿತ ಸವಾಲು: ಉತ್ತರದ ಬಣ್ಣವನ್ನು ನೆನಪಿಡಿ ಮತ್ತು ಒಂದೇ ರೀತಿಯ ಬಣ್ಣಗಳಿಂದ ಅದನ್ನು ಆರಿಸಿ.",
+        "description": "Find Odd Color: Color Master 2 ಮೊದಲು ಮೂಲ ಬಣ್ಣದ ಅರ್ಥ ಪರೀಕ್ಷೆ. ಇದನ್ನು ಮೊದಲು ವೆಬ್‌ನಲ್ಲಿ ಪ್ರಯತ್ನಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ.",
         "highlights": [
           "ಮೂಲ ಭಾವನೆ",
           "ಬಣ್ಣದ ಗಮನ",
           "ತ್ವರಿತ ಆಟ",
           "ಈಗ ಸ್ಥಾಪಿಸಿ"
         ],
-        "primaryCta": "ಕಲರ್ ಮಾಸ್ಟರ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
+        "primaryCta": "ಕಲರ್ ಸೆನ್ಸ್ ಟೆಸ್ಟ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ",
         "detailCta": "ವೆಬ್ ಡೆಮೊ ಪ್ರಯತ್ನಿಸಿ",
         "statusNote": "ಇದನ್ನು ಮೊದಲು ವೆಬ್‌ನಲ್ಲಿ ಪ್ರಯತ್ನಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ.",
-        "iconAlt": "ಬಣ್ಣ ಮಾಸ್ಟರ್ ಐಕಾನ್"
+        "iconAlt": "Color Sense Test: Color Master ಐಕಾನ್"
       },
       "koreanRandomDefense": {
         "name": "ಕೊರಿಯನ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್: ಮುತ್ತಿಗೆ",
@@ -16036,7 +16160,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ಲಕ್ಕಿ ಕಾರ್ಡ್ ರಾಂಡಮ್ ಡಿಫೆನ್ಸ್ ಐಕಾನ್"
       },
       "darkMaze": {
-        "name": "ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "ಬಿಡುಗಡೆ ಮಾಡಿದ ಜಟಿಲ ಪಾರು ಆಟ",
         "tagline": "ಡಾರ್ಕ್ ಜಟಿಲ ಮೂಲಕ ಲ್ಯಾಬ್ ಇಲಿಯನ್ನು ಮಾರ್ಗದರ್ಶನ ಮಾಡಿ ಮತ್ತು ನಿರ್ಗಮನವನ್ನು ಕಂಡುಕೊಳ್ಳಿ.",
         "description": "ಮೇ 28, 2026 ರಂದು Google Play ನಲ್ಲಿ ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ. ಡಾರ್ಕ್ ಜಟಿಲ ಮೂಲಕ ಸರಿಸಿ, ಐಟಂಗಳನ್ನು ಬಳಸಿ ಮತ್ತು ಮಾರ್ಗವು ಮುಚ್ಚುವ ಮೊದಲು ತಪ್ಪಿಸಿಕೊಳ್ಳಿ.",
@@ -16047,8 +16171,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ಡಾರ್ಕ್ ಬದುಕುಳಿಯುವಿಕೆ"
         ],
         "primaryCta": "Google Play ನಲ್ಲಿ ಸ್ಥಾಪಿಸಿ",
-        "statusNote": "ಈಗ Google Play ನಲ್ಲಿ ಲಭ್ಯವಿದೆ. ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಯಾವುದೇ ವೆಬ್ ಡೆಮೊವನ್ನು ಒದಗಿಸಲಾಗಿಲ್ಲ.",
-        "iconAlt": "ಲ್ಯಾಬ್ ರ್ಯಾಟ್ ಮೇಜ್ ಎಸ್ಕೇಪ್: ಡಾರ್ಕ್ ಮೇಜ್ ಐಕಾನ್"
+        "statusNote": "ಅಪ್ಲಿಕೇಶನ್ ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ, ನಂತರ ಅದನ್ನು Google Play ನಿಂದ ಸ್ಥಾಪಿಸಿ. ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಯಾವುದೇ ವೆಬ್ ಡೆಮೊವನ್ನು ಒದಗಿಸಲಾಗಿಲ್ಲ.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ಐಕಾನ್",
+        "detailCta": "ಅಪ್ಲಿಕೇಶನ್ ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ"
       }
     },
     "status": {
@@ -16065,18 +16190,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ಶಾರ್ಟ್ಸ್ ಐಡಿಯಾಸ್",
       "title": "ಅವುಗಳನ್ನು ಈ ರೀತಿ ಪ್ರಯತ್ನಿಸಿ",
       "colorMaster2": {
-        "app": "ಬಣ್ಣ ಮಾಸ್ಟರ್ 2",
-        "title": "\"ಈ ಬಣ್ಣ ವ್ಯತ್ಯಾಸವನ್ನು ನೀವು ನೋಡಿದರೆ, ನಿಮ್ಮ ಕಣ್ಣುಗಳು ತೀಕ್ಷ್ಣವಾಗಿರುತ್ತವೆ.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ನೀವು ಈ ಬೆಸ ಬಣ್ಣವನ್ನು ಗುರುತಿಸಿದರೆ, ನಿಮ್ಮ ಕಣ್ಣುಗಳು ತೀಕ್ಷ್ಣವಾಗಿರುತ್ತವೆ.\"",
         "description": "10 ಸೆಕೆಂಡುಗಳ ಸವಾಲಿನಲ್ಲಿ ಸ್ನೇಹಿತರೊಂದಿಗೆ ಸ್ಪರ್ಧಿಸಿ."
       },
       "galaxyCode": {
-        "app": "ಗ್ಯಾಲಕ್ಟಿಕೋಡ್",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"ನಿಮ್ಮ ಸ್ನೇಹಿತರಿಗೆ ಅನ್ಯಲೋಕದ ಸಂದೇಶವನ್ನು ಕಳುಹಿಸಿ ಅವರು ಡಿಕೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.\"",
         "description": "ಷೇರು-ಕೀ ಹೊಂದಿರುವವರು ಮಾತ್ರ ಡಿಕೋಡ್ ಮಾಡಬಹುದಾದ ರಹಸ್ಯ ಸಂದೇಶಗಳನ್ನು ಬಿಡಿ."
       },
       "ufoSignal": {
-        "app": "UFO ಗೆ ಕರೆ ಮಾಡಿ",
-        "title": "\"ನೀವು ಮುಂಜಾನೆ UFO ಬಟನ್ ಒತ್ತಿದರೆ ಏನಾಗುತ್ತದೆ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"ನೀವು ಮುಂಜಾನೆ UFO ಸಂಕೇತವನ್ನು ಕಳುಹಿಸಿದರೆ ಏನಾಗುತ್ತದೆ?\"",
         "description": "ಕತ್ತಲೆಯ ಕೋಣೆಯಲ್ಲಿ ಶಬ್ದಗಳು ಮತ್ತು ಅನಿಮೇಷನ್ ಅನ್ನು ಆನಂದಿಸಿ."
       }
     },
@@ -16093,7 +16218,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ನಾನು ಮೊದಲು ಯಾವ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಸ್ಥಾಪಿಸಬೇಕು?",
-        "answer": "ಇದು ನಿಮ್ಮ ಮೊದಲ ಭೇಟಿಯಾಗಿದ್ದರೆ, ಮೊದಲು ಬಣ್ಣ ಮಾಸ್ಟರ್ 2 ಅನ್ನು ಪ್ರಯತ್ನಿಸಿ. ಇದು ವೇಗವಾಗಿ ಆಡಲು ಮತ್ತು ಉತ್ತಮ ಸ್ಕೋರ್‌ಗಾಗಿ ರಿಪ್ಲೇ ಮಾಡಲು ಸುಲಭವಾಗಿದೆ."
+        "answer": "ಇದು ನಿಮ್ಮ ಮೊದಲ ಭೇಟಿಯಾಗಿದ್ದರೆ, ಮೊದಲು Find Odd Color: Color Master 2 ಪ್ರಯತ್ನಿಸಿ. ಇದು ವೇಗವಾಗಿ ಆಡಲು ಮತ್ತು ಉತ್ತಮ ಸ್ಕೋರ್‌ಗಾಗಿ ರಿಪ್ಲೇ ಮಾಡಲು ಸುಲಭವಾಗಿದೆ."
       },
       "privateTest": {
         "question": "ಖಾಸಗಿ ಪರೀಕ್ಷಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗೆ ನಾನು ಹೇಗೆ ಸೇರುವುದು?",
@@ -16104,12 +16229,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM ನಿಂದ ಮಾಡಲ್ಪಟ್ಟಿದೆ",
       "lastUpdated": "ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ: 2026.05.31",
       "googlePlay": "Google Play ಅಪ್ಲಿಕೇಶನ್‌ಗಳು",
-      "colorTest": "ಬಣ್ಣ ಪರೀಕ್ಷೆ",
-      "alienText": "ಏಲಿಯನ್ ಟೆಕ್ಸ್ಟ್ ಜನರೇಟರ್",
-      "ufoApp": "UFO ಅಪ್ಲಿಕೇಶನ್",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "ಗೌಪ್ಯತೆ ನೀತಿ",
       "appAds": "app-ads.txt",
-      "contact": "ಸಂಪರ್ಕಿಸಿ"
+      "contact": "ಸಂಪರ್ಕಿಸಿ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ಖಾಸಗಿ ಪರೀಕ್ಷಕ ಸೈನ್ ಅಪ್",
@@ -16130,9 +16256,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hr": {
     "seo": {
       "title": "NeoKIM App Lab | Besplatne mini aplikacije Android",
-      "description": "Instalirajte Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze i privatne testove za Lucky Card Random Defense i više Android mini aplikacija.",
+      "description": "Instalirajte Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze i privatne testove za više Android mini aplikacija.",
       "ogTitle": "NeoKIM App Lab | Mini aplikacije Android",
-      "ogDescription": "Izazovi u boji, tajne poruke poput izvanzemaljaca, iskustva pozivanja NLO-a, Lab Rat Maze Escape: Dark Maze i privatni testovi za brzu Android zabavu."
+      "ogDescription": "Pronađite neobične boje, napravite tajni tekst u vanzemaljskom stilu, pošaljite razigrane NLO signale, pobjegnite iz mračnih labirinata i pridružite se privatnim testovima za brzu Android zabavu."
     },
     "skip": {
       "apps": "Preskoči na popis aplikacija"
@@ -16167,11 +16293,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Kolekcija mini aplikacija Android",
       "title": "NeoKIM App Lab",
       "subtitle": "Male Android aplikacije stvorene za brzu zabavu i dijeljenje",
-      "description": "Izazovi u boji, tajne poruke poput vanzemaljaca i iskustva pozivanja NLO-a. Postavite lagano. Uživajte u manje od minute.",
+      "description": "Izazovi neobičnih boja, tajne poruke u stilu izvanzemaljaca, igra NLO signala i bijeg iz mračnog labirinta. Postavite lagano. Uživajte u manje od minute.",
       "primaryCta": "Instalirajte istaknutu aplikaciju",
-      "primaryAria": "Instalirajte Color Master 2 na Google Play",
+      "primaryAria": "Instalirajte Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Pregledajte aplikacije",
-      "visualAria": "Maketa telefona s ikonom Color Master 2 i pločicama u boji",
+      "visualAria": "Maketa telefona s ikonom Find Odd Color: Color Master 2 i pločicama u boji",
       "badges": [
         "Besplatne aplikacije",
         "Android",
@@ -16183,81 +16309,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ISTAKNUTA APLIKACIJA",
       "title": "Instalirajte ovo prvo danas",
       "badge": "Istaknuto",
-      "appName": "Majstor boja 2",
-      "short": "Pronađite drugu boju u 10 sekundi.",
-      "description": "Slagalica u boji za jedan život u kojoj jedna pogreška završava niz. Počinje brzo, a zatim vas stalno vuče unazad kako biste oborili svoj rekord.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Pronađite jednu drugu boju u 10 sekundi.",
+      "description": "Slagalica neobičnih boja s jednim životom u kojoj jedna pogreška završava niz. Počinje brzo, a zatim vas stalno vuče unazad kako biste oborili svoj rekord.",
       "primaryCta": "Instalirajte na Google Play",
-      "primaryAria": "Instalirajte Color Master 2 na Google Play",
+      "primaryAria": "Instalirajte Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Pregledajte aplikacije",
-      "visualAria": "Color Master 2 model izazova s pločicama u boji"
+      "visualAria": "Find Odd Color: Color Master 2 pločica izazovna maketa telefona"
     },
     "apps": {
       "kicker": "KATALOG APLIKACIJA",
       "title": "Sve aplikacije",
       "description": "Izravno instalirajte javne aplikacije. Za privatne testove prvo pošaljite zahtjev e-poštom; nakon dodavanja pristupa testera, upotrijebite gumb Pridružite se testiranju.",
       "colorMaster2": {
-        "name": "Majstor boja 2",
-        "category": "Slagalica u boji",
-        "tagline": "Pronađite drugu boju u 10 sekundi.",
-        "description": "Jedna pogreška završava niz. Kratak, zarazan izazov percepcije boja.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Igra zagonetke čudnih boja",
+        "tagline": "Pronađite jednu drugu boju u 10 sekundi.",
+        "description": "Jedna pogreška završava niz. Kratak, zarazan izazov u neobičnim bojama za fokus i percepciju boja.",
         "highlights": [
           "Ograničenje od 10 sekundi",
           "Trčanje za jedan život",
           "Leaderboard",
           "Pomoć za daltoniste"
         ],
-        "primaryCta": "Instalirajte Color Master 2",
+        "primaryCta": "Instalirajte Find Odd Color",
         "detailCta": "Isprobajte web demo",
         "statusNote": "Sada dostupno na Google Play.",
-        "iconAlt": "Color Master 2 ikona"
+        "iconAlt": "Ikona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galaktički kod",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikacija za tajne poruke",
         "tagline": "Stvorite tajne poruke poput vanzemaljaca kojima je za dekodiranje potreban ključ za dijeljenje.",
         "description": "Stvorite vlastita pravila galaktičkog jezika. Samo osobe s vašim ključem dijeljenja mogu ponovno stvoriti ista pravila, a izvorni tekst se ne učitava na poslužitelj.",
         "highlights": [
           "Na temelju dijeljenog ključa",
           "Osobna pravila",
-          "SNS-spreman",
+          "Spreman za SNS",
           "Nema prijenosa na poslužitelj"
         ],
         "primaryCta": "Stvorite tajne poruke",
         "detailCta": "Isprobajte web demo",
         "statusNote": "Sada dostupno na Google Play.",
-        "iconAlt": "Ikona Galacticode"
+        "iconAlt": "Alien Text Maker: Galaxy Code ikona"
       },
       "ufoSignal": {
-        "name": "Zovite NLO",
-        "category": "Imerzivna zabavna aplikacija",
-        "tagline": "Misteriozno iskustvo pozivanja NLO-a za zabavu.",
-        "description": "Pritisnite gumb, čujte signal i zamislite da nešto sluša iz svemira.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplikacija za zabavu Mystery Signal",
+        "tagline": "Pošaljite razigrani svemirski signal i uživajte u NLO raspoloženju.",
+        "description": "Otvorite aplikaciju, pritisnite tipku signala i uživajte u zvuku i animaciji koji čine trenutak poput malog NLO rituala.",
         "highlights": [
-          "Interaktivni gumb",
+          "Tipka za signal",
           "Misteriozni zvuci",
-          "Animacija",
+          "Animacija raspoloženja",
           "Nema prijave"
         ],
-        "primaryCta": "Zovite NLO",
-        "detailCta": "Isprobajte web demo",
-        "statusNote": "Sada dostupno na Google Play.",
-        "iconAlt": "Nazovite ikonu NLO"
+        "primaryCta": "Instalirajte UFO Signal Simulator",
+        "detailCta": "Pogledajte pojedinosti aplikacije",
+        "statusNote": "Pogledajte pojedinosti o aplikaciji, a zatim je instalirajte s Google Play.",
+        "iconAlt": "Ikona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Majstor boja",
-        "category": "Klasična slagalica u boji",
-        "tagline": "Izvorni izazov fokusiranja na boju: pronađite odgovor među sličnim bojama.",
-        "description": "Izvorna verzija prije Color Master 2. Prvo je isprobajte na webu, a zatim je instalirajte sa Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasična igra osjećaja boja",
+        "tagline": "Izvorni izazov fokusiranja na boju: zapamtite boju odgovora i odaberite je među sličnim bojama.",
+        "description": "Izvorni test osjetila boje prije Find Odd Color: Color Master 2-a. Prvo ga isprobajte na webu, a zatim ga instalirajte s Google Play-a.",
         "highlights": [
           "Izvorni osjećaj",
           "Fokus boje",
           "Brza igra",
           "Instalirajte sada"
         ],
-        "primaryCta": "Instalirajte Color Master",
+        "primaryCta": "Instalirajte Color Sense Test",
         "detailCta": "Isprobajte web demo",
-        "statusNote": "Prvo ga isprobajte na webu, a zatim ga instalirajte sa Google Play.",
-        "iconAlt": "Ikona Color Master"
+        "statusNote": "Prvo ga isprobajte na webu, a zatim ga instalirajte s Google Play-a.",
+        "iconAlt": "Ikona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Korejska nasumična obrana: Opsada",
@@ -16295,7 +16421,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Objavljena igra bijega iz labirinta",
         "tagline": "Vodite laboratorijskog štakora kroz mračni labirint i pronađite izlaz.",
-        "description": "Objavljeno na Google Playu 28. svibnja 2026. Krećite se kroz mračni labirint, koristite predmete i pobjegnite prije nego što se staza zatvori.",
+        "description": "Objavljeno na Google Play 28. svibnja 2026. Krećite se kroz mračni labirint, koristite predmete i pobjegnite prije nego što se staza zatvori.",
         "highlights": [
           "Objavljeno 28. svibnja 2026",
           "Bijeg iz labirinta",
@@ -16303,8 +16429,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Mračno preživljavanje"
         ],
         "primaryCta": "Instalirajte na Google Play",
-        "statusNote": "Sada dostupno na Google Playu. Za ovu aplikaciju nije osiguran web demo.",
-        "iconAlt": "Lab Rat Maze Escape: ikona tamnog labirinta"
+        "statusNote": "Pogledajte pojedinosti o aplikaciji, a zatim je instalirajte s Google Play. Za ovu aplikaciju nije osiguran web demo.",
+        "iconAlt": "Ikona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Pogledajte pojedinosti aplikacije"
       }
     },
     "status": {
@@ -16321,18 +16448,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEJE ZA KRATKE HRTOVE",
       "title": "Isprobajte ih ovako",
       "colorMaster2": {
-        "app": "Majstor boja 2",
-        "title": "\"Ako vidite ovu razliku u boji, oči su vam oštre.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Ako uočite ovu neobičnu boju, oči su vam oštre.\"",
         "description": "Natječite se s prijateljima u izazovu od 10 sekundi."
       },
       "galaxyCode": {
-        "app": "Galaktički kod",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Pošalji svom prijatelju poruku vanzemaljaca koju ne mogu dekodirati.\"",
         "description": "Ostavite tajne poruke koje samo vlasnici dioničkih ključeva mogu dekodirati."
       },
       "ufoSignal": {
-        "app": "Zovite NLO",
-        "title": "\"Što se događa ako pritisnete tipku UFO u zoru?\"",
+        "app": "UFO Signal Simulator",
+        "title": "“Što se događa ako pošaljete NLO signal u zoru?”",
         "description": "Uživajte u zvukovima i animaciji u mračnoj sobi."
       }
     },
@@ -16349,7 +16476,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Koju aplikaciju trebam prvu instalirati?",
-        "answer": "Ako vam je ovo prvi posjet, prvo isprobajte Color Master 2. Igra se brzo i lako se ponovno igra za bolji rezultat."
+        "answer": "Ako je ovo vaš prvi posjet, prvo isprobajte Find Odd Color: Color Master 2. Igra se brzo i lako se ponovno igra za bolji rezultat."
       },
       "privateTest": {
         "question": "Kako se mogu pridružiti privatnim aplikacijama za testiranje?",
@@ -16360,12 +16487,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Izradio NeoKIM",
       "lastUpdated": "Zadnje ažuriranje: 31.5.2026",
       "googlePlay": "Google Play aplikacije",
-      "colorTest": "Test boja",
-      "alienText": "Generator stranog teksta",
-      "ufoApp": "NLO aplikacija",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Politika privatnosti",
       "appAds": "app-ads.txt",
-      "contact": "kontakt"
+      "contact": "kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Prijava privatnog testera",
@@ -16386,9 +16514,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "km-KH": {
     "seo": {
       "title": "NeoKIM App Lab | កម្មវិធី Android Mini ឥតគិតថ្លៃ",
-      "description": "ដំឡើង Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze និងការធ្វើតេស្តឯកជនសម្រាប់ Lucky Card Random Defense និងកម្មវិធី Android mini ជាច្រើនទៀត។",
+      "description": "ដំឡើង Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze និងការធ្វើតេស្តឯកជនសម្រាប់កម្មវិធីខ្នាតតូច Android ជាច្រើនទៀត។",
       "ogTitle": "NeoKIM App Lab | កម្មវិធីខ្នាតតូច Android",
-      "ogDescription": "បញ្ហាប្រឈមពណ៌ សារសម្ងាត់ដូចមនុស្សក្រៅភព បទពិសោធន៍ហៅ UFO ការរត់គេចពី Lab Rat Maze: Dark Maze និងការធ្វើតេស្តឯកជនសម្រាប់ការសប្បាយរហ័សរបស់ Android ។"
+      "ogDescription": "ស្វែងរកពណ៌សេស បង្កើតអត្ថបទសម្ងាត់តាមបែបមនុស្សភពក្រៅ ផ្ញើសញ្ញា UFO លេងៗ គេចពីកន្លែងងងឹត និងចូលរួមការសាកល្បងឯកជនសម្រាប់ការសប្បាយរហ័ស Android ។"
     },
     "skip": {
       "apps": "រំលងទៅបញ្ជីកម្មវិធី"
@@ -16423,11 +16551,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "ការប្រមូលកម្មវិធីខ្នាតតូច Android",
       "title": "មន្ទីរពិសោធន៍កម្មវិធី NeoKIM",
       "subtitle": "កម្មវិធី Android ខ្នាតតូចបង្កើតឡើងសម្រាប់ការសប្បាយ និងការចែករំលែករហ័ស",
-      "description": "បញ្ហាប្រឈមពណ៌ សារសម្ងាត់ដូចមនុស្សភពក្រៅ និងបទពិសោធន៍ហៅ UFO ។ ដំឡើងស្រាល។ រីករាយក្នុងរយៈពេលតិចជាងមួយនាទី។",
+      "description": "ការ​ប្រជែង​ពណ៌​ចម្លែក សារ​សម្ងាត់​បែប​មនុស្ស​ក្រៅ​ភព ការ​លេង​សញ្ញា UFO និង​ការ​គេច​ចេញ​ពី​ផ្ទាំង​ថ្ម​ងងឹត។ ដំឡើងស្រាល។ រីករាយក្នុងរយៈពេលតិចជាងមួយនាទី។",
       "primaryCta": "ដំឡើងកម្មវិធីពិសេស",
-      "primaryAria": "ដំឡើង Color Master 2 នៅលើ Google Play",
+      "primaryAria": "ដំឡើង Find Odd Color: Color Master 2 នៅលើ Google Play",
       "secondaryCta": "រកមើលកម្មវិធី",
-      "visualAria": "គំរូទូរស័ព្ទជាមួយរូបតំណាង Color Master 2 និងផ្ទាំងពណ៌",
+      "visualAria": "គំរូទូរស័ព្ទជាមួយរូបតំណាង Find Odd Color: Color Master 2 និងផ្ទាំងពណ៌",
       "badges": [
         "កម្មវិធីឥតគិតថ្លៃ",
         "Android",
@@ -16439,36 +16567,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "កម្មវិធីពិសេស",
       "title": "ដំឡើងវាជាលើកដំបូងនៅថ្ងៃនេះ",
       "badge": "លក្ខណៈពិសេស",
-      "appName": "មេពណ៌ ២",
-      "short": "ស្វែងរកពណ៌ផ្សេងគ្នាក្នុងរយៈពេល 10 វិនាទី។",
-      "description": "ល្បែងផ្គុំរូបពណ៌មួយជីវិត ដែលកំហុសមួយបញ្ចប់ការរត់។ វាចាប់ផ្តើមលឿន បន្ទាប់មកបន្តទាញអ្នកត្រឡប់មកវិញដើម្បីបំបែកកំណត់ត្រារបស់អ្នក។",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "ស្វែងរកពណ៌ផ្សេងគ្នាមួយក្នុងរយៈពេល 10 វិនាទី។",
+      "description": "ល្បែងផ្គុំរូបពណ៌ចម្លែកមួយជីវិត ដែលកំហុសមួយបញ្ចប់ការរត់។ វាចាប់ផ្តើមលឿន បន្ទាប់មកបន្តទាញអ្នកត្រឡប់មកវិញដើម្បីបំបែកកំណត់ត្រារបស់អ្នក។",
       "primaryCta": "ដំឡើងនៅលើ Google Play",
-      "primaryAria": "ដំឡើង Color Master 2 នៅលើ Google Play",
+      "primaryAria": "ដំឡើង Find Odd Color: Color Master 2 នៅលើ Google Play",
       "secondaryCta": "រកមើលកម្មវិធី",
-      "visualAria": "Color Master 2 ការ​ប្រកួត​ប្រជែង​ក្បឿង​ពណ៌​ទូរស័ព្ទ​គំរូ"
+      "visualAria": "Find Odd Color: Color Master 2 ក្បឿងប្រឈមមុខនឹងទូរស័ព្ទ"
     },
     "apps": {
       "kicker": "កាតាឡុកកម្មវិធី",
       "title": "កម្មវិធីទាំងអស់។",
       "description": "ដំឡើងកម្មវិធីសាធារណៈដោយផ្ទាល់។ សម្រាប់ការធ្វើតេស្តឯកជន សូមផ្ញើសំណើសុំអ៊ីមែលជាមុនសិន។ បន្ទាប់​ពី​ការ​ចូល​ដំណើរ​ការ​អ្នក​សាកល្បង​ត្រូវ​បាន​បន្ថែម សូម​ប្រើ​ប៊ូតុង Join Test ។",
       "colorMaster2": {
-        "name": "មេពណ៌ ២",
-        "category": "ល្បែងផ្គុំរូបពណ៌",
-        "tagline": "ស្វែងរកពណ៌ផ្សេងគ្នាក្នុងរយៈពេល 10 វិនាទី។",
-        "description": "កំហុសមួយបញ្ចប់ការរត់។ ការប្រឈមមុខនឹងការយល់ឃើញពណ៌ដ៏ជក់ចិត្ត និងខ្លី។",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ល្បែងផ្គុំរូបពណ៌សេស",
+        "tagline": "ស្វែងរកពណ៌ផ្សេងគ្នាមួយក្នុងរយៈពេល 10 វិនាទី។",
+        "description": "កំហុសមួយបញ្ចប់ការរត់។ ការ​ប្រឈម​នឹង​ពណ៌​សេស​ដ៏​ខ្លី​មួយ​សម្រាប់​ការ​ផ្តោត​អារម្មណ៍ និង​ការ​យល់​ឃើញ​ពណ៌។",
         "highlights": [
           "ដែនកំណត់ 10 វិនាទី",
           "ការរត់មួយជីវិត",
           "តារាងពិន្ទុ",
           "ជំនួយពិការភ្នែកពណ៌"
         ],
-        "primaryCta": "ដំឡើង Color Master 2",
+        "primaryCta": "ដំឡើង ស្វែងរកពណ៌សេស",
         "detailCta": "សាកល្បង Web Demo",
         "statusNote": "អាចរកបានឥឡូវនេះនៅលើ Google Play ។",
-        "iconAlt": "រូបតំណាង Color Master 2"
+        "iconAlt": "រូបតំណាង Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "កម្មវិធីសារសម្ងាត់",
         "tagline": "បង្កើត​សារ​សម្ងាត់​ដូច​មនុស្ស​ក្រៅ​ភព ដែល​ត្រូវ​ការ​គន្លឹះ​ចែករំលែក​ដើម្បី​ឌិកូដ។",
         "description": "បង្កើតច្បាប់ភាសាកាឡាក់ស៊ីផ្ទាល់ខ្លួនរបស់អ្នក។ មានតែមនុស្សដែលមានគន្លឹះចែករំលែករបស់អ្នកប៉ុណ្ណោះដែលអាចបង្កើតច្បាប់ដូចគ្នានេះឡើងវិញ ហើយអត្ថបទដើមមិនត្រូវបានផ្ទុកឡើងទៅកាន់ម៉ាស៊ីនមេទេ។",
@@ -16481,39 +16609,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "បង្កើតសារសម្ងាត់",
         "detailCta": "សាកល្បង Web Demo",
         "statusNote": "អាចរកបានឥឡូវនេះនៅលើ Google Play ។",
-        "iconAlt": "រូបតំណាង Galacticode"
+        "iconAlt": "រូបតំណាង Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "ហៅ UFO",
-        "category": "កម្មវិធី​សប្បាយ​រីក​រាយ",
-        "tagline": "បទពិសោធន៍ហៅ UFO ដ៏អាថ៌កំបាំងសម្រាប់ការសប្បាយ។",
-        "description": "ចុចប៊ូតុង ឮសញ្ញា ហើយស្រមៃមើលអ្វីមួយដែលកំពុងស្តាប់ពីលំហ។",
+        "name": "UFO Signal Simulator",
+        "category": "កម្មវិធីកម្សាន្តសញ្ញាអាថ៌កំបាំង",
+        "tagline": "ផ្ញើសញ្ញាអវកាសលេងសើច និងរីករាយជាមួយអារម្មណ៍ UFO ។",
+        "description": "បើកកម្មវិធី ចុចប៊ូតុងសញ្ញា ហើយរីករាយជាមួយសំឡេង និងចលនាដែលធ្វើអោយអារម្មណ៍ពេលនេះដូចជាពិធីបុណ្យ UFO តូចមួយ។",
         "highlights": [
-          "ប៊ូតុងអន្តរកម្ម",
+          "ប៊ូតុងសញ្ញា",
           "សំឡេងអាថ៌កំបាំង",
-          "ចលនា",
+          "ចលនាអារម្មណ៍",
           "គ្មានការចុះឈ្មោះទេ។"
         ],
-        "primaryCta": "ហៅ UFO",
-        "detailCta": "សាកល្បង Web Demo",
-        "statusNote": "អាចរកបានឥឡូវនេះនៅលើ Google Play ។",
-        "iconAlt": "ហៅរូបតំណាង UFO"
+        "primaryCta": "ដំឡើង UFO Signal Simulator",
+        "detailCta": "មើលព័ត៌មានលម្អិតកម្មវិធី",
+        "statusNote": "មើលព័ត៌មានលម្អិតកម្មវិធី បន្ទាប់មកដំឡើងវាពី Google Play។",
+        "iconAlt": "រូបតំណាង UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "មេពណ៌",
-        "category": "ល្បែងផ្គុំរូបពណ៌បុរាណ",
-        "tagline": "ការប្រកួតប្រជែងផ្តោតលើពណ៌ដើម៖ ស្វែងរកចម្លើយក្នុងចំណោមពណ៌ស្រដៀងគ្នា។",
-        "description": "កំណែដើមមុន Color Master 2. សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play ។",
+        "name": "Color Sense Test: Color Master",
+        "category": "ល្បែងអារម្មណ៍ពណ៌បុរាណ",
+        "tagline": "ការប្រកួតប្រជែងផ្តោតលើពណ៌ដើម៖ ចងចាំពណ៌ចម្លើយ ហើយជ្រើសរើសវាពីពណ៌ស្រដៀងគ្នា។",
+        "description": "ការធ្វើតេស្តអារម្មណ៍ពណ៌ដើមមុនពេល Find Odd Color: Color Master 2 ។ សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play។",
         "highlights": [
           "អារម្មណ៍ដើម",
           "ការផ្តោតអារម្មណ៍ពណ៌",
           "លេងរហ័ស",
           "ដំឡើងឥឡូវនេះ"
         ],
-        "primaryCta": "ដំឡើង Color Master",
+        "primaryCta": "ដំឡើង Color Sense Test",
         "detailCta": "សាកល្បង Web Demo",
-        "statusNote": "សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play ។",
-        "iconAlt": "រូបតំណាងមេពណ៌"
+        "statusNote": "សាកល្បងវានៅលើគេហទំព័រជាមុនសិន បន្ទាប់មកដំឡើងវាពី Google Play។",
+        "iconAlt": "រូបតំណាង Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "ការការពារចៃដន្យកូរ៉េ៖ ឡោមព័ទ្ធ",
@@ -16551,7 +16679,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "ហ្គេម​រត់​គេច​ភ្នំ​ដែល​បាន​ចេញ​ផ្សាយ",
         "tagline": "ណែនាំសត្វកណ្ដុរក្នុងបន្ទប់ពិសោធន៍ កាត់តាមវាលគោងងឹត ហើយស្វែងរកច្រកចេញ។",
-        "description": "បានចេញផ្សាយនៅលើ Google Play នៅថ្ងៃទី 28 ខែឧសភា ឆ្នាំ 2026។ ផ្លាស់ទីកាត់តំបន់ងងឹត ប្រើរបស់របរ និងរត់គេចមុនពេលផ្លូវបិទ។",
+        "description": "បានចេញផ្សាយនៅលើ Google Play នៅថ្ងៃទី 28 ខែឧសភា ឆ្នាំ 2026។ ផ្លាស់ទីឆ្លងកាត់តំបន់ងងឹត ប្រើប្រាស់របស់របរ និងរត់គេចមុនពេលផ្លូវបិទ។",
         "highlights": [
           "ចេញផ្សាយ ថ្ងៃទី 28 ខែ ឧសភា ឆ្នាំ 2026",
           "Maze រត់គេចខ្លួន",
@@ -16559,8 +16687,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "ការរស់រានមានជីវិតងងឹត"
         ],
         "primaryCta": "ដំឡើងនៅលើ Google Play",
-        "statusNote": "ឥឡូវនេះមាននៅលើ Google Play ។ គ្មានការបង្ហាញតាមអ៊ីនធឺណិតត្រូវបានផ្តល់ជូនសម្រាប់កម្មវិធីនេះទេ។",
-        "iconAlt": "Lab Rat Maze Escape: រូបតំណាង Dark Maze"
+        "statusNote": "មើលព័ត៌មានលម្អិតកម្មវិធី បន្ទាប់មកដំឡើងវាពី Google Play។ គ្មានការបង្ហាញតាមអ៊ីនធឺណិតត្រូវបានផ្តល់ជូនសម្រាប់កម្មវិធីនេះទេ។",
+        "iconAlt": "រូបតំណាង Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "មើលព័ត៌មានលម្អិតកម្មវិធី"
       }
     },
     "status": {
@@ -16577,18 +16706,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "គំនិតខ្លីៗ",
       "title": "សាកល្បងពួកគេដូចនេះ",
       "colorMaster2": {
-        "app": "មេពណ៌ ២",
-        "title": "\"ប្រសិនបើអ្នកឃើញភាពខុសគ្នានៃពណ៌នេះ ភ្នែករបស់អ្នកច្បាស់ណាស់\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ប្រសិនបើអ្នកឃើញពណ៌ចម្លែកនេះ ភ្នែករបស់អ្នកច្បាស់\"",
         "description": "ប្រកួតប្រជែងជាមួយមិត្តភក្តិក្នុងការប្រកួតប្រជែង 10 វិនាទី។"
       },
       "galaxyCode": {
-        "app": "Galacticode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"ផ្ញើ​សារ​ឱ្យ​មិត្ត​ភក្តិ​របស់​អ្នក​ជា​ជនបរទេស​ដែល​ពួកគេ​មិន​អាច​ឌិកូដ​បាន​។\"",
         "description": "ទុក​សារ​សម្ងាត់​ដែល​មាន​តែ​អ្នក​កាន់​គន្លឹះ​ចែករំលែក​ប៉ុណ្ណោះ​អាច​ឌិកូដ​បាន។"
       },
       "ufoSignal": {
-        "app": "ហៅ UFO",
-        "title": "\"តើមានអ្វីកើតឡើងប្រសិនបើអ្នកចុចប៊ូតុង UFO នៅពេលព្រឹកព្រលឹម?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"តើមានអ្វីកើតឡើងប្រសិនបើអ្នកបញ្ជូនសញ្ញា UFO នៅពេលព្រឹកព្រលឹម?\"",
         "description": "រីករាយជាមួយសំឡេង និងចលនានៅក្នុងបន្ទប់ងងឹត។"
       }
     },
@@ -16605,7 +16734,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "តើខ្ញុំគួរដំឡើងកម្មវិធីមួយណាមុនគេ?",
-        "answer": "ប្រសិនបើនេះជាដំណើរទស្សនកិច្ចលើកដំបូងរបស់អ្នក សូមសាកល្បង Color Master 2 ជាមុនសិន។ វារហ័សក្នុងការលេង និងងាយស្រួលក្នុងការចាក់ឡើងវិញដើម្បីទទួលបានពិន្ទុកាន់តែប្រសើរ។"
+        "answer": "ប្រសិនបើនេះជាដំណើរទស្សនកិច្ចលើកដំបូងរបស់អ្នក សូមសាកល្បង Find Odd Color: Color Master 2 ជាមុនសិន។ វារហ័សក្នុងការលេង និងងាយស្រួលក្នុងការចាក់ឡើងវិញដើម្បីទទួលបានពិន្ទុកាន់តែប្រសើរ។"
       },
       "privateTest": {
         "question": "តើខ្ញុំចូលរួមកម្មវិធីសាកល្បងឯកជនដោយរបៀបណា?",
@@ -16616,12 +16745,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "ផលិតដោយ NeoKIM",
       "lastUpdated": "អាប់ដេតចុងក្រោយ៖ 2026.05.31",
       "googlePlay": "កម្មវិធី Google Play",
-      "colorTest": "តេស្តពណ៌",
-      "alienText": "កម្មវិធីបង្កើតអត្ថបទជនបរទេស",
-      "ufoApp": "កម្មវិធី UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "គោលការណ៍ឯកជនភាព",
       "appAds": "app-ads.txt",
-      "contact": "ទំនាក់ទំនង"
+      "contact": "ទំនាក់ទំនង",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ការចុះឈ្មោះអ្នកសាកល្បងឯកជន",
@@ -16642,9 +16772,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ky-KG": {
     "seo": {
       "title": "NeoKIM App Lab | Акысыз Android Mini колдонмолору",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze жана Lucky Card Random Defence үчүн жеке тесттерди жана башка Android мини колдонмолорун орнотуңуз.",
+      "description": "Көбүрөөк Android мини колдонмолору үчүн Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze жана жеке сыноолорду орнотуңуз.",
       "ogTitle": "NeoKIM App Lab | Android Мини колдонмолору",
-      "ogDescription": "Түстүү чакырыктар, келгиндерге окшош жашыруун билдирүүлөр, UFO чалуу тажрыйбалары, Lab Rat Maze Escape: Dark Maze жана Android'де тез көңүл ачуу үчүн жеке тесттер."
+      "ogDescription": "Кызык түстөрдү табыңыз, келгин стилиндеги жашыруун текстти түзүңүз, ойноок UFO сигналдарын жөнөтүңүз, караңгы лабиринттерден качыңыз жана Android тез көңүл ачуу үчүн жеке тесттерге кошулуңуз."
     },
     "skip": {
       "apps": "Колдонмолордун тизмесине өтүү"
@@ -16679,11 +16809,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android мини колдонмолор жыйнагы",
       "title": "NeoKIM Колдонмо лабораториясы",
       "subtitle": "Чакан Android колдонмолору тез көңүл ачуу жана бөлүшүү үчүн жасалган",
-      "description": "Түстүү чакырыктар, келгиндерге окшош жашыруун билдирүүлөр жана UFO чакыруу тажрыйбасы. Жеңил орнотуу. Бир мүнөттүн ичинде ырахат алыңыз.",
+      "description": "Так түстөгү чакырыктар, келгин стилиндеги жашыруун билдирүүлөр, UFO сигналын ойноо жана караңгы лабиринттен качуу. Жеңил орнотуу. Бир мүнөттүн ичинде ырахат алыңыз.",
       "primaryCta": "Өзгөчөлөнгөн колдонмону орнотуу",
-      "primaryAria": "Color Master 2ди Google Playке орнотуңуз",
+      "primaryAria": "Find Odd Color: Color Master 2ди Google Playге орнотуңуз",
       "secondaryCta": "Колдонмолорду карап чыгуу",
-      "visualAria": "Color Master 2 сөлөкөтү жана түстүү плиткалар менен телефондун макети",
+      "visualAria": "Find Odd Color: Color Master 2 сөлөкөтү жана түстүү плиткалар менен телефондун макети",
       "badges": [
         "Акысыз колдонмолор",
         "Android",
@@ -16695,81 +16825,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ТАҢДАГАН КОЛДОНМО",
       "title": "Муну биринчи бүгүн орнотуңуз",
       "badge": "Өзгөчөлөнгөн",
-      "appName": "Color Master 2",
-      "short": "10 секунданын ичинде башка түстү табыңыз.",
-      "description": "Бир жаңылыштык чуркоо аяктайт, бир өмүр түстүү табышмак. Ал тез башталат, андан кийин рекордуңузду жаңыртуу үчүн сизди артка тарта берет.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 секунданын ичинде бир башка түстү табыңыз.",
+      "description": "Бир жаңылыштык чуркоо менен аяктайт, бир турмуштук кызык түстүү табышмак. Ал тез башталат, андан кийин рекордуңузду жаңыртуу үчүн сизди артка тарта берет.",
       "primaryCta": "Google Playге орнотуу",
-      "primaryAria": "Color Master 2ди Google Playке орнотуңуз",
+      "primaryAria": "Find Odd Color: Color Master 2ди Google Playге орнотуңуз",
       "secondaryCta": "Колдонмолорду карап чыгуу",
-      "visualAria": "Color Master 2 түстүү плиткасы чакырык телефон макети"
+      "visualAria": "Find Odd Color: Color Master 2 мозаика чакырык телефон макети"
     },
     "apps": {
       "kicker": "APP КАТАЛОГ",
       "title": "Бардык колдонмолор",
       "description": "Коомдук колдонмолорду түз орнотуңуз. Жеке тесттер үчүн, адегенде электрондук почта аркылуу сурам жөнөтүңүз; сыноочу мүмкүнчүлүгү кошулгандан кийин, Тестке кошулуу баскычын колдонуңуз.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "Түс табышмак",
-        "tagline": "10 секунданын ичинде башка түстү табыңыз.",
-        "description": "Бир ката жүгүрүү аяктайт. Кыска, көз карандылыкты жаратуучу түстү кабыл алуу маселеси.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Так түстүү баш катырма оюну",
+        "tagline": "10 секунданын ичинде бир башка түстү табыңыз.",
+        "description": "Бир ката жүгүрүү аяктайт. Фокус жана түстү кабыл алуу үчүн кыска, көз карандылыктуу кызыктай түс маселеси.",
         "highlights": [
           "10 секунддук чек",
           "Бир өмүр чуркоо",
           "Лидер тактасы",
           "Түс сокуруна жардам"
         ],
-        "primaryCta": "Color Master 2 орнотуу",
+        "primaryCta": "Find Odd Color орнотуу",
         "detailCta": "Web Demo колдонуп көрүңүз",
         "statusNote": "Азыр Google Playде жеткиликтүү.",
-        "iconAlt": "Color Master 2 сөлөкөтү"
+        "iconAlt": "Find Odd Color: Color Master 2 сөлөкөтү"
       },
       "galaxyCode": {
-        "name": "Галактикод",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Жашыруун билдирүү колдонмосу",
         "tagline": "Дешифрлөө үчүн бөлүшүү ачкычын талап кылган келгиндерге окшош жашыруун билдирүүлөрдү түзүңүз.",
         "description": "Өзүңүздүн галактикалык тил эрежелериңизди түзүңүз. Бөлүшүү ачкычыңыз бар адамдар гана ошол эле эрежелерди кайра түзө алышат жана түпнуска текст серверге жүктөлбөйт.",
         "highlights": [
           "Бөлүшүү ачкычынын негизинде",
           "Жеке эрежелер",
-          "SNS-даяр",
+          "SNS даяр",
           "Сервер жүктөө жок"
         ],
         "primaryCta": "Жашыруун билдирүүлөрдү түзүү",
         "detailCta": "Web Demo колдонуп көрүңүз",
         "statusNote": "Азыр Google Playде жеткиликтүү.",
-        "iconAlt": "Галактикод сүрөтчөсү"
+        "iconAlt": "Alien Text Maker: Galaxy Code сөлөкөтү"
       },
       "ufoSignal": {
-        "name": "UFO чакыр",
-        "category": "Имерсивдүү кызыктуу колдонмо",
-        "tagline": "Көңүл ачуу үчүн сырдуу UFO чакыруу тажрыйбасы.",
-        "description": "Баскычты басып, сигналды угуп, космостон угуп жаткан нерсени элестетиңиз.",
+        "name": "UFO Signal Simulator",
+        "category": "Сырдуу сигнал көңүл ачуу колдонмосу",
+        "tagline": "Оюнчу космос сигналын жөнөтүңүз жана UFO маанайынан ырахат алыңыз.",
+        "description": "Колдонмону ачып, сигнал баскычын басыңыз жана көз ирмемди кичинекей UFO ритуалындай сезген үн менен анимациядан ырахат алыңыз.",
         "highlights": [
-          "Интерактивдүү баскыч",
+          "Сигнал баскычы",
           "Сырдуу үндөр",
-          "Анимация",
+          "Маанай анимациясы",
           "Каттоо жок"
         ],
-        "primaryCta": "UFO чакыр",
-        "detailCta": "Web Demo колдонуп көрүңүз",
-        "statusNote": "Азыр Google Playде жеткиликтүү.",
-        "iconAlt": "UFO сөлөкөтүн чакырыңыз"
+        "primaryCta": "UFO Signal Simulator орнотуңуз",
+        "detailCta": "Колдонмонун чоо-жайын көрүү",
+        "statusNote": "Колдонмонун чоо-жайын көрүп, аны Google Playден орнотуңуз.",
+        "iconAlt": "UFO Signal Simulator сөлөкөтү"
       },
       "colorMasterClassic": {
-        "name": "Color Master",
-        "category": "Классикалык түс табышмак",
-        "tagline": "Түпкү түскө көңүл буруу маселеси: окшош түстөрдүн арасынан жоопту табыңыз.",
-        "description": "Color Master 2ге чейинки оригиналдуу версия. Адегенде аны интернетте байкап көрүңүз, андан кийин Google Playден орнотуңуз.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Классикалык түс сезүү оюну",
+        "tagline": "Түпкү түскө көңүл буруу маселеси: жооптун түсүн эстеп, аны окшош түстөрдөн тандаңыз.",
+        "description": "Find Odd Color: Color Master 2 алдында оригиналдуу түс сезимин текшерүү. Адегенде аны интернеттен байкап көрүңүз, андан кийин Google Playден орнотуңуз.",
         "highlights": [
           "Оригиналдуу сезим",
           "Түс фокусу",
           "Тез ойноо",
           "Азыр орнотуу"
         ],
-        "primaryCta": "Color Master орнотуу",
+        "primaryCta": "Color Sense Testин орнотуңуз",
         "detailCta": "Web Demo колдонуп көрүңүз",
-        "statusNote": "Адегенде аны желеден байкап көрүңүз, андан кийин Google Playден орнотуңуз.",
-        "iconAlt": "Color Master сөлөкөтү"
+        "statusNote": "Адегенде аны интернеттен байкап көрүңүз, андан кийин Google Playден орнотуңуз.",
+        "iconAlt": "Color Sense Test: Color Master сөлөкөтү"
       },
       "koreanRandomDefense": {
         "name": "Кореянын туш келди коргонуусу: курчоо",
@@ -16807,16 +16937,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Лабиринттен качуу оюну чыкты",
         "tagline": "Лабораториялык келемишти караңгы лабиринт аркылуу жетектеп, чыгууну табыңыз.",
-        "description": "Google Play'де 2026-жылдын 28-майында жарыкка чыкты. Жол жабылганга чейин караңгы лабиринттен өтүп, нерселерди колдонуп, качып кетиңиз.",
+        "description": "Google Playде 2026-жылдын 28-майында чыгарылган. Жол жабылганга чейин караңгы лабиринт аркылуу жылып, нерселерди колдонуп, качып кетиңиз.",
         "highlights": [
           "2026-жылдын 28-майында чыгарылган",
           "Лабиринттен качуу",
           "Items",
           "Караңгы жашоо"
         ],
-        "primaryCta": "Google Play'ге орнотуу",
-        "statusNote": "Азыр Google Play'де жеткиликтүү. Бул колдонмо үчүн эч кандай веб демо каралган эмес.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze сөлөкөтү"
+        "primaryCta": "Google Playге орнотуу",
+        "statusNote": "Колдонмонун чоо-жайын көрүп, аны Google Playден орнотуңуз. Бул колдонмо үчүн эч кандай веб демо каралган эмес.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze сөлөкөтү",
+        "detailCta": "Колдонмонун чоо-жайын көрүү"
       }
     },
     "status": {
@@ -16833,18 +16964,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "КЫСКАЧА ИДЕЯЛАР",
       "title": "Аларды ушундай кылып көрүңүз",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"Эгер сиз бул түс айырмасын көрсөңүз, көзүңүз курч.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Эгер сиз бул кызык түстү байкасаңыз, көзүңүз курч болот.\"",
         "description": "10 секунддук тапшырмада досторуңуз менен жарышыңыз."
       },
       "galaxyCode": {
-        "app": "Галактикод",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Досуңузга алар чече албаган чоочун билдирүү жөнөтүңүз.\"",
         "description": "Ачкыч ээлери гана чече ала турган жашыруун билдирүүлөрдү калтырыңыз."
       },
       "ufoSignal": {
-        "app": "UFO чакыр",
-        "title": "\"Таң атканда UFO баскычын бассаңыз эмне болот?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Таң атканда НЛО сигналын жөнөтсөңүз эмне болот?\"",
         "description": "Караңгы бөлмөдө үндөрдү жана анимацияларды угуңуз."
       }
     },
@@ -16861,7 +16992,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Кайсы колдонмону биринчи орнотуу керек?",
-        "answer": "Эгер бул сиздин биринчи сапарыңыз болсо, алгач Color Master 2ди колдонуп көрүңүз. Бул тез ойнойт жана жакшыраак упай алуу үчүн кайра ойнотуу оңой."
+        "answer": "Эгер бул сиздин биринчи сапарыңыз болсо, адегенде Find Odd Color: Color Master 2 аракетин көрүңүз. Бул тез ойнойт жана жакшыраак упай алуу үчүн кайра ойнотуу оңой."
       },
       "privateTest": {
         "question": "Жеке сыноо колдонмолоруна кантип кошулам?",
@@ -16872,12 +17003,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM тарабынан жасалган",
       "lastUpdated": "Акыркы жаңыртылган күнү: 31.05.2026",
       "googlePlay": "Google Play колдонмолору",
-      "colorTest": "Түс сыноо",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO колдонмосу",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Купуялык саясаты",
       "appAds": "app-ads.txt",
-      "contact": "Байланыш"
+      "contact": "Байланыш",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Жеке сыноочу катталуу",
@@ -16898,9 +17030,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "ta-IN": {
     "seo": {
       "title": "NeoKIM ஆப் லேப் | இலவச Android மினி ஆப்ஸ்",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze மற்றும் லக்கி கார்டு ரேண்டம் டிஃபென்ஸ் மற்றும் பல ஆண்ட்ராய்டு மினி பயன்பாடுகளுக்கான தனிப்பட்ட சோதனைகளை நிறுவவும்.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze மற்றும் மேலும் Android மினி பயன்பாடுகளுக்கு தனிப்பட்ட சோதனைகளை நிறுவவும்.",
       "ogTitle": "NeoKIM ஆப் லேப் | Android மினி ஆப்ஸ்",
-      "ogDescription": "வண்ண சவால்கள், ஏலியன் போன்ற ரகசிய செய்திகள், யுஎஃப்ஒ அழைப்பு அனுபவங்கள், லேப் ரேட் பிரமை எஸ்கேப்: டார்க் பிரமை மற்றும் விரைவான Android வேடிக்கைக்கான தனிப்பட்ட சோதனைகள்."
+      "ogDescription": "ஒற்றைப்படை நிறங்களைக் கண்டறியவும், ஏலியன் பாணியில் இரகசிய உரையை உருவாக்கவும், விளையாட்டுத்தனமான UFO சிக்னல்களை அனுப்பவும், இருண்ட பிரமைகளிலிருந்து தப்பிக்கவும், மேலும் விரைவான Android வேடிக்கைக்காக தனிப்பட்ட சோதனைகளில் சேரவும்."
     },
     "skip": {
       "apps": "பயன்பாட்டு பட்டியலுக்கு செல்க"
@@ -16935,11 +17067,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android மினி பயன்பாட்டு சேகரிப்பு",
       "title": "NeoKIM ஆப் லேப்",
       "subtitle": "விரைவான வேடிக்கை மற்றும் பகிர்வுக்காக உருவாக்கப்பட்ட சிறிய Android பயன்பாடுகள்",
-      "description": "வண்ண சவால்கள், ஏலியன் போன்ற ரகசிய செய்திகள் மற்றும் UFO அழைப்பு அனுபவங்கள். லேசாக நிறுவவும். ஒரு நிமிடத்திற்குள் மகிழுங்கள்.",
+      "description": "ஒற்றை நிற சவால்கள், ஏலியன் பாணி ரகசிய செய்திகள், யுஎஃப்ஒ சிக்னல் பிளே மற்றும் டார்க் பிரமை தப்பிக்கும். லேசாக நிறுவவும். ஒரு நிமிடத்திற்குள் மகிழுங்கள்.",
       "primaryCta": "சிறப்பு பயன்பாட்டை நிறுவவும்",
-      "primaryAria": "Google Play இல் கலர் மாஸ்டர் 2 ஐ நிறுவவும்",
+      "primaryAria": "Google Play இல் Find Odd Color: Color Master 2 ஐ நிறுவவும்",
       "secondaryCta": "பயன்பாடுகளை உலாவவும்",
-      "visualAria": "கலர் மாஸ்டர் 2 ஐகான் மற்றும் கலர் டைல்ஸுடன் ஃபோன் மொக்கப்",
+      "visualAria": "Find Odd Color: Color Master 2 ஐகான் மற்றும் வண்ண ஓடுகளுடன் ஃபோன் மொக்கப்",
       "badges": [
         "இலவச பயன்பாடுகள்",
         "Android",
@@ -16951,36 +17083,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "சிறப்புப் பயன்பாடு",
       "title": "இதை இன்றே முதலில் நிறுவவும்",
       "badge": "இடம்பெற்றது",
-      "appName": "கலர் மாஸ்டர் 2",
-      "short": "10 வினாடிகளில் வெவ்வேறு வண்ணங்களைக் கண்டறியவும்.",
-      "description": "ஒரு வாழ்க்கை வண்ண புதிர், இதில் ஒரு தவறு ரன் முடிவடைகிறது. இது வேகமாகத் தொடங்குகிறது, பின்னர் உங்கள் சாதனையை முறியடிக்க உங்களை மீண்டும் இழுக்கிறது.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 வினாடிகளில் ஒரு வித்தியாசமான நிறத்தைக் கண்டறியவும்.",
+      "description": "ஒரு வாழ்க்கை ஒற்றை-வண்ணப் புதிர், இதில் ஒரு தவறு ரன் முடிவடைகிறது. இது வேகமாகத் தொடங்குகிறது, பின்னர் உங்கள் சாதனையை முறியடிக்க உங்களை மீண்டும் இழுக்கிறது.",
       "primaryCta": "Google Play இல் நிறுவவும்",
-      "primaryAria": "Google Play இல் கலர் மாஸ்டர் 2 ஐ நிறுவவும்",
+      "primaryAria": "Google Play இல் Find Odd Color: Color Master 2 ஐ நிறுவவும்",
       "secondaryCta": "பயன்பாடுகளை உலாவவும்",
-      "visualAria": "கலர் மாஸ்டர் 2 கலர் டைல் சவால் ஃபோன் மொக்கப்"
+      "visualAria": "Find Odd Color: Color Master 2 டைல் சவால் ஃபோன் மொக்கப்"
     },
     "apps": {
       "kicker": "பயன்பாட்டு பட்டியல்",
       "title": "அனைத்து பயன்பாடுகள்",
       "description": "பொது பயன்பாடுகளை நேரடியாக நிறுவவும். தனிப்பட்ட சோதனைகளுக்கு, முதலில் ஒரு கோரிக்கையை மின்னஞ்சல் செய்யவும்; சோதனையாளர் அணுகல் சேர்க்கப்பட்ட பிறகு, சோதனையில் சேரவும் பொத்தானைப் பயன்படுத்தவும்.",
       "colorMaster2": {
-        "name": "கலர் மாஸ்டர் 2",
-        "category": "வண்ண புதிர்",
-        "tagline": "10 வினாடிகளில் வெவ்வேறு வண்ணங்களைக் கண்டறியவும்.",
-        "description": "ஒரு தவறு ரன் முடிவடைகிறது. ஒரு குறுகிய, அடிமையாக்கும் வண்ண உணர்தல் சவால்.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ஒற்றை நிற புதிர் விளையாட்டு",
+        "tagline": "10 வினாடிகளில் ஒரு வித்தியாசமான நிறத்தைக் கண்டறியவும்.",
+        "description": "ஒரு தவறு ரன் முடிவடைகிறது. கவனம் மற்றும் வண்ண உணர்விற்கான ஒரு குறுகிய, அடிமையாக்கும் ஒற்றைப்படை வண்ண சவால்.",
         "highlights": [
           "10-வினாடி வரம்பு",
           "ஒரு வாழ்க்கை ஓட்டம்",
           "லீடர்போர்டு",
           "நிறக்குருடு உதவி"
         ],
-        "primaryCta": "கலர் மாஸ்டர் 2 ஐ நிறுவவும்",
+        "primaryCta": "ஃபைண்ட் ஓட் கலரை நிறுவவும்",
         "detailCta": "வலை டெமோவை முயற்சிக்கவும்",
         "statusNote": "Google Play இல் இப்போது கிடைக்கிறது.",
-        "iconAlt": "கலர் மாஸ்டர் 2 ஐகான்"
+        "iconAlt": "Find Odd Color: Color Master 2 ஐகான்"
       },
       "galaxyCode": {
-        "name": "கேலக்டிகோட்",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "ரகசிய செய்தி பயன்பாடு",
         "tagline": "டிகோட் செய்ய பங்கு விசை தேவைப்படும் ஏலியன் போன்ற ரகசிய செய்திகளை உருவாக்கவும்.",
         "description": "உங்கள் சொந்த விண்மீன் மொழி விதிகளை உருவாக்கவும். உங்கள் பகிர்வு விசையை உள்ளவர்கள் மட்டுமே அதே விதிகளை மீண்டும் உருவாக்க முடியும், மேலும் அசல் உரை சேவையகத்தில் பதிவேற்றப்படாது.",
@@ -16993,39 +17125,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ரகசிய செய்திகளை உருவாக்கவும்",
         "detailCta": "வலை டெமோவை முயற்சிக்கவும்",
         "statusNote": "Google Play இல் இப்போது கிடைக்கிறது.",
-        "iconAlt": "கேலக்டிகோட் ஐகான்"
+        "iconAlt": "Alien Text Maker: Galaxy Code ஐகான்"
       },
       "ufoSignal": {
-        "name": "UFO ஐ அழைக்கவும்",
-        "category": "ஆழ்ந்த வேடிக்கையான பயன்பாடு",
-        "tagline": "வேடிக்கைக்காக ஒரு மர்மமான UFO அழைப்பு அனுபவம்.",
-        "description": "பட்டனை அழுத்தி, சிக்னலைக் கேட்டு, விண்வெளியில் இருந்து எதையாவது கேட்பதாக கற்பனை செய்து பாருங்கள்.",
+        "name": "UFO Signal Simulator",
+        "category": "மர்ம சமிக்ஞை பொழுதுபோக்கு பயன்பாடு",
+        "tagline": "விளையாட்டுத்தனமான ஸ்பேஸ் சிக்னலை அனுப்பி UFO மனநிலையை அனுபவிக்கவும்.",
+        "description": "பயன்பாட்டைத் திறந்து, சிக்னல் பொத்தானை அழுத்தி, ஒரு சிறிய யுஎஃப்ஒ சடங்காக உணரக்கூடிய ஒலி மற்றும் அனிமேஷனை அனுபவிக்கவும்.",
         "highlights": [
-          "ஊடாடும் பொத்தான்",
+          "சிக்னல் பொத்தான்",
           "மர்ம ஒலிகள்",
-          "அனிமேஷன்",
+          "மனநிலை அனிமேஷன்",
           "பதிவு இல்லை"
         ],
-        "primaryCta": "UFO ஐ அழைக்கவும்",
-        "detailCta": "வலை டெமோவை முயற்சிக்கவும்",
-        "statusNote": "Google Play இல் இப்போது கிடைக்கிறது.",
-        "iconAlt": "UFO ஐகானை அழைக்கவும்"
+        "primaryCta": "UFO Signal Simulator ஐ நிறுவவும்",
+        "detailCta": "ஆப்ஸ் விவரங்களைக் காண்க",
+        "statusNote": "பயன்பாட்டு விவரங்களைப் பார்த்து, அதை Google Play இலிருந்து நிறுவவும்.",
+        "iconAlt": "UFO Signal Simulator ஐகான்"
       },
       "colorMasterClassic": {
-        "name": "வண்ண மாஸ்டர்",
-        "category": "கிளாசிக் வண்ண புதிர்",
-        "tagline": "அசல் வண்ண-கவனம் சவால்: ஒத்த வண்ணங்களில் பதிலைக் கண்டறியவும்.",
-        "description": "கலர் மாஸ்டர் 2க்கு முந்தைய அசல் பதிப்பு. முதலில் இணையத்தில் முயற்சிக்கவும், பிறகு Google Play இலிருந்து நிறுவவும்.",
+        "name": "Color Sense Test: Color Master",
+        "category": "கிளாசிக் வண்ண உணர்வு விளையாட்டு",
+        "tagline": "அசல் கலர்-ஃபோகஸ் சவால்: பதில் நிறத்தை நினைவில் வைத்து, ஒத்த வண்ணங்களிலிருந்து அதைத் தேர்ந்தெடுக்கவும்.",
+        "description": "Find Odd Color: Color Master 2 க்கு முன் அசல் வண்ண உணர்வு சோதனை. முதலில் இணையத்தில் இதை முயற்சிக்கவும், பின்னர் Google Play இலிருந்து நிறுவவும்.",
         "highlights": [
           "அசல் உணர்வு",
           "வண்ண கவனம்",
           "விரைவான விளையாட்டு",
           "இப்போது நிறுவவும்"
         ],
-        "primaryCta": "கலர் மாஸ்டரை நிறுவவும்",
+        "primaryCta": "வண்ண உணர்வு சோதனையை நிறுவவும்",
         "detailCta": "வலை டெமோவை முயற்சிக்கவும்",
-        "statusNote": "முதலில் இணையத்தில் இதை முயற்சிக்கவும், பிறகு Google Play இலிருந்து நிறுவவும்.",
-        "iconAlt": "கலர் மாஸ்டர் ஐகான்"
+        "statusNote": "முதலில் இணையத்தில் இதை முயற்சிக்கவும், பின்னர் Google Play இலிருந்து நிறுவவும்.",
+        "iconAlt": "Color Sense Test: Color Master ஐகான்"
       },
       "koreanRandomDefense": {
         "name": "கொரிய சீரற்ற பாதுகாப்பு: முற்றுகை",
@@ -17060,7 +17192,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "லக்கி கார்டு ரேண்டம் டிஃபென்ஸ் ஐகான்"
       },
       "darkMaze": {
-        "name": "ஆய்வக எலி பிரமை எஸ்கேப்: டார்க் பிரமை",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "பிரமை தப்பிக்கும் விளையாட்டு வெளியிடப்பட்டது",
         "tagline": "இருண்ட பிரமை வழியாக ஆய்வக எலிக்கு வழிகாட்டி வெளியேறும் வழியைக் கண்டறியவும்.",
         "description": "மே 28, 2026 அன்று Google Play இல் வெளியிடப்பட்டது. இருண்ட பிரமை வழியாகச் செல்லவும், பொருட்களைப் பயன்படுத்தவும், பாதை மூடும் முன் தப்பிக்கவும்.",
@@ -17071,8 +17203,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "இருண்ட உயிர்"
         ],
         "primaryCta": "Google Play இல் நிறுவவும்",
-        "statusNote": "இப்போது Google Play இல் கிடைக்கிறது. இந்த பயன்பாட்டிற்கு இணைய டெமோ எதுவும் வழங்கப்படவில்லை.",
-        "iconAlt": "லேப் ரேட் பிரமை எஸ்கேப்: டார்க் பிரமை ஐகான்"
+        "statusNote": "பயன்பாட்டு விவரங்களைப் பார்த்து, அதை Google Play இலிருந்து நிறுவவும். இந்த பயன்பாட்டிற்கு இணைய டெமோ எதுவும் வழங்கப்படவில்லை.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ஐகான்",
+        "detailCta": "ஆப்ஸ் விவரங்களைக் காண்க"
       }
     },
     "status": {
@@ -17089,18 +17222,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "குறும்பட யோசனைகள்",
       "title": "இதை இப்படி முயற்சிக்கவும்",
       "colorMaster2": {
-        "app": "கலர் மாஸ்டர் 2",
-        "title": "\"இந்த நிற வேறுபாட்டை நீங்கள் பார்த்தால், உங்கள் கண்கள் கூர்மையாக இருக்கும்.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"இந்த ஒற்றைப்படை நிறத்தை நீங்கள் கண்டால், உங்கள் கண்கள் கூர்மையாக இருக்கும்.\"",
         "description": "10-வினாடி சவாலில் நண்பர்களுடன் போட்டியிடுங்கள்."
       },
       "galaxyCode": {
-        "app": "கேலக்டிகோட்",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"உங்கள் நண்பருக்கு அவர்களால் டிகோட் செய்ய முடியாத அன்னிய செய்தியை அனுப்பவும்.\"",
         "description": "ஷேர்-கீ வைத்திருப்பவர்கள் மட்டுமே டிகோட் செய்யக்கூடிய ரகசிய செய்திகளை விடுங்கள்."
       },
       "ufoSignal": {
-        "app": "UFO ஐ அழைக்கவும்",
-        "title": "\"விடியலில் UFO பட்டனை அழுத்தினால் என்ன நடக்கும்?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"நீங்கள் விடியற்காலையில் யுஎஃப்ஒ சிக்னலை அனுப்பினால் என்ன நடக்கும்?\"",
         "description": "இருண்ட அறையில் ஒலிகள் மற்றும் அனிமேஷனை அனுபவிக்கவும்."
       }
     },
@@ -17117,7 +17250,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "எந்த ஆப்ஸை முதலில் நிறுவ வேண்டும்?",
-        "answer": "இது உங்கள் முதல் வருகை என்றால், முதலில் Color Master 2ஐ முயற்சிக்கவும். இது விரைவாக விளையாடுவது மற்றும் சிறந்த ஸ்கோருக்கு மீண்டும் விளையாடுவது எளிது."
+        "answer": "இது உங்கள் முதல் வருகை என்றால், முதலில் Find Odd Color: Color Master 2 ஐ முயற்சிக்கவும். இது விரைவாக விளையாடுவது மற்றும் சிறந்த ஸ்கோருக்கு மீண்டும் விளையாடுவது எளிது."
       },
       "privateTest": {
         "question": "தனிப்பட்ட சோதனை பயன்பாடுகளில் நான் எவ்வாறு சேர்வது?",
@@ -17128,12 +17261,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM ஆல் உருவாக்கப்பட்டது",
       "lastUpdated": "கடைசியாக புதுப்பிக்கப்பட்டது: 2026.05.31",
       "googlePlay": "Google Play பயன்பாடுகள்",
-      "colorTest": "வண்ண சோதனை",
-      "alienText": "ஏலியன் டெக்ஸ்ட் ஜெனரேட்டர்",
-      "ufoApp": "யுஎஃப்ஒ ஆப்",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "தனியுரிமைக் கொள்கை",
       "appAds": "app-ads.txt",
-      "contact": "தொடர்பு கொள்ளவும்"
+      "contact": "தொடர்பு கொள்ளவும்",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "தனியார் சோதனையாளர் பதிவு",
@@ -17154,9 +17288,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "th": {
     "seo": {
       "title": "NeoKIM App Lab | แอปมินิ Android ฟรี",
-      "description": "ติดตั้ง Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze และการทดสอบส่วนตัวสำหรับ Lucky Card Random Defense และแอปขนาดเล็กอื่นๆ ของ Android",
+      "description": "ติดตั้ง Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze และการทดสอบส่วนตัวสำหรับมินิแอป Android เพิ่มเติม",
       "ogTitle": "NeoKIM App Lab | แอพมินิ Android",
-      "ogDescription": "ความท้าทายด้านสี ข้อความลับเหมือนเอเลี่ยน ประสบการณ์การโทรด้วยยูเอฟโอ Lab Rat Maze Escape: Dark Maze และการทดสอบส่วนตัวเพื่อความสนุกสนานบน Android อย่างรวดเร็ว"
+      "ogDescription": "ค้นหาสีแปลก ๆ สร้างข้อความลับสไตล์เอเลี่ยน ส่งสัญญาณยูเอฟโอขี้เล่น หลบหนีเขาวงกตอันมืดมิด และเข้าร่วมการทดสอบส่วนตัวเพื่อความสนุกจาก Android อย่างรวดเร็ว"
     },
     "skip": {
       "apps": "ข้ามไปที่รายการแอป"
@@ -17191,11 +17325,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "คอลเลกชันแอปขนาดเล็ก Android",
       "title": "ห้องปฏิบัติการแอป NeoKIM",
       "subtitle": "แอป Android ขนาดเล็กที่สร้างขึ้นเพื่อความสนุกสนานและการแชร์ที่รวดเร็ว",
-      "description": "ความท้าทายด้านสี ข้อความลับเหมือนเอเลี่ยน และประสบการณ์การโทรยูเอฟโอ ติดตั้งเบาๆ. สนุกได้ภายในไม่ถึงนาที",
+      "description": "ความท้าทายสีแปลกๆ ข้อความลับสไตล์เอเลี่ยน การเล่นสัญญาณยูเอฟโอ และการหลบหนีจากเขาวงกตอันมืดมิด ติดตั้งเบาๆ. สนุกได้ภายในไม่ถึงนาที",
       "primaryCta": "ติดตั้งแอพแนะนำ",
-      "primaryAria": "ติดตั้ง Color Master 2 บน Google Play",
+      "primaryAria": "ติดตั้ง Find Odd Color: Color Master 2 บน Google Play",
       "secondaryCta": "เรียกดูแอพ",
-      "visualAria": "การจำลองโทรศัพท์พร้อมไอคอน Color Master 2 และไทล์สี",
+      "visualAria": "การจำลองโทรศัพท์พร้อมไอคอน Find Odd Color: Color Master 2 และชิ้นส่วนสี",
       "badges": [
         "แอพฟรี",
         "Android",
@@ -17207,81 +17341,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "แอพเด่น",
       "title": "ติดตั้งสิ่งนี้ก่อนวันนี้",
       "badge": "จุดเด่น",
-      "appName": "ต้นแบบสี 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "ค้นหาสีที่แตกต่างใน 10 วินาที",
-      "description": "ปริศนาสีหนึ่งชีวิตที่ความผิดพลาดครั้งหนึ่งทำให้การวิ่งสิ้นสุดลง มันเริ่มต้นอย่างรวดเร็ว จากนั้นดึงคุณกลับมาเพื่อทำลายสถิติของคุณ",
+      "description": "ปริศนาชีวิตเดียวที่มีสีแปลก ๆ ที่ความผิดพลาดครั้งหนึ่งทำให้การวิ่งสิ้นสุดลง มันเริ่มต้นอย่างรวดเร็ว จากนั้นดึงคุณกลับมาเพื่อทำลายสถิติของคุณ",
       "primaryCta": "ติดตั้งบน Google Play",
-      "primaryAria": "ติดตั้ง Color Master 2 บน Google Play",
+      "primaryAria": "ติดตั้ง Find Odd Color: Color Master 2 บน Google Play",
       "secondaryCta": "เรียกดูแอพ",
-      "visualAria": "ต้นแบบโทรศัพท์ท้าทายกระเบื้องสี Color Master 2"
+      "visualAria": "Find Odd Color: Color Master 2 ต้นแบบโทรศัพท์ท้าทายไทล์"
     },
     "apps": {
       "kicker": "แค็ตตาล็อกแอป",
       "title": "แอพทั้งหมด",
       "description": "ติดตั้งแอปสาธารณะโดยตรง สำหรับการทดสอบส่วนตัว โปรดส่งอีเมลคำขอก่อน หลังจากเพิ่มการเข้าถึงของผู้ทดสอบแล้ว ให้ใช้ปุ่มเข้าร่วมการทดสอบ",
       "colorMaster2": {
-        "name": "ต้นแบบสี 2",
-        "category": "ปริศนาสี",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "เกมปริศนาสีแปลก ๆ",
         "tagline": "ค้นหาสีที่แตกต่างใน 10 วินาที",
-        "description": "ข้อผิดพลาดหนึ่งข้อทำให้การวิ่งสิ้นสุดลง ความท้าทายในการรับรู้สีสั้นๆ ที่ชวนติดตาม",
+        "description": "ข้อผิดพลาดหนึ่งข้อทำให้การวิ่งสิ้นสุดลง ความท้าทายสั้น ๆ ในการใช้สีแปลก ๆ ที่น่าติดตามสำหรับการโฟกัสและการรับรู้สี",
         "highlights": [
           "จำกัดเวลา 10 วินาที",
           "วิ่งหนึ่งชีวิต",
           "ลีดเดอร์บอร์ด",
           "เครื่องช่วยตาบอดสี"
         ],
-        "primaryCta": "ติดตั้ง Color Master 2",
+        "primaryCta": "ติดตั้งค้นหาสีแปลก ๆ",
         "detailCta": "ลองเว็บสาธิต",
         "statusNote": "วางจำหน่ายแล้วที่ Google Play",
-        "iconAlt": "ไอคอนสีมาสเตอร์ 2"
+        "iconAlt": "ไอคอน Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "กาแลกติกโค้ด",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "แอพข้อความลับ",
         "tagline": "สร้างข้อความลับเหมือนเอเลี่ยนที่ต้องใช้คีย์แชร์เพื่อถอดรหัส",
         "description": "สร้างกฎภาษากาแล็กซี่ของคุณเอง เฉพาะผู้ที่มีรหัสแชร์ของคุณเท่านั้นที่สามารถสร้างกฎเดียวกันขึ้นใหม่ได้ และข้อความต้นฉบับจะไม่ถูกอัพโหลดไปยังเซิร์ฟเวอร์",
         "highlights": [
           "แชร์คีย์ตาม",
           "กฎส่วนตัว",
-          "พร้อม SNS",
+          "พร้อม SNS แล้ว",
           "ไม่มีการอัพโหลดเซิร์ฟเวอร์"
         ],
         "primaryCta": "สร้างข้อความลับ",
         "detailCta": "ลองเว็บสาธิต",
         "statusNote": "วางจำหน่ายแล้วที่ Google Play",
-        "iconAlt": "ไอคอนกาแลคติโคด"
+        "iconAlt": "ไอคอน Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "โทรหายูเอฟโอ",
-        "category": "แอพสนุก ๆ ที่ดื่มด่ำ",
-        "tagline": "ประสบการณ์การโทรยูเอฟโอลึกลับเพื่อความสนุกสนาน",
-        "description": "กดปุ่ม ฟังสัญญาณ และจินตนาการว่ามีบางสิ่งกำลังฟังจากอวกาศ",
+        "name": "UFO Signal Simulator",
+        "category": "แอพความบันเทิงสัญญาณลึกลับ",
+        "tagline": "ส่งสัญญาณอวกาศอย่างสนุกสนานและเพลิดเพลินไปกับอารมณ์ของยูเอฟโอ",
+        "description": "เปิดแอป กดปุ่มสัญญาณ และเพลิดเพลินไปกับเสียงและแอนิเมชั่นที่ทำให้ช่วงเวลานั้นรู้สึกเหมือนเป็นพิธีกรรมยูเอฟโอเล็กๆ",
         "highlights": [
-          "ปุ่มโต้ตอบ",
+          "ปุ่มสัญญาณ",
           "เสียงลึกลับ",
-          "แอนิเมชั่น",
+          "แอนิเมชั่นอารมณ์",
           "ไม่มีการสมัครสมาชิก"
         ],
-        "primaryCta": "โทรหายูเอฟโอ",
-        "detailCta": "ลองเว็บสาธิต",
-        "statusNote": "วางจำหน่ายแล้วที่ Google Play",
-        "iconAlt": "เรียกไอคอนยูเอฟโอ"
+        "primaryCta": "ติดตั้ง UFO Signal Simulator",
+        "detailCta": "ดูรายละเอียดแอพ",
+        "statusNote": "ดูรายละเอียดแอป จากนั้นติดตั้งจาก Google Play",
+        "iconAlt": "ไอคอน UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "อาจารย์สี",
-        "category": "ปริศนาสีคลาสสิก",
-        "tagline": "ความท้าทายในการเน้นสีแบบเดิม: ค้นหาคำตอบท่ามกลางสีที่คล้ายคลึงกัน",
-        "description": "เวอร์ชันดั้งเดิมก่อน Color Master 2 ลองใช้บนเว็บก่อน จากนั้นจึงติดตั้งจาก Google Play",
+        "name": "Color Sense Test: Color Master",
+        "category": "เกมสัมผัสสีคลาสสิก",
+        "tagline": "ความท้าทายในการเน้นสีแบบเดิม: จำสีคำตอบและเลือกจากสีที่คล้ายกัน",
+        "description": "การทดสอบการรับรู้สีดั้งเดิมก่อน Find Odd Color: Color Master 2 ลองใช้บนเว็บก่อน จากนั้นจึงติดตั้งจาก Google Play",
         "highlights": [
           "ความรู้สึกดั้งเดิม",
           "เน้นสี",
           "เล่นด่วน",
           "ติดตั้งทันที"
         ],
-        "primaryCta": "ติดตั้ง Color Master",
+        "primaryCta": "ติดตั้งการทดสอบการรับรู้สี",
         "detailCta": "ลองเว็บสาธิต",
         "statusNote": "ลองใช้บนเว็บก่อน จากนั้นจึงติดตั้งจาก Google Play",
-        "iconAlt": "ไอคอนต้นแบบสี"
+        "iconAlt": "ไอคอน Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "การป้องกันแบบสุ่มของเกาหลี: Siege",
@@ -17316,7 +17450,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ไอคอนลัคกี้การ์ดสุ่มป้องกัน"
       },
       "darkMaze": {
-        "name": "Lab Rat Maze Escape: เขาวงกตแห่งความมืด",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "เปิดตัวเกมหนีเขาวงกต",
         "tagline": "นำทางหนูทดลองผ่านเขาวงกตอันมืดมิดแล้วหาทางออก",
         "description": "วางจำหน่ายบน Google Play เมื่อวันที่ 28 พฤษภาคม 2026 เคลื่อนที่ผ่านเขาวงกตอันมืดมิด ใช้ไอเท็ม และหลบหนีก่อนที่เส้นทางจะปิด",
@@ -17327,8 +17461,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "การอยู่รอดที่มืดมน"
         ],
         "primaryCta": "ติดตั้งบน Google Play",
-        "statusNote": "วางจำหน่ายแล้วบน Google Play ไม่มีการสาธิตเว็บสำหรับแอพนี้",
-        "iconAlt": "Lab Rat Maze Escape: ไอคอน Dark Maze"
+        "statusNote": "ดูรายละเอียดแอป จากนั้นติดตั้งจาก Google Play ไม่มีการสาธิตเว็บสำหรับแอพนี้",
+        "iconAlt": "ไอคอน Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "ดูรายละเอียดแอพ"
       }
     },
     "status": {
@@ -17345,18 +17480,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ไอเดียเกี่ยวกับกางเกงขาสั้น",
       "title": "ลองแบบนี้",
       "colorMaster2": {
-        "app": "ต้นแบบสี 2",
-        "title": "“ถ้าคุณเห็นความแตกต่างของสีนี้ แสดงว่าดวงตาของคุณคมกริบ”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“ถ้าคุณเห็นสีแปลกๆ นี้ ดวงตาของคุณก็จะแหลมคม”",
         "description": "แข่งขันกับเพื่อน ๆ ในการท้าทาย 10 วินาที"
       },
       "galaxyCode": {
-        "app": "กาแลกติกโค้ด",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“ส่งข้อความเอเลี่ยนให้เพื่อนของคุณที่พวกเขาไม่สามารถถอดรหัสได้”",
         "description": "ฝากข้อความลับไว้ซึ่งมีเพียงผู้ถือกุญแจแชร์เท่านั้นที่สามารถถอดรหัสได้"
       },
       "ufoSignal": {
-        "app": "โทรหายูเอฟโอ",
-        "title": "“จะเกิดอะไรขึ้นถ้าคุณกดปุ่มยูเอฟโอตอนรุ่งเช้า”",
+        "app": "UFO Signal Simulator",
+        "title": "“จะเกิดอะไรขึ้นถ้าคุณส่งสัญญาณยูเอฟโอในตอนเช้า?”",
         "description": "เพลิดเพลินกับเสียงและภาพเคลื่อนไหวในห้องมืด"
       }
     },
@@ -17373,7 +17508,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ฉันควรติดตั้งแอปใดก่อน",
-        "answer": "หากนี่เป็นครั้งแรกของคุณ ให้ลองใช้ Color Master 2 ก่อน เล่นได้รวดเร็วและเล่นซ้ำได้ง่ายเพื่อให้ได้คะแนนดีขึ้น"
+        "answer": "หากนี่เป็นการเข้าชมครั้งแรกของคุณ ให้ลองใช้ Find Odd Color: Color Master 2 ก่อน เล่นได้รวดเร็วและเล่นซ้ำได้ง่ายเพื่อให้ได้คะแนนดีขึ้น"
       },
       "privateTest": {
         "question": "ฉันจะเข้าร่วมแอปทดสอบส่วนตัวได้อย่างไร",
@@ -17384,12 +17519,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "สร้างโดย NeoKIM",
       "lastUpdated": "อัปเดตล่าสุด: 2026.05.31",
       "googlePlay": "แอป Google Play",
-      "colorTest": "การทดสอบสี",
-      "alienText": "เครื่องกำเนิดข้อความคนต่างด้าว",
-      "ufoApp": "แอพยูเอฟโอ",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "นโยบายความเป็นส่วนตัว",
       "appAds": "app-ads.txt",
-      "contact": "ติดต่อ"
+      "contact": "ติดต่อ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "การลงทะเบียนผู้ทดสอบส่วนตัว",
@@ -17410,9 +17546,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "te-IN": {
     "seo": {
       "title": "NeoKIM యాప్ ల్యాబ్ | ఉచిత Android మినీ యాప్‌లు",
-      "description": "కలర్ మాస్టర్ 2, గెలాక్టికోడ్ ఇన్‌స్టాల్ చేయండి, UFOకి కాల్ చేయండి, ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్ మరియు లక్కీ కార్డ్ రాండమ్ డిఫెన్స్ మరియు మరిన్ని ఆండ్రాయిడ్ మినీ యాప్‌ల కోసం ప్రైవేట్ పరీక్షలు.",
+      "description": "Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze మరియు మరిన్ని Android మినీ యాప్‌ల కోసం ప్రైవేట్ పరీక్షలను ఇన్‌స్టాల్ చేయండి.",
       "ogTitle": "NeoKIM యాప్ ల్యాబ్ | Android మినీ యాప్‌లు",
-      "ogDescription": "రంగు సవాళ్లు, గ్రహాంతరవాసుల లాంటి రహస్య సందేశాలు, UFO కాలింగ్ అనుభవాలు, ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్ మరియు త్వరిత Android వినోదం కోసం ప్రైవేట్ పరీక్షలు."
+      "ogDescription": "బేసి రంగులను కనుగొనండి, ఏలియన్-శైలి రహస్య వచనాన్ని రూపొందించండి, ఉల్లాసభరితమైన UFO సంకేతాలను పంపండి, చీకటి చిట్టడవులను తప్పించుకోండి మరియు త్వరిత Android వినోదం కోసం ప్రైవేట్ పరీక్షల్లో చేరండి."
     },
     "skip": {
       "apps": "అనువర్తన జాబితాకు దాటవేయి"
@@ -17447,11 +17583,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android మినీ యాప్ సేకరణ",
       "title": "NeoKIM యాప్ ల్యాబ్",
       "subtitle": "చిన్న Android యాప్‌లు శీఘ్ర వినోదం మరియు భాగస్వామ్యం కోసం రూపొందించబడ్డాయి",
-      "description": "రంగు సవాళ్లు, గ్రహాంతరవాసుల లాంటి రహస్య సందేశాలు మరియు UFO కాలింగ్ అనుభవాలు. తేలికగా ఇన్స్టాల్ చేయండి. ఒక నిమిషంలోపు ఆనందించండి.",
+      "description": "బేసి-రంగు సవాళ్లు, గ్రహాంతర-శైలి రహస్య సందేశాలు, UFO సిగ్నల్ ప్లే మరియు డార్క్ మేజ్ ఎస్కేప్‌లు. తేలికగా ఇన్స్టాల్ చేయండి. ఒక నిమిషంలోపు ఆనందించండి.",
       "primaryCta": "ఫీచర్ చేసిన యాప్‌ను ఇన్‌స్టాల్ చేయండి",
-      "primaryAria": "Google Playలో కలర్ మాస్టర్ 2ని ఇన్‌స్టాల్ చేయండి",
+      "primaryAria": "Google Playలో Find Odd Color: Color Master 2ని ఇన్‌స్టాల్ చేయండి",
       "secondaryCta": "యాప్‌లను బ్రౌజ్ చేయండి",
-      "visualAria": "కలర్ మాస్టర్ 2 చిహ్నం మరియు రంగు టైల్స్‌తో ఫోన్ మాకప్",
+      "visualAria": "Find Odd Color: Color Master 2 చిహ్నం మరియు రంగు టైల్స్‌తో ఫోన్ మాకప్",
       "badges": [
         "ఉచిత యాప్‌లు",
         "Android",
@@ -17463,36 +17599,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ఫీచర్ చేసిన యాప్",
       "title": "ఈరోజు మొదట దీన్ని ఇన్‌స్టాల్ చేయండి",
       "badge": "ఫీచర్ చేయబడింది",
-      "appName": "రంగు మాస్టర్ 2",
-      "short": "10 సెకన్లలో విభిన్న రంగులను కనుగొనండి.",
-      "description": "ఒక పొరపాటు పరుగును ముగించే వన్-లైఫ్ కలర్ పజిల్. ఇది వేగంగా ప్రారంభమవుతుంది, ఆపై మీ రికార్డును అధిగమించడానికి మిమ్మల్ని వెనక్కి లాగుతుంది.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 సెకన్లలో ఒక విభిన్న రంగును కనుగొనండి.",
+      "description": "ఒక పొరపాటు పరుగును ముగించే వన్-లైఫ్ బేసి-రంగు పజిల్. ఇది వేగంగా ప్రారంభమవుతుంది, ఆపై మీ రికార్డును అధిగమించడానికి మిమ్మల్ని వెనక్కి లాగుతుంది.",
       "primaryCta": "Google Playలో ఇన్‌స్టాల్ చేయండి",
-      "primaryAria": "Google Playలో కలర్ మాస్టర్ 2ని ఇన్‌స్టాల్ చేయండి",
+      "primaryAria": "Google Playలో Find Odd Color: Color Master 2ని ఇన్‌స్టాల్ చేయండి",
       "secondaryCta": "యాప్‌లను బ్రౌజ్ చేయండి",
-      "visualAria": "కలర్ మాస్టర్ 2 కలర్ టైల్ ఛాలెంజ్ ఫోన్ మోకప్"
+      "visualAria": "Find Odd Color: Color Master 2 టైల్ ఛాలెంజ్ ఫోన్ మోకప్"
     },
     "apps": {
       "kicker": "యాప్ కేటలాగ్",
       "title": "అన్ని యాప్‌లు",
       "description": "పబ్లిక్ యాప్‌లను నేరుగా ఇన్‌స్టాల్ చేయండి. ప్రైవేట్ పరీక్షల కోసం, ముందుగా అభ్యర్థనను ఇమెయిల్ చేయండి; టెస్టర్ యాక్సెస్ జోడించిన తర్వాత, జాయిన్ టెస్ట్ బటన్‌ను ఉపయోగించండి.",
       "colorMaster2": {
-        "name": "రంగు మాస్టర్ 2",
-        "category": "రంగు పజిల్",
-        "tagline": "10 సెకన్లలో విభిన్న రంగులను కనుగొనండి.",
-        "description": "ఒక పొరపాటు పరుగును ముగించింది. చిన్న, వ్యసనపరుడైన రంగు అవగాహన సవాలు.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "బేసి-రంగు పజిల్ గేమ్",
+        "tagline": "10 సెకన్లలో ఒక విభిన్న రంగును కనుగొనండి.",
+        "description": "ఒక పొరపాటు పరుగును ముగించింది. దృష్టి మరియు రంగు అవగాహన కోసం చిన్న, వ్యసనపరుడైన బేసి-రంగు సవాలు.",
         "highlights": [
           "10-సెకన్ల పరిమితి",
           "వన్-లైఫ్ రన్",
           "లీడర్‌బోర్డ్",
           "రంగు బ్లైండ్ సహాయం"
         ],
-        "primaryCta": "కలర్ మాస్టర్ 2ని ఇన్‌స్టాల్ చేయండి",
+        "primaryCta": "ఫైండ్ బేసి రంగును ఇన్‌స్టాల్ చేయండి",
         "detailCta": "వెబ్ డెమోని ప్రయత్నించండి",
-        "statusNote": "Google Playలో ఇప్పుడు అందుబాటులో ఉంది.",
-        "iconAlt": "రంగు మాస్టర్ 2 చిహ్నం"
+        "statusNote": "ఇప్పుడు Google Playలో అందుబాటులో ఉంది.",
+        "iconAlt": "Find Odd Color: Color Master 2 చిహ్నం"
       },
       "galaxyCode": {
-        "name": "గెలాక్టికోడ్",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "రహస్య సందేశ యాప్",
         "tagline": "డీకోడ్ చేయడానికి షేర్ కీ అవసరమయ్యే గ్రహాంతరవాసుల లాంటి రహస్య సందేశాలను సృష్టించండి.",
         "description": "మీ స్వంత గెలాక్సీ భాషా నియమాలను సృష్టించండి. మీ షేర్ కీ ఉన్న వ్యక్తులు మాత్రమే అదే నియమాలను పునఃసృష్టించగలరు మరియు అసలు వచనం సర్వర్‌కు అప్‌లోడ్ చేయబడదు.",
@@ -17504,40 +17640,40 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         ],
         "primaryCta": "రహస్య సందేశాలను సృష్టించండి",
         "detailCta": "వెబ్ డెమోని ప్రయత్నించండి",
-        "statusNote": "Google Playలో ఇప్పుడు అందుబాటులో ఉంది.",
-        "iconAlt": "గెలాక్టికోడ్ చిహ్నం"
+        "statusNote": "ఇప్పుడు Google Playలో అందుబాటులో ఉంది.",
+        "iconAlt": "Alien Text Maker: Galaxy Code చిహ్నం"
       },
       "ufoSignal": {
-        "name": "UFOకి కాల్ చేయండి",
-        "category": "లీనమయ్యే సరదా యాప్",
-        "tagline": "వినోదం కోసం ఒక రహస్యమైన UFO కాలింగ్ అనుభవం.",
-        "description": "బటన్‌ను నొక్కండి, సిగ్నల్‌ను వినండి మరియు స్పేస్ నుండి ఏదో వింటున్నట్లు ఊహించుకోండి.",
+        "name": "UFO Signal Simulator",
+        "category": "మిస్టరీ సిగ్నల్ ఎంటర్టైన్మెంట్ యాప్",
+        "tagline": "ఉల్లాసభరితమైన స్పేస్ సిగ్నల్‌ని పంపండి మరియు UFO మూడ్‌ని ఆస్వాదించండి.",
+        "description": "యాప్‌ని తెరిచి, సిగ్నల్ బటన్‌ను నొక్కండి మరియు సౌండ్ మరియు యానిమేషన్‌ను ఆస్వాదించండి, ఆ క్షణాన్ని ఒక చిన్న UFO ఆచారంలా చేస్తుంది.",
         "highlights": [
-          "ఇంటరాక్టివ్ బటన్",
+          "సిగ్నల్ బటన్",
           "మిస్టరీ ధ్వనులు",
-          "యానిమేషన్",
+          "మూడ్ యానిమేషన్",
           "సైన్-అప్ లేదు"
         ],
-        "primaryCta": "UFOకి కాల్ చేయండి",
-        "detailCta": "వెబ్ డెమోని ప్రయత్నించండి",
-        "statusNote": "Google Playలో ఇప్పుడు అందుబాటులో ఉంది.",
-        "iconAlt": "UFO చిహ్నానికి కాల్ చేయండి"
+        "primaryCta": "UFO Signal Simulatorని ఇన్‌స్టాల్ చేయండి",
+        "detailCta": "యాప్ వివరాలను వీక్షించండి",
+        "statusNote": "అనువర్తన వివరాలను వీక్షించండి, ఆపై దానిని Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
+        "iconAlt": "UFO Signal Simulator చిహ్నం"
       },
       "colorMasterClassic": {
-        "name": "రంగు మాస్టర్",
-        "category": "క్లాసిక్ కలర్ పజిల్",
-        "tagline": "అసలు రంగు-ఫోకస్ సవాలు: సారూప్య రంగులలో సమాధానాన్ని కనుగొనండి.",
-        "description": "కలర్ మాస్టర్ 2 కంటే ముందు ఉన్న అసలైన సంస్కరణ. దీన్ని ముందుగా వెబ్‌లో ప్రయత్నించండి, ఆపై దీన్ని Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
+        "name": "Color Sense Test: Color Master",
+        "category": "క్లాసిక్ కలర్ సెన్స్ గేమ్",
+        "tagline": "అసలు రంగు-ఫోకస్ ఛాలెంజ్: సమాధాన రంగును గుర్తుంచుకోండి మరియు సారూప్య రంగుల నుండి దాన్ని ఎంచుకోండి.",
+        "description": "Find Odd Color: Color Master 2 కంటే ముందు అసలు రంగు సెన్స్ పరీక్ష. దీన్ని ముందుగా వెబ్‌లో ప్రయత్నించండి, ఆపై Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
         "highlights": [
           "అసలు అనుభూతి",
           "రంగు దృష్టి",
           "త్వరగా ఆడండి",
           "ఇప్పుడే ఇన్‌స్టాల్ చేయండి"
         ],
-        "primaryCta": "కలర్ మాస్టర్‌ను ఇన్‌స్టాల్ చేయండి",
+        "primaryCta": "కలర్ సెన్స్ టెస్ట్‌ను ఇన్‌స్టాల్ చేయండి",
         "detailCta": "వెబ్ డెమోని ప్రయత్నించండి",
-        "statusNote": "దీన్ని ముందుగా వెబ్‌లో ప్రయత్నించండి, ఆపై దీన్ని Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
-        "iconAlt": "రంగు మాస్టర్ చిహ్నం"
+        "statusNote": "దీన్ని ముందుగా వెబ్‌లో ప్రయత్నించండి, ఆపై Google Play నుండి ఇన్‌స్టాల్ చేయండి.",
+        "iconAlt": "Color Sense Test: Color Master చిహ్నం"
       },
       "koreanRandomDefense": {
         "name": "కొరియన్ రాండమ్ డిఫెన్స్: సీజ్",
@@ -17572,10 +17708,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "లక్కీ కార్డ్ రాండమ్ డిఫెన్స్ చిహ్నం"
       },
       "darkMaze": {
-        "name": "ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "మేజ్ ఎస్కేప్ గేమ్ విడుదల చేయబడింది",
         "tagline": "చీకటి చిట్టడవి ద్వారా ల్యాబ్ ఎలుకకు మార్గనిర్దేశం చేయండి మరియు నిష్క్రమణను కనుగొనండి.",
-        "description": "మే 28, 2026న Google Playలో విడుదలైంది. చీకటి చిట్టడవి గుండా వెళ్లండి, ఐటెమ్‌లను ఉపయోగించండి మరియు మార్గం మూసుకుపోయేలోపు తప్పించుకోండి.",
+        "description": "మే 28, 2026న Google Playలో విడుదల చేయబడింది. చీకటి చిట్టడవి గుండా వెళ్లండి, ఐటెమ్‌లను ఉపయోగించండి మరియు మార్గం మూసుకుపోయే ముందు తప్పించుకోండి.",
         "highlights": [
           "మే 28, 2026న విడుదలైంది",
           "మేజ్ ఎస్కేప్",
@@ -17583,8 +17719,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "చీకటి మనుగడ"
         ],
         "primaryCta": "Google Playలో ఇన్‌స్టాల్ చేయండి",
-        "statusNote": "ఇప్పుడు Google Playలో అందుబాటులో ఉంది. ఈ యాప్ కోసం వెబ్ డెమో అందించబడలేదు.",
-        "iconAlt": "ల్యాబ్ ర్యాట్ మేజ్ ఎస్కేప్: డార్క్ మేజ్ చిహ్నం"
+        "statusNote": "అనువర్తన వివరాలను వీక్షించండి, ఆపై దానిని Google Play నుండి ఇన్‌స్టాల్ చేయండి. ఈ యాప్ కోసం వెబ్ డెమో అందించబడలేదు.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze చిహ్నం",
+        "detailCta": "యాప్ వివరాలను వీక్షించండి"
       }
     },
     "status": {
@@ -17601,18 +17738,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "షార్ట్ ఐడియాస్",
       "title": "వాటిని ఇలా ప్రయత్నించండి",
       "colorMaster2": {
-        "app": "రంగు మాస్టర్ 2",
-        "title": "\"మీరు ఈ రంగు తేడాను చూస్తే, మీ కళ్ళు పదునుగా ఉంటాయి.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"మీరు ఈ బేసి రంగును గుర్తించినట్లయితే, మీ కళ్ళు పదునుగా ఉంటాయి.\"",
         "description": "10 సెకన్ల ఛాలెంజ్‌లో స్నేహితులతో పోటీపడండి."
       },
       "galaxyCode": {
-        "app": "గెలాక్టికోడ్",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"మీ స్నేహితుడికి వారు డీకోడ్ చేయలేని గ్రహాంతర సందేశాన్ని పంపండి.\"",
         "description": "షేర్-కీ హోల్డర్‌లు మాత్రమే డీకోడ్ చేయగల రహస్య సందేశాలను వదిలివేయండి."
       },
       "ufoSignal": {
-        "app": "UFOకి కాల్ చేయండి",
-        "title": "\"మీరు తెల్లవారుజామున UFO బటన్‌ను నొక్కితే ఏమి జరుగుతుంది?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"మీరు తెల్లవారుజామున UFO సిగ్నల్ పంపితే ఏమి జరుగుతుంది?\"",
         "description": "చీకటి గదిలో శబ్దాలు మరియు యానిమేషన్‌ను ఆస్వాదించండి."
       }
     },
@@ -17629,7 +17766,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "నేను ముందుగా ఏ యాప్‌ను ఇన్‌స్టాల్ చేయాలి?",
-        "answer": "ఇది మీ మొదటి సందర్శన అయితే, ముందుగా కలర్ మాస్టర్ 2ని ప్రయత్నించండి. ఇది త్వరగా ఆడవచ్చు మరియు మెరుగైన స్కోర్ కోసం రీప్లే చేయడం సులభం."
+        "answer": "ఇది మీ మొదటి సందర్శన అయితే, ముందుగా Find Odd Color: Color Master 2ని ప్రయత్నించండి. ఇది త్వరగా ఆడవచ్చు మరియు మెరుగైన స్కోర్ కోసం రీప్లే చేయడం సులభం."
       },
       "privateTest": {
         "question": "నేను ప్రైవేట్ టెస్ట్ యాప్‌లలో ఎలా చేరగలను?",
@@ -17640,12 +17777,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM ద్వారా రూపొందించబడింది",
       "lastUpdated": "చివరిగా నవీకరించబడింది: 2026.05.31",
       "googlePlay": "Google Play యాప్‌లు",
-      "colorTest": "రంగు పరీక్ష",
-      "alienText": "ఏలియన్ టెక్స్ట్ జనరేటర్",
-      "ufoApp": "UFO యాప్",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "గోప్యతా విధానం",
       "appAds": "app-ads.txt",
-      "contact": "సంప్రదించండి"
+      "contact": "సంప్రదించండి",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ప్రైవేట్ టెస్టర్ సైన్అప్",
@@ -17666,9 +17804,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "tr-TR": {
     "seo": {
       "title": "NeoKIM Uygulama Laboratuvarı | Ücretsiz Android Mini Uygulamalar",
-      "description": "Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze ve Lucky Card Random Defense için özel testleri ve daha fazla Android mini uygulamasını yükleyin.",
+      "description": "Daha fazla Android mini uygulaması için Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze ve özel testleri yükleyin.",
       "ogTitle": "NeoKIM Uygulama Laboratuvarı | Android Mini Uygulamalar",
-      "ogDescription": "Renkli zorluklar, uzaylı benzeri gizli mesajlar, UFO arama deneyimleri, Laboratuvar Faresi Labirentinden Kaçış: Karanlık Labirent ve hızlı Android eğlencesi için özel testler."
+      "ogDescription": "Tuhaf renkler bulun, uzaylı tarzı gizli metinler oluşturun, eğlenceli UFO sinyalleri gönderin, karanlık labirentlerden kaçın ve hızlı Android eğlencesi için özel testlere katılın."
     },
     "skip": {
       "apps": "Uygulama listesine atla"
@@ -17703,11 +17841,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini uygulama koleksiyonu",
       "title": "NeoKIM Uygulama Laboratuvarı",
       "subtitle": "Hızlı eğlence ve paylaşım için tasarlanmış küçük Android uygulamaları",
-      "description": "Renk mücadeleleri, uzaylı benzeri gizli mesajlar ve UFO arama deneyimleri. Hafifçe yükleyin. Bir dakikadan kısa sürede keyfini çıkarın.",
+      "description": "Tuhaf renkli zorluklar, uzaylı tarzı gizli mesajlar, UFO sinyal oyunları ve karanlık labirentten kaçışlar. Hafifçe yükleyin. Bir dakikadan kısa sürede keyfini çıkarın.",
       "primaryCta": "Öne Çıkan Uygulamayı Yükle",
-      "primaryAria": "Color Master 2'yi Google Play'e yükleyin",
+      "primaryAria": "Find Odd Color: Color Master 2'i Google Play'e yükleyin",
       "secondaryCta": "Uygulamalara Göz Atın",
-      "visualAria": "Color Master 2 simgesi ve renk döşemeleri içeren telefon modeli",
+      "visualAria": "Find Odd Color: Color Master 2 simgesi ve renk döşemelerini içeren telefon maketi",
       "badges": [
         "Ücretsiz Uygulamalar",
         "Android",
@@ -17719,36 +17857,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ÖNE ÇIKAN UYGULAMA",
       "title": "Bugün İlk Bunu Yükleyin",
       "badge": "Öne Çıkanlar",
-      "appName": "Renk Ustası 2",
-      "short": "10 saniyede farklı rengi bulun.",
-      "description": "Tek bir hatanın koşuyu sonlandırdığı, tek yaşamlı, renkli bir bulmaca. Hızlı başlıyor, sonra rekorunuzu kırmak için sizi geri çekiyor.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 saniyede farklı bir renk bulun.",
+      "description": "Tek bir hatanın koşuyu sonlandırdığı, tek ömürlü, tuhaf renkli bir bulmaca. Hızlı başlıyor, sonra rekorunuzu kırmak için sizi geri çekiyor.",
       "primaryCta": "Google Play'e yükleyin",
-      "primaryAria": "Color Master 2'yi Google Play'e yükleyin",
+      "primaryAria": "Find Odd Color: Color Master 2'i Google Play'e yükleyin",
       "secondaryCta": "Uygulamalara Göz Atın",
-      "visualAria": "Color Master 2 renkli kutucuk mücadelesi telefon modeli"
+      "visualAria": "Find Odd Color: Color Master 2 kutucuk mücadelesi telefon maketi"
     },
     "apps": {
       "kicker": "UYGULAMA KATALOĞU",
       "title": "Tüm Uygulamalar",
       "description": "Herkese açık uygulamaları doğrudan yükleyin. Özel testler için önce talebi e-postayla gönderin; Test kullanıcısı erişimi eklendikten sonra Teste Katıl düğmesini kullanın.",
       "colorMaster2": {
-        "name": "Renk Ustası 2",
-        "category": "Renk bulmacası",
-        "tagline": "10 saniyede farklı rengi bulun.",
-        "description": "Bir hata koşuyu bitirir. Kısa, bağımlılık yaratan bir renk algısı mücadelesi.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Garip renkli bulmaca oyunu",
+        "tagline": "10 saniyede farklı bir renk bulun.",
+        "description": "Bir hata koşuyu bitirir. Odaklanma ve renk algısı için kısa, bağımlılık yaratan tek renk mücadelesi.",
         "highlights": [
           "10 saniye sınırı",
           "Tek yaşam koşusu",
           "Liderlik tablosu",
           "Renk körü yardımı"
         ],
-        "primaryCta": "Color Master 2'yi yükleyin",
+        "primaryCta": "Tek Renk Bul uygulamasını yükleyin",
         "detailCta": "Web Demosunu Deneyin",
         "statusNote": "Artık Google Play'de mevcut.",
-        "iconAlt": "Color Master 2 simgesi"
+        "iconAlt": "Find Odd Color: Color Master 2 simgesi"
       },
       "galaxyCode": {
-        "name": "Galaktik kod",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Gizli mesaj uygulaması",
         "tagline": "Şifresini çözmek için bir paylaşım anahtarına ihtiyaç duyan uzaylı benzeri gizli mesajlar oluşturun.",
         "description": "Kendi galaktik dil kurallarınızı oluşturun. Yalnızca paylaşım anahtarınıza sahip kişiler aynı kuralları yeniden oluşturabilir ve orijinal metin bir sunucuya yüklenmez.",
@@ -17761,39 +17899,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Gizli Mesajlar Oluşturun",
         "detailCta": "Web Demosunu Deneyin",
         "statusNote": "Artık Google Play'de mevcut.",
-        "iconAlt": "Galaktik kod simgesi"
+        "iconAlt": "Alien Text Maker: Galaxy Code simgesi"
       },
       "ufoSignal": {
-        "name": "UFO'yu çağırın",
-        "category": "Sürükleyici eğlence uygulaması",
-        "tagline": "Eğlenmek için gizemli bir UFO arama deneyimi.",
-        "description": "Düğmeye basın, sinyali duyun ve uzaydan bir şeyin dinlediğini hayal edin.",
+        "name": "UFO Signal Simulator",
+        "category": "Gizemli sinyal eğlence uygulaması",
+        "tagline": "Eğlenceli bir uzay sinyali gönderin ve UFO havasının tadını çıkarın.",
+        "description": "Uygulamayı açın, sinyal düğmesine basın ve anı küçük bir UFO ritüeli gibi hissettiren ses ve animasyonun keyfini çıkarın.",
         "highlights": [
-          "Etkileşimli düğme",
+          "Sinyal düğmesi",
           "Gizemli sesler",
-          "Animasyon",
+          "Ruh hali animasyonu",
           "Kayıt yok"
         ],
-        "primaryCta": "UFO'yu çağırın",
-        "detailCta": "Web Demosunu Deneyin",
-        "statusNote": "Artık Google Play'de mevcut.",
-        "iconAlt": "UFO simgesini çağırın"
+        "primaryCta": "UFO Signal Simulator'i yükleyin",
+        "detailCta": "Uygulama Ayrıntılarını Görüntüle",
+        "statusNote": "Uygulama ayrıntılarını görüntüleyin ve ardından Google Play'den yükleyin.",
+        "iconAlt": "UFO Signal Simulator simgesi"
       },
       "colorMasterClassic": {
-        "name": "Renk Ustası",
-        "category": "Klasik renk bulmacası",
-        "tagline": "Orijinal renk odaklı zorluk: benzer renkler arasında cevabı bulun.",
-        "description": "Color Master 2'den önceki orijinal sürüm. Önce web'de deneyin, ardından Google Play'den yükleyin.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasik renk duygusu oyunu",
+        "tagline": "Orijinal renk odaklı zorluk: Yanıt rengini hatırlayın ve benzer renklerden seçin.",
+        "description": "Find Odd Color: Color Master 2'den önceki orijinal renk algılama testi. Önce web'de deneyin, ardından Google Play'den yükleyin.",
         "highlights": [
           "Orijinal his",
           "Renk odağı",
           "Hızlı oyun",
           "Şimdi yükle"
         ],
-        "primaryCta": "Color Master'ı yükleyin",
+        "primaryCta": "Color Sense Testini Yükle",
         "detailCta": "Web Demosunu Deneyin",
         "statusNote": "Önce web'de deneyin, ardından Google Play'den yükleyin.",
-        "iconAlt": "Renk Ustası simgesi"
+        "iconAlt": "Color Sense Test: Color Master simgesi"
       },
       "koreanRandomDefense": {
         "name": "Kore Rastgele Savunması: Kuşatma",
@@ -17828,10 +17966,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Şanslı Kart Rastgele Savunma simgesi"
       },
       "darkMaze": {
-        "name": "Laboratuvar Faresi Labirentten Kaçış: Karanlık Labirent",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Labirentten kaçış oyunu yayınlandı",
         "tagline": "Bir laboratuvar faresini karanlık labirentte yönlendirin ve çıkışı bulun.",
-        "description": "28 Mayıs 2026'da Google Play'de yayınlandı. Karanlık labirentte ilerleyin, öğeleri kullanın ve yol kapanmadan kaçın.",
+        "description": "28 Mayıs 2026'da Google Play'de yayınlandı. Karanlık labirentte ilerleyin, eşyaları kullanın ve yol kapanmadan kaçın.",
         "highlights": [
           "28 Mayıs 2026'da yayınlandı",
           "Labirent kaçış",
@@ -17839,8 +17977,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Karanlıkta hayatta kalma"
         ],
         "primaryCta": "Google Play'e yükleyin",
-        "statusNote": "Artık Google Play'de mevcut. Bu uygulama için web demosu sağlanmamıştır.",
-        "iconAlt": "Laboratuvar Faresi Labirentinden Kaçış: Karanlık Labirent simgesi"
+        "statusNote": "Uygulama ayrıntılarını görüntüleyin ve ardından Google Play'den yükleyin. Bu uygulama için web demosu sağlanmamıştır.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze simgesi",
+        "detailCta": "Uygulama Ayrıntılarını Görüntüle"
       }
     },
     "status": {
@@ -17857,18 +17996,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ŞORT FİKİRLERİ",
       "title": "Bunları Böyle Deneyin",
       "colorMaster2": {
-        "app": "Renk Ustası 2",
-        "title": "“Bu renk farkını görüyorsanız gözleriniz keskin demektir.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Bu tuhaf rengi fark ederseniz gözleriniz keskin demektir.\"",
         "description": "10 saniyelik bir mücadelede arkadaşlarınızla yarışın."
       },
       "galaxyCode": {
-        "app": "Galaktik kod",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Arkadaşınıza şifresini çözemeyecekleri bir uzaylı mesajı gönderin.\"",
         "description": "Yalnızca ortak anahtar sahiplerinin çözebileceği gizli mesajlar bırakın."
       },
       "ufoSignal": {
-        "app": "UFO'yu çağırın",
-        "title": "\"Şafak vakti UFO düğmesine basarsanız ne olur?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Şafakta bir UFO sinyali gönderirseniz ne olur?\"",
         "description": "Karanlık bir odada seslerin ve animasyonun keyfini çıkarın."
       }
     },
@@ -17885,7 +18024,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "İlk önce hangi uygulamayı yüklemeliyim?",
-        "answer": "Bu ilk ziyaretinizse önce Color Master 2'yi deneyin. Daha iyi bir skor için oynamak hızlı ve tekrar oynamak kolaydır."
+        "answer": "Bu ilk ziyaretinizse öncelikle Find Odd Color: Color Master 2'i deneyin. Daha iyi bir skor için oynamak hızlı ve tekrar oynamak kolaydır."
       },
       "privateTest": {
         "question": "Özel test uygulamalarına nasıl katılabilirim?",
@@ -17896,12 +18035,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM tarafından yapılmıştır",
       "lastUpdated": "Son güncelleme: 2026.05.31",
       "googlePlay": "Google Play Uygulamaları",
-      "colorTest": "Renk Testi",
-      "alienText": "Uzaylı Metin Oluşturucu",
-      "ufoApp": "UFO Uygulaması",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Gizlilik Politikası",
       "appAds": "app-ads.txt",
-      "contact": "İletişim"
+      "contact": "İletişim",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Özel Test Kullanıcısı Kaydı",
@@ -17922,9 +18062,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pa": {
     "seo": {
       "title": "NeoKIM ਐਪ ਲੈਬ | ਮੁਫ਼ਤ Android ਮਿੰਨੀ ਐਪਸ",
-      "description": "ਕਲਰ ਮਾਸਟਰ 2, ਗਲੈਕਟੀਕੋਡ, ਕਾਲ ਦ ਯੂਐਫਓ, ਲੈਬ ਰੈਟ ਮੇਜ਼ ਏਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼, ਅਤੇ ਲੱਕੀ ਕਾਰਡ ਰੈਂਡਮ ਡਿਫੈਂਸ ਅਤੇ ਹੋਰ ਐਂਡਰੌਇਡ ਮਿੰਨੀ ਐਪਾਂ ਲਈ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ।",
+      "description": "ਹੋਰ Android ਮਿੰਨੀ ਐਪਾਂ ਲਈ Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, ਅਤੇ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ।",
       "ogTitle": "NeoKIM ਐਪ ਲੈਬ | Android ਮਿੰਨੀ ਐਪਾਂ",
-      "ogDescription": "ਰੰਗ ਚੁਣੌਤੀਆਂ, ਏਲੀਅਨ ਵਰਗੇ ਗੁਪਤ ਸੁਨੇਹੇ, ਯੂਐਫਓ ਕਾਲਿੰਗ ਅਨੁਭਵ, ਲੈਬ ਰੈਟ ਮੇਜ਼ ਐਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼, ਅਤੇ ਤੇਜ਼ ਐਂਡਰੌਇਡ ਮਨੋਰੰਜਨ ਲਈ ਨਿੱਜੀ ਟੈਸਟ।"
+      "ogDescription": "ਅਜੀਬ ਰੰਗ ਲੱਭੋ, ਏਲੀਅਨ-ਸ਼ੈਲੀ ਦਾ ਗੁਪਤ ਟੈਕਸਟ ਬਣਾਓ, ਹੁਸ਼ਿਆਰ UFO ਸਿਗਨਲ ਭੇਜੋ, ਹਨੇਰੇ ਮੇਜ਼ ਤੋਂ ਬਚੋ, ਅਤੇ ਤੇਜ਼ Android ਮਜ਼ੇ ਲਈ ਨਿੱਜੀ ਟੈਸਟਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ।"
     },
     "skip": {
       "apps": "ਐਪ ਸੂਚੀ 'ਤੇ ਜਾਓ"
@@ -17959,11 +18099,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android ਮਿਨੀ ਐਪ ਸੰਗ੍ਰਹਿ",
       "title": "NeoKIM ਐਪ ਲੈਬ",
       "subtitle": "ਛੋਟੀਆਂ Android ਐਪਾਂ ਤੇਜ਼ ਮਨੋਰੰਜਨ ਅਤੇ ਸਾਂਝਾ ਕਰਨ ਲਈ ਬਣਾਈਆਂ ਗਈਆਂ ਹਨ",
-      "description": "ਰੰਗ ਦੀਆਂ ਚੁਣੌਤੀਆਂ, ਪਰਦੇਸੀ ਵਰਗੇ ਗੁਪਤ ਸੰਦੇਸ਼, ਅਤੇ UFO ਕਾਲਿੰਗ ਅਨੁਭਵ। ਹਲਕਾ ਇੰਸਟਾਲ ਕਰੋ. ਇੱਕ ਮਿੰਟ ਵਿੱਚ ਆਨੰਦ ਲਓ।",
+      "description": "ਅਜੀਬ-ਰੰਗ ਦੀਆਂ ਚੁਣੌਤੀਆਂ, ਏਲੀਅਨ-ਸ਼ੈਲੀ ਦੇ ਗੁਪਤ ਸੁਨੇਹੇ, ਯੂਐਫਓ ਸਿਗਨਲ ਪਲੇ, ਅਤੇ ਡਾਰਕ ਮੇਜ਼ ਐਸਕੇਪ। ਹਲਕਾ ਇੰਸਟਾਲ ਕਰੋ. ਇੱਕ ਮਿੰਟ ਵਿੱਚ ਆਨੰਦ ਲਓ।",
       "primaryCta": "ਫੀਚਰਡ ਐਪ ਸਥਾਪਿਤ ਕਰੋ",
-      "primaryAria": "Google Play 'ਤੇ ਕਲਰ ਮਾਸਟਰ 2 ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ",
+      "primaryAria": "Find Odd Color: Color Master 2 ਨੂੰ Google Play 'ਤੇ ਸਥਾਪਿਤ ਕਰੋ",
       "secondaryCta": "ਐਪਸ ਬ੍ਰਾਊਜ਼ ਕਰੋ",
-      "visualAria": "ਕਲਰ ਮਾਸਟਰ 2 ਆਈਕਨ ਅਤੇ ਰੰਗ ਟਾਈਲਾਂ ਦੇ ਨਾਲ ਫ਼ੋਨ ਮੌਕਅੱਪ",
+      "visualAria": "Find Odd Color: Color Master 2 ਆਈਕਨ ਅਤੇ ਰੰਗ ਦੀਆਂ ਟਾਈਲਾਂ ਨਾਲ ਫ਼ੋਨ ਮੌਕਅੱਪ",
       "badges": [
         "ਮੁਫ਼ਤ ਐਪਸ",
         "Android",
@@ -17975,81 +18115,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ਫੀਚਰਡ ਐਪ",
       "title": "ਅੱਜ ਹੀ ਇਸਨੂੰ ਪਹਿਲਾਂ ਸਥਾਪਿਤ ਕਰੋ",
       "badge": "ਫੀਚਰਡ",
-      "appName": "ਰੰਗ ਮਾਸਟਰ 2",
-      "short": "10 ਸਕਿੰਟਾਂ ਵਿੱਚ ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ।",
-      "description": "ਇੱਕ-ਜੀਵਨ ਰੰਗ ਦੀ ਬੁਝਾਰਤ ਜਿੱਥੇ ਇੱਕ ਗਲਤੀ ਦੌੜ ਨੂੰ ਖਤਮ ਕਰਦੀ ਹੈ। ਇਹ ਤੇਜ਼ੀ ਨਾਲ ਸ਼ੁਰੂ ਹੁੰਦਾ ਹੈ, ਫਿਰ ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਨੂੰ ਹਰਾਉਣ ਲਈ ਤੁਹਾਨੂੰ ਪਿੱਛੇ ਖਿੱਚਦਾ ਰਹਿੰਦਾ ਹੈ।",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 ਸਕਿੰਟਾਂ ਵਿੱਚ ਇੱਕ ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ।",
+      "description": "ਇੱਕ-ਜੀਵਨ ਅਜੀਬ-ਰੰਗੀ ਬੁਝਾਰਤ ਜਿੱਥੇ ਇੱਕ ਗਲਤੀ ਦੌੜ ਨੂੰ ਖਤਮ ਕਰਦੀ ਹੈ। ਇਹ ਤੇਜ਼ੀ ਨਾਲ ਸ਼ੁਰੂ ਹੁੰਦਾ ਹੈ, ਫਿਰ ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਨੂੰ ਹਰਾਉਣ ਲਈ ਤੁਹਾਨੂੰ ਪਿੱਛੇ ਖਿੱਚਦਾ ਰਹਿੰਦਾ ਹੈ।",
       "primaryCta": "Google Play 'ਤੇ ਸਥਾਪਿਤ ਕਰੋ",
-      "primaryAria": "Google Play 'ਤੇ ਕਲਰ ਮਾਸਟਰ 2 ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ",
+      "primaryAria": "Find Odd Color: Color Master 2 ਨੂੰ Google Play 'ਤੇ ਸਥਾਪਿਤ ਕਰੋ",
       "secondaryCta": "ਐਪਸ ਬ੍ਰਾਊਜ਼ ਕਰੋ",
-      "visualAria": "ਕਲਰ ਮਾਸਟਰ 2 ਕਲਰ ਟਾਈਲ ਚੈਲੇਂਜ ਫੋਨ ਮੋਕਅੱਪ"
+      "visualAria": "Find Odd Color: Color Master 2 ਟਾਇਲ ਚੈਲੇਂਜ ਫ਼ੋਨ ਮੋਕਅੱਪ"
     },
     "apps": {
       "kicker": "ਐਪ ਕੈਟਾਲਾਗ",
       "title": "ਸਾਰੀਆਂ ਐਪਾਂ",
       "description": "ਜਨਤਕ ਐਪਾਂ ਨੂੰ ਸਿੱਧਾ ਸਥਾਪਿਤ ਕਰੋ। ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਾਂ ਲਈ, ਪਹਿਲਾਂ ਇੱਕ ਬੇਨਤੀ ਈਮੇਲ ਕਰੋ; ਟੈਸਟਰ ਪਹੁੰਚ ਜੋੜਨ ਤੋਂ ਬਾਅਦ, ਟੈਸਟ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ ਬਟਨ ਦੀ ਵਰਤੋਂ ਕਰੋ।",
       "colorMaster2": {
-        "name": "ਰੰਗ ਮਾਸਟਰ 2",
-        "category": "ਰੰਗ ਬੁਝਾਰਤ",
-        "tagline": "10 ਸਕਿੰਟਾਂ ਵਿੱਚ ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ।",
-        "description": "ਇੱਕ ਗਲਤੀ ਦੌੜ ਨੂੰ ਖਤਮ ਕਰ ਦਿੰਦੀ ਹੈ। ਇੱਕ ਛੋਟੀ, ਆਦੀ ਰੰਗ ਧਾਰਨਾ ਚੁਣੌਤੀ।",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "ਅਜੀਬ ਰੰਗ ਦੀ ਬੁਝਾਰਤ ਖੇਡ",
+        "tagline": "10 ਸਕਿੰਟਾਂ ਵਿੱਚ ਇੱਕ ਵੱਖਰਾ ਰੰਗ ਲੱਭੋ।",
+        "description": "ਇੱਕ ਗਲਤੀ ਦੌੜ ਨੂੰ ਖਤਮ ਕਰ ਦਿੰਦੀ ਹੈ। ਫੋਕਸ ਅਤੇ ਰੰਗ ਧਾਰਨਾ ਲਈ ਇੱਕ ਛੋਟੀ, ਨਸ਼ਾ ਕਰਨ ਵਾਲੀ ਅਜੀਬ-ਰੰਗ ਦੀ ਚੁਣੌਤੀ।",
         "highlights": [
           "10-ਸਕਿੰਟ ਦੀ ਸੀਮਾ",
           "ਇਕ-ਜੀਵਨ ਦੌੜ",
           "ਲੀਡਰਬੋਰਡ",
           "ਕਲਰ ਬਲਾਇੰਡ ਸਹਾਇਤਾ"
         ],
-        "primaryCta": "ਕਲਰ ਮਾਸਟਰ 2 ਇੰਸਟਾਲ ਕਰੋ",
+        "primaryCta": "ਅਜੀਬ ਰੰਗ ਲੱਭੋ ਇੰਸਟਾਲ ਕਰੋ",
         "detailCta": "ਵੈੱਬ ਡੈਮੋ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
         "statusNote": "ਹੁਣ Google Play 'ਤੇ ਉਪਲਬਧ ਹੈ।",
-        "iconAlt": "ਕਲਰ ਮਾਸਟਰ 2 ਆਈਕਨ"
+        "iconAlt": "Find Odd Color: Color Master 2 ਪ੍ਰਤੀਕ"
       },
       "galaxyCode": {
-        "name": "ਗਲੈਕਟੀਕੋਡ",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "ਗੁਪਤ ਸੁਨੇਹਾ ਐਪ",
         "tagline": "ਏਲੀਅਨ ਵਰਗੇ ਗੁਪਤ ਸੁਨੇਹੇ ਬਣਾਓ ਜਿਨ੍ਹਾਂ ਨੂੰ ਡੀਕੋਡ ਕਰਨ ਲਈ ਸ਼ੇਅਰ ਕੁੰਜੀ ਦੀ ਲੋੜ ਹੈ।",
         "description": "ਆਪਣੇ ਗੈਲੈਕਟਿਕ ਭਾਸ਼ਾ ਦੇ ਨਿਯਮ ਬਣਾਓ। ਸਿਰਫ਼ ਤੁਹਾਡੀ ਸ਼ੇਅਰ ਕੁੰਜੀ ਵਾਲੇ ਲੋਕ ਹੀ ਉਹੀ ਨਿਯਮ ਦੁਬਾਰਾ ਬਣਾ ਸਕਦੇ ਹਨ, ਅਤੇ ਅਸਲੀ ਟੈਕਸਟ ਨੂੰ ਸਰਵਰ 'ਤੇ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।",
         "highlights": [
           "ਸ਼ੇਅਰ-ਕੁੰਜੀ ਅਧਾਰਤ",
           "ਨਿੱਜੀ ਨਿਯਮ",
-          "SNS- ਤਿਆਰ",
+          "SNS-ਤਿਆਰ",
           "ਕੋਈ ਸਰਵਰ ਅੱਪਲੋਡ ਨਹੀਂ"
         ],
         "primaryCta": "ਗੁਪਤ ਸੁਨੇਹੇ ਬਣਾਓ",
         "detailCta": "ਵੈੱਬ ਡੈਮੋ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
         "statusNote": "ਹੁਣ Google Play 'ਤੇ ਉਪਲਬਧ ਹੈ।",
-        "iconAlt": "ਗਲੈਕਟੀਕੋਡ ਪ੍ਰਤੀਕ"
+        "iconAlt": "Alien Text Maker: Galaxy Code ਪ੍ਰਤੀਕ"
       },
       "ufoSignal": {
-        "name": "UFO ਨੂੰ ਕਾਲ ਕਰੋ",
-        "category": "ਇਮਰਸਿਵ ਮਜ਼ੇਦਾਰ ਐਪ",
-        "tagline": "ਮਨੋਰੰਜਨ ਲਈ ਇੱਕ ਰਹੱਸਮਈ UFO ਕਾਲਿੰਗ ਅਨੁਭਵ।",
-        "description": "ਬਟਨ ਦਬਾਓ, ਸਿਗਨਲ ਸੁਣੋ, ਅਤੇ ਸਪੇਸ ਤੋਂ ਕੁਝ ਸੁਣਨ ਦੀ ਕਲਪਨਾ ਕਰੋ।",
+        "name": "UFO Signal Simulator",
+        "category": "ਰਹੱਸ ਸਿਗਨਲ ਮਨੋਰੰਜਨ ਐਪ",
+        "tagline": "ਇੱਕ ਚੰਚਲ ਸਪੇਸ ਸਿਗਨਲ ਭੇਜੋ ਅਤੇ UFO ਮੂਡ ਦਾ ਅਨੰਦ ਲਓ।",
+        "description": "ਐਪ ਖੋਲ੍ਹੋ, ਸਿਗਨਲ ਬਟਨ ਦਬਾਓ, ਅਤੇ ਧੁਨੀ ਅਤੇ ਐਨੀਮੇਸ਼ਨ ਦਾ ਅਨੰਦ ਲਓ ਜੋ ਪਲ ਨੂੰ ਇੱਕ ਛੋਟੀ UFO ਰਸਮ ਵਾਂਗ ਮਹਿਸੂਸ ਕਰਦੇ ਹਨ।",
         "highlights": [
-          "ਇੰਟਰਐਕਟਿਵ ਬਟਨ",
+          "ਸਿਗਨਲ ਬਟਨ",
           "ਰਹੱਸਮਈ ਆਵਾਜ਼ਾਂ",
-          "ਐਨੀਮੇਸ਼ਨ",
+          "ਮੂਡ ਐਨੀਮੇਸ਼ਨ",
           "ਕੋਈ ਸਾਈਨ-ਅੱਪ ਨਹੀਂ"
         ],
-        "primaryCta": "UFO ਨੂੰ ਕਾਲ ਕਰੋ",
-        "detailCta": "ਵੈੱਬ ਡੈਮੋ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
-        "statusNote": "ਹੁਣ Google Play 'ਤੇ ਉਪਲਬਧ ਹੈ।",
-        "iconAlt": "UFO ਆਈਕਨ ਨੂੰ ਕਾਲ ਕਰੋ"
+        "primaryCta": "UFO Signal Simulator ਨੂੰ ਸਥਾਪਿਤ ਕਰੋ",
+        "detailCta": "ਐਪ ਵੇਰਵੇ ਦੇਖੋ",
+        "statusNote": "ਐਪ ਵੇਰਵੇ ਵੇਖੋ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
+        "iconAlt": "UFO Signal Simulator ਪ੍ਰਤੀਕ"
       },
       "colorMasterClassic": {
-        "name": "ਰੰਗ ਮਾਸਟਰ",
-        "category": "ਕਲਾਸਿਕ ਰੰਗ ਬੁਝਾਰਤ",
-        "tagline": "ਅਸਲ ਰੰਗ-ਫੋਕਸ ਚੁਣੌਤੀ: ਸਮਾਨ ਰੰਗਾਂ ਵਿੱਚ ਜਵਾਬ ਲੱਭੋ।",
-        "description": "ਕਲਰ ਮਾਸਟਰ 2 ਤੋਂ ਪਹਿਲਾਂ ਦਾ ਅਸਲ ਸੰਸਕਰਣ। ਪਹਿਲਾਂ ਇਸਨੂੰ ਵੈੱਬ 'ਤੇ ਅਜ਼ਮਾਓ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
+        "name": "Color Sense Test: Color Master",
+        "category": "ਕਲਾਸਿਕ ਰੰਗ ਭਾਵਨਾ ਵਾਲੀ ਖੇਡ",
+        "tagline": "ਅਸਲ ਰੰਗ-ਫੋਕਸ ਚੁਣੌਤੀ: ਜਵਾਬ ਦਾ ਰੰਗ ਯਾਦ ਰੱਖੋ ਅਤੇ ਇਸ ਨੂੰ ਸਮਾਨ ਰੰਗਾਂ ਵਿੱਚੋਂ ਚੁਣੋ।",
+        "description": "Find Odd Color: Color Master 2 ਤੋਂ ਪਹਿਲਾਂ ਅਸਲ ਰੰਗ ਸੂਝ ਦੀ ਜਾਂਚ। ਇਸਨੂੰ ਪਹਿਲਾਂ ਵੈੱਬ 'ਤੇ ਅਜ਼ਮਾਓ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
         "highlights": [
           "ਅਸਲੀ ਮਹਿਸੂਸ",
           "ਰੰਗ ਫੋਕਸ",
           "ਤੇਜ਼ ਖੇਡੋ",
           "ਹੁਣੇ ਸਥਾਪਿਤ ਕਰੋ"
         ],
-        "primaryCta": "ਕਲਰ ਮਾਸਟਰ ਇੰਸਟਾਲ ਕਰੋ",
+        "primaryCta": "ਕਲਰ ਸੈਂਸ ਟੈਸਟ ਸਥਾਪਿਤ ਕਰੋ",
         "detailCta": "ਵੈੱਬ ਡੈਮੋ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
-        "statusNote": "ਪਹਿਲਾਂ ਇਸਨੂੰ ਵੈੱਬ 'ਤੇ ਅਜ਼ਮਾਓ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
-        "iconAlt": "ਕਲਰ ਮਾਸਟਰ ਆਈਕਨ"
+        "statusNote": "ਇਸਨੂੰ ਪਹਿਲਾਂ ਵੈੱਬ 'ਤੇ ਅਜ਼ਮਾਓ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ।",
+        "iconAlt": "Color Sense Test: Color Master ਪ੍ਰਤੀਕ"
       },
       "koreanRandomDefense": {
         "name": "ਕੋਰੀਅਨ ਬੇਤਰਤੀਬ ਰੱਖਿਆ: ਘੇਰਾਬੰਦੀ",
@@ -18084,19 +18224,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "ਲੱਕੀ ਕਾਰਡ ਰੈਂਡਮ ਡਿਫੈਂਸ ਆਈਕਨ"
       },
       "darkMaze": {
-        "name": "ਲੈਬ ਰੈਟ ਮੇਜ਼ ਏਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "ਰੀਲੀਜ਼ ਕੀਤੀ ਮੇਜ਼ ਏਕੇਪ ਗੇਮ",
         "tagline": "ਹਨੇਰੇ ਭੁਲੇਖੇ ਵਿੱਚੋਂ ਇੱਕ ਲੈਬ ਚੂਹੇ ਦੀ ਅਗਵਾਈ ਕਰੋ ਅਤੇ ਬਾਹਰ ਨਿਕਲਣ ਦਾ ਪਤਾ ਲਗਾਓ।",
-        "description": "28 ਮਈ, 2026 ਨੂੰ Google Play 'ਤੇ ਰਿਲੀਜ਼ ਕੀਤਾ ਗਿਆ। ਰਸਤੇ ਦੇ ਬੰਦ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਗੂੜ੍ਹੇ ਭੁਲੇਖੇ ਵਿੱਚੋਂ ਲੰਘੋ, ਆਈਟਮਾਂ ਦੀ ਵਰਤੋਂ ਕਰੋ ਅਤੇ ਬਚੋ।",
+        "description": "28 ਮਈ, 2026 ਨੂੰ Google Play 'ਤੇ ਰਿਲੀਜ਼ ਕੀਤਾ ਗਿਆ। ਹਨੇਰੇ ਦੇ ਭੁਲੇਖੇ ਵਿੱਚੋਂ ਲੰਘੋ, ਚੀਜ਼ਾਂ ਦੀ ਵਰਤੋਂ ਕਰੋ, ਅਤੇ ਰਸਤਾ ਬੰਦ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਬਚੋ।",
         "highlights": [
           "28 ਮਈ, 2026 ਨੂੰ ਜਾਰੀ ਕੀਤਾ ਗਿਆ",
           "ਭੁਲੇਖੇ ਤੋਂ ਬਚਣਾ",
           "ਆਈਟਮਾਂ",
           "ਹਨੇਰਾ ਬਚਾਅ"
         ],
-        "primaryCta": "Google Play 'ਤੇ ਸਥਾਪਤ ਕਰੋ",
-        "statusNote": "ਹੁਣ Google Play 'ਤੇ ਉਪਲਬਧ ਹੈ। ਇਸ ਐਪ ਲਈ ਕੋਈ ਵੈੱਬ ਡੈਮੋ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।",
-        "iconAlt": "ਲੈਬ ਰੈਟ ਮੇਜ਼ ਐਸਕੇਪ: ਡਾਰਕ ਮੇਜ਼ ਆਈਕਨ"
+        "primaryCta": "Google Play 'ਤੇ ਸਥਾਪਿਤ ਕਰੋ",
+        "statusNote": "ਐਪ ਵੇਰਵੇ ਵੇਖੋ, ਫਿਰ ਇਸਨੂੰ Google Play ਤੋਂ ਸਥਾਪਿਤ ਕਰੋ। ਇਸ ਐਪ ਲਈ ਕੋਈ ਵੈੱਬ ਡੈਮੋ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ਪ੍ਰਤੀਕ",
+        "detailCta": "ਐਪ ਵੇਰਵੇ ਦੇਖੋ"
       }
     },
     "status": {
@@ -18113,18 +18254,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ਛੋਟੇ ਵਿਚਾਰ",
       "title": "ਇਹਨਾਂ ਨੂੰ ਇਸ ਤਰ੍ਹਾਂ ਅਜ਼ਮਾਓ",
       "colorMaster2": {
-        "app": "ਰੰਗ ਮਾਸਟਰ 2",
-        "title": "\"ਜੇ ਤੁਸੀਂ ਰੰਗ ਦਾ ਇਹ ਅੰਤਰ ਦੇਖਦੇ ਹੋ, ਤਾਂ ਤੁਹਾਡੀਆਂ ਅੱਖਾਂ ਤਿੱਖੀਆਂ ਹਨ।\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"ਜੇ ਤੁਸੀਂ ਇਸ ਅਜੀਬ ਰੰਗ ਨੂੰ ਦੇਖਦੇ ਹੋ, ਤਾਂ ਤੁਹਾਡੀਆਂ ਅੱਖਾਂ ਤਿੱਖੀਆਂ ਹਨ.\"",
         "description": "10-ਸਕਿੰਟ ਦੀ ਚੁਣੌਤੀ ਵਿੱਚ ਦੋਸਤਾਂ ਨਾਲ ਮੁਕਾਬਲਾ ਕਰੋ।"
       },
       "galaxyCode": {
-        "app": "ਗਲੈਕਟੀਕੋਡ",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਇੱਕ ਏਲੀਅਨ ਸੁਨੇਹਾ ਭੇਜੋ ਜੋ ਉਹ ਡੀਕੋਡ ਨਹੀਂ ਕਰ ਸਕਦਾ।\"",
         "description": "ਗੁਪਤ ਸੁਨੇਹੇ ਛੱਡੋ ਜੋ ਸਿਰਫ਼ ਸ਼ੇਅਰ-ਕੁੰਜੀ ਧਾਰਕ ਹੀ ਡੀਕੋਡ ਕਰ ਸਕਦੇ ਹਨ।"
       },
       "ufoSignal": {
-        "app": "UFO ਨੂੰ ਕਾਲ ਕਰੋ",
-        "title": "\"ਜੇ ਤੁਸੀਂ ਸਵੇਰ ਵੇਲੇ UFO ਬਟਨ ਦਬਾਉਂਦੇ ਹੋ ਤਾਂ ਕੀ ਹੁੰਦਾ ਹੈ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"ਜੇ ਤੁਸੀਂ ਸਵੇਰ ਵੇਲੇ UFO ਸਿਗਨਲ ਭੇਜਦੇ ਹੋ ਤਾਂ ਕੀ ਹੁੰਦਾ ਹੈ?\"",
         "description": "ਇੱਕ ਹਨੇਰੇ ਕਮਰੇ ਵਿੱਚ ਆਵਾਜ਼ਾਂ ਅਤੇ ਐਨੀਮੇਸ਼ਨ ਦਾ ਅਨੰਦ ਲਓ।"
       }
     },
@@ -18141,7 +18282,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "ਮੈਨੂੰ ਪਹਿਲਾਂ ਕਿਹੜੀ ਐਪ ਸਥਾਪਤ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ?",
-        "answer": "ਜੇਕਰ ਇਹ ਤੁਹਾਡੀ ਪਹਿਲੀ ਫੇਰੀ ਹੈ, ਤਾਂ ਪਹਿਲਾਂ ਕਲਰ ਮਾਸਟਰ 2 ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਇਹ ਖੇਡਣਾ ਤੇਜ਼ ਹੈ ਅਤੇ ਬਿਹਤਰ ਸਕੋਰ ਲਈ ਦੁਬਾਰਾ ਚਲਾਉਣਾ ਆਸਾਨ ਹੈ।"
+        "answer": "ਜੇਕਰ ਇਹ ਤੁਹਾਡੀ ਪਹਿਲੀ ਫੇਰੀ ਹੈ, ਤਾਂ ਪਹਿਲਾਂ Find Odd Color: Color Master 2 ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਇਹ ਖੇਡਣਾ ਤੇਜ਼ ਹੈ ਅਤੇ ਬਿਹਤਰ ਸਕੋਰ ਲਈ ਦੁਬਾਰਾ ਚਲਾਉਣਾ ਆਸਾਨ ਹੈ।"
       },
       "privateTest": {
         "question": "ਮੈਂ ਪ੍ਰਾਈਵੇਟ ਟੈਸਟ ਐਪਸ ਵਿੱਚ ਕਿਵੇਂ ਸ਼ਾਮਲ ਹੋਵਾਂ?",
@@ -18152,12 +18293,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM ਦੁਆਰਾ ਬਣਾਇਆ ਗਿਆ",
       "lastUpdated": "ਆਖਰੀ ਅੱਪਡੇਟ: 2026.05.31",
       "googlePlay": "Google Play ਐਪਾਂ",
-      "colorTest": "ਰੰਗ ਟੈਸਟ",
-      "alienText": "ਏਲੀਅਨ ਟੈਕਸਟ ਜਨਰੇਟਰ",
-      "ufoApp": "UFO ਐਪ",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "ਗੋਪਨੀਯਤਾ ਨੀਤੀ",
       "appAds": "app-ads.txt",
-      "contact": "ਸੰਪਰਕ ਕਰੋ"
+      "contact": "ਸੰਪਰਕ ਕਰੋ",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ਪ੍ਰਾਈਵੇਟ ਟੈਸਟਰ ਸਾਈਨਅੱਪ",
@@ -18178,9 +18320,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
+      "description": "Find Odd Color: Color Master 2، Alien Text Maker: Galaxy Code، UFO Signal Simulator، Color Sense Test: Color Master، Lab Rat Maze Escape: Dark Maze و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
+      "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18215,11 +18357,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "مجموعه برنامه های کوچک Android",
       "title": "آزمایشگاه برنامه NeoKIM",
       "subtitle": "برنامه های کوچک Android که برای سرگرمی و اشتراک گذاری سریع ساخته شده اند",
-      "description": "چالش های رنگی، پیام های مخفی بیگانه مانند، و تجربه تماس با بشقاب پرنده. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
+      "description": "چالش‌های رنگ‌های عجیب، پیام‌های مخفی به سبک بیگانه، پخش سیگنال بشقاب پرنده، و فرار از پیچ و خم تاریک. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
       "primaryCta": "برنامه ویژه را نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن با نماد Color Master 2 و کاشی های رنگی",
+      "visualAria": "ماکت تلفن با نماد Find Odd Color: Color Master 2 و کاشی های رنگی",
       "badges": [
         "برنامه های رایگان",
         "Android",
@@ -18231,36 +18373,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "برنامه ویژه",
       "title": "This First Today را نصب کنید",
       "badge": "برجسته",
-      "appName": "Color Master 2",
-      "short": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-      "description": "یک پازل رنگی تک زندگی که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+      "description": "یک پازل با رنگ های عجیب و غریب که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
       "primaryCta": "روی Google Play نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن چالش کاشی رنگی Color Master 2"
+      "visualAria": "ماکت تلفن چالش کاشی Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "کاتالوگ برنامه",
       "title": "همه برنامه ها",
       "description": "برنامه های عمومی را مستقیماً نصب کنید. برای تست های خصوصی، ابتدا یک درخواست را ایمیل کنید. پس از اضافه شدن دسترسی تستر، از دکمه Join Test استفاده کنید.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "پازل رنگ",
-        "tagline": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور درک رنگ.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "بازی پازل با رنگ های عجیب و غریب",
+        "tagline": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور با رنگ های عجیب و غریب برای تمرکز و درک رنگ.",
         "highlights": [
           "محدودیت 10 ثانیه",
           "دویدن یک عمر",
           "تابلوی امتیازات",
           "کمک کوررنگی"
         ],
-        "primaryCta": "Color Master 2 را نصب کنید",
+        "primaryCta": "Find Odd Color را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد Color Master 2"
+        "iconAlt": "نماد Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "کهکشان",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -18273,39 +18415,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد کهکشان"
+        "iconAlt": "نماد Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "با بشقاب پرنده تماس بگیرید",
-        "category": "برنامه سرگرم کننده همهجانبه",
-        "tagline": "تجربه ای مرموز از تماس با بشقاب پرنده برای سرگرمی.",
-        "description": "دکمه را فشار دهید، سیگنال را بشنوید و چیزی را تصور کنید که از فضا گوش می دهد.",
+        "name": "UFO Signal Simulator",
+        "category": "برنامه سرگرمی سیگنال رمز و راز",
+        "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
+        "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
         "highlights": [
-          "دکمه تعاملی",
+          "دکمه سیگنال",
           "صداهای رازآلود",
-          "انیمیشن",
+          "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "با بشقاب پرنده تماس بگیرید",
-        "detailCta": "وب دمو را امتحان کنید",
-        "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "با نماد بشقاب پرنده تماس بگیرید"
+        "primaryCta": "UFO Signal Simulator را نصب کنید",
+        "detailCta": "مشاهده جزئیات برنامه",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
+        "iconAlt": "نماد UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "استاد رنگ",
-        "category": "پازل رنگ کلاسیک",
-        "tagline": "چالش اصلی تمرکز رنگ: پاسخ را در میان رنگ های مشابه پیدا کنید.",
-        "description": "نسخه اصلی قبل از Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "name": "Color Sense Test: Color Master",
+        "category": "بازی کلاسیک حس رنگ",
+        "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
+        "description": "تست حس رنگ اصلی قبل از Find Odd Color: Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "Color Master را نصب کنید",
+        "primaryCta": "تست حس رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد Master Color"
+        "iconAlt": "نماد Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای: محاصره",
@@ -18343,16 +18485,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "بازی فرار از پیچ و خم منتشر شد",
         "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
-        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
+        "description": "در Google Play در 28 مه 2026 منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
           "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
           "بقای تاریک"
         ],
-        "primaryCta": "در گوگل پلی نصب کنید",
-        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
-        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
+        "primaryCta": "روی Google Play نصب کنید",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "نماد Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "مشاهده جزئیات برنامه"
       }
     },
     "status": {
@@ -18369,18 +18512,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ایده های کوتاه",
       "title": "آنها را اینگونه امتحان کنید",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"اگر این تفاوت رنگ را می بینید، چشمان شما تیزبین است.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"اگر این رنگ عجیب را تشخیص دهید، چشمان شما تیزبین است.\"",
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "کهکشان",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "با بشقاب پرنده تماس بگیرید",
-        "title": "\"اگر دکمه بشقاب پرنده را در سحرگاه فشار دهید چه اتفاقی می افتد؟\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
     },
@@ -18397,7 +18540,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "کدام برنامه را ابتدا نصب کنم؟",
-        "answer": "اگر این اولین بازدید شماست، ابتدا Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
+        "answer": "اگر این اولین بازدید شماست، ابتدا Find Odd Color: Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
       },
       "privateTest": {
         "question": "چگونه به برنامه های تست خصوصی بپیوندم؟",
@@ -18408,12 +18551,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "ساخته شده توسط NeoKIM",
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
-      "colorTest": "تست رنگ",
-      "alienText": "مولد متن بیگانه",
-      "ufoApp": "اپلیکیشن UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
-      "contact": "تماس بگیرید"
+      "contact": "تماس بگیرید",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ثبت نام تستر خصوصی",
@@ -18434,9 +18578,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-AE": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
+      "description": "Find Odd Color: Color Master 2، Alien Text Maker: Galaxy Code، UFO Signal Simulator، Color Sense Test: Color Master، Lab Rat Maze Escape: Dark Maze و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
+      "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18471,11 +18615,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "مجموعه برنامه های کوچک Android",
       "title": "آزمایشگاه برنامه NeoKIM",
       "subtitle": "برنامه های کوچک Android که برای سرگرمی و اشتراک گذاری سریع ساخته شده اند",
-      "description": "چالش های رنگی، پیام های مخفی بیگانه مانند، و تجربه تماس با بشقاب پرنده. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
+      "description": "چالش‌های رنگ‌های عجیب، پیام‌های مخفی به سبک بیگانه، پخش سیگنال بشقاب پرنده، و فرار از پیچ و خم تاریک. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
       "primaryCta": "برنامه ویژه را نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن با نماد Color Master 2 و کاشی های رنگی",
+      "visualAria": "ماکت تلفن با نماد Find Odd Color: Color Master 2 و کاشی های رنگی",
       "badges": [
         "برنامه های رایگان",
         "Android",
@@ -18487,36 +18631,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "برنامه ویژه",
       "title": "This First Today را نصب کنید",
       "badge": "برجسته",
-      "appName": "Color Master 2",
-      "short": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-      "description": "یک پازل رنگی تک زندگی که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+      "description": "یک پازل با رنگ های عجیب و غریب که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
       "primaryCta": "روی Google Play نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن چالش کاشی رنگی Color Master 2"
+      "visualAria": "ماکت تلفن چالش کاشی Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "کاتالوگ برنامه",
       "title": "همه برنامه ها",
       "description": "برنامه های عمومی را مستقیماً نصب کنید. برای تست های خصوصی، ابتدا یک درخواست را ایمیل کنید. پس از اضافه شدن دسترسی تستر، از دکمه Join Test استفاده کنید.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "پازل رنگ",
-        "tagline": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور درک رنگ.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "بازی پازل با رنگ های عجیب و غریب",
+        "tagline": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور با رنگ های عجیب و غریب برای تمرکز و درک رنگ.",
         "highlights": [
           "محدودیت 10 ثانیه",
           "دویدن یک عمر",
           "تابلوی امتیازات",
           "کمک کوررنگی"
         ],
-        "primaryCta": "Color Master 2 را نصب کنید",
+        "primaryCta": "Find Odd Color را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد Color Master 2"
+        "iconAlt": "نماد Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "کهکشان",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -18529,39 +18673,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد کهکشان"
+        "iconAlt": "نماد Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "با بشقاب پرنده تماس بگیرید",
-        "category": "برنامه سرگرم کننده همهجانبه",
-        "tagline": "تجربه ای مرموز از تماس با بشقاب پرنده برای سرگرمی.",
-        "description": "دکمه را فشار دهید، سیگنال را بشنوید و چیزی را تصور کنید که از فضا گوش می دهد.",
+        "name": "UFO Signal Simulator",
+        "category": "برنامه سرگرمی سیگنال رمز و راز",
+        "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
+        "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
         "highlights": [
-          "دکمه تعاملی",
+          "دکمه سیگنال",
           "صداهای رازآلود",
-          "انیمیشن",
+          "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "با بشقاب پرنده تماس بگیرید",
-        "detailCta": "وب دمو را امتحان کنید",
-        "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "با نماد بشقاب پرنده تماس بگیرید"
+        "primaryCta": "UFO Signal Simulator را نصب کنید",
+        "detailCta": "مشاهده جزئیات برنامه",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
+        "iconAlt": "نماد UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "استاد رنگ",
-        "category": "پازل رنگ کلاسیک",
-        "tagline": "چالش اصلی تمرکز رنگ: پاسخ را در میان رنگ های مشابه پیدا کنید.",
-        "description": "نسخه اصلی قبل از Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "name": "Color Sense Test: Color Master",
+        "category": "بازی کلاسیک حس رنگ",
+        "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
+        "description": "تست حس رنگ اصلی قبل از Find Odd Color: Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "Color Master را نصب کنید",
+        "primaryCta": "تست حس رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد Master Color"
+        "iconAlt": "نماد Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای: محاصره",
@@ -18599,16 +18743,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "بازی فرار از پیچ و خم منتشر شد",
         "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
-        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
+        "description": "در Google Play در 28 مه 2026 منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
           "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
           "بقای تاریک"
         ],
-        "primaryCta": "در گوگل پلی نصب کنید",
-        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
-        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
+        "primaryCta": "روی Google Play نصب کنید",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "نماد Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "مشاهده جزئیات برنامه"
       }
     },
     "status": {
@@ -18625,18 +18770,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ایده های کوتاه",
       "title": "آنها را اینگونه امتحان کنید",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"اگر این تفاوت رنگ را می بینید، چشمان شما تیزبین است.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"اگر این رنگ عجیب را تشخیص دهید، چشمان شما تیزبین است.\"",
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "کهکشان",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "با بشقاب پرنده تماس بگیرید",
-        "title": "\"اگر دکمه بشقاب پرنده را در سحرگاه فشار دهید چه اتفاقی می افتد؟\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
     },
@@ -18653,7 +18798,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "کدام برنامه را ابتدا نصب کنم؟",
-        "answer": "اگر این اولین بازدید شماست، ابتدا Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
+        "answer": "اگر این اولین بازدید شماست، ابتدا Find Odd Color: Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
       },
       "privateTest": {
         "question": "چگونه به برنامه های تست خصوصی بپیوندم؟",
@@ -18664,12 +18809,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "ساخته شده توسط NeoKIM",
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
-      "colorTest": "تست رنگ",
-      "alienText": "مولد متن بیگانه",
-      "ufoApp": "اپلیکیشن UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
-      "contact": "تماس بگیرید"
+      "contact": "تماس بگیرید",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ثبت نام تستر خصوصی",
@@ -18690,9 +18836,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-AF": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
+      "description": "Find Odd Color: Color Master 2، Alien Text Maker: Galaxy Code، UFO Signal Simulator، Color Sense Test: Color Master، Lab Rat Maze Escape: Dark Maze و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
+      "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18727,11 +18873,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "مجموعه برنامه های کوچک Android",
       "title": "آزمایشگاه برنامه NeoKIM",
       "subtitle": "برنامه های کوچک Android که برای سرگرمی و اشتراک گذاری سریع ساخته شده اند",
-      "description": "چالش های رنگی، پیام های مخفی بیگانه مانند، و تجربه تماس با بشقاب پرنده. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
+      "description": "چالش‌های رنگ‌های عجیب، پیام‌های مخفی به سبک بیگانه، پخش سیگنال بشقاب پرنده، و فرار از پیچ و خم تاریک. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
       "primaryCta": "برنامه ویژه را نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن با نماد Color Master 2 و کاشی های رنگی",
+      "visualAria": "ماکت تلفن با نماد Find Odd Color: Color Master 2 و کاشی های رنگی",
       "badges": [
         "برنامه های رایگان",
         "Android",
@@ -18743,36 +18889,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "برنامه ویژه",
       "title": "This First Today را نصب کنید",
       "badge": "برجسته",
-      "appName": "Color Master 2",
-      "short": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-      "description": "یک پازل رنگی تک زندگی که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+      "description": "یک پازل با رنگ های عجیب و غریب که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
       "primaryCta": "روی Google Play نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن چالش کاشی رنگی Color Master 2"
+      "visualAria": "ماکت تلفن چالش کاشی Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "کاتالوگ برنامه",
       "title": "همه برنامه ها",
       "description": "برنامه های عمومی را مستقیماً نصب کنید. برای تست های خصوصی، ابتدا یک درخواست را ایمیل کنید. پس از اضافه شدن دسترسی تستر، از دکمه Join Test استفاده کنید.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "پازل رنگ",
-        "tagline": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور درک رنگ.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "بازی پازل با رنگ های عجیب و غریب",
+        "tagline": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور با رنگ های عجیب و غریب برای تمرکز و درک رنگ.",
         "highlights": [
           "محدودیت 10 ثانیه",
           "دویدن یک عمر",
           "تابلوی امتیازات",
           "کمک کوررنگی"
         ],
-        "primaryCta": "Color Master 2 را نصب کنید",
+        "primaryCta": "Find Odd Color را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد Color Master 2"
+        "iconAlt": "نماد Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "کهکشان",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -18785,39 +18931,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد کهکشان"
+        "iconAlt": "نماد Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "با بشقاب پرنده تماس بگیرید",
-        "category": "برنامه سرگرم کننده همهجانبه",
-        "tagline": "تجربه ای مرموز از تماس با بشقاب پرنده برای سرگرمی.",
-        "description": "دکمه را فشار دهید، سیگنال را بشنوید و چیزی را تصور کنید که از فضا گوش می دهد.",
+        "name": "UFO Signal Simulator",
+        "category": "برنامه سرگرمی سیگنال رمز و راز",
+        "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
+        "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
         "highlights": [
-          "دکمه تعاملی",
+          "دکمه سیگنال",
           "صداهای رازآلود",
-          "انیمیشن",
+          "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "با بشقاب پرنده تماس بگیرید",
-        "detailCta": "وب دمو را امتحان کنید",
-        "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "با نماد بشقاب پرنده تماس بگیرید"
+        "primaryCta": "UFO Signal Simulator را نصب کنید",
+        "detailCta": "مشاهده جزئیات برنامه",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
+        "iconAlt": "نماد UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "استاد رنگ",
-        "category": "پازل رنگ کلاسیک",
-        "tagline": "چالش اصلی تمرکز رنگ: پاسخ را در میان رنگ های مشابه پیدا کنید.",
-        "description": "نسخه اصلی قبل از Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "name": "Color Sense Test: Color Master",
+        "category": "بازی کلاسیک حس رنگ",
+        "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
+        "description": "تست حس رنگ اصلی قبل از Find Odd Color: Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "Color Master را نصب کنید",
+        "primaryCta": "تست حس رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد Master Color"
+        "iconAlt": "نماد Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای: محاصره",
@@ -18855,16 +19001,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "بازی فرار از پیچ و خم منتشر شد",
         "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
-        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
+        "description": "در Google Play در 28 مه 2026 منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
           "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
           "بقای تاریک"
         ],
-        "primaryCta": "در گوگل پلی نصب کنید",
-        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
-        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
+        "primaryCta": "روی Google Play نصب کنید",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "نماد Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "مشاهده جزئیات برنامه"
       }
     },
     "status": {
@@ -18881,18 +19028,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ایده های کوتاه",
       "title": "آنها را اینگونه امتحان کنید",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"اگر این تفاوت رنگ را می بینید، چشمان شما تیزبین است.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"اگر این رنگ عجیب را تشخیص دهید، چشمان شما تیزبین است.\"",
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "کهکشان",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "با بشقاب پرنده تماس بگیرید",
-        "title": "\"اگر دکمه بشقاب پرنده را در سحرگاه فشار دهید چه اتفاقی می افتد؟\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
     },
@@ -18909,7 +19056,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "کدام برنامه را ابتدا نصب کنم؟",
-        "answer": "اگر این اولین بازدید شماست، ابتدا Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
+        "answer": "اگر این اولین بازدید شماست، ابتدا Find Odd Color: Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
       },
       "privateTest": {
         "question": "چگونه به برنامه های تست خصوصی بپیوندم؟",
@@ -18920,12 +19067,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "ساخته شده توسط NeoKIM",
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
-      "colorTest": "تست رنگ",
-      "alienText": "مولد متن بیگانه",
-      "ufoApp": "اپلیکیشن UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
-      "contact": "تماس بگیرید"
+      "contact": "تماس بگیرید",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ثبت نام تستر خصوصی",
@@ -18946,9 +19094,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fa-IR": {
     "seo": {
       "title": "آزمایشگاه برنامه NeoKIM | برنامه های رایگان Android Mini",
-      "description": "Color Master 2، Galacticode، Call the UFO، Lab Rat Maze Escape: Dark Maze، و تست‌های خصوصی برای دفاع تصادفی کارت شانس و برنامه‌های کوچک اندروید را نصب کنید.",
+      "description": "Find Odd Color: Color Master 2، Alien Text Maker: Galaxy Code، UFO Signal Simulator، Color Sense Test: Color Master، Lab Rat Maze Escape: Dark Maze و آزمایش های خصوصی را برای برنامه های کوچک Android نصب کنید.",
       "ogTitle": "آزمایشگاه برنامه NeoKIM | برنامه های کوچک Android",
-      "ogDescription": "چالش های رنگی، پیام های مخفی بیگانه مانند، تجربه تماس با بشقاب پرنده، Lab Rat Maze Escape: Dark Maze، و تست های خصوصی برای سرگرمی سریع اندروید."
+      "ogDescription": "رنگ‌های عجیب و غریب را پیدا کنید، متن‌های مخفی به سبک بیگانه بسازید، سیگنال‌های بشقاب پرنده شوخ بفرستید، از پیچ و خم‌های تاریک فرار کنید و برای سرگرمی سریع Android به آزمایش‌های خصوصی بپیوندید."
     },
     "skip": {
       "apps": "پرش به لیست برنامه"
@@ -18983,11 +19131,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "مجموعه برنامه های کوچک Android",
       "title": "آزمایشگاه برنامه NeoKIM",
       "subtitle": "برنامه های کوچک Android که برای سرگرمی و اشتراک گذاری سریع ساخته شده اند",
-      "description": "چالش های رنگی، پیام های مخفی بیگانه مانند، و تجربه تماس با بشقاب پرنده. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
+      "description": "چالش‌های رنگ‌های عجیب، پیام‌های مخفی به سبک بیگانه، پخش سیگنال بشقاب پرنده، و فرار از پیچ و خم تاریک. به آرامی نصب کنید. در کمتر از یک دقیقه لذت ببرید",
       "primaryCta": "برنامه ویژه را نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن با نماد Color Master 2 و کاشی های رنگی",
+      "visualAria": "ماکت تلفن با نماد Find Odd Color: Color Master 2 و کاشی های رنگی",
       "badges": [
         "برنامه های رایگان",
         "Android",
@@ -18999,36 +19147,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "برنامه ویژه",
       "title": "This First Today را نصب کنید",
       "badge": "برجسته",
-      "appName": "Color Master 2",
-      "short": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-      "description": "یک پازل رنگی تک زندگی که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+      "description": "یک پازل با رنگ های عجیب و غریب که در آن یک اشتباه به دویدن پایان می دهد. سریع شروع می شود، سپس شما را به عقب می کشد تا رکورد شما را شکست دهد.",
       "primaryCta": "روی Google Play نصب کنید",
-      "primaryAria": "Color Master 2 را روی Google Play نصب کنید",
+      "primaryAria": "نصب Find Odd Color: Color Master 2 در Google Play",
       "secondaryCta": "مرور برنامه ها",
-      "visualAria": "ماکت تلفن چالش کاشی رنگی Color Master 2"
+      "visualAria": "ماکت تلفن چالش کاشی Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "کاتالوگ برنامه",
       "title": "همه برنامه ها",
       "description": "برنامه های عمومی را مستقیماً نصب کنید. برای تست های خصوصی، ابتدا یک درخواست را ایمیل کنید. پس از اضافه شدن دسترسی تستر، از دکمه Join Test استفاده کنید.",
       "colorMaster2": {
-        "name": "Color Master 2",
-        "category": "پازل رنگ",
-        "tagline": "رنگ های مختلف را در 10 ثانیه پیدا کنید.",
-        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور درک رنگ.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "بازی پازل با رنگ های عجیب و غریب",
+        "tagline": "یک رنگ متفاوت را در 10 ثانیه پیدا کنید.",
+        "description": "یک اشتباه به دویدن پایان می دهد. یک چالش کوتاه و اعتیاد آور با رنگ های عجیب و غریب برای تمرکز و درک رنگ.",
         "highlights": [
           "محدودیت 10 ثانیه",
           "دویدن یک عمر",
           "تابلوی امتیازات",
           "کمک کوررنگی"
         ],
-        "primaryCta": "Color Master 2 را نصب کنید",
+        "primaryCta": "Find Odd Color را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد Color Master 2"
+        "iconAlt": "نماد Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "کهکشان",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "اپلیکیشن پیام مخفی",
         "tagline": "پیام های محرمانه ای شبیه به بیگانه ایجاد کنید که برای رمزگشایی به یک کلید اشتراک نیاز دارند.",
         "description": "قوانین زبان کهکشانی خود را ایجاد کنید. فقط افرادی که کلید اشتراک شما را دارند می توانند همان قوانین را دوباره ایجاد کنند و متن اصلی در سرور آپلود نمی شود.",
@@ -19041,39 +19189,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "ایجاد پیام های مخفی",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "نماد کهکشان"
+        "iconAlt": "نماد Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "با بشقاب پرنده تماس بگیرید",
-        "category": "برنامه سرگرم کننده همهجانبه",
-        "tagline": "تجربه ای مرموز از تماس با بشقاب پرنده برای سرگرمی.",
-        "description": "دکمه را فشار دهید، سیگنال را بشنوید و چیزی را تصور کنید که از فضا گوش می دهد.",
+        "name": "UFO Signal Simulator",
+        "category": "برنامه سرگرمی سیگنال رمز و راز",
+        "tagline": "یک سیگنال فضای بازیگوش بفرستید و از حال و هوای بشقاب پرنده لذت ببرید.",
+        "description": "برنامه را باز کنید، دکمه سیگنال را فشار دهید و از صدا و انیمیشنی لذت ببرید که لحظه را شبیه به یک مراسم UFO کوچک می کند.",
         "highlights": [
-          "دکمه تعاملی",
+          "دکمه سیگنال",
           "صداهای رازآلود",
-          "انیمیشن",
+          "انیمیشن حالت",
           "بدون ثبت نام"
         ],
-        "primaryCta": "با بشقاب پرنده تماس بگیرید",
-        "detailCta": "وب دمو را امتحان کنید",
-        "statusNote": "اکنون در Google Play موجود است.",
-        "iconAlt": "با نماد بشقاب پرنده تماس بگیرید"
+        "primaryCta": "UFO Signal Simulator را نصب کنید",
+        "detailCta": "مشاهده جزئیات برنامه",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید.",
+        "iconAlt": "نماد UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "استاد رنگ",
-        "category": "پازل رنگ کلاسیک",
-        "tagline": "چالش اصلی تمرکز رنگ: پاسخ را در میان رنگ های مشابه پیدا کنید.",
-        "description": "نسخه اصلی قبل از Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
+        "name": "Color Sense Test: Color Master",
+        "category": "بازی کلاسیک حس رنگ",
+        "tagline": "چالش اصلی تمرکز رنگ: رنگ پاسخ را به خاطر بسپارید و آن را از رنگ های مشابه انتخاب کنید.",
+        "description": "تست حس رنگ اصلی قبل از Find Odd Color: Color Master 2. ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
         "highlights": [
           "احساس اصلی",
           "فوکوس رنگ",
           "پخش سریع",
           "اکنون نصب کنید"
         ],
-        "primaryCta": "Color Master را نصب کنید",
+        "primaryCta": "تست حس رنگ را نصب کنید",
         "detailCta": "وب دمو را امتحان کنید",
         "statusNote": "ابتدا آن را در وب امتحان کنید، سپس آن را از Google Play نصب کنید.",
-        "iconAlt": "نماد Master Color"
+        "iconAlt": "نماد Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "دفاع تصادفی کره ای: محاصره",
@@ -19111,16 +19259,17 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "بازی فرار از پیچ و خم منتشر شد",
         "tagline": "یک موش آزمایشگاهی را در پیچ و خم تاریک هدایت کنید و خروجی را پیدا کنید.",
-        "description": "در 28 مه 2026 در Google Play منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
+        "description": "در Google Play در 28 مه 2026 منتشر شد. در پیچ و خم تاریک حرکت کنید، از موارد استفاده کنید و قبل از بسته شدن مسیر فرار کنید.",
         "highlights": [
           "منتشر شده در 28 می 2026",
           "فرار از پیچ و خم",
           "موارد",
           "بقای تاریک"
         ],
-        "primaryCta": "در گوگل پلی نصب کنید",
-        "statusNote": "اکنون در Google Play موجود است. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
-        "iconAlt": "Lab Rat Maze Escape: نماد ماز تاریک"
+        "primaryCta": "روی Google Play نصب کنید",
+        "statusNote": "جزئیات برنامه را مشاهده کنید، سپس آن را از Google Play نصب کنید. هیچ نسخه آزمایشی وب برای این برنامه ارائه نشده است.",
+        "iconAlt": "نماد Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "مشاهده جزئیات برنامه"
       }
     },
     "status": {
@@ -19137,18 +19286,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "ایده های کوتاه",
       "title": "آنها را اینگونه امتحان کنید",
       "colorMaster2": {
-        "app": "Color Master 2",
-        "title": "\"اگر این تفاوت رنگ را می بینید، چشمان شما تیزبین است.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"اگر این رنگ عجیب را تشخیص دهید، چشمان شما تیزبین است.\"",
         "description": "در یک چالش 10 ثانیه ای با دوستان خود رقابت کنید."
       },
       "galaxyCode": {
-        "app": "کهکشان",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"یک پیام بیگانه برای دوست خود بفرستید که او قادر به رمزگشایی نیست.\"",
         "description": "پیام‌های مخفی بگذارید که فقط دارندگان کلید مشترک می‌توانند رمزگشایی کنند."
       },
       "ufoSignal": {
-        "app": "با بشقاب پرنده تماس بگیرید",
-        "title": "\"اگر دکمه بشقاب پرنده را در سحرگاه فشار دهید چه اتفاقی می افتد؟\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"اگر در سحر یک سیگنال بشقاب پرنده بفرستید چه اتفاقی می افتد؟\"",
         "description": "از صداها و انیمیشن در یک اتاق تاریک لذت ببرید."
       }
     },
@@ -19165,7 +19314,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "کدام برنامه را ابتدا نصب کنم؟",
-        "answer": "اگر این اولین بازدید شماست، ابتدا Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
+        "answer": "اگر این اولین بازدید شماست، ابتدا Find Odd Color: Color Master 2 را امتحان کنید. بازی سریع است و برای امتیاز بهتر پخش مجدد آسان است."
       },
       "privateTest": {
         "question": "چگونه به برنامه های تست خصوصی بپیوندم؟",
@@ -19176,12 +19325,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "ساخته شده توسط NeoKIM",
       "lastUpdated": "آخرین به روز رسانی: 2026.05.31",
       "googlePlay": "برنامه های Google Play",
-      "colorTest": "تست رنگ",
-      "alienText": "مولد متن بیگانه",
-      "ufoApp": "اپلیکیشن UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "سیاست حفظ حریم خصوصی",
       "appAds": "app-ads.txt",
-      "contact": "تماس بگیرید"
+      "contact": "تماس بگیرید",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "ثبت نام تستر خصوصی",
@@ -19202,9 +19352,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pt-BR": {
     "seo": {
       "title": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android gratuitos",
-      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e testes privados para Lucky Card Random Defense e mais miniaplicativos Android.",
+      "description": "Instale Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze e testes privados para mais miniaplicativos Android.",
       "ogTitle": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android",
-      "ogDescription": "Desafios de cores, mensagens secretas semelhantes a alienígenas, experiências de chamada de OVNIs, Lab Rat Maze Escape: Dark Maze e testes privados para diversão rápida no Android."
+      "ogDescription": "Encontre cores estranhas, crie textos secretos no estilo alienígena, envie sinais divertidos de OVNIs, escape de labirintos escuros e participe de testes privados para diversão rápida com Android."
     },
     "skip": {
       "apps": "Pular para a lista de aplicativos"
@@ -19239,11 +19389,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Coleção de miniaplicativos Android",
       "title": "Laboratório de aplicativos NeoKIM",
       "subtitle": "Pequenos aplicativos Android feitos para diversão e compartilhamento rápidos",
-      "description": "Desafios de cores, mensagens secretas semelhantes a alienígenas e experiências de chamada de OVNIs. Instale levemente. Aproveite em menos de um minuto.",
+      "description": "Desafios de cores estranhas, mensagens secretas de estilo alienígena, reprodução de sinais de OVNIs e fugas de labirintos escuros. Instale levemente. Aproveite em menos de um minuto.",
       "primaryCta": "Instale o aplicativo em destaque",
-      "primaryAria": "Instale o Color Master 2 no Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 em Google Play",
       "secondaryCta": "Navegar em aplicativos",
-      "visualAria": "Maquete de telefone com ícone Color Master 2 e blocos coloridos",
+      "visualAria": "Maquete de telefone com ícone Find Odd Color: Color Master 2 e blocos coloridos",
       "badges": [
         "Aplicativos gratuitos",
         "Android",
@@ -19255,36 +19405,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICATIVO EM DESTAQUE",
       "title": "Instale isto primeiro hoje",
       "badge": "Destaque",
-      "appName": "Mestre de Cores 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Encontre a cor diferente em 10 segundos.",
-      "description": "Um quebra-cabeça de cores de uma vida onde um erro encerra a corrida. Começa rápido e continua puxando você para bater seu recorde.",
+      "description": "Um quebra-cabeça de cores estranhas de uma vida onde um erro encerra a corrida. Começa rápido e continua puxando você para bater seu recorde.",
       "primaryCta": "Instalar no Google Play",
-      "primaryAria": "Instale o Color Master 2 no Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 em Google Play",
       "secondaryCta": "Navegar em aplicativos",
-      "visualAria": "Maquete de telefone com desafio de bloco colorido Color Master 2"
+      "visualAria": "Maquete de telefone com desafio de bloco Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÁLOGO DE APLICATIVOS",
       "title": "Todos os aplicativos",
       "description": "Instale aplicativos públicos diretamente. Para testes privados, envie primeiro uma solicitação por e-mail; depois que o acesso do testador for adicionado, use o botão Ingressar no teste.",
       "colorMaster2": {
-        "name": "Mestre de Cores 2",
-        "category": "Quebra-cabeça de cores",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Jogo de quebra-cabeça de cores estranhas",
         "tagline": "Encontre a cor diferente em 10 segundos.",
-        "description": "Um erro encerra a corrida. Um desafio curto e viciante de percepção de cores.",
+        "description": "Um erro encerra a corrida. Um desafio curto e viciante de cores estranhas para foco e percepção de cores.",
         "highlights": [
           "Limite de 10 segundos",
           "Corrida de uma vida",
           "Tabela de classificação",
           "Ajuda para daltônicos"
         ],
-        "primaryCta": "Instale o Color Master 2",
+        "primaryCta": "Instalar Encontrar cores estranhas",
         "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Disponível agora no Google Play.",
-        "iconAlt": "Ícone Color Master 2"
+        "statusNote": "Disponível agora em Google Play.",
+        "iconAlt": "Ícone Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galáctico",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicativo de mensagem secreta",
         "tagline": "Crie mensagens secretas semelhantes a alienígenas que precisam de uma chave de compartilhamento para serem decodificadas.",
         "description": "Crie suas próprias regras de linguagem galáctica. Somente pessoas com sua chave de compartilhamento podem recriar as mesmas regras, e o texto original não é carregado em um servidor.",
@@ -19296,40 +19446,40 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         ],
         "primaryCta": "Crie mensagens secretas",
         "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Disponível agora no Google Play.",
-        "iconAlt": "Ícone Galacticode"
+        "statusNote": "Disponível agora em Google Play.",
+        "iconAlt": "Ícone Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Chame o OVNI",
-        "category": "Aplicativo divertido e envolvente",
-        "tagline": "Uma misteriosa experiência de chamada de OVNI para se divertir.",
-        "description": "Pressione o botão, ouça o sinal e imagine algo ouvindo do espaço.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicativo de entretenimento com sinal misterioso",
+        "tagline": "Envie um sinal espacial divertido e aproveite o clima do OVNI.",
+        "description": "Abra o aplicativo, pressione o botão de sinalização e desfrute de som e animação que fazem o momento parecer um pequeno ritual de OVNI.",
         "highlights": [
-          "Botão interativo",
+          "Botão de sinal",
           "Sons misteriosos",
-          "Animação",
+          "Animação de humor",
           "Sem inscrição"
         ],
-        "primaryCta": "Chame o OVNI",
-        "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Disponível agora no Google Play.",
-        "iconAlt": "Chame o ícone do OVNI"
+        "primaryCta": "Instale UFO Signal Simulator",
+        "detailCta": "Ver detalhes do aplicativo",
+        "statusNote": "Veja os detalhes do aplicativo e instale-o em Google Play.",
+        "iconAlt": "Ícone UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mestre de cores",
-        "category": "Quebra-cabeça de cores clássico",
-        "tagline": "O desafio original do foco na cor: encontre a resposta entre cores semelhantes.",
-        "description": "A versão original anterior ao Color Master 2. Experimente primeiro na web e depois instale-a no Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Jogo clássico de percepção de cores",
+        "tagline": "O desafio original de foco na cor: lembre-se da cor da resposta e escolha-a entre cores semelhantes.",
+        "description": "O teste de detecção de cor original antes de Find Odd Color: Color Master 2. Experimente primeiro na web e depois instale-o em Google Play.",
         "highlights": [
           "Sensação original",
           "Foco de cor",
           "Jogo rápido",
           "Instale agora"
         ],
-        "primaryCta": "Instale o Color Master",
+        "primaryCta": "Instalar teste de detecção de cores",
         "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Experimente primeiro na web e depois instale-o no Google Play.",
-        "iconAlt": "Ícone Mestre de Cores"
+        "statusNote": "Experimente primeiro na web e depois instale-o em Google Play.",
+        "iconAlt": "Ícone Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defesa Aleatória Coreana: Cerco",
@@ -19364,19 +19514,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ícone de defesa aleatória da carta da sorte"
       },
       "darkMaze": {
-        "name": "Fuga do labirinto de ratos de laboratório: labirinto escuro",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Lançado jogo de fuga do labirinto",
         "tagline": "Guie um rato de laboratório pelo labirinto escuro e encontre a saída.",
-        "description": "Lançado no Google Play em 28 de maio de 2026. Percorra o labirinto escuro, use itens e escape antes que o caminho se feche.",
+        "description": "Lançado em Google Play em 28 de maio de 2026. Mova-se pelo labirinto escuro, use itens e escape antes que o caminho se feche.",
         "highlights": [
           "Lançado em 28 de maio de 2026",
           "Fuga do labirinto",
           "Itens",
           "Sobrevivência sombria"
         ],
-        "primaryCta": "Instalar no Google Play",
-        "statusNote": "Agora disponível no Google Play. Nenhuma demonstração na web é fornecida para este aplicativo.",
-        "iconAlt": "Lab Rat Maze Escape: ícone do labirinto escuro"
+        "primaryCta": "Instalar em Google Play",
+        "statusNote": "Veja os detalhes do aplicativo e instale-o em Google Play. Nenhuma demonstração na web é fornecida para este aplicativo.",
+        "iconAlt": "Ícone Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Ver detalhes do aplicativo"
       }
     },
     "status": {
@@ -19393,18 +19544,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEIAS DE CURTAS",
       "title": "Experimente-os assim",
       "colorMaster2": {
-        "app": "Mestre de Cores 2",
-        "title": "“Se você vir essa diferença de cor, seus olhos estarão aguçados.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“Se você detectar essa cor estranha, seus olhos serão aguçados.”",
         "description": "Competir com amigos em um desafio de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Galáctico",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Envie ao seu amigo uma mensagem alienígena que ele não possa decodificar.”",
         "description": "Deixe mensagens secretas que somente os detentores de chaves compartilhadas possam decodificar."
       },
       "ufoSignal": {
-        "app": "Chame o OVNI",
-        "title": "“O que acontece se você pressionar o botão OVNI de madrugada?”",
+        "app": "UFO Signal Simulator",
+        "title": "“O que acontece se você enviar um sinal de OVNI ao amanhecer?”",
         "description": "Aproveite os sons e a animação em um quarto escuro."
       }
     },
@@ -19421,7 +19572,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Qual aplicativo devo instalar primeiro?",
-        "answer": "Se esta for sua primeira visita, experimente primeiro o Color Master 2. É rápido de jogar e fácil de repetir para obter uma pontuação melhor."
+        "answer": "Se esta for sua primeira visita, experimente Find Odd Color: Color Master 2 primeiro. É rápido de jogar e fácil de repetir para obter uma pontuação melhor."
       },
       "privateTest": {
         "question": "Como faço para ingressar em aplicativos de teste privados?",
@@ -19432,12 +19583,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Feito por NeoKIM",
       "lastUpdated": "Última atualização: 2026.05.31",
       "googlePlay": "Aplicativos Google Play",
-      "colorTest": "Teste de cores",
-      "alienText": "Gerador de texto alienígena",
-      "ufoApp": "Aplicativo OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de Privacidade",
       "appAds": "app-ads.txt",
-      "contact": "Contato"
+      "contact": "Contato",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Inscrição de testador privado",
@@ -19458,9 +19610,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pt-PT": {
     "seo": {
       "title": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android gratuitos",
-      "description": "Instale Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze e testes privados para Lucky Card Random Defense e mais miniaplicativos Android.",
+      "description": "Instale Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze e testes privados para mais miniaplicativos Android.",
       "ogTitle": "Laboratório de aplicativos NeoKIM | Miniaplicativos Android",
-      "ogDescription": "Desafios de cores, mensagens secretas semelhantes a alienígenas, experiências de chamada de OVNIs, Lab Rat Maze Escape: Dark Maze e testes privados para diversão rápida no Android."
+      "ogDescription": "Encontre cores estranhas, crie textos secretos no estilo alienígena, envie sinais divertidos de OVNIs, escape de labirintos escuros e participe de testes privados para diversão rápida com Android."
     },
     "skip": {
       "apps": "Pular para a lista de aplicativos"
@@ -19495,11 +19647,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Coleção de miniaplicativos Android",
       "title": "Laboratório de aplicativos NeoKIM",
       "subtitle": "Pequenos aplicativos Android feitos para diversão e compartilhamento rápidos",
-      "description": "Desafios de cores, mensagens secretas semelhantes a alienígenas e experiências de chamada de OVNIs. Instale levemente. Aproveite em menos de um minuto.",
+      "description": "Desafios de cores estranhas, mensagens secretas de estilo alienígena, reprodução de sinais de OVNIs e fugas de labirintos escuros. Instale levemente. Aproveite em menos de um minuto.",
       "primaryCta": "Instale o aplicativo em destaque",
-      "primaryAria": "Instale o Color Master 2 no Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 em Google Play",
       "secondaryCta": "Navegar em aplicativos",
-      "visualAria": "Maquete de telefone com ícone Color Master 2 e blocos coloridos",
+      "visualAria": "Maquete de telefone com ícone Find Odd Color: Color Master 2 e blocos coloridos",
       "badges": [
         "Aplicativos gratuitos",
         "Android",
@@ -19511,36 +19663,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APLICATIVO EM DESTAQUE",
       "title": "Instale isto primeiro hoje",
       "badge": "Destaque",
-      "appName": "Mestre de Cores 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Encontre a cor diferente em 10 segundos.",
-      "description": "Um quebra-cabeça de cores de uma vida onde um erro encerra a corrida. Começa rápido e continua puxando você para bater seu recorde.",
+      "description": "Um quebra-cabeça de cores estranhas de uma vida onde um erro encerra a corrida. Começa rápido e continua puxando você para bater seu recorde.",
       "primaryCta": "Instalar no Google Play",
-      "primaryAria": "Instale o Color Master 2 no Google Play",
+      "primaryAria": "Instale Find Odd Color: Color Master 2 em Google Play",
       "secondaryCta": "Navegar em aplicativos",
-      "visualAria": "Maquete de telefone com desafio de bloco colorido Color Master 2"
+      "visualAria": "Maquete de telefone com desafio de bloco Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATÁLOGO DE APLICATIVOS",
       "title": "Todos os aplicativos",
       "description": "Instale aplicativos públicos diretamente. Para testes privados, envie primeiro uma solicitação por e-mail; depois que o acesso do testador for adicionado, use o botão Ingressar no teste.",
       "colorMaster2": {
-        "name": "Mestre de Cores 2",
-        "category": "Quebra-cabeça de cores",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Jogo de quebra-cabeça de cores estranhas",
         "tagline": "Encontre a cor diferente em 10 segundos.",
-        "description": "Um erro encerra a corrida. Um desafio curto e viciante de percepção de cores.",
+        "description": "Um erro encerra a corrida. Um desafio curto e viciante de cores estranhas para foco e percepção de cores.",
         "highlights": [
           "Limite de 10 segundos",
           "Corrida de uma vida",
           "Tabela de classificação",
           "Ajuda para daltônicos"
         ],
-        "primaryCta": "Instale o Color Master 2",
+        "primaryCta": "Instalar Encontrar cores estranhas",
         "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Disponível agora no Google Play.",
-        "iconAlt": "Ícone Color Master 2"
+        "statusNote": "Disponível agora em Google Play.",
+        "iconAlt": "Ícone Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galáctico",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplicativo de mensagem secreta",
         "tagline": "Crie mensagens secretas semelhantes a alienígenas que precisam de uma chave de compartilhamento para serem decodificadas.",
         "description": "Crie suas próprias regras de linguagem galáctica. Somente pessoas com sua chave de compartilhamento podem recriar as mesmas regras, e o texto original não é carregado em um servidor.",
@@ -19552,40 +19704,40 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         ],
         "primaryCta": "Crie mensagens secretas",
         "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Disponível agora no Google Play.",
-        "iconAlt": "Ícone Galacticode"
+        "statusNote": "Disponível agora em Google Play.",
+        "iconAlt": "Ícone Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Chame o OVNI",
-        "category": "Aplicativo divertido e envolvente",
-        "tagline": "Uma misteriosa experiência de chamada de OVNI para se divertir.",
-        "description": "Pressione o botão, ouça o sinal e imagine algo ouvindo do espaço.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplicativo de entretenimento com sinal misterioso",
+        "tagline": "Envie um sinal espacial divertido e aproveite o clima do OVNI.",
+        "description": "Abra o aplicativo, pressione o botão de sinalização e desfrute de som e animação que fazem o momento parecer um pequeno ritual de OVNI.",
         "highlights": [
-          "Botão interativo",
+          "Botão de sinal",
           "Sons misteriosos",
-          "Animação",
+          "Animação de humor",
           "Sem inscrição"
         ],
-        "primaryCta": "Chame o OVNI",
-        "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Disponível agora no Google Play.",
-        "iconAlt": "Chame o ícone do OVNI"
+        "primaryCta": "Instale UFO Signal Simulator",
+        "detailCta": "Ver detalhes do aplicativo",
+        "statusNote": "Veja os detalhes do aplicativo e instale-o em Google Play.",
+        "iconAlt": "Ícone UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mestre de cores",
-        "category": "Quebra-cabeça de cores clássico",
-        "tagline": "O desafio original do foco na cor: encontre a resposta entre cores semelhantes.",
-        "description": "A versão original anterior ao Color Master 2. Experimente primeiro na web e depois instale-a no Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Jogo clássico de percepção de cores",
+        "tagline": "O desafio original de foco na cor: lembre-se da cor da resposta e escolha-a entre cores semelhantes.",
+        "description": "O teste de detecção de cor original antes de Find Odd Color: Color Master 2. Experimente primeiro na web e depois instale-o em Google Play.",
         "highlights": [
           "Sensação original",
           "Foco de cor",
           "Jogo rápido",
           "Instale agora"
         ],
-        "primaryCta": "Instale o Color Master",
+        "primaryCta": "Instalar teste de detecção de cores",
         "detailCta": "Experimente a demonstração na web",
-        "statusNote": "Experimente primeiro na web e depois instale-o no Google Play.",
-        "iconAlt": "Ícone Mestre de Cores"
+        "statusNote": "Experimente primeiro na web e depois instale-o em Google Play.",
+        "iconAlt": "Ícone Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Defesa Aleatória Coreana: Cerco",
@@ -19620,19 +19772,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ícone de defesa aleatória da carta da sorte"
       },
       "darkMaze": {
-        "name": "Fuga do labirinto de ratos de laboratório: labirinto escuro",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Lançado jogo de fuga do labirinto",
         "tagline": "Guie um rato de laboratório pelo labirinto escuro e encontre a saída.",
-        "description": "Lançado no Google Play em 28 de maio de 2026. Percorra o labirinto escuro, use itens e escape antes que o caminho se feche.",
+        "description": "Lançado em Google Play em 28 de maio de 2026. Mova-se pelo labirinto escuro, use itens e escape antes que o caminho se feche.",
         "highlights": [
           "Lançado em 28 de maio de 2026",
           "Fuga do labirinto",
           "Itens",
           "Sobrevivência sombria"
         ],
-        "primaryCta": "Instalar no Google Play",
-        "statusNote": "Agora disponível no Google Play. Nenhuma demonstração na web é fornecida para este aplicativo.",
-        "iconAlt": "Lab Rat Maze Escape: ícone do labirinto escuro"
+        "primaryCta": "Instalar em Google Play",
+        "statusNote": "Veja os detalhes do aplicativo e instale-o em Google Play. Nenhuma demonstração na web é fornecida para este aplicativo.",
+        "iconAlt": "Ícone Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Ver detalhes do aplicativo"
       }
     },
     "status": {
@@ -19649,18 +19802,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDEIAS DE CURTAS",
       "title": "Experimente-os assim",
       "colorMaster2": {
-        "app": "Mestre de Cores 2",
-        "title": "“Se você vir essa diferença de cor, seus olhos estarão aguçados.”",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "“Se você detectar essa cor estranha, seus olhos serão aguçados.”",
         "description": "Competir com amigos em um desafio de 10 segundos."
       },
       "galaxyCode": {
-        "app": "Galáctico",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "“Envie ao seu amigo uma mensagem alienígena que ele não possa decodificar.”",
         "description": "Deixe mensagens secretas que somente os detentores de chaves compartilhadas possam decodificar."
       },
       "ufoSignal": {
-        "app": "Chame o OVNI",
-        "title": "“O que acontece se você pressionar o botão OVNI de madrugada?”",
+        "app": "UFO Signal Simulator",
+        "title": "“O que acontece se você enviar um sinal de OVNI ao amanhecer?”",
         "description": "Aproveite os sons e a animação em um quarto escuro."
       }
     },
@@ -19677,7 +19830,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Qual aplicativo devo instalar primeiro?",
-        "answer": "Se esta for sua primeira visita, experimente primeiro o Color Master 2. É rápido de jogar e fácil de repetir para obter uma pontuação melhor."
+        "answer": "Se esta for sua primeira visita, experimente Find Odd Color: Color Master 2 primeiro. É rápido de jogar e fácil de repetir para obter uma pontuação melhor."
       },
       "privateTest": {
         "question": "Como faço para ingressar em aplicativos de teste privados?",
@@ -19688,12 +19841,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Feito por NeoKIM",
       "lastUpdated": "Última atualização: 2026.05.31",
       "googlePlay": "Aplicativos Google Play",
-      "colorTest": "Teste de cores",
-      "alienText": "Gerador de texto alienígena",
-      "ufoApp": "Aplicativo OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Política de Privacidade",
       "appAds": "app-ads.txt",
-      "contact": "Contato"
+      "contact": "Contato",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Inscrição de testador privado",
@@ -19714,9 +19868,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "pl-PL": {
     "seo": {
       "title": "Laboratorium aplikacji NeoKIM | Darmowe aplikacje Android Mini",
-      "description": "Zainstaluj Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze i prywatne testy Lucky Card Random Defense i innych miniaplikacji na Androida.",
+      "description": "Zainstaluj Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze i prywatne testy, aby uzyskać więcej miniaplikacji Android.",
       "ogTitle": "Laboratorium aplikacji NeoKIM | Miniaplikacje Android",
-      "ogDescription": "Kolorowe wyzwania, tajne wiadomości przypominające kosmitów, wywoływanie UFO, Lab Rat Maze Escape: Dark Maze i prywatne testy zapewniające szybką zabawę na Androidzie."
+      "ogDescription": "Znajdź dziwne kolory, napisz tajny tekst w stylu kosmitów, wysyłaj zabawne sygnały UFO, ucieknij z ciemnych labiryntów i dołącz do prywatnych testów, aby szybko się bawić Android."
     },
     "skip": {
       "apps": "Przejdź do listy aplikacji"
@@ -19751,11 +19905,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Kolekcja miniaplikacji Android",
       "title": "Laboratorium aplikacji NeoKIM",
       "subtitle": "Małe aplikacje Android stworzone z myślą o szybkiej zabawie i udostępnianiu",
-      "description": "Kolorowe wyzwania, tajne wiadomości przypominające kosmitów i doświadczenia związane z wzywaniem UFO. Zainstaluj lekko. Ciesz się w niecałą minutę.",
+      "description": "Wyzwania w dziwnych kolorach, tajne wiadomości w stylu kosmitów, odtwarzanie sygnałów UFO i ucieczki z ciemnego labiryntu. Zainstaluj lekko. Ciesz się w niecałą minutę.",
       "primaryCta": "Zainstaluj polecaną aplikację",
-      "primaryAria": "Zainstaluj Color Master 2 na Google Play",
+      "primaryAria": "Zainstaluj Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Przeglądaj aplikacje",
-      "visualAria": "Makieta telefonu z ikoną Color Master 2 i kolorowymi kafelkami",
+      "visualAria": "Makieta telefonu z ikoną Find Odd Color: Color Master 2 i kolorowymi kafelkami",
       "badges": [
         "Darmowe aplikacje",
         "Android",
@@ -19767,81 +19921,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "WYRÓŻNIONA APLIKACJA",
       "title": "Zainstaluj to najpierw dzisiaj",
       "badge": "Polecane",
-      "appName": "Mistrz koloru 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Znajdź inny kolor w 10 sekund.",
-      "description": "Kolorowa łamigłówka na jedno życie, w której jeden błąd kończy bieg. Zaczyna się szybko, a potem ciągnie cię do tyłu, by pobić swój rekord.",
+      "description": "Dziwna łamigłówka na jedno życie, w której jeden błąd kończy bieg. Zaczyna się szybko, a potem ciągnie cię do tyłu, by pobić swój rekord.",
       "primaryCta": "Zainstaluj na Google Play",
-      "primaryAria": "Zainstaluj Color Master 2 na Google Play",
+      "primaryAria": "Zainstaluj Find Odd Color: Color Master 2 na Google Play",
       "secondaryCta": "Przeglądaj aplikacje",
-      "visualAria": "Makieta telefonu z wyzwaniem Color Master 2 w kolorze"
+      "visualAria": "Makieta telefonu z wyzwaniem kafelkowym Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "KATALOG APLIKACJI",
       "title": "Wszystkie aplikacje",
       "description": "Zainstaluj bezpośrednio aplikacje publiczne. W przypadku testów prywatnych wyślij najpierw e-mail z prośbą; po dodaniu dostępu testera należy skorzystać z przycisku Dołącz do testu.",
       "colorMaster2": {
-        "name": "Mistrz koloru 2",
-        "category": "Kolorowa łamigłówka",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Gra logiczna o dziwnych kolorach",
         "tagline": "Znajdź inny kolor w 10 sekund.",
-        "description": "Jeden błąd kończy serię. Krótkie, uzależniające wyzwanie w zakresie percepcji kolorów.",
+        "description": "Jeden błąd kończy serię. Krótkie, uzależniające wyzwanie związane z dziwnymi kolorami, poprawiające koncentrację i postrzeganie kolorów.",
         "highlights": [
           "Limit 10 sekund",
           "Bieg na jedno życie",
           "Tabela liderów",
           "Pomoc dla daltonistów"
         ],
-        "primaryCta": "Zainstaluj Color Mastera 2",
+        "primaryCta": "Zainstaluj opcję Znajdź dziwny kolor",
         "detailCta": "Wypróbuj wersję demonstracyjną w Internecie",
-        "statusNote": "Dostępne teraz w Google Play.",
-        "iconAlt": "Ikona Color Master 2"
+        "statusNote": "Dostępne teraz na Google Play.",
+        "iconAlt": "Ikona Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Kod galaktyczny",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Aplikacja do tajnych wiadomości",
         "tagline": "Twórz tajne wiadomości przypominające kosmitów, które wymagają klucza udostępniania do odszyfrowania.",
         "description": "Stwórz własne zasady języka galaktycznego. Tylko osoby posiadające Twój klucz udostępniania mogą odtworzyć te same reguły, a oryginalny tekst nie jest przesyłany na serwer.",
         "highlights": [
           "Oparty na kluczu udostępniania",
           "Zasady osobiste",
-          "Gotowy na SNS",
+          "Gotowy do SNS",
           "Brak przesyłania na serwer"
         ],
         "primaryCta": "Twórz tajne wiadomości",
         "detailCta": "Wypróbuj wersję demonstracyjną w Internecie",
-        "statusNote": "Dostępne teraz w Google Play.",
-        "iconAlt": "Ikona kodu galaktycznego"
+        "statusNote": "Dostępne teraz na Google Play.",
+        "iconAlt": "Ikona Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Zadzwoń do UFO",
-        "category": "Wciągająca, zabawna aplikacja",
-        "tagline": "Tajemnicze UFO wywołujące zabawę.",
-        "description": "Naciśnij przycisk, usłysz sygnał i wyobraź sobie, że coś słyszy z kosmosu.",
+        "name": "UFO Signal Simulator",
+        "category": "Aplikacja rozrywkowa Mystery Signal",
+        "tagline": "Wyślij zabawny sygnał kosmiczny i ciesz się nastrojem UFO.",
+        "description": "Otwórz aplikację, naciśnij przycisk sygnału i ciesz się dźwiękiem i animacją, dzięki którym poczujesz się jak mały rytuał UFO.",
         "highlights": [
-          "Interaktywny przycisk",
+          "Przycisk sygnału",
           "Tajemnicze dźwięki",
-          "Animacja",
+          "Animacja nastroju",
           "Brak rejestracji"
         ],
-        "primaryCta": "Zadzwoń do UFO",
-        "detailCta": "Wypróbuj wersję demonstracyjną w Internecie",
-        "statusNote": "Dostępne teraz w Google Play.",
-        "iconAlt": "Zadzwoń do ikony UFO"
+        "primaryCta": "Zainstaluj UFO Signal Simulator",
+        "detailCta": "Wyświetl szczegóły aplikacji",
+        "statusNote": "Wyświetl szczegóły aplikacji, a następnie zainstaluj ją z Google Play.",
+        "iconAlt": "Ikona UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Mistrz koloru",
-        "category": "Klasyczna kolorowa łamigłówka",
-        "tagline": "Oryginalne wyzwanie skupienia się na kolorze: znajdź odpowiedź wśród podobnych kolorów.",
-        "description": "Oryginalna wersja sprzed Color Master 2. Najpierw wypróbuj ją w Internecie, a następnie zainstaluj z Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasyczna gra polegająca na wyczuciu kolorów",
+        "tagline": "Oryginalne wyzwanie skupienia się na kolorze: zapamiętaj kolor odpowiedzi i wybierz go spośród podobnych kolorów.",
+        "description": "Oryginalny test wyczucia koloru przed Find Odd Color: Color Master 2. Najpierw wypróbuj w Internecie, a następnie zainstaluj z Google Play.",
         "highlights": [
           "Oryginalne uczucie",
           "Fokus koloru",
           "Szybka gra",
           "Zainstaluj teraz"
         ],
-        "primaryCta": "Zainstaluj Mistrza Kolorów",
+        "primaryCta": "Zainstaluj Test wyczucia kolorów",
         "detailCta": "Wypróbuj wersję demonstracyjną w Internecie",
-        "statusNote": "Wypróbuj najpierw w Internecie, a następnie zainstaluj z Google Play.",
-        "iconAlt": "Ikona mistrza kolorów"
+        "statusNote": "Najpierw wypróbuj w Internecie, a następnie zainstaluj z Google Play.",
+        "iconAlt": "Ikona Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Koreańska obrona losowa: oblężenie",
@@ -19876,19 +20030,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Ikona losowej obrony Szczęśliwej Karty"
       },
       "darkMaze": {
-        "name": "Ucieczka z labiryntu szczurów laboratoryjnych: Mroczny labirynt",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Wydano grę ucieczki z labiryntu",
         "tagline": "Poprowadź szczura laboratoryjnego przez ciemny labirynt i znajdź wyjście.",
-        "description": "Wydano w Google Play 28 maja 2026 r. Poruszaj się przez ciemny labirynt, korzystaj z przedmiotów i uciekaj, zanim ścieżka się zamknie.",
+        "description": "Wydany na Google Play 28 maja 2026 r. Poruszaj się przez ciemny labirynt, używaj przedmiotów i uciekaj, zanim ścieżka się zamknie.",
         "highlights": [
           "Wydany 28 maja 2026 r",
           "Ucieczka z labiryntu",
           "Przedmioty",
           "Mroczne przetrwanie"
         ],
-        "primaryCta": "Zainstaluj w Google Play",
-        "statusNote": "Teraz dostępne w Google Play. Dla tej aplikacji nie jest dostępne demo internetowe.",
-        "iconAlt": "Ucieczka z labiryntu szczurów laboratoryjnych: ikona ciemnego labiryntu"
+        "primaryCta": "Zainstaluj na Google Play",
+        "statusNote": "Wyświetl szczegóły aplikacji, a następnie zainstaluj ją z Google Play. Dla tej aplikacji nie jest dostępne demo internetowe.",
+        "iconAlt": "Ikona Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Wyświetl szczegóły aplikacji"
       }
     },
     "status": {
@@ -19905,18 +20060,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "POMYSŁY NA SZORTY",
       "title": "Wypróbuj je w ten sposób",
       "colorMaster2": {
-        "app": "Mistrz koloru 2",
-        "title": "„Jeśli widzisz tę różnicę kolorów, twoje oczy są bystre”.",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "„Jeśli zauważysz ten dziwny kolor, twoje oczy są bystre”.",
         "description": "Rywalizuj z przyjaciółmi w 10-sekundowym wyzwaniu."
       },
       "galaxyCode": {
-        "app": "Kod galaktyczny",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "„Wyślij swojemu przyjacielowi wiadomość od kosmitów, której nie może rozszyfrować”.",
         "description": "Zostaw tajne wiadomości, które tylko posiadacze klucza udostępniania mogą odszyfrować."
       },
       "ufoSignal": {
-        "app": "Zadzwoń do UFO",
-        "title": "„Co się stanie, jeśli o świcie naciśniesz przycisk UFO?”",
+        "app": "UFO Signal Simulator",
+        "title": "„Co się stanie, jeśli wyślesz sygnał UFO o świcie?”",
         "description": "Ciesz się dźwiękami i animacjami w ciemnym pokoju."
       }
     },
@@ -19933,7 +20088,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Którą aplikację powinienem zainstalować jako pierwszą?",
-        "answer": "Jeśli to Twoja pierwsza wizyta, wypróbuj najpierw Color Master 2. Gra jest szybka i łatwa do powtórzenia, aby uzyskać lepszy wynik."
+        "answer": "Jeśli to Twoja pierwsza wizyta, wypróbuj najpierw Find Odd Color: Color Master 2. Gra jest szybka i łatwa do powtórzenia, aby uzyskać lepszy wynik."
       },
       "privateTest": {
         "question": "Jak dołączyć do prywatnych aplikacji testowych?",
@@ -19944,12 +20099,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Wykonane przez NeoKIM",
       "lastUpdated": "Ostatnia aktualizacja: 2026.05.31",
       "googlePlay": "Aplikacje Google Play",
-      "colorTest": "Próba koloru",
-      "alienText": "Generator obcych tekstów",
-      "ufoApp": "Aplikacja UFO",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Polityka prywatności",
       "appAds": "app-ads.txt",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Rejestracja prywatnego testera",
@@ -19970,9 +20126,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fr-CA": {
     "seo": {
       "title": "Laboratoire d'applications NeoKIM | Mini-applications gratuites Android",
-      "description": "Installez Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze et des tests privés pour Lucky Card Random Defense et d'autres mini-applications Android.",
+      "description": "Installez Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze et des tests privés pour plus de mini-applications Android.",
       "ogTitle": "Laboratoire d'applications NeoKIM | Mini-applications Android",
-      "ogDescription": "Défis de couleurs, messages secrets de type extraterrestre, expériences d'appel d'OVNIS, Lab Rat Maze Escape: Dark Maze et tests privés pour un plaisir rapide sur Android."
+      "ogDescription": "Trouvez des couleurs étranges, créez un texte secret de style extraterrestre, envoyez des signaux d'OVNI ludiques, échappez à des labyrinthes sombres et rejoignez des tests privés pour vous amuser rapidement avec Android."
     },
     "skip": {
       "apps": "Passer à la liste des applications"
@@ -20007,11 +20163,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Collection de mini-applications Android",
       "title": "Laboratoire d'applications NeoKIM",
       "subtitle": "Petites applications Android conçues pour un plaisir et un partage rapides",
-      "description": "Défis de couleurs, messages secrets de type extraterrestre et expériences d'appel d'OVNI. Installez légèrement. Dégustez en moins d'une minute.",
+      "description": "Défis aux couleurs étranges, messages secrets de style extraterrestre, jeux de signaux d'OVNI et évasions de labyrinthes sombres. Installez légèrement. Dégustez en moins d'une minute.",
       "primaryCta": "Installer l'application en vedette",
-      "primaryAria": "Installez Color Master 2 sur Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 sur Google Play",
       "secondaryCta": "Parcourir les applications",
-      "visualAria": "Maquette de téléphone avec l'icône Color Master 2 et les vignettes de couleur",
+      "visualAria": "Maquette de téléphone avec l'icône Find Odd Color: Color Master 2 et les vignettes de couleur",
       "badges": [
         "Applications gratuites",
         "Android",
@@ -20023,36 +20179,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APPLICATION EN VEDETTE",
       "title": "Installez-le d'abord aujourd'hui",
       "badge": "En vedette",
-      "appName": "Maître des couleurs 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Trouvez la couleur différente en 10 secondes.",
-      "description": "Un puzzle de couleurs à vie où une erreur met fin à la course. Cela commence vite, puis continue de vous tirer vers le bas pour battre votre record.",
+      "description": "Un puzzle de couleurs impaires à une vie où une erreur met fin à la course. Cela commence vite, puis continue de vous tirer vers le bas pour battre votre record.",
       "primaryCta": "Installer sur Google Play",
-      "primaryAria": "Installez Color Master 2 sur Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 sur Google Play",
       "secondaryCta": "Parcourir les applications",
-      "visualAria": "Maquette de téléphone de défi de tuiles de couleurs Color Master 2"
+      "visualAria": "Maquette de téléphone de défi de tuile Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATALOGUE D'APPLICATIONS",
       "title": "Toutes les applications",
       "description": "Installez directement les applications publiques. Pour les tests privés, envoyez d'abord une demande par e-mail ; une fois l’accès du testeur ajouté, utilisez le bouton Rejoindre le test.",
       "colorMaster2": {
-        "name": "Maître des couleurs 2",
-        "category": "Casse-tête de couleurs",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Jeu de réflexion aux couleurs étranges",
         "tagline": "Trouvez la couleur différente en 10 secondes.",
-        "description": "Une erreur met fin à la course. Un défi court et addictif de perception des couleurs.",
+        "description": "Une erreur met fin à la course. Un défi de couleurs impaires court et addictif pour la concentration et la perception des couleurs.",
         "highlights": [
           "Limite de 10 secondes",
           "Course d'une vie",
           "Classement",
           "Aide aux daltoniens"
         ],
-        "primaryCta": "Installer Color Master 2",
+        "primaryCta": "Installer Trouver une couleur étrange",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Icône Color Master 2"
+        "iconAlt": "Icône Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galaccode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Application de messages secrets",
         "tagline": "Créez des messages secrets de type extraterrestre qui nécessitent une clé de partage pour être décodés.",
         "description": "Créez vos propres règles de langage galactique. Seules les personnes disposant de votre clé de partage peuvent recréer les mêmes règles et le texte original n'est pas téléchargé sur un serveur.",
@@ -20065,39 +20221,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Créer des messages secrets",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Icône Galaccode"
+        "iconAlt": "Icône Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Appelez l'OVNI",
-        "category": "Application amusante et immersive",
-        "tagline": "Une mystérieuse expérience d'appel d'OVNI pour le plaisir.",
-        "description": "Appuyez sur le bouton, entendez le signal et imaginez quelque chose écoutant depuis l'espace.",
+        "name": "UFO Signal Simulator",
+        "category": "Application de divertissement avec signal mystère",
+        "tagline": "Envoyez un signal spatial ludique et profitez de l'ambiance OVNI.",
+        "description": "Ouvrez l'application, appuyez sur le bouton de signal et profitez du son et de l'animation qui donnent à ce moment l'impression d'être un petit rituel OVNI.",
         "highlights": [
-          "Bouton interactif",
+          "Bouton de signalisation",
           "Des sons mystérieux",
-          "Animations",
+          "Animation d'ambiance",
           "Aucune inscription"
         ],
-        "primaryCta": "Appelez l'OVNI",
-        "detailCta": "Essayez la démo Web",
-        "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Appelez l'icône OVNI"
+        "primaryCta": "Installer UFO Signal Simulator",
+        "detailCta": "Afficher les détails de l'application",
+        "statusNote": "Affichez les détails de l'application, puis installez-la à partir de Google Play.",
+        "iconAlt": "Icône UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maître des couleurs",
-        "category": "Puzzle de couleurs classique",
-        "tagline": "Le défi original de la mise au point des couleurs : trouver la réponse parmi des couleurs similaires.",
-        "description": "La version originale avant Color Master 2. Essayez-la d'abord sur le Web, puis installez-la depuis Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Jeu classique de détection des couleurs",
+        "tagline": "Le défi original de mise au point sur les couleurs : mémorisez la couleur de la réponse et choisissez-la parmi des couleurs similaires.",
+        "description": "Le test original de détection des couleurs avant Find Odd Color: Color Master 2. Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
         "highlights": [
           "Sensation originale",
           "Mise au point des couleurs",
           "Jeu rapide",
           "Installer maintenant"
         ],
-        "primaryCta": "Installer Color Master",
+        "primaryCta": "Installer le test de détection des couleurs",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
-        "iconAlt": "Icône Maître des couleurs"
+        "iconAlt": "Icône Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Défense aléatoire coréenne : siège",
@@ -20132,10 +20288,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icône de défense aléatoire de la carte chanceuse"
       },
       "darkMaze": {
-        "name": "Évasion du labyrinthe des rats de laboratoire : Labyrinthe sombre",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Sortie du jeu d'évasion de labyrinthe",
         "tagline": "Guidez un rat de laboratoire à travers le labyrinthe sombre et trouvez la sortie.",
-        "description": "Sorti sur Google Play le 28 mai 2026. Déplacez-vous dans le labyrinthe sombre, utilisez des objets et échappez-vous avant que le chemin ne se ferme.",
+        "description": "Sorti sur Google Play le 28 mai 2026. Déplacez-vous dans le labyrinthe sombre, utilisez des objets et échappez-vous avant que le chemin ne se referme.",
         "highlights": [
           "Sortie le 28 mai 2026",
           "Évasion du labyrinthe",
@@ -20143,8 +20299,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Survie sombre"
         ],
         "primaryCta": "Installer sur Google Play",
-        "statusNote": "Maintenant disponible sur Google Play. Aucune démo Web n'est fournie pour cette application.",
-        "iconAlt": "Évasion du labyrinthe de rats de laboratoire : icône du labyrinthe sombre"
+        "statusNote": "Affichez les détails de l'application, puis installez-la à partir de Google Play. Aucune démo Web n'est fournie pour cette application.",
+        "iconAlt": "Icône Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Afficher les détails de l'application"
       }
     },
     "status": {
@@ -20161,18 +20318,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDÉES DE COURT-CIRCUIT",
       "title": "Essayez-les comme ça",
       "colorMaster2": {
-        "app": "Maître des couleurs 2",
-        "title": "\"Si vous voyez cette différence de couleur, vos yeux sont perçants.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Si vous repérez cette couleur étrange, vos yeux sont perçants.\"",
         "description": "Affrontez vos amis dans un défi de 10 secondes."
       },
       "galaxyCode": {
-        "app": "Galaccode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envoyez à votre ami un message extraterrestre qu'il ne peut pas décoder.\"",
         "description": "Laissez des messages secrets que seuls les détenteurs de clés de partage peuvent décoder."
       },
       "ufoSignal": {
-        "app": "Appelez l'OVNI",
-        "title": "\"Que se passe-t-il si vous appuyez sur le bouton OVNI à l'aube ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Que se passe-t-il si vous envoyez un signal d'OVNI à l'aube ?\"",
         "description": "Profitez des sons et de l'animation dans une pièce sombre."
       }
     },
@@ -20189,7 +20346,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Quelle application dois-je installer en premier ?",
-        "answer": "S'il s'agit de votre première visite, essayez d'abord Color Master 2. Il est rapide à jouer et facile à rejouer pour un meilleur score."
+        "answer": "S'il s'agit de votre première visite, essayez d'abord Find Odd Color: Color Master 2. Il est rapide à jouer et facile à rejouer pour un meilleur score."
       },
       "privateTest": {
         "question": "Comment rejoindre des applications de test privées ?",
@@ -20200,12 +20357,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Fabriqué par NeoKIM",
       "lastUpdated": "Dernière mise à jour : 2026.05.31",
       "googlePlay": "Applications Google Play",
-      "colorTest": "Test de couleur",
-      "alienText": "Générateur de texte extraterrestre",
-      "ufoApp": "Application OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Politique de confidentialité",
       "appAds": "app-ads.txt",
-      "contact": "Contacter"
+      "contact": "Contacter",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Inscription d'un testeur privé",
@@ -20226,9 +20384,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fr-FR": {
     "seo": {
       "title": "Laboratoire d'applications NeoKIM | Mini-applications gratuites Android",
-      "description": "Installez Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze et des tests privés pour Lucky Card Random Defense et d'autres mini-applications Android.",
+      "description": "Installez Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze et des tests privés pour plus de mini-applications Android.",
       "ogTitle": "Laboratoire d'applications NeoKIM | Mini-applications Android",
-      "ogDescription": "Défis de couleurs, messages secrets de type extraterrestre, expériences d'appel d'OVNIS, Lab Rat Maze Escape: Dark Maze et tests privés pour un plaisir rapide sur Android."
+      "ogDescription": "Trouvez des couleurs étranges, créez un texte secret de style extraterrestre, envoyez des signaux d'OVNI ludiques, échappez à des labyrinthes sombres et rejoignez des tests privés pour vous amuser rapidement avec Android."
     },
     "skip": {
       "apps": "Passer à la liste des applications"
@@ -20263,11 +20421,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Collection de mini-applications Android",
       "title": "Laboratoire d'applications NeoKIM",
       "subtitle": "Petites applications Android conçues pour un plaisir et un partage rapides",
-      "description": "Défis de couleurs, messages secrets de type extraterrestre et expériences d'appel d'OVNI. Installez légèrement. Dégustez en moins d'une minute.",
+      "description": "Défis aux couleurs étranges, messages secrets de style extraterrestre, jeux de signaux d'OVNI et évasions de labyrinthes sombres. Installez légèrement. Dégustez en moins d'une minute.",
       "primaryCta": "Installer l'application en vedette",
-      "primaryAria": "Installez Color Master 2 sur Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 sur Google Play",
       "secondaryCta": "Parcourir les applications",
-      "visualAria": "Maquette de téléphone avec l'icône Color Master 2 et les vignettes de couleur",
+      "visualAria": "Maquette de téléphone avec l'icône Find Odd Color: Color Master 2 et les vignettes de couleur",
       "badges": [
         "Applications gratuites",
         "Android",
@@ -20279,36 +20437,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "APPLICATION EN VEDETTE",
       "title": "Installez-le d'abord aujourd'hui",
       "badge": "En vedette",
-      "appName": "Maître des couleurs 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "Trouvez la couleur différente en 10 secondes.",
-      "description": "Un puzzle de couleurs à vie où une erreur met fin à la course. Cela commence vite, puis continue de vous tirer vers le bas pour battre votre record.",
+      "description": "Un puzzle de couleurs impaires à une vie où une erreur met fin à la course. Cela commence vite, puis continue de vous tirer vers le bas pour battre votre record.",
       "primaryCta": "Installer sur Google Play",
-      "primaryAria": "Installez Color Master 2 sur Google Play",
+      "primaryAria": "Installer Find Odd Color: Color Master 2 sur Google Play",
       "secondaryCta": "Parcourir les applications",
-      "visualAria": "Maquette de téléphone de défi de tuiles de couleurs Color Master 2"
+      "visualAria": "Maquette de téléphone de défi de tuile Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "CATALOGUE D'APPLICATIONS",
       "title": "Toutes les applications",
       "description": "Installez directement les applications publiques. Pour les tests privés, envoyez d'abord une demande par e-mail ; une fois l’accès du testeur ajouté, utilisez le bouton Rejoindre le test.",
       "colorMaster2": {
-        "name": "Maître des couleurs 2",
-        "category": "Casse-tête de couleurs",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Jeu de réflexion aux couleurs étranges",
         "tagline": "Trouvez la couleur différente en 10 secondes.",
-        "description": "Une erreur met fin à la course. Un défi court et addictif de perception des couleurs.",
+        "description": "Une erreur met fin à la course. Un défi de couleurs impaires court et addictif pour la concentration et la perception des couleurs.",
         "highlights": [
           "Limite de 10 secondes",
           "Course d'une vie",
           "Classement",
           "Aide aux daltoniens"
         ],
-        "primaryCta": "Installer Color Master 2",
+        "primaryCta": "Installer Trouver une couleur étrange",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Icône Color Master 2"
+        "iconAlt": "Icône Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galaccode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Application de messages secrets",
         "tagline": "Créez des messages secrets de type extraterrestre qui nécessitent une clé de partage pour être décodés.",
         "description": "Créez vos propres règles de langage galactique. Seules les personnes disposant de votre clé de partage peuvent recréer les mêmes règles et le texte original n'est pas téléchargé sur un serveur.",
@@ -20321,39 +20479,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Créer des messages secrets",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Icône Galaccode"
+        "iconAlt": "Icône Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Appelez l'OVNI",
-        "category": "Application amusante et immersive",
-        "tagline": "Une mystérieuse expérience d'appel d'OVNI pour le plaisir.",
-        "description": "Appuyez sur le bouton, entendez le signal et imaginez quelque chose écoutant depuis l'espace.",
+        "name": "UFO Signal Simulator",
+        "category": "Application de divertissement avec signal mystère",
+        "tagline": "Envoyez un signal spatial ludique et profitez de l'ambiance OVNI.",
+        "description": "Ouvrez l'application, appuyez sur le bouton de signal et profitez du son et de l'animation qui donnent à ce moment l'impression d'être un petit rituel OVNI.",
         "highlights": [
-          "Bouton interactif",
+          "Bouton de signalisation",
           "Des sons mystérieux",
-          "Animations",
+          "Animation d'ambiance",
           "Aucune inscription"
         ],
-        "primaryCta": "Appelez l'OVNI",
-        "detailCta": "Essayez la démo Web",
-        "statusNote": "Disponible dès maintenant sur Google Play.",
-        "iconAlt": "Appelez l'icône OVNI"
+        "primaryCta": "Installer UFO Signal Simulator",
+        "detailCta": "Afficher les détails de l'application",
+        "statusNote": "Affichez les détails de l'application, puis installez-la à partir de Google Play.",
+        "iconAlt": "Icône UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Maître des couleurs",
-        "category": "Puzzle de couleurs classique",
-        "tagline": "Le défi original de la mise au point des couleurs : trouver la réponse parmi des couleurs similaires.",
-        "description": "La version originale avant Color Master 2. Essayez-la d'abord sur le Web, puis installez-la depuis Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Jeu classique de détection des couleurs",
+        "tagline": "Le défi original de mise au point sur les couleurs : mémorisez la couleur de la réponse et choisissez-la parmi des couleurs similaires.",
+        "description": "Le test original de détection des couleurs avant Find Odd Color: Color Master 2. Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
         "highlights": [
           "Sensation originale",
           "Mise au point des couleurs",
           "Jeu rapide",
           "Installer maintenant"
         ],
-        "primaryCta": "Installer Color Master",
+        "primaryCta": "Installer le test de détection des couleurs",
         "detailCta": "Essayez la démo Web",
         "statusNote": "Essayez-le d'abord sur le Web, puis installez-le depuis Google Play.",
-        "iconAlt": "Icône Maître des couleurs"
+        "iconAlt": "Icône Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Défense aléatoire coréenne : siège",
@@ -20388,10 +20546,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Icône de défense aléatoire de la carte chanceuse"
       },
       "darkMaze": {
-        "name": "Évasion du labyrinthe des rats de laboratoire : Labyrinthe sombre",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Sortie du jeu d'évasion de labyrinthe",
         "tagline": "Guidez un rat de laboratoire à travers le labyrinthe sombre et trouvez la sortie.",
-        "description": "Sorti sur Google Play le 28 mai 2026. Déplacez-vous dans le labyrinthe sombre, utilisez des objets et échappez-vous avant que le chemin ne se ferme.",
+        "description": "Sorti sur Google Play le 28 mai 2026. Déplacez-vous dans le labyrinthe sombre, utilisez des objets et échappez-vous avant que le chemin ne se referme.",
         "highlights": [
           "Sortie le 28 mai 2026",
           "Évasion du labyrinthe",
@@ -20399,8 +20557,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Survie sombre"
         ],
         "primaryCta": "Installer sur Google Play",
-        "statusNote": "Maintenant disponible sur Google Play. Aucune démo Web n'est fournie pour cette application.",
-        "iconAlt": "Évasion du labyrinthe de rats de laboratoire : icône du labyrinthe sombre"
+        "statusNote": "Affichez les détails de l'application, puis installez-la à partir de Google Play. Aucune démo Web n'est fournie pour cette application.",
+        "iconAlt": "Icône Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Afficher les détails de l'application"
       }
     },
     "status": {
@@ -20417,18 +20576,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "IDÉES DE COURT-CIRCUIT",
       "title": "Essayez-les comme ça",
       "colorMaster2": {
-        "app": "Maître des couleurs 2",
-        "title": "\"Si vous voyez cette différence de couleur, vos yeux sont perçants.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Si vous repérez cette couleur étrange, vos yeux sont perçants.\"",
         "description": "Affrontez vos amis dans un défi de 10 secondes."
       },
       "galaxyCode": {
-        "app": "Galaccode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Envoyez à votre ami un message extraterrestre qu'il ne peut pas décoder.\"",
         "description": "Laissez des messages secrets que seuls les détenteurs de clés de partage peuvent décoder."
       },
       "ufoSignal": {
-        "app": "Appelez l'OVNI",
-        "title": "\"Que se passe-t-il si vous appuyez sur le bouton OVNI à l'aube ?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Que se passe-t-il si vous envoyez un signal d'OVNI à l'aube ?\"",
         "description": "Profitez des sons et de l'animation dans une pièce sombre."
       }
     },
@@ -20445,7 +20604,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Quelle application dois-je installer en premier ?",
-        "answer": "S'il s'agit de votre première visite, essayez d'abord Color Master 2. Il est rapide à jouer et facile à rejouer pour un meilleur score."
+        "answer": "S'il s'agit de votre première visite, essayez d'abord Find Odd Color: Color Master 2. Il est rapide à jouer et facile à rejouer pour un meilleur score."
       },
       "privateTest": {
         "question": "Comment rejoindre des applications de test privées ?",
@@ -20456,12 +20615,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Fabriqué par NeoKIM",
       "lastUpdated": "Dernière mise à jour : 2026.05.31",
       "googlePlay": "Applications Google Play",
-      "colorTest": "Test de couleur",
-      "alienText": "Générateur de texte extraterrestre",
-      "ufoApp": "Application OVNI",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Politique de confidentialité",
       "appAds": "app-ads.txt",
-      "contact": "Contacter"
+      "contact": "Contacter",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Inscription d'un testeur privé",
@@ -20482,9 +20642,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fi-FI": {
     "seo": {
       "title": "NeoKIM App Lab | Ilmaiset Android Mini -sovellukset",
-      "description": "Asenna Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze ja yksityiset testit Lucky Card Random Defenselle ja muille Android-minisovelluksille.",
+      "description": "Asenna Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze ja yksityisiä testejä muille Android-minisovelluksille.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Värihaasteita, avaruusolioita muistuttavia salaisia viestejä, UFO-kutsukokemuksia, Lab Rat Maze Escape: Dark Maze ja yksityisiä testejä nopeaan Android-hauskuuteen."
+      "ogDescription": "Löydä outoja värejä, tee alien-tyylistä salatekstiä, lähetä leikkisä UFO-signaalia, pakene tummia sokkeloita ja liity yksityisiin testeihin saadaksesi nopeaa Android-hauskaa."
     },
     "skip": {
       "apps": "Siirry sovellusluetteloon"
@@ -20519,11 +20679,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android minisovelluskokoelma",
       "title": "NeoKIM App Lab",
       "subtitle": "Pienet Android-sovellukset nopeaan hauskanpitoon ja jakamiseen",
-      "description": "Värihaasteita, avaruusolioiden kaltaisia salaisia viestejä ja UFO-kutsuelämyksiä. Asenna kevyesti. Nauti alle minuutissa.",
+      "description": "Omituisen värisiä haasteita, avaruusoliotyylisiä salaisia viestejä, UFO-signaalien toistoa ja tummia labyrinttipakoja. Asenna kevyesti. Nauti alle minuutissa.",
       "primaryCta": "Asenna Suositeltu sovellus",
-      "primaryAria": "Asenna Color Master 2 Google Play:ään",
+      "primaryAria": "Asenna Find Odd Color: Color Master 2 Google Playiin",
       "secondaryCta": "Selaa sovelluksia",
-      "visualAria": "Puhelinmalli, jossa on Color Master 2 -kuvake ja värilaatat",
+      "visualAria": "Puhelinmalli, jossa on Find Odd Color: Color Master 2-kuvake ja värilaatat",
       "badges": [
         "Ilmaiset sovellukset",
         "Android",
@@ -20535,81 +20695,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SUOMI SOVELLUS",
       "title": "Asenna tämä ensin tänään",
       "badge": "Esittelyssä",
-      "appName": "Värimestari 2",
-      "short": "Löydä eri väri 10 sekunnissa.",
-      "description": "Yhden elämän väripalapeli, jossa yksi virhe päättää juoksun. Se alkaa nopeasti, sitten vetää sinut takaisin lyödäksesi ennätystäsi.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Löydä yksi eri väri 10 sekunnissa.",
+      "description": "Yhden elämän parittomien värien palapeli, jossa yksi virhe päättää juoksun. Se alkaa nopeasti, sitten vetää sinua takaisin lyödäksesi ennätystäsi.",
       "primaryCta": "Asenna Google Play:ään",
-      "primaryAria": "Asenna Color Master 2 Google Play:ään",
+      "primaryAria": "Asenna Find Odd Color: Color Master 2 Google Playiin",
       "secondaryCta": "Selaa sovelluksia",
-      "visualAria": "Color Master 2 värilaattojen haastepuhelinmalli"
+      "visualAria": "Find Odd Color: Color Master 2-laattahaastepuhelinmalli"
     },
     "apps": {
       "kicker": "APP-LUETTELO",
       "title": "Kaikki sovellukset",
       "description": "Asenna julkiset sovellukset suoraan. Yksityisiä testejä varten lähetä pyyntö ensin sähköpostitse; Kun testaajan käyttöoikeus on lisätty, käytä Liity testi -painiketta.",
       "colorMaster2": {
-        "name": "Värimestari 2",
-        "category": "Väri palapeli",
-        "tagline": "Löydä eri väri 10 sekunnissa.",
-        "description": "Yksi virhe päättää juoksun. Lyhyt, koukuttava värien havaitsemishaaste.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Omituisen värinen pulmapeli",
+        "tagline": "Löydä yksi eri väri 10 sekunnissa.",
+        "description": "Yksi virhe päättää juoksun. Lyhyt, koukuttava parittomien värien haaste tarkennukseen ja värien havaitsemiseen.",
         "highlights": [
           "10 sekunnin raja",
           "Yhden elämän juoksu",
           "Tulostaulukko",
           "Värisokea apuväline"
         ],
-        "primaryCta": "Asenna Color Master 2",
+        "primaryCta": "Asenna Find Odd Color",
         "detailCta": "Kokeile Web-demoa",
-        "statusNote": "Saatavilla nyt Google Play:stä.",
-        "iconAlt": "Color Master 2 -kuvake"
+        "statusNote": "Saatavilla nyt Google Playista.",
+        "iconAlt": "Find Odd Color: Color Master 2 -kuvake"
       },
       "galaxyCode": {
-        "name": "Galacticcode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Salainen viestisovellus",
         "tagline": "Luo muukalaisia muistuttavia salaisia viestejä, jotka tarvitsevat jakoavaimen koodin purkamiseen.",
         "description": "Luo omat galaktisen kielen säännöt. Vain henkilöt, joilla on jakoavaimesi, voivat luoda samat säännöt uudelleen, eikä alkuperäistä tekstiä lähetetä palvelimelle.",
         "highlights": [
           "Share-key-pohjainen",
           "Henkilökohtaiset säännöt",
-          "SNS-valmis",
+          "SNS-valmius",
           "Ei palvelimen latausta"
         ],
         "primaryCta": "Luo salaisia viestejä",
         "detailCta": "Kokeile Web-demoa",
-        "statusNote": "Saatavilla nyt Google Play:stä.",
-        "iconAlt": "Galacticode-kuvake"
+        "statusNote": "Saatavilla nyt Google Playista.",
+        "iconAlt": "Alien Text Maker: Galaxy Code -kuvake"
       },
       "ufoSignal": {
-        "name": "Soita UFO",
-        "category": "Mukaansatempaava hauska sovellus",
-        "tagline": "Salaperäinen UFO-kutsukokemus huvin vuoksi.",
-        "description": "Paina painiketta, kuule signaali ja kuvittele jotain kuuntelevan avaruudesta.",
+        "name": "UFO Signal Simulator",
+        "category": "Mysteerisignaalin viihdesovellus",
+        "tagline": "Lähetä leikkisä avaruussignaali ja nauti UFO-tunnelmasta.",
+        "description": "Avaa sovellus, paina signaalipainiketta ja nauti äänestä ja animaatioista, jotka saavat hetken tuntumaan pieneltä UFO-rituaalilta.",
         "highlights": [
-          "Interaktiivinen painike",
+          "Signaalipainike",
           "Mysteerisiä ääniä",
-          "Animaatio",
+          "Tunnelma animaatio",
           "Ei ilmoittautumista"
         ],
-        "primaryCta": "Soita UFO",
-        "detailCta": "Kokeile Web-demoa",
-        "statusNote": "Saatavilla nyt Google Play:stä.",
-        "iconAlt": "Soita UFO-kuvakkeelle"
+        "primaryCta": "Asenna UFO Signal Simulator",
+        "detailCta": "Näytä sovelluksen tiedot",
+        "statusNote": "Katso sovelluksen tiedot ja asenna se sitten Google Playista.",
+        "iconAlt": "UFO Signal Simulator -kuvake"
       },
       "colorMasterClassic": {
-        "name": "Värin mestari",
-        "category": "Klassinen väripalapeli",
-        "tagline": "Alkuperäinen väritarkennushaaste: löydä vastaus samanlaisista väreistä.",
-        "description": "Alkuperäinen versio ennen Color Master 2:ta. Kokeile sitä ensin verkossa ja asenna se sitten Google Play:stä.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klassinen väriaistipeli",
+        "tagline": "Alkuperäinen väritarkennushaaste: muista vastauksen väri ja valitse se samanlaisista väreistä.",
+        "description": "Alkuperäinen värintunnistustesti ennen Find Odd Color: Color Master 2ia. Kokeile sitä ensin verkossa ja asenna se sitten Google Playista.",
         "highlights": [
           "Alkuperäinen fiilis",
           "Väri keskittyy",
           "Nopea peli",
           "Asenna nyt"
         ],
-        "primaryCta": "Asenna Color Master",
+        "primaryCta": "Asenna Color Sense Test",
         "detailCta": "Kokeile Web-demoa",
-        "statusNote": "Kokeile sitä ensin verkossa ja asenna se sitten Google Play:stä.",
-        "iconAlt": "Color Master -kuvake"
+        "statusNote": "Kokeile sitä ensin verkossa ja asenna se sitten Google Playista.",
+        "iconAlt": "Color Sense Test: Color Master -kuvake"
       },
       "koreanRandomDefense": {
         "name": "Korean satunnainen puolustus: Siege",
@@ -20644,19 +20804,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Lucky Card Random Defense -kuvake"
       },
       "darkMaze": {
-        "name": "Laboratoriorotan sokkelopako: tumma sokkelo",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Julkaistu labyrinttipakopeli",
         "tagline": "Ohjaa laboratoriorotta pimeän sokkelon läpi ja etsi uloskäynti.",
-        "description": "Julkaistu Google Playssa 28. toukokuuta 2026. Liiku pimeässä sokkelossa, käytä esineitä ja pakene ennen kuin polku sulkeutuu.",
+        "description": "Julkaistu Google Playissa 28. toukokuuta 2026. Liiku pimeässä sokkelossa, käytä esineitä ja pakene ennen kuin polku sulkeutuu.",
         "highlights": [
           "Julkaistu 28.5.2026",
           "Labyrinttipako",
           "Tuotteet",
           "Pimeä selviytyminen"
         ],
-        "primaryCta": "Asenna Google Playsta",
-        "statusNote": "Nyt saatavilla Google Playsta. Tälle sovellukselle ei ole tarjolla web-demoa.",
-        "iconAlt": "Laboratoriorotan sokkelopako: Tumma labyrintti -kuvake"
+        "primaryCta": "Asenna Google Playiin",
+        "statusNote": "Katso sovelluksen tiedot ja asenna se sitten Google Playista. Tälle sovellukselle ei ole tarjolla web-demoa.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze -kuvake",
+        "detailCta": "Näytä sovelluksen tiedot"
       }
     },
     "status": {
@@ -20673,18 +20834,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "SHORTS-IDEOITA",
       "title": "Kokeile niitä näin",
       "colorMaster2": {
-        "app": "Värimestari 2",
-        "title": "\"Jos näet tämän värieron, silmäsi ovat terävät.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Jos huomaat tämän oudon värin, silmäsi ovat terävät.\"",
         "description": "Kilpaile ystävien kanssa 10 sekunnin haasteessa."
       },
       "galaxyCode": {
-        "app": "Galacticcode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Lähetä ystävällesi muukalainen viesti, jota hän ei voi purkaa.\"",
         "description": "Jätä salaisia viestejä, jotka vain osakkeiden avainten haltijat voivat purkaa."
       },
       "ufoSignal": {
-        "app": "Soita UFO",
-        "title": "\"Mitä tapahtuu, jos painat UFO-painiketta aamunkoitteessa?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Mitä tapahtuu, jos lähetät UFO-signaalin aamunkoitteessa?\"",
         "description": "Nauti äänistä ja animaatioista pimeässä huoneessa."
       }
     },
@@ -20701,7 +20862,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Mikä sovellus minun pitäisi asentaa ensin?",
-        "answer": "Jos tämä on ensimmäinen vierailusi, kokeile ensin Color Master 2:ta. Se on nopea pelata ja helppo toistaa paremman tuloksen saamiseksi."
+        "answer": "Jos tämä on ensimmäinen vierailusi, kokeile ensin Find Odd Color: Color Master 2. Se on nopea pelata ja helppo toistaa paremman tuloksen saamiseksi."
       },
       "privateTest": {
         "question": "Kuinka liityn yksityisiin testisovelluksiin?",
@@ -20712,12 +20873,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Valmistaja NeoKIM",
       "lastUpdated": "Viimeksi päivitetty: 2026.05.31",
       "googlePlay": "Google Play-sovellukset",
-      "colorTest": "Väritesti",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO-sovellus",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Tietosuojakäytäntö",
       "appAds": "app-ads.txt",
-      "contact": "Ota yhteyttä"
+      "contact": "Ota yhteyttä",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Yksityinen testaaja ilmoittautuminen",
@@ -20738,9 +20900,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "fil": {
     "seo": {
       "title": "NeoKIM App Lab | Libreng Android Mini Apps",
-      "description": "I-install ang Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, at mga pribadong pagsubok para sa Lucky Card Random Defense at higit pang Android mini app.",
+      "description": "I-install ang Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze, at mga pribadong pagsubok para sa higit pang mga mini app ng Android.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Mga hamon sa kulay, mga lihim na mensaheng mala-alien, mga karanasan sa pagtawag sa UFO, Lab Rat Maze Escape: Dark Maze, at mga pribadong pagsubok para sa mabilis na kasiyahan sa Android."
+      "ogDescription": "Maghanap ng mga kakaibang kulay, gumawa ng alien-style na sikretong text, magpadala ng mga mapaglarong UFO signal, tumakas sa madilim na maze, at sumali sa mga pribadong pagsubok para sa mabilis na kasiyahan sa Android."
     },
     "skip": {
       "apps": "Lumaktaw sa listahan ng app"
@@ -20775,11 +20937,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android mini app collection",
       "title": "NeoKIM App Lab",
       "subtitle": "Maliit na Android app na ginawa para sa mabilis na kasiyahan at pagbabahagi",
-      "description": "Mga hamon sa kulay, mga lihim na mensaheng mala-alien, at mga karanasan sa pagtawag sa UFO. Mag-install nang bahagya. Mag-enjoy sa loob ng isang minuto.",
+      "description": "Kakaibang kulay na mga hamon, alien-style na mga lihim na mensahe, UFO signal play, at dark maze escapes. Mag-install nang bahagya. Mag-enjoy sa loob ng isang minuto.",
       "primaryCta": "I-install ang Itinatampok na App",
-      "primaryAria": "I-install ang Color Master 2 sa Google Play",
+      "primaryAria": "I-install ang Find Odd Color: Color Master 2 sa Google Play",
       "secondaryCta": "Mag-browse ng Apps",
-      "visualAria": "Mockup ng telepono na may icon ng Color Master 2 at mga color tile",
+      "visualAria": "Mockup ng telepono na may icon ng Find Odd Color: Color Master 2 at mga color tile",
       "badges": [
         "Libreng Apps",
         "Android",
@@ -20791,36 +20953,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "Itinatampok na APP",
       "title": "I-install Ito Una Ngayon",
       "badge": "Itinatampok",
-      "appName": "Master ng Kulay 2",
-      "short": "Hanapin ang iba't ibang kulay sa loob ng 10 segundo.",
-      "description": "Isang one-life color puzzle kung saan ang isang pagkakamali ay nagtatapos sa pagtakbo. Mabilis itong magsisimula, pagkatapos ay patuloy kang hinihila pabalik upang talunin ang iyong record.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Hanapin ang isang magkaibang kulay sa loob ng 10 segundo.",
+      "description": "Isang isang buhay na kakaibang kulay na palaisipan kung saan ang isang pagkakamali ay nagtatapos sa pagtakbo. Mabilis itong magsisimula, pagkatapos ay patuloy kang hinihila pabalik upang talunin ang iyong record.",
       "primaryCta": "I-install sa Google Play",
-      "primaryAria": "I-install ang Color Master 2 sa Google Play",
+      "primaryAria": "I-install ang Find Odd Color: Color Master 2 sa Google Play",
       "secondaryCta": "Mag-browse ng Apps",
-      "visualAria": "Color Master 2 color tile challenge phone mockup"
+      "visualAria": "Find Odd Color: Color Master 2 tile challenge phone mockup"
     },
     "apps": {
       "kicker": "CATALOG NG APP",
       "title": "Lahat ng Apps",
       "description": "Direktang mag-install ng mga pampublikong app. Para sa mga pribadong pagsubok, mag-email muna ng kahilingan; pagkatapos maidagdag ang access sa tester, gamitin ang button na Sumali sa Pagsubok.",
       "colorMaster2": {
-        "name": "Master ng Kulay 2",
-        "category": "Palaisipan ng kulay",
-        "tagline": "Hanapin ang iba't ibang kulay sa loob ng 10 segundo.",
-        "description": "Isang pagkakamali ang nagtatapos sa pagtakbo. Isang maikli, nakakahumaling na hamon sa pagdama ng kulay.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Kakaibang kulay na larong puzzle",
+        "tagline": "Hanapin ang isang magkaibang kulay sa loob ng 10 segundo.",
+        "description": "Isang pagkakamali ang nagtatapos sa pagtakbo. Isang maikli, nakakahumaling na kakaibang kulay na hamon para sa pagtutok at pagdama ng kulay.",
         "highlights": [
           "10 segundong limitasyon",
           "One-life run",
           "Leaderboard",
           "Colorblind aid"
         ],
-        "primaryCta": "I-install ang Color Master 2",
+        "primaryCta": "I-install ang Find Odd Color",
         "detailCta": "Subukan ang Web Demo",
         "statusNote": "Available na ngayon sa Google Play.",
-        "iconAlt": "Icon ng Color Master 2"
+        "iconAlt": "icon ng Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "Galacticcode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Lihim na mensahe ng app",
         "tagline": "Gumawa ng mga alien-like na lihim na mensahe na nangangailangan ng share key para mag-decode.",
         "description": "Lumikha ng iyong sariling galactic na mga panuntunan sa wika. Ang mga taong may iyong share key lang ang makakagawa ng parehong mga panuntunan, at ang orihinal na text ay hindi ina-upload sa isang server.",
@@ -20833,39 +20995,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Gumawa ng Mga Lihim na Mensahe",
         "detailCta": "Subukan ang Web Demo",
         "statusNote": "Available na ngayon sa Google Play.",
-        "iconAlt": "Icon ng Galacticcode"
+        "iconAlt": "icon ng Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "Tawagan ang UFO",
-        "category": "Nakaka-engganyong nakakatuwang app",
-        "tagline": "Isang misteryosong karanasan sa pagtawag ng UFO para masaya.",
-        "description": "Pindutin ang pindutan, marinig ang signal, at isipin ang isang bagay na nakikinig mula sa kalawakan.",
+        "name": "UFO Signal Simulator",
+        "category": "Misteryo signal entertainment app",
+        "tagline": "Magpadala ng mapaglarong space signal at tamasahin ang UFO mood.",
+        "description": "Buksan ang app, pindutin ang button ng signal, at i-enjoy ang tunog at animation na nagpaparamdam sa sandaling ito na parang isang maliit na ritwal ng UFO.",
         "highlights": [
-          "Interactive na button",
+          "Pindutan ng signal",
           "Mga tunog ng misteryo",
-          "Animasyon",
+          "Animasyon ng mood",
           "Walang sign-up"
         ],
-        "primaryCta": "Tawagan ang UFO",
-        "detailCta": "Subukan ang Web Demo",
-        "statusNote": "Available na ngayon sa Google Play.",
-        "iconAlt": "Tawagan ang icon ng UFO"
+        "primaryCta": "I-install ang UFO Signal Simulator",
+        "detailCta": "Tingnan ang Mga Detalye ng App",
+        "statusNote": "Tingnan ang mga detalye ng app, pagkatapos ay i-install ito mula sa Google Play.",
+        "iconAlt": "icon ng UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "Kulay Master",
-        "category": "Klasikong kulay na palaisipan",
-        "tagline": "Ang orihinal na hamon sa pagtutok sa kulay: hanapin ang sagot sa magkakatulad na mga kulay.",
-        "description": "Ang orihinal na bersyon bago ang Color Master 2. Subukan muna ito sa web, pagkatapos ay i-install ito mula sa Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasikong laro ng kahulugan ng kulay",
+        "tagline": "Ang orihinal na hamon sa pagtutok sa kulay: tandaan ang kulay ng sagot at piliin ito mula sa magkatulad na mga kulay.",
+        "description": "Ang orihinal na color sense test bago ang Find Odd Color: Color Master 2. Subukan muna ito sa web, pagkatapos ay i-install ito mula sa Google Play.",
         "highlights": [
           "Orihinal na pakiramdam",
           "Focus ng kulay",
           "Mabilis na paglalaro",
           "I-install ngayon"
         ],
-        "primaryCta": "I-install ang Color Master",
+        "primaryCta": "I-install ang Color Sense Test",
         "detailCta": "Subukan ang Web Demo",
         "statusNote": "Subukan muna ito sa web, pagkatapos ay i-install ito mula sa Google Play.",
-        "iconAlt": "Kulay Master icon"
+        "iconAlt": "icon ng Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "Korean Random Defense: Pagkubkob",
@@ -20911,8 +21073,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "Madilim na kaligtasan ng buhay"
         ],
         "primaryCta": "I-install sa Google Play",
-        "statusNote": "Available na ngayon sa Google Play. Walang web demo na ibinigay para sa app na ito.",
-        "iconAlt": "Lab Rat Maze Escape: Dark Maze icon"
+        "statusNote": "Tingnan ang mga detalye ng app, pagkatapos ay i-install ito mula sa Google Play. Walang web demo na ibinigay para sa app na ito.",
+        "iconAlt": "icon ng Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "Tingnan ang Mga Detalye ng App"
       }
     },
     "status": {
@@ -20929,18 +21092,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "MAIKLING IDEYA",
       "title": "Subukan Silang Ganito",
       "colorMaster2": {
-        "app": "Master ng Kulay 2",
-        "title": "\"Kung nakikita mo ang pagkakaiba ng kulay na ito, matalas ang iyong mga mata.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Kung makikita mo ang kakaibang kulay na ito, matalas ang iyong mga mata.\"",
         "description": "Makipagkumpitensya sa mga kaibigan sa isang 10 segundong hamon."
       },
       "galaxyCode": {
-        "app": "Galacticcode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Padalhan ang iyong kaibigan ng alien message na hindi nila ma-decode.\"",
         "description": "Mag-iwan ng mga lihim na mensahe na ang mga share-key holder lang ang makakapag-decode."
       },
       "ufoSignal": {
-        "app": "Tawagan ang UFO",
-        "title": "\"Ano ang mangyayari kung pinindot mo ang pindutan ng UFO sa madaling araw?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"Ano ang mangyayari kung magpadala ka ng UFO signal sa madaling araw?\"",
         "description": "Tangkilikin ang mga tunog at animation sa isang madilim na silid."
       }
     },
@@ -20957,7 +21120,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Aling app ang dapat kong i-install muna?",
-        "answer": "Kung ito ang iyong unang pagbisita, subukan muna ang Color Master 2. Mabilis itong laruin at madaling i-replay para sa mas magandang marka."
+        "answer": "Kung ito ang iyong unang pagbisita, subukan muna ang Find Odd Color: Color Master 2. Mabilis itong laruin at madaling i-replay para sa mas magandang marka."
       },
       "privateTest": {
         "question": "Paano ako makakasali sa mga pribadong pansubok na app?",
@@ -20968,12 +21131,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "Ginawa ni NeoKIM",
       "lastUpdated": "Huling na-update: 2026.05.31",
       "googlePlay": "Google Play Apps",
-      "colorTest": "Pagsubok sa Kulay",
-      "alienText": "Alien Text Generator",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Patakaran sa Privacy",
       "appAds": "app-ads.txt",
-      "contact": "Makipag-ugnayan"
+      "contact": "Makipag-ugnayan",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Private Tester Signup",
@@ -20994,9 +21158,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hu-HU": {
     "seo": {
       "title": "NeoKIM App Lab | Ingyenes Android Mini alkalmazások",
-      "description": "Telepítse a Color Master 2-t, a Galacticode-ot, a Call the UFO-t, a Lab Rat Maze Escape: Dark Maze-t, valamint a Lucky Card Random Defense privát tesztjeit és további Android-minialkalmazásokat.",
+      "description": "Telepítse a Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze és privát teszteket további Android minialkalmazásokhoz.",
       "ogTitle": "NeoKIM App Lab | Android Mini Apps",
-      "ogDescription": "Színes kihívások, idegenszerű titkos üzenetek, UFO-hívási élmények, Lab Rat Maze Escape: Dark Maze és privát tesztek a gyors Android szórakozáshoz."
+      "ogDescription": "Találja meg a furcsa színeket, készítsen idegen stílusú titkos szöveget, küldjön játékos UFO-jeleket, meneküljön el a sötét útvesztőkből, és csatlakozzon privát tesztekhez a gyors Android szórakozáshoz."
     },
     "skip": {
       "apps": "Ugrás az alkalmazáslistához"
@@ -21031,11 +21195,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android minialkalmazás-gyűjtemény",
       "title": "NeoKIM App Lab",
       "subtitle": "Kis Android alkalmazások a gyors szórakozáshoz és megosztáshoz",
-      "description": "Színes kihívások, földönkívüliekhez hasonló titkos üzenetek és UFO-hívási élmények. Könnyedén telepítse. Élvezze egy perc alatt.",
+      "description": "Különös színű kihívások, idegen stílusú titkos üzenetek, UFO jelek játéka és sötét labirintusból való menekülés. Könnyedén telepítse. Élvezze egy perc alatt.",
       "primaryCta": "Telepítse a kiemelt alkalmazást",
-      "primaryAria": "Telepítse a Color Master 2-t a Google Play-re",
+      "primaryAria": "Telepítse a Find Odd Color: Color Master 2 terméket a Google Play termékre",
       "secondaryCta": "Tallózás az alkalmazások között",
-      "visualAria": "Telefon makett Color Master 2 ikonnal és színes csempékkel",
+      "visualAria": "Telefon makett Find Odd Color: Color Master 2 ikonnal és színes csempével",
       "badges": [
         "Ingyenes alkalmazások",
         "Android",
@@ -21047,36 +21211,36 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "KIEMELT ALKALMAZÁS",
       "title": "Telepítse ezt először ma",
       "badge": "Kiemelt",
-      "appName": "Színmester 2",
-      "short": "Találja meg a különböző színt 10 másodperc alatt.",
-      "description": "Egy életből álló színrejtvény, ahol egy hiba véget vet a futásnak. Gyorsan indul, majd folyamatosan visszahúz, hogy megdöntse a rekordját.",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "Találja meg az egyik különböző színt 10 másodperc alatt.",
+      "description": "Egy életre szóló, páratlan színű puzzle, ahol egy hiba véget vet a futásnak. Gyorsan indul, majd folyamatosan visszahúz, hogy megdöntse a rekordját.",
       "primaryCta": "Telepítés a Google Play-re",
-      "primaryAria": "Telepítse a Color Master 2-t a Google Play-re",
+      "primaryAria": "Telepítse a Find Odd Color: Color Master 2 terméket a Google Play termékre",
       "secondaryCta": "Tallózás az alkalmazások között",
-      "visualAria": "Color Master 2 színes csempe kihívás telefon makett"
+      "visualAria": "Find Odd Color: Color Master 2 csempe kihívás telefon makett"
     },
     "apps": {
       "kicker": "APP KATALÓGUSA",
       "title": "Minden alkalmazás",
       "description": "Telepítse a nyilvános alkalmazásokat közvetlenül. Privát tesztekhez először küldjön kérést e-mailben; a tesztelői hozzáférés hozzáadása után használja a Csatlakozás teszthez gombot.",
       "colorMaster2": {
-        "name": "Színmester 2",
-        "category": "Színes puzzle",
-        "tagline": "Találja meg a különböző színt 10 másodperc alatt.",
-        "description": "Egy hiba véget vet a futásnak. Rövid, addiktív színérzékelési kihívás.",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "Páratlan színű kirakós játék",
+        "tagline": "Találja meg az egyik különböző színt 10 másodperc alatt.",
+        "description": "Egy hiba véget vet a futásnak. Rövid, addiktív, páratlan színekkel kapcsolatos kihívás a fókusz és a színérzékelés érdekében.",
         "highlights": [
           "10 másodperces határ",
           "Egy életre szóló futás",
           "Ranglista",
           "Színvak segédeszköz"
         ],
-        "primaryCta": "Telepítse a Color Master 2-t",
+        "primaryCta": "Telepítse a Find Odd Color",
         "detailCta": "Próbáld ki a webdemót",
         "statusNote": "Már elérhető a Google Play-en.",
-        "iconAlt": "Színes Mester 2 ikonra"
+        "iconAlt": "Find Odd Color: Color Master 2 ikonra"
       },
       "galaxyCode": {
-        "name": "Galacticcode",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "Titkos üzenet alkalmazás",
         "tagline": "Hozzon létre idegenszerű titkos üzeneteket, amelyek dekódolásához megosztási kulcsra van szükség.",
         "description": "Készítse el saját galaktikus nyelvi szabályait. Csak az Ön megosztási kulcsával rendelkező személyek hozhatják újra ugyanazokat a szabályokat, és az eredeti szöveg nem kerül feltöltésre a szerverre.",
@@ -21089,39 +21253,39 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "primaryCta": "Hozzon létre titkos üzeneteket",
         "detailCta": "Próbáld ki a webdemót",
         "statusNote": "Már elérhető a Google Play-en.",
-        "iconAlt": "Galacticode ikonra"
+        "iconAlt": "Alien Text Maker: Galaxy Code ikonra"
       },
       "ufoSignal": {
-        "name": "Hívd az UFO-t",
-        "category": "Magával ragadó szórakoztató alkalmazás",
-        "tagline": "Egy titokzatos UFO-hívás élménye szórakozásból.",
-        "description": "Nyomja meg a gombot, hallja a jelet, és képzelje el, hogy valami az űrből hallgat.",
+        "name": "UFO Signal Simulator",
+        "category": "Rejtélyes jel szórakoztató alkalmazás",
+        "tagline": "Küldj játékos térjelzést, és élvezd az UFO hangulatot.",
+        "description": "Nyissa meg az alkalmazást, nyomja meg a jel gombot, és élvezze a hangot és az animációt, amelyek egy kis UFO-rituálénak érzik a pillanatot.",
         "highlights": [
-          "Interaktív gomb",
+          "Jelző gomb",
           "Rejtélyes hangok",
-          "Animáció",
+          "Hangulat animáció",
           "Nincs regisztráció"
         ],
-        "primaryCta": "Hívd az UFO-t",
-        "detailCta": "Próbáld ki a webdemót",
-        "statusNote": "Már elérhető a Google Play-en.",
-        "iconAlt": "Hívja az UFO ikont"
+        "primaryCta": "Telepítse a UFO Signal Simulator terméket",
+        "detailCta": "Tekintse meg az alkalmazás részleteit",
+        "statusNote": "Tekintse meg az alkalmazás részleteit, majd telepítse a Google Play webhelyről.",
+        "iconAlt": "UFO Signal Simulator ikonra"
       },
       "colorMasterClassic": {
-        "name": "Színmester",
-        "category": "Klasszikus színes puzzle",
-        "tagline": "Az eredeti szín-fókusz kihívás: találd meg a választ a hasonló színek között.",
-        "description": "Az eredeti verzió a Color Master 2 előtt. Először próbálja ki az interneten, majd telepítse a Google Play-ről.",
+        "name": "Color Sense Test: Color Master",
+        "category": "Klasszikus színérzékelési játék",
+        "tagline": "Az eredeti szín-fókusz kihívás: emlékezzen a válasz színére, és válassza ki a hasonló színek közül.",
+        "description": "Az eredeti színérzékelési teszt a Find Odd Color: Color Master 2 előtt. Először próbálja ki az interneten, majd telepítse a Google Play webhelyről.",
         "highlights": [
           "Eredeti érzés",
           "Színes fókusz",
           "Gyors játék",
           "Telepítse most"
         ],
-        "primaryCta": "Telepítse a Color Master programot",
+        "primaryCta": "Telepítse a Color Sense Test",
         "detailCta": "Próbáld ki a webdemót",
         "statusNote": "Először próbálja ki az interneten, majd telepítse a Google Play webhelyről.",
-        "iconAlt": "Színes Mester ikonra"
+        "iconAlt": "Color Sense Test: Color Master ikonra"
       },
       "koreanRandomDefense": {
         "name": "Koreai véletlen védelem: ostrom",
@@ -21156,19 +21320,20 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "Szerencsekártya véletlenszerű védelem ikonra"
       },
       "darkMaze": {
-        "name": "Lab-rat labirintus menekülés: Sötét labirintus",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "Megjelent labirintus menekülési játék",
         "tagline": "Vezess át egy laborpatkányt a sötét labirintuson, és találd meg a kijáratot.",
-        "description": "Megjelenés a Google Playen 2026. május 28-án. Menj át a sötét labirintusban, használj tárgyakat, és menekülj, mielőtt az ösvény bezárulna.",
+        "description": "Megjelent a Google Play 2026. május 28-án. Menj át a sötét labirintusban, használj tárgyakat, és menekülj, mielőtt az ösvény bezárul.",
         "highlights": [
           "Megjelenés: 2026. május 28",
           "Labirintus menekülés",
           "Tételek",
           "Sötét túlélés"
         ],
-        "primaryCta": "Telepítés a Google Playen",
-        "statusNote": "Már elérhető a Google Playen. Ehhez az alkalmazáshoz nincs webes bemutató.",
-        "iconAlt": "Labirintus Labirintus Escape: Sötét labirintus ikon"
+        "primaryCta": "Telepítés a Google Play-re",
+        "statusNote": "Tekintse meg az alkalmazás részleteit, majd telepítse a Google Play webhelyről. Ehhez az alkalmazáshoz nincs webes bemutató.",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze ikonra",
+        "detailCta": "Tekintse meg az alkalmazás részleteit"
       }
     },
     "status": {
@@ -21185,18 +21350,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "RÖVID ÖTLETEK",
       "title": "Próbálja ki őket így",
       "colorMaster2": {
-        "app": "Színmester 2",
-        "title": "\"Ha ezt a színkülönbséget látod, a szemed éles.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"Ha észreveszed ezt a furcsa színt, a szemed éles.\"",
         "description": "Versenyezz a barátaiddal egy 10 másodperces kihívásban."
       },
       "galaxyCode": {
-        "app": "Galacticcode",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"Küldj a barátodnak egy idegen üzenetet, amelyet nem tudnak megfejteni.\"",
         "description": "Hagyjon titkos üzeneteket, amelyeket csak a megosztási kulcsok birtokosai tudnak dekódolni."
       },
       "ufoSignal": {
-        "app": "Hívd az UFO-t",
-        "title": "– Mi történik, ha hajnalban megnyomod az UFO gombot?",
+        "app": "UFO Signal Simulator",
+        "title": "\"Mi történik, ha UFO-jelet küldesz hajnalban?\"",
         "description": "Élvezze a hangokat és az animációt egy sötét szobában."
       }
     },
@@ -21213,7 +21378,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "Melyik alkalmazást telepítsem először?",
-        "answer": "Ha ez az első látogatása, először próbálja ki a Color Master 2-t. Gyorsan játszható, és könnyen visszajátszható a jobb pontszám érdekében."
+        "answer": "Ha ez az első látogatása, először próbálja ki a Find Odd Color: Color Master 2-t. Gyorsan játszható, és könnyen visszajátszható a jobb pontszám érdekében."
       },
       "privateTest": {
         "question": "Hogyan csatlakozhatok privát tesztalkalmazásokhoz?",
@@ -21224,12 +21389,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM készítette",
       "lastUpdated": "Utolsó frissítés: 2026.05.31",
       "googlePlay": "Google Play alkalmazások",
-      "colorTest": "Szín teszt",
-      "alienText": "Idegen szöveggenerátor",
-      "ufoApp": "UFO App",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "Adatvédelmi szabályzat",
       "appAds": "app-ads.txt",
-      "contact": "Kapcsolatfelvétel"
+      "contact": "Kapcsolatfelvétel",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "Privát tesztelő regisztráció",
@@ -21250,9 +21416,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "iw-IL": {
     "seo": {
       "title": "NeoKIM App Lab | אפליקציות מיני Android בחינם",
-      "description": "התקן את Color Master 2, Galacticode, Call the UFO, Lab Rat Maze Escape: Dark Maze, ובדיקות פרטיות עבור Lucky Card Random Defense ועוד אפליקציות מיני אנדרואיד.",
+      "description": "התקן את Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze ובדיקות פרטיות לאפליקציות מיני נוספות של Android.",
       "ogTitle": "NeoKIM App Lab | Android מיני אפליקציות",
-      "ogDescription": "אתגרי צבע, הודעות סודיות דמויות חייזרים, חוויות שיחות עב\"מים, בריחה של מבוך עכברוש מעבדה: מבוך אפל ומבחנים פרטיים להנאה מהירה של אנדרואיד."
+      "ogDescription": "מצא צבעים מוזרים, צור טקסט סודי בסגנון חייזר, שלח אותות עב\"מים שובבים, לברוח ממבוכים אפלים, והצטרף לבדיקות פרטיות לכיף מהיר של Android."
     },
     "skip": {
       "apps": "דלג לרשימת האפליקציות"
@@ -21287,11 +21453,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "אוסף מיני אפליקציות Android",
       "title": "מעבדת אפליקציות NeoKIM",
       "subtitle": "אפליקציות Android קטנות שנועדו להנאה ושיתוף מהירים",
-      "description": "אתגרי צבע, מסרים סודיים דמויי חייזרים וחוויות קריאת עב\"מים. התקן קלות. תהנה תוך פחות מדקה.",
+      "description": "אתגרים בצבע מוזר, מסרים סודיים בסגנון חייזרים, משחק איתות עב\"מים ובריחה ממבוך אפל. התקן קלות. תהנה תוך פחות מדקה.",
       "primaryCta": "התקן אפליקציה מומלצת",
-      "primaryAria": "התקן את Color Master 2 ב-Google Play",
+      "primaryAria": "התקן את Find Odd Color: Color Master 2 ב-Google Play",
       "secondaryCta": "עיין באפליקציות",
-      "visualAria": "דגם טלפון עם סמל Color Master 2 ואריחי צבע",
+      "visualAria": "דגם טלפון עם סמל Find Odd Color: Color Master 2 ואריחי צבע",
       "badges": [
         "אפליקציות בחינם",
         "Android",
@@ -21303,81 +21469,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "אפליקציה מומלצת",
       "title": "התקן את זה קודם היום",
       "badge": "מוצגים",
-      "appName": "צבע מאסטר 2",
+      "appName": "Find Odd Color: Color Master 2",
       "short": "מצא את הצבע השונה תוך 10 שניות.",
-      "description": "פאזל צבעוני חד-חיים שבו טעות אחת מסיימת את הריצה. זה מתחיל מהר, ואז ממשיך למשוך אותך אחורה כדי לנצח את השיא שלך.",
+      "description": "פאזל בצבע מוזר חד-חיים שבו טעות אחת מסיימת את הריצה. זה מתחיל מהר, ואז ממשיך למשוך אותך אחורה כדי לנצח את השיא שלך.",
       "primaryCta": "התקן ב-Google Play",
-      "primaryAria": "התקן את Color Master 2 ב-Google Play",
+      "primaryAria": "התקן את Find Odd Color: Color Master 2 ב-Google Play",
       "secondaryCta": "עיין באפליקציות",
-      "visualAria": "דגם טלפון לאתגר של Color Master 2 צבעוני"
+      "visualAria": "דגם טלפון לאתגר Find Odd Color: Color Master 2"
     },
     "apps": {
       "kicker": "קטלוג אפליקציות",
       "title": "כל האפליקציות",
       "description": "התקן אפליקציות ציבוריות ישירות. למבחנים פרטיים, תחילה בדוא\"ל בקשה; לאחר הוספת גישת בודק, השתמש בלחצן הצטרף למבחן.",
       "colorMaster2": {
-        "name": "צבע מאסטר 2",
-        "category": "חידת צבע",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "משחק פאזל בצבע מוזר",
         "tagline": "מצא את הצבע השונה תוך 10 שניות.",
-        "description": "טעות אחת מסיימת את הריצה. אתגר תפיסת צבע קצר וממכר.",
+        "description": "טעות אחת מסיימת את הריצה. אתגר צבע מוזר קצר וממכר למיקוד ותפיסת צבע.",
         "highlights": [
           "מגבלה של 10 שניות",
           "ריצה לחיים אחדים",
           "Leaderboard",
           "סיוע לעיוור צבעים"
         ],
-        "primaryCta": "התקן את Color Master 2",
+        "primaryCta": "התקן את Find Odd Color",
         "detailCta": "נסה את הדגמת אינטרנט",
         "statusNote": "זמין כעת ב-Google Play.",
-        "iconAlt": "סמל Color Master 2"
+        "iconAlt": "סמל Find Odd Color: Color Master 2"
       },
       "galaxyCode": {
-        "name": "גלקטיקוד",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "אפליקציית הודעות סודיות",
         "tagline": "צור הודעות סודיות דמויות חייזרים שזקוקים למפתח שיתוף כדי לפענח.",
         "description": "צור חוקי שפה גלקטית משלך. רק אנשים עם מפתח השיתוף שלך יכולים ליצור מחדש את אותם כללים, והטקסט המקורי לא מועלה לשרת.",
         "highlights": [
           "מבוסס מפתח שיתוף",
           "כללים אישיים",
-          "SNS מוכן",
+          "מוכן ל-SNS",
           "אין העלאת שרת"
         ],
         "primaryCta": "צור הודעות סודיות",
         "detailCta": "נסה את הדגמת אינטרנט",
         "statusNote": "זמין כעת ב-Google Play.",
-        "iconAlt": "סמל Galacticode"
+        "iconAlt": "סמל Alien Text Maker: Galaxy Code"
       },
       "ufoSignal": {
-        "name": "תתקשר לעב\"ם",
-        "category": "אפליקציה מהנה סוחפת",
-        "tagline": "חווית קריאת עב\"מים מסתורית בשביל הכיף.",
-        "description": "לחץ על הכפתור, שמע את האות ודמיין משהו מקשיב מהחלל.",
+        "name": "UFO Signal Simulator",
+        "category": "אפליקציית בידור אות מסתורין",
+        "tagline": "שלח אות מרחב שובב ותיהנה ממצב הרוח של עב\"מים.",
+        "description": "פתחו את האפליקציה, לחצו על כפתור האות ותיהנו מסאונד ואנימציה שגורמים לרגע להרגיש כמו טקס עב\"מים קטן.",
         "highlights": [
-          "כפתור אינטראקטיבי",
+          "כפתור איתות",
           "נשמע מסתורין",
-          "אנימציה",
+          "אנימציית מצב רוח",
           "אין הרשמה"
         ],
-        "primaryCta": "תתקשר לעב\"ם",
-        "detailCta": "נסה את הדגמת אינטרנט",
-        "statusNote": "זמין כעת ב-Google Play.",
-        "iconAlt": "התקשר לסמל העב\"מים"
+        "primaryCta": "התקן את UFO Signal Simulator",
+        "detailCta": "הצג את פרטי האפליקציה",
+        "statusNote": "הצג את פרטי האפליקציה ולאחר מכן התקן אותה מ-Google Play.",
+        "iconAlt": "סמל UFO Signal Simulator"
       },
       "colorMasterClassic": {
-        "name": "אמן צבע",
-        "category": "פאזל צבע קלאסי",
-        "tagline": "אתגר מיקוד הצבע המקורי: מצא את התשובה בין צבעים דומים.",
-        "description": "הגרסה המקורית לפני Color Master 2. נסה אותה קודם באינטרנט, ואז התקן אותה מ-Google Play.",
+        "name": "Color Sense Test: Color Master",
+        "category": "משחק חוש צבע קלאסי",
+        "tagline": "האתגר המקורי של מיקוד הצבע: זכור את צבע התשובה ובחר אותו מתוך צבעים דומים.",
+        "description": "בדיקת חוש הצבע המקורית לפני Find Odd Color: Color Master 2. נסה אותו קודם באינטרנט, ולאחר מכן התקן אותו מ-Google Play.",
         "highlights": [
           "תחושה מקורית",
           "מיקוד צבע",
           "משחק מהיר",
           "התקן עכשיו"
         ],
-        "primaryCta": "התקן את Color Master",
+        "primaryCta": "התקן את Color Sense Test",
         "detailCta": "נסה את הדגמת אינטרנט",
-        "statusNote": "נסה את זה באינטרנט תחילה, ואז התקן אותו מ-Google Play.",
-        "iconAlt": "סמל צבע מאסטר"
+        "statusNote": "נסה אותו קודם באינטרנט, ולאחר מכן התקן אותו מ-Google Play.",
+        "iconAlt": "סמל Color Sense Test: Color Master"
       },
       "koreanRandomDefense": {
         "name": "הגנה אקראית קוריאנית: מצור",
@@ -21412,10 +21578,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "סמל הגנה אקראית של Lucky Card"
       },
       "darkMaze": {
-        "name": "Lab Rat Maze Escape: מבוך אפל",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "פורסם משחק בריחה מבוך",
         "tagline": "הנח עכברוש מעבדה דרך המבוך האפל ומצא את היציאה.",
-        "description": "פורסם ב-Google Play ב-28 במאי 2026. עברו במבוך האפל, השתמשו בפריטים וברח לפני שהנתיב נסגר.",
+        "description": "שוחרר ב-Google Play ב-28 במאי 2026. עברו במבוך האפל, השתמשו בפריטים וברחו לפני שהנתיב נסגר.",
         "highlights": [
           "פורסם ב-28 במאי 2026",
           "בריחה ממבוך",
@@ -21423,8 +21589,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "הישרדות אפלה"
         ],
         "primaryCta": "התקן ב-Google Play",
-        "statusNote": "זמין כעת ב-Google Play. לא מסופק הדגמת אינטרנט עבור אפליקציה זו.",
-        "iconAlt": "Lab Rat Maze Escape: סמל מבוך אפל"
+        "statusNote": "הצג את פרטי האפליקציה ולאחר מכן התקן אותה מ-Google Play. לא מסופק הדגמת אינטרנט עבור אפליקציה זו.",
+        "iconAlt": "סמל Lab Rat Maze Escape: Dark Maze",
+        "detailCta": "הצג את פרטי האפליקציה"
       }
     },
     "status": {
@@ -21441,18 +21608,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "רעיונות קצרים",
       "title": "נסה אותם ככה",
       "colorMaster2": {
-        "app": "צבע מאסטר 2",
-        "title": "\"אם אתה רואה את הבדל הצבע הזה, העיניים שלך חדות.\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"אם אתה מזהה את הצבע המוזר הזה, העיניים שלך חדות.\"",
         "description": "התחרו עם חברים באתגר של 10 שניות."
       },
       "galaxyCode": {
-        "app": "גלקטיקוד",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"שלח לחבר שלך הודעה זר שהוא לא יכול לפענח.\"",
         "description": "השאר הודעות סודיות שרק בעלי מפתחות מניות יכולים לפענח."
       },
       "ufoSignal": {
-        "app": "תתקשר לעב\"ם",
-        "title": "\"מה יקרה אם תלחץ על כפתור העב\"מים עם עלות השחר?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"מה קורה אם אתה שולח אות עב\"מים עם עלות השחר?\"",
         "description": "תהנה מהצלילים והאנימציה בחדר חשוך."
       }
     },
@@ -21469,7 +21636,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "איזו אפליקציה כדאי להתקין קודם?",
-        "answer": "אם זה הביקור הראשון שלך, נסה תחילה את Color Master 2. זה מהיר לשחק וקל לשחק מחדש כדי לקבל ניקוד טוב יותר."
+        "answer": "אם זה הביקור הראשון שלך, נסה תחילה את Find Odd Color: Color Master 2. זה מהיר לשחק וקל לשחק מחדש כדי לקבל ניקוד טוב יותר."
       },
       "privateTest": {
         "question": "איך אני מצטרף לאפליקציות בדיקה פרטיות?",
@@ -21480,12 +21647,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "תוצרת NeoKIM",
       "lastUpdated": "עדכון אחרון: 2026.05.31",
       "googlePlay": "אפליקציות Google Play",
-      "colorTest": "מבחן צבע",
-      "alienText": "מחולל טקסטים זרים",
-      "ufoApp": "אפליקציית עב\"מים",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "מדיניות פרטיות",
       "appAds": "app-ads.txt",
-      "contact": "צור קשר"
+      "contact": "צור קשר",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "הרשמה לבוחן פרטי",
@@ -21506,9 +21674,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
   "hi-IN": {
     "seo": {
       "title": "NeoKIM ऐप लैब | मुफ़्त Android मिनी ऐप्स",
-      "description": "कलर मास्टर 2, गैलेक्टिकोड, यूएफओ को कॉल करें, लैब रैट मेज़ एस्केप: डार्क मेज़, और लकी कार्ड रैंडम डिफेंस और अधिक एंड्रॉइड मिनी ऐप्स के लिए निजी परीक्षण इंस्टॉल करें।",
+      "description": "अधिक Android मिनी ऐप्स के लिए Find Odd Color: Color Master 2, Alien Text Maker: Galaxy Code, UFO Signal Simulator, Color Sense Test: Color Master, Lab Rat Maze Escape: Dark Maze और निजी परीक्षण इंस्टॉल करें।",
       "ogTitle": "NeoKIM ऐप लैब | Android मिनी ऐप्स",
-      "ogDescription": "रंग चुनौतियाँ, एलियन जैसे गुप्त संदेश, यूएफओ कॉलिंग अनुभव, लैब रैट मेज़ एस्केप: डार्क मेज़, और त्वरित एंड्रॉइड मनोरंजन के लिए निजी परीक्षण।"
+      "ogDescription": "अजीब रंग ढूंढें, एलियन-शैली का गुप्त पाठ बनाएं, चंचल यूएफओ सिग्नल भेजें, अंधेरे भूलभुलैया से बचें, और त्वरित Android मनोरंजन के लिए निजी परीक्षणों में शामिल हों।"
     },
     "skip": {
       "apps": "ऐप सूची पर जाएं"
@@ -21543,11 +21711,11 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "eyebrow": "Android मिनी ऐप संग्रह",
       "title": "NeoKIM ऐप लैब",
       "subtitle": "त्वरित मनोरंजन और साझाकरण के लिए बनाए गए छोटे Android ऐप्स",
-      "description": "रंग चुनौतियाँ, एलियन जैसे गुप्त संदेश और यूएफओ कॉलिंग अनुभव। हल्के से स्थापित करें. एक मिनट के अंदर आनंद लें.",
+      "description": "अजीब रंग की चुनौतियाँ, विदेशी शैली के गुप्त संदेश, यूएफओ सिग्नल प्ले, और अंधेरे भूलभुलैया से बच निकलना। हल्के से स्थापित करें. एक मिनट के अंदर आनंद लें.",
       "primaryCta": "फ़ीचर्ड ऐप इंस्टॉल करें",
-      "primaryAria": "Google Play पर कलर मास्टर 2 स्थापित करें",
+      "primaryAria": "Google Play पर Find Odd Color: Color Master 2 स्थापित करें",
       "secondaryCta": "ऐप्स ब्राउज़ करें",
-      "visualAria": "कलर मास्टर 2 आइकन और कलर टाइल्स के साथ फ़ोन मॉकअप",
+      "visualAria": "Find Odd Color: Color Master 2 आइकन और रंगीन टाइल्स के साथ फ़ोन मॉकअप",
       "badges": [
         "निःशुल्क ऐप्स",
         "Android",
@@ -21559,81 +21727,81 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "फ़ीचर्ड ऐप",
       "title": "इसे सबसे पहले आज ही इंस्टॉल करें",
       "badge": "विशेष रुप से प्रदर्शित",
-      "appName": "कलर मास्टर 2",
-      "short": "10 सेकंड में अलग रंग ढूंढें।",
-      "description": "एक जीवन रंग पहेली जहां एक गलती से दौड़ समाप्त हो जाती है। यह तेजी से शुरू होता है, फिर आपके रिकॉर्ड को तोड़ने के लिए आपको पीछे खींचता रहता है।",
+      "appName": "Find Odd Color: Color Master 2",
+      "short": "10 सेकंड में एक अलग रंग ढूंढें।",
+      "description": "एक जीवन की अजीब रंग की पहेली जहां एक गलती से दौड़ समाप्त हो जाती है। यह तेजी से शुरू होता है, फिर आपके रिकॉर्ड को तोड़ने के लिए आपको पीछे खींचता रहता है।",
       "primaryCta": "Google Play पर इंस्टॉल करें",
-      "primaryAria": "Google Play पर कलर मास्टर 2 स्थापित करें",
+      "primaryAria": "Google Play पर Find Odd Color: Color Master 2 स्थापित करें",
       "secondaryCta": "ऐप्स ब्राउज़ करें",
-      "visualAria": "कलर मास्टर 2 कलर टाइल चैलेंज फोन मॉकअप"
+      "visualAria": "Find Odd Color: Color Master 2 टाइल चुनौती फ़ोन मॉकअप"
     },
     "apps": {
       "kicker": "ऐप कैटलॉग",
       "title": "सभी ऐप्स",
       "description": "सार्वजनिक ऐप्स सीधे इंस्टॉल करें. निजी परीक्षणों के लिए, पहले एक अनुरोध ईमेल करें; परीक्षक पहुंच जोड़ने के बाद, परीक्षण में शामिल हों बटन का उपयोग करें।",
       "colorMaster2": {
-        "name": "कलर मास्टर 2",
-        "category": "रंग पहेली",
-        "tagline": "10 सेकंड में अलग रंग ढूंढें।",
-        "description": "एक गलती से रन ख़त्म हो जाता है. एक छोटी, व्यसनी रंग धारणा चुनौती।",
+        "name": "Find Odd Color: Color Master 2",
+        "category": "अजीब रंग पहेली खेल",
+        "tagline": "10 सेकंड में एक अलग रंग ढूंढें।",
+        "description": "एक गलती से रन ख़त्म हो जाता है. फोकस और रंग धारणा के लिए एक छोटी, व्यसनी विषम रंग चुनौती।",
         "highlights": [
           "10 सेकंड की सीमा",
           "एक जीवन की दौड़",
           "लीडरबोर्ड",
           "कलरब्लाइंड सहायता"
         ],
-        "primaryCta": "कलर मास्टर 2 स्थापित करें",
+        "primaryCta": "अजीब रंग ढूँढें स्थापित करें",
         "detailCta": "वेब डेमो आज़माएँ",
         "statusNote": "अब Google Play पर उपलब्ध है।",
-        "iconAlt": "कलर मास्टर 2 आइकन"
+        "iconAlt": "Find Odd Color: Color Master 2 आइकन"
       },
       "galaxyCode": {
-        "name": "गैलेक्टिकोड",
+        "name": "Alien Text Maker: Galaxy Code",
         "category": "गुप्त संदेश ऐप",
         "tagline": "एलियन जैसे गुप्त संदेश बनाएं जिन्हें डिकोड करने के लिए शेयर कुंजी की आवश्यकता होती है।",
         "description": "अपने स्वयं के गैलेक्टिक भाषा नियम बनाएं। केवल आपकी शेयर कुंजी वाले लोग ही समान नियमों को फिर से बना सकते हैं, और मूल पाठ सर्वर पर अपलोड नहीं किया जाता है।",
         "highlights": [
           "शेयर-कुंजी आधारित",
           "व्यक्तिगत नियम",
-          "SNS-तैयार",
+          "एसएनएस-तैयार",
           "कोई सर्वर अपलोड नहीं"
         ],
         "primaryCta": "गुप्त संदेश बनाएँ",
         "detailCta": "वेब डेमो आज़माएँ",
         "statusNote": "अब Google Play पर उपलब्ध है।",
-        "iconAlt": "गैलेक्टिकोड आइकन"
+        "iconAlt": "Alien Text Maker: Galaxy Code आइकन"
       },
       "ufoSignal": {
-        "name": "यूएफओ को बुलाओ",
-        "category": "इमर्सिव फन ऐप",
-        "tagline": "मनोरंजन के लिए एक रहस्यमय यूएफओ कॉलिंग अनुभव।",
-        "description": "बटन दबाएँ, सिग्नल सुनें और अंतरिक्ष से कुछ सुनने की कल्पना करें।",
+        "name": "UFO Signal Simulator",
+        "category": "मिस्ट्री सिग्नल मनोरंजन ऐप",
+        "tagline": "एक चंचल अंतरिक्ष संकेत भेजें और यूएफओ मूड का आनंद लें।",
+        "description": "ऐप खोलें, सिग्नल बटन दबाएं, और ध्वनि और एनीमेशन का आनंद लें जो उस पल को एक छोटे यूएफओ अनुष्ठान जैसा महसूस कराता है।",
         "highlights": [
-          "इंटरैक्टिव बटन",
+          "सिग्नल बटन",
           "रहस्य लगता है",
-          "एनीमेशन",
+          "मूड एनीमेशन",
           "कोई साइन-अप नहीं"
         ],
-        "primaryCta": "यूएफओ को बुलाओ",
-        "detailCta": "वेब डेमो आज़माएँ",
-        "statusNote": "अब Google Play पर उपलब्ध है।",
-        "iconAlt": "यूएफओ आइकन पर कॉल करें"
+        "primaryCta": "UFO Signal Simulator स्थापित करें",
+        "detailCta": "ऐप विवरण देखें",
+        "statusNote": "ऐप विवरण देखें, फिर इसे Google Play से इंस्टॉल करें।",
+        "iconAlt": "UFO Signal Simulator आइकन"
       },
       "colorMasterClassic": {
-        "name": "रंग मास्टर",
-        "category": "क्लासिक रंग पहेली",
-        "tagline": "मूल रंग-फ़ोकस चुनौती: समान रंगों के बीच उत्तर ढूंढें।",
-        "description": "कलर मास्टर 2 से पहले का मूल संस्करण। पहले इसे वेब पर आज़माएँ, फिर इसे Google Play से इंस्टॉल करें।",
+        "name": "Color Sense Test: Color Master",
+        "category": "क्लासिक रंग बोध खेल",
+        "tagline": "मूल रंग-फ़ोकस चुनौती: उत्तर रंग याद रखें और उसे समान रंगों में से चुनें।",
+        "description": "Find Odd Color: Color Master 2 से पहले मूल रंग बोध परीक्षण। पहले इसे वेब पर आज़माएँ, फिर इसे Google Play से इंस्टॉल करें।",
         "highlights": [
           "मौलिक अनुभूति",
           "रंग फोकस",
           "त्वरित खेल",
           "अभी इंस्टॉल करें"
         ],
-        "primaryCta": "कलर मास्टर स्थापित करें",
+        "primaryCta": "कलर सेंस टेस्ट स्थापित करें",
         "detailCta": "वेब डेमो आज़माएँ",
         "statusNote": "पहले इसे वेब पर आज़माएँ, फिर इसे Google Play से इंस्टॉल करें।",
-        "iconAlt": "कलर मास्टर आइकन"
+        "iconAlt": "Color Sense Test: Color Master आइकन"
       },
       "koreanRandomDefense": {
         "name": "कोरियाई यादृच्छिक रक्षा: घेराबंदी",
@@ -21668,10 +21836,10 @@ window.NEOKIM_I18N_TRANSLATIONS = {
         "iconAlt": "लकी कार्ड रैंडम डिफेंस आइकन"
       },
       "darkMaze": {
-        "name": "लैब रैट भूलभुलैया से बच: डार्क भूलभुलैया",
+        "name": "Lab Rat Maze Escape: Dark Maze",
         "category": "भूलभुलैया से भागने का खेल जारी किया गया",
         "tagline": "अंधेरे भूलभुलैया के माध्यम से एक लैब चूहे का मार्गदर्शन करें और बाहर निकलने का रास्ता ढूंढें।",
-        "description": "28 मई, 2026 को Google Play पर जारी किया गया। अंधेरी भूलभुलैया से गुजरें, वस्तुओं का उपयोग करें और रास्ता बंद होने से पहले भाग जाएँ।",
+        "description": "28 मई, 2026 को Google Play पर जारी किया गया। अंधेरी भूलभुलैया से गुजरें, वस्तुओं का उपयोग करें और रास्ता बंद होने से पहले भाग जाएं।",
         "highlights": [
           "28 मई, 2026 को रिलीज़ हुई",
           "भूलभुलैया से बच",
@@ -21679,8 +21847,9 @@ window.NEOKIM_I18N_TRANSLATIONS = {
           "अँधेरा अस्तित्व"
         ],
         "primaryCta": "Google Play पर इंस्टॉल करें",
-        "statusNote": "अब Google Play पर उपलब्ध है. इस ऐप के लिए कोई वेब डेमो प्रदान नहीं किया गया है।",
-        "iconAlt": "लैब रैट भूलभुलैया एस्केप: डार्क भूलभुलैया आइकन"
+        "statusNote": "ऐप विवरण देखें, फिर इसे Google Play से इंस्टॉल करें। इस ऐप के लिए कोई वेब डेमो प्रदान नहीं किया गया है।",
+        "iconAlt": "Lab Rat Maze Escape: Dark Maze आइकन",
+        "detailCta": "ऐप विवरण देखें"
       }
     },
     "status": {
@@ -21697,18 +21866,18 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "kicker": "लघु विचार",
       "title": "इन्हें इस तरह आज़माएं",
       "colorMaster2": {
-        "app": "कलर मास्टर 2",
-        "title": "\"यदि आप इस रंग अंतर को देखते हैं, तो आपकी आंखें तेज़ हैं।\"",
+        "app": "Find Odd Color: Color Master 2",
+        "title": "\"यदि आप इस अजीब रंग को देखते हैं, तो आपकी आँखें तेज़ हैं।\"",
         "description": "10 सेकंड की चुनौती में दोस्तों के साथ प्रतिस्पर्धा करें।"
       },
       "galaxyCode": {
-        "app": "गैलेक्टिकोड",
+        "app": "Alien Text Maker: Galaxy Code",
         "title": "\"अपने मित्र को एक विदेशी संदेश भेजें जिसे वे डिकोड नहीं कर सकते।\"",
         "description": "गुप्त संदेश छोड़ें जिन्हें केवल शेयर-कुंजी धारक ही डिकोड कर सकते हैं।"
       },
       "ufoSignal": {
-        "app": "यूएफओ को बुलाओ",
-        "title": "\"यदि आप भोर में यूएफओ बटन दबाते हैं तो क्या होता है?\"",
+        "app": "UFO Signal Simulator",
+        "title": "\"यदि आप भोर में यूएफओ सिग्नल भेजते हैं तो क्या होगा?\"",
         "description": "अंधेरे कमरे में ध्वनि और एनिमेशन का आनंद लें।"
       }
     },
@@ -21725,7 +21894,7 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       },
       "first": {
         "question": "मुझे सबसे पहले कौन सा ऐप इंस्टॉल करना चाहिए?",
-        "answer": "यदि यह आपकी पहली यात्रा है, तो पहले कलर मास्टर 2 आज़माएँ। इसे खेलना तेज़ है और बेहतर स्कोर के लिए दोबारा खेलना आसान है।"
+        "answer": "यदि यह आपकी पहली यात्रा है, तो पहले Find Odd Color: Color Master 2 को आज़माएँ। इसे खेलना तेज़ है और बेहतर स्कोर के लिए दोबारा खेलना आसान है।"
       },
       "privateTest": {
         "question": "मैं निजी परीक्षण ऐप्स से कैसे जुड़ूँ?",
@@ -21736,12 +21905,13 @@ window.NEOKIM_I18N_TRANSLATIONS = {
       "madeBy": "NeoKIM द्वारा निर्मित",
       "lastUpdated": "अंतिम अद्यतन: 2026.05.31",
       "googlePlay": "Google Play ऐप्स",
-      "colorTest": "रंग परीक्षण",
-      "alienText": "एलियन टेक्स्ट जेनरेटर",
-      "ufoApp": "यूएफओ ऐप",
+      "colorTest": "Find Odd Color",
+      "alienText": "Alien Text Maker",
+      "ufoApp": "UFO Signal Simulator",
       "privacyPolicy": "गोपनीयता नीति",
       "appAds": "app-ads.txt",
-      "contact": "संपर्क करें"
+      "contact": "संपर्क करें",
+      "darkMaze": "Dark Maze"
     },
     "privateTest": {
       "title": "निजी परीक्षक साइनअप",
