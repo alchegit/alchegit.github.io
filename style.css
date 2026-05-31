@@ -961,17 +961,17 @@ summary:focus-visible {
 
 .supported-language-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
   gap: 8px;
   margin-top: 14px;
 }
 
 .supported-language {
-  min-height: 40px;
-  display: flex;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  column-gap: 10px;
   border: 1px solid rgba(0, 255, 170, 0.18);
   border-radius: 6px;
   padding: 8px 10px;
@@ -982,9 +982,29 @@ summary:focus-visible {
   cursor: pointer;
 }
 
+.supported-language span {
+  min-width: 0;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .supported-language small {
+  justify-self: end;
+  min-width: 50px;
+  max-width: 64px;
+  border: 1px solid rgba(0, 213, 255, 0.22);
+  border-radius: 999px;
+  padding: 3px 6px;
+  background: rgba(0, 213, 255, 0.06);
   color: var(--dim);
+  font-size: 0.76rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-align: center;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .supported-language.is-current,
