@@ -1028,7 +1028,7 @@ summary:focus-visible {
   width: min(760px, 100%);
   max-height: min(820px, calc(100vh - 40px));
   display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
   border: 1px solid var(--line-strong);
   border-radius: 8px;
   background: #07101a;
@@ -1081,6 +1081,7 @@ summary:focus-visible {
 
 .language-modal__content {
   min-height: 0;
+  overflow: hidden;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 12px;
