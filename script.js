@@ -27,7 +27,7 @@ const apps = [
   {
     id: "color-master-2",
     status: "live",
-    priority: 1,
+    priority: 2,
     code: "ANDROID004",
     campaign: "color_master2",
     recommended: true,
@@ -39,7 +39,7 @@ const apps = [
   {
     id: "galacticode",
     status: "live",
-    priority: 2,
+    priority: 4,
     code: "ANDROID002",
     campaign: "galacticode",
     i18nKey: "apps.galaxyCode",
@@ -50,7 +50,7 @@ const apps = [
   {
     id: "call-the-ufo",
     status: "live",
-    priority: 3,
+    priority: 5,
     code: "ANDROID001",
     campaign: "call_the_ufo",
     i18nKey: "apps.ufoSignal",
@@ -61,7 +61,7 @@ const apps = [
   {
     id: "color-master-classic",
     status: "classic",
-    priority: 4,
+    priority: 3,
     code: "ANDROID003",
     campaign: "colormaster",
     i18nKey: "apps.colorMasterClassic",
@@ -72,7 +72,7 @@ const apps = [
   {
     id: "korean-random-defense",
     status: "testing",
-    priority: 5,
+    priority: 2,
     code: "ANDROID006",
     i18nKey: "apps.koreanRandomDefense",
     icon: "assets/icon_korean_random_defense.png",
@@ -81,7 +81,7 @@ const apps = [
   {
     id: "lucky-card-random-defense",
     status: "testing",
-    priority: 6,
+    priority: 1,
     code: "ANDROID007",
     i18nKey: "apps.luckyCardRandomDefense",
     icon: "assets/icon_lucky_card_random_defense.png",
@@ -90,7 +90,7 @@ const apps = [
   {
     id: "dark-maze",
     status: "live",
-    priority: 7,
+    priority: 1,
     code: "ANDROID005",
     campaign: "darkmaze",
     i18nKey: "apps.darkMaze",
@@ -406,9 +406,25 @@ function renderAppCards() {
 
   appGrid.innerHTML = apps
     .slice()
-    .sort((a, b) => a.priority - b.priority)
+    .sort(compareCatalogApps)
     .map((app) => renderAppCard(app))
     .join("");
+}
+
+function compareCatalogApps(a, b) {
+  const statusGroups = {
+    live: 1,
+    classic: 1,
+    testing: 2,
+    "coming-soon": 2
+  };
+  const groupDiff = (statusGroups[a.status] || 1) - (statusGroups[b.status] || 1);
+
+  if (groupDiff !== 0) {
+    return groupDiff;
+  }
+
+  return a.priority - b.priority;
 }
 
 function renderAppCard(app) {
