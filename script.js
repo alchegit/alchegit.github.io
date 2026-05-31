@@ -662,7 +662,7 @@ function bindSmoothScroll() {
     }
 
     event.preventDefault();
-    target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+    target.scrollIntoView({ behavior: "auto", block: "start" });
     history.pushState(null, "", targetId);
   });
 }
@@ -752,6 +752,7 @@ function initColorPreviewLoop() {
     let roundIndex = previewIndex % colorPreviewRounds.length;
     let remainingSeconds = 10;
     let resetTimerId = null;
+    let isActive = !("IntersectionObserver" in window);
 
     if (tiles.length !== 16 || !timer) {
       return;
@@ -760,6 +761,7 @@ function initColorPreviewLoop() {
     const paintRound = () => {
       const round = colorPreviewRounds[roundIndex];
       timer.textContent = `00:${String(remainingSeconds).padStart(2, "0")}`;
+      phoneScreen?.classList.toggle("is-preview-active", isActive);
       phoneScreen?.classList.toggle("is-final-second", remainingSeconds <= 1);
 
       tiles.forEach((tile, tileIndex) => {
@@ -779,8 +781,22 @@ function initColorPreviewLoop() {
       return;
     }
 
+    if ("IntersectionObserver" in window && phoneScreen) {
+      const observer = new IntersectionObserver((entries) => {
+        isActive = entries.some((entry) => entry.isIntersecting);
+        phoneScreen.classList.toggle("is-preview-active", isActive);
+        if (isActive) {
+          paintRound();
+        }
+      }, { rootMargin: "160px 0px" });
+
+      observer.observe(phoneScreen);
+    } else {
+      phoneScreen?.classList.add("is-preview-active");
+    }
+
     window.setInterval(() => {
-      if (resetTimerId) {
+      if (!isActive || document.hidden || resetTimerId) {
         return;
       }
 

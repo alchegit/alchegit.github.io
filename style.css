@@ -24,10 +24,6 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
   min-width: 320px;
@@ -88,34 +84,7 @@ summary:focus-visible {
 
 .noise-overlay,
 .grid-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-.noise-overlay {
-  z-index: 1;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-}
-
-.grid-overlay {
-  z-index: 2;
-  opacity: 0.18;
-  background-image:
-    linear-gradient(to right, rgba(0, 255, 170, 0.12) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 255, 170, 0.12) 1px, transparent 1px);
-  background-size: 48px 48px;
-  animation: gridPulse 8s infinite alternate;
-}
-
-@keyframes gridPulse {
-  from {
-    opacity: 0.1;
-  }
-  to {
-    opacity: 0.2;
-  }
+  display: none;
 }
 
 .terminal-header {
@@ -123,10 +92,9 @@ summary:focus-visible {
   top: 0;
   z-index: 20;
   padding: 14px 20px 0;
-  background: rgba(1, 5, 10, 0.82);
+  background: rgba(1, 5, 10, 0.94);
   border-bottom: 1px solid var(--line);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.34);
-  backdrop-filter: blur(14px);
 }
 
 .terminal-bar {
@@ -159,7 +127,6 @@ summary:focus-visible {
   border-radius: 999px;
   background: var(--mint);
   box-shadow: 0 0 12px var(--mint);
-  animation: blink 1.8s infinite;
 }
 
 .status-text {
@@ -215,16 +182,6 @@ summary:focus-visible {
   height: 1px;
   margin: 12px auto 0;
   background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.36;
-  }
 }
 
 .site-shell,
@@ -405,6 +362,9 @@ summary:focus-visible {
   inset: 0;
   pointer-events: none;
   background: linear-gradient(180deg, transparent, rgba(0, 255, 170, 0.08), transparent);
+}
+
+.phone-screen.is-preview-active::after {
   animation: scanline 4s linear infinite;
 }
 
@@ -691,23 +651,22 @@ summary:focus-visible {
   inset-inline: 0;
   top: -40%;
   height: 40%;
+  opacity: 0;
   background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-  animation: cardScan 5s linear infinite;
+  transform: translateY(-120%);
+  transition: opacity 0.2s ease, transform 0.5s ease;
+}
+
+.cyber-card:hover::after,
+.cyber-card:focus-within::after {
+  opacity: 1;
+  transform: translateY(420%);
 }
 
 .cyber-card:hover {
   transform: translateY(-4px);
   border-color: rgba(0, 255, 170, 0.7);
   box-shadow: var(--shadow-mint);
-}
-
-@keyframes cardScan {
-  from {
-    top: -40%;
-  }
-  to {
-    top: 120%;
-  }
 }
 
 .card-content {
