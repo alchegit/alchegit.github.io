@@ -18,12 +18,24 @@ body.language-modal-open {
   display: none !important;
 }
 
+.text-phrase {
+  display: inline;
+}
+
+.text-phrase__segment {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
 body.privacy-runtime-body {
   max-width: none !important;
   margin: 0 !important;
   font-family: inherit;
   padding: 0 !important;
   background: #050b12;
+  overflow-wrap: break-word;
 }
 
 .i18n-toolbar {
@@ -293,6 +305,14 @@ body.privacy-runtime-body {
 
 .privacy-runtime h3 {
   margin: 18px 0 8px;
+}
+
+.privacy-runtime h1,
+.privacy-runtime h2,
+.privacy-runtime h3 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-break: strict;
 }
 
 .privacy-runtime p,

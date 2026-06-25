@@ -31,6 +31,7 @@ body {
   color: var(--text);
   font-family: "Share Tech Mono", Consolas, monospace;
   line-height: 1.55;
+  overflow-wrap: break-word;
   overflow-x: hidden;
 }
 
@@ -195,6 +196,14 @@ summary:focus-visible {
   margin: 0 auto;
 }
 
+.hero-copy,
+.featured-copy,
+.section-heading,
+.card-content,
+.idea-card {
+  min-width: 0;
+}
+
 .hero-section {
   min-height: calc(100vh - 210px);
   display: grid;
@@ -238,6 +247,17 @@ summary:focus-visible {
   color: var(--muted);
   font-size: 1.05rem;
   overflow-wrap: anywhere;
+}
+
+.hero-lead,
+.hero-subcopy,
+.section-description,
+.featured-description,
+.card-tagline,
+.card-note,
+.idea-card p,
+.footer-note {
+  max-width: 100%;
 }
 
 .hero-actions {
@@ -386,6 +406,9 @@ summary:focus-visible {
 .phone-title {
   color: #ffffff;
   font-size: 1.05rem;
+  line-height: 1.28;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .phone-timer {
@@ -1160,6 +1183,46 @@ summary:focus-visible {
   color: var(--amber);
 }
 
+.text-phrase {
+  display: inline;
+}
+
+.text-phrase__segment {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.phone-title .text-phrase {
+  display: inline-flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.36em;
+  row-gap: 0.08em;
+}
+
+.phone-title .text-phrase--compound .text-phrase__segment {
+  flex: 0 0 100%;
+}
+
+.terminal-actions a,
+.language-trigger,
+.hero-copy h1,
+.section-heading h2,
+.featured-copy h3,
+.featured-tagline,
+.card-title,
+.card-category,
+.idea-app,
+.idea-card h3,
+.contact-modal__body h2 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-break: strict;
+}
+
 .contact-modal[hidden] {
   display: none;
 }
@@ -1406,6 +1469,11 @@ summary:focus-visible {
     font-size: 0.98rem;
   }
 
+  .hero-lead,
+  .hero-subcopy {
+    word-break: break-all;
+  }
+
   .hero-actions,
   .featured-actions {
     flex-direction: column;
@@ -1419,6 +1487,16 @@ summary:focus-visible {
 
   .hero-badges li {
     font-size: 0.78rem;
+  }
+
+  .hero-badges {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-badges li {
+    min-width: 0;
+    text-align: center;
   }
 
   .hero-visual {

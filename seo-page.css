@@ -35,6 +35,7 @@ body {
   color: var(--text);
   font-family: "Share Tech Mono", Consolas, monospace;
   line-height: 1.6;
+  overflow-wrap: break-word;
   overflow-x: hidden;
 }
 
@@ -796,6 +797,31 @@ h1 {
 
 .mobile-sticky-cta {
   display: none;
+}
+
+.text-phrase {
+  display: inline;
+}
+
+.text-phrase__segment {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.nav-link,
+h1,
+h2,
+h3,
+.primary-cta,
+.secondary-cta,
+.tool-button,
+.preview-card h3,
+.mobile-sticky-link {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-break: strict;
 }
 
 @media (max-width: 860px) {

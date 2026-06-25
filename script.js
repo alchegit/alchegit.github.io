@@ -32,7 +32,7 @@ const apps = [
     campaign: "color_master2",
     recommended: true,
     i18nKey: "apps.colorMaster2",
-    icon: "assets/icon_colormaster2.png",
+    icon: "assets/app-icon-source-2026-06-18-v2-transparent.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.codexdev.color_master2",
     detailUrl: "./color-master-2/"
   },
@@ -110,6 +110,37 @@ let pageTextSourceSet = null;
 let pageTextAnyReverseMap = null;
 let originalDocumentTitle = "";
 let pageTextObserver = null;
+
+const mobileLineBreakPhrases = [
+  { text: "다른 색 찾기: 컬러 마스터2", segments: ["다른 색 찾기:", "컬러 마스터2"] },
+  { text: "Find Odd Color: Color Master 2", segments: ["Find Odd Color:", "Color Master 2"] },
+  { text: "색감 테스트: 컬러 마스터", segments: ["색감 테스트:", "컬러 마스터"] },
+  { text: "Color Sense Test: Color Master", segments: ["Color Sense Test:", "Color Master"] },
+  { text: "외계어 변환기: 은하코드", segments: ["외계어 변환기:", "은하코드"] },
+  { text: "Alien Text Maker: Galaxy Code", segments: ["Alien Text Maker:", "Galaxy Code"] },
+  { text: "UFO 호출기: 우주 신호 놀이", segments: ["UFO 호출기:", "우주 신호 놀이"] },
+  { text: "실험쥐 미로탈출: 다크메이즈", segments: ["실험쥐 미로탈출:", "다크메이즈"] },
+  { text: "Lab Rat Maze Escape: Dark Maze", segments: ["Lab Rat Maze Escape:", "Dark Maze"] },
+  { text: "한국사 랜덤 디펜스: 수성전", segments: ["한국사 랜덤 디펜스:", "수성전"] },
+  { text: "Korean Random Defense: Siege", segments: ["Korean Random Defense:", "Siege"] },
+  { text: "럭키 카드 랜덤 디펜스", segments: ["럭키 카드", "랜덤 디펜스"] },
+  { text: "Lucky Card Random Defense", segments: ["Lucky Card", "Random Defense"] },
+  { text: "다른 색 찾기", segments: ["다른 색 찾기"] },
+  { text: "외계어 변환기", segments: ["외계어 변환기"] },
+  { text: "UFO 호출기", segments: ["UFO 호출기"] },
+  { text: "색감 테스트", segments: ["색감 테스트"] },
+  { text: "컬러 마스터2", segments: ["컬러 마스터2"] },
+  { text: "Color Master 2", segments: ["Color Master 2"] },
+  { text: "컬러 마스터", segments: ["컬러 마스터"] },
+  { text: "Color Master", segments: ["Color Master"] },
+  { text: "은하코드", segments: ["은하코드"] },
+  { text: "우주 신호 놀이", segments: ["우주 신호 놀이"] },
+  { text: "다크메이즈", segments: ["다크메이즈"] },
+  { text: "Galaxy Code", segments: ["Galaxy Code"] },
+  { text: "Dark Maze", segments: ["Dark Maze"] },
+  { text: "랜덤 디펜스", segments: ["랜덤 디펜스"] },
+  { text: "Random Defense", segments: ["Random Defense"] }
+].sort((a, b) => b.text.length - a.text.length);
 
 const colorPreviewRounds = [
   { base: "#38e2bd", answer: "#1fb797", answerIndex: 6 },
@@ -234,6 +265,7 @@ function applyLocale(localeCode, options = {}) {
   currentLocale = resolvedLocale;
   const locale = getLocaleMeta(resolvedLocale);
 
+  releaseMobileLineBreakProtection();
   document.documentElement.lang = resolvedLocale;
   document.documentElement.dir = locale.rtl ? "rtl" : "ltr";
 
@@ -252,6 +284,7 @@ function applyLocale(localeCode, options = {}) {
   updateMetadata();
   updateLanguageControls();
   updateTestingMailtoLinks();
+  protectMobileLineBreaks();
   window.dispatchEvent(new CustomEvent("neokim:localechange", {
     detail: { locale: resolvedLocale }
   }));
@@ -361,6 +394,109 @@ function updateTestingMailtoLinks() {
   if (emailButton && activeApp) {
     emailButton.href = buildMailto(activeApp);
   }
+}
+
+function releaseMobileLineBreakProtection(root = document.body) {
+  if (!root) {
+    return;
+  }
+
+  root.querySelectorAll(".text-phrase").forEach((element) => {
+    element.replaceWith(document.createTextNode(element.textContent || ""));
+  });
+}
+
+function protectMobileLineBreaks(root = document.body) {
+  if (!root) {
+    return;
+  }
+
+  const textNodes = [];
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue.trim() || !containsProtectedPhrase(node.nodeValue)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+
+      const parent = node.parentElement;
+      if (!parent || shouldSkipLineBreakProtection(parent)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode);
+  }
+
+  textNodes.forEach((node) => {
+    node.replaceWith(buildProtectedTextFragment(node.nodeValue));
+  });
+}
+
+function containsProtectedPhrase(value) {
+  return mobileLineBreakPhrases.some((phrase) => value.includes(phrase.text));
+}
+
+function shouldSkipLineBreakProtection(element) {
+  return Boolean(element.closest("script, style, noscript, template, input, textarea, select, option, .language-modal, .text-phrase"));
+}
+
+function buildProtectedTextFragment(value) {
+  const fragment = document.createDocumentFragment();
+  let remaining = value;
+
+  while (remaining) {
+    const match = findNextProtectedPhrase(remaining);
+    if (!match) {
+      fragment.append(document.createTextNode(remaining));
+      break;
+    }
+
+    if (match.index > 0) {
+      fragment.append(document.createTextNode(remaining.slice(0, match.index)));
+    }
+
+    fragment.append(createProtectedPhraseElement(match.phrase));
+    remaining = remaining.slice(match.index + match.phrase.text.length);
+  }
+
+  return fragment;
+}
+
+function findNextProtectedPhrase(value) {
+  return mobileLineBreakPhrases.reduce((best, phrase) => {
+    const index = value.indexOf(phrase.text);
+    if (index === -1) {
+      return best;
+    }
+
+    if (!best || index < best.index || (index === best.index && phrase.text.length > best.phrase.text.length)) {
+      return { phrase, index };
+    }
+
+    return best;
+  }, null);
+}
+
+function createProtectedPhraseElement(phrase) {
+  const wrapper = document.createElement("span");
+  wrapper.className = `text-phrase ${phrase.segments.length > 1 ? "text-phrase--compound" : "text-phrase--single"}`;
+
+  phrase.segments.forEach((segment, index) => {
+    if (index > 0) {
+      wrapper.append(document.createTextNode(" "));
+    }
+
+    const segmentElement = document.createElement("span");
+    segmentElement.className = "text-phrase__segment";
+    segmentElement.textContent = segment;
+    wrapper.append(segmentElement);
+  });
+
+  return wrapper;
 }
 
 function renderFeaturedApp() {
