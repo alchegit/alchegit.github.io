@@ -1329,17 +1329,33 @@ summary:focus-visible {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
     gap: 8px;
-    overflow: hidden;
   }
 
   .terminal-actions a,
   .language-trigger {
     width: 100%;
+    max-width: none;
+    min-height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 0;
+    border: 1px solid rgba(0, 255, 170, 0.28);
+    border-radius: 999px;
+    background: rgba(0, 255, 170, 0.055);
+    color: var(--text);
+    font-weight: 700;
     text-align: center;
+  }
+
+  .terminal-actions a:hover,
+  .terminal-actions a:focus-visible,
+  .language-trigger:hover,
+  .language-trigger:focus-visible {
+    border-color: var(--line-strong);
+    color: var(--mint);
+    background: rgba(0, 255, 170, 0.11);
+    box-shadow: 0 0 14px rgba(0, 255, 170, 0.18);
   }
 
   .terminal-status {
@@ -1407,27 +1423,34 @@ summary:focus-visible {
 
 @media (max-width: 640px) {
   .terminal-header {
-    padding: 10px 14px 0;
+    padding: 14px 14px 12px;
   }
 
   .terminal-bar {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    justify-items: stretch;
   }
 
   .terminal-title {
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     font-size: 0.98rem;
   }
 
   .terminal-actions {
     display: grid;
-    grid-template-columns: 1fr;
-    flex: 0 0 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-self: stretch;
     width: 100%;
+    max-width: none;
     justify-content: stretch;
     gap: 8px;
-    overflow: hidden;
+    border: 1px solid rgba(0, 255, 170, 0.2);
+    border-radius: 12px;
+    padding: 8px;
+    background: rgba(2, 12, 18, 0.72);
   }
 
   .terminal-actions a,
@@ -1439,6 +1462,18 @@ summary:focus-visible {
     min-width: 0;
     font-size: 0.84rem;
     text-align: center;
+  }
+
+  .terminal-actions a {
+    min-height: 42px;
+    border-radius: 8px;
+    background: rgba(0, 213, 255, 0.07);
+  }
+
+  .language-trigger {
+    grid-column: 1 / -1;
+    min-height: 46px;
+    border-radius: 999px;
   }
 
   .terminal-actions a[href="#faq"] {
