@@ -306,6 +306,45 @@ summary:focus-visible {
   color: var(--mint);
 }
 
+.game-lab-cta {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border-color: rgba(0, 213, 255, 0.78);
+  background:
+    linear-gradient(135deg, rgba(0, 213, 255, 0.12), rgba(255, 48, 210, 0.08)),
+    rgba(0, 255, 170, 0.04);
+  color: var(--text);
+  box-shadow: 0 0 22px rgba(0, 213, 255, 0.14);
+}
+
+.game-lab-cta::after {
+  content: "PLAY";
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  border: 1px solid rgba(0, 213, 255, 0.7);
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: var(--bg);
+  color: var(--cyan);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.game-lab-cta span {
+  font-weight: 800;
+}
+
+.game-lab-cta small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
 .primary-cta:hover,
 .secondary-cta:hover,
 .card-cta:hover,
@@ -1518,6 +1557,10 @@ summary:focus-visible {
   .secondary-cta,
   .featured-actions .card-cta {
     width: 100%;
+  }
+
+  .game-lab-cta {
+    align-items: center;
   }
 
   .hero-badges li {

@@ -22,6 +22,7 @@ let catalogGames = [];
 let activeFilter = { type: "all", value: "all" };
 let baseLikeCounts = new Map();
 let likedGameIds = new Set();
+let likeCountsAreAuthoritative = false;
 
 const crystalMochiPreviewSets = {
   bakery: ["sugar-sun", "cloud-cookie", "pudding-star", "mellow-door"],
@@ -45,7 +46,9 @@ async function loadCatalog() {
     }
 
     const db = await response.json();
-    baseLikeCounts = await loadLikeCounts();
+    const likeData = await loadLikeCounts();
+    baseLikeCounts = likeData.counts;
+    likeCountsAreAuthoritative = likeData.authoritative;
     catalogGames = Array.isArray(db.games)
       ? db.games
         .filter((game) => game.status !== "closed" && game.visibleInCabinet !== false)
@@ -64,18 +67,39 @@ async function loadCatalog() {
 }
 
 async function loadLikeCounts() {
+  const endpoint = getLikeEndpoint();
+  if (endpoint) {
+    try {
+      const response = await fetch(endpoint, { cache: "no-store" });
+      if (response.ok) {
+        const data = await response.json();
+        const counts = data && typeof data.counts === "object" ? data.counts : {};
+        return {
+          counts: new Map(Object.entries(counts).map(([gameId, count]) => [gameId, Number(count) || 0])),
+          authoritative: true
+        };
+      }
+      console.warn(`Live like counts unavailable: HTTP ${response.status}`);
+    } catch (error) {
+      console.warn("Live like counts unavailable", error);
+    }
+  }
+
   try {
     const response = await fetch("./like-counts.json", { cache: "no-store" });
     if (!response.ok) {
-      return new Map();
+      return { counts: new Map(), authoritative: false };
     }
 
     const data = await response.json();
     const counts = data && typeof data.counts === "object" ? data.counts : {};
-    return new Map(Object.entries(counts).map(([gameId, count]) => [gameId, Number(count) || 0]));
+    return {
+      counts: new Map(Object.entries(counts).map(([gameId, count]) => [gameId, Number(count) || 0])),
+      authoritative: false
+    };
   } catch (error) {
     console.warn("Like counts unavailable", error);
-    return new Map();
+    return { counts: new Map(), authoritative: false };
   }
 }
 
@@ -187,7 +211,8 @@ function renderGameCard(game, index) {
 }
 
 function getLikeCount(gameId) {
-  return (baseLikeCounts.get(gameId) || 0) + (likedGameIds.has(gameId) ? 1 : 0);
+  const baseCount = baseLikeCounts.get(gameId) || 0;
+  return baseCount + (!likeCountsAreAuthoritative && likedGameIds.has(gameId) ? 1 : 0);
 }
 
 function loadLikedGameIds() {
@@ -238,11 +263,11 @@ function getLikeEndpoint() {
 async function sendLikeVote(gameId) {
   const endpoint = getLikeEndpoint();
   if (!endpoint) {
-    return;
+    return null;
   }
 
   const voterHash = await hashVisitorId(getVisitorId());
-  await fetch(endpoint, {
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -252,6 +277,12 @@ async function sendLikeVote(gameId) {
       value: 1
     })
   });
+
+  if (!response.ok) {
+    throw new Error(`Like endpoint responded with HTTP ${response.status}`);
+  }
+
+  return response.json();
 }
 
 function updateCandidateMetricsReport(games) {
@@ -348,9 +379,21 @@ function handleLikeClick(event) {
   button.setAttribute("aria-pressed", "true");
   button.disabled = true;
   button.querySelector(".like-mark").textContent = "♥";
+
+  if (likeCountsAreAuthoritative) {
+    baseLikeCounts.set(gameId, (baseLikeCounts.get(gameId) || 0) + 1);
+  }
+
   button.querySelector("[data-like-count]").textContent = String(getLikeCount(gameId));
   updateCandidateMetricsReport(catalogGames);
-  sendLikeVote(gameId).catch((error) => console.warn("Like vote was not sent", error));
+  sendLikeVote(gameId)
+    .then((result) => {
+      if (result && result.gameId === gameId && Number.isFinite(Number(result.count))) {
+        baseLikeCounts.set(gameId, Number(result.count));
+        button.querySelector("[data-like-count]").textContent = String(getLikeCount(gameId));
+      }
+    })
+    .catch((error) => console.warn("Like vote was not sent", error));
 }
 
 function renderPreview(animationKey = "") {

@@ -1,0 +1,15 @@
+name = "neokim-game-likes"
+main = "src/index.js"
+compatibility_date = "2026-07-03"
+
+[vars]
+ALLOWED_ORIGINS = "https://alchegit.github.io,http://localhost:4177,http://127.0.0.1:4177"
+VALID_GAME_IDS = "flame-pudding-pad-race,flame-pocket-rogue-bakery,defold-star-delivery-rocket,defold-marshmallow-sling,html5-pixel-color-garden,phaser-jelly-brick-shop,solar2d-lunchbox-tapper,love-moon-letter-runner"
+RATE_LIMIT_WINDOW_SECONDS = "60"
+RATE_LIMIT_MAX_PER_VISITOR = "8"
+RATE_LIMIT_MAX_PER_IP = "60"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "neokim-game-likes"
+database_id = "223d856e-96a9-4bbe-ba59-9e3666405bb8"
