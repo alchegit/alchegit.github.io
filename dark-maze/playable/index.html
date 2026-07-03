@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="실험쥐 미로탈출: 다크메이즈를 웹에서 먼저 체험해보는 HTML5 플레이어입니다. 드래그로 실험쥐를 움직이고 어둠 속 출구를 찾아보세요.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#05080d">
+  <link rel="canonical" href="https://alchegit.github.io/dark-maze/playable/">
+  <meta property="og:title" content="실험쥐 미로탈출 웹 체험판 | 다크메이즈">
+  <meta property="og:description" content="드래그로 실험쥐를 움직여 어둠 속 미로의 출구를 찾아보세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://alchegit.github.io/dark-maze/playable/">
+  <meta property="og:image" content="https://alchegit.github.io/assets/icon_darkmaze.png">
+  <title>실험쥐 미로탈출 웹 체험판 | 다크메이즈</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="site-back-link" href="../">소개</a>
+
+  <div id="ad-root" class="ad-root">
+    <canvas id="game-canvas" aria-label="실험쥐 미로탈출 웹 체험판"></canvas>
+
+    <div id="intro-panel" class="intro-panel">
+      <div id="intro-title" class="intro-title">Escape the dark maze</div>
+      <div id="intro-hint" class="intro-hint">Drag to move the lab rat</div>
+    </div>
+
+    <button id="light-button" class="light-button" type="button" aria-label="Use light item">
+      <span class="light-bulb" aria-hidden="true"></span>
+    </button>
+
+    <div id="result-panel" class="result-panel" aria-live="polite">
+      <div class="result-copy">
+        <div id="result-title" class="result-title">Escape complete!</div>
+        <div id="result-body" class="result-body">Try darker mazes in the app</div>
+      </div>
+      <button id="cta-button" class="cta-button" type="button">Continue in app</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

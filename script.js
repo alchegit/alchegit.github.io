@@ -96,7 +96,7 @@ const apps = [
     i18nKey: "apps.darkMaze",
     icon: "assets/icon_darkmaze.png",
     playUrl: "https://play.google.com/store/apps/details?id=com.neokim.darkmaze",
-    detailUrl: "./dark-maze/"
+    detailUrl: "./dark-maze/playable/"
   }
 ];
 

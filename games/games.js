@@ -67,6 +67,20 @@ async function loadCatalog() {
 }
 
 async function loadLikeCounts() {
+  const supabase = getSupabaseConfig();
+  if (supabase) {
+    try {
+      const data = await callSupabaseRpc("get_game_like_counts");
+      const counts = data && typeof data.counts === "object" ? data.counts : {};
+      return {
+        counts: new Map(Object.entries(counts).map(([gameId, count]) => [gameId, Number(count) || 0])),
+        authoritative: true
+      };
+    } catch (error) {
+      console.warn("Supabase like counts unavailable", error);
+    }
+  }
+
   const endpoint = getLikeEndpoint();
   if (endpoint) {
     try {
@@ -260,13 +274,61 @@ function getLikeEndpoint() {
   return String(configured).trim();
 }
 
+function getSupabaseConfig() {
+  const url = window.GAME_LIKE_SUPABASE_URL || document.querySelector('meta[name="game-like-supabase-url"]')?.content || "";
+  const key = window.GAME_LIKE_SUPABASE_KEY || document.querySelector('meta[name="game-like-supabase-key"]')?.content || "";
+  const normalizedUrl = String(url).trim().replace(/\/+$/g, "");
+  const normalizedKey = String(key).trim();
+
+  if (!normalizedUrl || !normalizedKey) {
+    return null;
+  }
+
+  return {
+    url: normalizedUrl,
+    key: normalizedKey
+  };
+}
+
+async function callSupabaseRpc(functionName, body = {}) {
+  const supabase = getSupabaseConfig();
+  if (!supabase) {
+    return null;
+  }
+
+  const response = await fetch(`${supabase.url}/rest/v1/rpc/${functionName}`, {
+    method: "POST",
+    headers: {
+      apikey: supabase.key,
+      Authorization: `Bearer ${supabase.key}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Supabase RPC ${functionName} responded with HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
 async function sendLikeVote(gameId) {
+  const voterHash = await hashVisitorId(getVisitorId());
+  const supabase = getSupabaseConfig();
+  if (supabase) {
+    return callSupabaseRpc("create_game_like", {
+      p_game_id: gameId,
+      p_voter_hash: voterHash,
+      p_page: "/games/"
+    });
+  }
+
   const endpoint = getLikeEndpoint();
   if (!endpoint) {
     return null;
   }
 
-  const voterHash = await hashVisitorId(getVisitorId());
   const response = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

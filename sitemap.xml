@@ -72,8 +72,13 @@
   </url>
   <url>
     <loc>https://alchegit.github.io/dark-maze/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-07-03</lastmod>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alchegit.github.io/dark-maze/playable/</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://alchegit.github.io/privacy-policy/colormaster2.html</loc>

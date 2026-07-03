@@ -243,8 +243,8 @@ window.NEOKIM_I18N = (() => {
           description: "Released on Google Play on May 28, 2026. Move through the dark maze, use items, and escape before the path closes in.",
           highlights: ["Released May 28, 2026", "Maze escape", "Items", "Dark survival"],
           primaryCta: "Install on Google Play",
-          detailCta: "View App Details",
-          statusNote: "View the app details, then install it from Google Play. No web demo is provided for this app.",
+          detailCta: "Try Web Demo",
+          statusNote: "Try the web playable first, then install the full app from Google Play.",
           iconAlt: "Lab Rat Maze Escape: Dark Maze icon"
         }
       },
@@ -461,8 +461,8 @@ window.NEOKIM_I18N = (() => {
           description: "2026년 5월 28일 Google Play에 출시했습니다. 어둠 속 미로를 이동하고 아이템을 활용해 출구를 찾아 탈출하세요.",
           highlights: ["2026년 5월 28일 출시", "미로 탈출", "아이템", "어둠 속 생존"],
           primaryCta: "Google Play에서 설치",
-          detailCta: "살펴보기",
-          statusNote: "앱 소개를 살펴보고 Google Play에서 설치할 수 있습니다. 이 앱은 웹 미리해보기를 제공하지 않습니다.",
+          detailCta: "웹에서 먼저 체험",
+          statusNote: "웹 체험판으로 조작감을 먼저 확인하고, Google Play에서 앱을 설치할 수 있습니다.",
           iconAlt: "실험쥐 미로탈출: 다크메이즈 아이콘"
         }
       },
