@@ -1,0 +1,2234 @@
+{
+  "schemaVersion": "games-design-db/v1",
+  "lastUpdated": "2026-07-03",
+  "route": "/games/",
+  "catalogTitle": "NeoKIM Game Cabinet",
+  "catalogSubtitle": "HTML5, Phaser, Defold, Flutter + Flame, Godot, libGDX, Solar2D, LÖVE 실험작을 귀여운 픽셀 미리보기로 진열하는 설계 DB",
+  "renderingContract": {
+    "sortKey": "gridSlot",
+    "cardFields": [
+      "preview.animationKey",
+      "workingTitleKo",
+      "oneLineSummary",
+      "engine",
+      "status",
+      "sourceTitle",
+      "cuteTransformation"
+    ],
+    "previewRule": "GIF처럼 보이는 루프 미리보기는 실제 게임 빌드가 붙기 전까지 CSS pixel scene으로 렌더링한다.",
+    "copyRule": "각 항목은 원본 예제를 그대로 복제하지 않고, 메커닉만 참고해 새 아트와 새 이름으로 변형한다."
+  },
+  "statusLegend": {
+    "design-db": "설계 DB 작성 완료",
+    "prototype-next": "첫 playable prototype 후보",
+    "engine-slot": "엔진 실험 슬롯",
+    "playable": "브라우저에서 바로 플레이 가능한 게임"
+  },
+  "funDepthReviewContract": {
+    "purpose": "좋아요 반응이 높은 게임을 앱 제작 후보로 고르기 전에, 현재 playable을 실제 유저가 반복해서 즐길 수 있는 깊이 있는 게임으로 키우기 위한 내부 설계 메모.",
+    "visibility": "이 필드는 /games 카드 화면에 노출하지 않는다.",
+    "reviewFields": [
+      "playerFunHook",
+      "currentDepthGap",
+      "depthUpgradeBacklog",
+      "retentionLoop",
+      "appCandidateSignal"
+    ],
+    "decisionRule": "좋아요 수, 재방문율, 평균 플레이 시간, 재시도율 중 2개 이상이 높은 항목을 앱화 우선 후보로 본다."
+  },
+  "games": [
+    {
+      "id": "flame-crystal-mochi-stand",
+      "gridSlot": "G-001",
+      "status": "closed",
+      "priority": 1,
+      "engine": "Flutter + Flame",
+      "runtimeTarget": "HTML5 web build first, Android later",
+      "playableUrl": "./crystal-mochi-stand/",
+      "sourceTitle": "Flame Examples - Crystal Ball / Sample Games",
+      "sourceUrl": "https://examples.flame-engine.org/",
+      "sourceRepoUrl": "https://github.com/flame-engine/flame/tree/main/examples",
+      "licenseNote": "공식 예제는 학습용 참고로만 사용하고, 코드와 그래픽은 새로 작성한다.",
+      "workingTitleKo": "별점 모찌 상점",
+      "workingTitleEn": "Crystal Mochi Stand",
+      "oneLineSummary": "투명 모찌를 탭하면 반짝 조각이 튀어나오고 오늘의 작은 점괘를 모으는 Flame 미니게임.",
+      "originalMechanic": "탭 입력, 간단한 이펙트, 랜덤 결과, Flame sample game 구조",
+      "cuteTransformation": "수정구의 신비감은 남기되 캐릭터를 투명 모찌와 별사탕으로 바꾸어 부드러운 점술 장난감처럼 만든다.",
+      "coreLoop": [
+        "모찌를 길게 눌러 빛을 충전한다.",
+        "타이밍에 맞춰 놓으면 별사탕 조각이 퍼진다.",
+        "조각을 모아 짧은 운세 카드와 점수를 얻는다."
+      ],
+      "preview": {
+        "animationKey": "sparkle-oracle",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "crystal mochi",
+          "sparkle chips",
+          "fortune card"
+        ],
+        "thumbnailMood": "mint, lemon, coral pastel"
+      },
+      "prototypePlan": [
+        "Flame GameWidget과 SpriteComponent 기본 화면 구성",
+        "tap/hold/release 입력과 particles 컴포넌트 구현",
+        "운세 카드 12종 JSON으로 분리"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "길게 누르다 놓는 한 번의 타이밍으로 반짝 조각이 터지고 운세 카드가 열리는 즉각적인 보상감.",
+        "currentDepthGap": "현재는 점수와 카드 획득이 짧은 세션에서 끝나기 쉬워, 다시 눌러야 할 이유가 약하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "collection",
+            "idea": "운세 카드에 희귀도, 세트, 오늘의 카드 보너스를 붙여 카드북 수집 목표를 만든다.",
+            "whyItAddsFun": "단순 점수보다 '아직 못 본 카드'를 찾는 반복 동기가 생긴다."
+          },
+          {
+            "type": "skill",
+            "idea": "충전 게이지에 sweet spot, overcharge, perfect release 판정을 넣는다.",
+            "whyItAddsFun": "같은 탭이라도 숙련으로 더 좋은 결과를 만드는 손맛이 생긴다."
+          },
+          {
+            "type": "choice",
+            "idea": "별사탕 조각을 모아 모찌 표정, 배경 소품, 카드 테마 중 하나를 해금하게 한다.",
+            "whyItAddsFun": "짧은 운세 장난감에서 취향을 꾸미는 장기 목표로 확장된다."
+          },
+          {
+            "type": "session",
+            "idea": "하루 3회 특별 점괘와 주간 별자리 챌린지를 추가한다.",
+            "whyItAddsFun": "매일 다시 들어올 명분이 생기고, 앱화 시 푸시/위젯과도 잘 맞는다."
+          }
+        ],
+        "retentionLoop": "카드 수집률, 오늘의 점괘, 꾸미기 해금, perfect release 기록을 묶어 1분짜리 재방문 루프로 만든다.",
+        "appCandidateSignal": "좋아요가 많고 카드북 완성률/일일 재방문율이 높으면 힐링 운세 앱 후보로 우선 검토한다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-001 playable HTML5 Canvas prototype",
+            "items": [
+              "운세 카드 12종에 common/rare/epic/mythic 희귀도, 3개 세트, 오늘의 카드 보너스를 부여했다.",
+              "브라우저 localStorage 기반 카드북 저장을 추가해 새 카드, 중복 카드, 세트 완성 보상이 세션을 넘어 이어지게 했다.",
+              "충전 게이지에 PERFECT, SWEET, NEAR, OVER 판정을 추가하고 판정별 점수, 시간, 카드 등장 확률, 희귀도 가중치를 다르게 적용했다.",
+              "게임 화면에 오늘의 카드, 콤보, 최근 획득 카드, 카드북 슬롯의 희귀도 표시를 추가했다."
+            ],
+            "nextDepthTargets": [
+              "별사탕 조각 재화와 모찌 표정/배경 소품 해금 UI",
+              "하루 3회 특별 점괘 제한과 주간 별자리 챌린지",
+              "퍼펙트 릴리즈 최고 연속 기록을 카드북과 함께 저장"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-001 second-pass retention upgrade",
+            "items": [
+              "별조각 재화를 추가하고 PERFECT/SWEET 판정, 새 카드, 오늘의 카드, 일일 특별 점괘에서 별조각을 얻도록 했다.",
+              "별조각으로 방긋 얼굴, 별 램프, 꿈 커튼, 수정 왕관 장식을 해금하고 캔버스 장식 패널에서 장착할 수 있게 했다.",
+              "하루 3회 특별 점괘를 localStorage 날짜 기준으로 제한하고 특별 점괘 보상/잔여 횟수를 화면에 표시했다.",
+              "주간 퍼펙트 7회 챌린지와 퍼펙트 릴리즈 최고 연속 기록을 저장해 카드북 밖의 재방문 목표를 만들었다."
+            ],
+            "nextDepthTargets": [
+              "장식별로 점수/카드 확률에 영향을 주는 작은 패시브 효과",
+              "주간 별자리 챌린지 결과 카드 공유",
+              "장식 해금 상태를 /games 카드 미리보기에도 반영하는 preview 변형"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-001 third-pass passive preview upgrade",
+            "items": [
+              "방긋 얼굴, 별 램프, 꿈 커튼, 수정 왕관 장식에 각각 점수, 카드 등장 확률, 시간 보너스, 별조각 보너스 패시브 효과를 부여했다.",
+              "장착 장식의 패시브를 release 판정 계산에 반영하고 DECOR 패널에 효과 라벨을 표시해 장식 선택이 플레이 스타일 선택이 되도록 했다.",
+              "주간 퍼펙트 7회 챌린지를 달성하면 CMSW1 주간 별자리 카드 코드를 생성하고 결과 화면과 주간 카드 버튼에서 다시 확인할 수 있게 했다.",
+              "/games 카탈로그의 sparkle-oracle 미리보기가 crystalMochiStandProgress 저장소의 장착 장식을 읽어 램프, 커튼, 왕관, 웃는 얼굴 변형을 반영하도록 했다.",
+              "카탈로그와 게임 상세 페이지 캐시 버전을 갱신하고 데스크톱/모바일 렌더 오류를 확인했다."
+            ],
+            "nextDepthTargets": [
+              "장식별 패시브 효과를 카드 세트 보너스와 조합하는 빌드 프리셋 화면",
+              "CMSW1 주간 카드 코드를 입력해 친구의 주간 결과와 비교하는 화면",
+              "장식 상태뿐 아니라 카드북 완성률도 /games 미리보기 색감에 반영"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-001 fourth-pass build preset weekly compare preview upgrade",
+            "items": [
+              "균형, 점수, 카드, 별빛 4개 빌드 프리셋을 추가하고 하단 프리셋 버튼으로 즉시 순환 장착할 수 있게 했다.",
+              "장식 패시브, 빌드 프리셋 효과, 카드 세트 완성 보너스를 하나의 패시브 계산으로 합산해 점수 배율, 카드 확률, 시간 보너스, 별조각 배율에 반영했다.",
+              "BUILD 패널에 현재 프리셋과 완성 카드 세트 수를 표시하고, 장식 선택 목록을 같은 패널 안에서 유지했다.",
+              "CMSW1 주간 카드 코드를 입력하는 친구비교 버튼을 추가하고 친구의 주간 퍼펙트, 카드북 수, 점수, 장식, 프리셋 기록을 저장하도록 했다.",
+              "친구 주간 기록이 있으면 캔버스 패널과 결과 문구에서 퍼펙트/카드북/점수 차이를 비교해 보여주게 했다.",
+              "/games sparkle-oracle 미리보기가 장식 상태뿐 아니라 crystalMochiStandCollection 카드북 완성률을 읽어 시작/절반/완성 단계별 색감과 카드 장식을 바꾸도록 했다."
+            ],
+            "nextDepthTargets": [
+              "빌드 프리셋별 최고 점수와 최고 카드 획득 수를 따로 저장하는 프리셋 기록표",
+              "CMSW1 친구 기록을 여러 개 저장하고 주간 친구 목록으로 비교",
+              "카드 세트 보너스와 프리셋 조합을 /games 카드의 작은 배지/색상으로 더 세밀하게 반영"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-001 fifth-pass preset record friend list preview badge upgrade",
+            "items": [
+              "빌드 프리셋별 bestScore, bestCards, bestNewCards, plays 기록을 진행 데이터에 저장하고 라운드 종료 시 현재 프리셋 기록을 갱신하도록 했다.",
+              "BUILD 패널에 현재 프리셋의 최고 점수, 최고 카드 수, 최고 신규 카드 수를 표시해 프리셋을 바꿔가며 다시 도전할 이유를 만들었다.",
+              "CMSW1 친구 주간 기록을 최대 6개까지 중복 제거해 저장하고, 비교 기준은 저장된 친구 기록 중 최고 점수/카드북/퍼펙트가 높은 기록으로 선택하도록 했다.",
+              "친구 기록 패널에 저장된 친구 기록 수, 최고 친구의 퍼펙트/카드북/점수를 표시하고 결과 화면 비교 문구도 최고 친구 기록 기준으로 계산하도록 했다.",
+              "/games sparkle-oracle 미리보기가 카드북의 bakery, sky, dream 세트 완성 여부와 저장된 빌드 프리셋을 읽어 카드 색, 모찌 색, 반짝임 색으로 더 세밀하게 반영하도록 했다.",
+              "카탈로그와 게임 상세 페이지 캐시 버전을 갱신해 변경된 저장/미리보기 로직이 바로 반영되도록 했다."
+            ],
+            "nextDepthTargets": [
+              "프리셋 기록표를 별도 카드북 화면으로 확장하고 리셋/고정 기능 추가",
+              "CMSW1 친구 목록에 주간별 필터와 친구별 닉네임 메모 추가",
+              "/games 미리보기에 좋아요, 카드북 완성률, 친구 비교 성과를 결합한 후보 앱 신호 반영"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-001 sixth-pass record book friend memo candidate signal upgrade",
+            "items": [
+              "별점 모찌 상점 상세 페이지에 기록 버튼과 #records 카드북 기록 오버레이를 추가해 카드북, 프리셋 기록, 친구 기록을 별도 화면에서 확인할 수 있게 했다.",
+              "프리셋 기록 화면에 현재 프리셋의 기록 리셋 버튼과 기본 프리셋 고정/고정 해제 버튼을 추가하고, 고정 프리셋은 다음 세션의 기본 프리셋으로 복원되도록 저장했다.",
+              "친구 기록 목록에 주간 필터를 추가하고 CMSW1 친구 기록마다 최대 14자 닉네임 메모를 저장/수정할 수 있게 했다.",
+              "기록 화면이 열려 있는 동안 라운드 타이머가 진행되지 않도록 잠시 멈추고, 닫으면 기존 플레이 상태로 돌아가도록 했다.",
+              "/games sparkle-oracle 미리보기가 좋아요 여부, 카드북 진행률, 친구 비교 성과를 조합해 작은 픽셀 후보 신호 배지로 반영하도록 했다.",
+              "카탈로그와 게임 상세 페이지 캐시 버전을 갱신하고 요약 HTML의 CSS 버전을 최신 카탈로그 스타일과 맞췄다."
+            ],
+            "nextDepthTargets": [
+              "카드북 기록 화면에서 카드별 획득 날짜와 오늘의 카드 적중 횟수 기록 추가",
+              "친구 기록을 수동 정렬하거나 오래된 주간 기록을 보관함으로 이동하는 관리 기능 추가",
+              "후보 앱 신호를 좋아요 임계치, 완성률, 재방문 기록 기준으로 수치화해 내부용 hidden metrics로 저장"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-001 seventh-pass card stats friend archive candidate metrics upgrade",
+            "items": [
+              "카드별 firstAcquiredDay, lastAcquiredDay, pulls, todayHits 통계를 진행 데이터에 저장하고 카드가 등장할 때마다 갱신하도록 했다.",
+              "카드북 기록 화면의 각 카드에 최초 획득일과 오늘의 카드 적중 횟수를 표시해 카드별 수집 이력이 보이도록 했다.",
+              "친구 기록에 archived와 order 필드를 추가하고 기록 화면에서 위/아래 수동 정렬, 보관, 복귀 기능을 사용할 수 있게 했다.",
+              "친구 기록 필터에 활성/보관함/전체 Box 선택을 추가하고, 보관된 친구 기록은 비교 기준에서 제외되도록 했다.",
+              "좋아요 여부, 카드북 완성률, 최근 방문일 수, 친구 비교 우위로 candidateMetrics 점수와 tier를 계산해 진행 데이터에 hidden metrics로 저장하도록 했다.",
+              "/games sparkle-oracle 미리보기가 candidateMetrics 점수를 우선 읽어 후보 앱 신호 배지를 안정적으로 반영하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "카드별 통계를 기반으로 카드북 안에 희귀 카드 힌트와 세트별 완성 보상 미션 추가",
+              "친구 기록 보관함에 오래된 주간 기록 자동 보관 규칙과 보관함 비우기 기능 추가",
+              "candidateMetrics를 별도 hidden JSON 리포트로 모아 여러 게임의 앱 후보 우선순위를 비교"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-001 eighth-pass set mission archive cleanup candidate report upgrade",
+            "items": [
+              "카드북 기록 화면에 세트 미션 섹션을 추가해 세트별 수집률, 세트 보너스 상태, 오늘 카드 적중 합계를 확인할 수 있게 했다.",
+              "미완성 세트에는 남은 카드 중 가장 높은 희귀도 기준으로 PERFECT 힌트를 표시해 다음 목표가 더 선명하게 보이도록 했다.",
+              "친구 기록 정규화 과정에서 현재 주차가 아닌 CMSW1 기록을 자동 보관 처리해 오래된 주간 기록이 활성 비교 기준에 섞이지 않게 했다.",
+              "기록 화면 하단에 보관함 비우기 버튼을 추가하고 보관된 친구 기록 개수에 따라 비활성/활성 상태를 갱신하도록 했다.",
+              "친구 기록 최대 보관 순서를 활성 기록과 수동 order 우선으로 정리해 오래된 보관 기록이 최신 활성 기록을 밀어내지 않도록 했다.",
+              "/games 페이지에 화면에 보이지 않는 candidateMetricsReport JSON 컨테이너를 추가하고, 각 게임의 후보 점수와 tier를 정렬된 내부 리포트로 갱신하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "세트 미션 완료 시 별조각 또는 장식 색상 변형 같은 실제 보상 수령 흐름 추가",
+              "candidateMetricsReport를 기반으로 개발자용 hidden 정렬 필터와 앱 후보 임계치 플래그 추가",
+              "G-002 푸딩 패드 레이스의 다음 설계DB 목표로 넘어가 주행 깊이와 리텐션 루프 확장"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "flame",
+        "flutter",
+        "tap",
+        "effects",
+        "cute",
+        "playable"
+      ],
+      "summaryLine": "Flutter + Flame | 별점 모찌 상점 | closed: 수집과 운세 연출은 귀엽지만, 플레이어가 고민해서 선택하는 순간과 즉시 달라지는 결과가 부족했다.",
+      "visibleInCabinet": false,
+      "closedAt": "2026-07-02",
+      "closureReview": {
+        "reason": "수집과 운세 연출은 귀엽지만, 플레이어가 고민해서 선택하는 순간과 즉시 달라지는 결과가 부족했다.",
+        "doNotRepeat": [
+          "버튼을 누르면 보상이 나오는 슬롯형 구조만으로 게임이라고 공개하지 않는다.",
+          "수집물이 있더라도 손맛, 위험, 선택, 실패 후 재도전 이유 중 최소 두 가지가 없으면 보류한다.",
+          "예쁜 연출은 게임성의 보조 요소로만 쓰고 핵심 루프를 대신하게 만들지 않는다."
+        ],
+        "researchBasis": "직접 조작감은 화면의 대상에 바로 작용하고 즉시 피드백이 돌아올 때 강해진다. 이 게임은 그 연결이 약했다."
+      }
+    },
+    {
+      "id": "flame-pudding-pad-race",
+      "gridSlot": "G-002",
+      "status": "playable",
+      "priority": 2,
+      "engine": "Flutter + Flame",
+      "runtimeTarget": "HTML5 web build first, mobile tilt later",
+      "playableUrl": "./pudding-pad-race/",
+      "sourceTitle": "Flame Examples - Padracing",
+      "sourceUrl": "https://examples.flame-engine.org/",
+      "sourceRepoUrl": "https://github.com/flame-engine/flame/tree/main/examples/games/padracing",
+      "licenseNote": "레이싱 구조만 참고하고 트랙, 캐릭터, 사운드, UI는 모두 신규 제작한다.",
+      "workingTitleKo": "푸딩 패드 레이스",
+      "workingTitleEn": "Pudding Pad Race",
+      "oneLineSummary": "작은 푸딩 카트가 쿠션 트랙을 미끄러지며 젤리 게이트를 통과하는 Flame 레이싱 실험.",
+      "originalMechanic": "top-down racing, steering, lap/checkpoint handling",
+      "cuteTransformation": "강한 속도감 대신 말랑한 관성, 쿠션 벽, 젤리 체크포인트를 넣어 가벼운 장난감 레이스로 바꾼다.",
+      "coreLoop": [
+        "좌우 입력으로 푸딩 카트를 조향한다.",
+        "젤리 게이트를 순서대로 지난다.",
+        "미끄럼 콤보를 이어 랩 타임을 줄인다."
+      ],
+      "preview": {
+        "animationKey": "pudding-race",
+        "gifLoopSeconds": 5,
+        "pixelObjects": [
+          "pudding kart",
+          "cushion track",
+          "jelly gates"
+        ],
+        "thumbnailMood": "sky, strawberry, custard"
+      },
+      "prototypePlan": [
+        "곡선 트랙 1개와 카트 1대 구현",
+        "checkpoint trigger와 lap timer 추가",
+        "벽 충돌을 튕김보다 말랑한 감속으로 조정"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "말랑한 관성과 젤리 게이트를 통과하는 작은 레이싱 성취감.",
+        "currentDepthGap": "트랙 하나를 완주하면 다음 목표가 약하고, 랩 타임 개선 외의 성장 요소가 부족하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "track",
+            "idea": "짧은 트랙 5개와 각 트랙별 별 3개 목표를 만든다.",
+            "whyItAddsFun": "완주, 빠른 기록, 충돌 적음처럼 여러 방식의 도전이 생긴다."
+          },
+          {
+            "type": "skill",
+            "idea": "코너 드리프트 게이지와 연속 게이트 콤보를 추가한다.",
+            "whyItAddsFun": "속도보다 부드러운 조작 숙련을 보상할 수 있다."
+          },
+          {
+            "type": "progression",
+            "idea": "푸딩 카트의 탄성, 가속, 회전감을 서로 다른 맛 스킨으로 분리한다.",
+            "whyItAddsFun": "스킨이 단순 외형이 아니라 조작 취향 선택이 된다."
+          },
+          {
+            "type": "social",
+            "idea": "오늘의 트랙과 ghost replay 느낌의 기록 비교를 추가한다.",
+            "whyItAddsFun": "짧은 레이스라도 친구/자기 기록을 넘는 반복 목표가 생긴다."
+          }
+        ],
+        "retentionLoop": "일일 트랙 기록 갱신, 별 목표 수집, 카트 맛 해금으로 3분 반복 플레이를 만든다.",
+        "appCandidateSignal": "좋아요 대비 평균 재시도 횟수가 높고 기록 공유 클릭이 나오면 모바일 레이싱 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-002 playable HTML5 Canvas prototype",
+            "items": [
+              "일일 맛 카트(custard/berry/mint)를 추가하고 맛마다 가속, 회전, 그립 특성을 다르게 적용했다.",
+              "코너 조향 중 드리프트 게이지가 차면 젤리 부스트가 발동하고 점수 보상이 생기도록 했다.",
+              "트랙을 벗어나지 않고 빠르게 게이트를 통과하면 게이트 콤보가 증가하고 콤보/속도 보너스가 점수에 반영되도록 했다.",
+              "완주, 빠른 기록, 콤보와 부스트 숙련을 기준으로 별 3개 목표를 계산하고 최고 별/최고 기록을 localStorage에 저장한다."
+            ],
+            "nextDepthTargets": [
+              "짧은 트랙 5개와 트랙 선택 화면",
+              "맛 카트 해금/선택 UI와 각 맛별 미션",
+              "자기 최고기록 ghost line 또는 리플레이 그림자"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-002 second-pass retention upgrade",
+            "items": [
+              "쿠션 루프, 베리 헤어핀, 민트 물결, 포도 포켓, 소다 스프린트 5개 트랙 프리셋을 추가하고 날짜 기준 오늘의 트랙을 고르게 했다.",
+              "트랙별로 게이트 각도, 트랙 폭, 난이도 느낌이 다르게 보이도록 레이아웃을 분리했다.",
+              "트랙별 최고기록, 최고 별, 최고기록 주행 좌표를 localStorage에 저장하도록 했다.",
+              "저장된 최고기록 주행 좌표를 다음 플레이에서 반투명 ghost line으로 그려 자기 기록 비교 목표를 제공했다."
+            ],
+            "nextDepthTargets": [
+              "사용자가 직접 고르는 트랙 선택 화면",
+              "맛 카트 해금 조건과 맛별 전용 미션",
+              "고스트 라인을 시간 진행에 맞춰 움직이는 리플레이 그림자로 확장"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-002 third-pass track flavor upgrade",
+            "items": [
+              "오늘의 트랙 고정 구조를 사용자가 직접 고르는 트랙 선택 구조로 바꾸고 하단 트랙 버튼에서 5개 트랙을 순환할 수 있게 했다.",
+              "누적 트랙 별점 합계에 따라 커스터드, 딸기, 민트 카트가 단계적으로 해금되도록 하고 해금된 맛만 맛 버튼에서 순환 선택되게 했다.",
+              "커스터드 완주, 딸기 게이트 콤보 x7, 민트 드리프트 부스트 4회 맛별 전용 미션을 추가하고 결과 화면과 오버레이에 진행 상태를 표시했다.",
+              "선택한 트랙/맛과 맛별 미션 완료 상태를 puddingPadRaceProgress:v2에 저장해 다음 방문에도 선택이 유지되도록 했다.",
+              "저장된 고스트 라인을 점선만이 아니라 시간에 따라 움직이는 작은 리플레이 표식으로 확장했다."
+            ],
+            "nextDepthTargets": [
+              "트랙 선택을 별점/고스트/미션 상태가 보이는 별도 선택 패널로 확장",
+              "맛 카트별 전용 외형 장식과 해금 배지 표시",
+              "고스트 리플레이를 결과 카드 코드로 내보내 친구 기록과 비교"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "트랙을 도는 행위는 있지만, 잘 달렸다는 순간이 눈과 손에 강하게 남지 않는다.",
+          "whyFunFallsFlat": [
+            "게이트 통과가 점수로만 보상되어 코너를 예쁘게 빠져나온 감각이 약하다.",
+            "부스트와 드리프트가 플레이어의 실력 보상이라기보다 숫자 이벤트처럼 느껴진다.",
+            "모바일에서는 방향 버튼보다 손가락 드래그로 미끄러지는 감각이 더 중요하다."
+          ],
+          "repairPrinciple": "코너-게이트-부스트를 한 덩어리의 리듬으로 묶고, 완벽 통과 순간에 짧은 속도감과 시각 피드백을 준다.",
+          "nextPlayableChange": "게이트 중심을 빠르게 통과하면 PERFECT GATE 판정, 짧은 푸딩 피버, 추가 트레일을 부여한다.",
+          "implementedRepairs": [
+            "키보드 조향을 제거하고 캔버스 터치/드래그 조향만 남겨 모바일 손맛을 기준으로 맞췄다.",
+            "게이트 중심을 빠르게 통과하면 PERFECT GATE가 발생하고 짧은 피버 속도, 금색 잔상, 추가 점수가 즉시 터지도록 했다.",
+            "실패하지 않고 지나가기보다 중심선을 예쁘게 꿰는 선택이 더 즐거운 목표가 되도록 보상 조건을 좁혔다."
+          ],
+          "featureKey": "PERFECT_GATE_FEVER",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "이전 버전은 좌우로 피하기만 해도 진행되어 운전 실력이 드러나는 순간이 약했다.",
+            "repairFocus": "정확한 중앙 통과와 빠른 속도를 한 묶음으로 보상해 내가 잘했다는 감각을 만든다.",
+            "notVolumeRule": "코스 수를 늘리기보다 첫 20초 안에 PERFECT GATE를 한 번 맛보게 하는 것이 우선이다.",
+            "nextPlaytestCheck": "유저가 두 번째 판에서 자연스럽게 중심 통과를 노리는지 관찰한다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "flame",
+        "racing",
+        "physics",
+        "mobile",
+        "playable"
+      ],
+      "summaryLine": "G-002 | Flutter + Flame | 푸딩 패드 레이스 | 플레이 가능: 쿠션 트랙을 돌며 젤리 게이트를 통과하는 미니 레이스, /games/pudding-pad-race/에서 플레이 | preview=pudding-race",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "candidate-later",
+        "mobileInput": "손가락으로 패드를 좌우로 밀어 푸딩 카트를 부드럽게 조향한다. 긴 버튼 대신 트랙 위 드래그와 짧은 부스트 탭만 사용한다.",
+        "funDiagnosis": "레이스는 속도감이 핵심인데, 코너마다 미끄러지는 맛과 추월 목표가 약하면 단순 이동으로 느껴진다.",
+        "implementationNotes": [
+          "트랙 폭을 좁히는 구간, 젤리 게이트, 짧은 점프 패드로 손맛을 만든다.",
+          "한 판은 20초 안팎으로 끝내고 완주 시간, 게이트 콤보, 부스트 절약 보너스를 기록한다.",
+          "부스트는 자동 회복보다 코스 안의 별 젤리를 모아 채우는 방식이 더 읽기 쉽다."
+        ],
+        "nextBuildSteps": [
+          "모바일 드래그 조향 보정",
+          "코너 미끄러짐과 부스트 이펙트 추가",
+          "타임어택 기록과 유령 주행 미리보기 설계"
+        ]
+      }
+    },
+    {
+      "id": "flame-pocket-rogue-bakery",
+      "gridSlot": "G-003",
+      "status": "playable",
+      "priority": 3,
+      "engine": "Flutter + Flame",
+      "runtimeTarget": "HTML5 web build first, Android later",
+      "playableUrl": "./pocket-bakery-defense/",
+      "sourceTitle": "Flame Examples - Rogue Shooter",
+      "sourceUrl": "https://examples.flame-engine.org/",
+      "sourceRepoUrl": "https://github.com/flame-engine/flame/tree/main/examples/games/rogue_shooter",
+      "licenseNote": "전투 루프 구조만 참고하고 폭력 표현은 빵집 방어와 재료 수집으로 치환한다.",
+      "workingTitleKo": "주머니 빵집 디펜스",
+      "workingTitleEn": "Pocket Bakery Defense",
+      "oneLineSummary": "작은 빵집에서 반죽 방울을 튕겨 재료를 지키는 Flame 탑다운 생존 루프.",
+      "originalMechanic": "top-down movement, waves, projectile timing, upgrades",
+      "cuteTransformation": "슈터의 탄막을 반죽 방울과 설탕 가루로 바꾸고, 웨이브를 주문 러시로 바꿔 밝은 방어 게임으로 만든다.",
+      "coreLoop": [
+        "작업대 주변을 이동하며 재료를 지킨다.",
+        "반죽 방울을 발사해 주문 러시를 밀어낸다.",
+        "라운드 후 오븐, 속도, 방울 크기를 업그레이드한다."
+      ],
+      "preview": {
+        "animationKey": "bakery-defense",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "tiny bakery",
+          "dough bubbles",
+          "ingredient crates"
+        ],
+        "thumbnailMood": "toast, mint, berry"
+      },
+      "prototypePlan": [
+        "8방향 이동과 자동 조준 projectile 구현",
+        "30초 웨이브 1개와 upgrade 선택 3개 작성",
+        "피격 대신 재료 바구니 내구도 UI로 표현"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "작은 빵집을 지키며 자동 반죽 방울과 업그레이드가 점점 강해지는 생존 성장감.",
+        "currentDepthGap": "웨이브와 업그레이드 종류가 적으면 매판 빌드 차이가 작아 금방 익숙해진다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "build",
+            "idea": "오븐, 반죽, 설탕, 바구니 계열 업그레이드를 시너지형으로 나눈다.",
+            "whyItAddsFun": "매판 다른 빌드를 고르는 판단 재미가 생긴다."
+          },
+          {
+            "type": "enemy",
+            "idea": "느린 주문서, 빠른 쿠폰, 보호막 접시처럼 행동이 다른 주문 러시를 만든다.",
+            "whyItAddsFun": "자동 발사 게임이 단순 회피가 아니라 우선순위 선택 게임이 된다."
+          },
+          {
+            "type": "objective",
+            "idea": "재료 상자를 옮기거나 오븐을 고치는 짧은 라운드 미션을 섞는다.",
+            "whyItAddsFun": "한 자리에서 버티는 느낌을 줄이고 동선 목표를 만든다."
+          },
+          {
+            "type": "meta",
+            "idea": "라운드 후 빵집 진열대 꾸미기와 영구 레시피 해금을 추가한다.",
+            "whyItAddsFun": "실패해도 다음 판이 조금 더 기대되는 누적 성장이 생긴다."
+          }
+        ],
+        "retentionLoop": "30초 생존, 업그레이드 선택, 레시피 해금, 빵집 꾸미기를 연결해 짧은 로그라이트 루프로 만든다.",
+        "appCandidateSignal": "좋아요와 함께 평균 플레이 시간이 가장 길게 나오면 생존형 앱 후보로 우선 검토한다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-003 playable HTML5 Canvas prototype",
+            "items": [
+              "오븐, 반죽, 설탕, 바구니 업그레이드 계열과 반복 선택 시너지를 추가했다.",
+              "빠른 쿠폰, 보호막 접시, 느리지만 강한 긴 주문서 타입을 섞어 주문 러시의 우선순위 판단을 만들었다.",
+              "설탕 감속, 반죽 범위 피해, 바구니 보호막, 점수 배율이 실제 전투 계산에 반영되도록 했다.",
+              "재료 상자 수집 목표와 localStorage 기반 레시피/최고점 누적 저장을 추가했다."
+            ],
+            "nextDepthTargets": [
+              "레시피 해금에 따른 시작 업그레이드 선택",
+              "오븐 수리/재료 운반 같은 10초 미니 미션",
+              "빵집 진열대 꾸미기와 결과 화면 컬렉션"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-003 second-pass retention upgrade",
+            "items": [
+              "누적 레시피 수에 따라 오븐, 반죽, 설탕, 바구니 시작 보너스가 단계적으로 켜지도록 했다.",
+              "영업 중 오븐 수리와 재료 운반 10초 미니 미션을 발생시켜 생존 중 이동 목표와 추가 레시피 보상을 만들었다.",
+              "누적 레시피 비용에 따라 초승달빵, 딸기잼, 크림롤, 민트타르트, 별식빵 진열장 아이템이 해금되도록 했다.",
+              "새 progress 저장소에 레시피와 진열장 수집 상태를 저장하고 결과 화면에서 새 진열 해금 수를 보여주도록 했다."
+            ],
+            "nextDepthTargets": [
+              "시작 보너스를 플레이어가 직접 고르는 프리셋 선택 화면",
+              "미니 미션 성공/실패에 따른 다음 웨이브 특수 규칙",
+              "진열장 아이템마다 작은 패시브 효과 부여"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-003 third-pass preset mission passive upgrade",
+            "items": [
+              "누적 레시피로 열린 시작 보너스를 균형, 오븐, 반죽, 설탕, 바구니 프리셋으로 나누고 푸터 버튼에서 다음 프리셋을 순환 선택할 수 있게 했다.",
+              "선택한 프리셋을 progress 저장소에 보존하고, 레시피 포인트보다 많은 시작 업그레이드가 배정되지 않도록 프리셋 계산을 제한했다.",
+              "초승달빵, 딸기잼, 크림롤, 민트타르트, 별식빵 진열 아이템에 점수, 피해, 보호막, 이동, 발사 속도 패시브를 부여하고 실제 전투 수치에 반영했다.",
+              "오븐 수리와 재료 운반 미션의 성공/실패가 따끈한 오븐, 신선한 재료, 그을린 오븐, 늦은 배송 같은 다음 웨이브 규칙으로 이어지게 했다.",
+              "캔버스 오버레이에 프리셋, 진열 패시브, 미션 타이머, 웨이브 규칙을 표시해 플레이어가 현재 빌드의 효과를 읽을 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "프리셋별 시작 능력치와 잠금 조건을 한눈에 비교하는 선택 패널",
+              "미션이 발생하기 전 다음 웨이브 규칙을 예고하는 작은 경고 연출",
+              "진열 패시브 조합별 결과 카드 코드와 공유용 빵집 스탬프"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "mobile-first input cleanup",
+            "items": [
+              "공개 안내 문구에서 방향키/WASD 표현을 제거하고 탭/드래그 이동 기준으로 바꿨다.",
+              "키보드 keydown/keyup 이동 리스너를 제거해 모바일 조작을 기본 입력으로 고정했다.",
+              "기존 화면 터치 이동과 하단 큰 방향 패드 버튼은 유지해 손가락 조작 선택지를 남겼다."
+            ],
+            "nextDepthTargets": [
+              "업그레이드 선택 패널을 엄지 조작에 맞게 재배치",
+              "웨이브 예고와 미션 목적지를 화면 안쪽에 크게 표시"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "next wave warning and focused rush",
+            "items": [
+              "다음 주문 러시가 시작되기 4초 전에 왼쪽 매대, 오른쪽 매대, 윗문 중 어느 방향이 위험한지 안내하도록 했다.",
+              "새 웨이브 시작 직후 5초 동안 예고된 방향에서 주문이 더 자주 몰려오게 해 예고가 실제 플레이 판단으로 이어지게 했다.",
+              "캔버스 위에 NEXT RUSH/ORDER RUSH 배지와 방향 화살표를 그려 모바일에서도 이동 목표가 바로 보이게 했다."
+            ],
+            "nextDepthTargets": [
+              "웨이브 예고 배지를 미션 위치와 함께 묶어 어떤 목표를 먼저 지킬지 더 분명하게 표시",
+              "러시 방향별 적 조합을 다르게 만들어 프리셋 선택 의미 강화"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "자동 공격이 편하지만, 플레이어가 움직여서 위기를 막았다는 주도감이 아직 약하다.",
+          "whyFunFallsFlat": [
+            "웨이브 예고가 있어도 그 방향으로 이동했을 때 즉시 체감되는 보상이 부족하다.",
+            "생존 게임의 핵심인 위치 선정이 자동 발사에 묻혀 수동 판단의 맛이 약해진다.",
+            "업그레이드 전까지 초반 15초가 비슷하게 흘러간다."
+          ],
+          "repairPrinciple": "예고된 러시 방향을 지키면 발사 속도와 점수가 올라가게 해 이동 선택을 전투력으로 바꾼다.",
+          "nextPlayableChange": "러시 방향과 바구니 사이를 지키는 위치에 있으면 GUARD 보너스와 빠른 반죽 발사를 적용한다.",
+          "implementedRepairs": [
+            "다음 러시 방향을 따라 앞쪽에서 지키면 GUARD ON이 켜지고 공격 속도, 탄 크기, 피해량이 상승하도록 했다.",
+            "자동 공격의 구경꾼 느낌을 줄이고, 이동 위치 선택이 방어 성공률과 점수에 직접 연결되게 했다.",
+            "러시 예고와 플레이어 위치 사이의 관계를 강화해 어디에 서야 하는가라는 짧은 판단을 만들었다."
+          ],
+          "featureKey": "GUARD_ON_DIRECTIONAL_DEFENSE",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "자동 공격이 편하긴 했지만 플레이어가 상황을 바꿨다는 체감이 부족했다.",
+            "repairFocus": "위치를 잘 잡는 순간 공격 성능이 즉시 변하도록 만들어 방어의 주도권을 돌려준다.",
+            "notVolumeRule": "적 종류를 늘리기 전, 한 방향 러시를 막는 3초가 재미있어야 한다.",
+            "nextPlaytestCheck": "유저가 예고 방향을 보고 먼저 움직이는지, 아니면 중앙에 머무르는지 확인한다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "flame",
+        "survival",
+        "upgrade",
+        "topdown",
+        "playable"
+      ],
+      "summaryLine": "G-003 | Flutter + Flame | 주머니 빵집 디펜스 | 플레이 가능: 자동 반죽 방울로 주문 러시를 막고 재료 바구니를 지키는 생존 게임, /games/pocket-bakery-defense/에서 플레이 | preview=bakery-defense",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "near-term",
+        "mobileInput": "화면을 탭하거나 드래그해 빵집 주인을 이동시킨다. 공격은 자동으로 처리하고, 하단에는 큰 업그레이드 선택 버튼만 둔다.",
+        "funDiagnosis": "자동 공격 생존 게임은 이동 목표와 빌드 선택이 없으면 금방 반복 작업이 된다. 짧은 미션과 웨이브 규칙이 매판의 이유를 만들어야 한다.",
+        "implementationNotes": [
+          "주문 러시가 몰리는 방향을 미리 예고하고, 플레이어가 바구니와 재료 상자 사이를 선택하게 만든다.",
+          "20~30초마다 오븐 수리, 재료 운반, 바구니 보호 같은 미니 미션을 넣어 정지 플레이를 줄인다.",
+          "업그레이드는 오븐/반죽/설탕/바구니 계열로 묶고, 같은 계열 반복 선택에 눈에 띄는 시너지를 준다."
+        ],
+        "nextBuildSteps": [
+          "프리셋 선택 패널을 모바일 카드형으로 개선",
+          "다음 웨이브 위험 예고 UI 추가",
+          "진열장 보상과 결과 카드 공유 흐름 정리"
+        ]
+      }
+    },
+    {
+      "id": "defold-konpeito-swarm",
+      "gridSlot": "G-004",
+      "status": "closed",
+      "priority": 1,
+      "engine": "Defold",
+      "runtimeTarget": "HTML5 canvas",
+      "playableUrl": "./konpeito-swarm-parade/",
+      "sourceTitle": "Britzl Public Examples - Swarm AI 0.0",
+      "sourceUrl": "https://britzl.github.io/publicexamples/swarmai/index.html",
+      "sourceRepoUrl": "https://github.com/britzl/publicexamples",
+      "licenseNote": "군집 AI 아이디어만 참고하고 캐릭터/스테이지/밸런스는 새로 설계한다.",
+      "workingTitleKo": "별사탕 행진대",
+      "workingTitleEn": "Konpeito Swarm Parade",
+      "oneLineSummary": "별사탕 무리가 리더 신호를 따라 흩어졌다 모이는 귀여운 군집 AI 장난감.",
+      "originalMechanic": "swarm movement, separation, target following",
+      "cuteTransformation": "공격적인 떼 움직임을 별사탕 행진과 간식 신호로 바꿔 관찰형 미니 퍼즐로 만든다.",
+      "coreLoop": [
+        "리더 별사탕을 배치해 무리의 이동 방향을 바꾼다.",
+        "서로 부딪히지 않게 좁은 길을 통과시킨다.",
+        "흩어진 조각을 제한 시간 안에 모은다."
+      ],
+      "preview": {
+        "animationKey": "konpeito-swarm",
+        "gifLoopSeconds": 5,
+        "pixelObjects": [
+          "leader candy",
+          "swarm candy",
+          "snack beacon"
+        ],
+        "thumbnailMood": "peach, cyan, grape"
+      },
+      "prototypePlan": [
+        "Defold game objects로 20개 agent 생성",
+        "separation/alignment/target force 최소 구현",
+        "도착 지점과 별점 평가 UI 추가"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "별사탕 무리가 리더 신호를 따라 한꺼번에 흘러가는 관찰형 쾌감.",
+        "currentDepthGap": "무리가 움직이는 모습은 귀엽지만, 플레이어가 전략적으로 개입할 지점이 더 필요하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "puzzle",
+            "idea": "간식 신호를 2~3개 배치하고 순서를 정해 좁은 통로를 통과하게 한다.",
+            "whyItAddsFun": "군집 이동이 감상에서 공간 퍼즐로 바뀐다."
+          },
+          {
+            "type": "agent",
+            "idea": "겁 많은 별사탕, 빠른 별사탕, 무거운 별사탕처럼 성격을 나눈다.",
+            "whyItAddsFun": "무리의 행동을 예측하고 조합하는 재미가 생긴다."
+          },
+          {
+            "type": "scoring",
+            "idea": "모은 수, 충돌 횟수, 남은 시간으로 별점 평가를 만든다.",
+            "whyItAddsFun": "같은 스테이지를 더 깔끔하게 풀고 싶은 반복 목표가 생긴다."
+          },
+          {
+            "type": "editor",
+            "idea": "간단한 배치 퍼즐 에디터와 공유 코드를 장기 후보로 둔다.",
+            "whyItAddsFun": "유저가 직접 만든 군집 퍼즐이 좋아요 확산 소재가 된다."
+          }
+        ],
+        "retentionLoop": "짧은 스테이지 클리어, 별점 갱신, 별사탕 성격 해금, 퍼즐 공유로 확장한다.",
+        "appCandidateSignal": "좋아요와 퍼즐 재시도율이 높으면 퍼즐 앱 후보로 검토하고, 공유 퍼즐 반응이 있으면 우선순위를 올린다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-004 playable HTML5 Canvas prototype",
+            "items": [
+              "간식 신호를 최대 3개까지 배치해 별사탕 무리가 여러 비콘 중 가까운 신호를 따라가도록 했다.",
+              "빠른 별사탕, 소심한 별사탕, 묵직한 별사탕 성격을 추가해 속도, 타깃 반응, 분리 거리를 다르게 적용했다.",
+              "에이전트끼리 너무 붙거나 장애물에 부딪힐 때 bumpCount를 기록해 클리어 품질 평가에 반영한다.",
+              "수집/도착/부딪힘/남은 시간 기반 별점 평가와 localStorage 최고 별점 저장을 추가했다."
+            ],
+            "nextDepthTargets": [
+              "스테이지별 고정 퍼즐 레이아웃 5개",
+              "별사탕 성격 해금과 편성 선택",
+              "간식 신호 배치 공유 코드와 간단한 퍼즐 에디터"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-004 second-pass puzzle sharing upgrade",
+            "items": [
+              "리본문, 베리 굽이, 설탕 주머니, 민트 다리, 별가루 미로 5개 고정 레이아웃을 추가하고 스테이지별 장애물, 시작 지점, 바구니 위치, 목표 도착 수를 분리했다.",
+              "스테이지별 최고 별점 합계로 빠른, 조심, 묵직 편성을 해금하고 선택한 편성이 별사탕 성격 패턴에 반영되게 했다.",
+              "핀 편집 모드를 추가해 유저가 간식 신호 3개까지 미리 배치하고 같은 퍼즐을 다른 루트로 다시 실험할 수 있게 했다.",
+              "현재 스테이지, 편성, 핀 배치를 KSP1 공유 코드로 인코딩/디코딩해 유저 제작 배치를 복원할 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "공유 코드에서 불러온 핀 배치의 클리어율/좋아요 반응 기록",
+              "스테이지별 힌트 핀과 유저 핀의 차이를 보여주는 리플레이 비교",
+              "성격 편성별 전용 보너스 목표와 시각 효과"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-004 third-pass share reaction and crew bonus upgrade",
+            "items": [
+              "KSP1 공유 코드별로 공유 횟수, 플레이 수, 성공 수, 최고 별점, 응원 수를 progress 저장소에 기록하도록 했다.",
+              "현재 핀 배치에 응원 버튼을 추가하고 브라우저별 liked 목록으로 같은 배치 응원이 1번만 증가하게 했다.",
+              "핀 편집 중 기본 힌트 핀과 유저 핀 루트를 함께 보여주고, 캔버스 오버레이에 평균 DIFF 거리를 표시해 배치 비교가 가능하게 했다.",
+              "혼합, 빠른, 조심, 묵직 편성에 각각 조각 점수, 추가 시간, 충돌 허용, 도착 목표 완화 보너스를 부여하고 실제 점수/별점/완료 조건에 반영했다.",
+              "편성별로 작은 꼬리, 보호 링, 무게 그림자, 반짝 포인트를 그려 선택한 편성이 플레이 중 눈에 보이게 했다."
+            ],
+            "nextDepthTargets": [
+              "공유 코드 통계를 /games 카드의 좋아요 신호와 연결해 인기 핀 배치를 카드 미리보기에 반영",
+              "성공한 배치의 유령 경로를 저장해 실패한 배치와 나란히 비교하는 리플레이 패널",
+              "편성 보너스별 전용 스테이지 목표와 보상 뱃지"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "defold",
+        "ai",
+        "swarm",
+        "puzzle",
+        "playable"
+      ],
+      "summaryLine": "Defold | 별사탕 행진대 | closed: 군집 AI 움직임은 보기 좋지만, 플레이어가 개입해 상황을 바꾸는 지점이 흐려 관람형 데모처럼 느껴졌다.",
+      "visibleInCabinet": false,
+      "closedAt": "2026-07-02",
+      "closureReview": {
+        "reason": "군집 AI 움직임은 보기 좋지만, 플레이어가 개입해 상황을 바꾸는 지점이 흐려 관람형 데모처럼 느껴졌다.",
+        "doNotRepeat": [
+          "자동으로 예쁘게 움직이는 시뮬레이션을 플레이 목표 없이 카드에 올리지 않는다.",
+          "신호를 놓는다면 한 번의 터치가 무리의 경로, 보상, 실패 조건을 분명히 바꾸게 만든다.",
+          "AI 실험은 반드시 플레이어의 작은 명령이 큰 결과로 이어지는 장면을 포함한다."
+        ],
+        "researchBasis": "모바일 게임 조작은 단순해도 사용자가 행동의 결과를 즉시 보고 만족감을 느껴야 한다. 군집 이동만으로는 그 만족이 약했다."
+      }
+    },
+    {
+      "id": "defold-star-delivery-rocket",
+      "gridSlot": "G-005",
+      "status": "playable",
+      "priority": 2,
+      "engine": "Defold",
+      "runtimeTarget": "HTML5 canvas",
+      "playableUrl": "./twinkle-delivery-rocket/",
+      "sourceTitle": "Britzl Public Examples - Rotate and Move 0.0",
+      "sourceUrl": "https://britzl.github.io/publicexamples/rotate_and_move/index.html",
+      "sourceRepoUrl": "https://github.com/britzl/publicexamples",
+      "licenseNote": "회전/전진 입력 구조만 참고하고 그래픽과 레벨은 신규 제작한다.",
+      "workingTitleKo": "빙글별 배달 로켓",
+      "workingTitleEn": "Twinkle Delivery Rocket",
+      "oneLineSummary": "회전과 전진만으로 별 우편을 배달하는 Defold 조작감 실험.",
+      "originalMechanic": "rotate, thrust, inertia, simple top-down control",
+      "cuteTransformation": "우주선 조작을 별 우편 배달로 바꾸고, 충돌 실패보다 봉투 흔들림과 재시도 흐름을 강조한다.",
+      "coreLoop": [
+        "좌우로 로켓 방향을 돌린다.",
+        "짧은 추진으로 별 우편함까지 이동한다.",
+        "부드럽게 착지하면 보너스 스티커를 얻는다."
+      ],
+      "preview": {
+        "animationKey": "rocket-delivery",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "tiny rocket",
+          "mail stars",
+          "delivery pad"
+        ],
+        "thumbnailMood": "navy, lemon, pink"
+      },
+      "prototypePlan": [
+        "rotation input과 thrust velocity 구현",
+        "3개 우편함을 순서대로 도는 micro level 제작",
+        "착지 각도와 속도에 따른 점수 계산"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "회전과 추진만으로 부드럽게 착지하는 관성 조작의 손맛.",
+        "currentDepthGap": "현재는 우편함 3개를 방문하면 세션이 끝나므로, 숙련을 쌓을 레벨 변화가 부족하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "level",
+            "idea": "중력 행성, 바람 구역, 회전 우편함을 가진 짧은 배달 코스를 추가한다.",
+            "whyItAddsFun": "같은 조작이 매 코스마다 다른 문제로 느껴진다."
+          },
+          {
+            "type": "skill",
+            "idea": "착지 속도, 각도, 연료 사용량을 각각 평가하는 스티커 등급을 만든다.",
+            "whyItAddsFun": "단순 도착이 아니라 예쁘게 착지하는 숙련 목표가 생긴다."
+          },
+          {
+            "type": "resource",
+            "idea": "제한 연료와 보너스 연료 별을 추가한다.",
+            "whyItAddsFun": "계속 추진하는 대신 미끄러지는 판단이 중요해진다."
+          },
+          {
+            "type": "progression",
+            "idea": "로켓 꼬리 불꽃, 우편 봉투, 별 지도 스킨을 배달 성과로 해금한다.",
+            "whyItAddsFun": "난이도 상승과 꾸미기 보상이 함께 작동한다."
+          }
+        ],
+        "retentionLoop": "오늘의 배달 코스, 착지 스티커 등급, 연료 절약 기록, 로켓 꾸미기를 묶는다.",
+        "appCandidateSignal": "플레이어가 한 코스를 여러 번 재시도하고 perfect 착지 비율을 공유하면 앱 후보로 올린다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-005 playable HTML5 Canvas prototype",
+            "items": [
+              "추진 시 소모되는 제한 연료와 맵 위 보너스 연료 별을 추가했다.",
+              "착지 속도와 각도에 따라 B/A/S 스티커 등급을 계산하고 배달 점수에 반영한다.",
+              "localStorage 기반 최고 스티커 저장을 추가해 같은 코스를 더 예쁘게 착지하는 반복 목표를 만들었다.",
+              "캔버스 안에 연료 게이지, 최고 스티커, 이번 배달 스티커 패널을 표시한다."
+            ],
+            "nextDepthTargets": [
+              "중력 행성/바람 구역/회전 우편함이 있는 추가 코스",
+              "연료 절약 기록 기반 로켓 꼬리 불꽃과 우편 봉투 스킨",
+              "오늘의 배달 코스와 S등급 공유 카드"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-005 second-pass course and skin upgrade",
+            "items": [
+              "달빛 루프, 민트 돌풍, 베리 궤도, 소다 위성 4개 코스를 추가하고 코스별 우편함, 행성, 연료 별, 시작 위치, 제한 시간을 분리했다.",
+              "행성 중력, 바람 구역, 회전 우편함을 게임 루프에 반영해 같은 회전/추진 조작이 코스마다 다른 착륙 문제로 느껴지게 했다.",
+              "코스별 최고 스티커, 남은 연료, S 클리어 수, 완주 수를 twinkleDeliveryProgress:v2에 저장하고 오늘의 코스를 날짜 기반으로 선택하게 했다.",
+              "성과 조건에 따라 혜성, 베리, 별지도 스킨을 해금하고 로켓 본체, 꼬리 불꽃, 우편 봉투 색에 반영되게 했다.",
+              "현재 코스, 스티커, 남은 연료, 스킨, 점수를 TDR1 결과 카드 코드로 공유할 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "결과 카드 코드를 /games 카드 좋아요 흐름과 연결해 공유 반응을 측정",
+              "오늘 코스 S등급 연속 기록과 주간 배달표",
+              "코스별 유령 궤적과 착지 리플레이 비교"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-005 third-pass card reaction daily ghost upgrade",
+            "items": [
+              "TDR1 결과 카드 코드별 공유 횟수, 응원 수, 최고 점수를 cardStats에 저장하고 브라우저별 liked 목록으로 같은 카드 응원이 1번만 증가하게 했다.",
+              "결과 카드 코드에 오늘 S 연속 기록을 포함하고, 결과가 나온 직후 카드/응원 버튼이 현재 결과를 기준으로 동작하게 했다.",
+              "오늘 코스에서 S 스티커 완주를 달성하면 daily streak와 최근 7일 주간 스티커 표시에 반영되도록 했다.",
+              "성공 주행 중 더 좋은 스티커 또는 같은 스티커에서 더 많은 연료를 남긴 기록의 경로를 ghostTrace로 저장하고 다음 플레이에서 점선 유령 궤적으로 보여주게 했다.",
+              "캔버스 오버레이에 STREAK, GHOST, WEEK 정보를 추가해 재도전 목표가 보이도록 했다."
+            ],
+            "nextDepthTargets": [
+              "TDR1 카드 응원 수를 /games 로켓 카드 미리보기의 불꽃 크기나 배지로 반영",
+              "유령 궤적과 현재 주행 사이의 거리 차이를 실시간 점수 보너스로 연결",
+              "주간 배달표 7일 완성 보상 스킨과 S 연속 실패 시 복구권"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "로켓을 움직이는 장난감성은 있지만, 배달 성공이 짜릿한 기술 성공으로 느껴지지 않는다.",
+          "whyFunFallsFlat": [
+            "우편함 방문 순서와 속도 목표가 흐릿해 그냥 부딪히며 수거하는 느낌이 난다.",
+            "회전 조작의 어려움이 보상으로 이어지지 않으면 피로가 먼저 온다.",
+            "연료와 충돌이 위험/보상 리듬으로 읽히지 않는다."
+          ],
+          "repairPrinciple": "정해진 우편함을 좋은 속도로 통과하면 PERFECT DELIVERY와 연료 보너스를 주어 조작 숙련을 보상한다.",
+          "nextPlayableChange": "현재 목표 우편함에 링을 표시하고, 적정 속도·정확한 순서 배달에 콤보와 연료 회복을 부여한다.",
+          "implementedRepairs": [
+            "키보드 입력을 제거하고 화면 왼쪽/오른쪽/가운데 터치 구역으로 회전과 추진을 나눴다.",
+            "목표 링 안에 낮은 속도로 들어가면 PERFECT DELIVERY가 발생하고 연료, 점수, 파티클 보상을 준다.",
+            "우편함에 SOFT 기준을 시각화해 단순 충돌보다 부드러운 접근을 노리게 했다."
+          ],
+          "featureKey": "PERFECT_DELIVERY_SOFT_LANDING",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "도착만 하면 되는 구조라 로켓을 섬세하게 다루는 이유가 약했다.",
+            "repairFocus": "천천히, 정확히 들어가는 기술을 즉시 보상해 조작 숙련의 재미를 만든다.",
+            "notVolumeRule": "목표 개수를 늘리기보다 첫 배달에서 부드럽게 넣었다는 감각을 살린다.",
+            "nextPlaytestCheck": "유저가 링 앞에서 감속을 시도하는지 관찰한다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "defold",
+        "movement",
+        "input",
+        "arcade",
+        "playable"
+      ],
+      "summaryLine": "G-005 | Defold | 빙글별 배달 로켓 | 플레이 가능: 회전과 추진만으로 별 우편함을 순서대로 방문하는 배달 게임, /games/twinkle-delivery-rocket/에서 플레이 | preview=rocket-delivery",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "candidate-later",
+        "mobileInput": "화면 왼쪽/오른쪽을 누르면 로켓이 해당 방향으로 회전하고, 로켓을 길게 누르면 짧게 추진한다.",
+        "funDiagnosis": "회전과 추진은 좋은 물리 장난감이지만 목적지가 단순하면 조작 피로만 남는다. 배달 순서와 연료 리듬이 필요하다.",
+        "implementationNotes": [
+          "별 우편함을 순서대로 방문하면 콤보가 붙고, 순서를 어기면 속도 보너스가 사라지게 한다.",
+          "충돌은 즉시 실패보다 별가루 손실과 짧은 튕김으로 처리해 다시 회복할 여지를 준다.",
+          "작은 행성 중력장과 회전 발판으로 한 번의 좋은 궤도가 기억에 남게 만든다."
+        ],
+        "nextBuildSteps": [
+          "터치 회전/추진 영역 조정",
+          "배달 순서 콤보 설계",
+          "연료와 충돌 피드백 추가"
+        ]
+      }
+    },
+    {
+      "id": "defold-marshmallow-sling",
+      "gridSlot": "G-006",
+      "status": "playable",
+      "priority": 3,
+      "engine": "Defold",
+      "runtimeTarget": "HTML5 canvas",
+      "playableUrl": "./marshmallow-sling-studio/",
+      "sourceTitle": "Britzl Public Examples - Throw a Crow 0.1",
+      "sourceUrl": "https://britzl.github.io/publicexamples/throwacrow/index.html",
+      "sourceRepoUrl": "https://github.com/britzl/publicexamples",
+      "licenseNote": "슬링샷 물리와 구조물 반응만 참고하고 캐릭터를 새 소품으로 바꾼다.",
+      "workingTitleKo": "마시멜로 슝 공방",
+      "workingTitleEn": "Marshmallow Sling Studio",
+      "oneLineSummary": "마시멜로를 당겨 날려 과자 블록 탑을 살짝 무너뜨리는 Defold 물리 퍼즐.",
+      "originalMechanic": "slingshot aiming, projectile physics, destructible stacks",
+      "cuteTransformation": "투척 대상을 부드러운 마시멜로 소품으로 바꾸고, 파괴보다 정리와 균형 맞추기 퍼즐로 톤을 낮춘다.",
+      "coreLoop": [
+        "당기는 방향과 세기를 정한다.",
+        "마시멜로를 날려 과자 블록을 밀어낸다.",
+        "목표 블록만 떨어뜨리면 별점 보상을 얻는다."
+      ],
+      "preview": {
+        "animationKey": "marshmallow-sling",
+        "gifLoopSeconds": 5,
+        "pixelObjects": [
+          "sling band",
+          "marshmallow",
+          "cookie blocks"
+        ],
+        "thumbnailMood": "cream, cocoa, blue"
+      },
+      "prototypePlan": [
+        "Defold physics collision group 정리",
+        "drag vector aiming UI 구현",
+        "과자 블록 3종과 목표 판정 작성"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "마시멜로를 당겨 날리고 과자 블록이 흔들리는 물리 반응의 즉각적인 재미.",
+        "currentDepthGap": "목표 블록을 떨어뜨리는 규칙은 명확하지만, 퍼즐 해법 다양성과 레벨 구조가 아직 얕다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "level",
+            "idea": "유리병, 젤리 쿠션, 무거운 초코 블록 등 재질별 반응을 가진 스테이지를 만든다.",
+            "whyItAddsFun": "힘 조절과 각도 선택이 매번 다르게 작동한다."
+          },
+          {
+            "type": "objective",
+            "idea": "목표 블록만 떨어뜨리기, 특정 블록은 지키기, 한 번에 두 목표 맞추기 미션을 섞는다.",
+            "whyItAddsFun": "마구 무너뜨리는 게임이 아니라 정밀 퍼즐이 된다."
+          },
+          {
+            "type": "tool",
+            "idea": "통통 마시멜로, 무거운 마시멜로, 끈적 마시멜로를 선택하게 한다.",
+            "whyItAddsFun": "발사 전 선택이 해법의 일부가 된다."
+          },
+          {
+            "type": "feedback",
+            "idea": "슬로모션 명중, 과자 부스러기 콤보, 별점 리플레이를 추가한다.",
+            "whyItAddsFun": "좋은 샷의 만족감과 공유 포인트가 커진다."
+          }
+        ],
+        "retentionLoop": "스테이지 별 3개, 마시멜로 종류 해금, 최소 발사 수 기록, 리플레이 공유로 반복성을 만든다.",
+        "appCandidateSignal": "좋아요 대비 클리어 재시도율과 최소 샷 도전 비율이 높으면 물리 퍼즐 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-006 playable HTML5 Canvas prototype",
+            "items": [
+              "통통/무거움/끈적 마시멜로 도구 선택을 추가하고 반지름, 발사 힘, 충돌 반응을 다르게 적용했다.",
+              "떨어뜨리면 별점에 불리한 보호 블록을 추가해 목표 블록만 정리하는 정밀 퍼즐성을 강화했다.",
+              "한 발로 여러 목표를 떨어뜨리면 콤보 보너스가 붙도록 했다.",
+              "남은 발사 수, 보호 블록 유지, 콤보를 기준으로 별점 평가와 localStorage 최고 별점 저장을 추가했다."
+            ],
+            "nextDepthTargets": [
+              "유리병/젤리 쿠션/초코 블록 등 재질별 스테이지",
+              "최소 발사 수 기록과 슬로모션 명중 리플레이",
+              "마시멜로 도구 해금과 스테이지 선택 화면"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-006 second-pass stage material upgrade",
+            "items": [
+              "기본 탑, 유리병 선반, 젤리 쿠션, 초코 잠금 4개 스테이지를 추가하고 목표 수, 발사 수, 블록 배치를 스테이지 데이터로 분리했다.",
+              "쿠키, 유리, 젤리, 초코 재질을 추가해 충격 전달, 들림, 회전, 마찰 계수가 다르게 작동하도록 했다.",
+              "스테이지별 최고 별점, 최소 발사 수, 마지막 궤적 리플레이를 marshmallowSlingProgress:v2에 저장하게 했다.",
+              "목표 블록 명중 시 짧은 슬로모션을 적용하고 저장된 궤적을 점선으로 다시 볼 수 있게 했다.",
+              "누적 별점으로 무거움/끈적 도구를 해금하고 스테이지 전환 UI에서 퍼즐을 고를 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "리플레이를 공유 코드로 내보내고 좋아요 반응과 연결",
+              "스테이지별 미션 배지: 목표만, 한 발 클리어, 보호 블록 무사",
+              "재질별 전용 사운드와 명중 카메라 흔들림"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-006 third-pass replay reaction badge feedback upgrade",
+            "items": [
+              "MSR1 리플레이 코드에 스테이지, 도구, 별점, 사용 발사 수, 콤보, 배지, 압축 궤적을 담아 공유할 수 있게 했다.",
+              "리플레이 코드별 공유 횟수, 응원 수, 최고 별점, 최고 콤보를 replayStats에 저장하고 브라우저별 liked 목록으로 같은 리플레이 응원이 1번만 증가하게 했다.",
+              "목표만, 한 발, 보호 3종 미션 배지를 스테이지별 stageBest에 저장하고 캔버스 오버레이에서 달성 상태를 보여주게 했다.",
+              "목표 외 블록 낙하를 accidentalDrops로 별도 집계해 목표만 배지가 정확히 판정되도록 했다.",
+              "재질별 명중 시 HIT 재질명 표시와 작은 카메라 흔들림을 추가해 슬로모션 명중 피드백을 강화했다."
+            ],
+            "nextDepthTargets": [
+              "MSR1 응원 수를 /games 마시멜로 카드 미리보기의 별 조각이나 배지로 반영",
+              "공유 리플레이 코드를 입력해 다른 유저의 궤적을 복원하는 보기 모드",
+              "배지 3종을 모두 모은 스테이지에 전용 과자 스킨 보상 추가"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "satisfying collapse and slingshot band repair",
+            "items": [
+              "첫 스테이지를 핀 블록과 얇은 유리 받침 중심의 약점 구조로 재배치해 한 발 붕괴 가능성을 높였다.",
+              "마시멜로 도구의 발사력, 충돌 반응, 블록 들림/회전 전달량을 높여 맞췄을 때 구조물이 더 쉽게 흔들리게 했다.",
+              "강한 충격이 주변 블록에 전달되는 보조 물리를 추가해 연쇄 붕괴와 파편 반응을 키웠다.",
+              "발사 뒤에도 새총 끈이 투사체에 계속 연결되어 보이던 문제를 고쳐 조준 중에만 끈이 붙도록 했다."
+            ],
+            "nextDepthTargets": [
+              "첫 판을 반복 플레이하며 최저 힘/최고 힘 모두에서 붕괴가 납득되는지 튜닝",
+              "터뜨림과 파괴감 중심의 사운드/화면 흔들림 강화"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "무너뜨리는 소재는 좋지만, 어디를 맞히면 크게 터질지 예측하는 재미가 아직 약하다.",
+          "whyFunFallsFlat": [
+            "구조물 약점이 한눈에 읽히지 않으면 샷이 운처럼 느껴진다.",
+            "명중 직후의 연쇄 붕괴가 약하면 다시 쏘고 싶은 감정이 식는다.",
+            "보호/목표 규칙보다 먼저 시원한 파괴 쾌감이 필요하다."
+          ],
+          "repairPrinciple": "약점 블록을 표시하고, 그 지점을 맞혔을 때 추가 충격파와 큰 파편을 준다.",
+          "nextPlayableChange": "PIN/유리 받침 명중 시 CRACK SHOT 판정과 주변 블록 흔들림을 강화한다.",
+          "implementedRepairs": [
+            "약한 유리 지지점을 점선 금색 테두리로 표시해 어디를 맞히면 무너지는지 읽히게 했다.",
+            "약점을 맞히면 CRACK SHOT 점수, 강한 흔들림, 추가 부스러기, 주변 블록 기상 효과가 발생하도록 했다.",
+            "당기는 끈이 발사 후 남아 보이는 문제를 정리하고, 한 판에서 구조가 무너지는 쾌감을 우선하도록 했다."
+          ],
+          "featureKey": "CRACK_SHOT_WEAK_POINT",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "이전에는 맞혀도 구조가 기대만큼 쓰러지지 않아 새총 게임의 핵심 쾌감이 약했다.",
+            "repairFocus": "맞힐 곳을 분명히 보여주고, 맞혔을 때 물리 반응과 시청각 보상을 크게 돌려준다.",
+            "notVolumeRule": "스테이지 여러 개보다 첫 구조물 하나가 시원하게 무너지는 것이 먼저다.",
+            "nextPlaytestCheck": "유저가 두 번째 발사에서 금색 약점을 의식적으로 노리는지 본다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "defold",
+        "physics",
+        "slingshot",
+        "puzzle",
+        "playable"
+      ],
+      "summaryLine": "G-006 | Defold | 마시멜로 슝 공방 | 플레이 가능: 마시멜로를 당겨 목표 과자 블록을 테이블 밖으로 밀어내는 슬링샷 퍼즐, /games/marshmallow-sling-studio/에서 플레이 | preview=marshmallow-sling",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "near-term",
+        "mobileInput": "마시멜로를 뒤로 당겼다가 놓는 드래그 릴리즈만으로 발사한다. 도구 선택은 엄지로 누르기 쉬운 큰 칩 버튼으로 둔다.",
+        "funDiagnosis": "쓰러뜨리는 게임은 구조물이 실제로 흔들리고 연쇄 붕괴해야 쾌감이 난다. 단단한 단일 탑보다 받침을 빼면 무너지는 약점 구조가 중요하다.",
+        "implementationNotes": [
+          "첫 판은 핀 블록, 가벼운 쿠키, 유리 받침, 젤리 완충재를 섞어 한 발만 잘 맞아도 연쇄 반응이 나게 만든다.",
+          "투사체 힘, 블록 들림, 회전 전달량을 올리고 충격이 주변 블록으로 번지는 보조 물리를 적용한다.",
+          "발사 중에는 새총 끈이 투사체에 계속 붙어 보이지 않도록 조준 중에만 연결한다.",
+          "성공 피드백은 별점보다 먼저 파편, 흔들림, 슬로모션, POP 표시로 즉시 보여준다."
+        ],
+        "nextBuildSteps": [
+          "첫 스테이지의 붕괴 성공률을 모바일 드래그 기준으로 재튜닝",
+          "목표 블록만 떨어뜨리는 보너스보다 우선 시원한 파괴감을 강화",
+          "리플레이/응원 수를 카드 미리보기의 반짝임과 연결"
+        ]
+      }
+    },
+    {
+      "id": "libgdx-pax-biscuitica",
+      "gridSlot": "G-007",
+      "status": "closed",
+      "priority": 2,
+      "engine": "libGDX",
+      "runtimeTarget": "HTML5 via TeaVM/GWT-style export after desktop prototype",
+      "playableUrl": "./pax-biscuitica/",
+      "sourceTitle": "libgdx-demo-pax-britannica",
+      "sourceUrl": "https://github.com/libgdx/libgdx-demo-pax-britannica",
+      "sourceRepoUrl": "https://github.com/libgdx/libgdx-demo-pax-britannica",
+      "licenseNote": "GitHub API license field is NOASSERTION; 재사용 전 저장소 license.txt를 별도 확인한다.",
+      "workingTitleKo": "비스킷 해양 조약",
+      "workingTitleEn": "Pax Biscuitica",
+      "oneLineSummary": "원버튼 생산과 자동 전투 흐름을 비스킷 함대의 귀여운 해양 영역 싸움으로 바꾼 libGDX 실험.",
+      "originalMechanic": "one-button unit production, resource timing, autonomous skirmish",
+      "cuteTransformation": "제국 전쟁의 긴장감을 비스킷 함대와 잼 항로 경쟁으로 바꿔 짧은 전략 장난감처럼 만든다.",
+      "coreLoop": [
+        "하나의 버튼으로 생산 타이밍을 고른다.",
+        "비스킷 함대가 자동으로 항로를 따라간다.",
+        "잼 기지를 밀거나 지키며 라운드를 끝낸다."
+      ],
+      "preview": {
+        "animationKey": "biscuit-fleet",
+        "gifLoopSeconds": 5,
+        "pixelObjects": [
+          "biscuit base",
+          "jam route",
+          "mini fleet"
+        ],
+        "thumbnailMood": "aqua, biscuit, raspberry"
+      },
+      "prototypePlan": [
+        "desktop libGDX에서 one-button spawn loop 구현",
+        "2개 기지와 lane 1개로 자동 교전 검증",
+        "웹 export 가능성을 TeaVM 기준으로 체크"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "한 버튼 생산 타이밍만으로 전선이 밀고 밀리는 자동 전략 관전 재미.",
+        "currentDepthGap": "현재는 생산 타이밍이 핵심이라 전략 선택지가 적고, 역전 변수가 부족하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "unit",
+            "idea": "바삭 함대, 크림 방패, 잼 저격선처럼 한 버튼 길게 누르기 시간으로 생산 유닛을 바꾼다.",
+            "whyItAddsFun": "버튼 하나를 유지하면서도 전략 선택이 생긴다."
+          },
+          {
+            "type": "lane",
+            "idea": "상단/하단 2개 항로와 중앙 보너스 섬을 추가한다.",
+            "whyItAddsFun": "전선을 어디에 밀지 고르는 공간 전략이 생긴다."
+          },
+          {
+            "type": "tempo",
+            "idea": "완벽한 굽기 타이밍을 연속으로 맞추면 일시 버프를 준다.",
+            "whyItAddsFun": "실시간 리듬감과 전략 결과가 연결된다."
+          },
+          {
+            "type": "campaign",
+            "idea": "잼 항로 지도와 각 지역별 특수 규칙을 만든다.",
+            "whyItAddsFun": "짧은 자동 전투가 캠페인 정복 루프로 확장된다."
+          }
+        ],
+        "retentionLoop": "항로별 승리, 유닛 조합 해금, 완벽 굽기 연속 기록, 지역 정복률을 묶는다.",
+        "appCandidateSignal": "좋아요와 함께 평균 관전 시간이 길고 재시작률이 높으면 원버튼 전략 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-007 playable HTML5 Canvas prototype",
+            "items": [
+              "굽기 버튼을 누르는 길이에 따라 바삭 함대, 크림 방패, 잼 저격선을 생산하도록 했다.",
+              "유닛별 비용, 체력, 속도, 공격력, 공격 거리를 다르게 적용해 원버튼 안에 전략 선택을 만들었다.",
+              "완벽한 굽기 연속 기록과 localStorage 최고 연속 기록 저장을 추가했다.",
+              "완벽 굽기 3연속 이상일 때 일시적인 템포 버프가 발동해 전선 돌파력을 높이도록 했다."
+            ],
+            "nextDepthTargets": [
+              "상단/하단 2개 항로와 중앙 보너스 섬",
+              "유닛 조합 해금과 항로별 특수 규칙",
+              "지역 정복 캠페인 지도와 전투 기록 공유"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-007 second-pass lane campaign upgrade",
+            "items": [
+              "상단/하단 2개 항로를 추가하고 생산 버튼으로 만든 유닛이 선택 항로를 따라 전투하도록 laneId를 분리했다.",
+              "중앙 보너스 섬을 추가해 플레이어 유닛이 통과하면 반죽과 점수를 얻고, 적 유닛이 통과하면 기지가 압박받도록 했다.",
+              "잼 해협, 크림 암초, 후추 해류 3개 지역을 추가하고 지역별 적 생산 속도, 반죽 회복, 유닛 비용 규칙을 다르게 적용했다.",
+              "지역별 승리 수, 최고 점수, 최고 굽기 연속 기록을 paxBiscuiticaProgress:v2에 저장해 캠페인 정복 루프를 만들었다.",
+              "지역/항로 선택 UI와 캔버스 오버레이를 추가해 현재 전선 선택과 지역 진행도를 한눈에 볼 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "지역 전투 기록을 공유 코드로 내보내기",
+              "승리 지역 수에 따라 유닛 조합/스킨 추가 해금",
+              "중앙 섬 점령 상태가 일정 시간 버프를 주는 항로별 특수 규칙 확장"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-007 third-pass battle share style island buff upgrade",
+            "items": [
+              "PBC1 전투 기록 코드에 지역, 항로, 함대 스타일, 승패, 점수, 최고 굽기 연속, 남은 기지 체력을 담아 공유할 수 있게 했다.",
+              "전투 기록 코드별 공유 횟수, 응원 수, 최고 점수, 승리 수를 battleStats에 저장하고 브라우저별 liked 목록으로 같은 전투 기록 응원이 1번만 증가하게 했다.",
+              "지역 승리 수에 따라 기본, 민트, 코코아 함대 스타일이 해금되며 스타일별 속도, 체력, 공격 보정과 유닛 색상이 실제 전투에 반영되도록 했다.",
+              "중앙 보너스 섬을 플레이어가 점령하면 반죽 보상뿐 아니라 7초간 함대 속도와 공격이 오르는 섬 버프가 발동하도록 확장했다.",
+              "캔버스 오버레이와 푸터 버튼에 STYLE, LIKE, ISLAND 정보를 표시해 현재 전략과 공유 반응을 읽을 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "PBC1 응원 수를 /games 비스킷 카드 미리보기의 함대 수나 깃발 배지로 반영",
+              "전투 기록 코드를 입력해 같은 지역/항로/스타일 조건으로 재도전하는 복원 모드",
+              "지역별 승리 조건을 다양화한 캠페인 지도와 보스 항로"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "libgdx",
+        "strategy",
+        "one-button",
+        "web-export",
+        "playable"
+      ],
+      "summaryLine": "libGDX | 비스킷 해양 조약 | closed: 자동 전략 컨셉은 흥미롭지만, 한 버튼 생산만으로는 전황을 읽고 선택하는 재미가 충분히 생기지 않았다.",
+      "visibleInCabinet": false,
+      "closedAt": "2026-07-02",
+      "closureReview": {
+        "reason": "자동 전략 컨셉은 흥미롭지만, 한 버튼 생산만으로는 전황을 읽고 선택하는 재미가 충분히 생기지 않았다.",
+        "doNotRepeat": [
+          "자동 전투를 만들 때는 생산 타이밍, 경로 선택, 카운터 유닛처럼 읽고 대응할 요소를 함께 설계한다.",
+          "상대보다 많이 생산하는 단순 수싸움은 귀여운 스킨을 입혀도 오래 버티기 어렵다.",
+          "첫 10초 안에 왜 이 선택이 좋았는지 화면에서 이해되는 피드백을 넣는다."
+        ],
+        "researchBasis": "게임의 재미는 결과보다 플레이어가 원인과 결과를 배워가는 과정에서 강해진다. 기존 구조는 선택의 원인이 너무 얕았다."
+      }
+    },
+    {
+      "id": "html5-pixel-color-garden",
+      "gridSlot": "G-008",
+      "status": "playable",
+      "priority": 2,
+      "engine": "HTML5 Canvas",
+      "runtimeTarget": "Plain HTML/CSS/JS",
+      "playableUrl": "./pixel-color-garden/",
+      "sourceTitle": "NeoKIM App Lab - Color Master lineage",
+      "sourceUrl": "https://alchegit.github.io/color-master-2/",
+      "sourceRepoUrl": "https://alchegit.github.io/",
+      "licenseNote": "자체 앱 아이디어를 웹 실험용으로 재해석한다.",
+      "workingTitleKo": "픽셀 컬러 정원",
+      "workingTitleEn": "Pixel Color Garden",
+      "oneLineSummary": "다른 색 타일 찾기 감각을 작은 꽃밭 관리 퍼즐로 바꾼 순수 HTML5 게임.",
+      "originalMechanic": "odd-color detection, short timed rounds, increasing difficulty",
+      "cuteTransformation": "색상 타일을 꽃밭 픽셀로 바꾸고, 틀린 선택은 실패보다 꽃봉오리 흔들림으로 표현한다.",
+      "coreLoop": [
+        "비슷한 꽃밭에서 살짝 다른 꽃을 찾는다.",
+        "연속 정답으로 물방울 콤보를 얻는다.",
+        "라운드가 지날수록 색 차이가 줄어든다."
+      ],
+      "preview": {
+        "animationKey": "color-garden",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "flower tiles",
+          "water drop",
+          "odd bloom"
+        ],
+        "thumbnailMood": "leaf, sky, rose"
+      },
+      "prototypePlan": [
+        "Canvas grid renderer 작성",
+        "색상 delta 난이도 테이블 설계",
+        "30초 score attack 모드 추가"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "비슷한 꽃밭에서 다른 색 하나를 찾는 빠른 관찰 쾌감.",
+        "currentDepthGap": "색 차이 난이도만 올라가면 피로가 빨리 오고, 성장/변주가 부족하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "mode",
+            "idea": "색상 찾기, 모양 찾기, 흔들리는 꽃 찾기, 기억 후 찾기 모드를 분리한다.",
+            "whyItAddsFun": "시각 퍼즐이 단조로워지는 것을 막는다."
+          },
+          {
+            "type": "progression",
+            "idea": "정답 콤보로 정원 구역을 확장하고 꽃 품종을 해금한다.",
+            "whyItAddsFun": "점수 게임에 수집과 꾸미기 목표가 붙는다."
+          },
+          {
+            "type": "accessibility",
+            "idea": "색약 보조 패턴 모드와 난이도 자동 보정 테이블을 둔다.",
+            "whyItAddsFun": "더 많은 유저가 공정하게 즐길 수 있고 앱 리뷰 리스크를 줄인다."
+          },
+          {
+            "type": "daily",
+            "idea": "오늘의 10문제 정원과 친구에게 공유 가능한 결과 카드를 만든다.",
+            "whyItAddsFun": "짧은 퍼즐이 매일 방문하는 루틴으로 바뀐다."
+          }
+        ],
+        "retentionLoop": "일일 정원, 꽃 품종 수집, 콤보 기록, 정원 꾸미기를 연결한다.",
+        "appCandidateSignal": "좋아요와 일일 재방문율이 높으면 Color Master 계열 차기 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-008 playable HTML5 Canvas prototype",
+            "items": [
+              "라운드를 색상 찾기, 모양 찾기, 씨앗 무늬 찾기, 반짝임 찾기, 흔들림 찾기 모드로 순환시켜 관찰 퍼즐의 단조로움을 줄였다.",
+              "연속 정답 콤보와 물방울 보상을 추가하고 빠른 정답, 어려운 모드, 오늘꽃 라운드에 추가 점수를 부여했다.",
+              "정답 콤보와 진행도에 따라 8종 꽃 품종을 해금하고 localStorage에 수집 상태, 최고 콤보, 누적 정답을 저장하도록 했다.",
+              "캔버스 하단에 수집한 꽃을 작은 픽셀 정원으로 표시해 점수 외 성장 피드백을 제공했다."
+            ],
+            "nextDepthTargets": [
+              "오늘의 10문제 정원과 결과 카드 공유",
+              "색약 보조 패턴을 유저가 직접 켜고 끌 수 있는 설정",
+              "수집 꽃으로 꾸미는 정원 배치 화면"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-008 second-pass daily accessibility upgrade",
+            "items": [
+              "오늘의 정원 10문제 모드를 추가하고 daily 진행 수, 정답 수, 점수 기록을 날짜별로 저장하도록 했다.",
+              "색 보조 무늬 토글을 추가해 색상 찾기 라운드의 정답 꽃에도 패턴 힌트를 표시할 수 있게 했다.",
+              "수집한 꽃의 정원 하단 배치 순서를 gardenSlots에 저장하고 배치 모드에서 순서를 바꿀 수 있게 했다.",
+              "오늘 결과를 PCG1 결과 카드 코드로 인코딩해 공유할 수 있게 했다.",
+              "하단 컨트롤을 daily, 무늬, 배치, 카드 버튼으로 정리하고 모바일에서 한 줄/두 줄로 안정적으로 접히게 했다."
+            ],
+            "nextDepthTargets": [
+              "결과 카드 코드로 친구 기록을 불러와 비교하는 화면",
+              "색 보조 설정을 첫 방문 시 접근성 옵션으로 더 명확하게 노출",
+              "정원 배치 화면에서 꽃별 위치를 직접 드래그하는 편집 모드"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-008 third-pass friend compare drag garden upgrade",
+            "items": [
+              "PCG1 결과 카드 코드를 입력해 친구의 오늘 정원 정답 수, 점수, 꽃 수를 friendRecord로 저장하고 현재 화면의 비교 배지와 결과 문구에 표시하게 했다.",
+              "비교 버튼을 추가하고 친구 기록이 불러와진 상태에서는 버튼과 툴팁에 친구 기록 요약이 보이도록 했다.",
+              "첫 방문 시 색 구분이 어려우면 무늬 버튼을 켤 수 있다는 접근성 힌트를 한 번만 표시하고 firstAssistPromptSeen으로 저장하게 했다.",
+              "색 보조가 켜진 상태를 무늬 ON 버튼 문구로 더 명확히 표시하도록 했다.",
+              "배치 모드에서 하단 정원 꽃을 직접 드래그해 꽃별 위치를 gardenPositions에 저장하고, 저장 좌표가 없을 때만 기존 자동 간격 배치를 사용하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "친구 기록과 내 기록의 차이를 라운드별 그래프나 작은 꽃 표식으로 비교",
+              "정원 위치 편집에 격자 스냅/초기화 버튼 추가",
+              "PCG1 친구 기록 반응을 /games 픽셀 컬러 정원 카드 미리보기에 반영"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "다른 색 찾기는 이해하기 쉽지만, 발견의 쾌감이 약하면 눈 피로 게임처럼 느껴진다.",
+          "whyFunFallsFlat": [
+            "오답과 정답 사이의 피드백 차이가 작으면 탐색이 건조하다.",
+            "색 차이만으로 난이도를 올리면 귀여운 정원 테마가 게임성으로 이어지지 않는다.",
+            "연속 발견 보상이 약하면 한 판 더 할 이유가 줄어든다."
+          ],
+          "repairPrinciple": "정답에 가까운 터치에는 따뜻한 힌트를 주고, 연속 정답에는 꽃이 번지는 시각 보상을 준다.",
+          "nextPlayableChange": "근접 오답에는 잎 흔들림 힌트, 연속 정답에는 BLOOM STREAK와 추가 꽃잎 파편을 적용한다.",
+          "implementedRepairs": [
+            "정답 근처를 탭하면 완전 실패가 아니라 따뜻한 힌트로 처리해 다시 찾고 싶은 흐름을 만들었다.",
+            "3콤보 이상부터 BLOOM STREAK 꽃잎 파티클과 점수 메시지를 넣어 관찰 성공의 리듬감을 강화했다.",
+            "단순 눈 테스트가 아니라 가까워지고 있다는 피드백과 연속 성공의 작은 폭발을 추가했다."
+          ],
+          "featureKey": "NEAR_HINT_AND_BLOOM_STREAK",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "오답이 차갑게 끊기면 귀여운 정원 분위기와 달리 틀린 순간 플레이 의욕이 꺼졌다.",
+            "repairFocus": "근접 힌트와 연속 개화로 거의 찾았다와 계속 맞힌다를 모두 보상한다.",
+            "notVolumeRule": "색상 패턴을 늘리기보다 한 번 틀린 뒤 다시 찾는 과정이 부드러워야 한다.",
+            "nextPlaytestCheck": "오답 후 바로 이탈하지 않고 주변 칸을 다시 눌러보는지 확인한다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "html5",
+        "canvas",
+        "color",
+        "puzzle",
+        "playable"
+      ],
+      "summaryLine": "G-008 | HTML5 Canvas | 픽셀 컬러 정원 | 플레이 가능: 다른 꽃 찾기 웹 퍼즐, /games/pixel-color-garden/에서 플레이 | preview=color-garden",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "candidate-later",
+        "mobileInput": "꽃밭을 손가락으로 훑고, 다른 색 꽃을 발견하면 바로 탭한다. 확대 버튼보다 핀치/드래그 탐색을 우선한다.",
+        "funDiagnosis": "다른 그림 찾기는 발견 순간의 만족감이 중요하다. 단순 색 차이만 반복되면 퍼즐보다 시력 검사처럼 느껴진다.",
+        "implementationNotes": [
+          "색 차이, 모양 차이, 피어나는 타이밍 차이를 섞어 관찰 재미를 만든다.",
+          "오답 페널티는 강하게 주기보다 꽃잎 흔들림과 콤보 끊김 정도로 귀엽게 처리한다.",
+          "한 판마다 작은 정원 스탬프를 주어 발견 결과가 수집으로 남게 한다."
+        ],
+        "nextBuildSteps": [
+          "터치 탐색 감도 조정",
+          "색/모양/움직임 차이 패턴 추가",
+          "정원 스탬프 1차 보상 설계"
+        ]
+      }
+    },
+    {
+      "id": "phaser-jelly-brick-shop",
+      "gridSlot": "G-009",
+      "status": "playable",
+      "priority": 4,
+      "engine": "Phaser",
+      "runtimeTarget": "HTML5",
+      "playableUrl": "./jelly-brick-shop/",
+      "sourceTitle": "Phaser Examples - games / physics / input",
+      "sourceUrl": "https://phaser.io/examples",
+      "sourceRepoUrl": "https://github.com/phaserjs/examples",
+      "licenseNote": "공식 예제 카테고리에서 입력/물리 패턴만 참고하고 게임 코드는 신규 작성한다.",
+      "workingTitleKo": "젤리 벽돌 가게",
+      "workingTitleEn": "Jelly Brick Shop",
+      "oneLineSummary": "벽돌깨기 공식을 젤리 진열대 정리 게임으로 바꾼 Phaser 아케이드 물리 실험.",
+      "originalMechanic": "arcade physics, paddle control, bouncing projectile, level clear",
+      "cuteTransformation": "블록을 깨는 감각은 젤리 진열대를 가지런히 치우는 연출로 바꾸고, 튀는 공은 설탕 구슬로 표현한다.",
+      "coreLoop": [
+        "패들을 움직여 설탕 구슬을 튕긴다.",
+        "젤리 벽돌을 순서대로 정리한다.",
+        "콤보로 새 젤리 색을 해금한다."
+      ],
+      "preview": {
+        "animationKey": "jelly-bricks",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "jelly bricks",
+          "sugar ball",
+          "shop paddle"
+        ],
+        "thumbnailMood": "lime, violet, tangerine"
+      },
+      "prototypePlan": [
+        "Phaser Arcade Physics scene 1개 작성",
+        "벽돌 배치와 bounce angle 조정",
+        "카드 미리보기용 6초 replay capture 추가"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "설탕 구슬을 패들로 꺾어 젤리 벽돌을 연속으로 정리하는 반사각 손맛.",
+        "currentDepthGap": "기본 벽돌깨기만으로는 오래 즐기기 어렵고, 벽돌/아이템 변주가 더 필요하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "brick",
+            "idea": "두 번 맞아야 하는 젤리, 움직이는 젤리, 색상 순서대로 맞춰야 하는 진열대를 추가한다.",
+            "whyItAddsFun": "공을 어디로 보내야 하는지 판단하는 퍼즐성이 생긴다."
+          },
+          {
+            "type": "powerup",
+            "idea": "패들 확장, 다중 구슬, 느린 구슬, 자석 패들을 짧은 시간 아이템으로 넣는다.",
+            "whyItAddsFun": "운과 실력이 섞인 순간적인 반전 재미가 생긴다."
+          },
+          {
+            "type": "shop",
+            "idea": "클리어한 젤리 색으로 가게 진열장을 꾸미는 수집 화면을 만든다.",
+            "whyItAddsFun": "벽돌 제거 결과가 시각적 소유감으로 남는다."
+          },
+          {
+            "type": "challenge",
+            "idea": "한 구슬 클리어, 콤보 20, 특정 색 먼저 정리 같은 미션을 추가한다.",
+            "whyItAddsFun": "같은 스테이지를 다른 목표로 다시 시도하게 된다."
+          }
+        ],
+        "retentionLoop": "짧은 스테이지 클리어, 아이템 콤보, 젤리 진열장 수집, 일일 미션으로 구성한다.",
+        "appCandidateSignal": "좋아요와 한 스테이지 재도전율이 높으면 캐주얼 아케이드 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-009 playable HTML5 Canvas prototype",
+            "items": [
+              "두 번 맞아야 하는 단단한 젤리, 좌우로 움직이는 젤리, 아이템을 품은 젤리를 추가해 공을 보낼 위치를 판단하게 했다.",
+              "넓은 패들, 느린 구슬, 쌍둥이 구슬, 자석 패들 아이템을 떨어뜨려 스테이지 중간에 반전과 콤보 기회를 만들었다.",
+              "오늘의 미션을 콤보, 특정 색 정리, 아이템 획득, 단단한 젤리 정리 중 하나로 배정하고 localStorage에 완료일을 저장하도록 했다.",
+              "색상별로 정리한 젤리를 진열장 수집 수량으로 저장하고 캔버스 하단 선반에 작은 젤리 병으로 표시했다."
+            ],
+            "nextDepthTargets": [
+              "색상 순서대로 맞춰야 하는 주문 진열대",
+              "스테이지별 젤리 배치 프리셋과 한 구슬 클리어 챌린지",
+              "수집한 젤리 병을 배치하는 별도 가게 꾸미기 화면"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-009 second-pass order shelf upgrade",
+            "items": [
+              "오늘 진열, 베리 주문, 하늘 주문, 한 구슬 도전 4개 스테이지 프리셋을 추가하고 하드/이동 젤리 배치를 스테이지별로 다르게 구성했다.",
+              "색상 순서 주문 진열대를 추가해 현재 주문 색이 아닌 젤리는 깨지지 않고 콤보가 끊기도록 했다.",
+              "한 구슬 도전 스테이지에서 구슬을 잃지 않고 클리어하면 oneBallClears에 기록하도록 했다.",
+              "수집한 젤리 병의 shelfLayout 순서를 저장하고 꾸미기 모드에서 진열장 병 배치를 순환할 수 있게 했다.",
+              "스테이지 전환과 꾸미기 버튼을 하단 컨트롤로 추가하고 주문 순서를 캔버스 오버레이에 표시했다."
+            ],
+            "nextDepthTargets": [
+              "한 구슬 클리어/주문 순서 클리어 결과 카드 공유",
+              "젤리 병을 드래그로 직접 놓는 별도 꾸미기 화면",
+              "스테이지 프리셋별 난이도와 보상 테이블 분리"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-009 third-pass result card drag shelf reward upgrade",
+            "items": [
+              "스테이지 프리셋에 difficulty와 rewardMul을 분리해 오늘 진열, 주문 진열, 한 구슬 도전의 보상 배율을 다르게 적용했다.",
+              "점수 획득, 주문 완료 보너스, 미션 보너스, 클리어 보너스가 현재 스테이지 보상 배율을 통과하도록 연결했다.",
+              "클리어/실패 결과를 JBS1 결과 카드 코드로 만들고 점수, 콤보, 한 구슬 클리어, 주문 완료, 미션 완료 여부를 코드와 resultStats에 남기도록 했다.",
+              "결과 카드별 공유 수와 응원 수를 저장하고 jellyBrickLikedResults:v1로 같은 브라우저의 같은 카드 응원이 한 번만 처리되게 했다.",
+              "꾸미기 모드에서 젤리 병을 직접 드래그해 선반 위 위치를 저장하는 shelfPositions를 추가하고, 기존 shelfLayout 저장값도 자동으로 기본 위치로 마이그레이션되게 했다.",
+              "모바일 폭에서 늘어난 카드/응원 버튼과 긴 결과 코드가 레이아웃을 밀지 않도록 캔버스 폭, 컨트롤 폭, 줄바꿈 처리를 보정했다."
+            ],
+            "nextDepthTargets": [
+              "JBS1 결과 카드 코드를 입력해 같은 스테이지/성과 조건을 다시 보는 복원 모드",
+              "젤리 병 꾸미기에 격자 스냅, 초기화, 배경 소품을 더한 별도 가게 편집 화면",
+              "JBS1 응원 수와 shelfPositions를 /games 젤리 벽돌 카드 미리보기의 선반 병 배치와 반짝임으로 반영"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "mobile-first input cleanup",
+            "items": [
+              "공개 안내 문구에서 마우스 표현을 제거하고 손가락 드래그 패들 조작으로 정리했다.",
+              "키보드 좌우 이동 리스너를 제거해 패들 조작을 포인터 드래그 중심으로 고정했다.",
+              "기존 꾸미기 모드의 젤리 병 드래그 조작은 유지했다."
+            ],
+            "nextDepthTargets": [
+              "패들 끝 반사각을 더 크게 만들어 드래그 실력 보상",
+              "첫 스테이지 벽돌 배치를 콤보 중심으로 재튜닝"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "edge-shot paddle feel upgrade",
+            "items": [
+              "패들 끝에 맞췄을 때 구슬 반사각과 속도 보너스가 커지도록 조정했다.",
+              "끝부분 명중 시 작은 점수 보너스, 노란 팝 파편, 패들 반짝임을 추가해 손가락 조작의 성공감을 키웠다.",
+              "중앙으로 받았을 때는 콤보를 일부만 남기고, 끝부분 슛은 콤보를 유지하게 해 구석 공략의 이유를 만들었다."
+            ],
+            "nextDepthTargets": [
+              "첫 스테이지 벽돌 배치를 끝부분 슛으로 연속 콤보가 나기 쉽게 재배치",
+              "끝부분 슛 3회 연속 성공 보너스와 짧은 화면 흔들림 추가"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "벽돌깨기의 기본은 있으나, 내가 각도를 조절했다는 숙련감이 더 선명해야 한다.",
+          "whyFunFallsFlat": [
+            "공이 돌아오는 시간을 기다리는 동안 플레이어의 의도가 약해진다.",
+            "패들 끝 명중 보상이 더 크게 연결되지 않으면 그냥 받아내는 게임이 된다.",
+            "콤보가 숫자로만 오르면 손맛보다 계산으로 느껴진다."
+          ],
+          "repairPrinciple": "끝부분 슛, 연속 콤보, 주문 색 정리를 한 번의 성공 연출로 묶는다.",
+          "nextPlayableChange": "끝부분 슛 이후 첫 벽돌을 깨면 ANGLE COMBO 보너스를 주고 파편 강도를 키운다.",
+          "implementedRepairs": [
+            "패들 끝으로 공을 맞힌 뒤 벽돌을 깨면 ANGLE COMBO가 터지도록 했다.",
+            "끝 공략 보너스, 색상 팝, 메시지로 각도를 조절한 결과를 즉시 알아차리게 했다.",
+            "그저 받는 벽돌깨기가 아니라 공을 어디에 맞힐지 고민하는 조작 목표를 만들었다."
+          ],
+          "featureKey": "ANGLE_COMBO_EDGE_SHOT",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "공을 계속 살리는 재미는 있었지만 각도 조절이 보상으로 읽히지 않았다.",
+            "repairFocus": "패들 끝 맞힘을 다음 벽돌 파괴 보너스와 연결해 의도한 샷의 성취감을 만든다.",
+            "notVolumeRule": "벽돌 배열을 늘리기보다 첫 1분 안에 의도한 반사로 한 번 크게 보상받게 한다.",
+            "nextPlaytestCheck": "유저가 중앙 받기에서 끝 맞히기로 행동을 바꾸는지 본다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "phaser",
+        "arcade",
+        "physics",
+        "breakout",
+        "playable"
+      ],
+      "summaryLine": "G-009 | Phaser | 젤리 벽돌 가게 | 플레이 가능: 설탕 구슬을 튕겨 젤리 진열대를 정리하는 벽돌깨기 게임, /games/jelly-brick-shop/에서 플레이 | preview=jelly-bricks",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "near-term",
+        "mobileInput": "손가락으로 패들을 직접 드래그한다. 버튼 이동은 제거하고, 공이 패들에 닿는 순간 짧은 진동감 있는 시각 피드백을 준다.",
+        "funDiagnosis": "벽돌깨기는 각도 조절과 연속 콤보가 재미의 중심이다. 벽돌 종류, 아이템 타이밍, 주문 순서가 없으면 금방 평면적으로 느껴진다.",
+        "implementationNotes": [
+          "패들 끝에 맞출수록 더 큰 각도로 튀게 해 손가락 조작 실력을 보상한다.",
+          "단단한 젤리, 움직이는 젤리, 색상 주문, 다중 구슬 아이템을 한 스테이지 안에서 리듬 있게 섞는다.",
+          "한 구슬 클리어와 주문 순서 클리어는 기록 카드로 남겨 다시 도전할 이유를 만든다."
+        ],
+        "nextBuildSteps": [
+          "패들 드래그 감도와 공 반사각 재조정",
+          "주문 순서 UI를 더 작고 명확하게 정리",
+          "첫 스테이지를 한 구슬로도 깰 수 있게 배치 튜닝"
+        ]
+      }
+    },
+    {
+      "id": "godot-cozy-switchyard",
+      "gridSlot": "G-010",
+      "status": "closed",
+      "priority": 5,
+      "engine": "Godot",
+      "runtimeTarget": "Godot Web export",
+      "playableUrl": "./cozy-switchyard/",
+      "sourceTitle": "Godot Docs - Exporting for the Web",
+      "sourceUrl": "https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_web.html",
+      "sourceRepoUrl": "https://github.com/godotengine/godot-docs",
+      "licenseNote": "Godot 웹 내보내기 제약을 먼저 확인한 뒤 자체 소스와 자체 에셋으로 제작한다.",
+      "workingTitleKo": "포근한 스위치 정류장",
+      "workingTitleEn": "Cozy Switchyard",
+      "oneLineSummary": "작은 레일 스위치를 돌려 선물 상자를 목적지로 보내는 Godot 2D 퍼즐.",
+      "originalMechanic": "node-based scenes, signals, tile/grid movement, web export test",
+      "cuteTransformation": "철도 퍼즐을 선물 상자 분류 놀이로 바꾸고, 실패 대신 상자가 다시 출발점으로 돌아오는 흐름을 둔다.",
+      "coreLoop": [
+        "레일 스위치를 미리 돌린다.",
+        "상자가 레일을 따라 자동 이동한다.",
+        "색상 목적지에 맞게 도착시키면 다음 퍼즐이 열린다."
+      ],
+      "preview": {
+        "animationKey": "switchyard",
+        "gifLoopSeconds": 5,
+        "pixelObjects": [
+          "rail tiles",
+          "gift box",
+          "switch lever"
+        ],
+        "thumbnailMood": "pine, peach, brass"
+      },
+      "prototypePlan": [
+        "Godot TileMap과 Area2D 신호로 레일 이동 구현",
+        "3x3 퍼즐 5개 제작",
+        "web export 빌드 크기와 GitHub Pages 배포 검증"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "스위치를 미리 정하고 상자가 자동으로 레일을 따라가는 예측 퍼즐의 만족감.",
+        "currentDepthGap": "한 개 스위치와 색상 목적지만으로는 풀이가 빨리 단순해진다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "puzzle",
+            "idea": "2~3개 스위치, 일방통행 레일, 시간차 출발 상자를 추가한다.",
+            "whyItAddsFun": "출발 전에 경로를 시뮬레이션하는 사고 깊이가 생긴다."
+          },
+          {
+            "type": "sequence",
+            "idea": "여러 상자가 연속 출발하고 중간에 스위치를 바꿀 수 있는 라운드를 만든다.",
+            "whyItAddsFun": "정적인 퍼즐에서 리듬 있는 운영 퍼즐로 확장된다."
+          },
+          {
+            "type": "rating",
+            "idea": "스위치 조작 횟수, 오배송 수, 남은 시간으로 스탬프 등급을 준다.",
+            "whyItAddsFun": "정답 이후에도 더 깔끔한 풀이를 노리게 된다."
+          },
+          {
+            "type": "content",
+            "idea": "정류장 테마 4개와 각 테마별 레일 규칙을 만든다.",
+            "whyItAddsFun": "퍼즐 묶음이 앱의 챕터 구조가 된다."
+          }
+        ],
+        "retentionLoop": "챕터별 퍼즐, 스탬프 등급, 최소 조작 수 기록, 정류장 테마 해금을 연결한다.",
+        "appCandidateSignal": "좋아요와 퍼즐별 재시도율이 높고 오배송 후 재도전이 많으면 퍼즐 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-010 playable HTML5 Canvas prototype",
+            "items": [
+              "앞 스위치는 윗길/가운데/아랫길을 고르고 뒤 스위치는 목적지 정류장을 고르는 두 스위치 경로 퍼즐로 확장했다.",
+              "상자마다 필요한 경유 레일과 목적지 색을 따로 지정해 출발 전에 경로를 예측하게 했다.",
+              "스위치 조작 횟수, 오배송 수, 연속 성공을 기록하고 결과에서 S/A/B/C 스탬프 등급을 계산하도록 했다.",
+              "localStorage에 최고 점수, 최고 스탬프, 전체 배송 성공 시 최소 조작 수, S 스탬프 횟수를 저장하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "중간에 스위치를 바꿔야 하는 시간차 출발 상자",
+              "일방통행 레일과 되돌아가는 레일 규칙",
+              "챕터별 정류장 테마와 퍼즐 프리셋 묶음"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-010 second-pass rail chapter upgrade",
+            "items": [
+              "초록 기본역, 시간차 플랫폼, 일방 숲길, 되돌이 항구 4개 챕터 프리셋을 추가하고 챕터별 상자 순서, 색감, 규칙, 기준 조작 수를 분리했다.",
+              "상자가 스위치 노드에 도착하는 순간 현재 레버를 읽도록 경로 계산을 바꿔, 시간차 플랫폼과 되돌이 항구에서 이동 중 스위치 변경이 실제 풀이가 되게 했다.",
+              "자동 출발 타이머를 추가해 다음 상자가 곧 출발하는 운영 압박을 만들고 하단 챕터 컨트롤과 규칙 표시를 붙였다.",
+              "일방 숲길에서는 첫 스위치를 틀리면 상자가 출발점으로 되돌아오고, 되돌이 항구에서는 뒤 스위치가 틀렸을 때 한 번 되돌이 레일을 돌며 재선택할 수 있게 했다.",
+              "localStorage v2에 챕터별 최고 점수, 최고 스탬프, 최소 조작 수, 클리어 수, S 스탬프 수를 따로 저장하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "각 챕터에 3~5개 퍼즐 맵을 두고 챕터 선택 화면에서 별/스탬프 진행률 표시",
+              "되돌이 레일을 이용한 의도적 우회 보너스와 무반송 클리어 보너스 분리",
+              "클리어 경로를 짧은 레일 리플레이 카드로 공유하는 기능"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-010 third-pass map progress replay upgrade",
+            "items": [
+              "각 챕터의 기존 상자 순서를 바탕으로 느긋한길, 꼬리표길, 반짝우회 3개 퍼즐 맵을 생성하고 맵별 parMoves를 분리했다.",
+              "selectedMapIndexes와 mapRecords를 저장해 챕터별 맵 클리어 수, S 스탬프 수, 맵별 최고 점수/스탬프/최소 조작 수를 따로 기록하도록 했다.",
+              "하단에 맵 전환 컨트롤과 진행률 텍스트를 추가해 챕터 안에서 어떤 퍼즐을 풀고 있고 얼마나 진행했는지 보이게 했다.",
+              "되돌이 레일을 타고도 최종 목적지를 맞춘 경우 우회 보너스를 주고, 오배송과 되돌이 없이 전체 배송을 마치면 무반송 보너스를 따로 지급하도록 했다.",
+              "클리어 경로를 CSY1 리플레이 카드 코드로 압축하고 공유 수, 응원 수, 최고 점수, 최고 스탬프를 replayStats에 저장하도록 했다.",
+              "cozySwitchyardLikedReplays:v1로 같은 브라우저의 같은 리플레이 카드 응원이 한 번만 처리되게 했다.",
+              "늘어난 컨트롤과 긴 카드 코드가 모바일에서 밀리지 않도록 버튼 행, 캔버스 폭, 결과 텍스트 줄바꿈을 보정했다."
+            ],
+            "nextDepthTargets": [
+              "CSY1 리플레이 코드를 입력해 같은 챕터/맵/경로 로그를 재생하는 보기 모드",
+              "맵별 최고 경로를 유령 선로로 표시하고 현재 풀이와 조작 수 차이를 비교하는 기능",
+              "리플레이 응원 수를 /games 스위치 정류장 카드의 선물 상자 행렬과 스탬프 반짝임으로 반영"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "godot",
+        "puzzle",
+        "tilemap",
+        "web-export",
+        "playable"
+      ],
+      "summaryLine": "Godot | 포근한 스위치 정류장 | closed: 스위치 퍼즐의 목표는 이해되지만, 귀여운 정류장 테마와 퍼즐 압박이 약해 성공 순간의 쾌감이 작았다.",
+      "visibleInCabinet": false,
+      "closedAt": "2026-07-02",
+      "closureReview": {
+        "reason": "스위치 퍼즐의 목표는 이해되지만, 귀여운 정류장 테마와 퍼즐 압박이 약해 성공 순간의 쾌감이 작았다.",
+        "doNotRepeat": [
+          "퍼즐은 단순히 맞는 칸으로 보내는 것에서 끝내지 않고 시간, 순서, 연쇄 보상 중 하나를 분명히 둔다.",
+          "조작 대상이 많아질수록 모바일에서는 탭 우선순위와 실수 복구 방법을 먼저 설계한다.",
+          "테마가 포근하더라도 성공/실패의 대비가 약하면 게임보다 정리 도구처럼 느껴진다."
+        ],
+        "researchBasis": "게임 감각은 입력, 반응, 시청각 보상이 한 덩어리로 느껴질 때 좋아진다. 이 실험은 그 보상이 약했다."
+      }
+    },
+    {
+      "id": "solar2d-lunchbox-tapper",
+      "gridSlot": "G-011",
+      "status": "playable",
+      "priority": 6,
+      "engine": "Solar2D",
+      "runtimeTarget": "Native prototype first, web viability later",
+      "playableUrl": "./lunchbox-tap-tap/",
+      "sourceTitle": "Solar2D Documentation",
+      "sourceUrl": "https://solar2d.com/documentation/",
+      "sourceRepoUrl": "https://github.com/coronalabs/corona",
+      "licenseNote": "Solar2D는 Lua 기반 실험 슬롯으로 두고, 웹 전시는 녹화 preview와 별도 빌드 링크를 검토한다.",
+      "workingTitleKo": "도시락 탭탭 키친",
+      "workingTitleEn": "Lunchbox Tap Tap",
+      "oneLineSummary": "정해진 순서대로 반찬 칸을 탭해 도시락을 완성하는 Solar2D 리듬 반응 게임.",
+      "originalMechanic": "tap timing, sprite transitions, lightweight Lua scene management",
+      "cuteTransformation": "리듬 입력을 요란한 판정 대신 도시락 칸 채우기와 스티커 보상으로 표현한다.",
+      "coreLoop": [
+        "빛나는 반찬 칸을 순서대로 탭한다.",
+        "정확한 타이밍이면 도시락 색이 채워진다.",
+        "연속 성공으로 작은 장식 스티커를 붙인다."
+      ],
+      "preview": {
+        "animationKey": "lunchbox-tapper",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "lunchbox grid",
+          "tap sparkle",
+          "sticker stamp"
+        ],
+        "thumbnailMood": "rice, tomato, seaweed"
+      },
+      "prototypePlan": [
+        "Lua composer scene 1개로 tap sequence 구현",
+        "10초 도시락 완성 라운드 작성",
+        "웹 진열용 mp4/gif preview 자동 추출 루틴 검토"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "빛나는 도시락 칸을 빠르게 탭해 콤보가 쌓이는 즉각적인 반응 재미.",
+        "currentDepthGap": "단순 랜덤 탭은 오래 하면 기억에 남는 패턴이나 음악성이 부족하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "pattern",
+            "idea": "초밥, 김밥, 과일 도시락처럼 각 메뉴마다 고유 탭 패턴을 둔다.",
+            "whyItAddsFun": "랜덤 반응 게임에서 외울 수 있는 리듬 게임으로 확장된다."
+          },
+          {
+            "type": "timing",
+            "idea": "Perfect, Good, Late 판정과 콤보 피버를 추가한다.",
+            "whyItAddsFun": "빠르게 누르는 것보다 정확히 누르는 숙련이 생긴다."
+          },
+          {
+            "type": "reward",
+            "idea": "완성한 도시락을 사진 카드처럼 저장하고 스티커를 붙이게 한다.",
+            "whyItAddsFun": "짧은 플레이 결과가 소장 가능한 결과물로 남는다."
+          },
+          {
+            "type": "audio",
+            "idea": "탭 성공음이 짧은 주방 리듬을 이루도록 사운드 레이어를 설계한다.",
+            "whyItAddsFun": "터치 반응이 손맛뿐 아니라 귀로도 보상된다."
+          }
+        ],
+        "retentionLoop": "메뉴 패턴 해금, perfect 콤보 기록, 도시락 카드 수집, 일일 메뉴 챌린지로 구성한다.",
+        "appCandidateSignal": "좋아요와 perfect 재도전율, 모바일 터치 세션 길이가 높으면 리듬 반응 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-011 playable HTML5 Canvas prototype",
+            "items": [
+              "초밥, 김밥, 과일 도시락 메뉴마다 18칸 고정 탭 패턴을 두어 랜덤 반응이 아니라 외울 수 있는 리듬 패턴으로 바꿨다.",
+              "탭 타이밍을 PERFECT, GOOD, LATE, MISS로 판정하고 PERFECT 연속 성공 시 피버 배율이 켜지도록 했다.",
+              "완주 결과를 S/A/B/C 등급으로 평가하고 메뉴별 A/S/B 도시락 카드를 localStorage에 수집 저장하도록 했다.",
+              "최고 점수, 최고 PERFECT 연속 기록, 플레이 횟수, 카드 수집률을 저장하고 캔버스 안 메뉴 패널에 진행도를 표시했다."
+            ],
+            "nextDepthTargets": [
+              "탭 성공음이 메뉴별 주방 리듬으로 쌓이는 사운드 레이어",
+              "일일 메뉴 챌린지와 결과 카드 공유",
+              "수집한 도시락 카드에 스티커를 배치하는 꾸미기 화면"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-011 second-pass rhythm daily upgrade",
+            "items": [
+              "브라우저 AudioContext 기반 짧은 주방 톤을 추가해 PERFECT, GOOD, LATE, MISS 판정마다 메뉴별 음계가 다르게 쌓이도록 했다.",
+              "오늘 메뉴 버튼을 추가하고 날짜 기준 메뉴, 24칸 목표, 별도 일일 기록을 쓰는 daily challenge 모드를 만들었다.",
+              "완성 결과를 LBT1 결과 카드 코드로 생성하고 최근 결과 코드를 localStorage에 저장해 결과 카드 버튼에서 다시 확인할 수 있게 했다.",
+              "수집한 도시락 카드를 6칸 스티커 슬롯에 순환 배치하는 꾸미기 루프를 추가하고 캔버스 안 스티커북 패널에 표시했다.",
+              "하단 컨트롤을 오늘 메뉴, 스티커, 결과 카드 버튼으로 정리하고 모바일에서는 1열 버튼으로 접어 가로 넘침을 막았다."
+            ],
+            "nextDepthTargets": [
+              "결과 카드 코드를 입력해 친구 기록을 불러오는 비교 화면",
+              "스티커 슬롯을 직접 선택하고 위치를 바꾸는 별도 도시락 앨범 화면",
+              "음계와 피버 연출을 메뉴별로 더 길게 이어지는 리듬 구간으로 확장"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-011 third-pass friend compare album rhythm upgrade",
+            "items": [
+              "친구비교 버튼을 추가하고 LBT1 결과 카드 코드를 입력하면 친구의 메뉴, 등급, 점수, PERFECT 수, 최대 콤보를 friendRecord에 저장하도록 했다.",
+              "결과 화면과 캔버스 패널에 친구 기록 대비 점수/PERFECT/콤보 차이를 표시해 같은 메뉴를 다시 도전할 이유를 만들었다.",
+              "스티커 버튼을 앨범 모드 토글로 바꾸고 캔버스의 스티커북 슬롯을 직접 탭해 빈 칸에 다음 보유 카드를 붙이거나 두 슬롯의 위치를 바꿀 수 있게 했다.",
+              "선택한 스티커 슬롯을 굵은 테두리로 표시하고 앨범 모드의 빈 칸 색을 다르게 표시해 직접 편집 중임을 알 수 있게 했다.",
+              "PERFECT 4연속마다 메뉴별 음계로 4음 리듬 프레이즈가 이어지고 캔버스에 RHYTHM 배지가 잠시 표시되도록 했다.",
+              "새 친구비교 버튼, 긴 LBT1 코드, 앨범 모드 라벨이 모바일에서 밀리지 않도록 버튼 줄바꿈, 결과 텍스트 줄바꿈, 보드 폭을 보정했다."
+            ],
+            "nextDepthTargets": [
+              "LBT1 친구 기록을 여러 명 저장해 순위표처럼 비교하는 작은 랭킹 앨범",
+              "스티커 슬롯의 좌표를 자유 배치로 저장하는 완전한 도시락 앨범 편집 화면",
+              "리듬 프레이즈 성공률을 /games 도시락 카드 미리보기의 반찬 박자 애니메이션과 응원 지표로 반영"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "탭 타이밍은 있지만, 다음 박자를 기다리는 맛과 리듬 예측이 아직 약하다.",
+          "whyFunFallsFlat": [
+            "반짝이는 칸만 따라 누르면 귀여운 반응 테스트에서 멈춘다.",
+            "PERFECT 판정이 소리와 화면 보상으로 충분히 과장되지 않으면 중독성이 약하다.",
+            "다음 칸을 살짝 예고하지 않으면 리듬 게임보다 순발력 게임처럼 느껴진다."
+          ],
+          "repairPrinciple": "현재 칸과 다음 칸을 박자처럼 보여주고, PERFECT 연속에는 FEVER가 확실히 켜지게 한다.",
+          "nextPlayableChange": "다음 칸 미리보기와 PERFECT 3연속 반짝 피버 진입 피드백을 강화한다.",
+          "implementedRepairs": [
+            "다음에 눌러야 할 칸을 하늘색 예고선과 픽셀 표식으로 보여줘 반응 게임의 불합리함을 줄였다.",
+            "PERFECT 3연속부터 바로 피버 메시지와 추가 보상을 주도록 문턱을 낮췄다.",
+            "순발력만 요구하는 탭게임에서 미리 보고 준비하는 리듬 게임 감각을 살렸다."
+          ],
+          "featureKey": "NEXT_CELL_PREVIEW_AND_THREE_PERFECT_FEVER",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "빛나는 칸을 따라 누르는 행위가 너무 즉흥적이라 숙련이 쌓이는 느낌이 약했다.",
+            "repairFocus": "다음 칸 예고와 낮은 피버 문턱으로 예측, 성공, 보상의 박자를 빠르게 순환시킨다.",
+            "notVolumeRule": "레시피 종류보다 첫 세 번의 탭이 리듬감 있게 이어지는지가 중요하다.",
+            "nextPlaytestCheck": "유저가 현재 칸만 보지 않고 다음 칸까지 시선이 이동하는지 확인한다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "solar2d",
+        "lua",
+        "tap",
+        "rhythm",
+        "playable"
+      ],
+      "summaryLine": "G-011 | Solar2D | 도시락 탭탭 키친 | 플레이 가능: 빛나는 도시락 칸을 순서대로 탭해 반찬 스티커를 채우는 리듬 반응 게임, /games/lunchbox-tap-tap/에서 플레이 | preview=lunchbox-tapper",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "candidate-later",
+        "mobileInput": "빛나는 도시락 칸을 리듬에 맞춰 탭하거나 짧게 문지른다. 복잡한 방향 입력 없이 한 손 플레이를 기준으로 한다.",
+        "funDiagnosis": "탭 게임은 판정 리듬과 보상음이 없으면 단순 반응 테스트가 된다. 귀여운 조리 순서와 콤보 리듬이 필요하다.",
+        "implementationNotes": [
+          "반찬마다 탭, 길게 누르기, 문지르기 같은 아주 짧은 제스처 차이를 둔다.",
+          "좋은 타이밍에는 도시락 칸이 차오르고, 실수해도 다음 박자에 바로 회복할 수 있게 한다.",
+          "한 판이 끝나면 완성 도시락 스티커가 남도록 해 공유 포인트를 만든다."
+        ],
+        "nextBuildSteps": [
+          "리듬 판정선 추가",
+          "반찬별 짧은 제스처 설계",
+          "완성 도시락 스티커 보상 작성"
+        ]
+      }
+    },
+    {
+      "id": "love-moon-letter-runner",
+      "gridSlot": "G-012",
+      "status": "playable",
+      "priority": 7,
+      "engine": "LÖVE",
+      "runtimeTarget": "Desktop prototype with web port evaluation",
+      "playableUrl": "./moon-letter-runner/",
+      "sourceTitle": "LÖVE Wiki",
+      "sourceUrl": "https://love2d.org/wiki/Main_Page",
+      "sourceRepoUrl": "https://github.com/love2d/love",
+      "licenseNote": "LÖVE 실험은 데스크톱 빌드 우선, 웹 전시는 love.js 포팅 가능성을 별도 검증한다.",
+      "workingTitleKo": "달빛 편지 러너",
+      "workingTitleEn": "Moon Letter Runner",
+      "oneLineSummary": "달빛 발판을 밟으며 편지를 모아 짧은 스테이지를 달리는 LÖVE Lua 러너.",
+      "originalMechanic": "Lua update loop, sprite animation, jump timing, score pickups",
+      "cuteTransformation": "무한 러너를 밤 산책 편지 배달로 바꾸고, 빠른 반응보다 짧은 스테이지 완주를 목표로 둔다.",
+      "coreLoop": [
+        "발판 타이밍에 맞춰 점프한다.",
+        "달빛 편지를 모아 게이지를 채운다.",
+        "작은 골인지점까지 도착하면 스탬프를 얻는다."
+      ],
+      "preview": {
+        "animationKey": "moon-runner",
+        "gifLoopSeconds": 4,
+        "pixelObjects": [
+          "moon platform",
+          "letter pickup",
+          "runner trail"
+        ],
+        "thumbnailMood": "indigo, moon, mint"
+      },
+      "prototypePlan": [
+        "LÖVE main.lua update/draw loop로 runner 구현",
+        "점프 arc와 collectible 배치 튜닝",
+        "love.js 또는 녹화 preview 방식 비교"
+      ],
+      "funDepthReview": {
+        "playerFunHook": "달빛 발판을 점프하며 편지를 모으고 짧은 골인지점까지 완주하는 산책형 러너 감각.",
+        "currentDepthGap": "현재는 발판과 편지 수집이 기본형이라, 경로 선택과 캐릭터 성장이 부족하다.",
+        "depthUpgradeBacklog": [
+          {
+            "type": "route",
+            "idea": "높은 길은 편지가 많고 낮은 길은 안전한 분기형 발판을 추가한다.",
+            "whyItAddsFun": "무조건 점프가 아니라 위험과 보상을 고르는 러너가 된다."
+          },
+          {
+            "type": "move",
+            "idea": "짧은 2단 점프, 달빛 활강, 착지 콤보를 단계적으로 해금한다.",
+            "whyItAddsFun": "처음엔 단순하지만 숙련될수록 움직임이 풍부해진다."
+          },
+          {
+            "type": "collection",
+            "idea": "편지 조각을 모아 짧은 밤 산책 이야기를 완성한다.",
+            "whyItAddsFun": "수집물이 점수 이상으로 다음 스테이지를 보고 싶게 만든다."
+          },
+          {
+            "type": "stage",
+            "idea": "숲길, 옥상, 해변 등 60초 안팎의 완주형 스테이지를 만든다.",
+            "whyItAddsFun": "무한 러너보다 완주 만족감과 챕터 진행감이 강해진다."
+          }
+        ],
+        "retentionLoop": "스테이지 완주, 편지 이야기 수집, 이동 기술 해금, 무피격/편지 전부 수집 기록을 묶는다.",
+        "appCandidateSignal": "좋아요와 완주율, 편지 전부 수집 재도전율이 높으면 감성 러너 앱 후보로 본다.",
+        "implementedDepthUpgrades": [
+          {
+            "date": "2026-06-30",
+            "scope": "G-012 playable HTML5 Canvas prototype",
+            "items": [
+              "안전한 낮은 길, 편지가 많은 높은 길, 위험한 그림자 발판을 섞어 경로별 위험/보상 선택을 만들었다.",
+              "편지 3개 수집 시 2단 점프를, 이야기 조각 2개 수집 시 달빛 활강을 해금하고 localStorage에 기술 해금 상태를 저장하도록 했다.",
+              "일반 편지와 별도 이야기 조각을 수집물로 분리하고 6개 밤 산책 이야기 조각의 수집률을 저장/표시했다.",
+              "완주 여부, 피해 횟수, 편지 수, 이야기 조각 수로 S/A/B/C 스탬프를 계산하고 최고 스탬프, 최고 점수, 최고 편지 수를 저장하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "숲길, 옥상, 해변 스테이지별 전용 발판 패턴",
+              "편지 조각을 읽는 짧은 이야기 앨범 화면",
+              "무피격/전부 수집 리플레이 공유 카드"
+            ]
+          },
+          {
+            "date": "2026-06-30",
+            "scope": "G-012 second-pass stage album upgrade",
+            "items": [
+              "숲길, 옥상, 해변 3개 스테이지 프리셋을 추가하고 시작 발판, 위험 발판, 편지/이야기 배치, 반복 스폰 패턴, 완주 거리를 분리했다.",
+              "스테이지 버튼을 추가해 플레이 중 다음 스테이지로 전환할 수 있게 하고, 캔버스 안 스킬 패널에 현재 스테이지와 PICK 수집률을 표시했다.",
+              "이야기 버튼을 추가해 수집한 밤 산책 이야기 조각을 한 줄씩 읽을 수 있는 간단 앨범 루프를 만들었다.",
+              "완주 결과를 MLR1 기록 카드 코드로 생성하고 최근 기록 카드를 localStorage에 저장해 기록 카드 버튼에서 다시 확인할 수 있게 했다.",
+              "localStorage v2에 스테이지별 최고 점수, 최고 스탬프, 최고 편지 수, 클리어 수, 무피격 클리어 수, 전부 수집 클리어 수를 저장하도록 했다."
+            ],
+            "nextDepthTargets": [
+              "스테이지 선택 화면에서 스테이지별 무피격/전부 수집 뱃지 표시",
+              "이야기 앨범을 카드형 페이지로 분리하고 조각별 픽셀 삽화 추가",
+              "MLR1 기록 카드로 친구 기록을 불러와 유령 편지 경로를 비교하는 기능"
+            ]
+          },
+          {
+            "date": "2026-07-01",
+            "scope": "G-012 third-pass badge story ghost upgrade",
+            "items": [
+              "스킬 패널에 현재 스테이지의 무피격 클리어와 전부 수집 클리어 뱃지를 BADGE NOHIT/ALL 형태로 표시해 스테이지 전환 중 진행률이 바로 보이게 했다.",
+              "이야기 버튼을 카드형 앨범 패널과 연결하고 수집한 조각별로 작은 픽셀 삽화와 이야기 문장을 캔버스 안에 표시하도록 했다.",
+              "편지와 이야기 조각을 주울 때 수집 타입과 월드 거리 기반 pickupRoute를 기록하고 MLR1 기록 카드 코드에 압축해서 포함했다.",
+              "친구비교 버튼을 추가해 MLR1 기록 카드를 입력하면 친구의 스탬프, 점수, 편지 수, 피해 수, 수집 경로를 friendRecord에 저장하도록 했다.",
+              "친구 기록의 수집 경로를 달리는 화면 위에 반투명 유령 편지/이야기 아이콘으로 표시하고 결과 화면에는 점수, 편지, 피해 차이를 함께 보여주게 했다.",
+              "긴 MLR1 코드와 새 버튼이 모바일에서 밀리지 않도록 버튼 줄바꿈, 결과 텍스트 줄바꿈, 보드 폭과 HUD 압축을 보정했다."
+            ],
+            "nextDepthTargets": [
+              "친구 유령 경로와 현재 주행의 거리 차이를 실시간으로 점수 보너스나 경고로 연결",
+              "이야기 앨범 카드에 조각별 해금 조건과 스테이지 출처 표시",
+              "MLR1 친구 비교/뱃지 상태를 /games 달빛 편지 러너 카드 미리보기의 유령 편지와 스탬프 반짝임으로 반영"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "mobile-first input cleanup",
+            "items": [
+              "공개 안내와 스킬 힌트에서 Space/클릭 표현을 제거하고 탭/길게 누르기 기준으로 바꿨다.",
+              "키보드 점프/활강 리스너를 제거해 터치 입력을 기본 조작으로 고정했다.",
+              "기존 pointerdown/pointerup 구조를 유지해 짧은 탭과 길게 누르기 조작이 이어지게 했다."
+            ],
+            "nextDepthTargets": [
+              "탭 점프 높이와 길게 누르기 활강 시간을 모바일에서 재튜닝",
+              "첫 20초 경로 선택 보상을 더 분명하게 배치"
+            ]
+          },
+          {
+            "date": "2026-07-02",
+            "scope": "hold glide and high-route reward upgrade",
+            "items": [
+              "터치를 길게 유지하면 점프 후 낙하 구간에서 자동으로 달빛 활강이 켜지도록 해 모바일 한 손 조작을 자연스럽게 만들었다.",
+              "높은 길과 위험 길에서 편지/이야기 조각을 모으면 추가 점수와 더 많은 달빛 파편이 나오게 했다.",
+              "높은 발판 위에 작은 달빛 표시를 추가해 보상 경로를 눈으로 구분할 수 있게 했다."
+            ],
+            "nextDepthTargets": [
+              "첫 20초 안에 안전한 길과 높은 길을 더 분명히 갈라 배치",
+              "활강 성공 착지 콤보와 짧은 착지 반짝임 추가"
+            ]
+          }
+        ],
+        "twoPercentGapAudit20260702": {
+          "date": "2026-07-02",
+          "symptom": "감성은 있으나, 높은 길을 선택했을 때의 긴장과 보상이 더 선명해야 한다.",
+          "whyFunFallsFlat": [
+            "안전한 길과 높은 길의 감정 차이가 작으면 러너의 선택성이 흐려진다.",
+            "활강이 단순 낙하 완화로만 느껴지면 조작의 재미가 약하다.",
+            "편지를 먹는 순간이 점수 증가 이상으로 기억되어야 한다."
+          ],
+          "repairPrinciple": "높은 길, 활강, 편지 수집을 보너스 경로로 묶고 착지 성공까지 작은 콤보로 이어준다.",
+          "nextPlayableChange": "활강 중 높은 길 편지를 먹으면 MOON LINE 보너스와 착지 반짝임을 부여한다.",
+          "implementedRepairs": [
+            "활강 중 높은 길의 편지를 먹으면 MOON LINE 콤보, 추가 점수, 빛줄기 피드백이 발생하도록 했다.",
+            "MOON LINE 이후 착지하면 별도 착지 보너스가 이어져 높은 길 선택이 위험만이 아니라 성취가 되게 했다.",
+            "높은 길 편지에 빛나는 프레임을 넣어 유저가 스스로 위험한 루트를 고르게 유도했다."
+          ],
+          "featureKey": "MOON_LINE_GLIDE_ROUTE",
+          "currentPassDiagnosis": {
+            "twoPercentCause": "러너 조작은 단순하지만 높은 길을 고를 이유와 성공했을 때의 달콤한 피드백이 약했다.",
+            "repairFocus": "높은 루트, 활강, 편지 획득, 착지를 하나의 짧은 보상 사슬로 묶는다.",
+            "notVolumeRule": "맵 길이보다 첫 높은 편지를 먹고 착지하는 5초가 재미있어야 한다.",
+            "nextPlaytestCheck": "유저가 안전 발판 대신 빛나는 높은 편지를 노리는지 본다."
+          },
+          "implementationStatus": "implemented in playable prototype on 2026-07-02"
+        }
+      },
+      "tags": [
+        "love2d",
+        "lua",
+        "runner",
+        "platformer",
+        "playable"
+      ],
+      "summaryLine": "G-012 | LÖVE | 달빛 편지 러너 | 플레이 가능: 달빛 발판을 점프하며 편지를 모아 골인지점까지 달리는 스테이지 러너, /games/moon-letter-runner/에서 플레이 | preview=moon-runner",
+      "visibleInCabinet": true,
+      "mobileFirstPolicy": {
+        "inputRule": "주요 조작은 탭, 드래그, 길게 누르기, 짧은 스와이프로만 구성한다.",
+        "minimumTouchTarget": "엄지 조작 영역은 최소 44px 이상으로 둔다.",
+        "feedbackRule": "입력 후 100ms 안에 위치 변화, 흔들림, 파편, 점수 반응 중 하나를 보여준다."
+      },
+      "mobileFunRoadmap": {
+        "priority": "near-term",
+        "mobileInput": "짧게 탭하면 점프하고, 공중에서 길게 누르면 달빛 활강을 한다. 두 손 조작 없이 한 손 엄지 플레이로 맞춘다.",
+        "funDiagnosis": "러너는 조작이 단순해도 경로 선택이 살아 있어야 한다. 높은 길의 편지 보상과 낮은 길의 안전함이 분명해야 재도전 욕구가 생긴다.",
+        "implementationNotes": [
+          "첫 20초 안에 낮은 길, 높은 길, 위험 발판을 모두 경험하게 배치한다.",
+          "이야기 조각은 위험한 경로에 두되, 실패해도 짧은 재시작으로 다시 도전하게 만든다.",
+          "완주 후에는 무피격, 전부 수집, 친구 경로 비교가 한눈에 보이도록 결과 카드를 정리한다."
+        ],
+        "nextBuildSteps": [
+          "점프와 활강의 손맛 재튜닝",
+          "높은 길 보상과 낮은 길 안전도 차이 강화",
+          "첫 스테이지 무피격/전부 수집 배지 노출 정리"
+        ]
+      }
+    }
+  ],
+  "cabinetQualityAudit": {
+    "date": "2026-07-02",
+    "visibleGameIds": [
+      "flame-pudding-pad-race",
+      "flame-pocket-rogue-bakery",
+      "defold-star-delivery-rocket",
+      "defold-marshmallow-sling",
+      "html5-pixel-color-garden",
+      "phaser-jelly-brick-shop",
+      "solar2d-lunchbox-tapper",
+      "love-moon-letter-runner"
+    ],
+    "closedGameIds": [
+      "flame-crystal-mochi-stand",
+      "defold-konpeito-swarm",
+      "libgdx-pax-biscuitica",
+      "godot-cozy-switchyard"
+    ],
+    "nearTermRepairIds": [
+      "defold-marshmallow-sling",
+      "flame-pocket-rogue-bakery",
+      "love-moon-letter-runner",
+      "phaser-jelly-brick-shop"
+    ],
+    "globalRules": [
+      "공개 카드에는 목표, 손맛, 즉시 피드백, 재도전 이유가 모두 보이는 게임만 남긴다.",
+      "키보드 전용 조작은 폐기하고 탭, 드래그, 길게 누르기, 짧은 스와이프만 기본 입력으로 사용한다.",
+      "귀여운 그래픽은 보조 요소이며 재미의 원인을 대신할 수 없다.",
+      "한 판이라도 제대로 재미있게 만든 뒤 스테이지 수를 늘린다."
+    ],
+    "researchNotes": [
+      "NN/g의 직접 조작 원칙처럼 모바일 게임은 화면의 대상에 바로 작용하고 즉시 피드백이 돌아와야 한다.",
+      "스마트폰 게임 조작 연구에서 말하는 터치 만족감과 한 손 제스처 부담을 기준으로 키보드 중심 입력을 제거한다.",
+      "Juice it or Lose it 계열의 게임 필 피드백처럼 명중, 파괴, 성공 순간에는 흔들림, 파편, 슬로모션, 점수 반응을 아끼지 않는다.",
+      "Angry Birds류 슬링샷 퍼즐은 당기는 힘과 각도, 재질별 구조물 붕괴가 핵심이므로 단단한 탑보다 약점이 보이는 구조가 필요하다."
+    ],
+    "implementedOn20260702": {
+      "closedGamesHiddenFromCabinet": [
+        "flame-crystal-mochi-stand",
+        "defold-konpeito-swarm",
+        "libgdx-pax-biscuitica",
+        "godot-cozy-switchyard"
+      ],
+      "visibleGamesKept": [
+        "flame-pudding-pad-race",
+        "flame-pocket-rogue-bakery",
+        "defold-star-delivery-rocket",
+        "defold-marshmallow-sling",
+        "html5-pixel-color-garden",
+        "phaser-jelly-brick-shop",
+        "solar2d-lunchbox-tapper",
+        "love-moon-letter-runner"
+      ],
+      "mobileFirstCodeChanges": [
+        "flame-pocket-rogue-bakery",
+        "phaser-jelly-brick-shop",
+        "love-moon-letter-runner"
+      ],
+      "depthUpgradeCodeChanges": [
+        "defold-marshmallow-sling: 첫 판 붕괴 구조와 새총 끈 버그 수정",
+        "flame-pocket-rogue-bakery: 다음 주문 러시 방향 예고와 예고 방향 스폰 집중",
+        "phaser-jelly-brick-shop: 패들 끝 명중 반사각, 속도, 파편 보상",
+        "love-moon-letter-runner: 긴 누름 활강과 높은 길 편지 보너스"
+      ],
+      "marshmallowRepair": "첫 스테이지 붕괴 구조, 충격 전달, 발사력, 새총 끈 표시 버그를 수정했다.",
+      "doNotRepeatRule": "보는 재미만 있고 즉시 이해되는 목표, 손맛, 실패 후 재도전 이유가 없는 실험작은 공개 카드에 올리지 않는다."
+    },
+    "twoPercentGapAudit20260702": {
+      "date": "2026-07-02",
+      "purpose": "재미가 애매한 게임을 볼륨이 아니라 첫 10~30초 안의 선택, 손맛, 즉시 보상 기준으로 다시 점검한다.",
+      "rule": "각 게임은 유저가 의도적으로 노릴 수 있는 작은 고급 행동 하나와 그 행동을 알아차릴 수 있는 피드백을 가져야 한다.",
+      "gameIds": [
+        "flame-pudding-pad-race",
+        "flame-pocket-rogue-bakery",
+        "defold-star-delivery-rocket",
+        "defold-marshmallow-sling",
+        "html5-pixel-color-garden",
+        "phaser-jelly-brick-shop",
+        "solar2d-lunchbox-tapper",
+        "love-moon-letter-runner"
+      ],
+      "implementedRepairs": [
+        {
+          "gameId": "flame-pudding-pad-race",
+          "featureKey": "PERFECT_GATE_FEVER",
+          "summary": "키보드 조향을 제거하고 캔버스 터치/드래그 조향만 남겨 모바일 손맛을 기준으로 맞췄다."
+        },
+        {
+          "gameId": "flame-pocket-rogue-bakery",
+          "featureKey": "GUARD_ON_DIRECTIONAL_DEFENSE",
+          "summary": "다음 러시 방향을 따라 앞쪽에서 지키면 GUARD ON이 켜지고 공격 속도, 탄 크기, 피해량이 상승하도록 했다."
+        },
+        {
+          "gameId": "defold-star-delivery-rocket",
+          "featureKey": "PERFECT_DELIVERY_SOFT_LANDING",
+          "summary": "키보드 입력을 제거하고 화면 왼쪽/오른쪽/가운데 터치 구역으로 회전과 추진을 나눴다."
+        },
+        {
+          "gameId": "defold-marshmallow-sling",
+          "featureKey": "CRACK_SHOT_WEAK_POINT",
+          "summary": "약한 유리 지지점을 점선 금색 테두리로 표시해 어디를 맞히면 무너지는지 읽히게 했다."
+        },
+        {
+          "gameId": "html5-pixel-color-garden",
+          "featureKey": "NEAR_HINT_AND_BLOOM_STREAK",
+          "summary": "정답 근처를 탭하면 완전 실패가 아니라 따뜻한 힌트로 처리해 다시 찾고 싶은 흐름을 만들었다."
+        },
+        {
+          "gameId": "phaser-jelly-brick-shop",
+          "featureKey": "ANGLE_COMBO_EDGE_SHOT",
+          "summary": "패들 끝으로 공을 맞힌 뒤 벽돌을 깨면 ANGLE COMBO가 터지도록 했다."
+        },
+        {
+          "gameId": "solar2d-lunchbox-tapper",
+          "featureKey": "NEXT_CELL_PREVIEW_AND_THREE_PERFECT_FEVER",
+          "summary": "다음에 눌러야 할 칸을 하늘색 예고선과 픽셀 표식으로 보여줘 반응 게임의 불합리함을 줄였다."
+        },
+        {
+          "gameId": "love-moon-letter-runner",
+          "featureKey": "MOON_LINE_GLIDE_ROUTE",
+          "summary": "활강 중 높은 길의 편지를 먹으면 MOON LINE 콤보, 추가 점수, 빛줄기 피드백이 발생하도록 했다."
+        }
+      ],
+      "qualityRuleAddendum": [
+        "재미가 애매한 게임은 볼륨을 늘리기 전에 첫 10~30초 안의 선택, 손맛, 즉시 보상 중 무엇이 비어 있는지 먼저 고친다.",
+        "각 게임은 유저가 의도적으로 노릴 수 있는 작은 고급 행동 하나를 가져야 한다.",
+        "귀여운 그래픽은 보상 신호를 돕는 역할이어야 하며, 핵심 루프의 빈자리를 대신하지 않는다.",
+        "모바일 공개작은 키보드 전제를 제거하고 탭, 길게 누르기, 드래그, 화면 구역 터치만 기본 입력으로 삼는다."
+      ],
+      "implementedAt": "2026-07-02",
+      "openPlaytestQuestion": "각 게임에서 유저가 두 번째 시도 때 새로 추가된 보상 행동을 스스로 노리는지 확인한다."
+    }
+  }
+}

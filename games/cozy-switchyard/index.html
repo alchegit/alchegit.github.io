@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="포근한 스위치 정류장은 레일 스위치를 돌려 선물 상자를 맞는 목적지로 보내는 HTML5 Canvas 퍼즐입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/cozy-switchyard/">
+
+    <meta property="og:title" content="포근한 스위치 정류장 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="레일 스위치를 돌리고 선물 상자를 맞는 색상 정류장으로 보내는 귀여운 자동 이동 퍼즐입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/cozy-switchyard/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>포근한 스위치 정류장 | Cozy Switchyard</title>
+    <link rel="stylesheet" href="./cozy-switchyard.css?v=20260701-1">
+    <script defer src="./cozy-switchyard.js?v=20260701-1"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">Godot tile signal study</p>
+            <h1 id="gameTitle">포근한 스위치 정류장</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Delivered</span>
+            <strong id="deliveredValue">0/6</strong>
+          </div>
+          <div>
+            <span>Boxes</span>
+            <strong id="boxValue">6</strong>
+          </div>
+          <div>
+            <span>Dock</span>
+            <strong id="dockValue">PINK</strong>
+          </div>
+          <div>
+            <span>Moves</span>
+            <strong id="moveValue">0</strong>
+          </div>
+          <div>
+            <span>Stamp</span>
+            <strong id="stampValue">S</strong>
+          </div>
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="switchCanvas" width="800" height="520" aria-label="포근한 스위치 정류장 게임판"></canvas>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p id="resultKicker" class="result-kicker">Station Closed</p>
+            <h2 id="resultTitle">분류 결과</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 정류장</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <div class="footer-copy">
+            <p id="hintText">스위치를 목적지 색에 맞춘 뒤 상자를 출발시키세요.</p>
+            <p id="ruleText" class="rule-text">색 띠와 정류장을 맞추세요.</p>
+          </div>
+          <div class="control-stack">
+            <div class="stage-row" aria-label="정류장 챕터">
+              <button id="stagePrevButton" class="icon-button small-button" type="button" aria-label="이전 챕터">‹</button>
+              <strong id="stageLabel">1/4 기본역</strong>
+              <button id="stageNextButton" class="icon-button small-button" type="button" aria-label="다음 챕터">›</button>
+            </div>
+            <div class="map-row" aria-label="퍼즐 맵">
+              <button id="mapPrevButton" class="icon-button small-button" type="button" aria-label="이전 맵">‹</button>
+              <strong id="mapLabel">M1/3</strong>
+              <button id="mapNextButton" class="icon-button small-button" type="button" aria-label="다음 맵">›</button>
+            </div>
+            <div class="action-row">
+              <button id="switchAButton" class="secondary-button" type="button">앞 스위치</button>
+              <button id="switchBButton" class="secondary-button" type="button">뒤 스위치</button>
+              <button id="launchButton" class="primary-button" type="button">출발</button>
+            </div>
+            <div class="share-row">
+              <button id="shareReplayButton" class="secondary-button" type="button" disabled>리플레이</button>
+              <button id="replayLikeButton" class="secondary-button" type="button" disabled>응원 0</button>
+            </div>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

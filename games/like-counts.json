@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "game-likes/v1",
+  "counts": {
+    "flame-crystal-mochi-stand": 0,
+    "flame-pudding-pad-race": 0,
+    "flame-pocket-rogue-bakery": 0,
+    "defold-konpeito-swarm": 0,
+    "defold-star-delivery-rocket": 0,
+    "defold-marshmallow-sling": 0,
+    "libgdx-pax-biscuitica": 0,
+    "html5-pixel-color-garden": 0,
+    "phaser-jelly-brick-shop": 0,
+    "godot-cozy-switchyard": 0,
+    "solar2d-lunchbox-tapper": 0,
+    "love-moon-letter-runner": 0
+  }
+}

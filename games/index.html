@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="NeoKIM Game Cabinet. 귀여운 HTML5 미니게임을 바로 플레이하고 좋아요로 응원할 수 있는 게임 진열장입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/">
+
+    <meta property="og:title" content="NeoKIM Game Cabinet">
+    <meta property="og:description" content="귀여운 HTML5 미니게임을 바로 플레이하고 좋아요로 응원할 수 있는 NeoKIM Game Cabinet입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NeoKIM Game Cabinet">
+    <meta name="twitter:description" content="Cute HTML5 mini games from NeoKIM Game Cabinet.">
+    <meta name="twitter:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>NeoKIM Game Cabinet | HTML5 Game Experiments</title>
+    <link rel="stylesheet" href="./games.css?v=20260702-games1">
+    <script defer src="./games.js?v=20260702-games1"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#gameGrid">게임 목록으로 이동</a>
+
+    <header class="cabinet-topbar">
+      <a class="brand-link" href="./" aria-label="NeoKIM Game Cabinet home">/games</a>
+      <nav class="topbar-nav" aria-label="Games navigation">
+        <a href="/">home</a>
+      </nav>
+    </header>
+
+    <main class="cabinet-shell">
+      <section class="catalog-intro" aria-labelledby="pageTitle">
+        <div class="intro-copy">
+          <p class="kicker">NeoKIM HTML5 game shelf</p>
+          <h1 id="pageTitle">Game Cabinet</h1>
+        </div>
+        <dl class="catalog-stats" aria-label="Catalog stats">
+          <div>
+            <dt>Games</dt>
+            <dd id="statDesigns">--</dd>
+          </div>
+          <div>
+            <dt>Engines</dt>
+            <dd id="statEngines">--</dd>
+          </div>
+          <div>
+            <dt>Playable</dt>
+            <dd id="statNext">--</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="catalog-toolbar" aria-label="Game catalog filters">
+        <div id="filterBar" class="filter-bar"></div>
+      </section>
+
+      <section id="gameGrid" class="game-grid" aria-live="polite">
+        <p class="loading-copy">게임 목록을 불러오는 중입니다.</p>
+      </section>
+    </main>
+
+    <script id="candidateMetricsReport" type="application/json">{}</script>
+  </body>
+</html>

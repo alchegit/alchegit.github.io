@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="픽셀 컬러 정원은 제한 시간 안에 살짝 다른 꽃을 찾는 HTML5 Canvas 색감 퍼즐 게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/pixel-color-garden/">
+
+    <meta property="og:title" content="픽셀 컬러 정원 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="작은 꽃밭에서 살짝 다른 꽃을 찾는 HTML5 Canvas 미니게임입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/pixel-color-garden/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>픽셀 컬러 정원 | Pixel Color Garden</title>
+    <link rel="stylesheet" href="./pixel-color-garden.css?v=20260702-2">
+    <script defer src="./pixel-color-garden.js?v=20260702-2"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">HTML5 Canvas</p>
+            <h1 id="gameTitle">픽셀 컬러 정원</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Time</span>
+            <strong id="timeValue">45</strong>
+          </div>
+          <div>
+            <span>Level</span>
+            <strong id="levelValue">1</strong>
+          </div>
+          <div>
+            <span>Garden</span>
+            <strong id="gardenValue">Lv.1</strong>
+          </div>
+          <div>
+            <span>Bloom</span>
+            <strong id="bloomValue">1/8</strong>
+          </div>
+          <div>
+            <span>Best</span>
+            <strong id="bestValue">0</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="gardenCanvas" width="512" height="512" aria-label="살짝 다른 꽃을 찾는 게임판"></canvas>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p class="result-kicker">Round Complete</p>
+            <h2 id="resultTitle">정원 정산</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 게임</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <p id="hintText">살짝 색이 다른 꽃 한 송이를 눌러주세요.</p>
+          <div class="garden-controls" aria-label="Garden controls">
+            <button id="dailyButton" class="control-button" type="button">오늘</button>
+            <button id="assistButton" class="control-button" type="button">무늬</button>
+            <button id="arrangeButton" class="control-button" type="button">배치</button>
+            <button id="shareButton" class="control-button" type="button">카드</button>
+            <button id="compareButton" class="control-button" type="button">비교</button>
+          </div>
+          <div id="comboBadge" class="combo-badge">combo 0</div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

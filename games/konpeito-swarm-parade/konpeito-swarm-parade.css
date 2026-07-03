@@ -1,0 +1,347 @@
+:root {
+  --ink: #182033;
+  --paper: #fff9ed;
+  --line: #243047;
+  --mint: #35d7a8;
+  --peach: #ffb88a;
+  --lemon: #ffd85a;
+  --berry: #e95b88;
+  --sky: #69c8ff;
+  --violet: #8f78ff;
+  --shadow: 5px 5px 0 rgba(24, 32, 51, 0.9);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    linear-gradient(90deg, rgba(36, 48, 71, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(36, 48, 71, 0.06) 1px, transparent 1px),
+    var(--paper);
+  background-size: 28px 28px;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+canvas:focus-visible {
+  outline: 3px solid var(--lemon);
+  outline-offset: 3px;
+}
+
+.game-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.game-board {
+  width: min(1080px, 100%);
+  max-width: calc(100vw - 36px);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.game-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 2px solid var(--line);
+  padding: 14px;
+  background: linear-gradient(90deg, #f9e6ff, #d9fbff);
+}
+
+.game-header > div {
+  min-width: 0;
+}
+
+.back-link,
+.icon-button,
+.primary-button,
+.tool-button,
+.crew-button {
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--line);
+}
+
+.back-link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+  background: var(--mint);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+.primary-button {
+  min-height: 42px;
+  cursor: pointer;
+  padding: 9px 14px;
+  background: var(--lemon);
+}
+
+.tool-button,
+.crew-button {
+  min-height: 36px;
+  cursor: pointer;
+  padding: 6px 9px;
+  font-size: 0.84rem;
+}
+
+.crew-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.46;
+  box-shadow: none;
+}
+
+.tool-button.is-selected,
+.crew-button.is-selected {
+  background: var(--lemon);
+}
+
+.kicker {
+  margin: 0 0 3px;
+  color: #526078;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 5vw, 2.65rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.hud-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--line);
+  background: #fffdf8;
+}
+
+.hud-grid div {
+  min-width: 0;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  padding: 9px 10px;
+  background: #ffffff;
+}
+
+.hud-grid span {
+  display: block;
+  color: #526078;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.hud-grid strong {
+  display: block;
+  margin-top: 2px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: clamp(1.1rem, 4vw, 1.65rem);
+  line-height: 1;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: min(800px, calc(100vw - 44px));
+  max-width: 100%;
+  margin: 14px auto;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #f8e8ff;
+  overflow: hidden;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.result-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  background: rgba(255, 249, 237, 0.95);
+  text-align: center;
+}
+
+.result-overlay[hidden] {
+  display: none;
+}
+
+.result-kicker {
+  margin: 0;
+  color: #526078;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.result-overlay h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 8vw, 3rem);
+}
+
+.result-overlay p {
+  max-width: 430px;
+  margin: 0;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.game-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border-top: 2px solid var(--line);
+  padding: 12px 14px;
+  background: #fffdf8;
+}
+
+.game-footer p {
+  margin: 0;
+  color: #44506a;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.planner-panel {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 280px;
+}
+
+.stage-switcher,
+.crew-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stage-switcher span {
+  min-width: 42px;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-weight: 900;
+}
+
+.signal-badge {
+  flex: 0 0 auto;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 9px;
+  background: var(--sky);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-weight: 900;
+}
+
+@media (max-width: 680px) {
+  .game-shell {
+    padding: 10px;
+    place-items: start;
+  }
+
+  .game-board {
+    width: min(360px, calc(100vw - 20px));
+    max-width: min(360px, calc(100vw - 20px));
+  }
+
+  .game-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .game-header h1 {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+  }
+
+  .icon-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .back-link {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .hud-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .canvas-wrap {
+    width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
+  }
+
+  .game-footer {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .planner-panel {
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  .crew-controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .crew-button {
+    flex: 1 1 64px;
+  }
+
+  .signal-badge {
+    width: fit-content;
+  }
+}

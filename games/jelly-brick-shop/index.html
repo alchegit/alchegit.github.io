@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="젤리 벽돌 가게는 설탕 구슬을 튕겨 젤리 진열대를 정리하는 HTML5 Canvas 벽돌깨기 미니게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/jelly-brick-shop/">
+
+    <meta property="og:title" content="젤리 벽돌 가게 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="패들을 움직여 설탕 구슬을 튕기고 젤리 벽돌을 정리하는 귀여운 아케이드 물리 게임입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/jelly-brick-shop/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>젤리 벽돌 가게 | Jelly Brick Shop</title>
+    <link rel="stylesheet" href="./jelly-brick-shop.css?v=20260702-3">
+    <script defer src="./jelly-brick-shop.js?v=20260702-3"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">Phaser arcade physics study</p>
+            <h1 id="gameTitle">젤리 벽돌 가게</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Jelly</span>
+            <strong id="jellyValue">0/30</strong>
+          </div>
+          <div>
+            <span>Balls</span>
+            <strong id="ballValue">3</strong>
+          </div>
+          <div>
+            <span>Combo</span>
+            <strong id="comboValue">0</strong>
+          </div>
+          <div>
+            <span>Mission</span>
+            <strong id="missionValue">0/8</strong>
+          </div>
+          <div>
+            <span>Best</span>
+            <strong id="bestValue">0</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="brickCanvas" width="800" height="520" aria-label="젤리 벽돌 가게 게임판"></canvas>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p id="resultKicker" class="result-kicker">Shop Closed</p>
+            <h2 id="resultTitle">정리 결과</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 진열</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <p id="hintText">손가락으로 패들을 드래그해 설탕 구슬을 튕기고 젤리 벽돌을 정리하세요.</p>
+          <div class="shop-controls" aria-label="Shop controls">
+            <button id="prevStageButton" class="control-button" type="button" aria-label="이전 진열">◀</button>
+            <span id="stageLabel">1/4</span>
+            <button id="nextStageButton" class="control-button" type="button" aria-label="다음 진열">▶</button>
+            <button id="decorateButton" class="control-button" type="button">꾸미기</button>
+            <button id="shareResultButton" class="control-button" type="button" disabled>카드</button>
+            <button id="resultLikeButton" class="control-button" type="button" disabled>응원 0</button>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

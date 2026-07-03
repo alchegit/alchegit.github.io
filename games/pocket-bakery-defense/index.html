@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="주머니 빵집 디펜스는 반죽 방울을 자동 발사해 주문 러시로부터 재료 바구니를 지키는 HTML5 Canvas 미니게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/pocket-bakery-defense/">
+
+    <meta property="og:title" content="주머니 빵집 디펜스 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="작은 빵집에서 반죽 방울을 튕겨 재료 바구니를 지키는 귀여운 탑다운 생존 게임입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/pocket-bakery-defense/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>주머니 빵집 디펜스 | Pocket Bakery Defense</title>
+    <link rel="stylesheet" href="./pocket-bakery-defense.css?v=20260702-3">
+    <script defer src="./pocket-bakery-defense.js?v=20260702-3"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">Flutter + Flame survival study</p>
+            <h1 id="gameTitle">주머니 빵집 디펜스</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Time</span>
+            <strong id="timeValue">75</strong>
+          </div>
+          <div>
+            <span>Basket</span>
+            <strong id="basketValue">100</strong>
+          </div>
+          <div>
+            <span>Wave</span>
+            <strong id="waveValue">1</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="bakeryCanvas" width="800" height="520" aria-label="주머니 빵집 디펜스 게임판"></canvas>
+          <div id="upgradeOverlay" class="choice-overlay" hidden>
+            <p class="result-kicker">Bakery Upgrade</p>
+            <h2>오븐 정비 시간</h2>
+            <p id="upgradeCopy">업그레이드 하나를 골라 다음 주문 러시를 준비하세요.</p>
+            <div id="upgradeChoices" class="choice-grid"></div>
+          </div>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p id="resultKicker" class="result-kicker">Bakery Complete</p>
+            <h2 id="resultTitle">빵집 정산</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 영업</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <p id="hintText">화면을 탭하거나 드래그해 움직이고, 가까운 주문 러시에는 반죽 방울이 자동 발사됩니다.</p>
+          <div class="footer-controls">
+            <button id="presetButton" class="secondary-button" type="button">프리셋</button>
+            <div class="control-pad" aria-label="Bakery movement controls">
+              <button data-control="left" type="button" aria-label="왼쪽">◀</button>
+              <button data-control="up" type="button" aria-label="위">▲</button>
+              <button data-control="right" type="button" aria-label="오른쪽">▶</button>
+              <button data-control="down" type="button" aria-label="아래">▼</button>
+            </div>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="푸딩 패드 레이스는 말랑한 푸딩 카트로 젤리 게이트를 통과하는 HTML5 Canvas 미니 레이싱 게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/pudding-pad-race/">
+
+    <meta property="og:title" content="푸딩 패드 레이스 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="쿠션 트랙을 미끄러지며 젤리 게이트를 통과하는 귀여운 미니 레이스입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/pudding-pad-race/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>푸딩 패드 레이스 | Pudding Pad Race</title>
+    <link rel="stylesheet" href="./pudding-pad-race.css?v=20260702-3">
+    <script defer src="./pudding-pad-race.js?v=20260702-3"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">Flutter + Flame racing study</p>
+            <h1 id="gameTitle">푸딩 패드 레이스</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Time</span>
+            <strong id="timeValue">75</strong>
+          </div>
+          <div>
+            <span>Lap</span>
+            <strong id="lapValue">0/3</strong>
+          </div>
+          <div>
+            <span>Gate</span>
+            <strong id="gateValue">1/4</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="raceCanvas" width="800" height="520" aria-label="푸딩 카트 레이싱 게임판"></canvas>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p id="resultKicker" class="result-kicker">Race Complete</p>
+            <h2 id="resultTitle">레이스 정산</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 레이스</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <p id="hintText">화면을 누른 채 좌우로 밀어 조향하고, 게이트 중심을 빠르게 통과해 피버를 터뜨리세요.</p>
+          <div class="footer-controls">
+            <div class="selection-row" aria-label="Race setup">
+              <button id="trackButton" class="secondary-button" type="button">트랙</button>
+              <button id="flavorButton" class="secondary-button" type="button">맛</button>
+            </div>
+            <div class="control-pad" aria-label="Race controls">
+              <button data-control="left" type="button" aria-label="왼쪽">◀</button>
+              <button data-control="thrust" type="button" aria-label="가속">▲</button>
+              <button data-control="right" type="button" aria-label="오른쪽">▶</button>
+            </div>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

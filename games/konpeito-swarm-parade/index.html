@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="별사탕 행진대는 간식 신호로 별사탕 무리를 이끌어 흩어진 조각을 모으는 HTML5 Canvas 군집 AI 미니게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/konpeito-swarm-parade/">
+
+    <meta property="og:title" content="별사탕 행진대 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="간식 신호를 놓아 별사탕 무리를 이끄는 귀여운 군집 AI 퍼즐입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/konpeito-swarm-parade/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>별사탕 행진대 | Konpeito Swarm Parade</title>
+    <link rel="stylesheet" href="./konpeito-swarm-parade.css?v=20260701-1">
+    <script defer src="./konpeito-swarm-parade.js?v=20260701-1"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">Defold swarm AI study</p>
+            <h1 id="gameTitle">별사탕 행진대</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Time</span>
+            <strong id="timeValue">60</strong>
+          </div>
+          <div>
+            <span>Snacks</span>
+            <strong id="snackValue">0/0</strong>
+          </div>
+          <div>
+            <span>Home</span>
+            <strong id="homeValue">0</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="swarmCanvas" width="800" height="520" aria-label="별사탕 무리 군집 AI 게임판"></canvas>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p id="resultKicker" class="result-kicker">Parade Complete</p>
+            <h2 id="resultTitle">행진 정산</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 행진</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <p id="hintText">화면을 눌러 간식 신호를 옮기고, 별사탕을 조각과 바구니로 이끌어주세요.</p>
+          <div class="planner-panel" aria-label="Puzzle planner controls">
+            <div class="stage-switcher" aria-label="Stage select">
+              <button id="prevLevelButton" class="tool-button" type="button" aria-label="이전 스테이지">◀</button>
+              <span id="stageLabel">1/5</span>
+              <button id="nextLevelButton" class="tool-button" type="button" aria-label="다음 스테이지">▶</button>
+            </div>
+            <div id="crewControls" class="crew-controls" aria-label="별사탕 편성"></div>
+            <button id="editorButton" class="tool-button" type="button" aria-pressed="false">핀</button>
+            <button id="shareButton" class="tool-button" type="button">코드</button>
+            <button id="loadCodeButton" class="tool-button" type="button">입력</button>
+            <button id="planLikeButton" class="tool-button" type="button">응원</button>
+            <div id="signalBadge" class="signal-badge">signal ready</div>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

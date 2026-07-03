@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="달빛 편지 러너는 달빛 발판을 점프하며 편지를 모아 골인지점까지 달리는 HTML5 Canvas 러너 게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/moon-letter-runner/">
+
+    <meta property="og:title" content="달빛 편지 러너 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="달빛 발판을 밟고 편지를 모아 짧은 스테이지를 완주하는 귀여운 Lua 러너 감각의 미니게임입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/moon-letter-runner/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>달빛 편지 러너 | Moon Letter Runner</title>
+    <link rel="stylesheet" href="./moon-letter-runner.css?v=20260702-3">
+    <script defer src="./moon-letter-runner.js?v=20260702-3"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div>
+            <p class="kicker">LÖVE Lua runner study</p>
+            <h1 id="gameTitle">달빛 편지 러너</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 게임">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Distance</span>
+            <strong id="distanceValue">0m</strong>
+          </div>
+          <div>
+            <span>Letters</span>
+            <strong id="letterValue">0</strong>
+          </div>
+          <div>
+            <span>Hearts</span>
+            <strong id="heartValue">3</strong>
+          </div>
+          <div>
+            <span>Jumps</span>
+            <strong id="jumpValue">0</strong>
+          </div>
+          <div>
+            <span>Story</span>
+            <strong id="storyValue">0/6</strong>
+          </div>
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="runnerCanvas" width="800" height="520" aria-label="달빛 편지 러너 게임판"></canvas>
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p id="resultKicker" class="result-kicker">Run Complete</p>
+            <h2 id="resultTitle">러닝 결과</h2>
+            <p id="resultCopy"></p>
+            <button id="overlayRestartButton" class="primary-button" type="button">새 편지길</button>
+          </div>
+        </div>
+
+        <footer class="game-footer">
+          <p id="hintText">탭으로 점프하고 길게 눌러 활강하세요. 높은 편지길은 MOON LINE 보너스로 이어집니다.</p>
+          <div class="action-row">
+            <button id="stageButton" class="secondary-button" type="button">스테이지</button>
+            <button id="albumButton" class="secondary-button" type="button">이야기</button>
+            <button id="cardButton" class="primary-button" type="button">기록 카드</button>
+            <button id="compareButton" class="secondary-button" type="button">친구비교</button>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>
