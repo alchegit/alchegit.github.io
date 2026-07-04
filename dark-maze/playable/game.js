@@ -12,6 +12,7 @@
   var resultBody = document.getElementById("result-body");
   var ctaButton = document.getElementById("cta-button");
   var lightButton = document.getElementById("light-button");
+  var restartButton = document.getElementById("restart-button");
 
   var STRINGS = {
     en: {
@@ -238,6 +239,9 @@
     root.addEventListener("pointerup", onPointerUp);
     root.addEventListener("pointercancel", onPointerUp);
     ctaButton.addEventListener("click", window.goInstall);
+    if (restartButton) {
+      restartButton.addEventListener("click", resetPlayable);
+    }
     lightButton.addEventListener("pointerdown", function (event) {
       event.stopPropagation();
     });
@@ -420,6 +424,21 @@
     if (introHidden) return;
     introHidden = true;
     introPanel.classList.add("is-hidden");
+  }
+
+  function resetPlayable() {
+    state = createInitialState();
+    pointer.active = false;
+    introHidden = false;
+    lastPawDistance = 0;
+    view.cameraX = state.rat.x;
+    view.cameraY = state.rat.y;
+    lastFrameTime = 0;
+    resultPanel.classList.remove("is-visible");
+    lightButton.classList.remove("is-used");
+    introPanel.classList.remove("is-hidden");
+    applyLocale();
+    window.setTimeout(hideIntro, 1050);
   }
 
   function useLight() {

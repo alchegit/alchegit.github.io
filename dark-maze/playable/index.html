@@ -1,44 +1,176 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="실험쥐 미로탈출: 다크메이즈를 웹에서 먼저 체험해보는 HTML5 플레이어입니다. 드래그로 실험쥐를 움직이고 어둠 속 출구를 찾아보세요.">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#05080d">
-  <link rel="canonical" href="https://alchegit.github.io/dark-maze/playable/">
-  <meta property="og:title" content="실험쥐 미로탈출 웹 체험판 | 다크메이즈">
-  <meta property="og:description" content="드래그로 실험쥐를 움직여 어둠 속 미로의 출구를 찾아보세요.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://alchegit.github.io/dark-maze/playable/">
-  <meta property="og:image" content="https://alchegit.github.io/assets/icon_darkmaze.png">
-  <title>실험쥐 미로탈출 웹 체험판 | 다크메이즈</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <a class="site-back-link" href="../">소개</a>
-
-  <div id="ad-root" class="ad-root">
-    <canvas id="game-canvas" aria-label="실험쥐 미로탈출 웹 체험판"></canvas>
-
-    <div id="intro-panel" class="intro-panel">
-      <div id="intro-title" class="intro-title">Escape the dark maze</div>
-      <div id="intro-hint" class="intro-hint">Drag to move the lab rat</div>
-    </div>
-
-    <button id="light-button" class="light-button" type="button" aria-label="Use light item">
-      <span class="light-bulb" aria-hidden="true"></span>
-    </button>
-
-    <div id="result-panel" class="result-panel" aria-live="polite">
-      <div class="result-copy">
-        <div id="result-title" class="result-title">Escape complete!</div>
-        <div id="result-body" class="result-body">Try darker mazes in the app</div>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>실험쥐 미로탈출 웹 체험 | 다크메이즈</title>
+    <meta name="description" content="실험쥐 미로탈출: 다크메이즈를 웹에서 먼저 체험해보세요. 드래그로 실험쥐를 움직이고 어둠 속 미로의 출구를 찾는 HTML5 미니 체험판입니다.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#05080d">
+    <link rel="canonical" href="https://alchegit.github.io/dark-maze/playable/">
+    <meta property="og:title" content="실험쥐 미로탈출 웹 체험 | 다크메이즈">
+    <meta property="og:description" content="드래그로 실험쥐를 움직여 어둠 속 미로의 출구를 찾아보세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/dark-maze/playable/">
+    <meta property="og:image" content="https://alchegit.github.io/assets/icon_darkmaze.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="실험쥐 미로탈출 웹 체험 | 다크메이즈">
+    <meta name="twitter:description" content="어둠 속 미로에서 출구를 찾는 실험쥐 탈출 게임을 웹에서 먼저 체험해보세요.">
+    <meta name="twitter:image" content="https://alchegit.github.io/assets/icon_darkmaze.png">
+    <link rel="stylesheet" href="../../seo-page.css?v=20260625-linebreak">
+    <link rel="stylesheet" href="./style.css?v=20260704-page1">
+  </head>
+  <body class="maze-playable-page" data-page="dark-maze-playable">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand-link" href="../../">/neokim-app-lab</a>
+        <nav class="nav-links" aria-label="관련 페이지">
+          <a class="nav-link" href="../">다크메이즈 소개</a>
+          <a class="nav-link" href="../../games/">Games</a>
+          <a class="nav-link" href="#faq">FAQ</a>
+        </nav>
       </div>
-      <button id="cta-button" class="cta-button" type="button">Continue in app</button>
-    </div>
-  </div>
+    </header>
 
-  <script src="game.js"></script>
-</body>
+    <main class="page-shell maze-shell">
+      <section class="hero maze-hero">
+        <div class="hero-copy">
+          <p class="kicker">Dark Maze HTML5 web demo</p>
+          <h1>어둠 속 미로를<br>웹에서 먼저 탈출해보세요</h1>
+          <p class="hero-lead maze-copy-lines">
+            <span>시야가 좁은 실험실 미로에서</span>
+            <span>실험쥐를 드래그해 출구까지 안내하세요.</span>
+            <span>라이트 아이템은 한 번뿐이라,</span>
+            <span>길을 기억하고</span>
+            <span>라이트를 쓰는 타이밍을 고르세요.</span>
+          </p>
+          <div class="hero-actions">
+            <a class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.neokim.darkmaze&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dweb_playable_page%26utm_campaign%3Ddarkmaze%26utm_content%3Dhero_install" target="_blank" rel="noopener" data-app-id="dark-maze" data-event="play_click" data-play-target="darkMaze" data-utm-content="hero_install">앱에서 더 깊은 미로 도전</a>
+            <a class="secondary-cta" href="#maze-demo">바로 플레이</a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div id="maze-demo" class="tool-card maze-tool">
+            <p class="kicker">Playable maze</p>
+            <h2>실험쥐 미로탈출 웹 체험</h2>
+            <p class="maze-copy-lines">
+              <span>휴대폰 화면처럼 만든 미로 안에서</span>
+              <span>드래그로 움직입니다.</span>
+              <span>시간이 다 가기 전에</span>
+              <span>출구를 찾으면 성공입니다.</span>
+            </p>
+
+            <div class="maze-play-frame" aria-label="실험쥐 미로탈출 웹 체험 게임">
+              <div class="maze-device-shell">
+                <div class="maze-device-top" aria-hidden="true">
+                  <span></span>
+                </div>
+                <div id="ad-root" class="ad-root">
+                  <canvas id="game-canvas" aria-label="실험쥐 미로탈출 웹 체험판"></canvas>
+
+                  <div id="intro-panel" class="intro-panel">
+                    <div id="intro-title" class="intro-title">어둠 속 미로 탈출</div>
+                    <div id="intro-hint" class="intro-hint">드래그해서 실험쥐를 움직이세요</div>
+                  </div>
+
+                  <button id="light-button" class="light-button" type="button" aria-label="라이트 사용">
+                    <span class="light-bulb" aria-hidden="true"></span>
+                  </button>
+
+                  <div id="result-panel" class="result-panel" aria-live="polite">
+                    <div class="result-copy">
+                      <div id="result-title" class="result-title">탈출 성공!</div>
+                      <div id="result-body" class="result-body">더 어두운 미로는 앱에서 도전하세요</div>
+                    </div>
+                    <button id="cta-button" class="cta-button" type="button">앱에서 계속하기</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tool-actions">
+              <button id="restart-button" class="tool-button secondary" type="button">다시 하기</button>
+              <a class="tool-button primary play-cta" href="https://play.google.com/store/apps/details?id=com.neokim.darkmaze&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dweb_playable_page%26utm_campaign%3Ddarkmaze%26utm_content%3Ddemo_install" target="_blank" rel="noopener" data-app-id="dark-maze" data-event="play_click" data-play-target="darkMaze" data-utm-content="demo_install">앱에서 계속 도전하기</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="kicker">App preview</p>
+          <h2>앱에서 이어지는 미로 감각</h2>
+          <p>웹 체험은 핵심 조작과 분위기를 빠르게 보여주고, 앱에서는 더 긴 미로와 반복 도전 흐름을 이어갑니다.</p>
+        </div>
+        <div class="preview-grid">
+          <article class="preview-card">
+            <div class="phone-preview maze-preview-dark">
+              <p class="mock-message">LIMITED<br>VISION</p>
+            </div>
+            <h3>제한된 시야</h3>
+            <p>화면 밖 길을 기억해야 해서 짧은 미로도 긴장감 있게 느껴집니다.</p>
+          </article>
+          <article class="preview-card">
+            <div class="phone-preview maze-preview-light">
+              <p class="mock-message">LIGHT<br>READY</p>
+            </div>
+            <h3>한 번뿐인 라이트</h3>
+            <p>막혔다고 느낄 때 빛을 써서 방향을 다시 읽는 판단이 중요합니다.</p>
+          </article>
+          <article class="preview-card">
+            <div class="phone-preview maze-preview-exit">
+              <p class="mock-message">EXIT<br>FOUND</p>
+            </div>
+            <h3>짧은 탈출 루프</h3>
+            <p>출구를 찾는 즉시 결과가 돌아와서 더 빠른 루트를 다시 노리게 됩니다.</p>
+          </article>
+        </div>
+        <div class="section-actions">
+          <a class="primary-cta play-cta" href="https://play.google.com/store/apps/details?id=com.neokim.darkmaze&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dweb_playable_page%26utm_campaign%3Ddarkmaze%26utm_content%3Dpreview_install" target="_blank" rel="noopener" data-app-id="dark-maze" data-event="play_click" data-play-target="darkMaze" data-utm-content="preview_install">다크메이즈 설치</a>
+          <a class="secondary-cta" href="../">앱 소개 보기</a>
+        </div>
+      </section>
+
+      <section id="faq" class="section">
+        <div class="section-heading">
+          <p class="kicker">FAQ</p>
+          <h2>자주 묻는 질문</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>웹 체험판은 앱과 같은 게임인가요?</summary>
+            <p>웹 체험판은 조작감과 분위기를 빠르게 확인하는 짧은 HTML5 버전입니다. 앱에서는 더 긴 플레이와 기록 도전을 이어갈 수 있습니다.</p>
+          </details>
+          <details>
+            <summary>모바일에서도 플레이할 수 있나요?</summary>
+            <p>네. 터치와 드래그 조작에 맞춰 만들었고, 휴대폰 화면 비율 안에서 플레이하도록 구성했습니다.</p>
+          </details>
+          <details>
+            <summary>무료로 설치할 수 있나요?</summary>
+            <p>네. 실험쥐 미로탈출: 다크메이즈는 Google Play에서 무료로 설치할 수 있으며, 일부 광고가 포함될 수 있습니다.</p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <strong>NeoKIM App Lab</strong>
+          <p>Made by NeoKIM</p>
+          <p>Last updated: 2026.07.04</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="https://play.google.com/store/apps/details?id=com.neokim.darkmaze&amp;referrer=utm_source%3Dneokim_site%26utm_medium%3Dfooter%26utm_campaign%3Ddarkmaze%26utm_content%3Dplayable_footer" target="_blank" rel="noopener">Google Play에서 설치</a>
+          <a href="../">다크메이즈 소개</a>
+          <a href="../../games/">Games</a>
+          <a href="../../privacy-policy/dark-maze-lab-rat-escape.html">Privacy Policy</a>
+          <a href="mailto:wlgnsl14@gmail.com">Contact</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="./game.js?v=20260704-page1"></script>
+  </body>
 </html>
