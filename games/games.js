@@ -43,7 +43,7 @@ async function loadCatalog() {
     catalogGames = Array.isArray(db.games)
       ? db.games
         .filter((game) => game.status !== "closed" && game.visibleInCabinet !== false)
-        .sort((a, b) => String(a.gridSlot).localeCompare(String(b.gridSlot)))
+        .sort(compareCatalogGames)
       : [];
 
     renderStats(catalogGames);
@@ -54,6 +54,30 @@ async function loadCatalog() {
     document.getElementById("gameGrid").innerHTML = `<p class="error-copy">게임 목록을 불러오지 못했습니다.</p>`;
     console.error(error);
   }
+}
+
+function compareCatalogGames(a, b) {
+  const releaseDelta = Number(isReleasedAppGame(b)) - Number(isReleasedAppGame(a));
+  if (releaseDelta !== 0) {
+    return releaseDelta;
+  }
+
+  const slotDelta = String(a.gridSlot || "").localeCompare(String(b.gridSlot || ""), "ko", {
+    numeric: true,
+    sensitivity: "base"
+  });
+  if (slotDelta !== 0) {
+    return slotDelta;
+  }
+
+  return String(a.workingTitleKo || a.id || "").localeCompare(String(b.workingTitleKo || b.id || ""), "ko", {
+    numeric: true,
+    sensitivity: "base"
+  });
+}
+
+function isReleasedAppGame(game) {
+  return game?.id?.startsWith("released-") || (Array.isArray(game?.tags) && game.tags.includes("released-app"));
 }
 
 async function loadLikeCounts() {

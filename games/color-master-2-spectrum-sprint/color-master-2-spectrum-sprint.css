@@ -82,7 +82,8 @@ canvas:focus-visible {
 
 .back-link,
 .icon-button,
-.primary-button {
+.primary-button,
+.app-install-link {
   border: 2px solid var(--line);
   border-radius: 7px;
   background: #ffffff;
@@ -114,7 +115,8 @@ canvas:focus-visible {
 
 .back-link:hover,
 .icon-button:hover,
-.primary-button:hover {
+.primary-button:hover,
+.app-install-link:hover {
   transform: translate(-1px, -1px);
 }
 
@@ -170,6 +172,30 @@ h1 {
   font-size: clamp(1rem, 4vw, 1.42rem);
   font-weight: 950;
   line-height: 1;
+}
+
+.app-install-link {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  justify-self: end;
+  padding: 8px 11px;
+  background: var(--mint);
+  font-size: 0.86rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.app-install-link::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--line);
+  border-radius: 5px;
+  background: var(--lemon);
+  box-shadow: inset -4px -4px 0 rgba(143, 120, 255, 0.68);
 }
 
 .sprint-stage {
