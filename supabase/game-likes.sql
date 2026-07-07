@@ -33,11 +33,16 @@ language sql
 immutable
 as $$
   select array[
+    'released-ufo-signal-room',
+    'released-galacticode-cipher-lab',
     'flame-pudding-pad-race',
     'flame-pocket-rogue-bakery',
     'defold-star-delivery-rocket',
     'defold-marshmallow-sling',
     'html5-pixel-color-garden',
+    'released-color-master-memory',
+    'released-color-master-2-spectrum-sprint',
+    'released-dark-maze-lab-run',
     'phaser-jelly-brick-shop',
     'solar2d-lunchbox-tapper',
     'love-moon-letter-runner'

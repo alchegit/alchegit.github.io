@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="문장을 은하 문자로 변환하고 해독 단서를 맞히는 Galacticode 기반 HTML5 웹게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/galacticode-cipher-lab/">
+
+    <meta property="og:title" content="갤럭시코드 해독 연구실 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="seed 언어로 변환된 은하 문장을 보고 원문을 맞히는 짧은 해독 퍼즐입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/galacticode-cipher-lab/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>갤럭시코드 해독 연구실 | Galacticode Cipher Lab</title>
+    <link rel="stylesheet" href="./galacticode-cipher-lab.css?v=20260707-1">
+    <script defer src="./galacticode-cipher-lab.js?v=20260707-1"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div class="title-block">
+            <p class="kicker">Galacticode web edition</p>
+            <h1 id="gameTitle">갤럭시코드 해독 연구실</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="새 라운드">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Round</span>
+            <strong id="roundValue">0/5</strong>
+          </div>
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Streak</span>
+            <strong id="streakValue">0</strong>
+          </div>
+          <div>
+            <span>Best</span>
+            <strong id="bestValue">0</strong>
+          </div>
+        </div>
+
+        <section class="lab-grid">
+          <div class="cipher-panel">
+            <div class="language-row" aria-label="Language seeds">
+              <button class="seed-button is-active" type="button" data-seed-index="0">Nebula</button>
+              <button class="seed-button" type="button" data-seed-index="1">Mint</button>
+              <button class="seed-button" type="button" data-seed-index="2">Solar</button>
+            </div>
+
+            <label class="input-label" for="messageInput">Message</label>
+            <textarea id="messageInput" rows="3" maxlength="80">달빛 편지를 보내줘</textarea>
+            <div id="encodedOutput" class="encoded-output" aria-live="polite"></div>
+            <div class="tool-row">
+              <button id="sampleButton" class="tool-button" type="button">샘플</button>
+              <button id="copyButton" class="tool-button" type="button">복사</button>
+            </div>
+          </div>
+
+          <div class="puzzle-panel">
+            <div class="puzzle-top">
+              <p id="phaseLabel" class="phase-label">대기</p>
+              <button id="startButton" class="primary-button" type="button">해독 시작</button>
+            </div>
+            <div id="cipherCard" class="cipher-card" aria-label="Encoded puzzle"></div>
+            <div id="optionGrid" class="option-grid" aria-label="Answer choices"></div>
+          </div>
+        </section>
+
+        <div id="resultOverlay" class="result-overlay" hidden>
+          <p class="result-kicker">Decode report</p>
+          <h2 id="resultTitle">기록</h2>
+          <p id="resultCopy"></p>
+          <div class="result-stats">
+            <span id="resultAccuracy">정확도 0%</span>
+            <span id="resultSeed">Seed Nebula</span>
+            <span id="resultStreak">최고 연속 0</span>
+          </div>
+          <button id="overlayRestartButton" class="primary-button" type="button">다시 해독</button>
+        </div>
+
+        <footer class="game-footer">
+          <p id="feedbackText" class="feedback-text">seed를 고르면 같은 문장도 다른 은하 문자로 바뀝니다.</p>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

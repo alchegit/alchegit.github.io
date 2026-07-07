@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="목표 색을 기억하고 보기 중 같은 색을 고르는 Color Master 기반 HTML5 미니게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/color-master-memory/">
+
+    <meta property="og:title" content="컬러마스터 기억 챌린지 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="10개의 색을 기억하고 맞히는 모바일 터치 색감 챌린지입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/color-master-memory/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>컬러마스터 기억 챌린지 | Color Master Memory Challenge</title>
+    <link rel="stylesheet" href="./color-master-memory.css?v=20260707-7">
+    <script defer src="./color-master-memory.js?v=20260707-7"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div class="title-block">
+            <p class="kicker">Color Master web edition</p>
+            <h1 id="gameTitle">컬러마스터 기억 챌린지</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="다시 시작">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="게임 상태">
+          <div>
+            <span>Round</span>
+            <strong id="roundValue">0/10</strong>
+          </div>
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Combo</span>
+            <strong id="comboValue">0</strong>
+          </div>
+          <div>
+            <span>Best</span>
+            <strong id="bestValue">0</strong>
+          </div>
+        </div>
+
+        <section class="memory-stage" aria-live="polite">
+          <div class="target-panel">
+            <div id="targetSwatch" class="target-swatch" aria-label="기억할 색상"></div>
+            <div class="stage-copy">
+              <p id="phaseLabel" class="phase-label">준비</p>
+              <p id="phaseCopy" class="phase-copy">색을 보고 같은 색을 골라보세요.</p>
+            </div>
+          </div>
+
+          <div class="focus-track" aria-hidden="true">
+            <span id="focusBar"></span>
+          </div>
+
+          <div id="optionGrid" class="option-grid" aria-label="색상 보기"></div>
+
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p class="result-kicker">Result</p>
+            <h2 id="resultTitle">기록</h2>
+            <p id="resultCopy"></p>
+            <div class="result-stats">
+              <span id="resultAccuracy">정확도 0%</span>
+              <span id="resultTime">시간 0.0초</span>
+              <span id="resultCombo">최고 콤보 0</span>
+            </div>
+            <button id="overlayRestartButton" class="primary-button" type="button">다시 도전</button>
+          </div>
+        </section>
+
+        <footer class="game-footer">
+          <button id="startButton" class="primary-button" type="button">시작</button>
+          <p id="feedbackText" class="feedback-text">오늘의 색감 감각을 가볍게 깨워봅니다.</p>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>다크메이즈 연구소 탈출 | NeoKIM Game Cabinet</title>
+    <meta name="description" content="손가락으로 실험쥐를 이끌어 어두운 연구소 미로를 탈출하는 HTML5 Canvas 미니게임입니다.">
+    <meta name="theme-color" content="#10131b">
+    <link rel="stylesheet" href="./dark-maze-lab-run.css?v=20260707-rebuild13">
+  </head>
+  <body>
+    <header class="maze-topbar">
+      <a class="brand-link" href="../">/games</a>
+      <div class="topbar-actions">
+        <button id="storyButton" class="story-button" type="button" aria-label="시작 웹툰 보기">
+          <span class="play-symbol" aria-hidden="true"></span>
+        </button>
+        <a class="home-link" href="../../">NeoKIM</a>
+      </div>
+    </header>
+
+    <main class="maze-shell">
+      <section class="maze-hero" aria-labelledby="gameTitle">
+        <div class="hero-copy">
+          <p class="kicker">Dark Maze</p>
+          <h1 id="gameTitle"><span>다크메이즈</span><span>연구소 탈출</span></h1>
+          <p class="hero-lead"><span>어둠 속 출구 불빛을 따라 </span><span>실험쥐를 천천히 이끌어 주세요.</span></p>
+        </div>
+
+        <dl class="score-strip" aria-label="진행 정보">
+          <div>
+            <dt>미로</dt>
+            <dd id="levelValue">1 / 3</dd>
+          </div>
+          <div>
+            <dt>남은 시간</dt>
+            <dd id="timeValue">45.0</dd>
+          </div>
+          <div>
+            <dt>최고 기록</dt>
+            <dd id="bestValue">--</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="play-section" aria-label="다크메이즈 연구소 탈출 게임">
+        <div class="maze-frame">
+          <canvas id="mazeCanvas" aria-label="어두운 연구소 미로"></canvas>
+
+          <div id="startOverlay" class="overlay-panel">
+            <p class="overlay-kicker">Ready</p>
+            <h2>드래그해서 길을 찾으세요</h2>
+            <p>조명은 미로마다 한 번만 켤 수 있습니다.</p>
+            <button id="startButton" class="primary-button" type="button">시작</button>
+          </div>
+
+          <div id="resultOverlay" class="overlay-panel" hidden>
+            <p id="resultKicker" class="overlay-kicker">Clear</p>
+            <h2 id="resultTitle">미로 통과</h2>
+            <p id="resultCopy">다음 미로로 이동합니다.</p>
+            <button id="resultButton" class="primary-button" type="button">계속</button>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <button id="lightButton" class="light-button" type="button" aria-label="조명 켜기">
+            <span class="light-icon" aria-hidden="true"></span>
+            <span id="lightLabel">조명</span>
+          </button>
+          <button id="restartButton" class="secondary-button" type="button">처음부터</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="storyOverlay" class="story-overlay" role="dialog" aria-modal="true" aria-label="다크메이즈 시작 웹툰" hidden>
+      <div class="story-viewer">
+        <button id="storyClose" class="story-close" type="button" aria-label="닫기">×</button>
+        <button id="storyPrev" class="story-nav story-prev" type="button" aria-label="이전 장"></button>
+        <img id="storyImage" class="story-image" alt="다크메이즈 시작 웹툰">
+        <button id="storyNext" class="story-nav story-next" type="button" aria-label="다음 장"></button>
+        <div id="storyDots" class="story-dots" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <script src="./dark-maze-lab-run.js?v=20260707-rebuild13"></script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="UFO 호출 신호를 유지하며 노이즈를 터치로 안정화하는 Call the UFO 기반 HTML5 웹게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/ufo-signal-room/">
+
+    <meta property="og:title" content="UFO 신호 대기실 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="신호가 끊기기 전에 노이즈를 탭해 UFO 호출을 유지하세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/ufo-signal-room/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>UFO 신호 대기실 | UFO Signal Room</title>
+    <link rel="stylesheet" href="./ufo-signal-room.css?v=20260707-1">
+    <script defer src="./ufo-signal-room.js?v=20260707-1"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div class="title-block">
+            <p class="kicker">Call the UFO web edition</p>
+            <h1 id="gameTitle">UFO 신호 대기실</h1>
+          </div>
+          <button id="muteButton" class="icon-button" type="button" aria-label="소리 켜기">♪</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Time</span>
+            <strong id="timeValue">0.0</strong>
+          </div>
+          <div>
+            <span>Signal</span>
+            <strong id="signalValue">0%</strong>
+          </div>
+          <div>
+            <span>Locks</span>
+            <strong id="lockValue">0</strong>
+          </div>
+          <div>
+            <span>Total</span>
+            <strong id="totalValue">0s</strong>
+          </div>
+        </div>
+
+        <section id="signalStage" class="signal-stage" aria-live="polite">
+          <div class="sky-field" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <img id="ufoVisual" class="ufo-visual" src="./assets/ufo_call_button.jpg" alt="UFO 호출 신호">
+
+          <div class="signal-meter" aria-label="Signal stability">
+            <span id="signalBar"></span>
+          </div>
+
+          <div id="noiseLayer" class="noise-layer" aria-label="Signal noise touch targets"></div>
+
+          <div id="introPanel" class="intro-panel">
+            <button id="startButton" class="call-button" type="button">
+              <img src="./assets/ufo_call_button.jpg" alt="">
+              <span>호출 시작</span>
+            </button>
+          </div>
+
+          <div id="resultOverlay" class="result-overlay" hidden>
+            <p class="result-kicker">Signal report</p>
+            <h2 id="resultTitle">대기 종료</h2>
+            <p id="resultCopy"></p>
+            <div class="result-stats">
+              <span id="resultTime">시간 0.0초</span>
+              <span id="resultGrade">등급 C</span>
+              <span id="resultTotal">누적 0초</span>
+            </div>
+            <button id="restartButton" class="primary-button" type="button">다시 호출</button>
+          </div>
+        </section>
+
+        <footer class="game-footer">
+          <button id="stopButton" class="primary-button secondary" type="button" disabled>호출 종료</button>
+          <p id="feedbackText" class="feedback-text">조용한 채널입니다.</p>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

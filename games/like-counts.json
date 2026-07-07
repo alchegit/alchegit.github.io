@@ -1,6 +1,8 @@
 {
   "schemaVersion": "game-likes/v1",
   "counts": {
+    "released-ufo-signal-room": 0,
+    "released-galacticode-cipher-lab": 0,
     "flame-crystal-mochi-stand": 0,
     "flame-pudding-pad-race": 0,
     "flame-pocket-rogue-bakery": 0,
@@ -9,6 +11,9 @@
     "defold-marshmallow-sling": 0,
     "libgdx-pax-biscuitica": 0,
     "html5-pixel-color-garden": 0,
+    "released-color-master-memory": 0,
+    "released-color-master-2-spectrum-sprint": 0,
+    "released-dark-maze-lab-run": 0,
     "phaser-jelly-brick-shop": 0,
     "godot-cozy-switchyard": 0,
     "solar2d-lunchbox-tapper": 0,

@@ -15,7 +15,6 @@ const accentColors = [
 
 const likeStorageKey = "neokim-game-cabinet-liked:v1";
 const visitorStorageKey = "neokim-game-cabinet-visitor:v1";
-const crystalMochiGameId = "flame-crystal-mochi-stand";
 const candidateReportElementId = "candidateMetricsReport";
 
 let catalogGames = [];
@@ -23,13 +22,6 @@ let activeFilter = { type: "all", value: "all" };
 let baseLikeCounts = new Map();
 let likedGameIds = new Set();
 let likeCountsAreAuthoritative = false;
-
-const crystalMochiPreviewSets = {
-  bakery: ["sugar-sun", "cloud-cookie", "pudding-star", "mellow-door"],
-  sky: ["mint-moon", "berry-orbit", "aqua-bell", "crystal-crown"],
-  dream: ["peach-comet", "lemon-lamp", "violet-ribbon", "heart-spark"]
-};
-const crystalMochiPreviewPresets = new Set(["balanced", "score", "card", "starlight"]);
 
 document.addEventListener("DOMContentLoaded", () => {
   likedGameIds = loadLikedGameIds();
@@ -40,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadCatalog() {
   try {
     const response = await fetch("./design-db.json", { cache: "no-store" });
-
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -60,8 +51,7 @@ async function loadCatalog() {
     renderGrid(catalogGames);
     updateCandidateMetricsReport(catalogGames);
   } catch (error) {
-    const grid = document.getElementById("gameGrid");
-    grid.innerHTML = `<p class="error-copy">게임 목록을 불러오지 못했습니다.</p>`;
+    document.getElementById("gameGrid").innerHTML = `<p class="error-copy">게임 목록을 불러오지 못했습니다.</p>`;
     console.error(error);
   }
 }
@@ -148,9 +138,8 @@ function renderFilters(games) {
     })
     .join("");
 
-  filterBar.addEventListener("click", (event) => {
+  filterBar.onclick = (event) => {
     const button = event.target.closest(".filter-button");
-
     if (!button) {
       return;
     }
@@ -159,10 +148,9 @@ function renderFilters(games) {
       type: button.dataset.filterType,
       value: button.dataset.filterValue
     };
-
     renderFilters(catalogGames);
     renderGrid(filterGames(catalogGames, activeFilter));
-  }, { once: true });
+  };
 }
 
 function filterGames(games, filter) {
@@ -179,7 +167,6 @@ function filterGames(games, filter) {
 
 function renderGrid(games) {
   const grid = document.getElementById("gameGrid");
-
   if (!games.length) {
     grid.innerHTML = `<p class="empty-copy">표시할 게임이 없습니다.</p>`;
     return;
@@ -260,40 +247,36 @@ function getVisitorId() {
   }
 }
 
-async function hashVisitorId(visitorId) {
+async function getVoterHash() {
+  const visitorId = getVisitorId();
+  const salt = "neokim-game-cabinet-like:v1";
   if (!globalThis.crypto?.subtle || typeof TextEncoder === "undefined") {
-    return visitorId;
+    return fallbackHash(`${salt}:${visitorId}`);
   }
 
-  const buffer = await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(visitorId));
-  return [...new Uint8Array(buffer)].map((value) => value.toString(16).padStart(2, "0")).join("");
+  const data = new TextEncoder().encode(`${salt}:${visitorId}`);
+  const hashBuffer = await globalThis.crypto.subtle.digest("SHA-256", data);
+  return [...new Uint8Array(hashBuffer)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 function getLikeEndpoint() {
   const configured = window.GAME_LIKE_ENDPOINT || document.querySelector('meta[name="game-like-endpoint"]')?.content || "";
-  return String(configured).trim();
+  return configured.trim();
 }
 
 function getSupabaseConfig() {
   const url = window.GAME_LIKE_SUPABASE_URL || document.querySelector('meta[name="game-like-supabase-url"]')?.content || "";
   const key = window.GAME_LIKE_SUPABASE_KEY || document.querySelector('meta[name="game-like-supabase-key"]')?.content || "";
-  const normalizedUrl = String(url).trim().replace(/\/+$/g, "");
-  const normalizedKey = String(key).trim();
-
-  if (!normalizedUrl || !normalizedKey) {
+  if (!url.trim() || !key.trim()) {
     return null;
   }
-
-  return {
-    url: normalizedUrl,
-    key: normalizedKey
-  };
+  return { url: url.trim().replace(/\/+$/, ""), key: key.trim() };
 }
 
-async function callSupabaseRpc(functionName, body = {}) {
+async function callSupabaseRpc(functionName, body) {
   const supabase = getSupabaseConfig();
   if (!supabase) {
-    return null;
+    throw new Error("Supabase is not configured");
   }
 
   const response = await fetch(`${supabase.url}/rest/v1/rpc/${functionName}`, {
@@ -303,24 +286,24 @@ async function callSupabaseRpc(functionName, body = {}) {
       Authorization: `Bearer ${supabase.key}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(body)
+    body: body ? JSON.stringify(body) : "{}"
   });
 
   if (!response.ok) {
-    throw new Error(`Supabase RPC ${functionName} responded with HTTP ${response.status}`);
+    throw new Error(`Supabase RPC failed: HTTP ${response.status}`);
   }
 
   return response.json();
 }
 
 async function sendLikeVote(gameId) {
-  const voterHash = await hashVisitorId(getVisitorId());
+  const voterHash = await getVoterHash();
   const supabase = getSupabaseConfig();
   if (supabase) {
     return callSupabaseRpc("create_game_like", {
       p_game_id: gameId,
       p_voter_hash: voterHash,
-      p_page: "/games/"
+      p_page: location.pathname || "/games/"
     });
   }
 
@@ -332,96 +315,14 @@ async function sendLikeVote(gameId) {
   const response = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      gameId,
-      voterHash,
-      page: "/games/",
-      value: 1
-    })
+    body: JSON.stringify({ gameId, voterHash, page: location.pathname || "/games/" })
   });
 
   if (!response.ok) {
-    throw new Error(`Like endpoint responded with HTTP ${response.status}`);
+    throw new Error(`Like vote failed: HTTP ${response.status}`);
   }
 
   return response.json();
-}
-
-function updateCandidateMetricsReport(games) {
-  const reportElement = document.getElementById(candidateReportElementId);
-
-  if (!reportElement) {
-    return;
-  }
-
-  reportElement.textContent = JSON.stringify(buildCandidateMetricsReport(games));
-}
-
-function buildCandidateMetricsReport(games) {
-  const items = games
-    .map((game) => {
-      const metrics = game.id === crystalMochiGameId ? getCrystalMochiStoredMetrics() : null;
-      const liked = likedGameIds.has(game.id);
-      const priority = Math.max(1, Number(game.priority || 12));
-      const fallbackScore = Math.min(100, (liked ? 25 : 0) + (game.status === "playable" ? 20 : 5) + Math.max(0, 13 - priority) * 3);
-      const score = Math.max(0, Math.min(100, Number(metrics?.score ?? fallbackScore)));
-
-      return {
-        id: game.id,
-        title: game.workingTitleKo,
-        engine: game.engine,
-        status: game.status,
-        score,
-        tier: metrics?.tier || getCandidateTier(score),
-        likedByUser: liked,
-        completionPercent: Number(metrics?.completionPercent || 0),
-        returnDays: Number(metrics?.returnDays || 0),
-        source: metrics ? "local-progress" : "catalog-baseline"
-      };
-    })
-    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
-
-  return {
-    route: "/games/",
-    generatedAt: new Date().toISOString(),
-    items
-  };
-}
-
-function getCrystalMochiStoredMetrics() {
-  try {
-    const progress = JSON.parse(localStorage.getItem("crystalMochiStandProgress:v1") || "{}");
-    const metrics = progress && typeof progress.candidateMetrics === "object" ? progress.candidateMetrics : null;
-
-    if (!metrics) {
-      return null;
-    }
-
-    return {
-      score: Number(metrics.score || 0),
-      tier: typeof metrics.tier === "string" ? metrics.tier : getCandidateTier(Number(metrics.score || 0)),
-      completionPercent: Number(metrics.completionPercent || 0),
-      returnDays: Number(metrics.returnDays || 0)
-    };
-  } catch (error) {
-    return null;
-  }
-}
-
-function getCandidateTier(score) {
-  if (score >= 75) {
-    return "hot";
-  }
-
-  if (score >= 45) {
-    return "warm";
-  }
-
-  if (score >= 20) {
-    return "spark";
-  }
-
-  return "quiet";
 }
 
 function handleLikeClick(event) {
@@ -438,16 +339,11 @@ function handleLikeClick(event) {
   likedGameIds.add(gameId);
   saveLikedGameIds();
   button.classList.add("is-liked");
-  button.setAttribute("aria-pressed", "true");
   button.disabled = true;
+  button.setAttribute("aria-pressed", "true");
   button.querySelector(".like-mark").textContent = "♥";
-
-  if (likeCountsAreAuthoritative) {
-    baseLikeCounts.set(gameId, (baseLikeCounts.get(gameId) || 0) + 1);
-  }
-
   button.querySelector("[data-like-count]").textContent = String(getLikeCount(gameId));
-  updateCandidateMetricsReport(catalogGames);
+
   sendLikeVote(gameId)
     .then((result) => {
       if (result && result.gameId === gameId && Number.isFinite(Number(result.count))) {
@@ -460,12 +356,11 @@ function handleLikeClick(event) {
 
 function renderPreview(animationKey = "") {
   const key = String(animationKey).replace(/[^a-z0-9-]/gi, "");
-  const crystalPreview = key === "sparkle-oracle" ? getCrystalMochiPreviewState() : { className: "" };
 
   switch (key) {
     case "sparkle-oracle":
       return `
-        <div class="preview-stage preview-sparkle-oracle ${crystalPreview.className}">
+        <div class="preview-stage preview-sparkle-oracle">
           <span class="scene-piece decor-curtain left"></span>
           <span class="scene-piece decor-curtain right"></span>
           <span class="scene-piece decor-lamp"></span>
@@ -477,6 +372,26 @@ function renderPreview(animationKey = "") {
           <span class="scene-piece sparkle three"></span>
           <span class="scene-piece fortune-card"></span>
           <span class="scene-piece candidate-signal"></span>
+        </div>
+      `;
+    case "ufo-signal":
+      return `
+        <div class="preview-stage preview-ufo-signal">
+          <span class="scene-piece ufo-disc"></span>
+          <span class="scene-piece signal-beam"></span>
+          <span class="scene-piece noise n1"></span>
+          <span class="scene-piece noise n2"></span>
+          <span class="scene-piece signal-dot"></span>
+        </div>
+      `;
+    case "galacticode-cipher":
+      return `
+        <div class="preview-stage preview-galacticode-cipher">
+          <span class="scene-piece cipher-screen">△◇☆</span>
+          <span class="scene-piece scan-line"></span>
+          <span class="scene-piece answer-chip a">문장</span>
+          <span class="scene-piece answer-chip b">신호</span>
+          <span class="scene-piece answer-chip c">좌표</span>
         </div>
       `;
     case "pudding-race":
@@ -543,6 +458,32 @@ function renderPreview(animationKey = "") {
           <span class="scene-piece drop"></span>
         </div>
       `;
+    case "color-memory":
+      return `
+        <div class="preview-stage preview-color-memory">
+          <span class="scene-piece memory-target"></span>
+          <span class="memory-options" aria-hidden="true">${Array.from({ length: 6 }, () => "<span></span>").join("")}</span>
+          <span class="scene-piece memory-cursor"></span>
+          <span class="scene-piece memory-flash"></span>
+        </div>
+      `;
+    case "spectrum-sprint":
+      return `
+        <div class="preview-stage preview-spectrum-sprint">
+          <span class="spectrum-grid" aria-hidden="true">${Array.from({ length: 25 }, () => "<span></span>").join("")}</span>
+          <span class="scene-piece spectrum-cursor"></span>
+          <span class="scene-piece spectrum-grade">PERFECT</span>
+        </div>
+      `;
+    case "dark-maze-run":
+      return `
+        <div class="preview-stage preview-dark-maze-run">
+          <span class="maze-preview-grid" aria-hidden="true">${Array.from({ length: 49 }, () => "<span></span>").join("")}</span>
+          <span class="scene-piece maze-exit"></span>
+          <span class="scene-piece maze-rat"></span>
+          <span class="scene-piece maze-light"></span>
+        </div>
+      `;
     case "jelly-bricks":
       return `
         <div class="preview-stage preview-jelly-bricks">
@@ -588,104 +529,39 @@ function renderPreview(animationKey = "") {
   }
 }
 
-function getCrystalMochiPreviewState() {
-  try {
-    const stored = JSON.parse(localStorage.getItem("crystalMochiStandProgress:v1") || "{}");
-    const collection = JSON.parse(localStorage.getItem("crystalMochiStandCollection:v2") || "[]");
-    const unlocked = Array.isArray(stored.unlockedDecorIds) ? stored.unlockedDecorIds : [];
-    const preferred = typeof stored.equippedDecor === "string" && stored.equippedDecor
-      ? stored.equippedDecor
-      : unlocked[unlocked.length - 1] || "";
-    const valid = new Set(["smile", "lamp", "curtain", "crown"]);
-    const classNames = [];
-    if (valid.has(preferred)) {
-      classNames.push(`has-${preferred}`);
-    }
-    const collectedIds = new Set(Array.isArray(collection) ? collection.filter(Boolean) : []);
-    const collectionSize = collectedIds.size;
-    const ratio = collectionSize / 12;
-    if (ratio >= 1) {
-      classNames.push("book-full");
-    } else if (ratio >= 0.5) {
-      classNames.push("book-half");
-    } else if (ratio > 0) {
-      classNames.push("book-start");
-    }
-    for (const [setId, ids] of Object.entries(crystalMochiPreviewSets)) {
-      if (ids.every((id) => collectedIds.has(id))) {
-        classNames.push(`set-${setId}`);
-      }
-    }
-    const preset = crystalMochiPreviewPresets.has(stored.buildPreset) ? stored.buildPreset : "balanced";
-    classNames.push(`preset-${preset}`);
-    const signalLevel = getCrystalMochiCandidateSignal(stored, collectionSize, ratio);
-    if (likedGameIds.has(crystalMochiGameId)) {
-      classNames.push("liked-by-user");
-    }
-    if (signalLevel >= 1) {
-      classNames.push("candidate-spark");
-    }
-    if (signalLevel >= 2) {
-      classNames.push("candidate-warm");
-    }
-    if (signalLevel >= 3) {
-      classNames.push("candidate-hot");
-    }
-    return { className: classNames.join(" ") };
-  } catch (error) {
-    return { className: "" };
+function updateCandidateMetricsReport(games) {
+  const report = document.getElementById(candidateReportElementId);
+  if (!report) {
+    return;
   }
+
+  const payload = {
+    schemaVersion: "candidate-metrics/v1",
+    updatedAt: new Date().toISOString(),
+    visibleGameIds: games.map((game) => game.id),
+    likedGameIds: [...likedGameIds]
+  };
+  report.textContent = JSON.stringify(payload, null, 2);
 }
 
-function getCrystalMochiCandidateSignal(progress, collectionSize, ratio) {
-  const metrics = progress && typeof progress.candidateMetrics === "object" ? progress.candidateMetrics : null;
-
-  if (metrics && Number.isFinite(Number(metrics.score))) {
-    const score = Number(metrics.score);
-
-    if (score >= 75) {
-      return 3;
-    }
-
-    if (score >= 45) {
-      return 2;
-    }
-
-    if (score >= 20) {
-      return 1;
-    }
-
-    return 0;
+function fallbackHash(input) {
+  let h1 = 0xdeadbeef;
+  let h2 = 0x41c6ce57;
+  for (let i = 0; i < input.length; i += 1) {
+    const code = input.charCodeAt(i);
+    h1 = Math.imul(h1 ^ code, 2654435761);
+    h2 = Math.imul(h2 ^ code, 1597334677);
   }
 
-  let score = likedGameIds.has(crystalMochiGameId) ? 1 : 0;
-  const friendRecords = Array.isArray(progress.friendWeeklyRecords)
-    ? progress.friendWeeklyRecords.filter((record) => !record?.archived)
-    : [];
-  const bestFriendScore = friendRecords.reduce((best, record) => Math.max(best, Number(record?.score || 0)), 0);
-  const bestFriendBook = friendRecords.reduce((best, record) => Math.max(best, Number(record?.collectionSize || 0)), 0);
-  const playerBest = Number(localStorage.getItem("crystalMochiStandBest") || 0);
-
-  if (ratio >= 0.5) {
-    score += 1;
-  }
-
-  if (ratio >= 1) {
-    score += 1;
-  }
-
-  if (friendRecords.length) {
-    score += playerBest >= bestFriendScore || collectionSize >= bestFriendBook ? 1 : 0;
-  }
-
-  return Math.min(3, score);
+  const hex = `${(h1 >>> 0).toString(16).padStart(8, "0")}${(h2 >>> 0).toString(16).padStart(8, "0")}`;
+  return hex.repeat(4).slice(0, 64);
 }
 
 function escapeHtml(value) {
   return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }

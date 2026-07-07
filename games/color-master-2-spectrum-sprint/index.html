@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="점점 커지는 색상 격자에서 하나만 다른 타일을 찾는 Color Master 2 기반 HTML5 Canvas 웹게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/color-master-2-spectrum-sprint/">
+
+    <meta property="og:title" content="컬러마스터2 스펙트럼 스프린트 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="하나만 다른 색을 빠르게 찾아 레벨을 올리는 색감 스프린트입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/color-master-2-spectrum-sprint/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+
+    <title>컬러마스터2 스펙트럼 스프린트 | Color Master 2 Spectrum Sprint</title>
+    <link rel="stylesheet" href="./color-master-2-spectrum-sprint.css?v=20260707-1">
+    <script defer src="./color-master-2-spectrum-sprint.js?v=20260707-1"></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="game-board" aria-labelledby="gameTitle">
+        <header class="game-header">
+          <a class="back-link" href="../">/games</a>
+          <div class="title-block">
+            <p class="kicker">Color Master 2 web edition</p>
+            <h1 id="gameTitle">컬러마스터2 스펙트럼 스프린트</h1>
+          </div>
+          <button id="restartButton" class="icon-button" type="button" aria-label="다시 시작">↻</button>
+        </header>
+
+        <div class="hud-grid" aria-label="Game status">
+          <div>
+            <span>Level</span>
+            <strong id="levelValue">1</strong>
+          </div>
+          <div>
+            <span>Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div>
+            <span>Combo</span>
+            <strong id="comboValue">0</strong>
+          </div>
+          <div>
+            <span>Best</span>
+            <strong id="bestValue">0</strong>
+          </div>
+        </div>
+
+        <section class="sprint-stage">
+          <div class="board-wrap">
+            <canvas id="spectrumCanvas" width="640" height="640" aria-label="하나만 다른 색을 찾는 색상 격자"></canvas>
+            <div id="resultOverlay" class="result-overlay" hidden>
+              <p class="result-kicker">Run result</p>
+              <h2 id="resultTitle">기록</h2>
+              <p id="resultCopy"></p>
+              <div class="result-stats">
+                <span id="resultLevel">레벨 1</span>
+                <span id="resultScore">점수 0</span>
+                <span id="resultGrade">등급 COOL</span>
+              </div>
+              <button id="overlayRestartButton" class="primary-button" type="button">다시 찾기</button>
+            </div>
+          </div>
+
+          <aside class="side-panel">
+            <div class="timer-card">
+              <span>Focus</span>
+              <strong id="timeValue">8.0</strong>
+              <div class="time-track"><span id="timeBar"></span></div>
+            </div>
+            <p id="feedbackText" class="feedback-text">하나만 다른 타일을 탭하세요.</p>
+            <button id="startButton" class="primary-button" type="button">시작</button>
+          </aside>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
