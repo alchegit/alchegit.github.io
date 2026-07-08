@@ -26,6 +26,14 @@ let likeCountsAreAuthoritative = false;
 document.addEventListener("DOMContentLoaded", () => {
   likedGameIds = loadLikedGameIds();
   document.getElementById("gameGrid").addEventListener("click", handleLikeClick);
+  window.addEventListener("neokim:games-localechange", () => {
+    if (!catalogGames.length) {
+      return;
+    }
+    renderFilters(catalogGames);
+    renderGrid(filterGames(catalogGames, activeFilter));
+    window.NEOKIM_GAMES_I18N?.translateDom(document.body);
+  });
   loadCatalog();
 });
 
@@ -51,7 +59,7 @@ async function loadCatalog() {
     renderGrid(catalogGames);
     updateCandidateMetricsReport(catalogGames);
   } catch (error) {
-    document.getElementById("gameGrid").innerHTML = `<p class="error-copy">게임 목록을 불러오지 못했습니다.</p>`;
+    document.getElementById("gameGrid").innerHTML = `<p class="error-copy">${escapeHtml(t("catalog.error", "게임 목록을 불러오지 못했습니다."))}</p>`;
     console.error(error);
   }
 }
@@ -143,14 +151,14 @@ function renderStats(games) {
 function renderFilters(games) {
   const filterBar = document.getElementById("filterBar");
   const engines = [...new Set(games.map((game) => game.engine))];
-  const filters = [{ type: "all", value: "all", label: "All" }];
+  const filters = [{ type: "all", value: "all", label: t("filter.all", "All") }];
 
   if (games.some((game) => game.status === "playable")) {
-    filters.push({ type: "status", value: "playable", label: "Playable" });
+    filters.push({ type: "status", value: "playable", label: t("filter.playable", "Playable") });
   }
 
   if (games.some((game) => game.status === "prototype-next")) {
-    filters.push({ type: "status", value: "prototype-next", label: "Next" });
+    filters.push({ type: "status", value: "prototype-next", label: t("filter.next", "Next") });
   }
 
   filters.push(...engines.map((engine) => ({ type: "engine", value: engine, label: engine })));
@@ -192,7 +200,7 @@ function filterGames(games, filter) {
 function renderGrid(games) {
   const grid = document.getElementById("gameGrid");
   if (!games.length) {
-    grid.innerHTML = `<p class="empty-copy">표시할 게임이 없습니다.</p>`;
+    grid.innerHTML = `<p class="empty-copy">${escapeHtml(t("catalog.empty", "표시할 게임이 없습니다."))}</p>`;
     return;
   }
 
@@ -205,34 +213,48 @@ function renderGameCard(game, index) {
   const playableUrl = game.playableUrl || game.demoUrl || "";
   const liked = likedGameIds.has(game.id);
   const likeCount = getLikeCount(game.id);
-  const likeLabel = `${game.workingTitleKo} 좋아요 ${likeCount}개`;
+  const title = gameText(game, "title", game.workingTitleKo);
+  const summary = gameText(game, "summary", game.oneLineSummary);
+  const likeLabel = getI18n()?.formatLikeLabel ? getI18n().formatLikeLabel(title, likeCount) : `${title} 좋아요 ${likeCount}개`;
 
   return `
     <article class="game-card" data-status="${escapeHtml(game.status)}" style="--accent: ${accent}">
-      <div class="preview-frame" role="img" aria-label="${escapeHtml(game.workingTitleKo)} 픽셀 미리보기">
+      <div class="preview-frame" role="img" aria-label="${escapeHtml(`${title} ${t("catalog.previewSuffix", "픽셀 미리보기")}`)}">
         ${renderPreview(game.preview?.animationKey)}
       </div>
       <div class="game-card-body">
         <div class="card-meta">
-          <h2 class="game-title">${escapeHtml(game.workingTitleKo)}</h2>
+          <h2 class="game-title">${escapeHtml(title)}</h2>
           <button class="like-button${liked ? " is-liked" : ""}" type="button" data-like-game="${escapeHtml(game.id)}" aria-label="${escapeHtml(likeLabel)}" aria-pressed="${liked ? "true" : "false"}"${liked ? " disabled" : ""}>
             <span class="like-mark" aria-hidden="true">${liked ? "♥" : "♡"}</span>
             <span class="like-count" data-like-count>${escapeHtml(likeCount)}</span>
           </button>
         </div>
-        <p class="game-summary">${escapeHtml(game.oneLineSummary)}</p>
+        <p class="game-summary">${escapeHtml(summary)}</p>
         <div class="pill-row">
           <span class="engine-pill">${escapeHtml(game.engine)}</span>
-          ${tags.map((tag) => `<span class="tag-pill">${escapeHtml(tag)}</span>`).join("")}
+          ${tags.map((tag) => `<span class="tag-pill">${escapeHtml(getI18n()?.tag ? getI18n().tag(tag) : tag)}</span>`).join("")}
         </div>
-        ${playableUrl ? `<div class="play-actions"><a class="play-link" href="${escapeHtml(playableUrl)}">플레이</a></div>` : ""}
+        ${playableUrl ? `<div class="play-actions"><a class="play-link" href="${escapeHtml(playableUrl)}">${escapeHtml(t("action.play", "플레이"))}</a></div>` : ""}
         <div class="card-actions" hidden aria-hidden="true">
-          <a class="card-link" href="${escapeHtml(game.sourceUrl)}" target="_blank" rel="noopener">원본 참고</a>
-          <a class="card-link" href="${escapeHtml(game.sourceRepoUrl)}" target="_blank" rel="noopener">소스/문서</a>
+          <a class="card-link" href="${escapeHtml(game.sourceUrl)}" target="_blank" rel="noopener">${escapeHtml(t("catalog.source", "원본 참고"))}</a>
+          <a class="card-link" href="${escapeHtml(game.sourceRepoUrl)}" target="_blank" rel="noopener">${escapeHtml(t("catalog.docs", "소스/문서"))}</a>
         </div>
       </div>
     </article>
   `;
+}
+
+function getI18n() {
+  return window.NEOKIM_GAMES_I18N || null;
+}
+
+function t(key, fallback) {
+  return getI18n()?.t ? getI18n().t(key, fallback) : fallback;
+}
+
+function gameText(game, field, fallback) {
+  return getI18n()?.gameText ? getI18n().gameText(game.id, field, fallback) : fallback;
 }
 
 function getLikeCount(gameId) {
@@ -367,12 +389,23 @@ function handleLikeClick(event) {
   button.setAttribute("aria-pressed", "true");
   button.querySelector(".like-mark").textContent = "♥";
   button.querySelector("[data-like-count]").textContent = String(getLikeCount(gameId));
+  const game = catalogGames.find((item) => item.id === gameId);
+  if (game) {
+    const title = gameText(game, "title", game.workingTitleKo);
+    const count = getLikeCount(gameId);
+    button.setAttribute("aria-label", getI18n()?.formatLikeLabel ? getI18n().formatLikeLabel(title, count) : `${title} 좋아요 ${count}개`);
+  }
 
   sendLikeVote(gameId)
     .then((result) => {
       if (result && result.gameId === gameId && Number.isFinite(Number(result.count))) {
         baseLikeCounts.set(gameId, Number(result.count));
         button.querySelector("[data-like-count]").textContent = String(getLikeCount(gameId));
+        if (game) {
+          const title = gameText(game, "title", game.workingTitleKo);
+          const count = getLikeCount(gameId);
+          button.setAttribute("aria-label", getI18n()?.formatLikeLabel ? getI18n().formatLikeLabel(title, count) : `${title} 좋아요 ${count}개`);
+        }
       }
     })
     .catch((error) => console.warn("Like vote was not sent", error));
