@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="목표 색을 기억하고 보기 중 같은 색을 고르는 Color Master 기반 HTML5 미니게임입니다.">
+    <meta name="description" content="목표 색을 기억하고 보기 중 같은 색을 고르는 Color Master 기반 무제한 HTML5 미니게임입니다.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alchegit.github.io/games/color-master-memory/">
 
     <meta property="og:title" content="컬러마스터 기억 챌린지 | NeoKIM Game Cabinet">
-    <meta property="og:description" content="10개의 색을 기억하고 맞히는 모바일 터치 색감 챌린지입니다.">
+    <meta property="og:description" content="실수 3번 전까지 계속 이어지는 모바일 터치 색감 챌린지입니다.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alchegit.github.io/games/color-master-memory/">
     <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="./color-master-memory.css?v=20260708-install2">
     <link rel="stylesheet" href="../i18n.css?v=20260708-1">
     <script defer src="../i18n.js?v=20260708-1"></script>
-    <script defer src="./color-master-memory.js?v=20260707-7"></script>
+    <script defer src="./color-master-memory.js?v=20260708-endless1"></script>
   </head>
   <body>
     <main class="game-shell">
@@ -34,7 +34,7 @@
         <div class="hud-grid" aria-label="게임 상태">
           <div>
             <span>Round</span>
-            <strong id="roundValue">0/10</strong>
+            <strong id="roundValue">0</strong>
           </div>
           <div>
             <span>Score</span>
@@ -43,6 +43,10 @@
           <div>
             <span>Combo</span>
             <strong id="comboValue">0</strong>
+          </div>
+          <div>
+            <span>Life</span>
+            <strong id="lifeValue">♥♥♥</strong>
           </div>
           <div>
             <span>Best</span>

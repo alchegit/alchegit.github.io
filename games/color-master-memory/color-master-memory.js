@@ -1,17 +1,8 @@
 (() => {
   "use strict";
 
-  const totalRounds = 10;
-  const quizLimitMs = 10000;
-  const storageKey = "colorMasterMemoryBest:v1";
-  const difficultyScale = 0.5;
-  const steps = [
-    { rounds: 2, options: 2, variation: 0.42 * difficultyScale, hue: 120 * difficultyScale, previewMs: 1850 },
-    { rounds: 2, options: 3, variation: 0.34 * difficultyScale, hue: 85 * difficultyScale, previewMs: 1700 },
-    { rounds: 2, options: 4, variation: 0.24 * difficultyScale, hue: 55 * difficultyScale, previewMs: 1550 },
-    { rounds: 2, options: 4, variation: 0.17 * difficultyScale, hue: 32 * difficultyScale, previewMs: 1450 },
-    { rounds: 2, options: 6, variation: 0.11 * difficultyScale, hue: 18 * difficultyScale, previewMs: 1350 }
-  ];
+  const maxLives = 3;
+  const storageKey = "colorMasterMemoryBest:endless:v1";
 
   const elements = {
     restart: document.getElementById("restartButton"),
@@ -25,6 +16,7 @@
     round: document.getElementById("roundValue"),
     score: document.getElementById("scoreValue"),
     combo: document.getElementById("comboValue"),
+    life: document.getElementById("lifeValue"),
     best: document.getElementById("bestValue"),
     feedback: document.getElementById("feedbackText"),
     resultOverlay: document.getElementById("resultOverlay"),
@@ -37,11 +29,14 @@
 
   const state = {
     phase: "ready",
-    questions: [],
+    currentQuestion: null,
+    random: Math.random,
     roundIndex: 0,
+    roundsPlayed: 0,
     score: 0,
     combo: 0,
     maxCombo: 0,
+    lives: maxLives,
     correctCount: 0,
     startedAt: 0,
     quizStartedAt: 0,
@@ -79,11 +74,14 @@
   function startGame() {
     clearTimers();
     state.phase = "preview";
-    state.questions = buildQuestions();
+    state.currentQuestion = null;
+    state.random = mulberry32(Date.now() ^ Math.floor(Math.random() * 0xffffffff));
     state.roundIndex = 0;
+    state.roundsPlayed = 0;
     state.score = 0;
     state.combo = 0;
     state.maxCombo = 0;
+    state.lives = maxLives;
     state.correctCount = 0;
     state.startedAt = performance.now();
     state.locked = false;
@@ -97,11 +95,8 @@
 
   function showPreview() {
     clearTimers();
-    const question = currentQuestion();
-    if (!question) {
-      finishGame();
-      return;
-    }
+    const question = buildQuestion(difficultyForRound(state.roundIndex), state.random, state.roundIndex);
+    state.currentQuestion = question;
 
     state.phase = "preview";
     state.locked = true;
@@ -110,7 +105,7 @@
     elements.target.classList.remove("is-hidden");
     elements.target.classList.add("is-pop");
     elements.target.style.background = colorToCss(question.correct);
-    elements.phaseLabel.textContent = `${state.roundIndex + 1} / ${totalRounds}`;
+    elements.phaseLabel.textContent = `라운드 ${state.roundIndex + 1}`;
     elements.phaseCopy.textContent = "이 색을 기억하세요.";
     elements.feedback.textContent = previewHintForRound(state.roundIndex);
     elements.focusBar.style.transform = "scaleX(1)";
@@ -182,9 +177,10 @@
       elements.feedback.textContent = correctCopy(answerMs, gained, state.combo);
     } else {
       state.combo = 0;
+      state.lives = Math.max(0, state.lives - 1);
       elements.feedback.textContent = isTimeout
-        ? "시간이 다 됐습니다. 정답 색을 확인하세요."
-        : "조금 달랐습니다. 정답 색을 확인하세요.";
+        ? `시간이 지났습니다. 하트 ${state.lives}개 남았습니다.`
+        : `조금 달랐습니다. 하트 ${state.lives}개 남았습니다.`;
     }
 
     elements.target.classList.remove("is-hidden");
@@ -192,10 +188,11 @@
     updateHud();
 
     window.setTimeout(() => {
-      state.roundIndex += 1;
-      if (state.roundIndex >= totalRounds) {
+      state.roundsPlayed += 1;
+      if (!isCorrect && state.lives <= 0) {
         finishGame();
       } else {
+        state.roundIndex = state.roundsPlayed;
         showPreview();
       }
     }, isCorrect ? 650 : 980);
@@ -205,6 +202,8 @@
     clearTimeout(state.quizTimer);
     clearInterval(state.focusTimer);
     const startedAt = performance.now();
+    const question = currentQuestion();
+    const quizLimitMs = question?.quizLimitMs || 10000;
     elements.focusBar.style.transform = "scaleX(1)";
     state.focusTimer = window.setInterval(() => {
       const ratio = Math.max(0, 1 - (performance.now() - startedAt) / quizLimitMs);
@@ -220,12 +219,14 @@
     state.phase = "result";
     state.locked = true;
     const elapsedMs = Math.max(1, performance.now() - state.startedAt);
-    const accuracy = Math.round((state.correctCount / totalRounds) * 100);
+    const roundsPlayed = Math.max(1, state.roundsPlayed);
+    const accuracy = Math.round((state.correctCount / roundsPlayed) * 100);
     const previousBest = state.best.score || 0;
     const isNewBest = state.score > previousBest;
     if (isNewBest) {
       state.best = {
         score: state.score,
+        roundsPlayed,
         accuracy,
         elapsedMs: Math.round(elapsedMs),
         maxCombo: state.maxCombo,
@@ -236,8 +237,8 @@
 
     elements.start.disabled = false;
     elements.start.textContent = "다시";
-    elements.resultTitle.textContent = isNewBest ? "새 최고 기록" : resultTitleForAccuracy(accuracy);
-    elements.resultCopy.textContent = resultCopy(accuracy, state.score, isNewBest);
+    elements.resultTitle.textContent = isNewBest ? "새 최고 기록" : `${roundsPlayed}라운드 생존`;
+    elements.resultCopy.textContent = resultCopy(roundsPlayed, accuracy, state.score, isNewBest);
     elements.resultAccuracy.textContent = `정확도 ${accuracy}%`;
     elements.resultTime.textContent = `시간 ${(elapsedMs / 1000).toFixed(1)}초`;
     elements.resultCombo.textContent = `최고 콤보 ${state.maxCombo}`;
@@ -247,21 +248,25 @@
   }
 
   function updateHud() {
-    elements.round.textContent = `${Math.min(state.roundIndex + (state.phase === "ready" ? 0 : 1), totalRounds)}/${totalRounds}`;
+    const visibleRound = state.phase === "ready" ? 0 : state.phase === "result" ? state.roundsPlayed : state.roundIndex + 1;
+    elements.round.textContent = String(visibleRound);
     elements.score.textContent = String(state.score);
     elements.combo.textContent = String(state.combo);
+    elements.life.textContent = "♥".repeat(state.lives).padEnd(maxLives, "·");
     elements.best.textContent = String(Math.max(state.best.score || 0, state.score));
   }
 
-  function buildQuestions() {
-    const random = mulberry32(Date.now() ^ Math.floor(Math.random() * 0xffffffff));
-    const questions = [];
-    for (const step of steps) {
-      for (let i = 0; i < step.rounds; i += 1) {
-        questions.push(buildQuestion(step, random, questions.length));
-      }
-    }
-    return questions.slice(0, totalRounds);
+  function difficultyForRound(roundIndex) {
+    const options = roundIndex < 3 ? 2 : roundIndex < 8 ? 3 : roundIndex < 18 ? 4 : 6;
+    const pressure = Math.min(1, roundIndex / 34);
+    const latePressure = Math.max(0, roundIndex - 18);
+    return {
+      options,
+      variation: clamp(0.21 - pressure * 0.15 - latePressure * 0.0018, 0.035, 0.21),
+      hue: clamp(62 - pressure * 46 - latePressure * 0.65, 6, 62),
+      previewMs: Math.round(clamp(1850 - roundIndex * 35, 850, 1850)),
+      quizLimitMs: Math.round(clamp(10000 - roundIndex * 85, 6500, 10000))
+    };
   }
 
   function buildQuestion(step, random, roundIndex) {
@@ -284,6 +289,7 @@
       options,
       answerIndex: options.indexOf(correct),
       previewMs: step.previewMs,
+      quizLimitMs: step.quizLimitMs,
       level: roundIndex + 1
     };
   }
@@ -298,7 +304,7 @@
 
   function variantColor(base, step, random, roundIndex) {
     const direction = random() > 0.5 ? 1 : -1;
-    const lateTighten = Math.max(0.62, 1 - roundIndex * 0.028);
+    const lateTighten = Math.max(0.72, 1 - Math.min(roundIndex, 32) * 0.012);
     const hueShift = step.hue * lateTighten * (0.72 + random() * 0.56) * direction;
     const saturationShift = step.variation * 100 * lateTighten * (0.45 + random() * 0.8) * (random() > 0.5 ? 1 : -1);
     const lightShift = step.variation * 92 * lateTighten * (0.45 + random() * 0.8) * (random() > 0.5 ? 1 : -1);
@@ -311,8 +317,9 @@
 
   function scoreRound(question, answerMs, comboCount) {
     const answerSec = answerMs / 1000;
-    const base = 780 + question.level * 42 + question.options.length * 35;
-    const speedBonus = Math.round(Math.max(0, (quizLimitMs / 1000 - answerSec) / (quizLimitMs / 1000)) * 220);
+    const quizLimitSec = (question.quizLimitMs || 10000) / 1000;
+    const base = 640 + question.level * 58 + question.options.length * 55;
+    const speedBonus = Math.round(Math.max(0, (quizLimitSec - answerSec) / quizLimitSec) * 260);
     const gradeBonus = answerMs <= 2000 ? 240 : answerMs <= 5000 ? 130 : 55;
     const comboBonus = comboCount >= 2 ? Math.min(180, comboCount * 24) : 0;
     return base + speedBonus + gradeBonus + comboBonus;
@@ -324,11 +331,14 @@
   }
 
   function previewHintForRound(roundIndex) {
-    if (roundIndex < 2) {
+    if (roundIndex < 3) {
       return "처음은 넉넉하게 보여드립니다.";
     }
-    if (roundIndex < 6) {
+    if (roundIndex < 8) {
       return "이제 색 차이가 조금 가까워집니다.";
+    }
+    if (roundIndex < 18) {
+      return "보기 수가 늘어납니다. 첫 느낌을 붙잡아보세요.";
     }
     return "작은 차이를 기억해보세요.";
   }
@@ -343,18 +353,18 @@
     return "다시 보면 더 보입니다";
   }
 
-  function resultCopy(accuracy, score, isNewBest) {
+  function resultCopy(roundsPlayed, accuracy, score, isNewBest) {
     if (isNewBest) {
-      return `이번 기록은 ${score}점입니다. 손끝 감각이 제법 반짝였습니다.`;
+      return `${roundsPlayed}라운드까지 버텼습니다. 이번 기록은 ${score}점입니다.`;
     }
     if (accuracy >= 80) {
-      return `이번 기록은 ${score}점입니다. 조금만 더 빠르면 최고 기록도 보입니다.`;
+      return `${roundsPlayed}라운드 생존, ${score}점입니다. 조금만 더 이어가면 최고 기록도 보입니다.`;
     }
-    return `이번 기록은 ${score}점입니다. 첫 색을 조금 더 오래 붙잡아보세요.`;
+    return `${roundsPlayed}라운드 생존, ${score}점입니다. 첫 색을 조금 더 오래 붙잡아보세요.`;
   }
 
   function currentQuestion() {
-    return state.questions[state.roundIndex] || null;
+    return state.currentQuestion;
   }
 
   function colorToCss(color) {
