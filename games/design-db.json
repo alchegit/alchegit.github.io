@@ -1,6 +1,6 @@
 ﻿{
     "schemaVersion":  "games-design-db/v1",
-    "lastUpdated":  "2026-07-07",
+    "lastUpdated":  "2026-07-13",
     "route":  "/games/",
     "catalogTitle":  "NeoKIM Game Cabinet",
     "catalogSubtitle":  "HTML5, Phaser, Defold, Flutter + Flame, Godot, libGDX, Solar2D, L횜VE ?ㅽ뿕?묒쓣 洹?ъ슫 ?쎌? 誘몃━蹂닿린濡?吏꾩뿴?섎뒗 ?ㅺ퀎 DB",
@@ -2121,6 +2121,200 @@
                                                                       "泥??ㅽ뀒?댁? 臾댄뵾寃??꾨? ?섏쭛 諛곗? ?몄텧 ?뺣━"
                                                                   ]
                                            }
+                  },
+                   {
+                      "id":  "html5-hidden-picture-atelier",
+                      "gridSlot":  "G-013",
+                      "status":  "playable",
+                      "priority":  13,
+                      "engine":  "HTML5 Canvas + DOM HUD",
+                      "runtimeTarget":  "GitHub Pages static web game, mobile touch first",
+                      "playableUrl":  "./hidden-picture-atelier/",
+                      "sourceTitle":  "Original NeoKIM hidden-picture prototype",
+                      "sourceUrl":  "",
+                      "sourceRepoUrl":  "",
+                      "licenseNote":  "실존 애니메이션, 사진, 미술작품을 복제하지 않고 장르 감성만 참고해 코드로 그린 원본 장면을 사용한다.",
+                      "workingTitleKo":  "숨은그림 테마 아틀리에",
+                      "workingTitleEn":  "Hidden Picture Theme Atelier",
+                      "oneLineSummary":  "애니풍, 풍경, 중세 예술, 고대, 현대, 동식물 테마 중 하나를 골라 90초 안에 숨은 물건 5개를 찾는 모바일 숨은그림찾기.",
+                      "originalMechanic":  "한 장면 안에 작은 물건을 숨겨두고 제한 시간 안에 목록의 물건을 모두 찾아 탭하는 hidden object / hidden picture 구조.",
+                      "cuteTransformation":  "무작정 빽빽한 난이도가 아니라 테마별 분위기 안에 물건이 자연스럽게 숨어 있고, 찾을 때 작은 반짝임과 도장감 있는 체크 연출이 나오는 가벼운 반복형 게임으로 바꾼다.",
+                      "coreLoop":  [
+                                       "플레이어가 테마 또는 랜덤을 고른다.",
+                                       "90초 안에 장면 속 목표 물건 5개를 찾아 탭한다.",
+                                       "정답을 찾으면 목록이 체크되고 점수, 남은 시간, 반짝임 피드백이 즉시 올라간다.",
+                                       "막히면 힌트를 2번까지 써서 아직 찾지 못한 물건 주변을 잠깐 비춘다.",
+                                       "클리어 후 같은 테마 재도전 또는 랜덤 새 장면으로 바로 이어간다."
+                                   ],
+                      "preview":  {
+                                      "animationKey":  "hidden-picture-atelier",
+                                      "gifLoopSeconds":  4,
+                                      "pixelObjects":  [
+                                                           "테마 카드가 천천히 바뀌는 배경",
+                                                           "돋보기 커서",
+                                                           "찾은 물건 체크 반짝임",
+                                                           "5개 목표 칩"
+                                                       ]
+                                  },
+                      "prototypePlan":  {
+                                            "firstPlayableScope":  "테마 6개에 장면 1장씩, 장면마다 숨은 물건 5개, 모바일 터치 판정, 힌트 2회, 로컬 최고 점수 저장까지 구현한다.",
+                                            "engineChoice":  {
+                                                                 "recommended":  "HTML5 Canvas + DOM HUD",
+                                                                 "why":  "숨은 물건의 좌표, 판정 반경, 힌트 링을 장면 데이터와 1:1로 맞춰야 하므로 bitmap 이미지만 배치하는 것보다 코드 기반 canvas가 첫 버전에 적합하다. Phaser를 쓰지 않아도 충돌과 애니메이션 요구가 작고 GitHub Pages에서 빠르게 열린다.",
+                                                                 "imageGenerationPolicy":  "나중에 그림 장수가 늘어날 때는 이미지젠으로 배경 시안을 만들 수 있지만, 초기판은 히트박스와 공정 난이도를 통제하기 위해 코드로 그린 원본 장면을 사용한다."
+                                                             },
+                                            "ruleDecision":  {
+                                                                "targetCount":  5,
+                                                                "timeLimitSeconds":  90,
+                                                                "hintCharges":  2,
+                                                                "whyFive":  "웹에서 반복적으로 가볍게 즐기는 목적이면 3개는 너무 빨리 끝나고 8개 이상은 작은 화면에서 피로하다. 5개는 한 장면을 충분히 둘러보게 하면서도 실패해도 바로 다시 할 수 있는 길이다.",
+                                                                "wrongTapPolicy":  "오답 탭은 큰 벌점보다 짧은 떨림과 2초 감점만 준다. 숨은그림찾기는 탐색 장르이므로 실수 처벌보다 다시 살펴보게 만드는 리듬이 중요하다."
+                                                            },
+                                            "themes":  [
+                                                           {
+                                                               "id":  "anime",
+                                                               "labelKo":  "애니풍",
+                                                               "sceneIntent":  "실존 애니를 닮지 않는 파스텔 루프탑/골목 감성. 선명한 소품과 부드러운 그림자.",
+                                                               "hiddenObjects":  [
+                                                                                     "별 머리핀",
+                                                                                     "작은 열쇠",
+                                                                                     "종이학",
+                                                                                     "방울 참",
+                                                                                     "빨간 리본"
+                                                                                 ]
+                                                           },
+                                                           {
+                                                               "id":  "landscape",
+                                                               "labelKo":  "풍경",
+                                                               "sceneIntent":  "사진처럼 보이는 산과 호수 풍경을 단순화해 자연물 사이에 여행 소품을 숨긴다.",
+                                                               "hiddenObjects":  [
+                                                                                     "나침반",
+                                                                                     "빨간 스카프",
+                                                                                     "동전",
+                                                                                     "발자국",
+                                                                                     "유리병"
+                                                                                 ]
+                                                           },
+                                                           {
+                                                               "id":  "medieval",
+                                                               "labelKo":  "중세 예술",
+                                                               "sceneIntent":  "양피지, 금박, 태피스트리, 성벽 느낌을 섞되 특정 작품을 베끼지 않는다.",
+                                                               "hiddenObjects":  [
+                                                                                     "금반지",
+                                                                                     "깃펜",
+                                                                                     "푸른 리본",
+                                                                                     "작은 성배",
+                                                                                     "낡은 열쇠"
+                                                                                 ]
+                                                           },
+                                                           {
+                                                               "id":  "ancient",
+                                                               "labelKo":  "고대",
+                                                               "sceneIntent":  "동굴 벽화, 사암, 이집트풍 기호를 원본 도형으로 구성한다.",
+                                                               "hiddenObjects":  [
+                                                                                     "스카라브",
+                                                                                     "태양 원반",
+                                                                                     "파피루스",
+                                                                                     "갈대 붓",
+                                                                                     "고양이 상"
+                                                                                 ]
+                                                           },
+                                                           {
+                                                               "id":  "modern",
+                                                               "labelKo":  "현대",
+                                                               "sceneIntent":  "카페와 지하철역 사이의 현대 생활 소품을 밝고 정돈된 장면에 숨긴다.",
+                                                               "hiddenObjects":  [
+                                                                                     "무선 이어버드",
+                                                                                     "교통카드",
+                                                                                     "카메라 렌즈",
+                                                                                     "노란 메모",
+                                                                                     "장난감 자동차"
+                                                                                 ]
+                                                           },
+                                                           {
+                                                               "id":  "wildlife",
+                                                               "labelKo":  "동식물",
+                                                               "sceneIntent":  "정글/사파리 사진 같은 녹색과 햇빛 속에 작은 생물과 탐험 소품을 숨긴다.",
+                                                               "hiddenObjects":  [
+                                                                                     "나비",
+                                                                                     "작은 개구리",
+                                                                                     "빨간 열매",
+                                                                                     "깃털",
+                                                                                     "쌍안경"
+                                                                                 ]
+                                                           }
+                                                       ],
+                                            "difficultyRules":  [
+                                                                  "숨은 물건의 실제 시각 크기는 모바일 기준 18~34px 안에 두되, 탭 판정 반경은 최소 28px 이상으로 둔다.",
+                                                                  "한 장면에서 색만으로 숨기는 물건은 2개 이하로 제한하고, 나머지는 형태 실루엣으로도 알아볼 수 있게 한다.",
+                                                                  "배경과 완전히 같은 색으로 묻어버리는 방식은 금지한다. 주변 대비를 낮추더라도 윤곽선, 반사광, 그림자 중 하나는 남긴다.",
+                                                                  "힌트는 정답 위치를 바로 찍지 않고 1.4초 동안 주변 원을 펄스시켜 플레이어가 스스로 찾은 감각을 유지한다.",
+                                                                  "오답 탭이 계속 나오면 장면 전체를 어렵게 만든 것이므로 다음 장면 추가 때 해당 물건의 위치와 대비를 완화한다."
+                                                              ],
+                                            "futureExpansion":  [
+                                                                   "좋아요와 평균 완료율이 올라가면 테마별 3장, 총 18장으로 늘린다.",
+                                                                   "장면 데이터는 테마, 목표물, 좌표, 판정 반경을 분리해 두어 이미지 교체와 난이도 조정을 빠르게 한다.",
+                                                                   "추후에는 오늘의 랜덤 장면, 연속 클리어 스탬프, 좋아요가 많은 테마 우선 추가를 검토한다."
+                                                               ]
+                                        },
+                      "funDepthReview":  {
+                                             "playerFunHook":  "테마를 고르는 순간 분위기가 바뀌고, 작은 물건을 찾을 때마다 도장 찍히듯 반짝이며 목록이 줄어드는 즉각적인 만족감.",
+                                             "currentDepthGap":  "초기판은 장면 수가 테마당 1장이라 오래 붙잡는 볼륨은 작다. 대신 첫 장면의 공정한 난이도와 빠른 재시작이 핵심이다.",
+                                             "depthUpgradeBacklog":  [
+                                                                         "테마별 두 번째 장면부터는 같은 물건을 다른 시각 패턴에 숨겨 학습과 변주를 만든다.",
+                                                                         "힌트를 쓰지 않고 클리어하면 작은 왕관 배지를 주어 실력 보상을 만든다.",
+                                                                         "좋아요가 많은 테마는 다음 장면 추가 우선순위를 올린다."
+                                                                     ],
+                                             "retentionLoop":  "1분 안팎의 성공/실패 후 랜덤 테마 버튼으로 바로 새 장면을 시작하게 한다.",
+                                             "appCandidateSignal":  "테마 선호도, 좋아요, 클리어율이 쌓이면 모바일 앱 후보로 확장할 수 있다."
+                                          },
+                      "secondPassUpgrade20260713":  {
+                                                        "versionName":  "v2 touch-feedback pass",
+                                                        "reason":  "1차 버전은 테마와 기본 규칙은 갖췄지만, 실제 반복 플레이에서 '찾는 물건을 머릿속에 붙잡는 감각'과 '거의 찾았다는 촉감'이 부족했다. 2차에서는 장면 수를 크게 늘리기보다 손맛과 공정함을 먼저 보강한다.",
+                                                        "plannedChanges":  [
+                                                                                "찾을 물건 목록에 작은 아이콘을 붙여 텍스트만 읽는 피로를 줄인다.",
+                                                                                "정답 근처를 탭했을 때는 완전한 오답처럼 취급하지 않고, 가까움 피드백과 부드러운 링을 보여준다.",
+                                                                                "같은 테마를 반복해도 물건 위치가 아주 조금 변주되도록 라운드별 위치 보정값을 적용한다.",
+                                                                                "힌트 미사용, 오답 없음, 빠른 클리어에 따라 결과 배지를 달리 보여준다."
+                                                                            ],
+                                                        "difficultyGuardrails":  [
+                                                                                     "위치 변주는 각 물건의 원래 맥락을 망치지 않는 3~4% 범위로 제한한다.",
+                                                                                     "가까움 피드백은 정답 반경의 약 1.9배 안에서만 발생시켜 힌트를 공짜로 남발하지 않는다.",
+                                                                                     "아이콘은 정답 위치를 알려주는 단서가 아니라 형태 기억을 돕는 목록 보조 장치로만 쓴다."
+                                                        ],
+                                                        "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                    },
+                      "thirdPassUpgrade20260713":  {
+                                                       "versionName":  "v3 loupe search pass",
+                                                       "reason":  "숨은그림찾기는 정답을 찍는 장르가 아니라 화면을 훑고 의심스러운 구석을 들여다보는 장르다. 2차까지는 탭 피드백은 좋아졌지만, 모바일에서 작은 물건을 손가락으로 자세히 관찰하는 맛이 부족했다.",
+                                                       "plannedChanges":  [
+                                                                               "돋보기 버튼을 추가해 플레이 중 손가락으로 장면 일부를 확대해 훑을 수 있게 한다.",
+                                                                               "돋보기는 정답 위치를 알려주는 힌트가 아니라 사용자가 직접 관찰하는 도구로만 동작한다.",
+                                                                               "돋보기 모드에서는 실수 탭이 발생하지 않도록 탐색과 선택을 명확히 분리한다.",
+                                                                               "결과 배지와 점수 체계는 유지하되, v3는 볼륨 확장보다 조작 감각과 공정한 관찰성을 우선한다."
+                                                                           ],
+                                                       "difficultyGuardrails":  [
+                                                                                    "돋보기 확대율은 약 1.85배로 제한해 장면을 완전히 쉽게 만들지 않는다.",
+                                                                                    "돋보기 원은 모바일 화면의 일부만 덮게 해 전체 장면 기억과 국소 관찰 사이의 리듬을 만든다.",
+                                                                                    "힌트와 돋보기는 목적이 다르다. 힌트는 위치 주변을 잠깐 알려주고, 돋보기는 플레이어가 스스로 의심 지점을 훑는 도구다."
+                                                                                ],
+                                                       "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                   },
+                      "tags":  [
+                                   "html5",
+                                   "canvas",
+                                   "hidden-object",
+                                   "theme",
+                                   "mobile",
+                                   "playable"
+                               ],
+                      "summaryLine":  "G-013 | HTML5 Canvas | 숨은그림 테마 아틀리에 | 테마를 고르고 90초 안에 숨은 물건 5개를 찾는 모바일 숨은그림찾기, /games/hidden-picture-atelier/에서 플레이 가능 | preview=hidden-picture-atelier",
+                      "visibleInCabinet":  true,
+                      "mobileFirstPolicy":  {
+                                                "inputRule":  "모든 핵심 조작은 탭으로 끝난다. 키보드 조작은 필수 입력으로 쓰지 않는다.",
+                                                "minimumTouchTarget":  "목표물은 작게 그려도 hit radius는 최소 28px, 버튼은 최소 44px 이상으로 둔다.",
+                                                "feedbackRule":  "정답 탭, 오답 탭, 힌트 사용, 시간 종료에 각각 색과 모션이 다른 즉시 피드백을 준다."
+                                            }
                   },
                   {
                       "id":  "released-ufo-signal-room",

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>숨은그림 테마 아틀리에 | NeoKIM Game Cabinet</title>
+    <meta name="description" content="테마를 고르고 90초 안에 숨은 물건 5개를 찾는 모바일 HTML5 숨은그림찾기 게임입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/games/hidden-picture-atelier/">
+    <meta property="og:title" content="숨은그림 테마 아틀리에 | NeoKIM Game Cabinet">
+    <meta property="og:description" content="애니풍, 풍경, 중세 예술, 고대, 현대, 동식물 테마에서 숨은 물건을 찾아보세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/games/hidden-picture-atelier/">
+    <meta property="og:image" content="https://alchegit.github.io/og-thumbnail_250511.png?v=3">
+    <meta name="theme-color" content="#fff8e6">
+    <link rel="stylesheet" href="./hidden-picture-atelier.css?v=20260713-v3">
+    <link rel="stylesheet" href="../i18n.css?v=20260708-1">
+    <script defer src="../i18n.js?v=20260708-1"></script>
+    <script defer src="./hidden-picture-atelier.js?v=20260713-v3"></script>
+  </head>
+  <body>
+    <header class="atelier-topbar">
+      <a class="brand-link" href="../">/games</a>
+      <div class="topbar-actions">
+        <a class="home-link" href="../../">NeoKIM</a>
+      </div>
+    </header>
+
+    <main class="atelier-shell" data-games-i18n-ignore>
+      <section class="atelier-hero" aria-labelledby="gameTitle">
+        <div class="title-block">
+          <p id="kickerLabel" class="kicker">Hidden Picture</p>
+          <h1 id="gameTitle">숨은그림 테마 아틀리에</h1>
+          <p id="heroLead" class="hero-lead">테마를 고르고 90초 안에 숨은 물건 5개를 찾아보세요.</p>
+        </div>
+
+        <dl class="hud-strip" aria-label="게임 상태">
+          <div>
+            <dt id="foundLabel">찾음</dt>
+            <dd id="foundValue">0 / 5</dd>
+          </div>
+          <div>
+            <dt id="timeLabel">남은 시간</dt>
+            <dd id="timeValue">90</dd>
+          </div>
+          <div>
+            <dt id="bestLabel">최고 점수</dt>
+            <dd id="bestValue">--</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="atelier-game" aria-label="숨은그림찾기 게임">
+        <aside class="theme-panel">
+          <div class="panel-heading">
+            <p id="themeKicker" class="panel-kicker">Theme</p>
+            <h2 id="themeTitle">테마</h2>
+          </div>
+          <div id="themeButtons" class="theme-buttons" role="group" aria-label="테마 선택"></div>
+        </aside>
+
+        <section class="scene-panel" aria-label="숨은그림 장면">
+          <canvas id="sceneCanvas" width="960" height="640" aria-label="숨은그림 장면"></canvas>
+
+          <div id="readyOverlay" class="overlay-panel">
+            <p id="readyKicker" class="overlay-kicker">Ready</p>
+            <h2 id="readyTitle">장면을 살펴보세요</h2>
+            <p id="readyCopy">목록의 물건 5개를 찾아 탭하면 됩니다.</p>
+            <button id="startButton" class="primary-button" type="button">시작</button>
+          </div>
+
+          <div id="resultOverlay" class="overlay-panel" hidden>
+            <p id="resultKicker" class="overlay-kicker">Result</p>
+            <h2 id="resultTitle">결과</h2>
+            <p id="resultCopy"></p>
+            <div class="result-row">
+              <span id="resultBadge">--</span>
+              <span id="resultScore">0</span>
+              <span id="resultFound">0 / 5</span>
+            </div>
+            <button id="resultButton" class="primary-button" type="button">다시 찾기</button>
+          </div>
+        </section>
+
+        <aside class="target-panel">
+          <div class="panel-heading">
+            <p id="targetKicker" class="panel-kicker">Objects</p>
+            <h2 id="targetTitle">찾을 물건</h2>
+          </div>
+          <ol id="targetList" class="target-list"></ol>
+          <div class="control-grid">
+            <button id="loupeButton" class="secondary-button" type="button" aria-pressed="false">돋보기</button>
+            <button id="hintButton" class="secondary-button" type="button">힌트 2</button>
+            <button id="newGameButton" class="secondary-button" type="button">새 장면</button>
+          </div>
+          <p id="feedbackText" class="feedback-text" aria-live="polite">테마를 고르면 바로 시작할 수 있어요.</p>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

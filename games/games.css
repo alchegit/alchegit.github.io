@@ -468,11 +468,18 @@ h1 {
 
 .play-actions {
   margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
 }
 
-.play-link {
+.play-actions.has-install {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.play-link,
+.install-link {
   min-height: 40px;
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -487,7 +494,31 @@ h1 {
   box-shadow: 3px 3px 0 var(--line);
 }
 
-.play-link:hover {
+.play-link {
+  width: 100%;
+}
+
+.install-link {
+  min-width: 62px;
+  padding-inline: 10px;
+  background: #ffffff;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.install-link::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border: 2px solid var(--line);
+  border-radius: 4px;
+  background: var(--accent);
+  box-shadow: inset -3px -3px 0 rgba(24, 32, 51, 0.12);
+}
+
+.play-link:hover,
+.install-link:hover {
   transform: translate(-1px, -1px);
 }
 
@@ -1442,6 +1473,102 @@ h1 {
   animation: lightBlink 2.1s steps(2) infinite;
 }
 
+.preview-hidden-picture-atelier {
+  background:
+    radial-gradient(circle at 22% 22%, rgba(255, 216, 90, 0.34), transparent 22%),
+    radial-gradient(circle at 78% 72%, rgba(97, 230, 189, 0.28), transparent 24%),
+    linear-gradient(135deg, #fff8e6 0%, #e8f6ff 52%, #f8edff 100%);
+}
+
+.preview-hidden-picture-atelier .picture-card {
+  width: 86px;
+  height: 72px;
+  border: 3px solid var(--line);
+  border-radius: 7px;
+  box-shadow: 4px 4px 0 rgba(24, 32, 51, 0.8);
+}
+
+.preview-hidden-picture-atelier .picture-card.anime {
+  left: 17%;
+  top: 20%;
+  background:
+    linear-gradient(180deg, rgba(127, 200, 255, 0.78) 0 45%, rgba(255, 216, 90, 0.76) 46% 100%),
+    #ffffff;
+  animation: hiddenCardOne 4s steps(1) infinite;
+}
+
+.preview-hidden-picture-atelier .picture-card.jungle {
+  right: 14%;
+  bottom: 20%;
+  background:
+    radial-gradient(circle at 32% 26%, #ffd86a 0 9%, transparent 10%),
+    linear-gradient(180deg, #c9f7a7 0%, #62b972 54%, #2f694d 100%);
+  animation: hiddenCardTwo 4s steps(1) infinite;
+}
+
+.preview-hidden-picture-atelier .hidden-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--berry);
+  animation: hiddenDotBlink 2s steps(2) infinite;
+}
+
+.preview-hidden-picture-atelier .d1 {
+  left: 28%;
+  top: 33%;
+}
+
+.preview-hidden-picture-atelier .d2 {
+  right: 26%;
+  bottom: 38%;
+  background: var(--lemon);
+  animation-delay: 0.25s;
+}
+
+.preview-hidden-picture-atelier .d3 {
+  left: 51%;
+  top: 59%;
+  background: var(--mint);
+  animation-delay: 0.5s;
+}
+
+.preview-hidden-picture-atelier .magnifier {
+  left: 36%;
+  top: 47%;
+  width: 38px;
+  height: 38px;
+  border: 5px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.38);
+  animation: magnifierSearch 4s ease-in-out infinite;
+}
+
+.preview-hidden-picture-atelier .magnifier::after {
+  content: "";
+  position: absolute;
+  right: -15px;
+  bottom: -12px;
+  width: 22px;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--line);
+  transform: rotate(45deg);
+}
+
+.preview-hidden-picture-atelier .found-flash {
+  left: 58%;
+  top: 28%;
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--line);
+  border-radius: 50%;
+  background: var(--mint);
+  opacity: 0;
+  animation: foundFlashPop 4s steps(1) infinite;
+}
+
 .preview-jelly-bricks {
   background: linear-gradient(180deg, #f6edff 0%, #d8fff4 100%);
 }
@@ -1836,6 +1963,34 @@ h1 {
 @keyframes letterBlink {
   0%, 100% { opacity: 0.45; }
   50% { opacity: 1; }
+}
+
+@keyframes hiddenCardOne {
+  0%, 47% { transform: translate(0, 0); }
+  48%, 100% { transform: translate(10px, 8px); }
+}
+
+@keyframes hiddenCardTwo {
+  0%, 47% { transform: translate(0, 0); }
+  48%, 100% { transform: translate(-10px, -8px); }
+}
+
+@keyframes hiddenDotBlink {
+  0%, 40%, 100% { opacity: 0.42; }
+  41%, 62% { opacity: 1; }
+}
+
+@keyframes magnifierSearch {
+  0% { transform: translate(0, 0); }
+  28% { transform: translate(52px, -28px); }
+  58% { transform: translate(96px, 34px); }
+  82% { transform: translate(18px, 46px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes foundFlashPop {
+  0%, 44%, 100% { opacity: 0; transform: scale(0.7); }
+  45%, 61% { opacity: 1; transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {

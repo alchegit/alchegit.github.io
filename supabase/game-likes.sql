@@ -45,7 +45,8 @@ as $$
     'released-dark-maze-lab-run',
     'phaser-jelly-brick-shop',
     'solar2d-lunchbox-tapper',
-    'love-moon-letter-runner'
+    'love-moon-letter-runner',
+    'html5-hidden-picture-atelier'
   ]::text[];
 $$;
 

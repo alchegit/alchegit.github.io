@@ -16,6 +16,13 @@ const accentColors = [
 const likeStorageKey = "neokim-game-cabinet-liked:v1";
 const visitorStorageKey = "neokim-game-cabinet-visitor:v1";
 const candidateReportElementId = "candidateMetricsReport";
+const appInstallUrlsByGameId = {
+  "released-dark-maze-lab-run": "https://play.google.com/store/apps/details?id=com.neokim.darkmaze&referrer=utm_source%3Dneokim_site%26utm_medium%3Dgames%26utm_campaign%3Ddarkmaze%26utm_content%3Dcabinet_card",
+  "released-color-master-2-spectrum-sprint": "https://play.google.com/store/apps/details?id=com.codexdev.color_master2&referrer=utm_source%3Dneokim_site%26utm_medium%3Dgames%26utm_campaign%3Dcolor_master2%26utm_content%3Dcabinet_card",
+  "released-color-master-memory": "https://play.google.com/store/apps/details?id=com.neokim.colormaster&referrer=utm_source%3Dneokim_site%26utm_medium%3Dgames%26utm_campaign%3Dcolormaster%26utm_content%3Dcabinet_card",
+  "released-galacticode-cipher-lab": "https://play.google.com/store/apps/details?id=com.galactic.speak&referrer=utm_source%3Dneokim_site%26utm_medium%3Dgames%26utm_campaign%3Dgalacticode%26utm_content%3Dcabinet_card",
+  "released-ufo-signal-room": "https://play.google.com/store/apps/details?id=com.call_the_ufo&referrer=utm_source%3Dneokim_site%26utm_medium%3Dgames%26utm_campaign%3Dcall_the_ufo%26utm_content%3Dcabinet_card"
+};
 
 let catalogGames = [];
 let activeFilter = { type: "all", value: "all" };
@@ -68,6 +75,16 @@ function compareCatalogGames(a, b) {
   const releaseDelta = Number(isReleasedAppGame(b)) - Number(isReleasedAppGame(a));
   if (releaseDelta !== 0) {
     return releaseDelta;
+  }
+
+  if (isReleasedAppGame(a) && isReleasedAppGame(b)) {
+    const releaseSlotDelta = String(b.gridSlot || "").localeCompare(String(a.gridSlot || ""), "ko", {
+      numeric: true,
+      sensitivity: "base"
+    });
+    if (releaseSlotDelta !== 0) {
+      return releaseSlotDelta;
+    }
   }
 
   const slotDelta = String(a.gridSlot || "").localeCompare(String(b.gridSlot || ""), "ko", {
@@ -211,6 +228,7 @@ function renderGameCard(game, index) {
   const accent = accentColors[index % accentColors.length];
   const tags = Array.isArray(game.tags) ? game.tags.slice(0, 4) : [];
   const playableUrl = game.playableUrl || game.demoUrl || "";
+  const appInstallUrl = appInstallUrlsByGameId[game.id] || "";
   const liked = likedGameIds.has(game.id);
   const likeCount = getLikeCount(game.id);
   const title = gameText(game, "title", game.workingTitleKo);
@@ -235,7 +253,12 @@ function renderGameCard(game, index) {
           <span class="engine-pill">${escapeHtml(game.engine)}</span>
           ${tags.map((tag) => `<span class="tag-pill">${escapeHtml(getI18n()?.tag ? getI18n().tag(tag) : tag)}</span>`).join("")}
         </div>
-        ${playableUrl ? `<div class="play-actions"><a class="play-link" href="${escapeHtml(playableUrl)}">${escapeHtml(t("action.play", "플레이"))}</a></div>` : ""}
+        ${playableUrl ? `
+          <div class="play-actions${appInstallUrl ? " has-install" : ""}">
+            <a class="play-link" href="${escapeHtml(playableUrl)}">${escapeHtml(t("action.play", "플레이"))}</a>
+            ${appInstallUrl ? `<a class="install-link" href="${escapeHtml(appInstallUrl)}" target="_blank" rel="noopener" aria-label="${escapeHtml(`${title} ${t("action.install", "앱 설치")}`)}">${escapeHtml(t("action.installShort", "설치"))}</a>` : ""}
+          </div>
+        ` : ""}
         <div class="card-actions" hidden aria-hidden="true">
           <a class="card-link" href="${escapeHtml(game.sourceUrl)}" target="_blank" rel="noopener">${escapeHtml(t("catalog.source", "원본 참고"))}</a>
           <a class="card-link" href="${escapeHtml(game.sourceRepoUrl)}" target="_blank" rel="noopener">${escapeHtml(t("catalog.docs", "소스/문서"))}</a>
@@ -539,6 +562,18 @@ function renderPreview(animationKey = "") {
           <span class="scene-piece maze-exit"></span>
           <span class="scene-piece maze-rat"></span>
           <span class="scene-piece maze-light"></span>
+        </div>
+      `;
+    case "hidden-picture-atelier":
+      return `
+        <div class="preview-stage preview-hidden-picture-atelier">
+          <span class="scene-piece picture-card anime"></span>
+          <span class="scene-piece picture-card jungle"></span>
+          <span class="scene-piece hidden-dot d1"></span>
+          <span class="scene-piece hidden-dot d2"></span>
+          <span class="scene-piece hidden-dot d3"></span>
+          <span class="scene-piece magnifier"></span>
+          <span class="scene-piece found-flash"></span>
         </div>
       `;
     case "jelly-bricks":
