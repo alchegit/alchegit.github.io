@@ -26,13 +26,17 @@
   const table = { x: 510, y: 432, w: 250, h: 24 };
   const floorY = 500;
   const maxPull = 118;
+  const projectileGravity = 540;
+  const blockGravity = 660;
+  const marshmallowBurstThreshold = 510;
+  const comboWindowSeconds = 1.05;
   const bestStarsStorageKey = "marshmallowSlingBestStars:v1";
   const progressStorageKey = "marshmallowSlingProgress:v2";
   const likedReplaysStorageKey = "marshmallowSlingLikedReplays:v1";
   const tools = {
-    bouncy: { label: "통통", color: "#fff1d6", radius: 17, power: 6.55, impact: 1.18, bounce: 1.32, unlockStars: 0 },
-    heavy: { label: "무거움", color: "#f4b860", radius: 20, power: 5.9, impact: 1.72, bounce: 0.74, unlockStars: 3 },
-    sticky: { label: "끈적", color: "#a7f1dd", radius: 18, power: 6.1, impact: 1.32, bounce: 0.58, unlockStars: 6 }
+    bouncy: { label: "통통", color: "#fff1d6", radius: 17, power: 6.75, impact: 1.28, bounce: 1.42, unlockStars: 0 },
+    heavy: { label: "무거움", color: "#f4b860", radius: 20, power: 6.02, impact: 1.9, bounce: 0.82, unlockStars: 3 },
+    sticky: { label: "끈적", color: "#a7f1dd", radius: 18, power: 6.22, impact: 1.42, bounce: 0.64, unlockStars: 6 }
   };
   const materials = {
     cookie: { label: "쿠키", push: 1.18, lift: 1.08, rotate: 1.18, friction: 0.985, color: "#f0b96f" },
@@ -128,6 +132,8 @@
       accidentalDrops: 0,
       shotTargets: 0,
       comboBest: 0,
+      impactCombo: 0,
+      comboTimer: 0,
       crackShots: 0,
       bestStars: stageBest.stars,
       minShots: stageBest.minShots,
@@ -142,9 +148,12 @@
       currentReplay: [],
       lastReplay: stageBest.replay,
       hint: `${stage.name} / ${tools[selectedTool].label} 마시멜로`,
+      launchPower: 0,
       projectile: makeProjectile(selectedTool),
       blocks: makeBlocks(stage),
-      crumbs: []
+      crumbs: [],
+      shockwaves: [],
+      floatTexts: []
     };
     resultOverlay.hidden = true;
     syncToolButtons();
@@ -192,7 +201,8 @@
       dynamic: false,
       hit: false,
       cleared: false,
-      penaltyCounted: false
+      penaltyCounted: false,
+      burstRewarded: false
     };
   }
 
@@ -259,7 +269,9 @@
 
     event.preventDefault();
     state.dragging = true;
-    canvas.setPointerCapture(event.pointerId);
+    if (canvas.setPointerCapture && event.pointerId !== undefined) {
+      canvas.setPointerCapture(event.pointerId);
+    }
     moveDrag(event);
   }
 
@@ -304,11 +316,18 @@
 
     state.shots -= 1;
     state.shotTargets = 0;
+    state.impactCombo = 0;
+    state.comboTimer = 0;
+    state.launchPower = power;
     state.currentReplay = [];
     state.phase = "flight";
     projectile.active = true;
     projectile.vx = pullX * tool.power;
     projectile.vy = pullY * tool.power;
+    addShockwave(sling.x, sling.y, tool.color, clamp(power / maxPull, 0.38, 1));
+    if (power > maxPull * 0.82) {
+      addFloatText(sling.x + 44, sling.y - 38, "FULL PULL!", "#ffd85a");
+    }
     state.hint = "날아갑니다! 분홍 별표 블록이 테이블 밖으로 밀리면 성공이에요.";
     updateHud();
   }
@@ -412,13 +431,38 @@
       state.crumbs.push({
         x,
         y,
-        vx: (Math.random() - 0.5) * 150,
-        vy: -Math.random() * 120 - 20,
-        life: 0.9,
-        maxLife: 0.9,
-        color
+        vx: (Math.random() - 0.5) * 190,
+        vy: -Math.random() * 150 - 26,
+        life: 0.82 + Math.random() * 0.28,
+        maxLife: 1.02,
+        color,
+        size: 3 + Math.random() * 4
       });
     }
+  }
+
+  function addShockwave(x, y, color = "#ffd85a", scale = 0.75) {
+    state.shockwaves.push({
+      x,
+      y,
+      color,
+      radius: 12,
+      maxRadius: 54 + 42 * scale,
+      life: 0.38 + 0.14 * scale,
+      maxLife: 0.38 + 0.14 * scale
+    });
+  }
+
+  function addFloatText(x, y, text, color = "#243047") {
+    state.floatTexts.push({
+      x,
+      y,
+      text,
+      color,
+      vy: -54,
+      life: 0.95,
+      maxLife: 0.95
+    });
   }
 
   function circleRectCollision(circle, rect) {
@@ -426,14 +470,46 @@
     const closestY = clamp(circle.y, rect.y, rect.y + rect.h);
     const dx = circle.x - closestX;
     const dy = circle.y - closestY;
+    const distanceSq = dx * dx + dy * dy;
+    let normalX = dx;
+    let normalY = dy;
+
+    if (distanceSq < 0.0001) {
+      const left = Math.abs(circle.x - rect.x);
+      const right = Math.abs(rect.x + rect.w - circle.x);
+      const top = Math.abs(circle.y - rect.y);
+      const bottom = Math.abs(rect.y + rect.h - circle.y);
+      const closestSide = Math.min(left, right, top, bottom);
+      if (closestSide === left) {
+        normalX = -1;
+        normalY = 0;
+      } else if (closestSide === right) {
+        normalX = 1;
+        normalY = 0;
+      } else if (closestSide === top) {
+        normalX = 0;
+        normalY = -1;
+      } else {
+        normalX = 0;
+        normalY = 1;
+      }
+    } else {
+      const invDistance = 1 / Math.sqrt(distanceSq);
+      normalX *= invDistance;
+      normalY *= invDistance;
+    }
+
     return {
-      hit: dx * dx + dy * dy < circle.r * circle.r,
+      hit: distanceSq < circle.r * circle.r,
       dx,
-      dy
+      dy,
+      normalX,
+      normalY,
+      penetration: Math.max(0, circle.r - Math.sqrt(distanceSq))
     };
   }
 
-  function hitBlock(block) {
+  function hitBlock(block, collision) {
     if (block.hitCooldown > 0) {
       return;
     }
@@ -443,16 +519,21 @@
     const impactVx = projectile.vx;
     const impactVy = projectile.vy;
     const impact = Math.hypot(impactVx, impactVy);
-    const pushX = impactVx >= 0 ? 1 : -1;
+    const normalX = Number.isFinite(collision?.normalX) ? collision.normalX : -Math.sign(impactVx || 1);
+    const normalY = Number.isFinite(collision?.normalY) ? collision.normalY : 0;
+    const pushX = -normalX || (impactVx >= 0 ? 1 : -1);
+    const impactLevel = clamp((impact / 430) * tool.impact, 0.45, 2.45);
     const material = block.material;
 
     block.dynamic = true;
     block.hit = true;
-    block.hitCooldown = 0.16;
-    block.vx += (impactVx * 0.34 * tool.impact + pushX * 55 * tool.impact) * material.push;
-    block.vy += (impactVy * 0.16 * tool.impact - Math.min(180, impact * 0.14 * tool.impact)) * material.lift;
-    block.angular += pushX * clamp(impact / 520, 0.5, 1.4) * tool.impact * material.rotate;
-    wakeNearbyBlocks(block, impact * tool.impact, pushX);
+    block.hitCooldown = 0.11;
+    block.x += pushX * clamp(collision?.penetration || 0, 0, 8);
+    block.vx += (impactVx * 0.42 * tool.impact + pushX * 118 * impactLevel) * material.push;
+    block.vy += (impactVy * 0.14 * tool.impact - (95 + 62 * impactLevel) - Math.max(0, -normalY) * 88) * material.lift;
+    block.angular += pushX * (1.5 + impactLevel * 1.35) * material.rotate;
+    recordImpactCombo(block, impactLevel);
+    wakeNearbyBlocks(block, impact * tool.impact * 1.08, pushX, 0.95);
     if (isWeakPoint(block)) {
       triggerCrackShot(block, impact, pushX);
     }
@@ -460,20 +541,48 @@
     if (state.currentTool === "sticky") {
       block.vx *= 0.78;
       block.angular *= 0.72;
+      pullNearbyBlocks(block, impactLevel);
     }
 
-    projectile.vx = (-impactVx * 0.23 + pushX * 32) * tool.bounce;
-    projectile.vy = (impactVy * 0.46 - 58) * tool.bounce;
-    state.score += block.target ? 30 : 12;
-    state.hitShake = Math.max(state.hitShake, block.materialId === "glass" ? 0.24 : block.materialId === "choco" ? 0.18 : 0.12);
-    state.hitEcho = `HIT ${block.material.label}`;
+    reflectProjectile(normalX, normalY, pushX, impactLevel);
+    state.score += Math.round((block.target ? 38 : 14) * impactLevel);
+    state.hitShake = Math.max(state.hitShake, block.materialId === "glass" ? 0.28 : block.materialId === "choco" ? 0.22 : 0.15, impactLevel * 0.12);
+    state.hitEcho = impactLevel > 1.65 ? `BOING ${block.material.label}` : `HIT ${block.material.label}`;
     state.hint = block.target
       ? "좋은 명중입니다. 목표 블록이 테이블 밖으로 나가면 큰 점수를 얻어요."
       : "과자 블록이 흔들렸어요. 분홍 별표 블록을 계속 노려봅시다.";
     if (block.target) {
       state.slowTimer = 0.34;
     }
-    addCrumbs(projectile.x, projectile.y, block.color, block.materialId === "glass" ? 14 : 8);
+    addShockwave(projectile.x, projectile.y, block.target ? "#ff74a2" : block.color, impactLevel);
+    addCrumbs(projectile.x, projectile.y, block.color, Math.round((block.materialId === "glass" ? 18 : 10) * impactLevel));
+
+    if (impact > marshmallowBurstThreshold && !block.burstRewarded) {
+      triggerMarshmallowBurst(block, impact, pushX, impactLevel);
+    }
+  }
+
+  function recordImpactCombo(block, impactLevel) {
+    state.comboTimer = comboWindowSeconds;
+    state.impactCombo += block.target || impactLevel > 1.25 ? 1 : 0;
+    if (state.impactCombo > 1) {
+      state.comboBest = Math.max(state.comboBest, state.impactCombo);
+      state.score += state.impactCombo * 26;
+      addFloatText(block.x + block.w / 2, block.y - 14, `COMBO x${state.impactCombo}`, "#ff74a2");
+    } else if (impactLevel > 1.55) {
+      addFloatText(block.x + block.w / 2, block.y - 14, "BOING!", "#ffd85a");
+    }
+  }
+
+  function reflectProjectile(normalX, normalY, pushX, impactLevel) {
+    const projectile = state.projectile;
+    const tool = tools[state.currentTool];
+    const dot = projectile.vx * normalX + projectile.vy * normalY;
+    const bounce = 0.54 * tool.bounce;
+    projectile.vx = (projectile.vx - 2 * dot * normalX) * bounce + pushX * 48 * impactLevel;
+    projectile.vy = (projectile.vy - 2 * dot * normalY) * bounce - 38 * impactLevel;
+    projectile.vx = clamp(projectile.vx, -760, 760);
+    projectile.vy = clamp(projectile.vy, -720, 720);
   }
 
   function isWeakPoint(block) {
@@ -492,14 +601,80 @@
     state.hitShake = Math.max(state.hitShake, 0.34);
     state.hitEcho = `CRACK ${block.label}`;
     state.hint = `CRACK SHOT! 약점 ${block.label}을 맞혔습니다.`;
-    wakeNearbyBlocks(block, impact * 1.45, direction);
+    wakeNearbyBlocks(block, impact * 1.9, direction, 1.25);
+    addShockwave(cx, cy, "#ffd85a", 1.25);
+    addFloatText(cx, cy - 20, "CRACK SHOT!", "#ffd85a");
     addCrumbs(cx, cy, "#ffd85a", 28);
   }
 
-  function wakeNearbyBlocks(source, strength, direction) {
+  function triggerMarshmallowBurst(source, impact, direction, impactLevel) {
+    source.burstRewarded = true;
+    const cx = source.x + source.w / 2;
+    const cy = source.y + source.h / 2;
+    const radius = 112 + impactLevel * 34;
+    state.score += Math.round(70 * impactLevel);
+    state.hitShake = Math.max(state.hitShake, 0.42);
+    state.slowTimer = Math.max(state.slowTimer, 0.2);
+    state.hitEcho = "MALLOW BURST";
+    addShockwave(cx, cy, "#fff1d6", 1.5);
+    addFloatText(cx, cy - 28, "MALLOW BURST!", "#fff1d6");
+    addCrumbs(cx, cy, "#fff1d6", 34);
+
+    for (const block of state.blocks) {
+      if (block === source || block.cleared) {
+        continue;
+      }
+
+      const bx = block.x + block.w / 2;
+      const by = block.y + block.h / 2;
+      const dx = bx - cx;
+      const dy = by - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > radius) {
+        continue;
+      }
+
+      const falloff = 1 - dist / radius;
+      const nx = dx / (dist || 1);
+      const impulse = (180 + impact * 0.22) * falloff * block.material.push;
+      block.dynamic = true;
+      block.hit = true;
+      block.hitCooldown = 0.08;
+      block.vx += (nx * impulse + direction * 56 * falloff) * block.material.push;
+      block.vy -= (75 + impulse * 0.24) * block.material.lift;
+      block.angular += (Math.sign(dx) || direction || 1) * (1.7 + falloff * 3.2) * block.material.rotate;
+    }
+  }
+
+  function pullNearbyBlocks(source, impactLevel) {
+    const sx = source.x + source.w / 2;
+    const sy = source.y + source.h / 2;
+    for (const block of state.blocks) {
+      if (block === source || block.cleared) {
+        continue;
+      }
+
+      const cx = block.x + block.w / 2;
+      const cy = block.y + block.h / 2;
+      const dist = Math.hypot(cx - sx, cy - sy);
+      if (dist > 92) {
+        continue;
+      }
+
+      const force = (1 - dist / 92) * impactLevel;
+      block.dynamic = true;
+      block.hit = true;
+      block.vx += (sx - cx) * 1.9 * force;
+      block.vy += (sy - cy) * 0.9 * force - 34 * force;
+      block.angular *= 0.82;
+      addCrumbs(cx, cy, "#a7f1dd", 4);
+    }
+  }
+
+  function wakeNearbyBlocks(source, strength, direction, multiplier = 1) {
     const sourceCx = source.x + source.w / 2;
     const sourceCy = source.y + source.h / 2;
-    const push = clamp(strength / 420, 0.22, 1.65);
+    const push = clamp(strength / 390, 0.28, 2.05) * multiplier;
 
     for (const block of state.blocks) {
       if (block === source || block.cleared || block.hitCooldown > 0.04) {
@@ -522,10 +697,10 @@
       const lift = stacked ? -70 : -26;
       block.dynamic = true;
       block.hit = true;
-      block.hitCooldown = 0.12;
-      block.vx += (side * 170 + direction * 80) * push * block.material.push;
+      block.hitCooldown = 0.09;
+      block.vx += (side * 205 + direction * 96) * push * block.material.push;
       block.vy += lift * push * block.material.lift;
-      block.angular += side * push * 2.8 * block.material.rotate;
+      block.angular += side * push * 3.3 * block.material.rotate;
       addCrumbs(cx, cy, block.color, block.target ? 10 : 5);
     }
   }
@@ -536,7 +711,7 @@
       return;
     }
 
-    projectile.vy += 520 * dt;
+    projectile.vy += projectileGravity * dt;
     projectile.x += projectile.vx * dt;
     projectile.y += projectile.vy * dt;
     projectile.rotation += projectile.vx * dt * 0.03;
@@ -566,7 +741,7 @@
 
       const collision = circleRectCollision(projectile, block);
       if (collision.hit) {
-        hitBlock(block);
+        hitBlock(block, collision);
       }
     }
 
@@ -586,7 +761,7 @@
         continue;
       }
 
-      block.vy += 620 * dt;
+      block.vy += blockGravity * dt;
       block.hitCooldown = Math.max(0, block.hitCooldown - dt);
       block.x += block.vx * dt;
       block.y += block.vy * dt;
@@ -632,6 +807,8 @@
           const comboBonus = state.shotTargets > 1 ? 180 * (state.shotTargets - 1) : 0;
           state.score += 260 + comboBonus;
           state.hint = comboBonus > 0 ? `목표 블록 ${block.label} 콤보!` : `목표 블록 ${block.label} 정리 성공!`;
+          addShockwave(block.x + block.w / 2, block.y + block.h / 2, "#ffd85a", 1.18);
+          addFloatText(block.x + block.w / 2, block.y - 14, comboBonus > 0 ? `TARGET x${state.shotTargets}` : "TARGET!", "#ff74a2");
           addCrumbs(block.x + block.w / 2, block.y + block.h / 2, "#ffd85a", 20);
         } else if (!block.penaltyCounted) {
           block.penaltyCounted = true;
@@ -648,8 +825,56 @@
       }
     }
 
+    resolveBlockContacts();
+
     if (state.targetCleared >= state.targetTotal) {
       finishGame(true);
+    }
+  }
+
+  function resolveBlockContacts() {
+    for (let i = 0; i < state.blocks.length; i += 1) {
+      const a = state.blocks[i];
+      if (a.cleared || !a.dynamic) {
+        continue;
+      }
+
+      for (let j = i + 1; j < state.blocks.length; j += 1) {
+        const b = state.blocks[j];
+        if (b.cleared) {
+          continue;
+        }
+
+        const overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+        const overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        if (overlapX <= 0 || overlapY <= 0) {
+          continue;
+        }
+
+        const ax = a.x + a.w / 2;
+        const bx = b.x + b.w / 2;
+        const direction = Math.sign(bx - ax) || Math.sign(a.vx) || 1;
+        const transfer = clamp((Math.abs(a.vx) + Math.abs(a.vy) + Math.abs(b.vx) + Math.abs(b.vy)) / 620, 0.12, 1.08);
+
+        b.dynamic = true;
+        b.hit = true;
+        b.vx += direction * (72 + overlapX * 4.2) * transfer * b.material.push;
+        b.vy -= (18 + overlapY * 1.6) * transfer * b.material.lift;
+        b.angular += direction * (0.8 + transfer * 1.7) * b.material.rotate;
+        a.vx -= direction * 28 * transfer;
+        a.angular -= direction * 0.65 * transfer;
+
+        if (overlapX < overlapY) {
+          const separate = overlapX * 0.52;
+          a.x -= direction * separate;
+          b.x += direction * separate;
+        } else if (a.y < b.y) {
+          const separate = overlapY * 0.48;
+          a.y -= separate;
+          b.y += separate;
+          a.vy *= -0.08;
+        }
+      }
     }
   }
 
@@ -663,18 +888,40 @@
     });
   }
 
+  function updateEffects(dt) {
+    state.shockwaves = state.shockwaves.filter((wave) => {
+      wave.life -= dt;
+      const progress = 1 - wave.life / wave.maxLife;
+      wave.radius = 12 + (wave.maxRadius - 12) * clamp(progress, 0, 1);
+      return wave.life > 0;
+    });
+
+    state.floatTexts = state.floatTexts.filter((text) => {
+      text.life -= dt;
+      text.y += text.vy * dt;
+      text.vy *= Math.pow(0.9, dt * 60);
+      return text.life > 0;
+    });
+  }
+
   function updateGame(dt) {
     if (!state.active) {
       updateCrumbs(dt);
+      updateEffects(dt);
       return;
     }
 
     const slowDt = state.slowTimer > 0 ? dt * 0.38 : dt;
     state.slowTimer = Math.max(0, state.slowTimer - dt);
     state.hitShake = Math.max(0, state.hitShake - dt);
+    state.comboTimer = Math.max(0, state.comboTimer - dt);
+    if (state.comboTimer <= 0) {
+      state.impactCombo = 0;
+    }
     updateProjectile(slowDt);
     updateBlocks(slowDt);
     updateCrumbs(dt);
+    updateEffects(dt);
 
     if (state.phase === "settle") {
       state.resetTimer -= dt;
@@ -749,8 +996,9 @@
       return;
     }
 
+    const tension = state.dragging ? clamp(distance(projectile, sling) / maxPull, 0, 1) : 0;
     ctx.strokeStyle = "#243047";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 5 + tension * 3;
     ctx.beginPath();
     ctx.moveTo(90, 358);
     ctx.lineTo(projectile.x, projectile.y);
@@ -758,12 +1006,19 @@
     ctx.stroke();
 
     ctx.strokeStyle = "#e95b88";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 3 + tension * 2;
     ctx.beginPath();
     ctx.moveTo(91, 358);
     ctx.lineTo(projectile.x, projectile.y);
     ctx.lineTo(142, 358);
     ctx.stroke();
+
+    if (tension > 0.55) {
+      ctx.fillStyle = "rgba(255, 216, 90, 0.9)";
+      ctx.beginPath();
+      ctx.arc(projectile.x, projectile.y - 24, 5 + tension * 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   function drawPrediction() {
@@ -781,7 +1036,7 @@
     ctx.fillStyle = "rgba(24, 32, 51, 0.32)";
     for (let i = 0; i < 20; i += 1) {
       vx *= 0.996;
-      vy += 520 * 0.055;
+      vy += projectileGravity * 0.055;
       x += vx * 0.055;
       y += vy * 0.055;
       if (i % 2 === 0) {
@@ -809,10 +1064,18 @@
   function drawProjectile() {
     const projectile = state.projectile;
     const tool = tools[state.currentTool];
+    const speed = Math.hypot(projectile.vx, projectile.vy);
+    const pullStretch = state.dragging ? clamp(distance(projectile, sling) / maxPull, 0, 1) * 0.18 : 0;
+    const flightStretch = projectile.active ? clamp(speed / 950, 0, 0.24) : 0;
+    const stretch = pullStretch + flightStretch;
     ctx.save();
     ctx.translate(projectile.x, projectile.y);
     ctx.rotate(projectile.rotation);
+    ctx.scale(1 + stretch, Math.max(0.72, 1 - stretch * 0.55));
+    ctx.shadowColor = tool.color;
+    ctx.shadowBlur = projectile.active || state.dragging ? 16 : 4;
     drawPixelRect(-projectile.r + 1, -projectile.r + 1, projectile.r * 2 - 2, projectile.r * 2 - 2, tool.color);
+    ctx.shadowBlur = 0;
     drawPixelRect(-16, -8, 32, 16, "#fff7ed");
     drawPixelRect(-7, -4, 5, 5, "#243047");
     drawPixelRect(5, -4, 5, 5, "#243047");
@@ -868,10 +1131,45 @@
 
   function drawCrumbs() {
     for (const crumb of state.crumbs) {
-      ctx.globalAlpha = crumb.life / crumb.maxLife;
-      drawPixelRect(crumb.x, crumb.y, 5, 5, crumb.color);
+      ctx.globalAlpha = clamp(crumb.life / crumb.maxLife, 0, 1);
+      drawPixelRect(crumb.x, crumb.y, crumb.size || 5, crumb.size || 5, crumb.color);
     }
     ctx.globalAlpha = 1;
+  }
+
+  function drawShockwaves() {
+    ctx.save();
+    for (const wave of state.shockwaves) {
+      const alpha = clamp(wave.life / wave.maxLife, 0, 1);
+      ctx.globalAlpha = alpha * 0.65;
+      ctx.strokeStyle = wave.color;
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = alpha * 0.18;
+      ctx.fillStyle = wave.color;
+      ctx.beginPath();
+      ctx.arc(wave.x, wave.y, wave.radius * 0.58, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawFloatTexts() {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "900 16px ui-monospace, Consolas, monospace";
+    for (const item of state.floatTexts) {
+      ctx.globalAlpha = clamp(item.life / item.maxLife, 0, 1);
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#243047";
+      ctx.strokeText(item.text, item.x, item.y);
+      ctx.fillStyle = item.color;
+      ctx.fillText(item.text, item.x, item.y);
+    }
+    ctx.restore();
   }
 
   function drawRunOverlay() {
@@ -968,9 +1266,11 @@
     drawReplayTrail();
     drawPrediction();
     drawSling();
+    drawShockwaves();
     state.blocks.forEach(drawBlock);
     drawProjectile();
     drawCrumbs();
+    drawFloatTexts();
     drawRunOverlay();
     ctx.restore();
   }

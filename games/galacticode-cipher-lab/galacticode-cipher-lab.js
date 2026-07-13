@@ -48,6 +48,7 @@
     best: document.getElementById("bestValue"),
     phase: document.getElementById("phaseLabel"),
     cipherCard: document.getElementById("cipherCard"),
+    cluePanel: document.getElementById("cluePanel"),
     optionGrid: document.getElementById("optionGrid"),
     feedback: document.getElementById("feedbackText"),
     result: document.getElementById("resultOverlay"),
@@ -68,6 +69,10 @@
     maxStreak: 0,
     correct: 0,
     answerStartedAt: 0,
+    clueTimer: 0,
+    clueRevealed: false,
+    cluesUsed: 0,
+    fastSolves: 0,
     best: loadBest()
   };
 
@@ -80,6 +85,10 @@
   elements.optionGrid.addEventListener("click", handleAnswer);
   elements.seedButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.phase === "playing") {
+        elements.feedback.textContent = "진행 중에는 seed가 고정됩니다.";
+        return;
+      }
       state.seedIndex = Number(button.dataset.seedIndex) || 0;
       elements.seedButtons.forEach((item) => item.classList.toggle("is-active", item === button));
       updateEncodedOutput();
@@ -93,12 +102,17 @@
   renderReadyPuzzle();
 
   function renderReadyPuzzle() {
+    clearTimeout(state.clueTimer);
     state.phase = "ready";
     elements.result.hidden = true;
     elements.start.disabled = false;
     elements.start.textContent = "해독 시작";
+    elements.seedButtons.forEach((button) => {
+      button.disabled = false;
+    });
     elements.phase.textContent = `Seed ${currentLanguage().name}`;
     elements.cipherCard.textContent = encodeText("준비 완료", currentLanguage().seed);
+    elements.cluePanel.innerHTML = "";
     elements.optionGrid.innerHTML = "";
     elements.feedback.textContent = "seed를 고르면 같은 문장도 다른 은하 문자로 바뀝니다.";
     updateHud();
@@ -112,9 +126,16 @@
     state.streak = 0;
     state.maxStreak = 0;
     state.correct = 0;
+    state.clueRevealed = false;
+    state.cluesUsed = 0;
+    state.fastSolves = 0;
+    clearTimeout(state.clueTimer);
     elements.result.hidden = true;
     elements.start.disabled = true;
     elements.start.textContent = "진행중";
+    elements.seedButtons.forEach((button) => {
+      button.disabled = true;
+    });
     renderRound();
   }
 
@@ -125,13 +146,37 @@
       return;
     }
     state.answerStartedAt = performance.now();
+    state.clueRevealed = false;
+    clearTimeout(state.clueTimer);
     elements.phase.textContent = `${state.roundIndex + 1} / ${roundCount}`;
     elements.cipherCard.textContent = encodeText(round.answer, currentLanguage().seed);
+    renderCluePanel(round, false);
     elements.optionGrid.innerHTML = round.options
       .map((option, index) => `<button class="answer-button" type="button" data-index="${index}">${escapeHtml(option)}</button>`)
       .join("");
     elements.feedback.textContent = "은하 문장을 읽고 원문을 고르세요.";
+    state.clueTimer = window.setTimeout(() => {
+      if (state.phase !== "playing" || currentRound() !== round) {
+        return;
+      }
+      state.clueRevealed = true;
+      state.cluesUsed += 1;
+      renderCluePanel(round, true);
+      elements.feedback.textContent = "앵커 글리프가 열렸습니다. 보기에서 같은 글자를 찾아보세요.";
+    }, 1450);
     updateHud();
+  }
+
+  function renderCluePanel(round, revealAnchor) {
+    const clue = round.clue;
+    const anchorText = revealAnchor
+      ? `${clue.anchorGlyph} = ${clue.anchorChar} (${clue.anchorPosition}번째)`
+      : "스캔 중...";
+    elements.cluePanel.innerHTML = [
+      `<div class="clue-chip"><span>length</span>${clue.charCount}글자</div>`,
+      `<div class="clue-chip"><span>words</span>${clue.wordCount}마디</div>`,
+      `<div class="clue-chip ${revealAnchor ? "is-anchor" : "is-hidden"}"><span>anchor</span>${escapeHtml(anchorText)}</div>`
+    ].join("");
   }
 
   function handleAnswer(event) {
@@ -145,6 +190,7 @@
     }
     const index = Number(button.dataset.index);
     const buttons = [...elements.optionGrid.querySelectorAll(".answer-button")];
+    clearTimeout(state.clueTimer);
     buttons.forEach((item) => {
       item.disabled = true;
       if (Number(item.dataset.index) === round.answerIndex) {
@@ -154,12 +200,14 @@
     const correct = index === round.answerIndex;
     const elapsedMs = Math.max(0, performance.now() - state.answerStartedAt);
     if (correct) {
-      const gained = scoreAnswer(elapsedMs, state.streak + 1);
+      const wasFastSolve = !state.clueRevealed && elapsedMs < 1450;
+      const gained = scoreAnswer(elapsedMs, state.streak + 1, state.clueRevealed, wasFastSolve);
       state.score += gained;
       state.streak += 1;
       state.maxStreak = Math.max(state.maxStreak, state.streak);
       state.correct += 1;
-      elements.feedback.textContent = `해독 성공 +${gained}점`;
+      state.fastSolves += wasFastSolve ? 1 : 0;
+      elements.feedback.textContent = wasFastSolve ? `빠른 해독 성공 +${gained}점` : `해독 성공 +${gained}점`;
     } else {
       button.classList.add("is-wrong");
       state.streak = 0;
@@ -174,6 +222,7 @@
 
   function finishPuzzle() {
     state.phase = "result";
+    clearTimeout(state.clueTimer);
     const accuracy = Math.round((state.correct / roundCount) * 100);
     const previousBest = state.best.score || 0;
     const isNewBest = state.score > previousBest;
@@ -189,11 +238,14 @@
     }
     elements.start.disabled = false;
     elements.start.textContent = "다시";
+    elements.seedButtons.forEach((button) => {
+      button.disabled = false;
+    });
     elements.resultTitle.textContent = isNewBest ? "새 해독 기록" : resultTitle(accuracy);
-    elements.resultCopy.textContent = resultCopy(accuracy, state.score, isNewBest);
+    elements.resultCopy.textContent = `${resultCopy(accuracy, state.score, isNewBest)} 빠른 해독 ${state.fastSolves}회, 앵커 사용 ${state.cluesUsed}회입니다.`;
     elements.resultAccuracy.textContent = `정확도 ${accuracy}%`;
     elements.resultSeed.textContent = `Seed ${currentLanguage().name}`;
-    elements.resultStreak.textContent = `최고 연속 ${state.maxStreak}`;
+    elements.resultStreak.textContent = `최고 연속 ${state.maxStreak} · 빠른 해독 ${state.fastSolves}`;
     elements.result.hidden = false;
     updateHud();
   }
@@ -206,7 +258,8 @@
       return {
         answer,
         options,
-        answerIndex: options.indexOf(answer)
+        answerIndex: options.indexOf(answer),
+        clue: buildClue(answer, random)
       };
     });
   }
@@ -215,11 +268,28 @@
     return shuffle(puzzles.filter((item) => item !== answer), random).slice(0, 3);
   }
 
-  function scoreAnswer(elapsedMs, streak) {
+  function buildClue(answer, random) {
+    const chars = Array.from(answer).filter((char) => !/\s/u.test(char));
+    const anchorOffset = Math.floor(random() * chars.length);
+    const anchorChar = chars[anchorOffset] || Array.from(answer)[0] || "";
+    const allChars = Array.from(answer);
+    const anchorPosition = Math.max(1, allChars.findIndex((char) => char === anchorChar) + 1);
+    return {
+      charCount: chars.length,
+      wordCount: answer.trim().split(/\s+/u).filter(Boolean).length,
+      anchorChar,
+      anchorGlyph: encodeText(anchorChar, currentLanguage().seed),
+      anchorPosition
+    };
+  }
+
+  function scoreAnswer(elapsedMs, streak, clueRevealed, fastSolve) {
     const base = 900;
     const speed = Math.max(0, Math.round(340 - elapsedMs / 18));
     const streakBonus = Math.min(240, streak * 45);
-    return base + speed + streakBonus;
+    const cluePenalty = clueRevealed ? 120 : 0;
+    const fastBonus = fastSolve ? 220 : 0;
+    return base + speed + streakBonus + fastBonus - cluePenalty;
   }
 
   function updateEncodedOutput() {

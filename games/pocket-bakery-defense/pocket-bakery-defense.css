@@ -126,6 +126,31 @@ canvas:focus-visible {
   background: var(--sky);
 }
 
+.burst-button {
+  background: #fff1d6;
+}
+
+.burst-button.is-ready {
+  background: var(--mint);
+  animation: burstButtonPulse 0.72s ease-in-out infinite alternate;
+}
+
+.burst-button.is-cooling {
+  background: #e8edf1;
+}
+
+@keyframes burstButtonPulse {
+  from {
+    transform: translate(0, 0);
+    box-shadow: 3px 3px 0 var(--line);
+  }
+
+  to {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--line);
+  }
+}
+
 .kicker {
   margin: 0 0 3px;
   color: #526078;

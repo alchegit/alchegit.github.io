@@ -26,27 +26,35 @@
   const cardTotal = 9;
   const grid = { x: 218, y: 86, cell: 116, gap: 12 };
   const foodColors = ["#ffd85a", "#35d7a8", "#e95b88", "#69c8ff", "#ff9a6c", "#8f78ff"];
+  const baseBeatWindows = {
+    perfect: 0.1,
+    good: 0.3,
+    burn: 0.56
+  };
   const menus = [
     {
       id: "sushi",
       name: "초밥",
       pattern: [0, 1, 2, 5, 8, 7, 6, 3, 4, 1, 5, 7, 3, 0, 4, 8, 2, 6],
       accent: "#e95b88",
-      notes: [523, 659, 784, 659]
+      notes: [523, 659, 784, 659],
+      beatCenter: 0.7
     },
     {
       id: "kimbap",
       name: "김밥",
       pattern: [3, 4, 5, 2, 1, 0, 3, 6, 7, 8, 5, 4, 1, 2, 5, 8, 7, 4],
       accent: "#35d7a8",
-      notes: [392, 494, 587, 740]
+      notes: [392, 494, 587, 740],
+      beatCenter: 0.64
     },
     {
       id: "fruit",
       name: "과일",
       pattern: [6, 4, 2, 0, 1, 5, 8, 4, 6, 7, 3, 0, 4, 8, 5, 1, 3, 7],
       accent: "#ffd85a",
-      notes: [440, 554, 660, 880]
+      notes: [440, 554, 660, 880],
+      beatCenter: 0.78
     }
   ];
   const progressStorageKey = "lunchboxTapTapProgress:v2";
@@ -73,10 +81,14 @@
       perfectHits: 0,
       perfectStreak: 0,
       maxPerfectStreak: 0,
+      earlyHits: 0,
+      burntHits: 0,
+      timingOffsetSum: 0,
       filled: 0,
       patternIndex: 0,
       activeCell: menu.pattern[0],
       nextCell: menu.pattern[1],
+      secondNextCell: menu.pattern[2],
       cellStartedAt: performance.now(),
       lastJudge: "READY",
       judgeFlash: 0,
@@ -92,7 +104,7 @@
       stickers: Array.isArray(progress.stickers) ? progress.stickers.slice(0, stickerSlots) : Array.from({ length: stickerSlots }, () => ""),
       friendRecord: normalizeFriendRecord(progress.friendRecord),
       resultCardCode: "",
-      hint: `${dailyMode ? "오늘 메뉴" : menu.name} 도시락 패턴입니다. 반짝이는 칸을 박자에 맞춰 눌러주세요.`
+      hint: `${dailyMode ? "오늘 메뉴" : menu.name} 도시락 패턴입니다. 링이 가운데 선에 닿을 때 톡 눌러주세요.`
     };
     while (state.stickers.length < stickerSlots) {
       state.stickers.push("");
@@ -185,8 +197,12 @@
   function playTapSound(label) {
     const notes = state.menu.notes;
     const note = notes[state.patternIndex % notes.length];
-    if (label === "MISS") {
+    if (label === "MISS" || label === "BURNT") {
       playTone(154, 0.08, "sawtooth", 0.025);
+      return;
+    }
+    if (label === "EARLY") {
+      playTone(note * 0.55, 0.05, "triangle", 0.018);
       return;
     }
     if (label === "LATE") {
@@ -225,6 +241,7 @@
   function chooseNextCell() {
     state.activeCell = state.menu.pattern[state.patternIndex % state.menu.pattern.length];
     state.nextCell = state.menu.pattern[(state.patternIndex + 1) % state.menu.pattern.length];
+    state.secondNextCell = state.menu.pattern[(state.patternIndex + 2) % state.menu.pattern.length];
     state.cellStartedAt = performance.now();
   }
 
@@ -249,15 +266,52 @@
     return -1;
   }
 
+  function currentBeatSpec() {
+    const feverFactor = state.feverTime > 0 ? 0.9 : 1;
+    return {
+      center: (state.menu.beatCenter || 0.7) * feverFactor,
+      perfect: baseBeatWindows.perfect,
+      good: baseBeatWindows.good,
+      burn: baseBeatWindows.burn
+    };
+  }
+
+  function beatInfo(now = performance.now()) {
+    const spec = currentBeatSpec();
+    const elapsed = (now - state.cellStartedAt) / 1000;
+    const offset = elapsed - spec.center;
+    const total = spec.center + spec.burn;
+    let zone = "wait";
+    if (Math.abs(offset) <= spec.perfect) {
+      zone = "perfect";
+    } else if (Math.abs(offset) <= spec.good) {
+      zone = "good";
+    } else if (offset > spec.good) {
+      zone = "late";
+    }
+    return {
+      elapsed,
+      offset,
+      progress: clamp(elapsed / total, 0, 1),
+      remaining: total - elapsed,
+      zone,
+      spec
+    };
+  }
+
   function timingJudge() {
-    const elapsed = (performance.now() - state.cellStartedAt) / 1000;
-    if (elapsed <= 0.52) {
-      return { label: "PERFECT", score: 140, time: 0.55, perfect: true, keepsCombo: true };
+    const info = beatInfo();
+    const absOffset = Math.abs(info.offset);
+    if (info.offset < -info.spec.good) {
+      return { label: "EARLY", score: 0, time: -0.42, perfect: false, keepsCombo: false, advance: false, offset: info.offset };
     }
-    if (elapsed <= 1.02) {
-      return { label: "GOOD", score: 95, time: 0.3, perfect: false, keepsCombo: true };
+    if (absOffset <= info.spec.perfect) {
+      return { label: "PERFECT", score: 160, time: 0.52, perfect: true, keepsCombo: true, advance: true, offset: info.offset };
     }
-    return { label: "LATE", score: 55, time: -0.25, perfect: false, keepsCombo: false };
+    if (absOffset <= info.spec.good) {
+      return { label: "GOOD", score: 100, time: 0.24, perfect: false, keepsCombo: true, advance: true, offset: info.offset };
+    }
+    return { label: "LATE", score: 48, time: -0.32, perfect: false, keepsCombo: false, advance: true, offset: info.offset };
   }
 
   function tapCell(index) {
@@ -267,6 +321,21 @@
 
     if (index === state.activeCell) {
       const judge = timingJudge();
+      if (!judge.advance) {
+        state.combo = 0;
+        state.perfectStreak = 0;
+        state.earlyHits += 1;
+        state.feverTime = Math.max(0, state.feverTime - 0.7);
+        state.timeLeft = Math.max(0, state.timeLeft + judge.time);
+        state.lastJudge = judge.label;
+        state.judgeFlash = 0.46;
+        state.hint = "조금 빨랐어요. 링이 가운데 선에 가까워질 때 다시 톡 눌러주세요.";
+        playTapSound(judge.label);
+        addSparks(cellCenter(index).x, cellCenter(index).y, "#69c8ff", 8);
+        updateHud();
+        return;
+      }
+
       const color = foodColors[(state.filled + state.combo) % foodColors.length];
       const multiplier = state.feverTime > 0 ? 1.35 : 1;
       const gained = Math.round((judge.score + state.combo * 16) * multiplier);
@@ -279,6 +348,7 @@
       state.timeLeft = clamp(state.timeLeft + judge.time, 0, 36);
       state.lastJudge = judge.label;
       state.judgeFlash = 0.65;
+      state.timingOffsetSum += Math.abs(judge.offset || 0);
 
       if (judge.perfect) {
         state.perfectHits += 1;
@@ -297,7 +367,7 @@
       playTapSound(judge.label);
       state.hint = judge.perfect && state.perfectStreak >= 3
         ? `반짝 피버! PERFECT x${state.perfectStreak} +${gained}`
-        : `${judge.label} +${gained}. ${state.menu.name} 패턴 ${Math.min(state.targetGoal, state.filled + 1)}/${state.targetGoal}`;
+        : `${judge.label} +${gained}. ${state.menu.name} 박자 ${Math.min(state.targetGoal, state.filled + 1)}/${state.targetGoal}`;
       addSparks(cellCenter(index).x, cellCenter(index).y, color, judge.perfect ? 22 : 14);
 
       if (state.filled >= state.targetGoal) {
@@ -346,12 +416,32 @@
     }
   }
 
+  function burnActiveCell() {
+    if (!state.active || state.finished) {
+      return;
+    }
+
+    const index = state.activeCell;
+    state.combo = 0;
+    state.perfectStreak = 0;
+    state.burntHits += 1;
+    state.timeLeft = Math.max(0, state.timeLeft - 0.85);
+    state.lastJudge = "BURNT";
+    state.judgeFlash = 0.58;
+    state.hint = "반찬이 식어버렸어요. 다음 칸의 박자를 보고 다시 이어가세요.";
+    playTapSound("MISS");
+    addSparks(cellCenter(index).x, cellCenter(index).y, "#8f78ff", 12);
+    state.patternIndex += 1;
+    chooseNextCell();
+  }
+
   function gradeForRun(won) {
     const perfectRatio = state.perfectHits / state.targetGoal;
-    if (won && perfectRatio >= 0.78 && state.maxCombo >= Math.floor(state.targetGoal * 0.66)) {
+    const mistakeCount = state.earlyHits + state.burntHits;
+    if (won && perfectRatio >= 0.78 && state.maxCombo >= Math.floor(state.targetGoal * 0.66) && mistakeCount <= 2) {
       return "S";
     }
-    if (won && perfectRatio >= 0.5) {
+    if (won && perfectRatio >= 0.5 && mistakeCount <= 5) {
       return "A";
     }
     if (state.filled >= Math.floor(state.targetGoal * 0.66)) {
@@ -578,11 +668,14 @@
       state.resultCardCode = resultCardCode(grade, won);
       updateDailyRecord(grade);
       const friendCopy = compareWithFriend();
+      const mistakeCopy = state.earlyHits + state.burntHits > 0
+        ? ` EARLY ${state.earlyHits}번, BURNT ${state.burntHits}번.`
+        : " 박자가 깨끗했어요.";
       resultKicker.textContent = "Lunchbox Complete";
       resultTitle.textContent = `도시락 ${grade} 등급`;
       resultCopy.textContent =
         `남은 시간, 콤보, PERFECT 보너스 ${bonus}점을 더해 ${Math.round(state.score)}점을 기록했어요. ` +
-        `${cardMessage || "이미 가진 도시락 카드입니다."} 카드 ${state.resultCardCode}` +
+        `${cardMessage || "이미 가진 도시락 카드입니다."}${mistakeCopy} 카드 ${state.resultCardCode}` +
         `${friendCopy ? ` · 친구 비교 ${friendCopy}` : ""}`;
     } else {
       state.resultCardCode = resultCardCode(grade, won);
@@ -591,7 +684,7 @@
       resultKicker.textContent = "Kitchen Closed";
       resultTitle.textContent = "오늘 도시락 마감";
       resultCopy.textContent =
-        `${state.filled}/${state.targetGoal}칸을 채웠어요. 카드 ${state.resultCardCode}` +
+        `${state.filled}/${state.targetGoal}칸을 채웠어요. EARLY ${state.earlyHits}번, BURNT ${state.burntHits}번. 카드 ${state.resultCardCode}` +
         `${friendCopy ? ` · 친구 비교 ${friendCopy}` : ""}`;
     }
 
@@ -615,6 +708,9 @@
       state.feverTime = Math.max(0, state.feverTime - dt);
       state.rhythmPhraseTime = Math.max(0, state.rhythmPhraseTime - dt);
       state.judgeFlash = Math.max(0, state.judgeFlash - dt);
+      if (beatInfo().remaining <= 0) {
+        burnActiveCell();
+      }
       if (state.timeLeft <= 0) {
         state.timeLeft = 0;
         finishGame(false);
@@ -667,6 +763,7 @@
       const y = grid.y + row * (grid.cell + grid.gap);
       const active = index === state.activeCell && state.active;
       const next = index === state.nextCell && state.active && !active;
+      const secondNext = index === state.secondNextCell && state.active && !active && !next;
       const pulse = active ? 1 + Math.sin(time * 9) * 0.06 : 1;
       const entry = state.cells[index];
       const color = entry ? entry.color : "#fff8e8";
@@ -687,6 +784,19 @@
         ctx.setLineDash([]);
         drawPixelRect(28, -42, 16, 16, "#69c8ff");
       }
+      if (secondNext) {
+        ctx.globalAlpha = 0.58;
+        ctx.strokeStyle = "#8f78ff";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 8]);
+        ctx.strokeRect(-grid.cell / 2 + 16, -grid.cell / 2 + 16, grid.cell - 32, grid.cell - 32);
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+      }
+
+      if (active) {
+        drawBeatRing(time);
+      }
 
       if (entry) {
         ctx.fillStyle = "#243047";
@@ -697,6 +807,43 @@
       }
       ctx.restore();
     }
+  }
+
+  function drawBeatRing(time) {
+    const info = beatInfo();
+    const targetRadius = 32;
+    const movingRadius = 64 - info.progress * 36;
+    const zoneColor = info.zone === "perfect" ? "#fff8e8" : info.zone === "good" ? "#ffd85a" : info.zone === "late" ? "#e95b88" : "#69c8ff";
+
+    ctx.save();
+    ctx.strokeStyle = "rgba(36,48,71,0.72)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(0, 0, targetRadius, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = zoneColor;
+    ctx.lineWidth = info.zone === "perfect" ? 8 : 5;
+    ctx.beginPath();
+    ctx.arc(0, 0, Math.max(18, movingRadius), 0, Math.PI * 2);
+    ctx.stroke();
+
+    if (info.zone === "perfect") {
+      ctx.globalAlpha = 0.36 + Math.sin(time * 18) * 0.1;
+      ctx.fillStyle = "#fff8e8";
+      ctx.beginPath();
+      ctx.arc(0, 0, 42, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    ctx.fillStyle = "#243047";
+    ctx.font = "900 15px ui-monospace, Consolas, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const beatText = info.zone === "wait" ? "..." : info.zone === "perfect" ? "TAP" : info.zone === "late" ? "!" : "tap";
+    ctx.fillText(beatText, 0, 2);
+    ctx.restore();
   }
 
   function drawMenuPanel() {
@@ -716,6 +863,7 @@
     ctx.fillText(`MAX ${state.maxCombo}`, 58, 190);
     ctx.fillText(`CARD ${state.cards.size}/${cardTotal}`, 58, 214);
     ctx.fillText(state.dailyMode ? "DAILY" : "NORMAL", 58, 244);
+    drawBeatMeter(58, 250, 88, 8);
     if (state.feverTime > 0) {
       drawPixelRect(58, 230, 88, 12, "#ffd85a");
       drawPixelRect(58, 230, 88 * (state.feverTime / 5.5), 12, "#e95b88");
@@ -723,6 +871,21 @@
       ctx.lineWidth = 2;
       ctx.strokeRect(58, 230, 88, 12);
     }
+  }
+
+  function drawBeatMeter(x, y, w, h) {
+    if (!state.active) {
+      return;
+    }
+    const info = beatInfo();
+    drawPixelRect(x, y, w, h, "rgba(255,255,255,0.75)");
+    const fill = clamp(info.progress, 0, 1) * w;
+    drawPixelRect(x, y, fill, h, info.zone === "perfect" ? "#35d7a8" : info.zone === "late" ? "#e95b88" : "#69c8ff");
+    const targetX = x + (info.spec.center / (info.spec.center + info.spec.burn)) * w;
+    drawPixelRect(targetX - 2, y - 3, 4, h + 6, "#243047");
+    ctx.strokeStyle = "#243047";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, w, h);
   }
 
   function drawStickerBook() {

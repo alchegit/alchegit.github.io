@@ -331,8 +331,8 @@
 
   const state = {
     locale: "ko",
-    selectedSceneId: "anime",
-    scene: scenes[0],
+    selectedSceneId: "random",
+    scene: pickInitialScene(),
     found: new Set(),
     hintsLeft: maxHints,
     started: false,
@@ -357,6 +357,7 @@
 
   function init() {
     state.locale = currentLocale();
+    state.lastRandomSceneId = state.scene.id;
     preloadSceneImage(state.scene.image);
     renderStaticCopy();
     renderThemeButtons();
@@ -487,29 +488,34 @@
 
   function pickRandomScene() {
     const excludedId = state.scene?.id || state.lastRandomSceneId;
-    const pool = scenes.filter((item) => item.id !== excludedId);
-    const scenePool = pool.length ? pool : scenes;
-    const next = scenePool[Math.floor(Math.random() * scenePool.length)];
+    const next = pickSceneFromPool(scenes, excludedId);
     state.lastRandomSceneId = next.id;
     return next;
   }
 
-  function pickThemeScene(themeId, advance) {
+  function pickThemeScene(themeId) {
     const pool = scenes.filter((item) => item.themeId === themeId);
     if (!pool.length) {
       return scenes[0];
     }
-    if (advance && state.scene?.themeId === themeId) {
-      const currentIndex = pool.findIndex((item) => item.id === state.scene.id);
-      return pool[(currentIndex + 1) % pool.length];
-    }
-    return pool[0];
+    const excludedId = state.scene?.themeId === themeId ? state.scene.id : "";
+    return pickSceneFromPool(pool, excludedId);
+  }
+
+  function pickInitialScene() {
+    return pickSceneFromPool(scenes, "");
+  }
+
+  function pickSceneFromPool(pool, excludedId) {
+    const filtered = pool.filter((item) => item.id !== excludedId);
+    const scenePool = filtered.length ? filtered : pool;
+    return scenePool[Math.floor(Math.random() * scenePool.length)] || scenes[0];
   }
 
   function advanceSceneForSelection() {
     state.scene = state.selectedSceneId === "random"
       ? pickRandomScene()
-      : pickThemeScene(state.selectedSceneId, true);
+      : pickThemeScene(state.selectedSceneId);
   }
 
   function startGame(advanceScene) {
@@ -532,7 +538,7 @@
     if (!keepScene) {
       state.scene = state.selectedSceneId === "random"
         ? pickRandomScene()
-        : pickThemeScene(state.selectedSceneId, false);
+        : pickThemeScene(state.selectedSceneId);
     }
     stopTimer();
     state.found = new Set();
@@ -595,6 +601,11 @@
   }
 
   function renderMarkers() {
+    if (state.ended || !elements.resultOverlay.hidden) {
+      elements.markerLayer.innerHTML = "";
+      return;
+    }
+
     const now = performance.now();
     state.missPings = state.missPings.filter((ping) => now - ping.born < 900);
     const foundMarkers = state.scene.targets
@@ -789,6 +800,7 @@
     elements.resultFound.textContent = `${state.found.size} / ${targetCount}`;
     elements.resultButton.textContent = state.selectedSceneId === "random" ? t("nextRandom") : t("retry");
     elements.resultOverlay.hidden = false;
+    renderMarkers();
     renderHud();
   }
 

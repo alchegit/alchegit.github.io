@@ -74,6 +74,10 @@
       bestComboThisRun: 0,
       edgeShotReady: false,
       angleCombos: 0,
+      sugarRush: 0,
+      sugarRushHits: 0,
+      noHitTimer: 0,
+      lastRushReady: false,
       cleared: 0,
       orderQueue: stage.order.slice(),
       decorateMode: false,
@@ -270,14 +274,14 @@
       resultTitle.textContent = "젤리 진열 완료!";
       resultCopy.textContent =
         `남은 구슬 보너스 ${bonus}점을 더해 ${Math.round(state.score)}점을 기록했어요. ` +
-        `최고 콤보는 ${state.bestComboThisRun}, 카드 ${result.code}, 응원 ${result.record.likes}입니다.`;
+        `최고 콤보는 ${state.bestComboThisRun}, 슈가 러시 ${state.sugarRushHits}회, 카드 ${result.code}, 응원 ${result.record.likes}입니다.`;
     } else {
       const result = syncResultRecord(false);
       resultKicker.textContent = "Shop Closed";
       resultTitle.textContent = "오늘 진열 마감";
       resultCopy.textContent =
         `${state.cleared}/${totalBricks}개 젤리를 정리했어요. ` +
-        `카드 ${result.code}, 응원 ${result.record.likes}. 아이템 젤리를 먼저 노리면 다음 시도가 훨씬 부드러워집니다.`;
+        `슈가 러시 ${state.sugarRushHits}회, 카드 ${result.code}, 응원 ${result.record.likes}. 아이템 젤리와 러시 한 방을 노리면 다음 시도가 훨씬 부드러워집니다.`;
     }
 
     saveProgress();
@@ -303,6 +307,9 @@
   function resetBall() {
     state.balls = [makeBall()];
     state.combo = 0;
+    state.sugarRush = 0;
+    state.noHitTimer = 0;
+    state.lastRushReady = false;
     state.paddle.x = 340;
     state.paddle.targetX = 340;
     state.paddle.flash = 0;
@@ -343,9 +350,13 @@
 
   function hitBrick(brick, ball) {
     bounceBallFromBrick(ball, brick);
+    const rushReady = state.sugarRush >= 1;
+    state.noHitTimer = 0;
+    state.lastRushReady = false;
 
     if (state.orderQueue.length && brick.colorId !== state.orderQueue[0]) {
       state.combo = 0;
+      state.sugarRush = Math.max(0, state.sugarRush - 0.28);
       state.score = Math.max(0, state.score - 15);
       state.hint = `${colorLabel(state.orderQueue[0])} 젤리 주문 먼저`;
       addPop(brick.x + brick.w / 2, brick.y + brick.h / 2, "#ffffff");
@@ -355,9 +366,16 @@
 
     if (brick.hp > 1) {
       brick.hp -= 1;
-      addScore(35 + state.combo * 4);
-      addPop(brick.x + brick.w / 2, brick.y + brick.h / 2, brick.color);
-      state.hint = "두꺼운 젤리는 한 번 더 맞아야 정리됩니다.";
+      const chipBonus = rushReady ? 80 : 0;
+      addScore(35 + state.combo * 4 + chipBonus);
+      addPop(brick.x + brick.w / 2, brick.y + brick.h / 2, rushReady ? "#fff9ed" : brick.color, rushReady ? 1.8 : 1);
+      if (rushReady) {
+        state.sugarRushHits += 1;
+        state.sugarRush = 0;
+      }
+      state.hint = rushReady
+        ? "SUGAR RUSH! 단단한 젤리가 크게 금갔어요."
+        : "두꺼운 젤리는 한 번 더 맞아야 정리됩니다.";
       updateHud();
       return;
     }
@@ -374,8 +392,13 @@
     }
     state.bestComboThisRun = Math.max(state.bestComboThisRun, state.combo);
     state.shelf[brick.colorId] = (state.shelf[brick.colorId] || 0) + 1;
+    const rushBonus = rushReady ? addScore(140 + state.combo * 16) : 0;
+    if (rushReady) {
+      state.sugarRushHits += 1;
+      state.sugarRush = 0;
+    }
     addScore(80 + state.combo * 12 + (brick.kind === "mover" ? 30 : 0) + (brick.kind === "hard" ? 45 : 0));
-    addPop(brick.x + brick.w / 2, brick.y + brick.h / 2, brick.color);
+    addPop(brick.x + brick.w / 2, brick.y + brick.h / 2, rushReady ? "#fff9ed" : brick.color, rushReady ? 2.1 : 1);
 
     if (brick.powerup) {
       spawnPowerup(brick);
@@ -387,7 +410,9 @@
       brick.kind === "hard" ? advanceMission("hard", 1) : ""
     ].filter(Boolean);
 
-    state.hint = state.hint.startsWith("ANGLE COMBO") ? state.hint : (missionMessages[0] || `젤리 정리! 콤보 ${state.combo}`);
+    state.hint = rushReady
+      ? `SUGAR RUSH! 오래 기다린 한 방 +${rushBonus}`
+      : state.hint.startsWith("ANGLE COMBO") ? state.hint : (missionMessages[0] || `젤리 정리! 콤보 ${state.combo}`);
     advanceOrderQueue();
 
     if (state.cleared >= totalBricks) {
@@ -665,6 +690,21 @@
     const targetWidth = state.activePowerups.wide > 0 ? 168 : 120;
     state.paddle.w += (targetWidth - state.paddle.w) * clamp(dt * 12, 0, 1);
     state.paddle.flash = Math.max(0, state.paddle.flash - dt);
+
+    if (state.balls.length > 0 && state.bricks.some((brick) => brick.alive)) {
+      state.noHitTimer += dt;
+      if (state.noHitTimer > 3.2) {
+        state.sugarRush = clamp(state.sugarRush + dt * 0.32, 0, 1);
+      }
+      if (state.sugarRush >= 1 && !state.lastRushReady) {
+        state.lastRushReady = true;
+        state.hint = "SUGAR RUSH 준비! 다음 젤리 명중이 크게 터집니다.";
+      }
+    } else {
+      state.noHitTimer = 0;
+      state.sugarRush = 0;
+      state.lastRushReady = false;
+    }
   }
 
   function updatePaddle(dt) {
@@ -916,7 +956,8 @@
 
   function drawPaddleAndBalls() {
     const paddle = state.paddle;
-    const paddleColor = paddle.flash > 0 ? "#ffd85a" : (state.activePowerups.magnet > 0 ? "#e95b88" : "#ff9a6c");
+    const rushReady = state.sugarRush >= 1;
+    const paddleColor = rushReady ? "#8f78ff" : paddle.flash > 0 ? "#ffd85a" : (state.activePowerups.magnet > 0 ? "#e95b88" : "#ff9a6c");
 
     drawPixelRect(paddle.x, paddle.y, paddle.w, paddle.h, paddleColor);
     drawPixelRect(paddle.x + 12, paddle.y + 4, Math.max(10, paddle.w - 24), 5, "#ffd85a");
@@ -926,7 +967,24 @@
     ctx.lineWidth = 4;
     ctx.strokeRect(paddle.x, paddle.y, paddle.w, paddle.h);
 
+    if (state.sugarRush > 0.01) {
+      const gaugeW = paddle.w * state.sugarRush;
+      drawPixelRect(paddle.x, paddle.y - 12, paddle.w, 6, "rgba(36,48,71,0.22)");
+      drawPixelRect(paddle.x, paddle.y - 12, gaugeW, 6, rushReady ? "#ffd85a" : "#8f78ff");
+      ctx.strokeStyle = rushReady ? "#fff9ed" : "#243047";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(paddle.x, paddle.y - 12, paddle.w, 6);
+    }
+
     for (const ball of state.balls) {
+      if (state.sugarRush > 0.2) {
+        ctx.globalAlpha = 0.25 + state.sugarRush * 0.22;
+        ctx.fillStyle = rushReady ? "#ffd85a" : "#8f78ff";
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r + 9 + state.sugarRush * 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
@@ -935,6 +993,35 @@
       ctx.lineWidth = 3;
       ctx.stroke();
     }
+  }
+
+  function drawSugarRushOverlay() {
+    if (state.sugarRush <= 0.01) {
+      return;
+    }
+
+    const x = width / 2 - 106;
+    const y = 18;
+    const w = 212;
+    const h = 42;
+    ctx.fillStyle = "rgba(255,249,237,0.9)";
+    ctx.strokeStyle = state.sugarRush >= 1 ? "#8f78ff" : "#243047";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 8);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#526078";
+    ctx.font = "900 10px ui-monospace, monospace";
+    ctx.textAlign = "left";
+    ctx.fillText("SUGAR RUSH", x + 14, y + 17);
+    drawPixelRect(x + 14, y + 25, 126, 8, "rgba(36,48,71,0.16)");
+    drawPixelRect(x + 14, y + 25, 126 * state.sugarRush, 8, state.sugarRush >= 1 ? "#ffd85a" : "#8f78ff");
+    ctx.strokeStyle = "#243047";
+    ctx.strokeRect(x + 14, y + 25, 126, 8);
+    ctx.fillStyle = state.sugarRush >= 1 ? "#8f78ff" : "#243047";
+    ctx.font = "900 13px ui-monospace, monospace";
+    ctx.fillText(state.sugarRush >= 1 ? "READY" : `${Math.round(state.sugarRush * 100)}%`, x + 152, y + 33);
   }
 
   function drawPowerups() {
@@ -1004,6 +1091,7 @@
     drawActiveBadges();
     drawOrderOverlay();
     drawStageOverlay();
+    drawSugarRushOverlay();
   }
 
   function loop(timestamp) {

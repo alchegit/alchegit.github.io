@@ -81,6 +81,11 @@
       level: 1,
       combo: 0,
       water: 0,
+      dewSaves: 0,
+      scentTrail: [],
+      scentTrailExpiresAt: 0,
+      scentTrailUses: 0,
+      scentTrailHits: 0,
       timeLeft: roundSeconds,
       gridSize: 3,
       oddIndex: 0,
@@ -248,7 +253,54 @@
     state.baseColor = `hsl(${palette.base[0]} ${palette.base[1]}% ${palette.base[2]}%)`;
     state.oddColor = `hsl(${palette.base[0] + hueShift} ${palette.base[1]}% ${palette.base[2] + lightShift}%)`;
     state.roundStartedAt = performance.now();
-    hintText.textContent = carryMessage || `${state.currentMode.hint} 오늘꽃은 ${state.dailyVariety.name}입니다.`;
+    refreshScentTrail();
+    const scentMessage = state.scentTrail.length ? " 향기 길이 후보 꽃을 잠깐 감쌉니다." : "";
+    hintText.textContent = carryMessage
+      ? `${carryMessage}${scentMessage}`
+      : `${state.currentMode.hint} 오늘꽃은 ${state.dailyVariety.name}입니다.${scentMessage}`;
+  }
+
+  function refreshScentTrail() {
+    state.scentTrail = [];
+    state.scentTrailExpiresAt = 0;
+
+    if (state.combo < 3) {
+      return;
+    }
+
+    const total = state.gridSize * state.gridSize;
+    const targetCount = Math.min(total, state.combo >= 8 ? 5 : 6);
+    const oddRow = Math.floor(state.oddIndex / state.gridSize);
+    const oddCol = state.oddIndex % state.gridSize;
+    const candidates = new Set([state.oddIndex]);
+    const offsets = [
+      [0, -1], [1, 0], [0, 1], [-1, 0],
+      [1, -1], [1, 1], [-1, 1], [-1, -1],
+      [2, 0], [-2, 0], [0, 2], [0, -2]
+    ];
+
+    for (const [dx, dy] of offsets) {
+      if (candidates.size >= targetCount) {
+        break;
+      }
+      const row = oddRow + dy;
+      const col = oddCol + dx;
+      if (row >= 0 && col >= 0 && row < state.gridSize && col < state.gridSize) {
+        candidates.add(row * state.gridSize + col);
+      }
+    }
+
+    while (candidates.size < targetCount) {
+      candidates.add(Math.floor(Math.random() * total));
+    }
+
+    state.scentTrail = [...candidates].sort(() => Math.random() - 0.5);
+    state.scentTrailExpiresAt = performance.now() + 1350 + Math.min(7, state.combo) * 95;
+    state.scentTrailUses += 1;
+  }
+
+  function isScentTrailActive(timestamp = performance.now()) {
+    return state.scentTrail.length > 0 && timestamp <= state.scentTrailExpiresAt;
   }
 
   function handlePointer(event) {
@@ -279,12 +331,17 @@
       const speedBonus = Math.max(0, Math.round((3.2 - elapsed) * 18));
       const modeBonus = ["sparkle", "sway"].includes(state.currentModeId) ? 45 : 20;
       const dailyBonus = state.roundVariety.id === state.dailyVariety.id ? 35 : 0;
+      const scentBonus = isScentTrailActive() && state.scentTrail.includes(index) ? 34 + Math.min(36, state.combo * 4) : 0;
       const nextCombo = state.combo + 1;
-      const gained = 120 + state.level * 18 + state.combo * 15 + speedBonus + modeBonus + dailyBonus;
+      const gained = 120 + state.level * 18 + state.combo * 15 + speedBonus + modeBonus + dailyBonus + scentBonus;
       const waterGain = 1 + Math.floor(nextCombo / 4);
       const unlocked = unlockBloom(nextCombo);
 
       addEffect(index, "hit");
+      if (scentBonus > 0) {
+        state.scentTrailHits += 1;
+        addEffect(index, "scent", 760);
+      }
       if (nextCombo >= 3) {
         addBloomBurst(index, Math.min(5, 2 + Math.floor(nextCombo / 2)));
       }
@@ -297,7 +354,7 @@
       state.timeLeft = Math.min(roundSeconds + 8, state.timeLeft + 1.2 + waterGain * 0.12);
 
       const roundMessage = nextCombo >= 3
-        ? `BLOOM STREAK x${nextCombo}! 꽃잎이 번졌습니다. +${gained}`
+        ? `BLOOM STREAK x${nextCombo}! ${scentBonus > 0 ? "향기 길 성공, " : ""}꽃잎이 번졌습니다. +${gained}`
         : unlocked
         ? `${unlocked.name}이 정원에 피었습니다. +${gained}`
         : `정답입니다. 물방울 +${waterGain}, 점수 +${gained}`;
@@ -315,14 +372,24 @@
     } else {
       state.dailyAnswered += state.dailyMode ? 1 : 0;
       const near = isNearOddIndex(index);
+      const dewSave = near && state.water >= 2 && state.combo >= 2;
       addEffect(index, near ? "near" : "miss");
-      if (near) {
-        addEffect(state.oddIndex, "near");
+      if (dewSave) {
+        state.water -= 2;
+        state.dewSaves += 1;
+        state.score = Math.max(0, state.score - 4);
+        state.timeLeft = Math.max(0, state.timeLeft - 0.25);
+        addEffect(state.oddIndex, "dew", 980);
+        hintText.textContent = "물방울 힌트! 콤보를 지키고 다른 꽃이 잠깐 반짝입니다.";
+      } else {
+        if (near) {
+          addEffect(state.oddIndex, "near");
+        }
+        state.score = Math.max(0, state.score - (near ? 12 : 45));
+        state.combo = near ? Math.max(0, state.combo - 1) : 0;
+        state.timeLeft = Math.max(0, state.timeLeft - (near ? 0.8 : 2.2));
+        hintText.textContent = near ? "따뜻해요. 바로 옆 꽃밭에 다른 꽃이 숨어 있습니다." : "그 꽃은 오늘도 건강해요. 다시 찾아보세요.";
       }
-      state.score = Math.max(0, state.score - (near ? 12 : 45));
-      state.combo = near ? Math.max(0, state.combo - 1) : 0;
-      state.timeLeft = Math.max(0, state.timeLeft - (near ? 0.8 : 2.2));
-      hintText.textContent = near ? "따뜻해요. 바로 옆 꽃밭에 다른 꽃이 숨어 있습니다." : "그 꽃은 오늘도 건강해요. 다시 찾아보세요.";
 
       if (state.dailyMode && state.dailyAnswered >= 10) {
         finishGame();
@@ -599,11 +666,12 @@
     };
   }
 
-  function addEffect(index, type) {
+  function addEffect(index, type, duration = 520) {
     state.effects.push({
       ...getTileBounds(index),
       type,
-      startedAt: performance.now()
+      startedAt: performance.now(),
+      duration: Number.isFinite(duration) && duration > 0 ? duration : 520
     });
   }
 
@@ -616,11 +684,12 @@
     bloomValue.textContent = `${state.unlockedIds.size}/${flowerVarieties.length}`;
     bestValue.textContent = state.best.toString();
     const friend = state.progress.friendRecord;
+    const scentText = isScentTrailActive() ? ` · 향기 ${state.scentTrail.length}` : "";
     comboBadge.textContent = friend
       ? `friend ${friend.correct}/10 · ${friend.score}`
       : state.dailyMode
       ? `daily ${state.dailyAnswered}/10 · ${state.dailyCorrect}정답`
-      : `${state.currentMode.label} · combo ${state.combo} · 물 ${state.water}`;
+      : `${state.currentMode.label} · combo ${state.combo} · 물 ${state.water}${scentText}`;
   }
 
   function finishGame() {
@@ -644,7 +713,7 @@
     saveProgress();
     resultCopy.textContent =
       `${state.dailyMode ? `오늘 ${state.dailyCorrect}/10, ` : ""}점수 ${state.score}점, 레벨 ${state.level}까지 정원을 돌봤습니다. ` +
-      `꽃 ${state.unlockedIds.size}/${flowerVarieties.length}, 최고 콤보 ${state.progress.maxCombo}입니다.` +
+      `꽃 ${state.unlockedIds.size}/${flowerVarieties.length}, 최고 콤보 ${state.progress.maxCombo}, 물방울 힌트 ${state.dewSaves}회, 향기 길 ${state.scentTrailHits}/${state.scentTrailUses}회입니다.` +
       (state.progress.friendRecord ? ` 친구 ${state.progress.friendRecord.correct}/10, ${state.progress.friendRecord.score}점.` : "");
     resultOverlay.hidden = false;
     updateHud();
@@ -672,7 +741,41 @@
       }
     }
 
+    drawScentTrail(timestamp);
     drawEffects(timestamp);
+  }
+
+  function drawScentTrail(timestamp) {
+    if (!isScentTrailActive(timestamp)) {
+      return;
+    }
+
+    const remaining = Math.max(0, state.scentTrailExpiresAt - timestamp);
+    const alpha = Math.min(0.78, remaining / 700);
+    const pulse = 0.5 + Math.sin(timestamp / 105) * 0.5;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    state.scentTrail.forEach((index, order) => {
+      const { x, y, tile } = getTileBounds(index);
+      const cx = x + tile / 2;
+      const cy = y + tile / 2;
+      const r = Math.max(10, tile * (0.2 + pulse * 0.035));
+      ctx.strokeStyle = order % 2 === 0 ? "#35d7a8" : "#ffd85a";
+      ctx.lineWidth = 3;
+      ctx.setLineDash([5, 6]);
+      ctx.strokeRect(x + 8, y + 8, tile - 16, tile - 16);
+      ctx.setLineDash([]);
+      ctx.fillStyle = order % 2 === 0 ? "#35d7a8" : "#ffd85a";
+      ctx.beginPath();
+      ctx.arc(cx, cy + tile * 0.24, r * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = alpha * 0.18;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = alpha;
+    });
+    ctx.restore();
   }
 
   function tileTraits(index, palette) {
@@ -820,30 +923,40 @@
   }
 
   function drawEffects(timestamp) {
-    state.effects = state.effects.filter((effect) => timestamp - effect.startedAt <= 520);
+    state.effects = state.effects.filter((effect) => timestamp - effect.startedAt <= (effect.duration || 520));
 
     state.effects.forEach((effect) => {
       const age = timestamp - effect.startedAt;
-      const pulse = 1 - age / 520;
+      const duration = effect.duration || 520;
+      const pulse = 1 - age / duration;
       const colors = {
         hit: "#35d7a8",
         miss: "#e95b88",
         near: "#ffd85a",
-        bloom: "#69c8ff"
+        bloom: "#69c8ff",
+        dew: "#8f78ff",
+        scent: "#35d7a8"
       };
       ctx.strokeStyle = colors[effect.type] || "#35d7a8";
-      ctx.lineWidth = effect.type === "bloom" ? 4 : 5;
+      ctx.lineWidth = effect.type === "bloom" ? 4 : effect.type === "dew" ? 7 : effect.type === "scent" ? 6 : 5;
       ctx.strokeRect(
         effect.x + 5 - pulse * 6,
         effect.y + 5 - pulse * 6,
         effect.tile - 10 + pulse * 12,
         effect.tile - 10 + pulse * 12
       );
-      if (effect.type === "bloom" || effect.type === "near") {
-        ctx.globalAlpha = Math.max(0, pulse * 0.35);
+      if (effect.type === "bloom" || effect.type === "near" || effect.type === "dew" || effect.type === "scent") {
+        ctx.globalAlpha = Math.max(0, pulse * (effect.type === "dew" ? 0.48 : 0.35));
         ctx.fillStyle = colors[effect.type];
         ctx.fillRect(effect.x + 10, effect.y + 10, effect.tile - 20, effect.tile - 20);
         ctx.globalAlpha = 1;
+      }
+      if (effect.type === "dew") {
+        ctx.fillStyle = "#ffffff";
+        const cx = effect.x + effect.tile / 2;
+        const cy = effect.y + effect.tile / 2;
+        ctx.fillRect(cx - 3, cy - 18, 6, 36);
+        ctx.fillRect(cx - 18, cy - 3, 36, 6);
       }
     });
   }

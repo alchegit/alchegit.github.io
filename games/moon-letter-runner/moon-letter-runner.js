@@ -166,6 +166,9 @@
       moonLineTimer: 0,
       landingBonusReady: false,
       landingGlow: 0,
+      airTime: 0,
+      softLandings: 0,
+      landingChain: 0,
       player: { x: 145, y: 338, w: 30, h: 42, vy: 0, grounded: false, jumpsLeft: 1, invuln: 0 },
       platforms: [],
       pickups: [],
@@ -416,6 +419,7 @@
 
   function updatePlayer(dt) {
     const player = state.player;
+    const wasGrounded = player.grounded;
     if (state.actionHeld && state.hasGlide && !player.grounded && player.vy > -20 && player.jumpsLeft <= 0) {
       state.gliding = true;
     }
@@ -429,17 +433,25 @@
     player.invuln = Math.max(0, player.invuln - dt);
     state.moonLineTimer = Math.max(0, state.moonLineTimer - dt);
     state.landingGlow = Math.max(0, state.landingGlow - dt);
+    if (!wasGrounded) {
+      state.airTime += dt;
+    }
 
     for (const platform of state.platforms) {
       const overlapsX = player.x + player.w > platform.x && player.x < platform.x + platform.w;
       const falling = player.vy >= 0;
       const bottom = player.y + player.h;
       if (overlapsX && falling && bottom >= platform.y && bottom <= platform.y + 24) {
+        const landedFromAir = state.airTime > 0.18;
         player.y = platform.y - player.h;
         player.vy = 0;
         player.grounded = true;
         player.jumpsLeft = state.hasDoubleJump ? 1 : 0;
         state.gliding = false;
+        if (landedFromAir) {
+          handleSoftLanding(platform);
+        }
+        state.airTime = 0;
         if (state.landingBonusReady) {
           const landingBonus = 55 + Math.min(state.moonLine, 5) * 12;
           state.score += landingBonus;
@@ -470,6 +482,8 @@
     if (player.y > height + 60) {
       player.y = 270;
       player.vy = 0;
+      state.airTime = 0;
+      state.landingChain = 0;
       player.invuln = 1.2;
       state.hearts -= 1;
       state.damage += 1;
@@ -480,6 +494,28 @@
     if (state.hearts <= 0) {
       finishGame(false);
     }
+  }
+
+  function handleSoftLanding(platform) {
+    const player = state.player;
+    const playerCenter = player.x + player.w / 2;
+    const platformCenter = platform.x + platform.w / 2;
+    const centerQuality = 1 - Math.abs(playerCenter - platformCenter) / Math.max(1, platform.w / 2);
+    const goodLanding = centerQuality > 0.54 && state.airTime > 0.34;
+
+    if (!goodLanding) {
+      state.landingChain = Math.max(0, state.landingChain - 1);
+      return;
+    }
+
+    state.softLandings += 1;
+    state.landingChain += 1;
+    const routeBonus = platform.route === "high" ? 32 : platform.route === "risky" ? 42 : 18;
+    const bonus = 45 + routeBonus + Math.min(5, state.landingChain) * 16;
+    state.score += bonus;
+    state.landingGlow = Math.max(state.landingGlow, 0.72);
+    state.hint = `SOFT LAND x${state.landingChain}! 발판 중앙 착지 +${bonus}`;
+    addSparks(player.x + player.w * 0.5, player.y + player.h, platform.route === "risky" ? "#ff9a6c" : "#fff4a8", 18 + Math.min(5, state.landingChain) * 3);
   }
 
   function collectLetters() {
@@ -706,7 +742,7 @@
     resultKicker.textContent = won ? "Run Complete" : "Run Paused";
     resultTitle.textContent = won ? `달빛 배달 ${stamp} 스탬프` : "편지길 쉬어가기";
     resultCopy.textContent =
-      `편지 ${state.letters}개, 이야기 ${state.storyThisRun.size}조각, 피해 ${state.damage}회입니다. ` +
+      `편지 ${state.letters}개, 이야기 ${state.storyThisRun.size}조각, SOFT LAND ${state.softLandings}회, 피해 ${state.damage}회입니다. ` +
       `보너스 ${bonus}점을 더해 ${Math.round(state.score)}점을 기록했어요. 카드 ${state.resultCardCode}` +
       `${friendCopy ? ` · 친구 비교 ${friendCopy}` : ""}`;
     saveProgress(stamp);
@@ -776,6 +812,8 @@
       const topColor = platform.route === "high" ? "#fff4a8" : platform.route === "risky" ? "#ff9a6c" : "#fff9ed";
       drawPixelRect(platform.x, platform.y, platform.w, 16, topColor);
       drawPixelRect(platform.x + 8, platform.y + 5, platform.w - 16, 5, "#ffffff");
+      const zoneW = clamp(platform.w * 0.34, 34, 62);
+      drawPixelRect(platform.x + platform.w / 2 - zoneW / 2, platform.y - 5, zoneW, 5, platform.route === "risky" ? "#ff9a6c" : "#fff4a8");
       if (platform.route === "high") {
         for (let x = platform.x + 22; x < platform.x + platform.w - 12; x += 42) {
           drawPixelRect(x, platform.y - 10, 6, 6, "#fff4a8");

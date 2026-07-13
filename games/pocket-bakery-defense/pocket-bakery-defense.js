@@ -6,6 +6,7 @@ const basketValue = document.getElementById("basketValue");
 const waveValue = document.getElementById("waveValue");
 const hintText = document.getElementById("hintText");
 const presetButton = document.getElementById("presetButton");
+const burstButton = document.getElementById("burstButton");
 const restartButton = document.getElementById("restartButton");
 const overlayRestartButton = document.getElementById("overlayRestartButton");
 const upgradeOverlay = document.getElementById("upgradeOverlay");
@@ -20,6 +21,7 @@ const width = 800;
 const height = 520;
 const roundSeconds = 75;
 const basketMax = 100;
+const burstMeterMax = 100;
 const recipeStorageKey = "pocketBakeryRecipes:v1";
 const bestScoreStorageKey = "pocketBakeryBestScore:v1";
 const progressStorageKey = "pocketBakeryProgress:v2";
@@ -88,6 +90,7 @@ let lastTimestamp = 0;
 restartButton.addEventListener("click", () => startGame(state?.selectedPresetId));
 overlayRestartButton.addEventListener("click", () => startGame(state?.selectedPresetId));
 presetButton.addEventListener("click", cyclePreset);
+burstButton.addEventListener("click", activateOvenBurst);
 canvas.addEventListener("pointerdown", setMoveTarget);
 canvas.addEventListener("pointermove", (event) => {
   if (event.buttons === 1 && state.active && !state.paused) {
@@ -132,6 +135,18 @@ function createInitialState(presetId = "") {
     activeWaveHint: null,
     waveFocusTimer: 0,
     guardTimer: 0,
+    guardPrep: 0,
+    burstMeter: 24,
+    burstCooldown: 0,
+    burstActivations: 0,
+    burstHits: 0,
+    burstSaves: 0,
+    counterBakeTimer: 0,
+    counterBakeShots: 0,
+    counterBakeCueId: "",
+    counterBakeWave: 0,
+    counterBakeActivations: 0,
+    counterBakeHits: 0,
     waveWarningIssuedFor: 0,
     spawnTimer: 0,
     fireTimer: 0,
@@ -158,7 +173,8 @@ function createInitialState(presetId = "") {
     player: { x: playerStart.x, y: playerStart.y, speed: 148 + shelfPassive.speedBonus, target: null, bob: 0 },
     enemies: [],
     bubbles: [],
-    crumbs: []
+    crumbs: [],
+    pulses: []
   };
 }
 
@@ -252,11 +268,13 @@ function tick(timestamp) {
     updateWaveRule(delta);
     state.guardTimer = Math.max(0, state.guardTimer - delta);
     updatePlayer(delta);
+    updateGuardPrep(delta);
     spawnEnemies(delta);
     updateEnemies(delta);
     updateBubbles(delta);
     updateIngredient(delta);
     updateMission(delta);
+    updateBurst(delta);
     updateCrumbs(delta);
     autoFire(delta);
     checkFinish();
@@ -313,6 +331,11 @@ function updateWave() {
     state.wave = wave;
     state.activeWaveHint = state.nextWaveHint || getWaveHint(state.wave);
     state.waveFocusTimer = 5;
+    state.guardPrep = 0;
+    state.counterBakeWave = 0;
+    state.counterBakeTimer = 0;
+    state.counterBakeShots = 0;
+    state.counterBakeCueId = "";
     state.nextWaveHint = getWaveHint(state.wave + 1);
     state.waveWarningIssuedFor = 0;
     hintText.textContent = `${state.wave}번째 주문 러시가 ${state.activeWaveHint.label}에서 시작됐습니다.`;
@@ -347,6 +370,123 @@ function updateWaveRule(delta) {
     state.waveRule = null;
     state.waveRuleTimer = 0;
   }
+}
+
+function updateGuardPrep(delta) {
+  state.counterBakeTimer = Math.max(0, state.counterBakeTimer - delta);
+
+  if (state.counterBakeTimer === 0 && state.counterBakeShots > 0) {
+    state.counterBakeShots = 0;
+    state.counterBakeCueId = "";
+  }
+
+  const cue = state.activeWaveHint;
+  if (!cue || state.waveFocusTimer <= 0 || state.counterBakeWave === state.wave) {
+    state.guardPrep = Math.max(0, state.guardPrep - delta * 0.42);
+    return;
+  }
+
+  if (isInGuardZone(cue)) {
+    state.guardPrep = Math.min(1, state.guardPrep + delta * 0.52);
+    if (state.guardPrep >= 1) {
+      state.guardPrep = 0;
+      state.counterBakeTimer = 4.4;
+      state.counterBakeShots = 5;
+      state.counterBakeCueId = cue.id;
+      state.counterBakeWave = state.wave;
+      state.counterBakeActivations += 1;
+      state.guardTimer = 0.72;
+      state.score += 40 + state.wave * 12;
+      spawnCrumbs(state.player.x, state.player.y - 18, 20, "#ffd85a");
+      hintText.textContent = `카운터 굽기 준비 완료! ${cue.label} 러시를 크게 튕겨냅니다.`;
+    }
+  } else {
+    state.guardPrep = Math.max(0, state.guardPrep - delta * 0.22);
+  }
+}
+
+function updateBurst(delta) {
+  state.burstCooldown = Math.max(0, state.burstCooldown - delta);
+  for (const pulse of state.pulses) {
+    pulse.life -= delta;
+    pulse.radius += pulse.speed * delta;
+  }
+  state.pulses = state.pulses.filter((pulse) => pulse.life > 0);
+}
+
+function addBurstMeter(amount) {
+  state.burstMeter = clamp(state.burstMeter + amount, 0, burstMeterMax);
+}
+
+function activateOvenBurst() {
+  if (!state.active || state.paused || state.burstCooldown > 0 || state.burstMeter < burstMeterMax) {
+    return;
+  }
+
+  const radius = 158 + state.wave * 6 + state.buildCounts.bubble * 4;
+  const damage = 8 + state.wave * 2 + state.bubbleDamage * 0.8;
+  let hits = 0;
+
+  state.burstMeter = 0;
+  state.burstCooldown = 5.2;
+  state.burstActivations += 1;
+  state.guardTimer = 0.62;
+  state.pulses.push({
+    x: state.player.x,
+    y: state.player.y,
+    radius: 18,
+    maxRadius: radius,
+    speed: 420,
+    life: 0.42,
+    color: "#35d7a8"
+  });
+
+  for (const enemy of state.enemies) {
+    const distance = Math.hypot(enemy.x - state.player.x, enemy.y - state.player.y);
+    if (distance <= radius + enemy.size) {
+      const falloff = 1 - Math.min(0.55, distance / (radius * 1.8));
+      applyBubbleDamage(enemy, damage * falloff);
+      enemy.slowTimer = Math.max(enemy.slowTimer, 1.15);
+      knockEnemyFrom(enemy, state.player.x, state.player.y, 38 + (1 - distance / Math.max(1, radius)) * 30);
+      hits += 1;
+    }
+  }
+
+  state.burstHits += hits;
+  state.score += hits * (34 + state.wave * 7);
+  if (state.basketHp <= 36 && hits >= 3) {
+    state.burstSaves += 1;
+    state.basketHp = Math.min(basketMax, state.basketHp + 8);
+  }
+  spawnCrumbs(state.player.x, state.player.y, 32, hits ? "#35d7a8" : "#ffd85a");
+  collectDefeatedEnemies("#35d7a8", 1.18);
+  hintText.textContent = hits
+    ? `오븐 파동! 주문 ${hits}개를 말랑하게 밀어냈습니다.`
+    : "오븐 파동이 반짝였지만 주문이 너무 멀었어요.";
+}
+
+function getGuardZone(cue) {
+  if (!cue) {
+    return null;
+  }
+  if (cue.id === "left") {
+    return { x: 70, y: 112, w: 122, h: 300 };
+  }
+  if (cue.id === "right") {
+    return { x: width - 192, y: 112, w: 122, h: 300 };
+  }
+  return { x: 278, y: 84, w: 244, h: 96 };
+}
+
+function isInGuardZone(cue) {
+  const zone = getGuardZone(cue);
+  if (!zone) {
+    return false;
+  }
+  return state.player.x >= zone.x
+    && state.player.x <= zone.x + zone.w
+    && state.player.y >= zone.y
+    && state.player.y <= zone.y + zone.h;
 }
 
 function updatePlayer(delta) {
@@ -471,23 +611,33 @@ function autoFire(delta) {
   }
 
   const guarding = isGuardingRush();
+  const counterBake = isCounterBakeActive();
   const dx = target.x - state.player.x;
   const dy = target.y - state.player.y;
   const distance = Math.max(1, Math.hypot(dx, dy));
   state.bubbles.push({
     x: state.player.x,
     y: state.player.y - 8,
-    vx: (dx / distance) * (guarding ? 318 : 275),
-    vy: (dy / distance) * (guarding ? 318 : 275),
-    r: state.bubbleSize + (guarding ? 2.2 : 0),
-    damage: state.bubbleDamage * (guarding ? 1.24 : 1),
-    life: 1.45
+    vx: (dx / distance) * (counterBake ? 368 : guarding ? 318 : 275),
+    vy: (dy / distance) * (counterBake ? 368 : guarding ? 318 : 275),
+    r: state.bubbleSize + (counterBake ? 5.4 : guarding ? 2.2 : 0),
+    damage: state.bubbleDamage * (counterBake ? 1.72 : guarding ? 1.24 : 1),
+    life: counterBake ? 1.6 : 1.45,
+    counterBake
   });
-  if (guarding) {
+  if (counterBake) {
+    state.counterBakeShots = Math.max(0, state.counterBakeShots - 1);
+    state.guardTimer = 0.4;
+    state.score += 9 + state.wave * 2;
+  } else if (guarding) {
     state.guardTimer = 0.28;
     state.score += 3;
   }
-  state.fireTimer = state.fireDelay * (state.waveRule?.fireMultiplier || 1) * (guarding ? 0.72 : 1);
+  state.fireTimer = state.fireDelay * (state.waveRule?.fireMultiplier || 1) * (counterBake ? 0.58 : guarding ? 0.72 : 1);
+}
+
+function isCounterBakeActive() {
+  return state.counterBakeTimer > 0 && state.counterBakeShots > 0;
 }
 
 function isGuardingRush() {
@@ -528,15 +678,27 @@ function updateBubbles(delta) {
     for (const enemy of state.enemies) {
       if (Math.hypot(enemy.x - bubble.x, enemy.y - bubble.y) < enemy.size + bubble.r) {
         applyBubbleDamage(enemy, bubble.damage);
-        if (state.splashRadius > 0) {
+        const splashRadius = bubble.counterBake ? Math.max(52, state.splashRadius + 26) : state.splashRadius;
+        if (bubble.counterBake) {
+          state.counterBakeHits += 1;
+          state.score += 18 + state.wave * 4;
+          addBurstMeter(2.2);
+          enemy.slowTimer = Math.max(enemy.slowTimer, 0.85);
+          knockEnemyFrom(enemy, bubble.x, bubble.y, 28);
+        }
+        if (splashRadius > 0) {
           for (const nearby of state.enemies) {
-            if (nearby !== enemy && Math.hypot(nearby.x - bubble.x, nearby.y - bubble.y) < state.splashRadius + nearby.size) {
-              applyBubbleDamage(nearby, Math.max(1, bubble.damage * 0.45));
+            if (nearby !== enemy && Math.hypot(nearby.x - bubble.x, nearby.y - bubble.y) < splashRadius + nearby.size) {
+              applyBubbleDamage(nearby, Math.max(1, bubble.damage * (bubble.counterBake ? 0.62 : 0.45)));
+              if (bubble.counterBake) {
+                nearby.slowTimer = Math.max(nearby.slowTimer, 0.6);
+                knockEnemyFrom(nearby, bubble.x, bubble.y, 18);
+              }
             }
           }
         }
         bubble.life = 0;
-        spawnCrumbs(bubble.x, bubble.y, 4, "#ffffff");
+        spawnCrumbs(bubble.x, bubble.y, bubble.counterBake ? 16 : 4, bubble.counterBake ? "#ffd85a" : "#ffffff");
         break;
       }
     }
@@ -544,6 +706,10 @@ function updateBubbles(delta) {
 
   state.bubbles = state.bubbles.filter((bubble) => bubble.life > 0 && bubble.x > -30 && bubble.x < width + 30 && bubble.y > -30 && bubble.y < height + 30);
 
+  collectDefeatedEnemies("#ffd85a", 1);
+}
+
+function collectDefeatedEnemies(color, scoreBoost) {
   const defeated = [];
   state.enemies = state.enemies.filter((enemy) => {
     if (enemy.hp <= 0) {
@@ -554,8 +720,9 @@ function updateBubbles(delta) {
   });
 
   for (const enemy of defeated) {
-    state.score += Math.round((70 + enemy.maxHp * 8 + state.wave * 12) * enemy.scoreMod * state.scoreMultiplier);
-    spawnCrumbs(enemy.x, enemy.y, 10, "#ffd85a");
+    state.score += Math.round((70 + enemy.maxHp * 8 + state.wave * 12) * enemy.scoreMod * state.scoreMultiplier * scoreBoost);
+    addBurstMeter(7 + state.wave * 1.6 + (enemy.type === "scroll" ? 4 : 0));
+    spawnCrumbs(enemy.x, enemy.y, 10, color);
   }
 }
 
@@ -569,6 +736,15 @@ function applyBubbleDamage(enemy, damage) {
   if (state.sugarSlow > 0) {
     enemy.slowTimer = Math.max(enemy.slowTimer, 0.45 + state.sugarSlow);
   }
+}
+
+function knockEnemyFrom(enemy, x, y, force) {
+  const dx = enemy.x - x;
+  const dy = enemy.y - y;
+  const distance = Math.max(1, Math.hypot(dx, dy));
+  enemy.x = clamp(enemy.x + (dx / distance) * force, 12, width - 12);
+  enemy.y = clamp(enemy.y + (dy / distance) * force, 36, height - 12);
+  enemy.wobble += 0.8;
 }
 
 function updateIngredient(delta) {
@@ -598,6 +774,7 @@ function updateIngredient(delta) {
     state.collectedIngredients += 1;
     state.basketHp = Math.min(basketMax, state.basketHp + 8 + state.buildCounts.basket * 2);
     state.score += Math.round(160 * state.scoreMultiplier);
+    addBurstMeter(14);
     spawnCrumbs(state.ingredient.x, state.ingredient.y, 14, "#35d7a8");
     hintText.textContent = `재료 상자 +${state.collectedIngredients}`;
     state.ingredient = null;
@@ -640,6 +817,7 @@ function updateMission(delta) {
     state.basketHp = Math.min(basketMax, state.basketHp + (state.mission.type === "repair" ? 10 : 6));
     state.missionCompletions += 1;
     state.recipes += 1;
+    addBurstMeter(state.mission.type === "repair" ? 20 : 16);
     spawnCrumbs(state.mission.x, state.mission.y, 18, state.mission.type === "repair" ? "#f4b860" : "#35d7a8");
     hintText.textContent = `${state.mission.title} 완료! 레시피 +1`;
     setMissionWaveRule(true, state.mission.type);
@@ -758,9 +936,11 @@ function finishGame(won) {
 
   resultKicker.textContent = won ? "Bakery Complete" : "Bakery Closed";
   resultTitle.textContent = won ? "오늘 영업 성공" : "재료 바구니가 비었어요";
+  const counterSummary = `카운터 ${state.counterBakeActivations}회/${state.counterBakeHits}타`;
+  const burstSummary = `오븐 파동 ${state.burstActivations}회/${state.burstHits}타`;
   resultCopy.textContent = won
-    ? `${state.selectedPresetName} 프리셋, 내구도 ${Math.ceil(state.basketHp)}, 미션 ${state.missionCompletions}회, 레시피 +${recipeGain}, 새 진열 ${newShelfItems}개입니다.`
-    : `${state.selectedPresetName} 프리셋, 점수 ${state.score}점, 미션 ${state.missionCompletions}회, 레시피 +${recipeGain}, 새 진열 ${newShelfItems}개입니다.`;
+    ? `${state.selectedPresetName} 프리셋, 내구도 ${Math.ceil(state.basketHp)}, ${counterSummary}, ${burstSummary}, 미션 ${state.missionCompletions}회, 레시피 +${recipeGain}, 새 진열 ${newShelfItems}개입니다.`
+    : `${state.selectedPresetName} 프리셋, 점수 ${state.score}점, ${counterSummary}, ${burstSummary}, 미션 ${state.missionCompletions}회, 레시피 +${recipeGain}, 새 진열 ${newShelfItems}개입니다.`;
   resultOverlay.hidden = false;
 }
 
@@ -773,6 +953,15 @@ function updateHud() {
   presetButton.textContent = `프리셋: ${state.selectedPresetName}`;
   presetButton.disabled = unlocked.length < 2;
   presetButton.title = unlocked.length < 2 ? "레시피 4개부터 새 프리셋이 열립니다." : "다음 시작 프리셋으로 바꿉니다.";
+  const burstReady = state.burstMeter >= burstMeterMax && state.burstCooldown <= 0 && state.active && !state.paused;
+  const burstPercent = Math.floor(state.burstMeter);
+  burstButton.disabled = !burstReady;
+  burstButton.textContent = state.burstCooldown > 0
+    ? `오븐 파동 ${Math.ceil(state.burstCooldown)}`
+    : `오븐 파동 ${burstPercent}%`;
+  burstButton.classList.toggle("is-ready", burstReady);
+  burstButton.classList.toggle("is-cooling", state.burstCooldown > 0);
+  burstButton.title = burstReady ? "가까운 주문을 밀어내는 오븐 파동을 터뜨립니다." : "주문을 막고 재료를 모으면 충전됩니다.";
 }
 
 function draw(timestamp) {
@@ -780,6 +969,7 @@ function draw(timestamp) {
   ctx.clearRect(0, 0, width, height);
   drawBackground(timestamp);
   drawBakery();
+  drawGuardPrepZone(timestamp);
   drawBasket();
   drawIngredient();
   drawMission();
@@ -787,6 +977,7 @@ function draw(timestamp) {
   drawEnemies(timestamp);
   drawPlayer(timestamp);
   drawCrumbs();
+  drawPulses();
   drawRunOverlay();
   drawWaveCue();
 }
@@ -938,15 +1129,67 @@ function drawMission() {
   ctx.fillRect(state.mission.x - 34, state.mission.y + 46, 68 * ratio, 5);
 }
 
+function drawGuardPrepZone(timestamp) {
+  const cue = state.activeWaveHint;
+  if (!cue || state.waveFocusTimer <= 0) {
+    return;
+  }
+
+  const zone = getGuardZone(cue);
+  if (!zone) {
+    return;
+  }
+
+  const pulse = 0.5 + Math.sin(timestamp / 140) * 0.5;
+  const armed = state.counterBakeWave === state.wave && state.counterBakeShots > 0;
+  const used = state.counterBakeWave === state.wave && state.counterBakeShots <= 0;
+  ctx.save();
+  ctx.globalAlpha = armed ? 0.24 : used ? 0.12 : 0.16 + pulse * 0.12;
+  ctx.fillStyle = armed ? "#ffd85a" : used ? "#526078" : cue.color;
+  ctx.strokeStyle = armed ? "#ffd85a" : used ? "#526078" : cue.color;
+  ctx.lineWidth = armed ? 5 : 3;
+  ctx.setLineDash([10, 8]);
+  roundRect(zone.x, zone.y, zone.w, zone.h, 8);
+  ctx.fill();
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  const barWidth = zone.w - 24;
+  const barX = zone.x + 12;
+  const barY = zone.y + zone.h - 18;
+  ctx.globalAlpha = 0.92;
+  ctx.fillStyle = "rgba(255, 255, 255, 0.84)";
+  ctx.fillRect(barX, barY, barWidth, 8);
+  ctx.fillStyle = armed ? "#ffd85a" : used ? "#526078" : "#35d7a8";
+  ctx.fillRect(barX, barY, barWidth * (armed || used ? 1 : state.guardPrep), 8);
+  ctx.strokeStyle = "#243047";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(barX, barY, barWidth, 8);
+
+  ctx.fillStyle = "#243047";
+  ctx.font = "900 11px ui-monospace, SFMono-Regular, Consolas, monospace";
+  ctx.textAlign = "center";
+  ctx.fillText(armed ? "COUNTER READY" : used ? "COUNTER USED" : "PREP ZONE", zone.x + zone.w / 2, zone.y + 18);
+  ctx.restore();
+}
+
 function drawPlayer(timestamp) {
   const player = state.player;
   const bob = Math.sin(player.bob) * 2;
   ctx.save();
   ctx.translate(player.x, player.y + bob);
-  if (state.guardTimer > 0) {
-    ctx.globalAlpha = 0.72;
+  if (isCounterBakeActive()) {
+    const pulse = 0.5 + Math.sin(timestamp / 70) * 0.5;
+    ctx.globalAlpha = 0.28 + pulse * 0.18;
     ctx.fillStyle = "#ffd85a";
-    ctx.fillRect(-28, -34, 56, 8);
+    ctx.beginPath();
+    ctx.arc(0, -2, 38 + pulse * 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  } else if (state.guardTimer > 0 || state.guardPrep > 0.35) {
+    ctx.globalAlpha = 0.72;
+    ctx.fillStyle = state.guardPrep > 0.35 ? "#35d7a8" : "#ffd85a";
+    ctx.fillRect(-28, -34, 56 * Math.max(0.18, state.guardPrep || 1), 8);
     ctx.globalAlpha = 1;
   }
   ctx.fillStyle = "#a7f1dd";
@@ -1003,13 +1246,26 @@ function drawEnemies(timestamp) {
 
 function drawBubbles() {
   for (const bubble of state.bubbles) {
-    ctx.fillStyle = "#ffffff";
+    if (bubble.counterBake) {
+      ctx.save();
+      ctx.globalAlpha = 0.24;
+      ctx.fillStyle = "#ffd85a";
+      ctx.beginPath();
+      ctx.arc(bubble.x, bubble.y, bubble.r + 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = bubble.counterBake ? "#fff1d6" : "#ffffff";
     ctx.strokeStyle = "#243047";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = bubble.counterBake ? 3 : 2;
     ctx.beginPath();
     ctx.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
+    if (bubble.counterBake) {
+      ctx.fillStyle = "#ffd85a";
+      ctx.fillRect(bubble.x - 3, bubble.y - bubble.r - 2, 6, 6);
+    }
   }
 }
 
@@ -1019,6 +1275,26 @@ function drawCrumbs() {
     ctx.globalAlpha = Math.max(0, crumb.life);
     ctx.fillStyle = crumb.color;
     ctx.fillRect(crumb.x, crumb.y, crumb.size, crumb.size);
+    ctx.restore();
+  }
+}
+
+function drawPulses() {
+  for (const pulse of state.pulses) {
+    const progress = 1 - pulse.life / 0.42;
+    const radius = Math.min(pulse.maxRadius, pulse.radius);
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 0.5 - progress * 0.42);
+    ctx.strokeStyle = pulse.color;
+    ctx.lineWidth = 8 - progress * 4;
+    ctx.beginPath();
+    ctx.arc(pulse.x, pulse.y, radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = Math.max(0, 0.18 - progress * 0.14);
+    ctx.fillStyle = pulse.color;
+    ctx.beginPath();
+    ctx.arc(pulse.x, pulse.y, radius * 0.82, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   }
 }
@@ -1072,7 +1348,20 @@ function drawRunOverlay() {
   ctx.fillStyle = "#526078";
   ctx.font = "900 10px ui-monospace, SFMono-Regular, Consolas, monospace";
   ctx.fillText(state.waveRule ? `RULE ${state.waveRule.label} ${Math.ceil(state.waveRuleTimer)}` : "RULE --", width - 204, 184);
-  ctx.fillText(isGuardingRush() ? "GUARD ON" : getPassiveSummary(state.shelfPassive), width - 204, 200);
+  ctx.fillText(getGuardStatusText(), width - 204, 200);
+}
+
+function getGuardStatusText() {
+  if (isCounterBakeActive()) {
+    return `COUNTER x${state.counterBakeShots}`;
+  }
+  if (state.counterBakeWave === state.wave) {
+    return state.counterBakeShots > 0 ? "COUNTER READY" : "COUNTER USED";
+  }
+  if (state.guardPrep > 0) {
+    return `PREP ${Math.round(state.guardPrep * 100)}%`;
+  }
+  return isGuardingRush() ? "GUARD ON" : getPassiveSummary(state.shelfPassive);
 }
 
 function drawWaveCue() {

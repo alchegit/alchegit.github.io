@@ -27,6 +27,8 @@
   const progressStorageKey = "twinkleDeliveryProgress:v2";
   const likedCardsStorageKey = "twinkleDeliveryLikedCards:v1";
   const fuelMax = 100;
+  const softApproachRange = 158;
+  const silkyGlideThreshold = 0.72;
   const courseLayouts = [
     {
       id: "moon-loop",
@@ -165,6 +167,14 @@
       timeLeft: course.time,
       fuel: fuelMax,
       fuelCollected: 0,
+      glideCharge: 0,
+      glideLandings: 0,
+      stampRingReady: false,
+      stampRingChain: 0,
+      bestStampRingChain: 0,
+      stampRingHits: 0,
+      stampRingFlash: 0,
+      stampRing: null,
       stickers: [],
       landingLog: [],
       bestSticker: getCourseBestSticker(progress, course.id),
@@ -295,11 +305,11 @@
       state.score += timeBonus + fuelBonus;
       resultKicker.textContent = "Delivery Complete";
       resultTitle.textContent = "별 우편 배달 완료!";
-      resultCopy.textContent = `${state.course.name} 스티커 ${state.stickers.join("/")}, 연료 보너스 ${fuelBonus}점, 최고 스티커 ${state.bestSticker}입니다.`;
+      resultCopy.textContent = `${state.course.name} 스티커 ${state.stickers.join("/")}, 활강 착륙 ${state.glideLandings}회, 우표 링 ${state.stampRingHits}회, 연료 보너스 ${fuelBonus}점, 최고 스티커 ${state.bestSticker}입니다.`;
     } else {
       resultKicker.textContent = "Delivery Closed";
       resultTitle.textContent = "오늘 우편 마감";
-      resultCopy.textContent = `${state.course.name} ${state.delivered}/${state.mailboxes.length}개 배달, 스티커 ${state.stickers.join("/") || "-"}, 최고 스티커 ${state.bestSticker}입니다.`;
+      resultCopy.textContent = `${state.course.name} ${state.delivered}/${state.mailboxes.length}개 배달, 활강 착륙 ${state.glideLandings}회, 우표 링 ${state.stampRingHits}회, 스티커 ${state.stickers.join("/") || "-"}, 최고 스티커 ${state.bestSticker}입니다.`;
     }
 
     syncResultCardRecord();
@@ -322,11 +332,14 @@
   function deliverMail(target, speed, angleError) {
     const grade = getLandingGrade(speed, angleError);
     const perfect = grade === "S";
+    const silkyGlide = state.glideCharge >= silkyGlideThreshold && grade !== "B";
+    const stampRingBonus = state.stampRingReady ? 150 + state.stampRingChain * 45 : 0;
     const speedScore = Math.round(clamp(130 - speed, 0, 130));
     const angleScore = Math.round(clamp(80 - angleError * 90, 0, 80));
     const stickerBonus = grade === "S" ? 220 : grade === "A" ? 120 : 50;
     const perfectBonus = perfect ? 160 + state.perfectDeliveries * 40 : 0;
-    const deliveryScore = 220 + speedScore + angleScore + stickerBonus + perfectBonus;
+    const glideBonus = silkyGlide ? Math.round(120 + state.glideCharge * 150) : 0;
+    const deliveryScore = 220 + speedScore + angleScore + stickerBonus + perfectBonus + glideBonus + stampRingBonus;
 
     state.score += deliveryScore;
     state.delivered += 1;
@@ -335,26 +348,114 @@
       state.perfectDeliveries += 1;
       state.fuel = Math.min(fuelMax, state.fuel + 16);
     }
+    if (silkyGlide) {
+      state.glideLandings += 1;
+      state.fuel = Math.min(fuelMax, state.fuel + 8);
+    }
+    if (!state.stampRingReady) {
+      state.stampRingChain = 0;
+    }
+    state.bestStampRingChain = Math.max(state.bestStampRingChain, state.stampRingChain);
     state.landingLog.push({
       label: target.label,
       grade,
       speed: Math.round(speed),
-      angle: Number(angleError.toFixed(2))
+      angle: Number(angleError.toFixed(2)),
+      glide: silkyGlide,
+      stampRing: state.stampRingReady
     });
     rememberSticker(grade);
     state.successTimer = perfect ? 1.15 : 0.9;
+    state.glideCharge = 0;
     state.rocket.vx *= 0.26;
     state.rocket.vy *= 0.26;
     state.hint = perfect
-      ? `PERFECT DELIVERY! 연료 +16 / 우편함 ${target.label} +${deliveryScore}`
-      : `${grade} 스티커 / 우편함 ${target.label} +${deliveryScore}`;
+      ? `PERFECT DELIVERY!${silkyGlide ? " SILKY GLIDE!" : ""}${stampRingBonus ? " STAMP RING!" : ""} 우편함 ${target.label} +${deliveryScore}`
+      : `${grade} 스티커${silkyGlide ? " / SILKY GLIDE" : ""}${stampRingBonus ? " / STAMP RING" : ""} / 우편함 ${target.label} +${deliveryScore}`;
+    state.stampRingReady = false;
+    state.stampRing = null;
 
-    for (let i = 0; i < (perfect ? 38 : 26); i += 1) {
-      addSparkle(target.x, target.y - 10, target.color);
+    for (let i = 0; i < (perfect ? 38 : 26) + (silkyGlide ? 20 : 0); i += 1) {
+      addSparkle(target.x, target.y - 10, silkyGlide && i % 2 === 0 ? "#fff9ed" : target.color);
     }
 
     if (state.delivered >= state.mailboxes.length) {
       finishGame(true);
+    }
+  }
+
+  function updateGlideAssist(dt, target, targetDistance, currentSpeed, currentAngleError) {
+    if (!target) {
+      state.glideCharge = Math.max(0, state.glideCharge - dt * 2);
+      return;
+    }
+
+    const rocket = state.rocket;
+    const inApproach = targetDistance < softApproachRange;
+    const gentleSpeed = currentSpeed < 112;
+    const alignedEnough = currentAngleError < 0.82;
+    const coasting = !controls.thrust;
+
+    if (inApproach && gentleSpeed && alignedEnough && coasting) {
+      state.glideCharge = clamp(state.glideCharge + dt * 1.18, 0, 1);
+    } else {
+      state.glideCharge = clamp(state.glideCharge - dt * (inApproach ? 0.72 : 1.8), 0, 1);
+    }
+
+    if (state.glideCharge > 0.28 && targetDistance > 1) {
+      const pull = 8.5 * state.glideCharge * dt;
+      rocket.vx += ((target.x - rocket.x) / targetDistance) * pull;
+      rocket.vy += ((target.y - rocket.y) / targetDistance) * pull;
+    }
+  }
+
+  function getRouteStartPoint() {
+    if (state.targetIndex <= 0) {
+      return state.course.start;
+    }
+    return state.mailboxes[state.targetIndex - 1] || state.course.start;
+  }
+
+  function updateStampRing(dt) {
+    const target = state.mailboxes[state.targetIndex];
+    if (!target || !state.active) {
+      state.stampRing = null;
+      return;
+    }
+
+    state.stampRingFlash = Math.max(0, state.stampRingFlash - dt);
+
+    const start = getRouteStartPoint();
+    const dx = target.x - start.x;
+    const dy = target.y - start.y;
+    const length = Math.max(1, Math.hypot(dx, dy));
+    const offsetSign = (state.courseIndex + state.targetIndex) % 2 === 0 ? 1 : -1;
+    const offset = clamp(length * 0.16, 38, 72) * offsetSign;
+    const t = 0.54;
+    state.stampRing = {
+      x: clamp(start.x + dx * t + (-dy / length) * offset, 64, width - 64),
+      y: clamp(start.y + dy * t + (dx / length) * offset, 70, height - 70),
+      color: target.color
+    };
+
+    if (state.stampRingReady) {
+      return;
+    }
+
+    const speed = Math.hypot(state.rocket.vx, state.rocket.vy);
+    const ringDistance = Math.hypot(state.rocket.x - state.stampRing.x, state.rocket.y - state.stampRing.y);
+    if (ringDistance < 31 && speed > 42 && speed < 205) {
+      state.stampRingReady = true;
+      state.stampRingChain += 1;
+      state.bestStampRingChain = Math.max(state.bestStampRingChain, state.stampRingChain);
+      state.stampRingHits += 1;
+      state.stampRingFlash = 0.8;
+      state.score += 90 + state.stampRingChain * 22;
+      state.fuel = Math.min(fuelMax, state.fuel + 6);
+      state.hint = `우표 링 x${state.stampRingChain}! 다음 착륙 보너스가 커집니다.`;
+      for (let i = 0; i < 24; i += 1) {
+        addSparkle(state.stampRing.x, state.stampRing.y, i % 2 === 0 ? "#ffd85a" : target.color);
+      }
     }
   }
 
@@ -538,12 +639,14 @@
     }
 
     collectFuelStars();
+    updateStampRing(dt);
 
     const target = state.mailboxes[state.targetIndex];
     if (target) {
       const targetDistance = distance(rocket, target);
       const currentSpeed = Math.hypot(rocket.vx, rocket.vy);
       const currentAngleError = Math.abs(angleDelta(rocket.angle, target.angle));
+      updateGlideAssist(dt, target, targetDistance, currentSpeed, currentAngleError);
 
       if (targetDistance < 43) {
         if (currentSpeed < 76 && currentAngleError < 0.92) {
@@ -556,6 +659,8 @@
       } else if (currentSpeed > 150) {
         state.hint = "속도가 꽤 빨라요. 추진을 쉬면서 미끄러지듯 접근해보세요.";
       }
+    } else {
+      updateGlideAssist(dt, null, Infinity, 0, 0);
     }
 
     rocket.trail.unshift({ x: rocket.x, y: rocket.y, angle: rocket.angle });
@@ -684,6 +789,37 @@
     }
   }
 
+  function drawStampRing(time) {
+    if (!state.stampRing || !state.active) {
+      return;
+    }
+
+    const ring = state.stampRing;
+    const pulse = 1 + Math.sin(time * 5.2) * 0.07 + state.stampRingFlash * 0.08;
+    ctx.save();
+    ctx.translate(ring.x, ring.y);
+    ctx.scale(pulse, pulse);
+    ctx.globalAlpha = state.stampRingReady ? 0.62 : 0.88;
+    ctx.strokeStyle = state.stampRingReady ? "#ffd85a" : ring.color;
+    ctx.lineWidth = state.stampRingReady ? 5 : 4;
+    ctx.setLineDash(state.stampRingReady ? [] : [7, 6]);
+    ctx.beginPath();
+    ctx.arc(0, 0, state.stampRingReady ? 26 : 31, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = state.stampRingReady ? 0.26 : 0.14;
+    ctx.fillStyle = state.stampRingReady ? "#ffd85a" : ring.color;
+    ctx.beginPath();
+    ctx.arc(0, 0, 24, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#fff9ed";
+    ctx.font = "900 11px ui-monospace, Consolas, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(state.stampRingReady ? `x${state.stampRingChain}` : "STAMP", 0, 4);
+    ctx.restore();
+  }
+
   function drawMailbox(mailbox, index, time) {
     const isTarget = index === state.targetIndex;
     const isDone = index < state.targetIndex;
@@ -723,6 +859,88 @@
     ctx.textBaseline = "middle";
     ctx.fillText(mailbox.label, 0, 7);
     ctx.restore();
+  }
+
+  function drawFlightVector() {
+    if (!state.active) {
+      return;
+    }
+
+    const rocket = state.rocket;
+    const speed = Math.hypot(rocket.vx, rocket.vy);
+    if (speed < 18) {
+      return;
+    }
+
+    ctx.save();
+    ctx.globalAlpha = 0.72;
+    const vectorColor = state.glideCharge > 0.45 ? "#ffd85a" : "#69c8ff";
+    for (let i = 1; i <= 8; i += 1) {
+      const t = i * 0.15;
+      const x = rocket.x + rocket.vx * t;
+      const y = rocket.y + rocket.vy * t;
+      const radius = 2 + i * 0.45;
+      ctx.fillStyle = i % 2 === 0 ? "#fff9ed" : vectorColor;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawApproachGuide(time) {
+    const target = state.mailboxes[state.targetIndex];
+    if (!target || !state.active) {
+      return;
+    }
+
+    const rocket = state.rocket;
+    const targetDistance = distance(rocket, target);
+    if (targetDistance > softApproachRange + 34 && state.glideCharge <= 0.01) {
+      return;
+    }
+
+    const speed = Math.hypot(rocket.vx, rocket.vy);
+    const angleError = Math.abs(angleDelta(rocket.angle, target.angle));
+    const speedReady = speed < 112;
+    const angleReady = angleError < 0.82;
+    const color = speedReady && angleReady ? "#35d7a8" : speedReady ? "#ffd85a" : "#e95b88";
+    const pulse = 1 + Math.sin(time * 6) * 0.04;
+
+    ctx.save();
+    ctx.translate(target.x, target.y);
+    ctx.rotate(target.angle);
+    ctx.globalAlpha = 0.86;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(0, 0, 61 * pulse, -Math.PI * 0.35, Math.PI * 0.35);
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.22;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(-72, -18);
+    ctx.lineTo(-25, 0);
+    ctx.lineTo(-72, 18);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    if (state.glideCharge > 0.02) {
+      ctx.save();
+      ctx.translate(target.x, target.y);
+      ctx.strokeStyle = "#fff9ed";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(0, 0, 72, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * state.glideCharge);
+      ctx.stroke();
+      ctx.fillStyle = state.glideCharge >= silkyGlideThreshold ? "#ffd85a" : "#fff9ed";
+      ctx.font = "900 11px ui-monospace, Consolas, monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(state.glideCharge >= silkyGlideThreshold ? "GLIDE" : "COAST", 0, 84);
+      ctx.restore();
+    }
   }
 
   function drawRocket() {
@@ -841,53 +1059,70 @@
     ctx.restore();
   }
 
+  function getOverlayAlpha(x, y, w, h) {
+    const target = state.mailboxes[state.targetIndex];
+    const points = [state.rocket, target].filter(Boolean);
+    const padding = 74;
+    const overlapping = points.some((point) => (
+      point.x >= x - padding &&
+      point.x <= x + w + padding &&
+      point.y >= y - padding &&
+      point.y <= y + h + padding
+    ));
+    return overlapping ? 0.34 : 1;
+  }
+
   function drawRunOverlay() {
     ctx.save();
+    const topX = width - 178;
+    const topY = 24;
+    ctx.globalAlpha = getOverlayAlpha(topX, topY, 148, 162);
     ctx.fillStyle = "rgba(255, 249, 237, 0.9)";
     ctx.strokeStyle = "#182033";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.roundRect(width - 178, 24, 148, 74, 8);
+    ctx.roundRect(topX, topY, 148, 74, 8);
     ctx.fill();
     ctx.stroke();
 
     ctx.fillStyle = "#526078";
     ctx.font = "900 10px ui-monospace, Consolas, monospace";
     ctx.textAlign = "left";
-    ctx.fillText("FUEL", width - 160, 46);
-    ctx.fillText("BEST", width - 82, 46);
+    ctx.fillText("FUEL", topX + 18, 46);
+    ctx.fillText("BEST", topX + 96, 46);
     ctx.fillStyle = "rgba(24,32,51,0.16)";
-    ctx.fillRect(width - 160, 62, 66, 10);
+    ctx.fillRect(topX + 18, 62, 66, 10);
     ctx.fillStyle = state.fuel > 22 ? "#35d7a8" : "#e95b88";
-    ctx.fillRect(width - 160, 62, 66 * (state.fuel / fuelMax), 10);
+    ctx.fillRect(topX + 18, 62, 66 * (state.fuel / fuelMax), 10);
     ctx.strokeStyle = "#182033";
-    ctx.strokeRect(width - 160, 62, 66, 10);
+    ctx.strokeRect(topX + 18, 62, 66, 10);
     ctx.fillStyle = "#182033";
     ctx.font = "900 22px ui-monospace, Consolas, monospace";
-    ctx.fillText(state.bestSticker, width - 82, 76);
+    ctx.fillText(state.bestSticker, topX + 96, 76);
 
     ctx.fillStyle = "rgba(255, 249, 237, 0.9)";
     ctx.strokeStyle = "#182033";
     ctx.beginPath();
-    ctx.roundRect(width - 178, 108, 148, 78, 8);
+    ctx.roundRect(topX, 108, 148, 78, 8);
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = "#526078";
     ctx.font = "900 10px ui-monospace, Consolas, monospace";
-    ctx.fillText(state.courseIndex === getDailyCourseIndex() ? "TODAY" : "COURSE", width - 160, 130);
-    ctx.fillText("SKIN", width - 82, 130);
+    ctx.fillText(state.courseIndex === getDailyCourseIndex() ? "TODAY" : "COURSE", topX + 18, 130);
+    ctx.fillText("SKIN", topX + 96, 130);
     ctx.fillStyle = "#182033";
     ctx.font = "900 15px ui-monospace, Consolas, monospace";
-    ctx.fillText(`${state.courseIndex + 1}/${courseLayouts.length}`, width - 160, 150);
-    ctx.fillText(state.skin.short, width - 82, 150);
+    ctx.fillText(`${state.courseIndex + 1}/${courseLayouts.length}`, topX + 18, 150);
+    ctx.fillText(state.skin.short, topX + 96, 150);
     ctx.fillStyle = "#526078";
     ctx.font = "900 10px ui-monospace, Consolas, monospace";
-    ctx.fillText("STREAK", width - 160, 174);
-    ctx.fillText("GHOST", width - 82, 174);
+    ctx.fillText("STREAK", topX + 18, 174);
+    ctx.fillText("GHOST", topX + 96, 174);
     ctx.fillStyle = "#182033";
     ctx.font = "900 13px ui-monospace, Consolas, monospace";
-    ctx.fillText(`${getDailyProgress(state.progress).streak}S`, width - 160, 181);
-    ctx.fillText(getGhostLabel(), width - 82, 181);
+    ctx.fillText(`${getDailyProgress(state.progress).streak}S`, topX + 18, 181);
+    ctx.fillText(getGhostLabel(), topX + 96, 181);
+    ctx.globalAlpha = 1;
 
     ctx.fillStyle = "rgba(255, 249, 237, 0.9)";
     ctx.strokeStyle = "#182033";
@@ -912,7 +1147,10 @@
     drawWindZones();
     drawPlanetoids();
     drawFuelStars(time);
+    drawStampRing(time);
     state.mailboxes.forEach((mailbox, index) => drawMailbox(mailbox, index, time));
+    drawApproachGuide(time);
+    drawFlightVector();
     drawSparkles();
     drawGhostTrace();
     drawRocket();

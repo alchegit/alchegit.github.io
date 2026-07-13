@@ -245,6 +245,14 @@ h1 {
   background: var(--mint);
 }
 
+.seed-button:disabled {
+  background: #dce5ef;
+  color: #657188;
+  cursor: default;
+  transform: none;
+  box-shadow: 1px 1px 0 rgba(36, 48, 71, 0.45);
+}
+
 .input-label {
   display: block;
   margin: 14px 0 6px;
@@ -325,6 +333,47 @@ textarea {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 9px;
+}
+
+.clue-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: -2px 0 10px;
+}
+
+.clue-chip {
+  min-width: 0;
+  border: 2px solid rgba(36, 48, 71, 0.6);
+  border-radius: 7px;
+  padding: 7px 8px;
+  background: #f8fbff;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1.25;
+  word-break: keep-all;
+}
+
+.clue-chip span {
+  display: block;
+  margin-bottom: 3px;
+  color: #657188;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+}
+
+.clue-chip.is-hidden {
+  background:
+    repeating-linear-gradient(135deg, rgba(105, 200, 255, 0.16) 0 8px, transparent 8px 16px),
+    #ffffff;
+  color: #526078;
+}
+
+.clue-chip.is-anchor {
+  background: #d9fff2;
+  box-shadow: 3px 3px 0 rgba(36, 48, 71, 0.3);
 }
 
 .answer-button {
@@ -437,8 +486,18 @@ textarea {
   }
 
   .game-header {
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
     padding: 10px;
+  }
+
+  .title-block {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .icon-button {
+    justify-self: end;
   }
 
   .back-link {
@@ -461,6 +520,10 @@ textarea {
   }
 
   .option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clue-panel {
     grid-template-columns: 1fr;
   }
 

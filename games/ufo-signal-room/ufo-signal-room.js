@@ -37,6 +37,10 @@
     elapsedMs: 0,
     signal: 0,
     locks: 0,
+    lockStreak: 0,
+    bestChain: 0,
+    syncBursts: 0,
+    syncTimer: 0,
     spawned: 0,
     missed: 0,
     muted: false,
@@ -60,9 +64,13 @@
     state.elapsedMs = 0;
     state.signal = 0;
     state.locks = 0;
+    state.lockStreak = 0;
+    state.bestChain = 0;
+    state.syncBursts = 0;
+    state.syncTimer = 0;
     state.spawned = 0;
     state.missed = 0;
-    elements.stage.classList.remove("is-calling", "is-danger");
+    elements.stage.classList.remove("is-calling", "is-danger", "is-synced");
     elements.intro.classList.remove("is-hidden");
     elements.result.hidden = true;
     elements.noiseLayer.innerHTML = "";
@@ -81,6 +89,10 @@
     state.elapsedMs = 0;
     state.signal = 76;
     state.locks = 0;
+    state.lockStreak = 0;
+    state.bestChain = 0;
+    state.syncBursts = 0;
+    state.syncTimer = 0;
     state.spawned = 0;
     state.missed = 0;
     elements.intro.classList.add("is-hidden");
@@ -103,7 +115,9 @@
     const deltaMs = Math.min(120, now - state.lastTickAt);
     state.lastTickAt = now;
     state.elapsedMs = now - state.startedAt;
-    const drain = 4.5 + Math.min(7.5, state.elapsedMs / 7000);
+    state.syncTimer = Math.max(0, state.syncTimer - deltaMs / 1000);
+    const syncEase = state.syncTimer > 0 ? 0.64 : 1;
+    const drain = (4.5 + Math.min(7.5, state.elapsedMs / 7000)) * syncEase;
     state.signal = clamp(state.signal - (drain * deltaMs) / 1000, 0, maxSignal);
 
     updateHud();
@@ -134,12 +148,14 @@
     state.spawned += 1;
     const node = document.createElement("button");
     node.type = "button";
-    node.className = "noise-node";
+    const syncCandidate = state.lockStreak >= 2;
+    node.className = syncCandidate ? "noise-node is-sync" : "noise-node";
     node.setAttribute("aria-label", "신호 노이즈 안정화");
     const x = 10 + Math.random() * 76;
     const y = 12 + Math.random() * 62;
     node.style.left = `${x}%`;
     node.style.top = `${y}%`;
+    const spawnedAt = performance.now();
     let resolved = false;
 
     const timeout = window.setTimeout(() => {
@@ -149,8 +165,9 @@
       }
       resolved = true;
       state.missed += 1;
+      state.lockStreak = 0;
       state.signal = clamp(state.signal - 12, 0, maxSignal);
-      elements.feedback.textContent = "노이즈가 신호를 갉아먹었습니다.";
+      elements.feedback.textContent = "노이즈가 신호를 갉아먹었습니다. 연속 고정이 끊겼어요.";
       node.remove();
       updateHud();
     }, 1450);
@@ -161,9 +178,19 @@
       }
       resolved = true;
       clearTimeout(timeout);
+      const quickLock = performance.now() - spawnedAt < 900;
       state.locks += 1;
-      state.signal = clamp(state.signal + 10 + Math.min(8, state.locks), 0, maxSignal);
-      elements.feedback.textContent = lockCopy(state.locks);
+      state.lockStreak = quickLock ? state.lockStreak + 1 : Math.max(1, state.lockStreak - 1);
+      state.bestChain = Math.max(state.bestChain, state.lockStreak);
+      const burst = state.lockStreak > 0 && state.lockStreak % 3 === 0;
+      if (burst) {
+        state.syncBursts += 1;
+        state.syncTimer = 3.2;
+        state.signal = clamp(state.signal + 22 + Math.min(10, state.syncBursts * 2), 0, maxSignal);
+      } else {
+        state.signal = clamp(state.signal + 10 + Math.min(8, state.locks), 0, maxSignal);
+      }
+      elements.feedback.textContent = burst ? `SYNC BURST x${state.syncBursts}! 신호 감쇠가 잠시 느려집니다.` : lockCopy(state.locks, state.lockStreak, quickLock);
       node.remove();
       updateHud();
     }, { once: true });
@@ -179,7 +206,7 @@
     clearTimers();
     stopAudio();
     elements.noiseLayer.innerHTML = "";
-    elements.stage.classList.remove("is-calling", "is-danger");
+    elements.stage.classList.remove("is-calling", "is-danger", "is-synced");
     elements.stop.disabled = true;
     const elapsedSec = Math.max(0, state.elapsedMs / 1000);
     const grade = gradeRun(reason, elapsedSec, state.signal, state.locks);
@@ -193,7 +220,7 @@
     elements.resultTitle.textContent = titleForReason(reason, grade);
     elements.resultCopy.textContent = copyForReason(reason, grade);
     elements.resultTime.textContent = `시간 ${elapsedSec.toFixed(1)}초`;
-    elements.resultGrade.textContent = `등급 ${grade}`;
+    elements.resultGrade.textContent = `등급 ${grade} · SYNC ${state.syncBursts}`;
     elements.resultTotal.textContent = `누적 ${formatSeconds(state.record.totalSeconds)}`;
     elements.result.hidden = false;
     elements.feedback.textContent = "호출 기록이 저장되었습니다.";
@@ -204,10 +231,11 @@
     const signalValue = Math.round(state.signal);
     elements.time.textContent = (state.elapsedMs / 1000).toFixed(1);
     elements.signal.textContent = `${signalValue}%`;
-    elements.locks.textContent = String(state.locks);
+    elements.locks.textContent = state.lockStreak > 1 ? `${state.locks} x${state.lockStreak}` : String(state.locks);
     elements.total.textContent = formatSeconds(state.record.totalSeconds || 0);
     elements.signalBar.style.transform = `scaleX(${clamp(state.signal / maxSignal, 0, 1)})`;
     elements.stage.classList.toggle("is-danger", state.phase === "calling" && state.signal < 28);
+    elements.stage.classList.toggle("is-synced", state.phase === "calling" && state.syncTimer > 0);
   }
 
   function playSignalSound() {
@@ -251,7 +279,7 @@
   }
 
   function gradeRun(reason, elapsedSec, signal, locks) {
-    if (reason === "complete" && signal >= 70 && locks >= 18) {
+    if (reason === "complete" && signal >= 70 && locks >= 18 && state.syncBursts >= 3) {
       return "S";
     }
     if (reason === "complete") {
@@ -278,10 +306,10 @@
 
   function copyForReason(reason, grade) {
     if (reason === "complete" && grade === "S") {
-      return "노이즈를 거의 놓치지 않았습니다. 대기실이 아주 조용하게 빛났습니다.";
+      return `노이즈를 거의 놓치지 않았습니다. SYNC ${state.syncBursts}회, 최고 연속 ${state.bestChain}으로 대기실이 아주 조용하게 빛났습니다.`;
     }
     if (reason === "complete") {
-      return "UFO 신호가 끝까지 이어졌습니다. 다음에는 더 높은 안정도를 노려보세요.";
+      return `UFO 신호가 끝까지 이어졌습니다. SYNC ${state.syncBursts}회, 최고 연속 ${state.bestChain}입니다.`;
     }
     if (reason === "manual") {
       return "직접 호출을 마쳤습니다. 누적 대기 시간은 계속 쌓입니다.";
@@ -289,7 +317,13 @@
     return "신호가 끊겼습니다. 노이즈가 뜨면 조금 더 빠르게 탭해보세요.";
   }
 
-  function lockCopy(locks) {
+  function lockCopy(locks, streak, quickLock) {
+    if (!quickLock) {
+      return `노이즈 고정. 천천히 잡아서 연속 ${streak}입니다.`;
+    }
+    if (streak >= 2) {
+      return `연속 ${streak}! 다음 노이즈를 빠르게 잡으면 공명이 터집니다.`;
+    }
     if (locks % 6 === 0) {
       return "신호가 또렷해졌습니다.";
     }

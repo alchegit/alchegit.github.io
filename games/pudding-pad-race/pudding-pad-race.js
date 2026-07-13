@@ -187,6 +187,9 @@ function createInitialState(options = {}) {
     bestGateCombo: 0,
     perfectGates: 0,
     driftBoosts: 0,
+    apexLinks: 0,
+    lineCharge: 0,
+    lineReady: false,
     boostTime: 0,
     feverTime: 0,
     boostCooldown: 0,
@@ -246,6 +249,7 @@ function tick(timestamp) {
     state.boostCooldown = Math.max(0, state.boostCooldown - delta);
     state.boostTime = Math.max(0, state.boostTime - delta);
     updateKart(delta);
+    updateRacingLine(delta);
     recordRaceTrace(delta);
     updateFloaters(delta);
     checkGate();
@@ -423,6 +427,40 @@ function triggerDriftBoost() {
   spawnFloatText(`BOOST +${bonus}`, currentFlavor.color, kart.x, kart.y - 28);
 }
 
+function angleDelta(a, b) {
+  let delta = (a - b + Math.PI) % (Math.PI * 2) - Math.PI;
+  if (delta < -Math.PI) {
+    delta += Math.PI * 2;
+  }
+  return delta;
+}
+
+function updateRacingLine(delta) {
+  const gate = gates[state.gateIndex];
+  const nextGate = gates[(state.gateIndex + 1) % gates.length];
+  if (!gate || !nextGate) {
+    state.lineCharge = 0;
+    state.lineReady = false;
+    return;
+  }
+
+  const kart = state.kart;
+  const distanceToGate = Math.hypot(kart.x - gate.x, kart.y - gate.y);
+  const angleToNext = Math.atan2(nextGate.y - kart.y, nextGate.x - kart.x);
+  const setupError = Math.abs(angleDelta(kart.angle, angleToNext));
+  const onTrack = getTrackBand(kart.x, kart.y).inside;
+  const setupWindow = distanceToGate < 138 && distanceToGate > 18 && kart.speed > 112 && onTrack && setupError < 0.68;
+
+  if (setupWindow) {
+    const quality = clamp(1 - setupError / 0.68, 0.12, 1);
+    state.lineCharge = clamp(state.lineCharge + delta * (0.95 + quality * 1.05), 0, 1);
+  } else {
+    state.lineCharge = clamp(state.lineCharge - delta * 0.92, 0, 1);
+  }
+
+  state.lineReady = state.lineCharge >= 0.64;
+}
+
 function spawnFloatText(text, color, x, y) {
   state.floaters.push({
     text,
@@ -477,19 +515,31 @@ function checkGate() {
 
   const cleanPass = state.offTrackTimer <= 0 && state.kart.speed > 118;
   const perfectPass = cleanPass && distance < 18 && state.kart.speed > 158;
+  const apexLink = cleanPass && state.lineReady;
   state.gateCombo = cleanPass ? state.gateCombo + 1 : 1;
   state.bestGateCombo = Math.max(state.bestGateCombo, state.gateCombo);
 
   const comboBonus = state.gateCombo * 48;
   const speedBonus = Math.round(Math.min(220, state.kart.speed));
   const perfectBonus = perfectPass ? 180 + state.gateCombo * 30 : 0;
-  const gateScore = 140 + state.gateIndex * 35 + state.lap * 120 + comboBonus + speedBonus + perfectBonus;
+  const apexBonus = apexLink ? 150 + state.gateCombo * 34 : 0;
+  const gateScore = 140 + state.gateIndex * 35 + state.lap * 120 + comboBonus + speedBonus + perfectBonus + apexBonus;
   state.score += gateScore;
   if (perfectPass) {
     triggerPerfectGate(gate);
   }
+  if (apexLink) {
+    state.apexLinks += 1;
+    state.boostTime = Math.max(state.boostTime, 0.46);
+    state.kart.speed = Math.min(306, state.kart.speed + 24);
+    spawnFloatText(`APEX +${apexBonus}`, "#8f78ff", state.kart.x, state.kart.y - 44);
+  }
+  state.lineCharge = apexLink ? 0.22 : 0;
+  state.lineReady = false;
   state.gateIndex += 1;
-  hintText.textContent = perfectPass ? `PERFECT ${gate.name}! 푸딩 피버 x${state.gateCombo}` : `${gate.name} 게이트 x${state.gateCombo}`;
+  hintText.textContent = apexLink
+    ? `APEX LINK! 다음 게이트 라인을 잘 탔어요 x${state.gateCombo}`
+    : perfectPass ? `PERFECT ${gate.name}! 푸딩 피버 x${state.gateCombo}` : `${gate.name} 게이트 x${state.gateCombo}`;
   spawnFloatText(`${perfectPass ? "PERFECT " : ""}x${state.gateCombo} +${gateScore}`, perfectPass ? "#ffd66e" : gate.color, gate.x, gate.y - 26);
 
   if (state.gateIndex >= gates.length) {
@@ -546,8 +596,8 @@ function finishGame(won) {
   resultKicker.textContent = won ? "Race Complete" : "Race Paused";
   resultTitle.textContent = won ? "말랑한 완주" : "다시 달려볼까요";
   resultCopy.textContent = won
-    ? `${state.trackName} 별 ${stars}/3, 기록 ${formatTime(state.elapsed)}, 콤보 x${state.bestGateCombo}, 부스트 ${state.driftBoosts}회입니다. ${currentFlavor.name} 미션 ${missionCleared ? "완료" : currentFlavor.mission}.`
-    : `${state.trackName} ${state.lap}/${totalLaps}랩, 게이트 ${state.gateIndex + 1}/${gates.length}, 최고 콤보 x${state.bestGateCombo}까지 진행했습니다.`;
+    ? `${state.trackName} 별 ${stars}/3, 기록 ${formatTime(state.elapsed)}, 콤보 x${state.bestGateCombo}, APEX ${state.apexLinks}회, 부스트 ${state.driftBoosts}회입니다. ${currentFlavor.name} 미션 ${missionCleared ? "완료" : currentFlavor.mission}.`
+    : `${state.trackName} ${state.lap}/${totalLaps}랩, 게이트 ${state.gateIndex + 1}/${gates.length}, 최고 콤보 x${state.bestGateCombo}, APEX ${state.apexLinks}회까지 진행했습니다.`;
   resultOverlay.hidden = false;
   syncButtons();
 }
@@ -586,6 +636,7 @@ function draw(timestamp) {
   drawBackground(timestamp);
   drawTrack();
   drawGhostTrace(timestamp);
+  drawRacingLine(timestamp);
   drawGates(timestamp);
   drawTrail();
   drawKart(timestamp);
@@ -679,6 +730,44 @@ function drawGhostTrace(timestamp) {
   ctx.stroke();
   ctx.fillStyle = "#69c8ff";
   ctx.fillRect(last.x - 5, last.y - 4, 10, 8);
+  ctx.restore();
+}
+
+function drawRacingLine(timestamp) {
+  const gate = gates[state.gateIndex];
+  const nextGate = gates[(state.gateIndex + 1) % gates.length];
+  if (!gate || !nextGate || !state.active) {
+    return;
+  }
+
+  const pulse = 0.5 + Math.sin(timestamp / 180) * 0.2;
+  ctx.save();
+  ctx.globalAlpha = 0.38 + state.lineCharge * 0.36;
+  ctx.strokeStyle = state.lineReady ? "#ffd66e" : "#8f78ff";
+  ctx.lineWidth = state.lineReady ? 6 : 4;
+  ctx.setLineDash([14, 12]);
+  ctx.beginPath();
+  ctx.moveTo(gate.x, gate.y);
+  const midX = center.x + (gate.x + nextGate.x - center.x * 2) * 0.18;
+  const midY = center.y + (gate.y + nextGate.y - center.y * 2) * 0.18;
+  ctx.quadraticCurveTo(midX, midY, nextGate.x, nextGate.y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.globalAlpha = 0.58 + state.lineCharge * 0.3;
+  ctx.strokeStyle = state.lineReady ? "#ffd66e" : currentFlavor.color;
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(nextGate.x, nextGate.y, 44 + pulse * 6, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(0.08, state.lineCharge));
+  ctx.stroke();
+
+  ctx.fillStyle = state.lineReady ? "#ffd66e" : "#fffef7";
+  ctx.strokeStyle = "#243047";
+  ctx.lineWidth = 2;
+  ctx.font = "900 11px ui-monospace, SFMono-Regular, Consolas, monospace";
+  ctx.textAlign = "center";
+  ctx.strokeText(state.lineReady ? "APEX" : "NEXT", nextGate.x, nextGate.y - 48);
+  ctx.fillText(state.lineReady ? "APEX" : "NEXT", nextGate.x, nextGate.y - 48);
   ctx.restore();
 }
 
@@ -789,7 +878,7 @@ function drawRaceOverlay() {
   ctx.font = "900 13px ui-monospace, SFMono-Regular, Consolas, monospace";
   ctx.fillText(state.flavorMissionDone ? "DONE" : currentFlavor.mission, 146, 116);
 
-  drawPanel(width - 226, 28, 198, 78);
+  drawPanel(width - 226, 28, 198, 106);
   ctx.fillStyle = "#526078";
   ctx.font = "900 10px ui-monospace, SFMono-Regular, Consolas, monospace";
   ctx.fillText("DRIFT", width - 206, 50);
@@ -802,6 +891,16 @@ function drawRaceOverlay() {
   ctx.strokeStyle = "#243047";
   ctx.lineWidth = 2;
   ctx.strokeRect(width - 206, 66, 78, 12);
+
+  ctx.fillStyle = "#526078";
+  ctx.font = "900 10px ui-monospace, SFMono-Regular, Consolas, monospace";
+  ctx.fillText("APEX", width - 206, 96);
+  ctx.fillStyle = "rgba(36, 48, 71, 0.16)";
+  ctx.fillRect(width - 206, 112, 78, 10);
+  ctx.fillStyle = state.lineReady ? "#ffd66e" : "#8f78ff";
+  ctx.fillRect(width - 206, 112, 78 * state.lineCharge, 10);
+  ctx.strokeStyle = "#243047";
+  ctx.strokeRect(width - 206, 112, 78, 10);
 
   for (let i = 0; i < 3; i += 1) {
     drawMiniStar(width - 108 + i * 24, 72, i < state.bestStars ? "#ffd66e" : "#ffffff");

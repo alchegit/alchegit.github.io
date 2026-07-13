@@ -223,6 +223,12 @@ h1 {
     linear-gradient(180deg, #06040a 0%, #190b1d 52%, #221827 100%);
 }
 
+.signal-stage.is-synced {
+  background:
+    linear-gradient(rgba(255, 216, 90, 0.13) 1px, transparent 1px) 0 0 / 100% 18px,
+    linear-gradient(180deg, #04100f 0%, #0a1f25 52%, #132b38 100%);
+}
+
 .sky-field span {
   position: absolute;
   width: 3px;
@@ -311,6 +317,20 @@ h1 {
   bottom: 14px;
   left: 26px;
   width: 3px;
+}
+
+.noise-node.is-sync {
+  border-color: var(--lemon);
+  background: rgba(255, 216, 90, 0.24);
+  box-shadow:
+    0 0 0 7px rgba(255, 216, 90, 0.22),
+    0 0 28px rgba(255, 216, 90, 0.42),
+    3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.noise-node.is-sync::before,
+.noise-node.is-sync::after {
+  background: var(--lemon);
 }
 
 .intro-panel,
@@ -453,8 +473,18 @@ h1 {
   }
 
   .game-header {
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
     padding: 10px;
+  }
+
+  .title-block {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .icon-button {
+    justify-self: end;
   }
 
   .back-link {
