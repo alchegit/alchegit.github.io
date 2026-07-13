@@ -17,6 +17,7 @@
   const restartButton = document.getElementById("restartButton");
   const overlayRestartButton = document.getElementById("overlayRestartButton");
   const resultOverlay = document.getElementById("resultOverlay");
+  const resultTitle = document.getElementById("resultTitle");
   const resultCopy = document.getElementById("resultCopy");
 
   const storageKey = "pixelColorGardenBest";
@@ -711,9 +712,26 @@
     }
 
     saveProgress();
+    const maxCombo = Math.max(state.combo, state.progress.maxCombo || 0);
+    const comboTitle =
+      maxCombo >= 12
+        ? "무지개 향기 정원사"
+        : maxCombo >= 8
+        ? "꽃길 집중 장인"
+        : maxCombo >= 5
+        ? "새싹 감각 수집가"
+        : "차분한 정원 돌봄";
+    resultTitle.textContent =
+      state.dailyMode && state.dailyCorrect >= 9
+        ? "오늘의 정원 장인!"
+        : maxCombo >= 8
+        ? "콤보가 활짝 피었어요"
+        : state.level >= 10
+        ? "정원이 깊어졌어요"
+        : "정원 정산";
     resultCopy.textContent =
       `${state.dailyMode ? `오늘 ${state.dailyCorrect}/10, ` : ""}점수 ${state.score}점, 레벨 ${state.level}까지 정원을 돌봤습니다. ` +
-      `꽃 ${state.unlockedIds.size}/${flowerVarieties.length}, 최고 콤보 ${state.progress.maxCombo}, 물방울 힌트 ${state.dewSaves}회, 향기 길 ${state.scentTrailHits}/${state.scentTrailUses}회입니다.` +
+      `칭호 ${comboTitle}, 꽃 ${state.unlockedIds.size}/${flowerVarieties.length}, 최고 콤보 ${maxCombo}, 물방울 힌트 ${state.dewSaves}회, 향기 길 ${state.scentTrailHits}/${state.scentTrailUses}회입니다.` +
       (state.progress.friendRecord ? ` 친구 ${state.progress.friendRecord.correct}/10, ${state.progress.friendRecord.score}점.` : "");
     resultOverlay.hidden = false;
     updateHud();

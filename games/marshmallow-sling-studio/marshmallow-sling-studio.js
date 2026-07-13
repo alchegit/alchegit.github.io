@@ -142,6 +142,7 @@
       replayRecord: getReplayRecord(progress, progress.lastReplayCode || ""),
       hitShake: 0,
       hitEcho: "",
+      weakCoachTime: progress.bestStars > 0 ? 2.2 : 4.6,
       lastTime: performance.now(),
       resetTimer: 0,
       slowTimer: 0,
@@ -269,6 +270,7 @@
 
     event.preventDefault();
     state.dragging = true;
+    state.weakCoachTime = 0;
     if (canvas.setPointerCapture && event.pointerId !== undefined) {
       canvas.setPointerCapture(event.pointerId);
     }
@@ -913,6 +915,7 @@
 
     const slowDt = state.slowTimer > 0 ? dt * 0.38 : dt;
     state.slowTimer = Math.max(0, state.slowTimer - dt);
+    state.weakCoachTime = Math.max(0, state.weakCoachTime - dt);
     state.hitShake = Math.max(0, state.hitShake - dt);
     state.comboTimer = Math.max(0, state.comboTimer - dt);
     if (state.comboTimer <= 0) {
@@ -1129,6 +1132,54 @@
     ctx.restore();
   }
 
+  function firstCoachBlock() {
+    return state.blocks.find((block) => isWeakPoint(block) && !block.cleared)
+      || state.blocks.find((block) => block.target && !block.cleared)
+      || null;
+  }
+
+  function drawWeakCoach(time) {
+    if (state.weakCoachTime <= 0 || state.phase !== "aim" || state.dragging || state.finished) {
+      return;
+    }
+    const block = firstCoachBlock();
+    if (!block) {
+      return;
+    }
+    const cx = block.x + block.w / 2;
+    const cy = block.y + block.h / 2;
+    const pulse = 0.5 + Math.sin(time * 7) * 0.5;
+
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, state.weakCoachTime);
+    ctx.strokeStyle = "#ffd85a";
+    ctx.lineWidth = 5 + pulse * 2;
+    ctx.setLineDash([8, 6]);
+    ctx.strokeRect(block.x - 9, block.y - 9, block.w + 18, block.h + 18);
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+    ctx.moveTo(sling.x + 28, sling.y - 32);
+    ctx.lineTo(cx - 12, cy);
+    ctx.strokeStyle = "rgba(255,216,90,0.82)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(255,249,237,0.94)";
+    ctx.strokeStyle = "#243047";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(cx - 58, cy - 64, 116, 34, 7);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#243047";
+    ctx.font = "900 16px ui-sans-serif, system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(isWeakPoint(block) ? "약점!" : "분홍 목표!", cx, cy - 46);
+    ctx.restore();
+  }
+
   function drawCrumbs() {
     for (const crumb of state.crumbs) {
       ctx.globalAlpha = clamp(crumb.life / crumb.maxLife, 0, 1);
@@ -1268,6 +1319,7 @@
     drawSling();
     drawShockwaves();
     state.blocks.forEach(drawBlock);
+    drawWeakCoach(time);
     drawProjectile();
     drawCrumbs();
     drawFloatTexts();

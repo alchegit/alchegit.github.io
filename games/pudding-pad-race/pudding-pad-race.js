@@ -593,11 +593,25 @@ function finishGame(won) {
   const missionCleared = won && currentFlavor.missionCheck(state);
   saveProgress(stars, newBestTime, missionCleared);
 
+  const skillTitle =
+    state.perfectGates >= 8
+      ? "푸딩 라인 마스터!"
+      : state.bestGateCombo >= 7
+      ? "말랑 콤보 질주!"
+      : state.driftBoosts >= 4
+      ? "젤리 부스트 드리프트!"
+      : "말랑한 완주";
+  const stabilityPraise =
+    state.perfectGates >= 6
+      ? "게이트 중심을 꾸준히 통과해서 착지가 아주 안정적이었어요."
+      : state.bestGateCombo >= 4
+      ? "콤보 라인이 살아나고 있어요. 다음 판에는 중심선을 조금 더 오래 잡아보세요."
+      : "다음 판에는 노란 중심선을 짧게 끊어 잡으면 푸딩이 덜 흔들려요.";
   resultKicker.textContent = won ? "Race Complete" : "Race Paused";
-  resultTitle.textContent = won ? "말랑한 완주" : "다시 달려볼까요";
+  resultTitle.textContent = won ? skillTitle : "다시 달려볼까요";
   resultCopy.textContent = won
-    ? `${state.trackName} 별 ${stars}/3, 기록 ${formatTime(state.elapsed)}, 콤보 x${state.bestGateCombo}, APEX ${state.apexLinks}회, 부스트 ${state.driftBoosts}회입니다. ${currentFlavor.name} 미션 ${missionCleared ? "완료" : currentFlavor.mission}.`
-    : `${state.trackName} ${state.lap}/${totalLaps}랩, 게이트 ${state.gateIndex + 1}/${gates.length}, 최고 콤보 x${state.bestGateCombo}, APEX ${state.apexLinks}회까지 진행했습니다.`;
+    ? `${state.trackName} 별 ${stars}/3, 기록 ${formatTime(state.elapsed)}, 콤보 x${state.bestGateCombo}, APEX ${state.apexLinks}회, 부스트 ${state.driftBoosts}회입니다. ${stabilityPraise} ${currentFlavor.name} 미션 ${missionCleared ? "완료" : currentFlavor.mission}.`
+    : `${state.trackName} ${state.lap}/${totalLaps}랩, 게이트 ${state.gateIndex + 1}/${gates.length}, 최고 콤보 x${state.bestGateCombo}, APEX ${state.apexLinks}회까지 진행했습니다. ${stabilityPraise}`;
   resultOverlay.hidden = false;
   syncButtons();
 }

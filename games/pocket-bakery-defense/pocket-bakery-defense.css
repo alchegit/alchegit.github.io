@@ -342,8 +342,8 @@ canvas {
   }
 
   .game-board {
-    width: min(360px, calc(100vw - 20px));
-    max-width: min(360px, calc(100vw - 20px));
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
   }
 
   .game-header {

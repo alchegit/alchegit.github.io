@@ -466,12 +466,23 @@
 
     const rocket = state.rocket;
     const pushAngle = Math.atan2(rocket.y - target.y, rocket.x - target.x);
-    const speed = Math.max(90, Math.hypot(rocket.vx, rocket.vy));
+    const approachSpeed = Math.hypot(rocket.vx, rocket.vy);
+    const angleError = Math.abs(angleDelta(rocket.angle, target.angle));
+    const speed = Math.max(90, approachSpeed);
     rocket.vx = Math.cos(pushAngle) * speed * 0.55;
     rocket.vy = Math.sin(pushAngle) * speed * 0.55;
     state.bumpTimer = 0.6;
     state.score = Math.max(0, state.score - 25);
-    state.hint = "우편함이 흔들렸어요. 속도를 75 아래로 낮추고 각도를 맞춰 다시 접근하세요.";
+    if (approachSpeed > 92) {
+      state.hint = `속도가 빨라 튕겼어요. 현재 ${Math.round(approachSpeed)}, 75 아래로 미끄러지듯 접근하세요.`;
+    } else if (angleError > 0.72) {
+      state.hint = "코 방향이 우편함과 어긋났어요. 흰 슬롯 방향에 로켓 앞머리를 맞춰보세요.";
+    } else {
+      state.hint = "중앙에서 살짝 벗어났어요. 우편함 링 가운데로 천천히 들어가세요.";
+    }
+    for (let i = 0; i < 12; i += 1) {
+      addSparkle(target.x, target.y, i % 2 === 0 ? "#e95b88" : target.color);
+    }
   }
 
   function collectFuelStars() {

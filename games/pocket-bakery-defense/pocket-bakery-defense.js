@@ -174,7 +174,10 @@ function createInitialState(presetId = "") {
     enemies: [],
     bubbles: [],
     crumbs: [],
-    pulses: []
+    pulses: [],
+    popups: [],
+    damageFeedbacks: 0,
+    coachTime: progress.recipes > 0 ? 2.4 : 5.2
   };
 }
 
@@ -276,6 +279,7 @@ function tick(timestamp) {
     updateMission(delta);
     updateBurst(delta);
     updateCrumbs(delta);
+    updatePopups(delta);
     autoFire(delta);
     checkFinish();
   }
@@ -592,6 +596,7 @@ function updateEnemies(delta) {
           state.basketHp = Math.max(0, state.basketHp - damage);
         }
         spawnCrumbs(enemy.x, enemy.y, 6, "#e95b88");
+        showBasketDamageFeedback(enemy, damage);
       }
     }
 
@@ -859,6 +864,17 @@ function updateCrumbs(delta) {
   state.crumbs = state.crumbs.filter((crumb) => crumb.life > 0);
 }
 
+function updatePopups(delta) {
+  state.coachTime = Math.max(0, state.coachTime - delta);
+  state.popups = state.popups.filter((popup) => {
+    popup.life -= delta;
+    popup.x += popup.vx * delta;
+    popup.y += popup.vy * delta;
+    popup.vy += 24 * delta;
+    return popup.life > 0;
+  });
+}
+
 function spawnCrumbs(x, y, count, color) {
   for (let i = 0; i < count; i += 1) {
     const angle = Math.random() * Math.PI * 2;
@@ -873,6 +889,35 @@ function spawnCrumbs(x, y, count, color) {
       size: 3 + Math.random() * 4
     });
   }
+}
+
+function addPopup(x, y, text, color = "#243047", size = 18) {
+  state.popups.push({
+    x,
+    y,
+    text,
+    color,
+    size,
+    vx: (Math.random() - 0.5) * 18,
+    vy: -34,
+    life: 1.05,
+    maxLife: 1.05
+  });
+}
+
+function showBasketDamageFeedback(enemy, damage) {
+  if (state.damageFeedbacks >= 2) {
+    return;
+  }
+  state.damageFeedbacks += 1;
+  const fromLeft = enemy.x < basket.x - 80;
+  const fromRight = enemy.x > basket.x + 80;
+  const fromTop = enemy.y < basket.y - 70;
+  const label = fromLeft ? "왼쪽" : fromRight ? "오른쪽" : fromTop ? "위쪽" : "바구니";
+  const action = fromLeft ? "왼쪽 매대로 이동!" : fromRight ? "오른쪽 매대로 이동!" : fromTop ? "윗문으로 이동!" : "가까이 붙어 막기!";
+  hintText.textContent = `${label} 주문이 바구니를 갉았어요. 다음 러시엔 ${action}`;
+  addPopup(basket.x, basket.y - 62, `${label}을 막아요`, "#e95b88", 20);
+  addPopup(enemy.x, enemy.y - 22, `-${damage}`, "#e95b88", 16);
 }
 
 function showUpgrade() {
@@ -980,6 +1025,8 @@ function draw(timestamp) {
   drawPulses();
   drawRunOverlay();
   drawWaveCue();
+  drawCoachCard(timestamp);
+  drawPopups();
 }
 
 function drawBackground(timestamp) {
@@ -1295,6 +1342,48 @@ function drawPulses() {
     ctx.beginPath();
     ctx.arc(pulse.x, pulse.y, radius * 0.82, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawCoachCard(timestamp) {
+  if (state.coachTime <= 0 || state.paused || !state.active) {
+    return;
+  }
+  const alpha = Math.min(1, state.coachTime * 1.5);
+  const pulse = 0.5 + Math.sin(timestamp / 120) * 0.5;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  drawPanel(240, 218, 320, 96);
+  ctx.fillStyle = "#ffd85a";
+  ctx.beginPath();
+  ctx.arc(282, 266, 18 + pulse * 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#243047";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fillStyle = "#243047";
+  ctx.font = "900 21px ui-sans-serif, system-ui, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("러시 방향으로 먼저 이동", 320, 258);
+  ctx.font = "800 14px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillStyle = "#526078";
+  ctx.fillText("GUARD ON이면 반죽 방울이 더 세게 나갑니다.", 320, 284);
+  ctx.restore();
+}
+
+function drawPopups() {
+  for (const popup of state.popups) {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, popup.life / popup.maxLife);
+    ctx.font = `900 ${popup.size}px ui-sans-serif, system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.strokeText(popup.text, popup.x, popup.y);
+    ctx.fillStyle = popup.color;
+    ctx.fillText(popup.text, popup.x, popup.y);
     ctx.restore();
   }
 }

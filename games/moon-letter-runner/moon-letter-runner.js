@@ -166,6 +166,9 @@
       moonLineTimer: 0,
       landingBonusReady: false,
       landingGlow: 0,
+      coachTime: progress.bestScore > 0 || progress.storyIds.length > 0 ? 2.5 : 5.2,
+      coachUsed: false,
+      glideCoachTime: progress.unlockedGlide ? 2.8 : 0,
       airTime: 0,
       softLandings: 0,
       landingChain: 0,
@@ -174,6 +177,7 @@
       pickups: [],
       hazards: [],
       sparks: [],
+      popups: [],
       storyThisRun: new Set(),
       pickupRoute: [],
       progress,
@@ -270,7 +274,7 @@
     if (progress.unlockedDoubleJump) {
       return "공중에서 한 번 더 눌러 2단 점프를 사용할 수 있습니다.";
     }
-    return "탭으로 점프해 달빛 편지를 모으고, 공중에서 길게 누르면 더 오래 버팁니다.";
+    return "빛나는 편지 위로 짧게 탭해 점프하세요. 스토리 조각을 모으면 활강이 열립니다.";
   }
 
   function currentStage() {
@@ -321,6 +325,8 @@
     }
 
     state.actionHeld = true;
+    state.coachUsed = true;
+    state.coachTime = 0;
     const player = state.player;
     if (player.grounded) {
       player.vy = -430;
@@ -330,6 +336,7 @@
       state.jumps += 1;
       state.hint = "좋은 점프입니다. 편지 봉투를 지나가며 모아보세요.";
       addSparks(player.x + 14, player.y + player.h, "#fff4a8", 8);
+      addPopup(player.x + player.w / 2, player.y - 16, "점프!", "#fff4a8", 19);
     } else if (player.jumpsLeft > 0) {
       player.vy = -360;
       player.jumpsLeft -= 1;
@@ -337,9 +344,12 @@
       state.jumps += 1;
       state.hint = "2단 점프로 높은 편지길을 노렸습니다.";
       addSparks(player.x + 14, player.y + player.h, "#69c8ff", 12);
+      addPopup(player.x + player.w / 2, player.y - 16, "2단 점프!", "#69c8ff", 18);
     } else if (state.hasGlide) {
       state.gliding = true;
+      state.glideCoachTime = 0;
       state.hint = "달빛 활강 중입니다. 높은 길의 편지를 천천히 노려보세요.";
+      addPopup(player.x + player.w / 2, player.y - 18, "활강", "#fff4a8", 18);
     }
 
     updateHud();
@@ -359,8 +369,10 @@
     }
     if (!state.hasGlide && state.storyThisRun.size >= 2) {
       state.hasGlide = true;
+      state.glideCoachTime = 4.2;
       state.hint = "달빛 활강을 배웠습니다. 공중에서 길게 눌러 천천히 내려오세요.";
       addSparks(state.player.x, state.player.y, "#fff4a8", 24);
+      addPopup(state.player.x + state.player.w / 2, state.player.y - 20, "활강 해금!", "#fff4a8", 22);
     }
   }
 
@@ -376,6 +388,20 @@
         color
       });
     }
+  }
+
+  function addPopup(x, y, text, color, size = 18) {
+    state.popups.push({
+      x,
+      y,
+      text,
+      color,
+      size,
+      vx: (Math.random() - 0.5) * 16,
+      vy: -36,
+      life: 0.82,
+      maxLife: 0.82
+    });
   }
 
   function spawnMore(scrollSpeed, dt) {
@@ -759,11 +785,23 @@
     });
   }
 
+  function updatePopups(dt) {
+    state.popups = state.popups.filter((popup) => {
+      popup.life -= dt;
+      popup.x += popup.vx * dt;
+      popup.y += popup.vy * dt;
+      popup.vy += 26 * dt;
+      return popup.life > 0;
+    });
+  }
+
   function updateGame(dt) {
     if (state.active) {
       const scrollSpeed = 138 + state.distance * 0.05;
       state.distance += scrollSpeed * dt * 0.08;
       state.score += dt * 5;
+      state.coachTime = Math.max(0, state.coachTime - dt);
+      state.glideCoachTime = Math.max(0, state.glideCoachTime - dt);
       spawnMore(scrollSpeed, dt);
       updatePlayer(dt);
       collectLetters();
@@ -772,12 +810,37 @@
       }
     }
     updateSparks(dt);
+    updatePopups(dt);
     updateHud();
   }
 
   function drawPixelRect(x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+  }
+
+  function drawRoundRect(x, y, w, h, r, fill, stroke = "", lineWidth = 0) {
+    const radius = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + w - radius, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+    ctx.lineTo(x + w, y + h - radius);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    ctx.lineTo(x + radius, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    if (fill) {
+      ctx.fillStyle = fill;
+      ctx.fill();
+    }
+    if (stroke && lineWidth > 0) {
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    }
   }
 
   function drawBackground(time) {
@@ -898,6 +961,54 @@
     ctx.globalAlpha = 1;
   }
 
+  function drawPopups() {
+    for (const popup of state.popups) {
+      ctx.globalAlpha = Math.max(0, popup.life / popup.maxLife);
+      ctx.font = `900 ${popup.size}px ui-sans-serif, system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "rgba(36,49,95,0.7)";
+      ctx.strokeText(popup.text, popup.x, popup.y);
+      ctx.fillStyle = popup.color;
+      ctx.fillText(popup.text, popup.x, popup.y);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCoachCard(time) {
+    const showGlide = state.glideCoachTime > 0 && state.hasGlide;
+    if ((state.coachTime <= 0 && !showGlide) || state.finished || state.albumMode) {
+      return;
+    }
+    const title = showGlide ? "공중에서 길게 누르면 활강" : "짧게 탭해서 점프";
+    const sub = showGlide ? "높은 편지길에서 천천히 내려와 MOON LINE을 이어가세요." : "편지 위로 뛰고, 착지는 발판 가운데를 노리세요.";
+    const x = 248;
+    const y = 176;
+    ctx.globalAlpha = showGlide ? Math.min(1, state.glideCoachTime) : Math.min(1, state.coachTime * 1.5);
+    drawRoundRect(x, y, 304, 106, 8, "rgba(255,249,237,0.94)", "#243047", 4);
+    const pulse = 1 + Math.sin(time * 7) * 0.06;
+    ctx.save();
+    ctx.translate(x + 52, y + 53);
+    ctx.scale(pulse, pulse);
+    drawPixelRect(-20, -18, 40, 36, showGlide ? "#69c8ff" : "#fff4a8");
+    drawPixelRect(-8, -30, 16, 12, "#ffffff");
+    ctx.strokeStyle = "#243047";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(-20, -18, 40, 36);
+    ctx.restore();
+    ctx.fillStyle = "#182033";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+    ctx.font = "900 22px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText(title, x + 92, y + 44);
+    ctx.font = "800 14px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillStyle = "#526078";
+    ctx.fillText(sub.slice(0, 24), x + 92, y + 70);
+    ctx.fillText(sub.slice(24, 48), x + 92, y + 90);
+    ctx.globalAlpha = 1;
+  }
+
   function drawSkillPanel() {
     drawPixelRect(42, 42, 236, 108, "rgba(255,255,255,0.84)");
     ctx.strokeStyle = "#243047";
@@ -996,7 +1107,9 @@
     drawPlayer();
     drawSkillPanel();
     drawStoryAlbum();
+    drawCoachCard(time);
     drawSparks();
+    drawPopups();
   }
 
   function loop(timestamp) {

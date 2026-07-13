@@ -24,7 +24,7 @@
   const targetCount = 18;
   const dailyTargetCount = 24;
   const cardTotal = 9;
-  const grid = { x: 218, y: 86, cell: 116, gap: 12 };
+  const grid = { x: 230, y: 86, cell: 116, gap: 12 };
   const foodColors = ["#ffd85a", "#35d7a8", "#e95b88", "#69c8ff", "#ff9a6c", "#8f78ff"];
   const baseBeatWindows = {
     perfect: 0.1,
@@ -94,11 +94,17 @@
       judgeFlash: 0,
       feverTime: 0,
       rhythmPhraseTime: 0,
+      coachTime: progress.plays < 2 ? 5.2 : 2.4,
+      firstTapDone: false,
+      rewardFlashTime: 0,
+      rewardFlashText: "",
+      bonusStamps: 0,
       albumMode: false,
       selectedStickerSlot: null,
       menu,
       cells: Array.from({ length: 9 }, () => null),
       sparks: [],
+      popups: [],
       progress,
       cards: new Set(progress.cards),
       stickers: Array.isArray(progress.stickers) ? progress.stickers.slice(0, stickerSlots) : Array.from({ length: stickerSlots }, () => ""),
@@ -319,7 +325,13 @@
       return;
     }
 
+    if (!state.firstTapDone) {
+      state.firstTapDone = true;
+      state.coachTime = 0;
+    }
+
     if (index === state.activeCell) {
+      const center = cellCenter(index);
       const judge = timingJudge();
       if (!judge.advance) {
         state.combo = 0;
@@ -331,21 +343,21 @@
         state.judgeFlash = 0.46;
         state.hint = "조금 빨랐어요. 링이 가운데 선에 가까워질 때 다시 톡 눌러주세요.";
         playTapSound(judge.label);
-        addSparks(cellCenter(index).x, cellCenter(index).y, "#69c8ff", 8);
+        addSparks(center.x, center.y, "#69c8ff", 8);
+        addPopup(center.x, center.y - 18, "기다려요", "#69c8ff", 18);
         updateHud();
         return;
       }
 
       const color = foodColors[(state.filled + state.combo) % foodColors.length];
       const multiplier = state.feverTime > 0 ? 1.35 : 1;
-      const gained = Math.round((judge.score + state.combo * 16) * multiplier);
+      let gained = Math.round((judge.score + state.combo * 16) * multiplier);
+      let extraTime = judge.time;
 
       state.cells[index] = { color, mark: judge.label[0] };
       state.filled += 1;
       state.combo = judge.keepsCombo ? state.combo + 1 : 0;
       state.maxCombo = Math.max(state.maxCombo, state.combo);
-      state.score += gained;
-      state.timeLeft = clamp(state.timeLeft + judge.time, 0, 36);
       state.lastJudge = judge.label;
       state.judgeFlash = 0.65;
       state.timingOffsetSum += Math.abs(judge.offset || 0);
@@ -357,6 +369,16 @@
         if (state.perfectStreak >= 3) {
           state.feverTime = Math.max(state.feverTime, 5.5);
         }
+        if (state.perfectStreak > 0 && state.perfectStreak % 3 === 0) {
+          const streakBonus = 180 + state.perfectStreak * 12;
+          gained += streakBonus;
+          extraTime += 0.65;
+          state.bonusStamps += 1;
+          state.rewardFlashTime = 1.15;
+          state.rewardFlashText = `맛있다 x${state.perfectStreak}`;
+          addRewardBurst(center.x, center.y, color);
+          addPopup(center.x, center.y - 34, `보너스 +${streakBonus}`, "#e95b88", 21);
+        }
         if (state.perfectStreak > 0 && state.perfectStreak % 4 === 0) {
           playRhythmPhrase();
         }
@@ -364,11 +386,14 @@
         state.perfectStreak = 0;
       }
 
+      state.score += gained;
+      state.timeLeft = clamp(state.timeLeft + extraTime, 0, 38);
       playTapSound(judge.label);
       state.hint = judge.perfect && state.perfectStreak >= 3
         ? `반짝 피버! PERFECT x${state.perfectStreak} +${gained}`
         : `${judge.label} +${gained}. ${state.menu.name} 박자 ${Math.min(state.targetGoal, state.filled + 1)}/${state.targetGoal}`;
-      addSparks(cellCenter(index).x, cellCenter(index).y, color, judge.perfect ? 22 : 14);
+      addSparks(center.x, center.y, color, judge.perfect ? 28 : 16);
+      addPopup(center.x, center.y - 22, judge.perfect ? "PERFECT!" : `${judge.label} +${gained}`, judge.perfect ? "#e95b88" : "#182033", judge.perfect ? 22 : 17);
 
       if (state.filled >= state.targetGoal) {
         finishGame(true);
@@ -386,7 +411,9 @@
       state.hint = "다른 칸이 반짝이고 있어요. 패턴의 다음 칸을 다시 잡아봅시다.";
       playTapSound("MISS");
       if (index >= 0) {
-        addSparks(cellCenter(index).x, cellCenter(index).y, "#ffffff", 8);
+        const center = cellCenter(index);
+        addSparks(center.x, center.y, "#ffffff", 8);
+        addPopup(center.x, center.y - 18, "다음 칸!", "#526078", 16);
       }
     }
 
@@ -411,9 +438,41 @@
         vy: (Math.random() - 0.8) * 100,
         life: 0.65,
         maxLife: 0.65,
-        color
+        color,
+        size: 4 + Math.random() * 4
       });
     }
+  }
+
+  function addRewardBurst(x, y, color) {
+    for (let i = 0; i < 22; i += 1) {
+      const angle = (Math.PI * 2 * i) / 22;
+      const speed = 115 + Math.random() * 85;
+      state.sparks.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 35,
+        life: 0.9,
+        maxLife: 0.9,
+        color: i % 3 === 0 ? "#ffd85a" : color,
+        size: 6 + Math.random() * 5
+      });
+    }
+  }
+
+  function addPopup(x, y, text, color, size = 18) {
+    state.popups.push({
+      x,
+      y,
+      text,
+      color,
+      size,
+      vx: (Math.random() - 0.5) * 22,
+      vy: -42,
+      life: 0.82,
+      maxLife: 0.82
+    });
   }
 
   function burnActiveCell() {
@@ -430,7 +489,9 @@
     state.judgeFlash = 0.58;
     state.hint = "반찬이 식어버렸어요. 다음 칸의 박자를 보고 다시 이어가세요.";
     playTapSound("MISS");
-    addSparks(cellCenter(index).x, cellCenter(index).y, "#8f78ff", 12);
+    const center = cellCenter(index);
+    addSparks(center.x, center.y, "#8f78ff", 12);
+    addPopup(center.x, center.y - 18, "놓쳤어요", "#8f78ff", 17);
     state.patternIndex += 1;
     chooseNextCell();
   }
@@ -567,13 +628,21 @@
     return { menu, grade };
   }
 
+  function stickerSlotRect(index) {
+    const col = index % 2;
+    const row = Math.floor(index / 2);
+    return {
+      x: 52 + col * 72,
+      y: 330 + row * 38,
+      w: 58,
+      h: 30
+    };
+  }
+
   function stickerSlotAt(point) {
     for (let index = 0; index < stickerSlots; index += 1) {
-      const col = index % 2;
-      const row = Math.floor(index / 2);
-      const x = 58 + col * 52;
-      const y = 324 + row * 38;
-      if (point.x >= x && point.x <= x + 42 && point.y >= y && point.y <= y + 28) {
+      const { x, y, w, h } = stickerSlotRect(index);
+      if (point.x >= x && point.x <= x + w && point.y >= y && point.y <= y + h) {
         return index;
       }
     }
@@ -671,20 +740,23 @@
       const mistakeCopy = state.earlyHits + state.burntHits > 0
         ? ` EARLY ${state.earlyHits}번, BURNT ${state.burntHits}번.`
         : " 박자가 깨끗했어요.";
+      const praise = grade === "S" ? "완벽한 맛집 도시락!" : grade === "A" ? "아주 맛있는 도시락!" : "든든한 도시락 완성!";
+      resultOverlay.className = `result-overlay is-${grade.toLowerCase()}`;
       resultKicker.textContent = "Lunchbox Complete";
-      resultTitle.textContent = `도시락 ${grade} 등급`;
+      resultTitle.textContent = praise;
       resultCopy.textContent =
-        `남은 시간, 콤보, PERFECT 보너스 ${bonus}점을 더해 ${Math.round(state.score)}점을 기록했어요. ` +
-        `${cardMessage || "이미 가진 도시락 카드입니다."}${mistakeCopy} 카드 ${state.resultCardCode}` +
+        `${grade} 등급, ${Math.round(state.score)}점. 최고 콤보 ${state.maxCombo}, PERFECT ${state.perfectHits}번, 반짝 보너스 ${state.bonusStamps}번! ` +
+        `마지막 보너스 ${bonus}점을 더했어요. ${cardMessage || "이미 가진 도시락 카드입니다."}${mistakeCopy} 카드 ${state.resultCardCode}` +
         `${friendCopy ? ` · 친구 비교 ${friendCopy}` : ""}`;
     } else {
       state.resultCardCode = resultCardCode(grade, won);
       updateDailyRecord(grade);
       const friendCopy = compareWithFriend();
+      resultOverlay.className = "result-overlay is-c";
       resultKicker.textContent = "Kitchen Closed";
-      resultTitle.textContent = "오늘 도시락 마감";
+      resultTitle.textContent = "아쉬운 마감";
       resultCopy.textContent =
-        `${state.filled}/${state.targetGoal}칸을 채웠어요. EARLY ${state.earlyHits}번, BURNT ${state.burntHits}번. 카드 ${state.resultCardCode}` +
+        `${state.filled}/${state.targetGoal}칸을 채웠어요. 다음 판에는 노란 링이 안쪽 선에 닿는 순간만 노려보세요. EARLY ${state.earlyHits}번, BURNT ${state.burntHits}번. 카드 ${state.resultCardCode}` +
         `${friendCopy ? ` · 친구 비교 ${friendCopy}` : ""}`;
     }
 
@@ -702,12 +774,24 @@
     });
   }
 
+  function updatePopups(dt) {
+    state.popups = state.popups.filter((popup) => {
+      popup.life -= dt;
+      popup.x += popup.vx * dt;
+      popup.y += popup.vy * dt;
+      popup.vy += 28 * dt;
+      return popup.life > 0;
+    });
+  }
+
   function updateGame(dt) {
     if (state.active) {
       state.timeLeft -= dt;
       state.feverTime = Math.max(0, state.feverTime - dt);
       state.rhythmPhraseTime = Math.max(0, state.rhythmPhraseTime - dt);
       state.judgeFlash = Math.max(0, state.judgeFlash - dt);
+      state.coachTime = Math.max(0, state.coachTime - dt);
+      state.rewardFlashTime = Math.max(0, state.rewardFlashTime - dt);
       if (beatInfo().remaining <= 0) {
         burnActiveCell();
       }
@@ -717,12 +801,37 @@
       }
     }
     updateSparks(dt);
+    updatePopups(dt);
     updateHud();
   }
 
   function drawPixelRect(x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+  }
+
+  function drawRoundRect(x, y, w, h, r, fill, stroke = "", lineWidth = 0) {
+    const radius = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + w - radius, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+    ctx.lineTo(x + w, y + h - radius);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    ctx.lineTo(x + radius, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    if (fill) {
+      ctx.fillStyle = fill;
+      ctx.fill();
+    }
+    if (stroke && lineWidth > 0) {
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    }
   }
 
   function drawBackground() {
@@ -795,10 +904,18 @@
       }
 
       if (active) {
+        if (entry) {
+          drawRoundRect(-48, -50, 35, 24, 5, "rgba(255,255,255,0.82)", "#243047", 2);
+          ctx.fillStyle = "#243047";
+          ctx.font = "900 14px ui-monospace, Consolas, monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(entry.mark, -30, -37);
+        }
         drawBeatRing(time);
       }
 
-      if (entry) {
+      if (entry && !active) {
         ctx.fillStyle = "#243047";
         ctx.font = "900 30px ui-monospace, Consolas, monospace";
         ctx.textAlign = "center";
@@ -814,6 +931,8 @@
     const targetRadius = 32;
     const movingRadius = 64 - info.progress * 36;
     const zoneColor = info.zone === "perfect" ? "#fff8e8" : info.zone === "good" ? "#ffd85a" : info.zone === "late" ? "#e95b88" : "#69c8ff";
+    const badgeFill = info.zone === "perfect" ? "#35d7a8" : info.zone === "late" ? "#fff2df" : "#ffffff";
+    const badgeText = info.zone === "wait" ? "기다려" : info.zone === "perfect" ? "톡!" : info.zone === "late" ? "늦음" : "좋아";
 
     ctx.save();
     ctx.strokeStyle = "rgba(36,48,71,0.72)";
@@ -837,39 +956,43 @@
       ctx.globalAlpha = 1;
     }
 
+    ctx.fillStyle = info.zone === "perfect" ? "#ffd85a" : "#fff8e8";
+    ctx.beginPath();
+    ctx.arc(0, 0, 11 + Math.sin(time * 10) * 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#243047";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    drawRoundRect(-34, 35, 68, 24, 7, badgeFill, "#243047", 3);
     ctx.fillStyle = "#243047";
-    ctx.font = "900 15px ui-monospace, Consolas, monospace";
+    ctx.font = "900 14px ui-sans-serif, system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    const beatText = info.zone === "wait" ? "..." : info.zone === "perfect" ? "TAP" : info.zone === "late" ? "!" : "tap";
-    ctx.fillText(beatText, 0, 2);
+    ctx.fillText(badgeText, 0, 48);
     ctx.restore();
   }
 
   function drawMenuPanel() {
-    drawPixelRect(44, 84, 128, 176, "rgba(255,255,255,0.86)");
-    ctx.strokeStyle = "#243047";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(44, 84, 128, 176);
+    drawRoundRect(26, 84, 176, 188, 6, "rgba(255,255,255,0.9)", "#243047", 3);
     ctx.fillStyle = "#526078";
-    ctx.font = "900 12px ui-monospace, Consolas, monospace";
-    ctx.textAlign = "left";
-    ctx.fillText("MENU", 58, 108);
-    ctx.fillStyle = "#182033";
-    ctx.font = "900 18px ui-sans-serif, system-ui, sans-serif";
-    ctx.fillText(state.menu.name, 58, 136);
     ctx.font = "900 13px ui-monospace, Consolas, monospace";
-    ctx.fillText(`P ${state.perfectHits}`, 58, 166);
-    ctx.fillText(`MAX ${state.maxCombo}`, 58, 190);
-    ctx.fillText(`CARD ${state.cards.size}/${cardTotal}`, 58, 214);
-    ctx.fillText(state.dailyMode ? "DAILY" : "NORMAL", 58, 244);
-    drawBeatMeter(58, 250, 88, 8);
+    ctx.textAlign = "left";
+    ctx.fillText("MENU", 46, 108);
+    ctx.fillStyle = "#182033";
+    ctx.font = "900 26px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText(state.menu.name, 46, 138);
+    ctx.font = "900 22px ui-monospace, Consolas, monospace";
+    ctx.fillText(`${state.filled}/${state.targetGoal}`, 46, 168);
+    ctx.font = "900 18px ui-monospace, Consolas, monospace";
+    ctx.fillText(`P ${state.perfectHits}`, 46, 194);
+    ctx.fillText(`MAX ${state.maxCombo}`, 46, 218);
+    ctx.font = "900 16px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText(state.dailyMode ? "오늘 메뉴" : "일반 메뉴", 46, 246);
+    drawBeatMeter(46, 254, 128, 10);
     if (state.feverTime > 0) {
-      drawPixelRect(58, 230, 88, 12, "#ffd85a");
-      drawPixelRect(58, 230, 88 * (state.feverTime / 5.5), 12, "#e95b88");
-      ctx.strokeStyle = "#243047";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(58, 230, 88, 12);
+      drawRoundRect(46, 224, 128, 14, 5, "#ffd85a", "#243047", 2);
+      drawRoundRect(46, 224, 128 * (state.feverTime / 5.5), 14, 5, "#e95b88");
     }
   }
 
@@ -889,32 +1012,26 @@
   }
 
   function drawStickerBook() {
-    drawPixelRect(44, 286, 128, 172, "rgba(255,255,255,0.82)");
-    ctx.strokeStyle = "#243047";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(44, 286, 128, 172);
+    drawRoundRect(26, 292, 176, 166, 6, "rgba(255,255,255,0.84)", "#243047", 3);
     ctx.fillStyle = "#526078";
-    ctx.font = "900 12px ui-monospace, Consolas, monospace";
+    ctx.font = "900 13px ui-monospace, Consolas, monospace";
     ctx.textAlign = "left";
-    ctx.fillText("STICKER", 58, 310);
+    ctx.fillText("STICKER", 46, 316);
 
     for (let index = 0; index < stickerSlots; index += 1) {
-      const col = index % 2;
-      const row = Math.floor(index / 2);
-      const x = 58 + col * 52;
-      const y = 324 + row * 38;
+      const { x, y, w, h } = stickerSlotRect(index);
       const cardId = state.stickers[index] || "";
       const selected = state.selectedStickerSlot === index;
-      drawPixelRect(x, y, 42, 28, cardId ? cardParts(cardId).menu.accent : state.albumMode ? "#fff2df" : "#fff8e8");
+      drawRoundRect(x, y, w, h, 4, cardId ? cardParts(cardId).menu.accent : state.albumMode ? "#fff2df" : "#fff8e8");
       ctx.strokeStyle = selected ? "#e95b88" : "#243047";
       ctx.lineWidth = selected ? 4 : 2;
-      ctx.strokeRect(x, y, 42, 28);
+      ctx.strokeRect(x, y, w, h);
       if (cardId) {
         const { grade } = cardParts(cardId);
         ctx.fillStyle = "#182033";
-        ctx.font = "900 14px ui-monospace, Consolas, monospace";
+        ctx.font = "900 16px ui-monospace, Consolas, monospace";
         ctx.textAlign = "center";
-        ctx.fillText(grade, x + 21, y + 19);
+        ctx.fillText(grade, x + w / 2, y + 22);
       }
     }
   }
@@ -951,6 +1068,48 @@
     ctx.globalAlpha = 1;
   }
 
+  function drawRewardFlash() {
+    if (state.rewardFlashTime <= 0) {
+      return;
+    }
+    const alpha = Math.min(1, state.rewardFlashTime);
+    ctx.globalAlpha = alpha;
+    drawRoundRect(498, 132, 232, 56, 8, "rgba(255,216,90,0.94)", "#243047", 4);
+    ctx.fillStyle = "#182033";
+    ctx.font = "900 22px ui-sans-serif, system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(state.rewardFlashText || "맛있다!", 614, 161);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCoachCard(time) {
+    if (state.coachTime <= 0 || state.finished || state.albumMode) {
+      return;
+    }
+    const alpha = clamp(state.coachTime * 2, 0, 1);
+    ctx.globalAlpha = alpha;
+    drawRoundRect(238, 168, 324, 128, 8, "rgba(255,248,232,0.99)", "#243047", 4);
+    ctx.fillStyle = "#ffd85a";
+    ctx.beginPath();
+    ctx.arc(400, 206, 17 + Math.sin(time * 8) * 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#243047";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.fillStyle = "#182033";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.font = "900 21px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText("링이 안쪽 선에 닿으면", 400, 242);
+    ctx.font = "900 28px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText("톡!", 400, 270);
+    ctx.font = "800 14px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillStyle = "#526078";
+    ctx.fillText("하늘 점선은 다음 칸", 400, 286);
+    ctx.globalAlpha = 1;
+  }
+
   function drawFriendCompare() {
     if (!state.friendRecord) {
       return;
@@ -972,7 +1131,22 @@
   function drawSparks() {
     for (const spark of state.sparks) {
       ctx.globalAlpha = spark.life / spark.maxLife;
-      drawPixelRect(spark.x, spark.y, 5, 5, spark.color);
+      drawPixelRect(spark.x, spark.y, spark.size || 5, spark.size || 5, spark.color);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPopups() {
+    for (const popup of state.popups) {
+      ctx.globalAlpha = Math.max(0, popup.life / popup.maxLife);
+      ctx.font = `900 ${popup.size}px ui-sans-serif, system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "rgba(255,255,255,0.8)";
+      ctx.strokeText(popup.text, popup.x, popup.y);
+      ctx.fillStyle = popup.color;
+      ctx.fillText(popup.text, popup.x, popup.y);
     }
     ctx.globalAlpha = 1;
   }
@@ -982,10 +1156,13 @@
     drawMenuPanel();
     drawStickerBook();
     drawLunchbox(time);
+    drawCoachCard(time);
     drawJudgeFlash();
     drawRhythmPhrase();
+    drawRewardFlash();
     drawFriendCompare();
     drawSparks();
+    drawPopups();
   }
 
   function loop(timestamp) {
