@@ -105,8 +105,8 @@
         summary: "Ride moonlit platforms, collect letters, and chase high-path combos in a mobile runner."
       },
       "html5-hidden-picture-atelier": {
-        title: "Hidden Picture Theme Atelier",
-        summary: "Pick anime mood, landscape, medieval art, ancient, modern, or wildlife scenes and find five hidden objects in 90 seconds."
+        title: "Hidden Difference Theme Atelier",
+        summary: "Pick anime mood, landscape, medieval art, ancient, modern, or wildlife scenes and find five differences between two pictures in 90 seconds."
       },
       "released-ufo-signal-room": {
         title: "UFO Signal Room",
@@ -163,8 +163,8 @@
         summary: "月明かりの足場を走って手紙を集め、高いルートのコンボを狙うモバイルランナーです。"
       },
       "html5-hidden-picture-atelier": {
-        title: "隠し絵テーマアトリエ",
-        summary: "アニメ風、風景、中世芸術、古代、現代、動植物の場面から選び、90秒以内に5つの隠れた物を探します。"
+        title: "まちがい探しテーマアトリエ",
+        summary: "アニメ風、風景、中世芸術、古代、現代、動植物の絵を選び、90秒以内に2枚の絵のちがいを5つ探します。"
       },
       "released-ufo-signal-room": {
         title: "UFOシグナル待機室",

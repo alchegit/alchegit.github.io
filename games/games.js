@@ -87,7 +87,7 @@ function compareCatalogGames(a, b) {
     }
   }
 
-  const slotDelta = String(a.gridSlot || "").localeCompare(String(b.gridSlot || ""), "ko", {
+  const slotDelta = String(b.gridSlot || "").localeCompare(String(a.gridSlot || ""), "ko", {
     numeric: true,
     sensitivity: "base"
   });
@@ -567,12 +567,10 @@ function renderPreview(animationKey = "") {
     case "hidden-picture-atelier":
       return `
         <div class="preview-stage preview-hidden-picture-atelier">
-          <span class="scene-piece picture-card anime"></span>
-          <span class="scene-piece picture-card jungle"></span>
-          <span class="scene-piece hidden-dot d1"></span>
-          <span class="scene-piece hidden-dot d2"></span>
-          <span class="scene-piece hidden-dot d3"></span>
-          <span class="scene-piece magnifier"></span>
+          <span class="scene-piece picture-card left"></span>
+          <span class="scene-piece picture-card right"></span>
+          <span class="scene-piece difference-ring r1"></span>
+          <span class="scene-piece difference-ring r2"></span>
           <span class="scene-piece found-flash"></span>
         </div>
       `;

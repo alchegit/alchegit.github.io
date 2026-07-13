@@ -6,6 +6,7 @@
     "catalogSubtitle":  "HTML5, Phaser, Defold, Flutter + Flame, Godot, libGDX, Solar2D, L횜VE ?ㅽ뿕?묒쓣 洹?ъ슫 ?쎌? 誘몃━蹂닿린濡?吏꾩뿴?섎뒗 ?ㅺ퀎 DB",
     "renderingContract":  {
                               "sortKey":  "gridSlot",
+                              "sortRule":  "기본 목록은 출시 앱을 먼저 보여주고 R 번호가 큰 최근 출시작부터 정렬한다. 출시 앱이 아닌 개발/실험 게임은 G 번호가 큰 최근 제작작부터 정렬한다.",
                               "cardFields":  [
                                                  "preview.animationKey",
                                                  "workingTitleKo",
@@ -2127,23 +2128,23 @@
                       "gridSlot":  "G-013",
                       "status":  "playable",
                       "priority":  13,
-                      "engine":  "HTML5 Canvas + DOM HUD",
+                      "engine":  "HTML5 DOM image panels + imagegen assets",
                       "runtimeTarget":  "GitHub Pages static web game, mobile touch first",
                       "playableUrl":  "./hidden-picture-atelier/",
                       "sourceTitle":  "Original NeoKIM hidden-picture prototype",
                       "sourceUrl":  "",
                       "sourceRepoUrl":  "",
-                      "licenseNote":  "실존 애니메이션, 사진, 미술작품을 복제하지 않고 장르 감성만 참고해 코드로 그린 원본 장면을 사용한다.",
-                      "workingTitleKo":  "숨은그림 테마 아틀리에",
-                      "workingTitleEn":  "Hidden Picture Theme Atelier",
-                      "oneLineSummary":  "애니풍, 풍경, 중세 예술, 고대, 현대, 동식물 테마 중 하나를 골라 90초 안에 숨은 물건 5개를 찾는 모바일 숨은그림찾기.",
-                      "originalMechanic":  "한 장면 안에 작은 물건을 숨겨두고 제한 시간 안에 목록의 물건을 모두 찾아 탭하는 hidden object / hidden picture 구조.",
-                      "cuteTransformation":  "무작정 빽빽한 난이도가 아니라 테마별 분위기 안에 물건이 자연스럽게 숨어 있고, 찾을 때 작은 반짝임과 도장감 있는 체크 연출이 나오는 가벼운 반복형 게임으로 바꾼다.",
+                      "licenseNote":  "실존 애니메이션, 사진, 미술작품을 복제하지 않고 장르 감성만 참고해 이미지젠으로 만든 원본 좌우 비교 그림을 사용한다.",
+                      "workingTitleKo":  "숨은 차이 테마 아틀리에",
+                      "workingTitleEn":  "Hidden Difference Theme Atelier",
+                      "oneLineSummary":  "애니풍, 풍경, 중세 예술, 고대, 현대, 동식물 테마 중 하나를 골라 90초 안에 두 그림의 다른 점 5개를 찾는 모바일 차이찾기.",
+                      "originalMechanic":  "거의 같은 두 그림을 나란히 보여주고 제한 시간 안에 오른쪽 그림에서 달라진 지점을 모두 찾아 탭하는 spot-the-difference 구조.",
+                      "cuteTransformation":  "실사풍, 만화풍, 중세 채색화풍, 고대 유물풍처럼 그림 자체가 구경거리가 되도록 만들고, 정답을 찾을 때 작은 도장감 있는 체크 연출이 나오는 가벼운 반복형 게임으로 바꾼다.",
                       "coreLoop":  [
                                        "플레이어가 테마 또는 랜덤을 고른다.",
-                                       "90초 안에 장면 속 목표 물건 5개를 찾아 탭한다.",
+                                       "90초 안에 오른쪽 그림에서 달라진 지점 5개를 찾아 탭한다.",
                                        "정답을 찾으면 목록이 체크되고 점수, 남은 시간, 반짝임 피드백이 즉시 올라간다.",
-                                       "막히면 힌트를 2번까지 써서 아직 찾지 못한 물건 주변을 잠깐 비춘다.",
+                                       "막히면 힌트를 2번까지 써서 아직 찾지 못한 차이 주변을 잠깐 비춘다.",
                                        "클리어 후 같은 테마 재도전 또는 랜덤 새 장면으로 바로 이어간다."
                                    ],
                       "preview":  {
@@ -2151,117 +2152,117 @@
                                       "gifLoopSeconds":  4,
                                       "pixelObjects":  [
                                                            "테마 카드가 천천히 바뀌는 배경",
-                                                           "돋보기 커서",
-                                                           "찾은 물건 체크 반짝임",
+                                                           "좌우 비교 그림",
+                                                           "찾은 차이 체크 반짝임",
                                                            "5개 목표 칩"
                                                        ]
                                   },
                       "prototypePlan":  {
-                                            "firstPlayableScope":  "테마 6개에 장면 1장씩, 장면마다 숨은 물건 5개, 모바일 터치 판정, 힌트 2회, 로컬 최고 점수 저장까지 구현한다.",
+                                            "firstPlayableScope":  "테마 6개에 이미지젠 좌우 비교 그림 1장씩, 장면마다 차이 5개, 모바일 터치 판정, 힌트 2회, 로컬 최고 점수 저장까지 구현한다.",
                                             "engineChoice":  {
-                                                                 "recommended":  "HTML5 Canvas + DOM HUD",
-                                                                 "why":  "숨은 물건의 좌표, 판정 반경, 힌트 링을 장면 데이터와 1:1로 맞춰야 하므로 bitmap 이미지만 배치하는 것보다 코드 기반 canvas가 첫 버전에 적합하다. Phaser를 쓰지 않아도 충돌과 애니메이션 요구가 작고 GitHub Pages에서 빠르게 열린다.",
-                                                                 "imageGenerationPolicy":  "나중에 그림 장수가 늘어날 때는 이미지젠으로 배경 시안을 만들 수 있지만, 초기판은 히트박스와 공정 난이도를 통제하기 위해 코드로 그린 원본 장면을 사용한다."
+                                                                 "recommended":  "HTML5 DOM image panels",
+                                                                 "why":  "실제 그림 감상이 핵심인 장르라 Canvas로 도형을 다시 그리는 것보다 고해상도 이미지젠 결과물을 DOM 패널에 배치하는 편이 화풍과 품질을 더 잘 살린다. 정답 판정은 오른쪽 그림 위의 정규화 좌표와 hit radius만으로 충분하다.",
+                                                                 "imageGenerationPolicy":  "각 테마는 실존 작품이나 특정 IP를 복제하지 않고 분위기만 참고한다. 생성 이미지는 하나의 좌우 비교 합성본으로 보관하고, 데스크톱에서는 좌우 절반을 나란히, 모바일에서는 위아래로 잘라 보여준다."
                                                              },
                                             "ruleDecision":  {
                                                                 "targetCount":  5,
                                                                 "timeLimitSeconds":  90,
                                                                 "hintCharges":  2,
                                                                 "whyFive":  "웹에서 반복적으로 가볍게 즐기는 목적이면 3개는 너무 빨리 끝나고 8개 이상은 작은 화면에서 피로하다. 5개는 한 장면을 충분히 둘러보게 하면서도 실패해도 바로 다시 할 수 있는 길이다.",
-                                                                "wrongTapPolicy":  "오답 탭은 큰 벌점보다 짧은 떨림과 2초 감점만 준다. 숨은그림찾기는 탐색 장르이므로 실수 처벌보다 다시 살펴보게 만드는 리듬이 중요하다."
+                                                                "wrongTapPolicy":  "오답 탭은 큰 벌점보다 짧은 링과 2초 감점만 준다. 차이찾기는 탐색 장르이므로 실수 처벌보다 다시 비교하게 만드는 리듬이 중요하다."
                                                             },
                                             "themes":  [
                                                            {
                                                                "id":  "anime",
                                                                "labelKo":  "애니풍",
-                                                               "sceneIntent":  "실존 애니를 닮지 않는 파스텔 루프탑/골목 감성. 선명한 소품과 부드러운 그림자.",
+                                                               "sceneIntent":  "실존 애니를 닮지 않는 파스텔 루프탑 아틀리에 감성. 선명한 소품과 부드러운 그림자.",
                                                                "hiddenObjects":  [
-                                                                                     "별 머리핀",
-                                                                                     "작은 열쇠",
-                                                                                     "종이학",
-                                                                                     "방울 참",
-                                                                                     "빨간 리본"
+                                                                                     "하늘의 새",
+                                                                                     "분홍 붓컵",
+                                                                                     "파란 키링",
+                                                                                     "노트 위 꽃",
+                                                                                     "책상 위 붓"
                                                                                  ]
                                                            },
                                                            {
                                                                "id":  "landscape",
                                                                "labelKo":  "풍경",
-                                                               "sceneIntent":  "사진처럼 보이는 산과 호수 풍경을 단순화해 자연물 사이에 여행 소품을 숨긴다.",
+                                                               "sceneIntent":  "사진처럼 보이는 산과 호수 풍경에서 하늘, 물가, 여행 소품의 작고 자연스러운 차이를 찾게 한다.",
                                                                "hiddenObjects":  [
-                                                                                     "나침반",
-                                                                                     "빨간 스카프",
-                                                                                     "동전",
-                                                                                     "발자국",
-                                                                                     "유리병"
+                                                                                     "호수의 오리",
+                                                                                     "배낭 패치",
+                                                                                     "하얀 머그컵",
+                                                                                     "보라 꽃무리",
+                                                                                     "하늘의 흰 선"
                                                                                  ]
                                                            },
                                                            {
                                                                "id":  "medieval",
                                                                "labelKo":  "중세 예술",
-                                                               "sceneIntent":  "양피지, 금박, 태피스트리, 성벽 느낌을 섞되 특정 작품을 베끼지 않는다.",
+                                                               "sceneIntent":  "양피지, 금박, 태피스트리, 성벽 느낌을 섞되 특정 작품을 베끼지 않고 소품 차이를 넣는다.",
                                                                "hiddenObjects":  [
-                                                                                     "금반지",
-                                                                                     "깃펜",
-                                                                                     "푸른 리본",
-                                                                                     "작은 성배",
-                                                                                     "낡은 열쇠"
+                                                                                     "하얀 꽃",
+                                                                                     "성의 깃발",
+                                                                                     "상자 문양",
+                                                                                     "빨간 장식",
+                                                                                     "열매 접시"
                                                                                  ]
                                                            },
                                                            {
                                                                "id":  "ancient",
                                                                "labelKo":  "고대",
-                                                               "sceneIntent":  "동굴 벽화, 사암, 이집트풍 기호를 원본 도형으로 구성한다.",
+                                                               "sceneIntent":  "사암 신전과 고대 이집트풍 기호를 실사에 가깝게 구성하되 실제 유물 복제가 아닌 원본 장면으로 만든다.",
                                                                "hiddenObjects":  [
-                                                                                     "스카라브",
-                                                                                     "태양 원반",
-                                                                                     "파피루스",
-                                                                                     "갈대 붓",
-                                                                                     "고양이 상"
+                                                                                     "앙크 문양",
+                                                                                     "벽의 기호",
+                                                                                     "작은 황금 항아리",
+                                                                                     "파피루스 선",
+                                                                                     "사라진 스카라브"
                                                                                  ]
                                                            },
                                                            {
                                                                "id":  "modern",
                                                                "labelKo":  "현대",
-                                                               "sceneIntent":  "카페와 지하철역 사이의 현대 생활 소품을 밝고 정돈된 장면에 숨긴다.",
+                                                               "sceneIntent":  "현대 카페 테이블의 생활 소품을 사실적인 빛과 재질로 보여주고, 쿠션과 소품의 차이를 찾게 한다.",
                                                                "hiddenObjects":  [
-                                                                                     "무선 이어버드",
-                                                                                     "교통카드",
-                                                                                     "카메라 렌즈",
-                                                                                     "노란 메모",
-                                                                                     "장난감 자동차"
+                                                                                     "화분 속 하트",
+                                                                                     "주황 쿠션",
+                                                                                     "점박이 화분",
+                                                                                     "종이 피라미드",
+                                                                                     "바뀐 엽서"
                                                                                  ]
                                                            },
                                                            {
                                                                "id":  "wildlife",
                                                                "labelKo":  "동식물",
-                                                               "sceneIntent":  "정글/사파리 사진 같은 녹색과 햇빛 속에 작은 생물과 탐험 소품을 숨긴다.",
+                                                               "sceneIntent":  "정글/사파리 사진 같은 녹색과 햇빛 속에서 동물 색, 위치, 사라진 생물을 비교하게 한다.",
                                                                "hiddenObjects":  [
-                                                                                     "나비",
-                                                                                     "작은 개구리",
-                                                                                     "빨간 열매",
-                                                                                     "깃털",
-                                                                                     "쌍안경"
+                                                                                     "파란 앵무새",
+                                                                                     "파란 개구리",
+                                                                                     "사라진 나비",
+                                                                                     "붉은 잎",
+                                                                                     "코끼리 주변"
                                                                                  ]
                                                            }
                                                        ],
                                             "difficultyRules":  [
-                                                                  "숨은 물건의 실제 시각 크기는 모바일 기준 18~34px 안에 두되, 탭 판정 반경은 최소 28px 이상으로 둔다.",
-                                                                  "한 장면에서 색만으로 숨기는 물건은 2개 이하로 제한하고, 나머지는 형태 실루엣으로도 알아볼 수 있게 한다.",
+                                                                  "차이의 실제 시각 크기는 모바일 기준 18~48px 안에 두되, 탭 판정 반경은 최소 28px 이상으로 둔다.",
+                                                                  "한 장면에서 색만 다른 차이는 2개 이하로 제한하고, 나머지는 위치, 형태, 개수, 소품 추가/삭제로 섞는다.",
                                                                   "배경과 완전히 같은 색으로 묻어버리는 방식은 금지한다. 주변 대비를 낮추더라도 윤곽선, 반사광, 그림자 중 하나는 남긴다.",
-                                                                  "힌트는 정답 위치를 바로 찍지 않고 1.4초 동안 주변 원을 펄스시켜 플레이어가 스스로 찾은 감각을 유지한다.",
-                                                                  "오답 탭이 계속 나오면 장면 전체를 어렵게 만든 것이므로 다음 장면 추가 때 해당 물건의 위치와 대비를 완화한다."
+                                                                  "힌트는 정답 위치를 바로 찍지 않고 1.8초 동안 주변 원을 펄스시켜 플레이어가 스스로 찾은 감각을 유지한다.",
+                                                                  "오답 탭이 계속 나오면 장면 전체를 어렵게 만든 것이므로 다음 그림 추가 때 해당 차이의 위치와 대비를 완화한다."
                                                               ],
                                             "futureExpansion":  [
-                                                                   "좋아요와 평균 완료율이 올라가면 테마별 3장, 총 18장으로 늘린다.",
-                                                                   "장면 데이터는 테마, 목표물, 좌표, 판정 반경을 분리해 두어 이미지 교체와 난이도 조정을 빠르게 한다.",
+                                                                   "2026-07-13 기준 테마별 3장, 총 18장 구성을 1차 구현했다. 다음 확장은 테마별 5장 이상으로 늘릴 때 진행한다.",
+                                                                   "장면 데이터는 테마, 이미지 파일, 차이 라벨, 좌표, 판정 반경을 분리해 두어 이미지 교체와 난이도 조정을 빠르게 한다.",
                                                                    "추후에는 오늘의 랜덤 장면, 연속 클리어 스탬프, 좋아요가 많은 테마 우선 추가를 검토한다."
                                                                ]
                                         },
                       "funDepthReview":  {
-                                             "playerFunHook":  "테마를 고르는 순간 분위기가 바뀌고, 작은 물건을 찾을 때마다 도장 찍히듯 반짝이며 목록이 줄어드는 즉각적인 만족감.",
-                                             "currentDepthGap":  "초기판은 장면 수가 테마당 1장이라 오래 붙잡는 볼륨은 작다. 대신 첫 장면의 공정한 난이도와 빠른 재시작이 핵심이다.",
+                                             "playerFunHook":  "테마를 고르는 순간 분위기가 바뀌고, 작은 차이를 찾을 때마다 도장 찍히듯 반짝이며 목록이 줄어드는 즉각적인 만족감.",
+                                             "currentDepthGap":  "초기판은 이미지가 테마당 1쌍이라 오래 붙잡는 볼륨은 작다. 대신 첫 그림쌍의 공정한 난이도와 빠른 재시작이 핵심이다.",
                                              "depthUpgradeBacklog":  [
-                                                                         "테마별 두 번째 장면부터는 같은 물건을 다른 시각 패턴에 숨겨 학습과 변주를 만든다.",
+                                                                         "테마별 두 번째 그림부터는 색, 위치, 개수, 추가/삭제 차이를 균형 있게 섞어 학습과 변주를 만든다.",
                                                                          "힌트를 쓰지 않고 클리어하면 작은 왕관 배지를 주어 실력 보상을 만든다.",
                                                                          "좋아요가 많은 테마는 다음 장면 추가 우선순위를 올린다."
                                                                      ],
@@ -2298,21 +2299,128 @@
                                                                                     "돋보기 원은 모바일 화면의 일부만 덮게 해 전체 장면 기억과 국소 관찰 사이의 리듬을 만든다.",
                                                                                     "힌트와 돋보기는 목적이 다르다. 힌트는 위치 주변을 잠깐 알려주고, 돋보기는 플레이어가 스스로 의심 지점을 훑는 도구다."
                                                                                 ],
-                                                       "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                       "implementationStatus":  "superseded by imagegen pair upgrade on 2026-07-13. The loupe search pass was useful for canvas scenes, but the current version prioritizes high-resolution paired artwork."
                                                    },
+                      "imageGenPairUpgrade20260713":  {
+                                                          "versionName":  "v4 imagegen paired-art pass",
+                                                          "reason":  "사용자 피드백상 코드 도형으로 그린 장면은 숨은그림찾기의 핵심인 그림 감상 매력이 부족했다. 장르가 제대로 작동하려면 실사, 만화풍, 중세 채색화, 고대 유물풍 같은 화풍별 그림 자체가 먼저 좋아야 한다.",
+                                                          "implementedAssets":  [
+                                                                                   "assets/anime-pair.png",
+                                                                                   "assets/anime-observatory-pair.png",
+                                                                                   "assets/anime-festival-pair.png",
+                                                                                   "assets/landscape-pair.png",
+                                                                                   "assets/landscape-canyon-pair.png",
+                                                                                   "assets/landscape-hotspring-pair.png",
+                                                                                   "assets/medieval-pair.png",
+                                                                                   "assets/medieval-market-pair.png",
+                                                                                   "assets/medieval-greenhouse-pair.png",
+                                                                                   "assets/ancient-pair.png",
+                                                                                   "assets/ancient-cave-pair.png",
+                                                                                   "assets/ancient-ziggurat-pair.png",
+                                                                                   "assets/modern-pair.png",
+                                                                                   "assets/modern-subway-pair.png",
+                                                                                   "assets/modern-laundromat-pair.png",
+                                                                                   "assets/wildlife-pair.png",
+                                                                                   "assets/wildlife-savanna-pair.png",
+                                                                                   "assets/wildlife-tidepool-pair.png"
+                                                                               ],
+                                                          "layoutRule":  [
+                                                                            "데스크톱은 좌우 그림을 나란히 보여주고, 오른쪽 그림 위에서만 정답 탭을 받는다.",
+                                                                            "모바일은 같은 두 그림을 위아래로 배치해 세로 스크롤 없이 비교하기 쉽게 한다.",
+                                                                            "원본 합성 이미지는 1774x887 고해상도 PNG이며 각 절반은 정사각형 패널로 잘라 표시한다."
+                                                                        ],
+                                                          "difficultyNotes":  [
+                                                                                 "정답 지점은 오른쪽 그림 기준 정규화 좌표와 반경으로 관리한다.",
+                                                                                 "차이는 색만 바뀐 것, 소품 추가/삭제, 위치 이동, 형태 변경이 섞이도록 기록했다.",
+                                                                                 "찾기 어려운 지점은 힌트 링으로 잠깐 주변만 비추고, 정답을 직접 표시하지 않는다."
+                                                                             ],
+                                                          "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                      },
+                      "hitboxAndTimedClueCorrection20260713":  {
+                                                                   "reason":  "차이찾기는 실제 물체 위치와 정답 판정 위치가 어긋나는 순간 유저가 강한 불공정함을 느낀다. 스크린샷 기준 풍경 테마의 머그컵처럼 마커 중심이 실제 차이보다 벗어난 지점을 확인했다.",
+                                                                   "corrections":  [
+                                                                                      "오른쪽 그림 절반을 0~1 정규화 좌표 격자로 다시 확인하고, 풍경의 오리/머그컵, 야생의 앵무새/개구리, 중세의 깃발/상자 문양 등 눈에 띄게 벗어난 히트박스를 실제 차이 중심으로 옮겼다.",
+                                                                                      "히트 반경은 너무 넓어 엉뚱한 곳을 정답으로 처리하지 않도록 일부 줄이되, 모바일 손가락 입력이 가능한 최소 여유는 유지했다.",
+                                                                                      "오른쪽 목록의 차이 이름은 시작부터 모두 보여주지 않고 잠금 상태로 둔다.",
+                                                                                      "남은 시간이 60초, 45초, 30초, 18초, 9초 이하가 될 때 단서 이름이 하나씩 공개되도록 바꿔 후반 긴장감을 만든다.",
+                                                                                      "수동 힌트 버튼은 남은 차이 중 하나의 이름을 즉시 공개하고 해당 주변만 잠깐 비추는 보조 장치로 유지했다."
+                                                                                  ],
+                                                                   "futureRule":  [
+                                                                                     "새 이미지쌍을 추가할 때는 반드시 오른쪽 절반 위에 10% 격자와 hit radius 오버레이를 얹어 검수한 뒤 좌표를 입력한다.",
+                                                                                     "차이 이름은 정답 목록이 아니라 시간 압박형 단서로 취급한다. 시작 직후에는 순수 비교 플레이가 먼저 오고, 후반에 단서가 열리도록 한다."
+                                                                                 ],
+                                                                   "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                               },
+                      "themeVolumeExpansion20260713":  {
+                                                           "versionName":  "v5 varied composition expansion",
+                                                           "reason":  "사용자가 지적한 것처럼 같은 테마 안에서 이전 그림과 구도가 비슷하면 숨은그림찾기의 핵심인 '새 장면을 훑는 재미'가 사라진다. 단순히 그림 수를 늘리는 것이 아니라 카메라 위치, 공간 깊이, 전경 소품, 시선 방향이 달라져야 한다.",
+                                                           "implementedSceneCount":  {
+                                                                                        "themes":  6,
+                                                                                        "scenesPerTheme":  3,
+                                                                                        "totalScenes":  18,
+                                                                                        "differencesPerScene":  5
+                                                                                    },
+                                                           "addedScenes":  [
+                                                                                "애니풍: 다락 천문대, 야시장 운하",
+                                                                                "풍경: 사막 협곡 캠프, 눈 내린 해안 온천",
+                                                                                "중세 예술: 시장 광장, 수도원 약초 온실",
+                                                                                "고대: 선사 동굴벽화, 지구라트 천문대",
+                                                                                "현대: 비 오는 지하철 승강장, 밤의 셀프 빨래방",
+                                                                                "동식물: 사바나 물가, 바위 해안 조수웅덩이"
+                                                                            ],
+                                                           "compositionRules":  [
+                                                                                    "이미 존재하는 산 호수, 루프탑 작업실, 카페 책상, 이집트 정물, 정글 폭포와 같은 시점/공간 배치를 재사용하지 않는다.",
+                                                                                    "한 테마 안에서도 실내/실외, 낮/밤, 전경 소품의 크기, 카메라 높이를 최소 하나 이상 크게 바꾼다.",
+                                                                                    "이미지젠 결과가 기존 장면과 닮아 보이면 자산으로 복사하지 않고 폐기한다. 2026-07-13 첫 후보 2장은 구도 유사성 때문에 폐기했다.",
+                                                                                    "정답 좌표는 오른쪽 그림 절반 기준 10% 격자에서 다시 잡고, 작은 물체는 모바일 손가락을 고려해 반경을 약간 넓힌다."
+                                                                                ],
+                                                           "runtimeBehavior":  [
+                                                                                  "카탈로그 버튼은 테마 6개와 랜덤만 유지해 선택 UI를 단순하게 둔다.",
+                                                                                  "테마를 고르면 첫 번째 장면부터 시작하고, 새 그림/다시 찾기는 같은 테마 안에서 다음 장면으로 순환한다.",
+                                                                                  "랜덤은 전체 18장 중 현재 장면과 다른 장면을 골라 반복감을 줄인다.",
+                                                                                  "이미지 18장을 한 번에 예열하지 않고 현재 장면만 프리로드해 모바일 초기 로딩 부담을 줄인다."
+                                                                              ],
+                                                           "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                       },
+                      "coordinateFairnessAudit20260713":  {
+                                                              "reason":  "새로 추가한 이미지 중 빨래방 장면처럼 실제 차이 위치와 체크 마커 중심이 어긋나는 문제가 확인됐다. 차이찾기에서 판정 위치 불일치는 유저가 게임을 불공정하다고 느끼는 치명적인 문제이므로 전체 장면을 다시 검수했다.",
+                                                              "cause":  "초기 신규 이미지 좌표 일부가 이미지젠 프롬프트에서 예상한 물체 위치에 가깝게 잡혀 있었고, 실제 생성 결과의 오른쪽 그림 절반에서 물체가 자리 잡은 위치와 달랐다. 신규 이미지는 1536x1024 합성본이라 각 반쪽이 세로형이므로, 오른쪽 절반의 실제 x/y 비율을 기준으로 다시 잡아야 했다.",
+                                                              "auditScope":  {
+                                                                                "sceneCount":  18,
+                                                                                "targetCount":  90,
+                                                                                "method":  "오른쪽 그림 절반에 10% 좌표 격자와 현재 마커를 얹은 검수 시트를 만들고, 물체 중심 기준으로 좌표를 재입력한 뒤 브라우저에서 모든 좌표를 실제 클릭했다."
+                                                                            },
+                                                              "majorCorrections":  [
+                                                                                       "modern-laundromat: 분홍 세탁기 문, 작은 화분, 빨간 바구니 손잡이 좌표를 실제 물체 중심으로 이동",
+                                                                                       "landscape-canyon: 작은 열기구, 두 번째 컵, 도마뱀 좌표를 실제 생성물 위치로 이동",
+                                                                                       "anime-observatory: 망원경 별표, 고양이 쿠션, 고리 행성 좌표를 예상 위치가 아니라 실제 소품 중심으로 이동",
+                                                                                       "anime-festival: 초승달 등, 베어 문 사과, 종이배 좌표를 실제 트레이/물가 위치로 이동",
+                                                                                       "medieval-greenhouse, ancient-cave, ancient-ziggurat, modern-subway, wildlife-savanna, wildlife-tidepool의 신규 좌표 전반을 재검수"
+                                                                                   ],
+                                                              "verification":  [
+                                                                                  "브라우저 자동 클릭 검증에서 18개 장면 모두 5 / 5 통과",
+                                                                                  "사용자가 지적한 빨래방 분홍 세탁기 문 장면을 실제로 클릭해 마커가 분홍 문 위에 표시되는지 스크린샷으로 확인"
+                                                                              ],
+                                                              "futureRule":  [
+                                                                                "이미지젠 결과를 추가할 때는 파일을 복사한 직후 오른쪽 절반 원본 크롭과 화면 표시용 정사각형 검수 시트를 모두 만든다.",
+                                                                                "프롬프트에 적은 물체 이름이 아니라 실제 생성된 물체 중심을 기준으로 좌표를 입력한다.",
+                                                                                "새 장면은 배포 전 전체 정답을 자동 클릭해 5 / 5가 되는지 확인하고, 적어도 한 번은 마커 시각 위치를 사람이 검수한다."
+                                                                            ],
+                                                              "implementationStatus":  "implemented in playable prototype on 2026-07-13"
+                                                          },
                       "tags":  [
                                    "html5",
-                                   "canvas",
-                                   "hidden-object",
+                                   "imagegen",
+                                   "spot-difference",
                                    "theme",
                                    "mobile",
                                    "playable"
                                ],
-                      "summaryLine":  "G-013 | HTML5 Canvas | 숨은그림 테마 아틀리에 | 테마를 고르고 90초 안에 숨은 물건 5개를 찾는 모바일 숨은그림찾기, /games/hidden-picture-atelier/에서 플레이 가능 | preview=hidden-picture-atelier",
+                      "summaryLine":  "G-013 | HTML5 DOM image panels | 숨은 차이 테마 아틀리에 | 테마를 고르고 90초 안에 두 그림의 다른 점 5개를 찾는 모바일 차이찾기, /games/hidden-picture-atelier/에서 플레이 가능 | preview=hidden-picture-atelier",
                       "visibleInCabinet":  true,
                       "mobileFirstPolicy":  {
                                                 "inputRule":  "모든 핵심 조작은 탭으로 끝난다. 키보드 조작은 필수 입력으로 쓰지 않는다.",
-                                                "minimumTouchTarget":  "목표물은 작게 그려도 hit radius는 최소 28px, 버튼은 최소 44px 이상으로 둔다.",
+                                                "minimumTouchTarget":  "차이 지점은 작게 보여도 hit radius는 최소 28px, 버튼은 최소 44px 이상으로 둔다.",
                                                 "feedbackRule":  "정답 탭, 오답 탭, 힌트 사용, 시간 종료에 각각 색과 모션이 다른 즉시 피드백을 준다."
                                             }
                   },
