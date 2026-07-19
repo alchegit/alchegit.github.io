@@ -1,0 +1,15 @@
+{
+  "name": "neokim-webtoon-image-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Server-side worker scaffold for NeoKIM Webtoon Studio generation jobs.",
+  "scripts": {
+    "start": "node src/worker.mjs",
+    "once": "node src/worker.mjs --once",
+    "check": "node --check src/worker.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

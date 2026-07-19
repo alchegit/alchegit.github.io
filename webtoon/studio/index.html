@@ -1,0 +1,210 @@
+﻿<!doctype html>
+<html lang="ko" data-webtoon-access="visitor">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
+  <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <meta name="description" content="한 줄 이야기를 확장해 웹툰 컷과 대사로 만들고, 원하는 장면만 수정해 모바일 미리보기와 게시까지 준비하는 제작 작업대입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/webtoon/studio/">
+    <meta property="og:title" content="NeoKIM Webtoon Studio">
+    <meta property="og:description" content="현대 판타지 각성물 도입부를 아이디어에서 컷 초안, 세로 미리보기, TXT 내보내기까지 빠르게 제작합니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/webtoon/studio/">
+    <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NeoKIM Webtoon Studio">
+    <meta name="twitter:description" content="Quick K-webtoon awakening fantasy intro draft studio.">
+    <meta name="twitter:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
+    <title>NeoKIM Webtoon Studio | 현대 판타지 각성물 제작 작업대</title>
+    <link rel="stylesheet" href="../webtoon.css?v=20260718-home2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../webtoon.js?v=20260719-security1"></script>
+    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+  </head>
+  <body class="webtoon-app-page page-studio">
+    <a class="skip-link" href="#studio">작업대로 이동</a>
+
+    <header class="wt-topbar">
+      <a class="brand-link" href="/webtoon/" aria-label="NeoKIM 웹툰 스튜디오 홈"><span aria-hidden="true">N</span><strong>WEBTOON STUDIO</strong></a>
+      <nav class="topbar-nav" aria-label="웹툰 메뉴">
+        <a href="/webtoon/">소개</a>
+        <a href="/webtoon/studio/" aria-current="page">작업대</a>
+        <a href="/webtoon/guide/">가이드</a>
+        <a href="/webtoon/templates/">템플릿</a>
+        <a href="/webtoon/reader/">감상</a>
+        <a href="/webtoon/operator/" data-admin-only>운영</a>
+        <a href="/webtoon/plan/" data-admin-only>설계</a>
+      </nav>
+      <div class="account-widget" data-account>
+        <span class="account-name" data-account-name hidden></span>
+        <span class="acorn-pill" data-acorns hidden>도토리 <strong data-acorn-count>--</strong></span>
+        <button class="account-button" type="button" data-auth-action="login">Google로 로그인</button>
+        <button class="account-button muted" type="button" data-auth-action="claim" hidden>도토리 받기</button>
+        <button class="account-button ghost" type="button" data-auth-action="logout" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <main id="studio" class="wt-shell guide-shell studio-simple-shell">
+      <section class="page-head guide-head studio-simple-head" aria-labelledby="pageTitle">
+        <div>
+          <p class="kicker">Simple webtoon maker</p>
+          <h1 id="pageTitle">웹툰 작업대</h1>
+        </div>
+        <div class="guide-finish-card studio-mode-card">
+          <span>기본 모드</span>
+          <strong>3단계</strong>
+        </div>
+      </section>
+
+      <section class="guide-grid studio-workbench-grid">
+        <aside class="guide-control studio-control" aria-labelledby="studioControlTitle">
+          <div class="column-head">
+            <h2 id="studioControlTitle">간단 제작</h2>
+            <a class="tag" href="/webtoon/guide/">1분 가이드</a>
+          </div>
+
+          <div class="studio-start-card" data-visitor-banner>
+            <p class="kicker">Private beta</p>
+            <strong>웹툰 제작 기능을 준비하고 있습니다.</strong>
+            <p>현재는 관리자 테스트 중입니다. 일반 회원은 가이드와 공개 웹툰 감상을 이용할 수 있습니다.</p>
+            <a class="account-policy-link" href="/webtoon/privacy/">로그인 및 보안 정보 안내</a>
+          </div>
+
+          <label class="field story-field studio-story-field">
+            <span class="field-label-row">
+              <span>나의 이야기</span>
+              <small id="ideaCharCount" class="input-counter" aria-live="polite">0 / 3,000자</small>
+            </span>
+            <textarea id="ideaInput" rows="7" autocomplete="off" minlength="10" maxlength="3000" aria-describedby="ideaLimitNote">폐역 플랫폼에서 F급 헌터가 자신에게만 보이는 퀘스트 창을 발견한다</textarea>
+            <small id="ideaLimitNote" class="field-hint">10~3,000자 · 한 화 권장 280~950자</small>
+          </label>
+
+          <button id="draftButton" class="tool-button primary studio-create-button" type="button" disabled>개발 중</button>
+          <p id="creationAccessNote" class="creation-access-note" aria-live="polite">계정과 권한을 확인하고 있습니다.</p>
+          <p class="project-state studio-project-state" data-project-state aria-live="polite">이 기기의 비공개 초안</p>
+
+          <div class="studio-flow" aria-label="간단 제작 순서">
+            <span><b>1</b> 이야기 적기</span>
+            <span><b>2</b> 웹툰 만들기</span>
+            <span><b>3</b> 결과 확인</span>
+          </div>
+
+          <div class="studio-extensions" aria-label="상세 기능">
+            <p class="studio-extensions-label">상세 기능</p>
+
+            <details class="studio-extension" data-studio-section="story">
+              <summary>
+                <span><strong>이야기 설정</strong><small>유형, 장면 수, 분량 진단</small></span>
+                <i aria-hidden="true"></i>
+              </summary>
+              <div class="studio-extension-body">
+                <div class="studio-option-grid">
+                  <label class="field">
+                    <span>웹툰 유형</span>
+                    <select id="genreSelect" aria-label="현재 제작 타입">
+                      <option value="modern-awakening">현대 판타지 각성물</option>
+                    </select>
+                  </label>
+                  <div class="field">
+                    <span class="control-label">핵심 장면</span>
+                    <div class="segmented" role="group" aria-label="핵심 장면 수 선택">
+                      <button class="segment-button" type="button" data-panel-count="12" aria-pressed="false">12</button>
+                      <button class="segment-button" type="button" data-panel-count="16" aria-pressed="true">16</button>
+                      <button class="segment-button" type="button" data-panel-count="20" aria-pressed="false">20</button>
+                    </div>
+                  </div>
+                </div>
+
+                <details class="production-limits">
+                  <summary><strong>제작 기준</strong><span>제한 보기</span></summary>
+                  <div class="limit-grid">
+                    <p><strong>원고</strong><span>최대 3,000자</span><small>권장 280~950자</small></p>
+                    <p><strong>핵심 장면</strong><span>최대 20장</span><small>12·16·20장</small></p>
+                    <p><strong>말풍선</strong><span>최대 80자</span><small>권장 45자 이하</small></p>
+                    <p><strong>이미지</strong><span>한 장 12MB</span><small>JPG·PNG·WebP</small></p>
+                  </div>
+                </details>
+
+                <section class="story-advisor" aria-labelledby="storyAdvisorTitle">
+                  <div class="story-advisor-head">
+                    <div><p class="kicker">Story editor</p><h2 id="storyAdvisorTitle">스토리 편집 비서</h2></div>
+                    <strong class="advisor-state" data-advisor-state>분석 중</strong>
+                  </div>
+                  <dl class="advisor-metrics" aria-label="스토리 분량 진단">
+                    <div><dt>원고</dt><dd data-advisor-length>--</dd></div>
+                    <div><dt>예상 분량</dt><dd data-advisor-panels>--</dd></div>
+                    <div><dt>추천 구성</dt><dd data-advisor-scenes>--</dd></div>
+                  </dl>
+                  <p class="advisor-comment" data-advisor-comment aria-live="polite"></p>
+                  <div class="advisor-cut"><span>1화 마감 제안</span><p data-advisor-cut>스토리를 입력하면 첫 화의 적정 마감 지점을 찾아드립니다.</p></div>
+                  <div class="advisor-next" data-advisor-next-wrap hidden><span>다음 화에 보관</span><p data-advisor-next></p></div>
+                  <div class="advisor-actions">
+                    <button id="applyEpisodePlanButton" class="tool-button primary" type="button">추천 구성 적용</button>
+                    <button id="storyEditorPromptButton" class="tool-button pro" type="button">AI 진단 요청문</button>
+                  </div>
+                </section>
+              </div>
+            </details>
+
+            <details class="studio-extension" data-studio-section="scenes">
+              <summary>
+                <span><strong>장면 다듬기</strong><small>컷, 대사, 이미지 편집</small></span>
+                <i aria-hidden="true"></i>
+              </summary>
+              <div class="studio-extension-body">
+                <div class="toolbar studio-scene-tools" aria-label="장면 도구">
+                  <button id="addPanelButton" class="tool-button sky" type="button">장면 추가</button>
+                  <button id="twistButton" class="tool-button yellow" type="button">반전 추가</button>
+                  <button id="promptPackButton" class="tool-button pro" type="button">이미지 프롬프트</button>
+                </div>
+                <div class="panel-column studio-panel-column" aria-labelledby="panelListTitle">
+                  <div class="column-head"><h2 id="panelListTitle">핵심 장면 편집</h2><a class="tag" href="/webtoon/templates/">템플릿</a></div>
+                  <div id="panelList" class="panel-list" aria-live="polite"></div>
+                </div>
+              </div>
+            </details>
+
+            <details class="studio-extension" data-studio-section="output">
+              <summary>
+                <span><strong>저장 및 내보내기</strong><small>미리보기, 저장, 게시</small></span>
+                <i aria-hidden="true"></i>
+              </summary>
+              <div class="studio-extension-body">
+                <div class="toolbar studio-output-tools" aria-label="저장 및 내보내기 도구">
+                  <button id="saveButton" class="tool-button" type="button">초안 저장</button>
+                  <button id="previewButton" class="tool-button" type="button">독자 화면에서 보기</button>
+                  <button id="publishButton" class="tool-button berry" type="button" data-admin-only>게시</button>
+                  <button id="exportButton" class="tool-button berry" type="button">TXT 내보내기</button>
+                </div>
+                <section id="exportColumn" class="export-column studio-export-column" aria-labelledby="exportTitle" hidden>
+                  <div class="column-head"><h2 id="exportTitle">내보내기</h2><button id="copyExportButton" class="tool-button" type="button">복사</button></div>
+                  <textarea id="exportText" readonly></textarea>
+                </section>
+              </div>
+            </details>
+          </div>
+        </aside>
+
+        <section class="guide-preview studio-live-preview" aria-labelledby="previewTitle">
+          <div class="column-head">
+            <div><p class="kicker">Live preview</p><h2 id="previewTitle">완성 웹툰</h2></div>
+            <a class="tool-button" href="/webtoon/reader/">전체 화면</a>
+          </div>
+          <dl class="studio-preview-meta" aria-label="현재 웹툰 정보">
+            <div><dt>장면</dt><dd id="statPanels">--</dd></div>
+            <div><dt>유형</dt><dd id="statGenre">--</dd></div>
+            <div><dt>읽기</dt><dd id="statMinutes">--</dd></div>
+          </dl>
+          <div class="phone-preview studio-preview-frame" aria-label="웹툰 세로 미리보기">
+            <div id="phonePreview" class="phone-screen"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </body>
+</html>

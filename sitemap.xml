@@ -11,6 +11,31 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://alchegit.github.io/webtoon/</loc>
+    <lastmod>2026-07-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alchegit.github.io/webtoon/studio/</loc>
+    <lastmod>2026-07-18</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alchegit.github.io/webtoon/guide/</loc>
+    <lastmod>2026-07-15</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alchegit.github.io/webtoon/templates/</loc>
+    <lastmod>2026-07-15</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alchegit.github.io/webtoon/reader/</loc>
+    <lastmod>2026-07-15</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://alchegit.github.io/games/pudding-pad-race/</loc>
     <lastmod>2026-07-03</lastmod>
     <priority>0.7</priority>

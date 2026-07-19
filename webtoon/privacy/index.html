@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko" data-webtoon-access="visitor" data-webtoon-account="signed-out">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
+    <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <meta name="description" content="NeoKIM Webtoon Studio의 Google 로그인, 도토리, 계정 보안 정보 처리 안내입니다.">
+    <meta name="robots" content="index, follow">
+    <title>로그인 및 보안 정보 안내 | NeoKIM Webtoon Studio</title>
+    <link rel="stylesheet" href="../webtoon.css?v=20260718-home2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../webtoon.js?v=20260719-security1"></script>
+    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+  </head>
+  <body class="webtoon-app-page page-plan">
+    <a class="skip-link" href="#privacy">본문으로 이동</a>
+
+    <header class="wt-topbar">
+      <a class="brand-link" href="/webtoon/" aria-label="NeoKIM 웹툰 스튜디오 홈"><span aria-hidden="true">N</span><strong>WEBTOON STUDIO</strong></a>
+      <nav class="topbar-nav" aria-label="웹툰 메뉴">
+        <a href="/webtoon/">소개</a>
+        <a href="/webtoon/studio/">작업대</a>
+        <a href="/webtoon/guide/">가이드</a>
+        <a href="/webtoon/templates/">템플릿</a>
+        <a href="/webtoon/reader/">감상</a>
+        <a href="/webtoon/operator/" data-admin-only>운영</a>
+        <a href="/webtoon/plan/" data-admin-only>설계</a>
+      </nav>
+      <div class="account-widget" data-account>
+        <span class="account-name" data-account-name hidden></span>
+        <span class="acorn-pill" data-acorns hidden>도토리 <strong data-acorn-count>--</strong></span>
+        <button class="account-button" type="button" data-auth-action="login">Google로 로그인</button>
+        <button class="account-button muted" type="button" data-auth-action="claim" hidden>도토리 받기</button>
+        <button class="account-button ghost" type="button" data-auth-action="logout" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <main id="privacy" class="wt-shell plan-shell">
+      <section class="page-head">
+        <div><p class="kicker">Privacy &amp; security</p><h1>로그인 및 보안 정보 안내</h1></div>
+        <p>웹툰 제작 계정과 도토리를 안전하게 운영하기 위해 필요한 정보만 처리합니다.</p>
+      </section>
+
+      <section class="plan-band">
+        <p class="kicker">Collected data</p>
+        <h2>처리하는 정보</h2>
+        <p>Google 로그인으로 확인된 이메일, 표시 이름, 계정 고유 ID와 도토리 이용 기록을 저장합니다. 부정 이용 대응을 위해 IP 주소 원문 대신 서버 비밀키로 만든 일방향 접속 식별값과 기기·브라우저의 큰 분류만 기록합니다.</p>
+      </section>
+
+      <section class="plan-grid" aria-label="정보 처리 기준">
+        <article class="plan-card"><p class="kicker">Private beta</p><h2>현재 제작 권한</h2><p>웹툰 제작은 개발 중이며 지정된 관리자 계정만 테스트할 수 있습니다. 일반 회원은 로그인 여부와 도토리 잔액에 관계없이 제작 요청이 서버에서 차단됩니다.</p></article>
+        <article class="plan-card"><p class="kicker">Purpose</p><h2>이용 목적</h2><p>로그인 확인, 도토리 지급·차감, 웹툰 초안 저장, 계정 제재, 과도한 요청 및 비정상 접근 확인에만 사용합니다.</p></article>
+        <article class="plan-card"><p class="kicker">Retention</p><h2>보관 기간</h2><p>보안 이벤트는 기본 30일 후 삭제합니다. 계정과 도토리 원장은 회원 관리 및 거래 내역 확인에 필요한 동안 보관하며, 운영 정책에 따라 삭제 요청을 처리합니다.</p></article>
+        <article class="plan-card"><p class="kicker">Access</p><h2>접근 권한</h2><p>일반 사용자는 자신의 잔액만 확인합니다. 회원 목록, 잔액 조정, 제명 및 보안 이벤트는 지정된 관리자 Google 계정만 조회할 수 있습니다.</p></article>
+        <article class="plan-card"><p class="kicker">Processors</p><h2>사용 서비스</h2><p>Google 및 Supabase는 로그인 확인을, 운영자의 Oracle 서버는 회원·도토리·작업 데이터를 처리합니다. 관리자 비밀키와 Oracle 접속 정보는 브라우저에 제공하지 않습니다.</p></article>
+      </section>
+
+      <section class="plan-band">
+        <p class="kicker">Your choice</p>
+        <h2>로그인하지 않으면</h2>
+        <p>공개 웹툰과 무료 가이드는 볼 수 있지만 도토리를 받거나 사용하여 웹툰을 제작할 수 없습니다.</p>
+        <a class="tool-button primary" href="/webtoon/studio/">작업대로 돌아가기</a>
+      </section>
+    </main>
+    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </body>
+</html>

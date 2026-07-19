@@ -1,0 +1,16 @@
+[Unit]
+Description=NeoKIM Webtoon Download Watcher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=webtoonbrowser
+Group=webtoonbrowser
+WorkingDirectory=/opt/neokim-webtoon-download-watcher
+ExecStart=/usr/bin/python3 watch_downloads.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

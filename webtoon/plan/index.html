@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko" data-webtoon-access="visitor" data-webtoon-account="signed-out">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
+    <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>설계 | NeoKIM Webtoon Studio</title>
+    <link rel="stylesheet" href="../webtoon.css?v=20260718-home2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../webtoon.js?v=20260719-security1"></script>
+    <script defer src="../admin.js?v=20260719-security1"></script>
+    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+  </head>
+  <body class="webtoon-app-page page-plan">
+    <a class="skip-link" href="#plan">설계 화면으로 이동</a>
+
+    <header class="wt-topbar">
+      <a class="brand-link" href="/webtoon/" aria-label="NeoKIM 웹툰 스튜디오 홈"><span aria-hidden="true">N</span><strong>WEBTOON STUDIO</strong></a>
+      <nav class="topbar-nav" aria-label="웹툰 메뉴">
+        <a href="/webtoon/">소개</a>
+        <a href="/webtoon/studio/">작업대</a>
+        <a href="/webtoon/guide/">가이드</a>
+        <a href="/webtoon/templates/">템플릿</a>
+        <a href="/webtoon/reader/">감상</a>
+        <a href="/webtoon/operator/" data-admin-only>운영</a>
+        <a href="/webtoon/plan/" aria-current="page" data-admin-only>설계</a>
+      </nav>
+      <div class="account-widget" data-account>
+        <span class="account-name" data-account-name hidden></span>
+        <span class="acorn-pill" data-acorns hidden>도토리 <strong data-acorn-count>--</strong></span>
+        <button class="account-button" type="button" data-auth-action="login">Google로 로그인</button>
+        <button class="account-button muted" type="button" data-auth-action="claim" hidden>도토리 받기</button>
+        <button class="account-button ghost" type="button" data-auth-action="logout" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <main id="plan" class="wt-shell admin-shell">
+      <section class="access-banner" data-admin-locked>
+        <p class="kicker">Private design</p>
+        <h1>관리자 확인이 필요합니다</h1>
+        <p>설계 문서는 정적 페이지에 포함되지 않으며, 지정된 관리자 계정에만 서버가 전달합니다.</p>
+      </section>
+
+      <div data-admin-console hidden>
+        <section class="page-head admin-page-head">
+          <div><p class="kicker">Private product plan</p><h1>설계</h1></div>
+          <button id="adminPlanRefresh" class="tool-button" type="button">새로고침</button>
+        </section>
+        <section class="admin-section" aria-labelledby="adminPlanTitle">
+          <div class="admin-section-head"><div><p class="kicker">Server document</p><h2 id="adminPlanTitle">비공개 설계 문서</h2></div></div>
+          <div id="adminPlanContent" class="admin-plan-content" aria-live="polite">서버에서 설계 문서를 확인하고 있습니다.</div>
+        </section>
+      </div>
+    </main>
+
+    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </body>
+</html>

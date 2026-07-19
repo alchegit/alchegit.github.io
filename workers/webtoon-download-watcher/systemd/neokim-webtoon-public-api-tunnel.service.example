@@ -1,0 +1,15 @@
+[Unit]
+Description=Temporary Cloudflare Quick Tunnel for NeoKIM Webtoon API
+After=network-online.target neokim-eenta-repo3-api-tunnel.service
+Wants=network-online.target neokim-eenta-repo3-api-tunnel.service
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=-/opt/neokim-webtoon-download-watcher/public-tunnel.env
+ExecStart=/opt/neokim-webtoon-download-watcher/start-public-api-tunnel.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

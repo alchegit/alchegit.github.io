@@ -1,0 +1,32 @@
+[Unit]
+Description=NeoKIM Webtoon Oracle API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=webtoonapi
+Group=webtoonapi
+WorkingDirectory=/opt/neokim-webtoon-oracle-api
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node src/server.mjs
+Restart=always
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadWritePaths=/var/lib/neokim-webtoon
+
+[Install]
+WantedBy=multi-user.target

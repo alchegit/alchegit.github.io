@@ -345,6 +345,20 @@ summary:focus-visible {
   font-weight: 600;
 }
 
+.webtoon-lab-cta {
+  border-color: rgba(255, 216, 90, 0.8);
+  background:
+    linear-gradient(135deg, rgba(255, 216, 90, 0.13), rgba(0, 255, 170, 0.08)),
+    rgba(255, 48, 210, 0.04);
+  box-shadow: 0 0 22px rgba(255, 216, 90, 0.13);
+}
+
+.webtoon-lab-cta::after {
+  content: "MAKE";
+  border-color: rgba(255, 216, 90, 0.78);
+  color: var(--amber);
+}
+
 .primary-cta:hover,
 .secondary-cta:hover,
 .card-cta:hover,

@@ -1,0 +1,153 @@
+﻿<!doctype html>
+<html lang="ko" data-webtoon-access="visitor">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
+  <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <meta name="description" content="준비된 원고로 웹툰을 만들고 말풍선, 인물 위치, 원하는 컷만 수정하며 제작 흐름을 익히는 NeoKIM 웹툰 가이드입니다.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/webtoon/guide/">
+    <meta property="og:title" content="웹툰 만들기 가이드 | NeoKIM Webtoon Studio">
+    <meta property="og:description" content="샘플 원고로 웹툰을 만들고 말풍선, 인물 위치, 원하는 컷만 직접 수정해보세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/webtoon/guide/">
+    <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
+    <title>웹툰 만들기 가이드 | NeoKIM Webtoon Studio</title>
+    <link rel="stylesheet" href="../webtoon.css?v=20260716-tunnel2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../webtoon.js?v=20260719-security1"></script>
+    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+    <script defer src="./guide.js?v=20260719-vertical2"></script>
+  </head>
+  <body class="webtoon-app-page page-guide">
+    <a class="skip-link" href="#guideStage">가이드로 이동</a>
+
+    <header class="wt-topbar">
+      <a class="brand-link" href="/webtoon/" aria-label="NeoKIM 웹툰 스튜디오 홈"><span aria-hidden="true">N</span><strong>WEBTOON STUDIO</strong></a>
+      <nav class="topbar-nav" aria-label="웹툰 메뉴">
+        <a href="/webtoon/">소개</a>
+        <a href="/webtoon/studio/">작업대</a>
+        <a href="/webtoon/guide/" aria-current="page">가이드</a>
+        <a href="/webtoon/templates/">템플릿</a>
+        <a href="/webtoon/reader/">감상</a>
+        <a href="/webtoon/operator/" data-admin-only>운영</a>
+        <a href="/webtoon/plan/" data-admin-only>설계</a>
+      </nav>
+      <div class="account-widget" data-account>
+        <span class="account-name" data-account-name hidden></span>
+        <span class="acorn-pill" data-acorns hidden>도토리 <strong data-acorn-count>--</strong></span>
+        <button class="account-button" type="button" data-auth-action="login">Google로 로그인</button>
+        <button class="account-button muted" type="button" data-auth-action="claim" hidden>도토리 받기</button>
+        <button class="account-button ghost" type="button" data-auth-action="logout" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <main class="wt-shell guide-shell">
+      <section class="page-head guide-head" aria-labelledby="pageTitle">
+        <div>
+          <p class="kicker">K-webtoon intro tour</p>
+          <h1 id="pageTitle">웹툰 만들기 가이드</h1>
+        </div>
+        <div class="guide-finish-card">
+          <span>완료</span>
+          <strong id="guideDoneCount">0 / 5</strong>
+        </div>
+      </section>
+
+      <section id="guideStage" class="guide-grid">
+        <aside class="guide-control" aria-labelledby="runnerTitle">
+          <div class="column-head">
+            <h2 id="runnerTitle">따라하기</h2>
+            <span class="tag">약 1분</span>
+          </div>
+
+          <div class="guide-intro-card">
+            <p class="kicker">Interactive walkthrough</p>
+            <strong>직접 만들며 익혀보세요.</strong>
+            <p>강조되는 곳을 차례로 누르면 원고 입력부터 원하는 컷만 다시 만들기까지 자연스럽게 익힐 수 있습니다.</p>
+            <button id="startTourButton" class="tool-button primary" type="button">가이드 시작</button>
+          </div>
+
+          <label class="field" data-tour-target="prompt">
+            <span class="field-label-row">
+              <span>샘플 원고</span>
+              <small id="guidePromptCount" class="input-counter" aria-live="polite">0 / 600자</small>
+            </span>
+            <textarea id="guidePrompt" rows="7" minlength="10" maxlength="600" aria-describedby="guidePromptLimit" placeholder="가이드를 시작하면 준비된 원고가 자동으로 입력됩니다."></textarea>
+            <small id="guidePromptLimit" class="field-hint">가이드 체험은 최대 600자까지 입력할 수 있습니다.</small>
+          </label>
+
+          <button id="runGuideButton" class="tool-button primary guide-run-button" data-tour-target="run" type="button" disabled>샘플 웹툰 만들기</button>
+
+          <div class="guide-progress-card" data-tour-target="progress" aria-live="polite">
+            <div class="guide-progress-head">
+              <strong id="progressLabel">대기 중</strong>
+              <span id="progressPercent">0%</span>
+            </div>
+            <div class="guide-progress-track">
+              <div id="progressFill" class="guide-progress-fill"></div>
+            </div>
+            <p id="progressLog">샘플 웹툰이 만들어지는 과정을 짧게 체험합니다.</p>
+          </div>
+
+          <ol id="guideSteps" class="guide-steps" aria-label="Guide steps">
+            <li data-step="run" class="is-current"><span>1</span>웹툰 만들기</li>
+            <li data-step="view"><span>2</span>결과 확인</li>
+            <li data-step="speech"><span>3</span>말풍선 수정</li>
+            <li data-step="move"><span>4</span>인물 이동</li>
+            <li data-step="regen"><span>5</span>두 번째 컷 수정</li>
+          </ol>
+        </aside>
+
+        <section class="guide-preview" aria-labelledby="previewTitle">
+          <div class="column-head">
+            <h2 id="previewTitle">완성 웹툰</h2>
+            <div class="guide-actions">
+              <button id="regenPanelButton" class="tool-button yellow" type="button" disabled>두 번째 컷만 다시 그리기</button>
+              <a class="tool-button" href="/webtoon/studio/?template=awakening-subway-gate">작업대로 이동</a>
+            </div>
+          </div>
+
+          <div id="guideCanvas" class="guide-canvas is-empty" data-tour-target="canvas" aria-live="polite">
+            <div class="guide-empty">
+              <strong>샘플 원고로 세로 웹툰을 만들어보세요.</strong>
+              <span>완성 컷을 아래로 읽으며 말풍선, 인물 위치, 원하는 컷만 차례로 수정해봅니다.</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="guideTour" class="guide-tour" hidden>
+      <div id="guideSpotlight" class="guide-spotlight" aria-hidden="true">
+        <span id="guideSpotlightStep" class="guide-spotlight-step">1</span>
+      </div>
+      <aside id="guideCoach" class="guide-coach" role="dialog" aria-labelledby="guideCoachTitle" aria-describedby="guideCoachText" aria-live="polite">
+        <div class="guide-coach-topline">
+          <span id="guideCoachCounter">STEP 1 / 7</span>
+          <button id="closeTourButton" class="guide-coach-close" type="button" aria-label="가이드 닫기">×</button>
+        </div>
+        <h2 id="guideCoachTitle">한 줄 원고부터 시작</h2>
+        <p id="guideCoachText">준비된 원고가 입력되는 위치입니다.</p>
+        <div id="guideCoachProgress" class="guide-coach-progress" role="progressbar" aria-label="현재 작업 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+          <div class="guide-coach-progress-head">
+            <span id="guideCoachProgressLabel">준비 중</span>
+            <strong id="guideCoachProgressPercent">0%</strong>
+          </div>
+          <div class="guide-coach-progress-track" aria-hidden="true">
+            <i id="guideCoachProgressFill"></i>
+          </div>
+        </div>
+        <div id="guideTourDots" class="guide-tour-dots" aria-hidden="true"></div>
+        <div class="guide-coach-actions">
+          <button id="previousTourButton" class="guide-coach-secondary" type="button">이전</button>
+          <button id="nextTourButton" class="guide-coach-primary" type="button">다음</button>
+        </div>
+      </aside>
+    </div>
+
+    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </body>
+</html>

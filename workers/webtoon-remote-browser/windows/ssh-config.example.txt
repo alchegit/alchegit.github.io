@@ -1,0 +1,5 @@
+Host EETNA_WEB_HOON
+  HostName your.server.example.com
+  User your_ssh_user
+  Port 22
+  IdentityFile ~/.ssh/id_ed25519

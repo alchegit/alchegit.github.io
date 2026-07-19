@@ -1,0 +1,15 @@
+[Unit]
+Description=SSH tunnel from remote browser server to EENTA_REPO3 Webtoon API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=/opt/neokim-webtoon-download-watcher/tunnel.env
+ExecStart=/opt/neokim-webtoon-download-watcher/start-api-tunnel.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

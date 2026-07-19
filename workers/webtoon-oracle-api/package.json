@@ -1,0 +1,21 @@
+{
+  "name": "neokim-webtoon-oracle-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Oracle-backed API server for NeoKIM Webtoon Studio.",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "check": "node --check src/server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.2",
+    "helmet": "^7.2.0",
+    "multer": "^2.2.0",
+    "oracledb": "^6.10.0"
+  }
+}

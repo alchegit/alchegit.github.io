@@ -1,0 +1,41 @@
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+*.secrets
+
+# Server-side credentials that must never be published to GitHub Pages
+service-role*.json
+service-role*.key
+credentials*.json
+secrets/
+
+# Local-only webtoon planning material. Public operator/plan routes contain
+# only authenticated shells; their private data is loaded from the Oracle API.
+webtoon/design-db.json
+webtoon/implementation-report.md
+webtoon/summary.txt
+
+# Runtime/build output
+node_modules/
+dist/
+build/
+.cache/
+.wrangler/
+.vercel/
+.netlify/
+workers/**/outbox/
+workers/**/data/
+workers/**/.webtoon-download-watcher-state.json
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

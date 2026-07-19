@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko" data-webtoon-access="visitor" data-webtoon-account="signed-out">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
+    <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>운영 | NeoKIM Webtoon Studio</title>
+    <link rel="stylesheet" href="../webtoon.css?v=20260718-home2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../webtoon.js?v=20260719-security1"></script>
+    <script defer src="../admin.js?v=20260719-security1"></script>
+    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+  </head>
+  <body class="webtoon-app-page page-operator">
+    <a class="skip-link" href="#operator">운영 화면으로 이동</a>
+
+    <header class="wt-topbar">
+      <a class="brand-link" href="/webtoon/" aria-label="NeoKIM 웹툰 스튜디오 홈"><span aria-hidden="true">N</span><strong>WEBTOON STUDIO</strong></a>
+      <nav class="topbar-nav" aria-label="웹툰 메뉴">
+        <a href="/webtoon/">소개</a>
+        <a href="/webtoon/studio/">작업대</a>
+        <a href="/webtoon/guide/">가이드</a>
+        <a href="/webtoon/templates/">템플릿</a>
+        <a href="/webtoon/reader/">감상</a>
+        <a href="/webtoon/operator/" aria-current="page" data-admin-only>운영</a>
+        <a href="/webtoon/plan/" data-admin-only>설계</a>
+      </nav>
+      <div class="account-widget" data-account>
+        <span class="account-name" data-account-name hidden></span>
+        <span class="acorn-pill" data-acorns hidden>도토리 <strong data-acorn-count>--</strong></span>
+        <button class="account-button" type="button" data-auth-action="login">Google로 로그인</button>
+        <button class="account-button muted" type="button" data-auth-action="claim" hidden>도토리 받기</button>
+        <button class="account-button ghost" type="button" data-auth-action="logout" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <main id="operator" class="wt-shell admin-shell">
+      <section class="access-banner" data-admin-locked>
+        <p class="kicker">Private administration</p>
+        <h1>관리자 확인이 필요합니다</h1>
+        <p>지정된 Google 관리자 계정으로 로그인한 경우에만 운영 정보가 서버에서 전달됩니다.</p>
+      </section>
+
+      <div data-admin-console hidden>
+        <section class="page-head admin-page-head">
+          <div><p class="kicker">Member operations</p><h1>운영</h1></div>
+          <button id="adminRefresh" class="tool-button" type="button">새로고침</button>
+        </section>
+
+        <dl class="admin-metrics" aria-label="회원 현황">
+          <div><dt>전체 회원</dt><dd id="adminTotalUsers">--</dd></div>
+          <div><dt>이용 가능</dt><dd id="adminActiveUsers">--</dd></div>
+          <div><dt>제명</dt><dd id="adminBannedUsers">--</dd></div>
+          <div><dt>보안 기록</dt><dd id="adminSecurityCount">--</dd></div>
+        </dl>
+
+        <section class="admin-section" aria-labelledby="memberTitle">
+          <div class="admin-section-head">
+            <div><p class="kicker">Members</p><h2 id="memberTitle">회원 관리</h2></div>
+            <label class="admin-search"><span class="sr-only">회원 검색</span><input id="adminUserSearch" type="search" maxlength="120" placeholder="이메일 또는 이름 검색"></label>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>계정</th><th>도토리</th><th>상태</th><th>최근 접속</th><th><span class="sr-only">관리</span></th></tr></thead>
+              <tbody id="adminUserRows"></tbody>
+            </table>
+          </div>
+          <p id="adminUsersEmpty" class="admin-empty" hidden>조건에 맞는 회원이 없습니다.</p>
+        </section>
+
+        <section class="admin-section" aria-labelledby="securityTitle">
+          <div class="admin-section-head">
+            <div><p class="kicker">Security signals</p><h2 id="securityTitle">보안 이벤트</h2></div>
+            <p>IP 원문 없이 접속 식별값과 기기 분류만 30일 보관</p>
+          </div>
+          <div id="adminSecurityEvents" class="security-event-list"></div>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="adminUserDialog" class="admin-dialog">
+      <form method="dialog" class="admin-dialog-head"><div><p class="kicker">Member</p><h2 id="adminDialogName">회원 관리</h2></div><button class="icon-button" value="cancel" aria-label="닫기">×</button></form>
+      <div class="admin-dialog-body">
+        <dl class="admin-member-detail">
+          <div><dt>Google 계정</dt><dd id="adminDialogEmail">--</dd></div>
+          <div><dt>상태</dt><dd id="adminDialogStatus">--</dd></div>
+          <div><dt>접속 식별값</dt><dd id="adminDialogFingerprint">--</dd></div>
+          <div><dt>기기</dt><dd id="adminDialogAgent">--</dd></div>
+          <div><dt>최근 접속</dt><dd id="adminDialogLastSeen">--</dd></div>
+          <div><dt>확인된 세션</dt><dd id="adminDialogLoginCount">--</dd></div>
+        </dl>
+        <label class="field"><span>도토리 잔액</span><input id="adminAcornBalance" type="number" min="0" max="999999" step="1"></label>
+        <label class="field"><span>조정 사유</span><input id="adminAcornReason" type="text" maxlength="200" placeholder="예: 이벤트 보상"></label>
+        <button id="adminSaveAcorns" class="tool-button primary" type="button">도토리 저장</button>
+        <hr>
+        <label class="field"><span>제명 또는 복구 사유</span><textarea id="adminBanReason" rows="3" maxlength="500" placeholder="제명 시 3자 이상 입력"></textarea></label>
+        <button id="adminToggleBan" class="tool-button berry" type="button">계정 제명</button>
+        <p class="admin-dialog-note">제명 계정은 Oracle API에서 즉시 차단됩니다. 서버에 Supabase 서비스 키가 설정되어 있으면 Google 로그인 세션 발급도 함께 정지됩니다.</p>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </body>
+</html>

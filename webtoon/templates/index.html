@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html lang="ko" data-webtoon-access="visitor">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
+  <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <meta name="description" content="폐역, 회귀, 옥상 균열 중 마음에 드는 이야기 시작점을 골라 현대 판타지 웹툰 초안을 빠르게 만들어보세요.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alchegit.github.io/webtoon/templates/">
+    <meta property="og:title" content="이야기 시작점 | NeoKIM Webtoon Studio">
+    <meta property="og:description" content="마음에 드는 현대 판타지 설정을 골라 나만의 웹툰으로 바꿔보세요.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alchegit.github.io/webtoon/templates/">
+    <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
+    <title>이야기 시작점 | NeoKIM Webtoon Studio</title>
+    <link rel="stylesheet" href="../webtoon.css?v=20260716-tunnel2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../webtoon.js?v=20260719-security1"></script>
+    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+  </head>
+  <body class="webtoon-app-page page-templates">
+    <a class="skip-link" href="#templateGrid">템플릿으로 이동</a>
+
+    <header class="wt-topbar">
+      <a class="brand-link" href="/webtoon/" aria-label="NeoKIM 웹툰 스튜디오 홈"><span aria-hidden="true">N</span><strong>WEBTOON STUDIO</strong></a>
+      <nav class="topbar-nav" aria-label="웹툰 메뉴">
+        <a href="/webtoon/">소개</a>
+        <a href="/webtoon/studio/">작업대</a>
+        <a href="/webtoon/guide/">가이드</a>
+        <a href="/webtoon/templates/" aria-current="page">템플릿</a>
+        <a href="/webtoon/reader/">감상</a>
+        <a href="/webtoon/operator/" data-admin-only>운영</a>
+        <a href="/webtoon/plan/" data-admin-only>설계</a>
+      </nav>
+      <div class="account-widget" data-account>
+        <span class="account-name" data-account-name hidden></span>
+        <span class="acorn-pill" data-acorns hidden>도토리 <strong data-acorn-count>--</strong></span>
+        <button class="account-button" type="button" data-auth-action="login">Google로 로그인</button>
+        <button class="account-button muted" type="button" data-auth-action="claim" hidden>도토리 받기</button>
+        <button class="account-button ghost" type="button" data-auth-action="logout" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <main class="wt-shell">
+      <section class="page-head" aria-labelledby="pageTitle">
+        <div>
+          <p class="kicker">Awakening start points</p>
+          <h1 id="pageTitle">이야기 시작점</h1>
+        </div>
+      </section>
+
+      <section id="templateGrid" class="template-grid" aria-live="polite"></section>
+    </main>
+    <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </body>
+</html>
