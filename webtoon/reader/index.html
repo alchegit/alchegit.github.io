@@ -15,10 +15,10 @@
     <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>웹툰 감상 | NeoKIM Webtoon Studio</title>
     <link rel="stylesheet" href="../webtoon.css?v=20260716-tunnel2">
-    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260721-reader2">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../webtoon.js?v=20260719-security1"></script>
-    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+    <script defer src="../webtoon.js?v=20260721-reader2"></script>
+    <script defer src="../webtoon-app.js?v=20260720-reader1"></script>
   </head>
   <body class="webtoon-app-page page-reader">
     <a class="skip-link" href="#readerCanvas">웹툰으로 이동</a>
@@ -68,6 +68,7 @@
       <div class="toolbar" aria-label="Reader actions">
         <a class="tool-button primary" href="/webtoon/studio/">내 웹툰 수정하기</a>
         <a class="tool-button" href="/webtoon/templates/">템플릿 보기</a>
+        <label class="reader-language-field"><span>글자 언어</span><select id="readerLanguage" aria-label="웹툰 글자 언어"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option></select></label>
       </div>
 
       <section class="reader-stage">

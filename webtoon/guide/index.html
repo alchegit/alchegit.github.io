@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
   <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
-    <meta name="description" content="준비된 원고로 웹툰을 만들고 말풍선, 인물 위치, 원하는 컷만 수정하며 제작 흐름을 익히는 NeoKIM 웹툰 가이드입니다.">
+    <meta name="description" content="준비된 원고로 콘티와 시안을 만들고, 구도를 승인해 완성화한 뒤 말풍선과 원하는 컷만 수정하는 NeoKIM 웹툰 가이드입니다.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alchegit.github.io/webtoon/guide/">
     <meta property="og:title" content="웹툰 만들기 가이드 | NeoKIM Webtoon Studio">
-    <meta property="og:description" content="샘플 원고로 웹툰을 만들고 말풍선, 인물 위치, 원하는 컷만 직접 수정해보세요.">
+    <meta property="og:description" content="샘플 원고로 시안을 만들고 승인한 구도만 완성화한 뒤 원하는 부분을 직접 수정해보세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alchegit.github.io/webtoon/guide/">
     <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>웹툰 만들기 가이드 | NeoKIM Webtoon Studio</title>
     <link rel="stylesheet" href="../webtoon.css?v=20260716-tunnel2">
-    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260721-visual2">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../webtoon.js?v=20260719-security1"></script>
-    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
-    <script defer src="./guide.js?v=20260719-vertical2"></script>
+    <script defer src="../webtoon.js?v=20260721-visual2"></script>
+    <script defer src="../webtoon-app.js?v=20260720-reader1"></script>
+    <script defer src="./guide.js?v=20260721-visual2"></script>
   </head>
   <body class="webtoon-app-page page-guide">
     <a class="skip-link" href="#guideStage">가이드로 이동</a>
@@ -52,7 +52,7 @@
         </div>
         <div class="guide-finish-card">
           <span>완료</span>
-          <strong id="guideDoneCount">0 / 5</strong>
+          <strong id="guideDoneCount">0 / 7</strong>
         </div>
       </section>
 
@@ -60,13 +60,13 @@
         <aside class="guide-control" aria-labelledby="runnerTitle">
           <div class="column-head">
             <h2 id="runnerTitle">따라하기</h2>
-            <span class="tag">약 1분</span>
+            <span class="tag">약 2분</span>
           </div>
 
           <div class="guide-intro-card">
             <p class="kicker">Interactive walkthrough</p>
             <strong>직접 만들며 익혀보세요.</strong>
-            <p>강조되는 곳을 차례로 누르면 원고 입력부터 원하는 컷만 다시 만들기까지 자연스럽게 익힐 수 있습니다.</p>
+            <p>원고 입력부터 시안 확인, 구도 승인, 완성화와 원하는 컷 수정까지 실제 작업 순서대로 익힙니다.</p>
             <button id="startTourButton" class="tool-button primary" type="button">가이드 시작</button>
           </div>
 
@@ -79,7 +79,14 @@
             <small id="guidePromptLimit" class="field-hint">가이드 체험은 최대 600자까지 입력할 수 있습니다.</small>
           </label>
 
-          <button id="runGuideButton" class="tool-button primary guide-run-button" data-tour-target="run" type="button" disabled>샘플 웹툰 만들기</button>
+          <button id="runGuideButton" class="tool-button primary guide-run-button" data-tour-target="run" type="button" disabled>콘티와 시안 만들기</button>
+
+          <ol id="guideVisualFlow" class="guide-visual-flow" aria-label="그림 제작 단계" aria-live="polite">
+            <li data-visual-stage="storyboard"><span>1</span><strong>콘티</strong></li>
+            <li data-visual-stage="draft"><span>2</span><strong>시안</strong></li>
+            <li data-visual-stage="final"><span>3</span><strong>완성화</strong></li>
+            <li data-visual-stage="approval"><span>4</span><strong>최종 승인</strong></li>
+          </ol>
 
           <div class="guide-progress-card" data-tour-target="progress" aria-live="polite">
             <div class="guide-progress-head">
@@ -89,31 +96,35 @@
             <div class="guide-progress-track">
               <div id="progressFill" class="guide-progress-fill"></div>
             </div>
-            <p id="progressLog">샘플 웹툰이 만들어지는 과정을 짧게 체험합니다.</p>
+            <p id="progressLog">완성도를 올리기 전에 콘티와 시안을 먼저 확인합니다.</p>
           </div>
 
           <ol id="guideSteps" class="guide-steps" aria-label="Guide steps">
-            <li data-step="run" class="is-current"><span>1</span>웹툰 만들기</li>
-            <li data-step="view"><span>2</span>결과 확인</li>
-            <li data-step="speech"><span>3</span>말풍선 수정</li>
-            <li data-step="move"><span>4</span>인물 이동</li>
-            <li data-step="regen"><span>5</span>두 번째 컷 수정</li>
+            <li data-step="run" class="is-current"><span>1</span>콘티 만들기</li>
+            <li data-step="draft"><span>2</span>시안 확인</li>
+            <li data-step="draft-approve"><span>3</span>시안 구도 승인</li>
+            <li data-step="final-approve"><span>4</span>완성화·최종 승인</li>
+            <li data-step="speech"><span>5</span>말풍선 수정</li>
+            <li data-step="move"><span>6</span>인물·구도 이동</li>
+            <li data-step="regen"><span>7</span>선택한 컷 수정</li>
           </ol>
         </aside>
 
         <section class="guide-preview" aria-labelledby="previewTitle">
           <div class="column-head">
-            <h2 id="previewTitle">완성 웹툰</h2>
+            <h2 id="previewTitle">시안 미리보기</h2>
             <div class="guide-actions">
-              <button id="regenPanelButton" class="tool-button yellow" type="button" disabled>두 번째 컷만 다시 그리기</button>
-              <a class="tool-button" href="/webtoon/studio/?template=awakening-subway-gate">작업대로 이동</a>
+              <button id="guideApprovalButton" class="tool-button primary" data-tour-target="approval" type="button" disabled>시안 구도 승인</button>
+              <button id="regenPanelButton" class="tool-button yellow" type="button" disabled>선택한 컷 다시 만들기</button>
+              <a id="guideReaderLink" class="tool-button is-disabled" href="/webtoon/reader/?scenario=guide-episode" aria-disabled="true" tabindex="-1">1화 감상</a>
+              <a class="tool-button" href="/webtoon/studio/?template=awakening-subway-gate&amp;scenario=guide-episode">작업대로 이동</a>
             </div>
           </div>
 
           <div id="guideCanvas" class="guide-canvas is-empty" data-tour-target="canvas" aria-live="polite">
             <div class="guide-empty">
-              <strong>샘플 원고로 세로 웹툰을 만들어보세요.</strong>
-              <span>완성 컷을 아래로 읽으며 말풍선, 인물 위치, 원하는 컷만 차례로 수정해봅니다.</span>
+              <strong>먼저 가벼운 시안으로 확인해보세요.</strong>
+              <span>마음에 드는 구도를 승인하면 같은 장면을 완성본으로 다듬습니다.</span>
             </div>
           </div>
         </section>
@@ -126,7 +137,7 @@
       </div>
       <aside id="guideCoach" class="guide-coach" role="dialog" aria-labelledby="guideCoachTitle" aria-describedby="guideCoachText" aria-live="polite">
         <div class="guide-coach-topline">
-          <span id="guideCoachCounter">STEP 1 / 7</span>
+          <span id="guideCoachCounter">STEP 1 / 10</span>
           <button id="closeTourButton" class="guide-coach-close" type="button" aria-label="가이드 닫기">×</button>
         </div>
         <h2 id="guideCoachTitle">한 줄 원고부터 시작</h2>

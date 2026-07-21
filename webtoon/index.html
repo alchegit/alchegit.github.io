@@ -6,11 +6,11 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
     <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
     <meta name="theme-color" content="#0b1018">
-    <meta name="description" content="한 줄로 적은 나만의 이야기를 AI가 웹툰용 서사와 장면으로 확장하고, 원하는 컷만 수정해 작품으로 완성하는 NeoKIM 웹툰 스튜디오입니다.">
+    <meta name="description" content="한 줄 이야기를 웹툰 콘티와 가벼운 시안으로 먼저 확인하고, 승인한 구도만 완성화해 작품으로 만드는 NeoKIM 웹툰 스튜디오입니다.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alchegit.github.io/webtoon/">
     <meta property="og:title" content="NeoKIM Webtoon Studio">
-    <meta property="og:description" content="한 줄 이야기를 확장하고, 컷과 대사를 다듬어 나만의 세로 웹툰으로 완성하세요.">
+    <meta property="og:description" content="시안으로 구도를 먼저 확인하고 승인한 컷만 완성화해 나만의 세로 웹툰을 만드세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alchegit.github.io/webtoon/">
     <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
@@ -20,9 +20,9 @@
     <meta name="twitter:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>NeoKIM Webtoon Studio | 한 줄 이야기를 AI 웹툰으로</title>
     <link rel="preload" href="./assets/webtoon-studio-hero-v1.webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="stylesheet" href="./landing.css?v=20260719-account2">
+    <link rel="stylesheet" href="./landing.css?v=20260721-visual2">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="./webtoon.js?v=20260719-security1"></script>
+    <script defer src="./webtoon.js?v=20260721-visual2"></script>
     <script defer src="./landing.js?v=20260718-home2"></script>
   </head>
   <body class="webtoon-landing">
@@ -60,7 +60,7 @@
             <span>한 줄 이야기를</span>
             <span class="hero-title-accent">AI 웹툰으로</span>
           </h1>
-          <p class="hero-summary">이야기를 한 줄로 적어보세요. AI가 서사를 확장하고 세로 웹툰에 어울리는 컷과 대사로 구성합니다. 마음에 들지 않는 부분만 고쳐 나만의 작품으로 완성하세요.</p>
+          <p class="hero-summary">이야기를 한 줄로 적어보세요. AI가 서사와 콘티를 만들고 가벼운 시안으로 먼저 보여드립니다. 마음에 드는 구도만 승인해 완성본으로 다듬으세요.</p>
           <div class="hero-flow" data-hero-flow aria-label="한 줄에서 웹툰 게시까지의 제작 흐름">
             <div class="hero-flow-idea">
               <span>MY STORY</span>
@@ -68,9 +68,10 @@
             </div>
             <ol>
               <li class="is-active" data-flow-step><span>01</span> 이야기 확장</li>
-              <li data-flow-step><span>02</span> 컷 구성</li>
-              <li data-flow-step><span>03</span> 골라서 수정</li>
-              <li data-flow-step><span>04</span> 게시 준비</li>
+              <li data-flow-step><span>02</span> 콘티 구성</li>
+              <li data-flow-step><span>03</span> 시안 확인</li>
+              <li data-flow-step><span>04</span> 승인·완성화</li>
+              <li data-flow-step><span>05</span> 게시 준비</li>
             </ol>
           </div>
           <div class="hero-actions">
@@ -179,33 +180,33 @@
       <section class="workflow-section" aria-labelledby="workflowTitle">
         <div class="workflow-intro" data-reveal>
           <p class="section-index">CHAPTER 03</p>
-          <h2 id="workflowTitle">한 줄이면 충분해요.<br>나머지는 차근차근.</h2>
+          <h2 id="workflowTitle">완성부터 만들지 않아요.<br>시안부터 차근차근.</h2>
         </div>
         <ol class="workflow-line">
           <li data-reveal>
             <span>01</span>
-            <strong>한 줄 입력</strong>
-            <p>내가 보고 싶은 이야기의 시작을 짧게 적습니다.</p>
+            <strong>한 줄 입력·확장</strong>
+            <p>보고 싶은 이야기의 시작을 적으면 목적과 사건, 다음 화의 질문을 보강합니다.</p>
           </li>
           <li data-reveal>
             <span>02</span>
-            <strong>이야기 확장</strong>
-            <p>주인공의 목적과 사건, 다음 화의 궁금증을 보강합니다.</p>
+            <strong>콘티 구성</strong>
+            <p>확장된 이야기를 세로 호흡의 장면, 카메라, 대사로 나눕니다.</p>
           </li>
           <li data-reveal>
             <span>03</span>
-            <strong>AI 장면 구성</strong>
-            <p>확장된 이야기를 세로 호흡의 장면과 대사로 나눕니다.</p>
+            <strong>가벼운 시안</strong>
+            <p>완성도를 올리기 전에 인물 위치와 시선, 장면 구도를 빠르게 확인합니다.</p>
           </li>
           <li data-reveal>
             <span>04</span>
-            <strong>부분 수정</strong>
-            <p>마음에 들지 않는 컷과 말풍선만 골라 다시 다듬습니다.</p>
+            <strong>승인·완성화</strong>
+            <p>승인한 시안의 구도는 지키고 선화, 빛, 재질과 배경만 완성합니다.</p>
           </li>
           <li data-reveal>
             <span>05</span>
-            <strong>미리보기·게시</strong>
-            <p>모바일 독자 화면으로 확인하고 공개할 작품을 게시합니다.</p>
+            <strong>최종 확인·게시</strong>
+            <p>완성본의 대사와 필요한 컷만 다듬은 뒤 모바일 독자 화면으로 확인합니다.</p>
           </li>
         </ol>
       </section>
@@ -214,14 +215,14 @@
         <div class="guide-copy" data-reveal>
           <p class="section-index">TRY THE STUDIO</p>
           <h2 id="guideTitle">설명 대신,<br>직접 만들어보세요.</h2>
-          <p>준비된 각성물 시나리오를 따라 컷을 만들고, 말풍선을 고치고, 인물 위치를 옮겨보세요. 도토리 없이 반복해서 체험할 수 있습니다.</p>
+          <p>준비된 각성물 시나리오로 시안을 만들고 구도를 승인한 뒤 완성화해보세요. 말풍선 수정과 인물 이동, 선택한 컷 재생성까지 도토리 없이 반복 체험할 수 있습니다.</p>
           <a class="landing-button primary" href="/webtoon/guide/">무료 가이드 시작</a>
         </div>
         <a class="guide-preview" href="/webtoon/guide/" aria-label="웹툰 제작 가이드 체험하기" data-reveal>
-          <span class="guide-preview-label">GUIDE / 07 STEPS</span>
-          <div class="guide-preview-cut cut-one"><span>아이디어 분석</span></div>
-          <div class="guide-preview-cut cut-two"><span>말풍선 수정</span></div>
-          <div class="guide-preview-cut cut-three"><span>컷 다시 그리기</span></div>
+          <span class="guide-preview-label">GUIDE / DRAFT TO FINAL</span>
+          <div class="guide-preview-cut cut-one"><span>콘티·시안</span></div>
+          <div class="guide-preview-cut cut-two"><span>구도 승인</span></div>
+          <div class="guide-preview-cut cut-three"><span>완성화·수정</span></div>
           <strong>직접 체험하기</strong>
         </a>
       </section>

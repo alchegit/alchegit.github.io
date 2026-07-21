@@ -29,6 +29,7 @@ build/
 workers/**/outbox/
 workers/**/data/
 workers/**/.webtoon-download-watcher-state.json
+test-results/
 
 # Logs
 *.log

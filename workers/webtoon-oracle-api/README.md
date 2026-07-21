@@ -23,7 +23,7 @@ The application listens on `127.0.0.1` by default so the public entry point rema
 
 ## Setup
 
-1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, run both `oracle/20260719-webtoon-content-limits.sql` and `oracle/20260719-webtoon-user-security.sql` once.
+1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql` before deploying the matching API.
 2. Copy `.env.example` to `.env` on `EENTA_REPO3`.
 3. Fill in Oracle connection values, Supabase Auth values, the exact administrator Google email, and long random server secrets.
 4. Install dependencies and start:
@@ -43,6 +43,7 @@ npm start
 - `POST /api/webtoon/projects`
 - `PUT /api/webtoon/projects/:id`
 - `POST /api/webtoon/jobs`
+- `POST /api/webtoon/assets/reference`
 - `GET /api/webtoon/jobs/ready`
 - `PATCH /api/webtoon/jobs/:id`
 - `POST /api/webtoon/assets/upload`
@@ -53,6 +54,8 @@ npm start
 - `GET /api/webtoon/admin/plan`
 
 Browser endpoints require a verified Supabase access token created by Google login. Administrator endpoints additionally require the exact `ADMIN_GOOGLE_EMAIL` identity. Worker endpoints require the server-only `X-Webtoon-Worker-Token`.
+
+`POST /api/webtoon/assets/reference` is the authenticated browser path for an approved visual draft. Final-render jobs are rejected unless every prompt package includes both an approved draft version ID and an HTTPS `approved-draft` reference.
 
 Keep `ADMIN_ONLY_CREATION=true` during private testing. In this mode, project writes and generation jobs reject every non-admin account with `403 development_in_progress`, even if a caller bypasses the browser UI.
 

@@ -1,0 +1,24 @@
+[Unit]
+Description=NeoKIM Webtoon manual prompt worker
+Wants=network-online.target
+After=network-online.target neokim-eenta-repo3-api-tunnel.service
+Requires=neokim-eenta-repo3-api-tunnel.service
+
+[Service]
+Type=simple
+User=webtoonworker
+Group=webtoonworker
+SupplementaryGroups=webtoonbrowser
+WorkingDirectory=/opt/neokim-webtoon-image-worker
+EnvironmentFile=/opt/neokim-webtoon-image-worker/.env
+ExecStart=/usr/bin/node /opt/neokim-webtoon-image-worker/src/worker.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/neokim-webtoon-worker/outbox
+
+[Install]
+WantedBy=multi-user.target

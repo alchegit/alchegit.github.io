@@ -70,10 +70,15 @@ create table webtoon_generation_jobs (
   id varchar2(36) primary key,
   user_id varchar2(80) not null references webtoon_profiles(user_id),
   project_id varchar2(36) references webtoon_projects(id),
-  job_type varchar2(60) not null check (job_type in ('draft_generation', 'panel_regenerate')),
+  parent_job_id varchar2(36) references webtoon_generation_jobs(id),
+  panel_id varchar2(120),
+  prompt_package_id varchar2(120),
+  attempt number(4) default 1 not null check (attempt between 1 and 99),
+  job_type varchar2(60) not null check (job_type in ('draft_generation', 'episode_generation', 'panel_generation', 'panel_regenerate')),
   scenario_key varchar2(100),
   cost number(10) default 0 not null check (
-    (job_type = 'draft_generation' and cost = 3)
+    (job_type in ('draft_generation', 'episode_generation') and cost = 3)
+    or (job_type = 'panel_generation' and cost = 0)
     or (job_type = 'panel_regenerate' and cost = 1)
   ),
   status varchar2(30) default 'ready' not null check (status in ('ready', 'running', 'done', 'failed', 'canceled')),
@@ -90,6 +95,9 @@ create index idx_wt_jobs_status_created
 
 create index idx_wt_jobs_user_created
   on webtoon_generation_jobs(user_id, created_at desc);
+
+create index idx_wt_jobs_parent
+  on webtoon_generation_jobs(parent_job_id, status, created_at);
 
 create table webtoon_assets (
   id varchar2(36) primary key,
@@ -126,6 +134,47 @@ create table webtoon_asset_versions (
   created_at timestamp with time zone default systimestamp not null,
   unique (asset_id, version_no)
 );
+
+create table webtoon_panel_versions (
+  version_key varchar2(300) primary key,
+  project_id varchar2(36) not null references webtoon_projects(id),
+  panel_id varchar2(120) not null,
+  version_id varchar2(120) not null,
+  parent_version_id varchar2(120),
+  source_asset_id varchar2(500),
+  prompt_package_id varchar2(120),
+  edit_target varchar2(40),
+  mask_asset_id varchar2(160),
+  render_stage varchar2(20) default 'final' not null check (render_stage in ('draft', 'final')),
+  requested_quality varchar2(20) default 'high' not null check (requested_quality in ('low', 'high')),
+  version_status varchar2(30) not null check (version_status in ('candidate', 'approved', 'needs-fix', 'superseded')),
+  is_approved char(1) default 'N' not null check (is_approved in ('Y', 'N')),
+  is_stage_approved char(1) default 'N' not null check (is_stage_approved in ('Y', 'N')),
+  metadata_json clob not null check (metadata_json is json),
+  created_at timestamp with time zone default systimestamp not null,
+  updated_at timestamp with time zone default systimestamp not null,
+  unique (project_id, panel_id, version_id)
+);
+
+create index idx_wt_panel_versions_lookup
+  on webtoon_panel_versions(project_id, panel_id, is_approved, created_at desc);
+
+create index idx_wt_panel_versions_stage
+  on webtoon_panel_versions(project_id, panel_id, render_stage, is_stage_approved, created_at desc);
+
+create table webtoon_panel_qc_issues (
+  id varchar2(36) primary key,
+  version_key varchar2(300) not null references webtoon_panel_versions(version_key),
+  project_id varchar2(36) not null references webtoon_projects(id),
+  panel_id varchar2(120) not null,
+  severity varchar2(20) default 'warning' not null check (severity in ('info', 'warning', 'error', 'critical')),
+  category varchar2(80),
+  issue_json clob not null check (issue_json is json),
+  created_at timestamp with time zone default systimestamp not null
+);
+
+create index idx_wt_panel_qc_lookup
+  on webtoon_panel_qc_issues(project_id, panel_id, version_key);
 
 create table webtoon_security_events (
   id varchar2(36) primary key,
@@ -171,6 +220,14 @@ end;
 
 create or replace trigger trg_wt_assets_bu
 before update on webtoon_assets
+for each row
+begin
+  :new.updated_at := systimestamp;
+end;
+/
+
+create or replace trigger trg_wt_panel_versions_bu
+before update on webtoon_panel_versions
 for each row
 begin
   :new.updated_at := systimestamp;

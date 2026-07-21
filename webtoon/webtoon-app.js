@@ -44,7 +44,6 @@
       ".template-card",
       ".plan-band",
       ".plan-card",
-      ".reader-stage",
       ".operator-card"
     ].join(",");
     const targets = [...body.querySelectorAll(selector)];

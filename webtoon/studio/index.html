@@ -19,10 +19,10 @@
     <meta name="twitter:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>NeoKIM Webtoon Studio | 현대 판타지 각성물 제작 작업대</title>
     <link rel="stylesheet" href="../webtoon.css?v=20260718-home2">
-    <link rel="stylesheet" href="../webtoon-app.css?v=20260719-account2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260721-visual1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../webtoon.js?v=20260719-security1"></script>
-    <script defer src="../webtoon-app.js?v=20260718-app1"></script>
+    <script defer src="../webtoon.js?v=20260721-visual1"></script>
+    <script defer src="../webtoon-app.js?v=20260720-reader1"></script>
   </head>
   <body class="webtoon-app-page page-studio">
     <a class="skip-link" href="#studio">작업대로 이동</a>
@@ -55,7 +55,7 @@
         </div>
         <div class="guide-finish-card studio-mode-card">
           <span>기본 모드</span>
-          <strong>3단계</strong>
+          <strong id="studioStepCount">0 / 5</strong>
         </div>
       </section>
 
@@ -86,11 +86,131 @@
           <p id="creationAccessNote" class="creation-access-note" aria-live="polite">계정과 권한을 확인하고 있습니다.</p>
           <p class="project-state studio-project-state" data-project-state aria-live="polite">이 기기의 비공개 초안</p>
 
-          <div class="studio-flow" aria-label="간단 제작 순서">
-            <span><b>1</b> 이야기 적기</span>
-            <span><b>2</b> 웹툰 만들기</span>
-            <span><b>3</b> 결과 확인</span>
+          <div id="studioProgressCard" class="guide-progress-card studio-progress-card" aria-live="polite">
+            <div class="guide-progress-head">
+              <strong id="studioProgressLabel">대기 중</strong>
+              <span id="studioProgressPercent">0%</span>
+            </div>
+            <div class="guide-progress-track">
+              <div id="studioProgressFill" class="guide-progress-fill"></div>
+            </div>
+            <p id="studioProgressLog">이야기를 입력하면 장면과 대사를 구성합니다.</p>
           </div>
+
+          <section id="storyDevelopmentPanel" class="studio-production-panel story-development-panel" aria-labelledby="storyDevelopmentTitle" hidden>
+            <div class="production-panel-head">
+              <div>
+                <p class="kicker">Story intent</p>
+                <h2 id="storyDevelopmentTitle">이야기 보강안 확인</h2>
+              </div>
+              <strong id="storyDevelopmentState" class="production-state">승인 전</strong>
+            </div>
+            <p class="production-panel-copy">내가 쓴 사실은 잠그고, 편집 비서가 보탠 내용만 골라서 사용합니다.</p>
+            <div class="story-fact-block">
+              <span>내가 쓴 이야기에서 유지할 내용</span>
+              <ul id="storyFactList" class="story-fact-list"></ul>
+            </div>
+            <div class="story-suggestion-head">
+              <span>AI가 보강한 내용</span>
+              <small>체크한 내용만 콘티에 반영됩니다.</small>
+            </div>
+            <div id="storySuggestionList" class="story-suggestion-list"></div>
+            <details class="story-lock-settings">
+              <summary><strong>바꾸지 말아야 할 설정</strong><span>선택 입력</span></summary>
+              <div class="story-lock-grid">
+                <label class="field">
+                  <span>반드시 유지</span>
+                  <textarea id="storyMustKeep" rows="2" maxlength="500" placeholder="예: 주인공은 F급 헌터이고 결말까지 혼자 싸운다."></textarea>
+                </label>
+                <label class="field">
+                  <span>절대 넣지 않기</span>
+                  <textarea id="storyMustAvoid" rows="2" maxlength="500" placeholder="예: 로맨스, 시간 회귀, 다른 작품의 캐릭터와 로고"></textarea>
+                </label>
+              </div>
+            </details>
+            <div class="production-panel-actions">
+              <button id="sourceOnlyStoryButton" class="tool-button" type="button">원문만 사용</button>
+              <button id="approveStoryPlanButton" class="tool-button primary" type="button">선택 내용으로 콘티 만들기</button>
+            </div>
+          </section>
+
+          <section id="storyboardApprovalPanel" class="studio-production-panel storyboard-approval-panel" aria-labelledby="storyboardApprovalTitle" hidden>
+            <div class="production-panel-head">
+              <div>
+                <p class="kicker">Vertical storyboard</p>
+                <h2 id="storyboardApprovalTitle">세로 콘티 확인</h2>
+              </div>
+              <strong id="storyboardApprovalState" class="production-state">0 / 0</strong>
+            </div>
+            <p class="production-panel-copy">그림을 만들기 전에 각 컷의 사건, 감정과 구도를 확인합니다.</p>
+            <div id="storyboardSceneList" class="storyboard-scene-list"></div>
+            <div id="storyboardReadiness" class="storyboard-readiness" aria-live="polite"></div>
+            <div class="production-panel-actions">
+              <button id="resetStoryboardApprovalButton" class="tool-button" type="button">승인 초기화</button>
+              <button id="approveAllStoryboardButton" class="tool-button primary" type="button">모든 콘티 승인</button>
+            </div>
+          </section>
+
+          <nav id="visualWorkflowSteps" class="visual-workflow-steps" aria-label="그림 제작 단계" hidden>
+            <ol>
+              <li data-visual-step="storyboard"><span>1</span><strong>콘티</strong><small>구도 확인</small></li>
+              <li data-visual-step="draft"><span>2</span><strong>시안</strong><small>저비용 확인</small></li>
+              <li data-visual-step="final"><span>3</span><strong>완성화</strong><small>승인 구도 유지</small></li>
+              <li data-visual-step="approval"><span>4</span><strong>최종 승인</strong><small>게시 준비</small></li>
+            </ol>
+          </nav>
+
+          <section id="generationQueuePanel" class="studio-production-panel generation-queue-panel" aria-labelledby="generationQueueTitle" hidden>
+            <div class="production-panel-head">
+              <div>
+                <p id="generationQueueKicker" class="kicker">Visual draft</p>
+                <h2 id="generationQueueTitle">저비용 시안 만들기</h2>
+              </div>
+              <strong id="generationQueueState" class="production-state">준비 전</strong>
+            </div>
+            <p id="generationQueueCopy" class="production-panel-copy">완성 작화 전에 인물 위치와 구도를 빠르게 확인할 시안을 만듭니다.</p>
+            <div id="referenceReadiness" class="reference-readiness"></div>
+            <fieldset id="generationScopeSettings" class="generation-scope-settings">
+              <legend>생성 순서</legend>
+              <label><input type="radio" name="generation-scope" value="representative" checked>대표 3컷 먼저</label>
+              <label><input type="radio" name="generation-scope" value="remaining">나머지 컷 이어서</label>
+              <small id="generationScopeHint">도입·중간·마지막 대표 컷으로 화풍과 인물을 먼저 확인합니다.</small>
+            </fieldset>
+            <div id="promptPackageList" class="prompt-package-list"></div>
+            <div class="production-panel-actions">
+              <button id="copyAllPromptPackagesButton" class="tool-button" type="button" disabled>전체 프롬프트 보기</button>
+              <button id="queueGenerationButton" class="tool-button primary" type="button" disabled>그림 작업 요청</button>
+            </div>
+            <small id="generationCostNote" class="generation-cost-note">콘티는 무료입니다. 시안과 완성화는 승인 단계를 나누어 요청합니다.</small>
+          </section>
+
+          <section id="qualityReviewPanel" class="studio-production-panel quality-review-panel" aria-labelledby="qualityReviewTitle" hidden>
+            <div class="production-panel-head">
+              <div>
+                <p id="qualityReviewKicker" class="kicker">Draft review</p>
+                <h2 id="qualityReviewTitle">시안 구도 확인</h2>
+              </div>
+              <strong id="qualityReviewState" class="production-state">0 / 0</strong>
+            </div>
+            <p id="qualityReviewCopy" class="production-panel-copy">시안에서는 이야기, 인물 위치와 카메라 구도만 확인합니다. 승인한 시안을 기준으로 완성화를 진행합니다.</p>
+            <fieldset class="publish-locale-settings">
+              <legend>게시 언어</legend>
+              <label><input type="checkbox" data-publish-locale="ko" checked disabled>한국어</label>
+              <label><input type="checkbox" data-publish-locale="en">English</label>
+              <label><input type="checkbox" data-publish-locale="ja">日本語</label>
+            </fieldset>
+            <div id="qualityReviewList" class="quality-review-list"></div>
+            <div id="publishReadiness" class="storyboard-readiness" aria-live="polite"></div>
+            <div id="authorAssistantReport" class="author-assistant-report" aria-live="polite"></div>
+          </section>
+
+          <ol id="studioSteps" class="guide-steps studio-guide-steps" aria-label="웹툰 제작 순서">
+            <li data-studio-step="run" class="is-current"><span>1</span>웹툰 만들기</li>
+            <li data-studio-step="view"><span>2</span>결과 확인</li>
+            <li data-studio-step="speech"><span>3</span>텍스트 수정·배치</li>
+            <li data-studio-step="move"><span>4</span>인물·구도 이동</li>
+            <li data-studio-step="regen"><span>5</span>선택한 컷 수정</li>
+          </ol>
 
           <div class="studio-extensions" aria-label="상세 기능">
             <p class="studio-extensions-label">상세 기능</p>
@@ -124,6 +244,8 @@
                     <p><strong>원고</strong><span>최대 3,000자</span><small>권장 280~950자</small></p>
                     <p><strong>핵심 장면</strong><span>최대 20장</span><small>12·16·20장</small></p>
                     <p><strong>말풍선</strong><span>최대 80자</span><small>권장 45자 이하</small></p>
+                    <p><strong>나레이션</strong><span>최대 180자</span><small>컷별 숨김 가능</small></p>
+                    <p><strong>의성어</strong><span>최대 16자</span><small>컷별 숨김 가능</small></p>
                     <p><strong>이미지</strong><span>한 장 12MB</span><small>JPG·PNG·WebP</small></p>
                   </div>
                 </details>
@@ -190,17 +312,79 @@
 
         <section class="guide-preview studio-live-preview" aria-labelledby="previewTitle">
           <div class="column-head">
-            <div><p class="kicker">Live preview</p><h2 id="previewTitle">완성 웹툰</h2></div>
-            <a class="tool-button" href="/webtoon/reader/">전체 화면</a>
+            <div><p class="kicker">Vertical canvas</p><h2 id="previewTitle">세로 컷 미리보기</h2></div>
+            <div class="guide-actions">
+              <div class="preview-width-controls" role="group" aria-label="모바일 미리보기 폭">
+                <button type="button" data-preview-width="360" aria-pressed="false">360</button>
+                <button type="button" data-preview-width="390" aria-pressed="true">390</button>
+                <button type="button" data-preview-width="430" aria-pressed="false">430</button>
+              </div>
+              <button id="regenerateSelectedButton" class="tool-button yellow" type="button" aria-expanded="false" aria-controls="regenerationPanel" disabled>다시 그리기 설정</button>
+              <a class="tool-button" href="/webtoon/reader/">전체 화면</a>
+            </div>
           </div>
           <dl class="studio-preview-meta" aria-label="현재 웹툰 정보">
             <div><dt>장면</dt><dd id="statPanels">--</dd></div>
             <div><dt>유형</dt><dd id="statGenre">--</dd></div>
             <div><dt>읽기</dt><dd id="statMinutes">--</dd></div>
           </dl>
-          <div class="phone-preview studio-preview-frame" aria-label="웹툰 세로 미리보기">
-            <div id="phonePreview" class="phone-screen"></div>
-          </div>
+          <section id="regenerationPanel" class="studio-regeneration-panel" aria-labelledby="regenerationTitle" hidden>
+            <div class="studio-regeneration-head">
+              <div>
+                <p class="kicker">Selective redraw</p>
+                <h3 id="regenerationTitle">선택한 컷만 다시 그리기</h3>
+                <p id="selectedPanelLabel">먼저 수정할 컷을 선택하세요.</p>
+              </div>
+              <button id="closeRegenerationButton" class="icon-button" type="button" aria-label="다시 그리기 설정 닫기">×</button>
+            </div>
+            <div class="regeneration-targets" role="group" aria-label="다시 그릴 부분">
+              <button class="segment-button is-active" type="button" data-regeneration-target="background" aria-pressed="true">배경만</button>
+              <button class="segment-button" type="button" data-regeneration-target="character" aria-pressed="false">인물만</button>
+              <button class="segment-button" type="button" data-regeneration-target="specific-character" aria-pressed="false">특정 인물</button>
+              <button class="segment-button" type="button" data-regeneration-target="face" aria-pressed="false">얼굴·표정</button>
+              <button class="segment-button" type="button" data-regeneration-target="hands" aria-pressed="false">손</button>
+              <button class="segment-button" type="button" data-regeneration-target="outfit" aria-pressed="false">의상</button>
+              <button class="segment-button" type="button" data-regeneration-target="prop" aria-pressed="false">소품</button>
+              <button class="segment-button" type="button" data-regeneration-target="lighting" aria-pressed="false">조명</button>
+              <button class="segment-button" type="button" data-regeneration-target="composition" aria-pressed="false">구도</button>
+              <button class="segment-button" type="button" data-regeneration-target="full" aria-pressed="false">전체</button>
+            </div>
+            <label id="regenerationCharacterField" class="field regeneration-character-field" hidden>
+              <span>다시 그릴 인물</span>
+              <select id="regenerationCharacterSelect" aria-label="다시 그릴 특정 인물"></select>
+            </label>
+            <details class="regeneration-region-editor">
+              <summary><strong>수정 영역</strong><span id="regenerationRegionSummary">컷 위 사각 범위</span></summary>
+              <div class="regeneration-region-modes" role="group" aria-label="수정 영역 선택 방식">
+                <button class="segment-button is-active" type="button" data-region-mode="rectangle" aria-pressed="true">사각 범위</button>
+                <button class="segment-button" type="button" data-region-mode="brush" aria-pressed="false">붓으로 칠하기</button>
+              </div>
+              <div id="regenerationRectangleControls" class="regeneration-region-grid">
+                <label><span>왼쪽 <output data-region-output="x">0</output>%</span><input type="range" min="0" max="90" value="0" data-region-field="x"></label>
+                <label><span>위 <output data-region-output="y">0</output>%</span><input type="range" min="0" max="90" value="0" data-region-field="y"></label>
+                <label><span>너비 <output data-region-output="width">100</output>%</span><input type="range" min="10" max="100" value="100" data-region-field="width"></label>
+                <label><span>높이 <output data-region-output="height">100</output>%</span><input type="range" min="10" max="100" value="100" data-region-field="height"></label>
+              </div>
+              <div id="regenerationBrushControls" class="regeneration-brush-controls" hidden>
+                <p>오른쪽의 선택한 컷에서 고칠 부분만 칠하세요. 칠하지 않은 영역은 그대로 보존합니다.</p>
+                <label class="regeneration-brush-size"><span>붓 크기 <output id="regenerationBrushSizeOutput">28</output>px</span><input id="regenerationBrushSize" type="range" min="8" max="72" step="2" value="28"></label>
+                <div class="regeneration-brush-actions" role="group" aria-label="마스크 붓 도구">
+                  <button class="segment-button is-active" type="button" data-mask-tool="paint" aria-pressed="true">칠하기</button>
+                  <button class="segment-button" type="button" data-mask-tool="erase" aria-pressed="false">지우기</button>
+                  <button id="undoRegenerationMask" class="segment-button" type="button">되돌리기</button>
+                  <button id="clearRegenerationMask" class="segment-button" type="button">초기화</button>
+                </div>
+                <output id="regenerationMaskState" class="regeneration-mask-state" aria-live="polite">아직 칠한 영역이 없습니다.</output>
+              </div>
+            </details>
+            <label class="field regeneration-instruction-field">
+              <span class="field-label-row"><span>고칠 내용</span><small id="regenerationInstructionCount" class="input-counter">0 / 240</small></span>
+              <textarea id="regenerationInstruction" rows="3" maxlength="240" placeholder="예: 배경의 출구가 두 개로 그려졌어요. 오른쪽 출구 하나만 남겨주세요."></textarea>
+            </label>
+            <p id="regenerationPreserveNote" class="regeneration-preserve-note">인물, 표정, 말풍선과 텍스트 배치는 그대로 보존합니다.</p>
+            <button id="requestRegenerationButton" class="tool-button yellow" type="button" disabled>배경만 다시 그리기 요청</button>
+          </section>
+          <div id="phonePreview" class="guide-canvas is-ready studio-preview-frame studio-guide-canvas" aria-label="웹툰 세로 미리보기" aria-live="polite"></div>
         </section>
       </section>
     </main>

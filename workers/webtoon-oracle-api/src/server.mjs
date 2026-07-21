@@ -27,9 +27,10 @@ const contentLimits = Object.freeze({
     imageKey: 200,
     imageName: 120
   }),
-  projectJsonBytes: 512 * 1024,
-  jobRequestBytes: 64 * 1024,
-  jobResultBytes: 128 * 1024,
+  projectJsonBytes: 1536 * 1024,
+  jobRequestBytes: 768 * 1024,
+  jobResultBytes: 512 * 1024,
+  regionMaskBytes: 256 * 1024,
   errorMessage: 1000,
   uploadMetadata: Object.freeze({
     originalName: 120,
@@ -40,6 +41,8 @@ const contentLimits = Object.freeze({
 
 const generationCosts = Object.freeze({
   draft_generation: 3,
+  episode_generation: 3,
+  panel_generation: 0,
   panel_regenerate: 1
 });
 
@@ -128,7 +131,7 @@ app.use(cors({
   maxAge: 600,
   optionsSuccessStatus: 204
 }));
-app.use(express.json({ limit: "768kb" }));
+app.use(express.json({ limit: "2mb" }));
 app.use("/api/webtoon", createRateLimiter({
   name: "api_ip",
   limit: config.rateLimitPerWindow,
@@ -156,6 +159,13 @@ const adminRateLimiter = createRateLimiter({
   limit: config.adminRateLimitPerWindow,
   windowMs: config.rateLimitWindowMs,
   keyResolver: (req) => `admin:${req.user?.id || "unknown"}`
+});
+
+const assetUploadRateLimiter = createRateLimiter({
+  name: "asset_upload_user",
+  limit: config.adminRateLimitPerWindow,
+  windowMs: config.rateLimitWindowMs,
+  keyResolver: (req) => `asset:${req.user?.id || "unknown"}`
 });
 
 app.get("/health", async (_req, res, next) => {
@@ -232,6 +242,23 @@ app.put("/api/webtoon/projects/:id", requireUser, creationRateLimiter, requireCr
   }
 });
 
+app.post("/api/webtoon/assets/reference", requireUser, assetUploadRateLimiter, requireCreatorAccount, upload.single("image"), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ error: "image_required" });
+      return;
+    }
+    const asset = await registerUploadedAsset(req, req.user);
+    res.status(201).json({ asset });
+  } catch (error) {
+    next(error);
+  } finally {
+    if (req.file?.path) {
+      unlink(req.file.path).catch(() => {});
+    }
+  }
+});
+
 app.post("/api/webtoon/jobs", requireUser, creationRateLimiter, requireCreatorAccount, requireJsonBody, async (req, res, next) => {
   try {
     const result = await createJob(req.body || {}, req.user, req);
@@ -298,6 +325,32 @@ app.get("/api/webtoon/jobs/ready", requireWorker, async (req, res, next) => {
   }
 });
 
+app.get("/api/webtoon/jobs/:id/status", requireUser, async (req, res, next) => {
+  try {
+    const result = await getJobStatus(req.params.id, req.user);
+    if (!result) {
+      res.status(404).json({ error: "not_found" });
+      return;
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/webtoon/jobs/:id/retry", requireWorker, async (req, res, next) => {
+  try {
+    const job = await retryFailedJob(req.params.id);
+    if (!job) {
+      res.status(404).json({ error: "not_found" });
+      return;
+    }
+    res.json({ job });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.patch("/api/webtoon/jobs/:id", requireWorker, async (req, res, next) => {
   try {
     const job = await updateJob(req.params.id, req.body || {});
@@ -346,7 +399,7 @@ app.use((error, _req, res, _next) => {
   if (status >= 500) {
     console.error(error);
   }
-  res.status(status).json({ error: message });
+  res.status(status).json({ error: message, ...(Array.isArray(error.details) ? { details: error.details } : {}) });
 });
 
 const server = app.listen(config.port, config.host, () => {
@@ -858,6 +911,11 @@ async function upsertProject(input, user, req) {
     const mayPublish = isAdminIdentity(user);
     project.status = mayPublish ? project.status : "draft";
     project.isPublic = mayPublish ? project.isPublic : false;
+    project.project.status = project.status;
+    project.project.isPublic = project.isPublic;
+    if (project.status === "published" || project.isPublic) {
+      assertProjectPublishReady(project.project);
+    }
 
     const binds = {
       id: project.id,
@@ -896,8 +954,105 @@ async function upsertProject(input, user, req) {
       );
     }
 
+    await syncPanelProductionRecords(connection, project);
+
     return getProject(project.id, connection);
   });
+}
+
+async function syncPanelProductionRecords(connection, project) {
+  try {
+    await connection.execute(
+      `update webtoon_panel_versions set is_approved = 'N', is_stage_approved = 'N' where project_id = :project_id`,
+      { project_id: project.id }
+    );
+    for (const panel of project.panels) {
+      const versions = Array.isArray(panel.imageVersions) ? panel.imageVersions : [];
+      for (const version of versions) {
+        const versionId = boundedString(version?.id, "panelVersion.id", 120, { required: true });
+        const versionKey = `${project.id}|${panel.id}|${versionId}`;
+        const status = ["candidate", "approved", "needs-fix", "superseded"].includes(version?.status)
+          ? version.status
+          : "candidate";
+        await connection.execute(
+          `merge into webtoon_panel_versions target
+           using (select :version_key as version_key from dual) source
+              on (target.version_key = source.version_key)
+           when matched then update set
+             parent_version_id = :parent_version_id,
+             source_asset_id = :source_asset_id,
+             prompt_package_id = :prompt_package_id,
+             edit_target = :edit_target,
+             mask_asset_id = :mask_asset_id,
+             render_stage = :render_stage,
+             requested_quality = :requested_quality,
+             version_status = :version_status,
+             is_approved = :is_approved,
+             is_stage_approved = :is_stage_approved,
+             metadata_json = :metadata_json
+           when not matched then insert (
+             version_key, project_id, panel_id, version_id, parent_version_id,
+             source_asset_id, prompt_package_id, edit_target, mask_asset_id,
+             render_stage, requested_quality, version_status, is_approved, is_stage_approved, metadata_json
+           ) values (
+             :version_key, :project_id, :panel_id, :version_id, :parent_version_id,
+             :source_asset_id, :prompt_package_id, :edit_target, :mask_asset_id,
+             :render_stage, :requested_quality, :version_status, :is_approved, :is_stage_approved, :metadata_json
+           )`,
+          {
+            version_key: versionKey,
+            project_id: project.id,
+            panel_id: panel.id,
+            version_id: versionId,
+            parent_version_id: nullableBoundedString(version.parentVersionId, "parentVersionId", 120),
+            source_asset_id: nullableBoundedString(version.sourceAssetId || version.imageKey, "sourceAssetId", 500),
+            prompt_package_id: nullableBoundedString(version.promptPackageId, "promptPackageId", 120),
+            edit_target: nullableBoundedString(version.editTarget || "full", "editTarget", 40),
+            mask_asset_id: nullableBoundedString(version.maskAssetId, "maskAssetId", 160),
+            render_stage: version.renderStage === "draft" ? "draft" : "final",
+            requested_quality: version.requestedQuality === "low" ? "low" : "high",
+            version_status: status,
+            is_approved: panel.approvedVersionId === versionId ? "Y" : "N",
+            is_stage_approved: (version.renderStage === "draft" ? panel.draftApprovedVersionId : panel.finalApprovedVersionId || panel.approvedVersionId) === versionId ? "Y" : "N",
+            metadata_json: clobJson(version)
+          }
+        );
+
+        await connection.execute(
+          `delete from webtoon_panel_qc_issues where version_key = :version_key`,
+          { version_key: versionKey }
+        );
+        const issues = Array.isArray(version?.qc?.issues) ? version.qc.issues.slice(0, 40) : [];
+        for (const issue of issues) {
+          const severity = ["info", "warning", "error", "critical"].includes(issue?.severity)
+            ? issue.severity
+            : "warning";
+          await connection.execute(
+            `insert into webtoon_panel_qc_issues (
+              id, version_key, project_id, panel_id, severity, category, issue_json
+            ) values (
+              :id, :version_key, :project_id, :panel_id, :severity, :category, :issue_json
+            )`,
+            {
+              id: randomId(),
+              version_key: versionKey,
+              project_id: project.id,
+              panel_id: panel.id,
+              severity,
+              category: nullableBoundedString(issue?.category, "qcIssue.category", 80),
+              issue_json: clobJson(issue)
+            }
+          );
+        }
+      }
+    }
+  } catch (error) {
+    if ([904, 942].includes(Number(error?.errorNum))) {
+      console.warn("[oracle] panel version audit migration is incomplete; project JSON remains authoritative");
+      return;
+    }
+    throw error;
+  }
 }
 
 async function latestPublicProject() {
@@ -933,12 +1088,43 @@ async function getProject(id, existingConnection = null) {
 async function createJob(input, user, req) {
   assertCreationAllowed(user);
   const jobType = boundedString(input.jobType || input.job_type, "jobType", 60, { required: true });
-  const cost = generationCosts[jobType];
-  if (cost === undefined) {
+  if (!["draft_generation", "panel_regenerate"].includes(jobType)) {
     throw httpError("invalid_job_type", 400);
   }
+  const cost = generationCosts[jobType];
 
-  const requestPayload = input.requestPayload || input.request_payload || {};
+  const rawRequestPayload = input.requestPayload || input.request_payload || {};
+  if (!rawRequestPayload || typeof rawRequestPayload !== "object" || Array.isArray(rawRequestPayload)) {
+    throw httpError("invalid_job_request", 400);
+  }
+  const requestPayload = { ...rawRequestPayload };
+  const renderStage = requestPayload.renderStage === "final" ? "final" : "draft";
+  if (requestPayload.renderStage && !["draft", "final"].includes(requestPayload.renderStage)) {
+    throw httpError("invalid_render_stage", 400);
+  }
+  requestPayload.renderStage = renderStage;
+  requestPayload.requestedQuality = renderStage === "final" ? "high" : "low";
+  if (jobType === "draft_generation" && renderStage === "final") {
+    const packages = Array.isArray(requestPayload.promptPackages) ? requestPayload.promptPackages : [];
+    const missingDraftReference = packages.some((item) => (
+      !item?.sourceDraftVersionId
+      || !Array.isArray(item.referenceManifest)
+      || !item.referenceManifest.some((reference) => reference?.type === "approved-draft" && /^https:\/\//i.test(String(reference?.source || "")))
+    ));
+    if (!packages.length || missingDraftReference) {
+      throw httpError("approved_draft_reference_required", 400);
+    }
+  }
+  if (jobType === "panel_regenerate") {
+    const regionMask = normalizeRegionMaskRequest(requestPayload.regionMask);
+    if (regionMask) {
+      requestPayload.regionMask = regionMask;
+      requestPayload.regionMaskAssetId = regionMask.id;
+      requestPayload.targetRegion = regionMask.bounds;
+    } else {
+      requestPayload.regionMask = null;
+    }
+  }
   assertJsonSize(requestPayload, contentLimits.jobRequestBytes, "job_request_too_large");
 
   const job = {
@@ -947,13 +1133,20 @@ async function createJob(input, user, req) {
     jobType,
     scenarioKey: nullableBoundedString(input.scenarioKey || input.scenario_key, "scenarioKey", 100),
     cost,
-    requestPayload
+    requestPayload,
+    parentJobId: null,
+    panelId: nullableBoundedString(requestPayload.panel?.id, "panelId", 120),
+    promptPackageId: nullableBoundedString(requestPayload.promptPackage?.id, "promptPackageId", 120),
+    attempt: 1
   };
 
   const ensuredProfile = await ensureUserProfile(user, req);
   const admin = isAdminIdentity(user);
 
   return withTransaction(async (connection) => {
+    if (job.jobType === "draft_generation" && renderStage === "final") {
+      await assertApprovedDraftReferences(connection, job, user);
+    }
     let balanceAfter = admin ? 999 : Number(ensuredProfile.acorns);
     if (job.cost > 0 && !admin) {
       const profile = await selectProfileForUpdate(connection, user.id);
@@ -988,26 +1181,52 @@ async function createJob(input, user, req) {
       balanceAfter = nextBalance;
     }
 
-    await connection.execute(
-      `insert into webtoon_generation_jobs (
-        id, user_id, project_id, job_type, scenario_key, cost, status, progress, request_payload
-      ) values (
-        :id, :user_id, :project_id, :job_type, :scenario_key, :cost, 'ready', 0, :request_payload
-      )`,
-      {
-        id: job.id,
-        user_id: user.id,
-        project_id: job.projectId,
-        job_type: job.jobType,
-        scenario_key: job.scenarioKey,
-        cost: job.cost,
-        request_payload: clobJson(job.requestPayload)
+    const packages = job.jobType === "draft_generation" && Array.isArray(job.requestPayload.promptPackages)
+      ? job.requestPayload.promptPackages
+      : [];
+    let createdJob;
+    let childCount = 0;
+    if (packages.length) {
+      const parentJob = {
+        ...job,
+        jobType: "episode_generation",
+        panelId: null,
+        promptPackageId: null
+      };
+      await insertGenerationJob(connection, parentJob, user.id, "running");
+      const sourcePanels = Array.isArray(job.requestPayload.panels) ? job.requestPayload.panels : [];
+      for (const [index, promptPackage] of packages.entries()) {
+        const panelId = boundedString(promptPackage.panelId || `panel-${index + 1}`, "panelId", 120, { required: true });
+        const panel = sourcePanels.find((item) => item?.id === panelId) || null;
+        const childJob = {
+          id: randomId(),
+          projectId: job.projectId,
+          parentJobId: parentJob.id,
+          panelId,
+          promptPackageId: nullableBoundedString(promptPackage.id, "promptPackageId", 120),
+          jobType: "panel_generation",
+          scenarioKey: job.scenarioKey,
+          cost: 0,
+          attempt: 1,
+          requestPayload: {
+            ...job.requestPayload,
+            promptPackages: [promptPackage],
+            panel,
+            panelIndex: Number.isInteger(promptPackage.panelIndex) ? promptPackage.panelIndex : index
+          }
+        };
+        assertJsonSize(childJob.requestPayload, contentLimits.jobRequestBytes, "job_request_too_large");
+        await insertGenerationJob(connection, childJob, user.id, "ready");
+        childCount += 1;
       }
-    );
-
-    const createdJob = await getJob(job.id, connection);
+      createdJob = await getJob(parentJob.id, connection);
+    } else {
+      await insertGenerationJob(connection, job, user.id, "ready");
+      createdJob = await getJob(job.id, connection);
+    }
     return {
       job: createdJob,
+      childCount,
       profile: {
         acorns: balanceAfter,
         isAdmin: admin
@@ -1016,17 +1235,141 @@ async function createJob(input, user, req) {
   });
 }
 
+async function assertApprovedDraftReferences(connection, job, user) {
+  if (!job.projectId) throw httpError("project_required", 400);
+  const project = await getProject(job.projectId, connection);
+  if (!project || (!isAdminIdentity(user) && project.userId !== user.id)) {
+    throw httpError("project_not_found", 404);
+  }
+  const packages = Array.isArray(job.requestPayload.promptPackages) ? job.requestPayload.promptPackages : [];
+  for (const promptPackage of packages) {
+    const panelId = String(promptPackage?.panelId || "");
+    const panel = (project.panels || []).find((item) => String(item?.id || "") === panelId);
+    const versionId = String(promptPackage?.sourceDraftVersionId || "");
+    const version = panel?.imageVersions?.find((item) => String(item?.id || "") === versionId);
+    const reference = promptPackage?.referenceManifest?.find((item) => item?.type === "approved-draft");
+    const storedSource = String(version?.sourceUrl || "");
+    const requestedSource = String(reference?.source || "");
+    const storedPath = storedSource.startsWith("/")
+      ? storedSource
+      : /^https?:\/\//i.test(storedSource) ? new URL(storedSource).pathname : "";
+    const sourceMatches = Boolean(storedSource && requestedSource && (
+      requestedSource === storedSource
+      || (storedPath && requestedSource.endsWith(storedPath))
+    ));
+    const assetResult = sourceMatches
+      ? await connection.execute(
+          `select count(*) as asset_count
+             from webtoon_assets
+            where project_id = :project_id
+              and panel_id = :panel_id
+              and public_path = :public_path`,
+          { project_id: job.projectId, panel_id: panelId, public_path: storedSource }
+        )
+      : null;
+    const assetExists = Number(assetResult?.rows?.[0]?.ASSET_COUNT || 0) > 0;
+    if (
+      !panel
+      || panel.draftApprovedVersionId !== versionId
+      || version?.renderStage !== "draft"
+      || version?.status !== "approved"
+      || version?.qc?.overall !== "approved"
+      || !sourceMatches
+      || !assetExists
+    ) {
+      throw httpError("approved_draft_reference_mismatch", 409);
+    }
+  }
+}
+
+async function insertGenerationJob(connection, job, userId, status) {
+  await connection.execute(
+    `insert into webtoon_generation_jobs (
+      id, user_id, project_id, parent_job_id, panel_id, prompt_package_id, attempt,
+      job_type, scenario_key, cost, status, progress, request_payload
+    ) values (
+      :id, :user_id, :project_id, :parent_job_id, :panel_id, :prompt_package_id, :attempt,
+      :job_type, :scenario_key, :cost, :status, 0, :request_payload
+    )`,
+    {
+      id: job.id,
+      user_id: userId,
+      project_id: job.projectId,
+      parent_job_id: job.parentJobId,
+      panel_id: job.panelId,
+      prompt_package_id: job.promptPackageId,
+      attempt: job.attempt || 1,
+      job_type: job.jobType,
+      scenario_key: job.scenarioKey,
+      cost: job.cost,
+      status,
+      request_payload: clobJson(job.requestPayload)
+    }
+  );
+}
+
 async function readyJobs(limit) {
   return withConnection(async (connection) => {
     const result = await connection.execute(
-      `select id, user_id, project_id, job_type, scenario_key, cost, status, progress,
+      `select id, user_id, project_id, parent_job_id, panel_id, prompt_package_id, attempt,
+              job_type, scenario_key, cost, status, progress,
               request_payload, result_payload, error_message, created_at, updated_at
          from webtoon_generation_jobs
         where status = 'ready'
+          and job_type <> 'episode_generation'
         order by created_at asc
         fetch first ${limit} rows only`
     );
     return result.rows.map(mapJob);
+  });
+}
+
+async function getJobStatus(id, user) {
+  return withConnection(async (connection) => {
+    const job = await getJob(id, connection);
+    if (!job) return null;
+    if (!isAdminIdentity(user) && job.userId !== user.id) {
+      throw httpError("job_access_denied", 403);
+    }
+    const result = await connection.execute(
+      `select id, user_id, project_id, parent_job_id, panel_id, prompt_package_id, attempt,
+              job_type, scenario_key, cost, status, progress,
+              request_payload, result_payload, error_message, created_at, updated_at
+         from webtoon_generation_jobs
+        where parent_job_id = :parent_job_id
+        order by created_at asc`,
+      { parent_job_id: job.id }
+    );
+    return { job, children: result.rows.map(mapJob) };
+  });
+}
+
+async function retryFailedJob(id) {
+  boundedString(id, "id", 36, { required: true });
+  return withTransaction(async (connection) => {
+    const job = await getJob(id, connection);
+    if (!job) return null;
+    if (!["panel_generation", "panel_regenerate"].includes(job.jobType)) {
+      throw httpError("job_not_retryable", 409);
+    }
+    if (job.status !== "failed") {
+      throw httpError("job_not_failed", 409);
+    }
+    if (job.attempt >= 3) {
+      throw httpError("job_retry_limit_reached", 409);
+    }
+    await connection.execute(
+      `update webtoon_generation_jobs
+          set status = 'ready',
+              progress = 0,
+              attempt = attempt + 1,
+              result_payload = null,
+              error_message = null
+        where id = :id`,
+      { id }
+    );
+    if (job.parentJobId) await refreshParentJob(connection, job.parentJobId);
+    return getJob(id, connection);
   });
 }
 
@@ -1067,31 +1410,83 @@ async function updateJob(id, input) {
       return null;
     }
 
-    await connection.execute(
-      `update webtoon_generation_jobs
-          set status = coalesce(:status, status),
-              progress = coalesce(:progress, progress),
-              result_payload = case when :result_payload_set = 1 then :result_payload else result_payload end,
-              error_message = case when :error_message_set = 1 then :error_message else error_message end
-        where id = :id`,
-      {
-        id,
-        status: patch.status,
-        progress: patch.progress,
-        result_payload_set: patch.result_payload === undefined ? 0 : 1,
-        result_payload: patch.result_payload === undefined ? null : clobJson(patch.result_payload),
-        error_message_set: input.errorMessage === undefined && input.error_message === undefined ? 0 : 1,
-        error_message: patch.error_message
-      }
-    );
+    const assignments = [];
+    const bindings = { id };
+    if (input.status !== undefined) {
+      assignments.push("status = :status");
+      bindings.status = patch.status;
+    }
+    if (input.progress !== undefined) {
+      assignments.push("progress = :progress");
+      bindings.progress = patch.progress;
+    }
+    if (patch.result_payload !== undefined) {
+      assignments.push("result_payload = :result_payload");
+      bindings.result_payload = clobJson(patch.result_payload);
+    }
+    if (input.errorMessage !== undefined || input.error_message !== undefined) {
+      assignments.push("error_message = :error_message");
+      bindings.error_message = patch.error_message;
+    }
+
+    if (assignments.length) {
+      await connection.execute(
+        `update webtoon_generation_jobs
+            set ${assignments.join(", ")}
+          where id = :id`,
+        bindings
+      );
+    }
+
+    if (current.parentJobId) {
+      await refreshParentJob(connection, current.parentJobId);
+    }
 
     return getJob(id, connection);
   });
 }
 
+async function refreshParentJob(connection, parentJobId) {
+  const summary = await connection.execute(
+    `select count(*) as total,
+            sum(case when status = 'done' then 1 else 0 end) as done_count,
+            sum(case when status = 'failed' then 1 else 0 end) as failed_count,
+            round(avg(progress)) as avg_progress
+       from webtoon_generation_jobs
+      where parent_job_id = :parent_job_id`,
+    { parent_job_id: parentJobId }
+  );
+  const row = summary.rows[0];
+  const total = Number(row?.TOTAL || 0);
+  const done = Number(row?.DONE_COUNT || 0);
+  const failed = Number(row?.FAILED_COUNT || 0);
+  const status = total > 0 && done === total ? "done" : failed > 0 ? "failed" : "running";
+  const progress = total > 0 && done === total ? 100 : Number(row?.AVG_PROGRESS || 0);
+  await connection.execute(
+    `update webtoon_generation_jobs
+        set status = :status,
+            progress = :progress,
+            result_payload = :result_payload
+      where id = :id`,
+    {
+      id: parentJobId,
+      status,
+      progress,
+      result_payload: clobJson({
+        schemaVersion: "webtoon-episode-job-result/v1",
+        total,
+        done,
+        failed,
+        pending: Math.max(0, total - done - failed)
+      })
+    }
+  );
+}
+
 async function getJob(id, connection) {
   const result = await connection.execute(
-    `select id, user_id, project_id, job_type, scenario_key, cost, status, progress,
+    `select id, user_id, project_id, parent_job_id, panel_id, prompt_package_id, attempt,
+            job_type, scenario_key, cost, status, progress,
             request_payload, result_payload, error_message, created_at, updated_at
        from webtoon_generation_jobs
       where id = :id`,
@@ -1122,7 +1517,7 @@ async function resolveAssetOwner(connection, { jobId, projectId }) {
   return config.adminUserId;
 }
 
-async function registerUploadedAsset(req) {
+async function registerUploadedAsset(req, actorUser = null) {
   await ensureAdminProfile();
 
   const tempPath = req.file.path;
@@ -1161,6 +1556,9 @@ async function registerUploadedAsset(req) {
   try {
     return await withTransaction(async (connection) => {
       const assetOwnerId = await resolveAssetOwner(connection, { jobId, projectId });
+      if (actorUser && !isAdminIdentity(actorUser) && actorUser.id !== assetOwnerId) {
+        throw httpError("asset_owner_mismatch", 403);
+      }
       await connection.execute(
         `insert into webtoon_assets (
           id, user_id, project_id, job_id, panel_id, file_name, mime_type, file_size,
@@ -1275,9 +1673,12 @@ function normalizeProject(input) {
   }
 
   const safeProject = {
+    schemaVersion: clampInt(project.schemaVersion, 1, 20, 2),
     id: boundedString(project.id || project.remoteId || randomId(), "id", 36, { required: true }),
     title,
     idea,
+    episodeLabel: boundedString(project.episodeLabel || "EP.01", "episodeLabel", 40),
+    synopsis: boundedString(project.synopsis || "", "synopsis", 600),
     templateId: boundedString(project.templateId || "", "templateId", 80),
     episodeStory: boundedString(project.episodeStory || "", "episodeStory", contentLimits.story),
     nextEpisodeStory: boundedString(project.nextEpisodeStory || "", "nextEpisodeStory", contentLimits.story),
@@ -1288,6 +1689,23 @@ function normalizeProject(input) {
     hasUnpublishedChanges: project.hasUnpublishedChanges === true,
     panelCount: panels.length,
     episodePlan: normalizeEpisodePlan(project.episodePlan),
+    storyIntent: normalizeJsonSection(project.storyIntent, 48 * 1024, "story_intent_too_large"),
+    aiSuggestions: normalizeJsonSection(project.aiSuggestions, 48 * 1024, "story_suggestions_too_large", []),
+    seriesBible: normalizeJsonSection(project.seriesBible, 96 * 1024, "series_bible_too_large"),
+    scenePlans: normalizeJsonSection(project.scenePlans, 128 * 1024, "scene_plans_too_large", []),
+    storyboardApproval: normalizeJsonSection(project.storyboardApproval, 32 * 1024, "storyboard_approval_too_large"),
+    promptPackages: normalizeJsonSection(project.promptPackages, 768 * 1024, "prompt_packages_too_large", []),
+    generationScope: ["representative", "remaining"].includes(project.generationScope) ? project.generationScope : "representative",
+    visualWorkflow: normalizeJsonSection(project.visualWorkflow, 8 * 1024, "visual_workflow_too_large", {
+      schemaVersion: "webtoon-visual-workflow/v1",
+      stage: "storyboard-review",
+      generationPass: "draft"
+    }),
+    publishLocales: Array.isArray(project.publishLocales)
+      ? [...new Set(["ko", ...project.publishLocales.filter((locale) => ["en", "ja"].includes(locale))])].slice(0, 3)
+      : ["ko"],
+    productionStage: boundedString(project.productionStage || "story-draft", "productionStage", 60),
+    generationJobId: boundedString(project.generationJobId || "", "generationJobId", 80),
     panels,
     updatedAt: boundedString(project.updatedAt || new Date().toISOString(), "updatedAt", 60)
   };
@@ -1310,6 +1728,7 @@ function normalizePanel(panel, index) {
   const accent = /^#[0-9a-f]{6}$/i.test(String(source.accent || "")) ? source.accent : "#69c8ff";
   return {
     id: boundedString(source.id || `panel-${index + 1}`, `panels[${index}].id`, contentLimits.panel.id, { required: true }),
+    sceneId: boundedString(source.sceneId || `scene-${index + 1}`, `panels[${index}].sceneId`, 120),
     beat: boundedString(source.beat || "", `panels[${index}].beat`, contentLimits.panel.beat, { required: true }),
     camera: boundedString(source.camera || "wide", `panels[${index}].camera`, contentLimits.panel.camera, { required: true }),
     line: boundedString(source.line || "", `panels[${index}].line`, contentLimits.panel.line),
@@ -1317,10 +1736,83 @@ function normalizePanel(panel, index) {
     phase: boundedString(source.phase || "development", `panels[${index}].phase`, contentLimits.panel.phase),
     accent,
     note: boundedString(source.note || "", `panels[${index}].note`, contentLimits.panel.note),
+    reaction: boundedString(source.reaction || "", `panels[${index}].reaction`, 180),
+    frameX: clampNumber(source.frameX, 0, 100, 50),
+    frameY: clampNumber(source.frameY, 0, 100, 50),
+    gapAfter: clampNumber(source.gapAfter, 16, 180, 46),
+    overlayVisibility: normalizeJsonSection(source.overlayVisibility, 4 * 1024, "overlay_visibility_too_large"),
+    overlayPositions: normalizeJsonSection(source.overlayPositions, 4 * 1024, "overlay_positions_too_large"),
+    panelSpec: normalizeJsonSection(source.panelSpec, 32 * 1024, "panel_spec_too_large"),
+    storyboardStatus: ["pending", "approved"].includes(source.storyboardStatus) ? source.storyboardStatus : "pending",
+    textObjects: normalizeJsonSection(source.textObjects, 32 * 1024, "text_objects_too_large", []),
+    imageVersions: normalizeJsonSection(source.imageVersions, 64 * 1024, "image_versions_too_large", []),
+    currentVersionId: boundedString(source.currentVersionId || "", `panels[${index}].currentVersionId`, 120),
+    draftApprovedVersionId: boundedString(source.draftApprovedVersionId || "", `panels[${index}].draftApprovedVersionId`, 120),
+    finalApprovedVersionId: boundedString(source.finalApprovedVersionId || source.approvedVersionId || "", `panels[${index}].finalApprovedVersionId`, 120),
+    approvedVersionId: boundedString(source.approvedVersionId || "", `panels[${index}].approvedVersionId`, 120),
+    qcStatus: ["missing", "pending", "needs-fix", "approved"].includes(source.qcStatus) ? source.qcStatus : "missing",
+    lastRegenerationRequest: normalizeJsonSection(source.lastRegenerationRequest, 8 * 1024, "regeneration_request_too_large"),
     imageKey: boundedString(source.imageKey || "", `panels[${index}].imageKey`, contentLimits.panel.imageKey),
     imageName: boundedString(source.imageName || "", `panels[${index}].imageName`, contentLimits.panel.imageName),
     imageUpdatedAt: boundedString(source.imageUpdatedAt || "", `panels[${index}].imageUpdatedAt`, 60)
   };
+}
+
+function assertProjectPublishReady(project) {
+  const issues = [];
+  const panels = Array.isArray(project?.panels) ? project.panels : [];
+  const locales = Array.isArray(project?.publishLocales) && project.publishLocales.includes("ko")
+    ? [...new Set(project.publishLocales.filter((locale) => ["ko", "en", "ja"].includes(locale)))]
+    : ["ko"];
+
+  if (!project?.storyIntent?.approvedAt && !project?.episodePlan?.developmentApprovedAt) {
+    issues.push("story_not_approved");
+  }
+
+  panels.forEach((panel, index) => {
+    if (panel.storyboardStatus !== "approved") {
+      issues.push(`panel_${index + 1}_storyboard_not_approved`);
+    }
+    const versions = Array.isArray(panel.imageVersions) ? panel.imageVersions : [];
+    const finalVersionId = String(panel.finalApprovedVersionId || panel.approvedVersionId || "");
+    const current = versions.find((version) => String(version?.id || "") === finalVersionId);
+    if (!current || !finalVersionId) {
+      issues.push(`panel_${index + 1}_version_not_approved`);
+    } else if ((current.renderStage && current.renderStage !== "final") || current.status !== "approved" || current.qc?.overall !== "approved") {
+      issues.push(`panel_${index + 1}_qc_not_approved`);
+    }
+
+    const textObjects = Array.isArray(panel.textObjects) ? panel.textObjects : [];
+    textObjects.filter((item) => item?.visible !== false).forEach((item) => {
+      locales.forEach((locale) => {
+        const text = String(item?.textByLocale?.[locale] || "").trim();
+        if (!text) {
+          issues.push(`panel_${index + 1}_${locale}_text_missing`);
+        } else if (serverTextLikelyOverflows(item, locale, text)) {
+          issues.push(`panel_${index + 1}_${locale}_text_overflow`);
+        }
+      });
+    });
+  });
+
+  if (!panels.length) issues.push("panels_missing");
+  if (issues.length) {
+    const error = httpError("publish_gate_failed", 409);
+    error.details = issues.slice(0, 12);
+    throw error;
+  }
+}
+
+function serverTextLikelyOverflows(item, locale, text) {
+  const compactLength = text.replace(/\s+/gu, "").length;
+  const limits = {
+    dialogue: locale === "en" ? 105 : 68,
+    thought: locale === "en" ? 105 : 68,
+    line: locale === "en" ? 105 : 68,
+    narration: locale === "en" ? 170 : 112,
+    sfx: 24
+  };
+  return compactLength > (limits[item?.kind] || 88) || text.split(/\r?\n/u).length > 4;
 }
 
 function normalizeEpisodePlan(value) {
@@ -1329,6 +1821,115 @@ function normalizeEpisodePlan(value) {
   }
   assertJsonSize(value, 32 * 1024, "episode_plan_too_large");
   return value;
+}
+
+function normalizeJsonSection(value, maxBytes, errorCode, fallback = {}) {
+  if (value === undefined || value === null) {
+    return fallback;
+  }
+  if (typeof value !== "object") {
+    throw httpError(errorCode, 400);
+  }
+  assertJsonSize(value, maxBytes, errorCode);
+  return JSON.parse(JSON.stringify(value));
+}
+
+function normalizeRegionMaskRequest(value) {
+  if (value === undefined || value === null) {
+    return null;
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw httpError("invalid_region_mask", 400);
+  }
+
+  const schemaVersion = boundedString(value.schemaVersion, "regionMask.schemaVersion", 60, { required: true });
+  if (schemaVersion !== "webtoon-region-mask/v1") {
+    throw httpError("unsupported_region_mask_schema", 400);
+  }
+  if (value.mimeType !== "image/png") {
+    throw httpError("invalid_region_mask_mime", 400);
+  }
+
+  const match = /^data:image\/png;base64,([a-z0-9+/]+={0,2})$/i.exec(String(value.dataUrl || ""));
+  if (!match) {
+    throw httpError("invalid_region_mask_data", 400);
+  }
+  const png = Buffer.from(match[1], "base64");
+  if (!png.length || png.length > contentLimits.regionMaskBytes) {
+    throw httpError("region_mask_too_large", 413);
+  }
+  if (
+    png.length < 24
+    || png.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a"
+    || png.subarray(12, 16).toString("ascii") !== "IHDR"
+  ) {
+    throw httpError("invalid_region_mask_png", 400);
+  }
+
+  const pngWidth = png.readUInt32BE(16);
+  const pngHeight = png.readUInt32BE(20);
+  if (pngWidth !== 320 || pngHeight !== 480) {
+    throw httpError("invalid_region_mask_dimensions", 400);
+  }
+  const declaredWidth = Number(value.width);
+  const declaredHeight = Number(value.height);
+  if (declaredWidth !== pngWidth || declaredHeight !== pngHeight) {
+    throw httpError("region_mask_dimension_mismatch", 400);
+  }
+
+  const coverage = Number(value.coverage);
+  if (!Number.isFinite(coverage) || coverage < 0.0005 || coverage > 1) {
+    throw httpError("invalid_region_mask_coverage", 400);
+  }
+  const bounds = normalizeRegionMaskBounds(value.bounds);
+  const id = boundedString(value.id, "regionMask.id", 80, { required: true });
+  if (!/^brush-fnv1a-[a-f0-9]{8}$/i.test(id)) {
+    throw httpError("invalid_region_mask_id", 400);
+  }
+  const hash = boundedString(value.hash, "regionMask.hash", 40, { required: true });
+  const expectedHash = fnv1aText(`data:image/png;base64,${match[1]}`);
+  if (!/^fnv1a-[a-f0-9]{8}$/i.test(hash) || hash !== expectedHash || id !== `brush-${hash}`) {
+    throw httpError("invalid_region_mask_hash", 400);
+  }
+
+  return {
+    schemaVersion,
+    id,
+    mimeType: "image/png",
+    width: pngWidth,
+    height: pngHeight,
+    coverage: Math.round(coverage * 10000) / 10000,
+    encodedBytes: png.length,
+    bounds,
+    hash,
+    dataUrl: `data:image/png;base64,${match[1]}`
+  };
+}
+
+function normalizeRegionMaskBounds(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value) || value.mode !== "brush-mask") {
+    throw httpError("invalid_region_mask_bounds", 400);
+  }
+  const x = Number(value.x);
+  const y = Number(value.y);
+  const width = Number(value.width);
+  const height = Number(value.height);
+  const values = [x, y, width, height];
+  if (
+    values.some((number) => !Number.isFinite(number))
+    || x < 0 || y < 0 || width <= 0 || height <= 0
+    || x + width > 100.1 || y + height > 100.1
+  ) {
+    throw httpError("invalid_region_mask_bounds", 400);
+  }
+  return {
+    mode: "brush-mask",
+    unit: "percent",
+    x: Math.round(x * 10) / 10,
+    y: Math.round(y * 10) / 10,
+    width: Math.round(width * 10) / 10,
+    height: Math.round(height * 10) / 10
+  };
 }
 
 function mapProfile(row) {
@@ -1373,6 +1974,10 @@ function mapJob(row) {
     id: row.ID,
     userId: row.USER_ID,
     projectId: row.PROJECT_ID,
+    parentJobId: row.PARENT_JOB_ID || null,
+    panelId: row.PANEL_ID || null,
+    promptPackageId: row.PROMPT_PACKAGE_ID || null,
+    attempt: Number(row.ATTEMPT || 1),
     jobType: row.JOB_TYPE,
     scenarioKey: row.SCENARIO_KEY,
     cost: Number(row.COST || 0),
@@ -1683,6 +2288,15 @@ function randomId() {
   return crypto.randomUUID();
 }
 
+function fnv1aText(value) {
+  let hash = 2166136261;
+  for (const character of String(value || "")) {
+    hash ^= character.codePointAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return `fnv1a-${(hash >>> 0).toString(16).padStart(8, "0")}`;
+}
+
 function splitCsv(value) {
   return value.split(",").map((item) => item.trim()).filter(Boolean);
 }
@@ -1708,6 +2322,14 @@ function trimTrailingSlash(value) {
 
 function clampInt(value, min, max, fallback) {
   const number = Number.parseInt(value, 10);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, number));
+}
+
+function clampNumber(value, min, max, fallback) {
+  const number = Number(value);
   if (!Number.isFinite(number)) {
     return fallback;
   }
