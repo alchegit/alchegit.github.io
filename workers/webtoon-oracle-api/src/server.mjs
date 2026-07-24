@@ -9,11 +9,16 @@ import helmet from "helmet";
 import multer from "multer";
 import oracledb from "oracledb";
 import {
+  STORYHEAVEN_EPISODE_LIMITS,
+  STORYHEAVEN_REACTIONS,
   STORYHEAVEN_STORY_LIMITS,
   STORYHEAVEN_NICKNAME_LIMITS,
+  createStoryHeavenGuestPreview,
+  detectStoryHeavenTextThreat,
   normalizeStoryHeavenNickname,
   storyHeavenRoundSchedule,
   temporaryStoryHeavenNickname,
+  validateStoryHeavenEpisode,
   validateStoryHeavenPacket,
   validateStoryHeavenNickname
 } from "./storyheaven.mjs";
@@ -149,6 +154,7 @@ app.use(cors({
   maxAge: 600,
   optionsSuccessStatus: 204
 }));
+app.use("/api/storyheaven", express.json({ limit: "64kb" }));
 app.use(express.json({ limit: "2mb" }));
 app.use("/api/webtoon", createRateLimiter({
   name: "api_ip",
@@ -289,12 +295,81 @@ app.get("/api/storyheaven/stories/:id", optionalUser, async (req, res, next) => 
   }
 });
 
+app.get("/api/storyheaven/stories/:id/episodes", optionalUser, async (req, res, next) => {
+  try {
+    const episodes = await listStoryHeavenEpisodes(req.params.id, req.user || null);
+    res.json({ episodes, limits: STORYHEAVEN_EPISODE_LIMITS });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/stories/:id/episodes/:episodeNo", optionalUser, async (req, res, next) => {
+  try {
+    const episode = await getStoryHeavenEpisode(req.params.id, req.params.episodeNo, req.user || null);
+    res.set("Cache-Control", req.user ? "private, no-store" : "public, max-age=60").json({ episode });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/storyheaven/stories", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     const profile = await ensureUserProfile(req.user, req);
     assertActiveStoryHeavenNickname(profile);
     const story = await createStoryHeavenDraft(req.user.id, req.body?.packet || req.body || {});
     res.status(201).json({ story, limits: STORYHEAVEN_STORY_LIMITS });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/episodes", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    const profile = await ensureUserProfile(req.user, req);
+    assertActiveStoryHeavenNickname(profile);
+    const episode = await createStoryHeavenEpisode(req.params.id, req.user.id, req.body?.episode || req.body || {}, req);
+    res.status(201).json({ episode, limits: STORYHEAVEN_EPISODE_LIMITS });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.patch("/api/storyheaven/stories/:id/episodes/:episodeNo/draft", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const episode = await saveStoryHeavenEpisodeDraft(req.params.id, req.params.episodeNo, req.user.id, req.body?.episode || req.body || {}, req);
+    res.json({ episode });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/submit", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const episode = await submitStoryHeavenEpisode(req.params.id, req.params.episodeNo, req.user, req.body?.episode || req.body || {}, req);
+    res.json({ episode });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/storyheaven/stories/:id/reading-progress", requireUser, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const progress = await saveStoryHeavenReadingProgress(req.params.id, req.user.id, req.body || {});
+    res.json({ progress });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/reactions", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const reactions = await setStoryHeavenEpisodeReaction(req.params.id, req.params.episodeNo, req.user.id, req.body || {});
+    res.json({ reactions });
   } catch (error) {
     next(error);
   }
@@ -314,8 +389,8 @@ app.post("/api/storyheaven/stories/:id/submit", requireUser, creationRateLimiter
   try {
     const profile = await ensureUserProfile(req.user, req);
     assertActiveStoryHeavenNickname(profile);
-    const story = await submitStoryHeavenStory(req.params.id, req.user.id, req.body || {});
-    res.json({ story });
+    const result = await submitStoryHeavenStory(req.params.id, req.user, req.body || {}, req);
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -390,6 +465,23 @@ app.post("/api/storyheaven/operator/stories/:id/endorsement", requireUser, requi
 app.get("/api/storyheaven/operator/submissions", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
   try {
     res.json({ submissions: await listStoryHeavenSubmissions() });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/operator/episodes", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
+  try {
+    res.json({ episodes: await listStoryHeavenEpisodeSubmissions() });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/episodes/:id/review", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    res.json({ episode: await reviewStoryHeavenEpisodeSubmission(req.params.id, req.user.id, req.body || {}) });
   } catch (error) {
     next(error);
   }
@@ -1137,6 +1229,10 @@ async function listStoryHeavenFeed({ userId = null, limit = 24 } = {}) {
                 s.tags_json, s.content_rating, s.content_origin,
                 s.competition_eligible, s.ai_disclosure_version, s.cover_path,
                 s.published_at, p.nickname, p.display_name, p.account_type,
+                (select count(*) from storyheaven_episodes episode_count
+                  where episode_count.story_id = s.id and episode_count.episode_status = 'published') as episode_count,
+                (select max(latest_episode.published_at) from storyheaven_episodes latest_episode
+                  where latest_episode.story_id = s.id and latest_episode.episode_status = 'published') as latest_episode_at,
                 (select count(*) from storyheaven_likes likes where likes.story_id = s.id) as like_count,
                 (select count(*)
                    from storyheaven_votes weekly_votes
@@ -1996,6 +2092,370 @@ async function getStoryHeavenStory(storyIdValue, user) {
   });
 }
 
+async function listStoryHeavenEpisodes(storyIdValue, user) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  return withConnection(async (connection) => {
+    const story = await connection.execute(
+      `select id, author_user_id, story_status from storyheaven_stories where id = :story_id`,
+      { story_id: storyId }
+    );
+    if (!story.rows.length) throw httpError("story_not_found", 404);
+    const isOwner = story.rows[0].AUTHOR_USER_ID === user?.id;
+    const mayReadPrivate = isOwner || isAdminIdentity(user);
+    if (story.rows[0].STORY_STATUS !== "published" && !mayReadPrivate) throw httpError("story_not_found", 404);
+
+    const result = await connection.execute(
+      `select e.id, e.episode_no, e.title, e.public_summary, e.character_count,
+              e.paragraph_count, e.estimated_read_minutes, e.episode_status,
+              e.current_revision_no, e.published_at, e.updated_at,
+              nvl(p.last_character_offset, 0) as last_character_offset,
+              nvl(p.completion_rate, 0) as completion_rate
+         from storyheaven_episodes e
+         left join storyheaven_reading_progress p
+           on p.episode_id = e.id and p.user_id = :viewer_user_id
+        where e.story_id = :story_id
+          and (:may_read_private = 'Y' or e.episode_status = 'published')
+        order by e.episode_no asc`,
+      {
+        story_id: storyId,
+        viewer_user_id: user?.id || null,
+        may_read_private: mayReadPrivate ? "Y" : "N"
+      }
+    );
+    return result.rows.map(mapStoryHeavenEpisodeSummary);
+  });
+}
+
+async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
+  return withConnection(async (connection) => {
+    const result = await connection.execute(
+      `select e.id, e.story_id, e.episode_no, e.title, e.public_summary, e.body_text,
+              e.character_count, e.paragraph_count, e.estimated_read_minutes,
+              e.preview_character_count, e.episode_status, e.current_revision_no,
+              e.published_at, e.updated_at, s.title as story_title,
+              s.author_user_id, s.story_status, p.nickname, p.display_name,
+              nvl(progress.last_character_offset, 0) as last_character_offset,
+              nvl(progress.completion_rate, 0) as completion_rate
+         from storyheaven_episodes e
+         join storyheaven_stories s on s.id = e.story_id
+         join webtoon_profiles p on p.user_id = s.author_user_id
+         left join storyheaven_reading_progress progress
+           on progress.episode_id = e.id and progress.user_id = :viewer_user_id
+        where e.story_id = :story_id and e.episode_no = :episode_no`,
+      { story_id: storyId, episode_no: episodeNo, viewer_user_id: user?.id || null }
+    );
+    if (!result.rows.length) throw httpError("episode_not_found", 404);
+    const row = result.rows[0];
+    const isOwner = row.AUTHOR_USER_ID === user?.id;
+    const mayReadPrivate = isOwner || isAdminIdentity(user);
+    const isPublic = row.STORY_STATUS === "published" && row.EPISODE_STATUS === "published";
+    if (!isPublic && !mayReadPrivate) throw httpError("episode_not_found", 404);
+
+    const body = String(row.BODY_TEXT || "");
+    const guestPreview = !user && isPublic ? createStoryHeavenGuestPreview(body) : null;
+    const reactions = await connection.execute(
+      `select reaction_type, count(*) as reaction_count,
+              max(case when user_id = :viewer_user_id then 1 else 0 end) as reacted_by_me
+         from storyheaven_episode_reactions
+        where episode_id = :episode_id
+        group by reaction_type`,
+      { episode_id: row.ID, viewer_user_id: user?.id || null }
+    );
+    return {
+      id: row.ID,
+      storyId: row.STORY_ID,
+      storyTitle: row.STORY_TITLE,
+      episodeNo: Number(row.EPISODE_NO),
+      title: row.TITLE,
+      summary: row.PUBLIC_SUMMARY || "",
+      body: guestPreview?.body ?? body,
+      characterCount: Number(row.CHARACTER_COUNT || 0),
+      paragraphCount: Number(row.PARAGRAPH_COUNT || 0),
+      estimatedReadMinutes: Number(row.ESTIMATED_READ_MINUTES || 1),
+      status: row.EPISODE_STATUS,
+      revisionNo: Number(row.CURRENT_REVISION_NO || 0),
+      publishedAt: row.PUBLISHED_AT || null,
+      updatedAt: row.UPDATED_AT,
+      author: row.NICKNAME || row.DISPLAY_NAME || "이야기씨앗",
+      guestPreview: Boolean(guestPreview?.truncated),
+      loginRequired: Boolean(guestPreview?.truncated),
+      previewCharacters: guestPreview?.previewCharacters ?? Number(row.CHARACTER_COUNT || 0),
+      totalCharacters: guestPreview?.totalCharacters ?? Number(row.CHARACTER_COUNT || 0),
+      progress: user ? {
+        lastCharacterOffset: Number(row.LAST_CHARACTER_OFFSET || 0),
+        completionRate: Number(row.COMPLETION_RATE || 0)
+      } : null,
+      reactions: Object.fromEntries(STORYHEAVEN_REACTIONS.map((type) => {
+        const reaction = reactions.rows.find((item) => item.REACTION_TYPE === type);
+        return [type, { count: Number(reaction?.REACTION_COUNT || 0), selected: reaction?.REACTED_BY_ME === 1 }];
+      }))
+    };
+  });
+}
+
+async function createStoryHeavenEpisode(storyIdValue, userId, input, req) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const validated = await requireStoryHeavenEpisode(input, "draft", req, userId);
+  return withTransaction(async (connection) => {
+    const story = await connection.execute(
+      `select id, story_status from storyheaven_stories
+        where id = :story_id and author_user_id = :user_id for update`,
+      { story_id: storyId, user_id: userId }
+    );
+    if (!story.rows.length) throw httpError("story_not_found", 404);
+    if (!new Set(["draft", "published"]).has(story.rows[0].STORY_STATUS)) throw httpError("story_not_editable", 409);
+    const draftCount = await connection.execute(
+      `select count(*) as draft_count from storyheaven_episodes
+        where story_id = :story_id and episode_status = 'draft'`,
+      { story_id: storyId }
+    );
+    if (Number(draftCount.rows[0].DRAFT_COUNT || 0) >= STORYHEAVEN_EPISODE_LIMITS.draftsPerSeries) {
+      throw httpError("episode_draft_limit_reached", 409);
+    }
+    const sequence = await connection.execute(
+      `select nvl(max(episode_no), 0) + 1 as next_episode_no
+         from storyheaven_episodes where story_id = :story_id`,
+      { story_id: storyId }
+    );
+    const episodeNo = Number(sequence.rows[0].NEXT_EPISODE_NO || 1);
+    if (episodeNo > STORYHEAVEN_EPISODE_LIMITS.publishedPerSeries) throw httpError("episode_series_limit_reached", 409);
+    const episodeId = randomId();
+    const hash = hashStoryHeavenEpisode(validated.episode);
+    const preview = createStoryHeavenGuestPreview(validated.episode.body);
+    await connection.execute(
+      `insert into storyheaven_episodes (
+        id, story_id, episode_no, title, public_summary, body_text,
+        character_count, paragraph_count, estimated_read_minutes,
+        preview_character_count, episode_status, current_revision_no
+      ) values (
+        :id, :story_id, :episode_no, :title, :public_summary, :body_text,
+        :character_count, :paragraph_count, :estimated_read_minutes,
+        :preview_character_count, 'draft', 1
+      )`,
+      storyHeavenEpisodeBinds(episodeId, storyId, episodeNo, validated, preview.previewCharacters)
+    );
+    await insertStoryHeavenEpisodeRevision(connection, episodeId, 1, userId, "draft", validated, hash);
+    await insertStoryHeavenActivity(connection, {
+      storyId, actorUserId: userId, type: "episode_created", toStatus: "draft",
+      details: { episodeId, episodeNo, characterCount: validated.analysis.characterCount }
+    });
+    return selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, userId);
+  });
+}
+
+async function saveStoryHeavenEpisodeDraft(storyIdValue, episodeNoValue, userId, input, req) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
+  const validated = await requireStoryHeavenEpisode(input, "draft", req, userId);
+  return withTransaction(async (connection) => {
+    const current = await lockStoryHeavenEpisode(connection, storyId, episodeNo, userId);
+    if (current.EPISODE_STATUS !== "draft") throw httpError("episode_not_editable", 409);
+    const revisionNo = Number(current.CURRENT_REVISION_NO || 0) + 1;
+    const preview = createStoryHeavenGuestPreview(validated.episode.body);
+    await updateStoryHeavenEpisode(connection, current.ID, validated, preview.previewCharacters, revisionNo, "draft");
+    await insertStoryHeavenEpisodeRevision(connection, current.ID, revisionNo, userId, "draft", validated, hashStoryHeavenEpisode(validated.episode));
+    return selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, userId);
+  });
+}
+
+async function submitStoryHeavenEpisode(storyIdValue, episodeNoValue, user, input, req) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
+  const validated = await requireStoryHeavenEpisode(input, "submit", req, user.id);
+  return withTransaction(async (connection) => {
+    const current = await lockStoryHeavenEpisode(connection, storyId, episodeNo, user.id);
+    if (current.EPISODE_STATUS !== "draft") throw httpError("episode_not_submittable", 409);
+    const revisionNo = Number(current.CURRENT_REVISION_NO || 0) + 1;
+    const preview = createStoryHeavenGuestPreview(validated.episode.body);
+    const nextStatus = isAdminIdentity(user) ? "published" : "moderation";
+    await updateStoryHeavenEpisode(connection, current.ID, validated, preview.previewCharacters, revisionNo, nextStatus);
+    await connection.execute(
+      `update storyheaven_episodes
+          set submitted_at = systimestamp,
+              published_at = case when :episode_status = 'published' then systimestamp else published_at end
+        where id = :episode_id`,
+      { episode_id: current.ID, episode_status: nextStatus }
+    );
+    await insertStoryHeavenEpisodeRevision(connection, current.ID, revisionNo, user.id, "submit", validated, hashStoryHeavenEpisode(validated.episode));
+    await insertStoryHeavenActivity(connection, {
+      storyId, actorUserId: user.id, type: nextStatus === "published" ? "episode_published" : "episode_submitted",
+      fromStatus: "draft", toStatus: nextStatus,
+      details: { episodeId: current.ID, episodeNo, characterCount: validated.analysis.characterCount }
+    });
+    return selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, user.id);
+  });
+}
+
+async function listStoryHeavenEpisodeSubmissions() {
+  return withConnection(async (connection) => {
+    const result = await connection.execute(
+      `select e.id, e.story_id, e.episode_no, e.title, e.public_summary, e.body_text,
+              e.character_count, e.paragraph_count, e.estimated_read_minutes,
+              e.episode_status, e.current_revision_no, e.submitted_at, e.updated_at,
+              s.title as story_title, s.author_user_id,
+              p.nickname, p.display_name
+         from storyheaven_episodes e
+         join storyheaven_stories s on s.id = e.story_id
+         join webtoon_profiles p on p.user_id = s.author_user_id
+        where e.episode_status = 'moderation'
+        order by e.submitted_at asc`
+    );
+    return result.rows.map((row) => ({
+      ...mapStoryHeavenEpisodeSummary(row),
+      storyId: row.STORY_ID,
+      storyTitle: row.STORY_TITLE,
+      authorUserId: row.AUTHOR_USER_ID,
+      author: row.NICKNAME || row.DISPLAY_NAME || "이야기씨앗",
+      body: String(row.BODY_TEXT || ""),
+      submittedAt: row.SUBMITTED_AT
+    }));
+  });
+}
+
+async function reviewStoryHeavenEpisodeSubmission(episodeIdValue, adminUserId, input) {
+  const episodeId = boundedString(episodeIdValue, "episodeId", 36, { required: true });
+  const decision = boundedString(input.decision, "decision", 30, { required: true });
+  if (!new Set(["approved", "changes_requested", "rejected"]).has(decision)) {
+    throw httpError("invalid_review_decision", 400);
+  }
+  const note = boundedString(input.note || "", "reviewNote", 1000, { required: decision !== "approved" });
+  const nextStatus = decision === "approved" ? "published" : decision === "changes_requested" ? "draft" : "archived";
+  return withTransaction(async (connection) => {
+    const current = await connection.execute(
+      `select e.id, e.story_id, e.episode_no, e.episode_status, e.current_revision_no,
+              s.author_user_id
+         from storyheaven_episodes e join storyheaven_stories s on s.id = e.story_id
+        where e.id = :episode_id for update`,
+      { episode_id: episodeId }
+    );
+    if (!current.rows.length) throw httpError("episode_not_found", 404);
+    const episode = current.rows[0];
+    if (episode.EPISODE_STATUS !== "moderation") throw httpError("episode_not_in_moderation", 409);
+    await connection.execute(
+      `update storyheaven_episodes
+          set episode_status = :episode_status, review_decision = :review_decision,
+              review_note = :review_note, reviewed_at = systimestamp,
+              reviewed_by = :reviewed_by,
+              published_at = case when :review_decision = 'approved' then systimestamp else published_at end,
+              updated_at = systimestamp
+        where id = :episode_id`,
+      {
+        episode_id: episodeId, episode_status: nextStatus,
+        review_decision: decision, review_note: note || null, reviewed_by: adminUserId
+      }
+    );
+    await insertStoryHeavenActivity(connection, {
+      storyId: episode.STORY_ID, actorUserId: adminUserId, type: "episode_reviewed",
+      fromStatus: "moderation", toStatus: nextStatus,
+      details: { episodeId, episodeNo: Number(episode.EPISODE_NO), decision, note }
+    });
+    await insertStoryHeavenNotification(connection, {
+      userId: episode.AUTHOR_USER_ID,
+      storyId: episode.STORY_ID,
+      type: "episode_review_result",
+      title: `${Number(episode.EPISODE_NO)}화 검수 결과`,
+      message: decision === "approved" ? "회차가 공개되었습니다." : note,
+      actionPath: `/storyheaven/write/?id=${encodeURIComponent(episode.STORY_ID)}`
+    });
+    const selected = await connection.execute(
+      `select e.id, e.episode_no, e.title, e.public_summary, e.character_count,
+              e.paragraph_count, e.estimated_read_minutes, e.episode_status,
+              e.current_revision_no, e.published_at, e.updated_at
+         from storyheaven_episodes e where e.id = :episode_id`,
+      { episode_id: episodeId }
+    );
+    return mapStoryHeavenEpisodeSummary(selected.rows[0]);
+  });
+}
+
+async function saveStoryHeavenReadingProgress(storyIdValue, userId, input) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(input.episodeNo);
+  return withTransaction(async (connection) => {
+    const episode = await connection.execute(
+      `select e.id, e.character_count from storyheaven_episodes e
+        join storyheaven_stories s on s.id = e.story_id
+       where e.story_id = :story_id and e.episode_no = :episode_no
+         and e.episode_status = 'published' and s.story_status = 'published'`,
+      { story_id: storyId, episode_no: episodeNo }
+    );
+    if (!episode.rows.length) throw httpError("episode_not_found", 404);
+    const total = Math.max(1, Number(episode.rows[0].CHARACTER_COUNT || 1));
+    const offset = clampInt(input.lastCharacterOffset, 0, total, 0);
+    const completionRate = Math.min(1, Number((offset / total).toFixed(4)));
+    await connection.execute(
+      `merge into storyheaven_reading_progress target
+       using (select :user_id user_id, :story_id story_id from dual) source
+          on (target.user_id = source.user_id and target.story_id = source.story_id)
+       when matched then update set
+         episode_id = :episode_id, last_character_offset = :last_character_offset,
+         completion_rate = :completion_rate,
+         completed_at = case when :completion_rate >= 0.95 then systimestamp else null end,
+         updated_at = systimestamp
+       when not matched then insert (
+         user_id, story_id, episode_id, last_character_offset, completion_rate, completed_at
+       ) values (
+         :user_id, :story_id, :episode_id, :last_character_offset, :completion_rate,
+         case when :completion_rate >= 0.95 then systimestamp else null end
+       )`,
+      {
+        user_id: userId, story_id: storyId, episode_id: episode.rows[0].ID,
+        last_character_offset: offset, completion_rate: completionRate
+      }
+    );
+    return { storyId, episodeNo, lastCharacterOffset: offset, completionRate };
+  });
+}
+
+async function setStoryHeavenEpisodeReaction(storyIdValue, episodeNoValue, userId, input) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
+  const reactionType = boundedString(input.reactionType, "reactionType", 30, { required: true });
+  if (!STORYHEAVEN_REACTIONS.includes(reactionType)) throw httpError("invalid_episode_reaction", 400);
+  const selected = input.selected !== false;
+  return withTransaction(async (connection) => {
+    const episode = await connection.execute(
+      `select e.id from storyheaven_episodes e join storyheaven_stories s on s.id = e.story_id
+        where e.story_id = :story_id and e.episode_no = :episode_no
+          and e.episode_status = 'published' and s.story_status = 'published'`,
+      { story_id: storyId, episode_no: episodeNo }
+    );
+    if (!episode.rows.length) throw httpError("episode_not_found", 404);
+    if (selected) {
+      await connection.execute(
+        `merge into storyheaven_episode_reactions target
+         using (select :episode_id episode_id, :user_id user_id, :reaction_type reaction_type from dual) source
+            on (target.episode_id = source.episode_id and target.user_id = source.user_id and target.reaction_type = source.reaction_type)
+         when not matched then insert (episode_id, user_id, reaction_type)
+         values (:episode_id, :user_id, :reaction_type)`,
+        { episode_id: episode.rows[0].ID, user_id: userId, reaction_type: reactionType }
+      );
+    } else {
+      await connection.execute(
+        `delete from storyheaven_episode_reactions
+          where episode_id = :episode_id and user_id = :user_id and reaction_type = :reaction_type`,
+        { episode_id: episode.rows[0].ID, user_id: userId, reaction_type: reactionType }
+      );
+    }
+      const counts = await connection.execute(
+        `select reaction_type, count(*) as reaction_count,
+                max(case when user_id = :user_id then 1 else 0 end) as is_selected
+           from storyheaven_episode_reactions
+          where episode_id = :episode_id group by reaction_type`,
+        { episode_id: episode.rows[0].ID, user_id: userId }
+      );
+      return Object.fromEntries(STORYHEAVEN_REACTIONS.map((type) => [
+        type,
+        {
+          count: Number(counts.rows.find((item) => item.REACTION_TYPE === type)?.REACTION_COUNT || 0),
+          selected: Number(counts.rows.find((item) => item.REACTION_TYPE === type)?.IS_SELECTED || 0) === 1
+        }
+      ]));
+  });
+}
+
 async function createStoryHeavenDraft(userId, input) {
   const validated = requireStoryHeavenPacket(input, "draft");
   const storyId = randomId();
@@ -2018,12 +2478,12 @@ async function createStoryHeavenDraft(userId, input) {
       `insert into storyheaven_stories (
         id, slug, author_user_id, title, logline, public_synopsis,
         protagonist_goal, obstacle_stakes, genre, secondary_genre, tags_json,
-        content_rating, rating_detail, content_origin, competition_eligible,
+        content_rating, rating_detail, content_origin, ai_disclosure_version, competition_eligible,
         story_status, current_revision_no, review_decision
       ) values (
         :id, :slug, :author_user_id, :title, :logline, :public_synopsis,
         :protagonist_goal, :obstacle_stakes, :genre, :secondary_genre, :tags_json,
-        :content_rating, :rating_detail, 'human', 'N',
+        :content_rating, :rating_detail, :content_origin, :ai_disclosure_version, 'N',
         'draft', :current_revision_no, 'none'
       )`,
       storyHeavenStoryBinds(storyId, slug, userId, validated.packet, revisionNo)
@@ -2081,9 +2541,11 @@ async function saveStoryHeavenDraft(storyIdValue, userId, input) {
   });
 }
 
-async function submitStoryHeavenStory(storyIdValue, userId, input) {
+async function submitStoryHeavenStory(storyIdValue, user, input, req) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
   const validated = requireStoryHeavenPacket(input.packet || {}, "submit");
+  const episodeNo = requireStoryHeavenEpisodeNo(input.episodeNo || 1);
+  const validatedEpisode = await requireStoryHeavenEpisode(input.episode || {}, "submit", req, user.id);
   const consent = input.consents && typeof input.consents === "object" ? input.consents : {};
   const requiredConsents = ["display", "originality", "adult"];
   const missing = requiredConsents.filter((name) => consent[name] !== true);
@@ -2094,10 +2556,12 @@ async function submitStoryHeavenStory(storyIdValue, userId, input) {
   }
 
   return withTransaction(async (connection) => {
-    const current = await lockStoryHeavenStory(connection, storyId, userId);
+    const current = await lockStoryHeavenStory(connection, storyId, user.id);
     if (current.STORY_STATUS !== "draft") {
       throw httpError("story_not_submittable", 409);
     }
+    const currentEpisode = await lockStoryHeavenEpisode(connection, storyId, episodeNo, user.id);
+    if (currentEpisode.EPISODE_STATUS !== "draft") throw httpError("episode_not_submittable", 409);
     const revisionNo = Number(current.CURRENT_REVISION_NO || 0) + 1;
     const hash = hashStoryHeavenPacket(validated.packet);
     await updateStoryHeavenCurrentPacket(connection, storyId, validated.packet, revisionNo, {
@@ -2107,7 +2571,7 @@ async function submitStoryHeavenStory(storyIdValue, userId, input) {
     await insertStoryHeavenRevision(connection, {
       storyId,
       revisionNo,
-      actorUserId: userId,
+      actorUserId: user.id,
       kind: "submit",
       packet: validated.packet,
       hash
@@ -2131,7 +2595,7 @@ async function submitStoryHeavenStory(storyIdValue, userId, input) {
     for (const type of [...requiredConsents, "training"]) {
       await upsertStoryHeavenConsent(connection, {
         storyId,
-        userId,
+        userId: user.id,
         type,
         accepted: consent[type] === true,
         hash
@@ -2139,13 +2603,46 @@ async function submitStoryHeavenStory(storyIdValue, userId, input) {
     }
     await insertStoryHeavenActivity(connection, {
       storyId,
-      actorUserId: userId,
+      actorUserId: user.id,
       type: "submitted_for_review",
       fromStatus: "draft",
       toStatus: "moderation",
       details: { revisionNo, totalLength: validated.totalLength, trainingConsent: consent.training === true }
     });
-    return selectStoryHeavenOwnerStory(connection, storyId, userId);
+
+    const episodeRevisionNo = Number(currentEpisode.CURRENT_REVISION_NO || 0) + 1;
+    const preview = createStoryHeavenGuestPreview(validatedEpisode.episode.body);
+    const episodeStatus = isAdminIdentity(user) ? "published" : "moderation";
+    await updateStoryHeavenEpisode(connection, currentEpisode.ID, validatedEpisode, preview.previewCharacters, episodeRevisionNo, episodeStatus);
+    await connection.execute(
+      `update storyheaven_episodes
+          set submitted_at = systimestamp,
+              published_at = case when :episode_status = 'published' then systimestamp else published_at end
+        where id = :episode_id`,
+      { episode_id: currentEpisode.ID, episode_status: episodeStatus }
+    );
+    await insertStoryHeavenEpisodeRevision(
+      connection,
+      currentEpisode.ID,
+      episodeRevisionNo,
+      user.id,
+      "submit",
+      validatedEpisode,
+      hashStoryHeavenEpisode(validatedEpisode.episode)
+    );
+    await insertStoryHeavenActivity(connection, {
+      storyId,
+      actorUserId: user.id,
+      type: episodeStatus === "published" ? "episode_published" : "episode_submitted",
+      fromStatus: "draft",
+      toStatus: episodeStatus,
+      details: { episodeId: currentEpisode.ID, episodeNo, characterCount: validatedEpisode.analysis.characterCount }
+    });
+
+    return {
+      story: await selectStoryHeavenOwnerStory(connection, storyId, user.id),
+      episode: await selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, user.id)
+    };
   });
 }
 
@@ -2185,6 +2682,14 @@ async function reviewStoryHeavenSubmission(storyIdValue, adminUserId, input) {
     if (!current.rows.length) throw httpError("story_not_found", 404);
     if (current.rows[0].STORY_STATUS !== "moderation") throw httpError("story_not_in_moderation", 409);
     if (decision === "approved") {
+      const publishedEpisodes = await connection.execute(
+        `select count(*) as published_count from storyheaven_episodes
+          where story_id = :story_id and episode_status = 'published'`,
+        { story_id: storyId }
+      );
+      if (Number(publishedEpisodes.rows[0].PUBLISHED_COUNT || 0) < 1) {
+        throw httpError("episode_review_required", 409);
+      }
       await assignStoryHeavenEntry(connection, {
         storyId,
         authorUserId: current.rows[0].AUTHOR_USER_ID,
@@ -2399,6 +2904,165 @@ function requireStoryHeavenPacket(input, mode) {
   return result;
 }
 
+async function requireStoryHeavenEpisode(input, mode, req, userId) {
+  const requestBytes = Buffer.byteLength(JSON.stringify(input || {}), "utf8");
+  if (requestBytes > STORYHEAVEN_EPISODE_LIMITS.requestBodyBytes) {
+    throw httpError("episode_request_too_large", 413);
+  }
+  const result = validateStoryHeavenEpisode(input, { mode });
+  if (!result.ok) {
+    const threats = result.errors.filter((item) => item.code === "unsafe_content_pattern");
+    if (threats.length) {
+      await recordStoryHeavenContentThreat(req, userId, threats).catch((error) => {
+        console.error("storyheaven_content_threat_log_failed", error?.message || error);
+      });
+    }
+    const error = httpError("episode_validation_failed", 400);
+    error.details = result.errors.map((item) => ({ ...item, field: `episode.${item.field}` }));
+    throw error;
+  }
+  return result;
+}
+
+async function recordStoryHeavenContentThreat(req, userId, threats) {
+  return recordSecurityEvent({
+    req,
+    userId,
+    eventType: "storyheaven_unsafe_content_blocked",
+    severity: "warn",
+    details: {
+      fields: [...new Set(threats.map((item) => item.field))],
+      threats: [...new Set(threats.map((item) => item.threat))]
+    }
+  });
+}
+
+function requireStoryHeavenEpisodeNo(value) {
+  const episodeNo = Number(value);
+  if (!Number.isInteger(episodeNo) || episodeNo < 1 || episodeNo > STORYHEAVEN_EPISODE_LIMITS.publishedPerSeries) {
+    throw httpError("invalid_episode_number", 400);
+  }
+  return episodeNo;
+}
+
+function hashStoryHeavenEpisode(episode) {
+  return crypto.createHash("sha256").update(JSON.stringify(episode)).digest("hex");
+}
+
+function storyHeavenEpisodeBinds(episodeId, storyId, episodeNo, validated, previewCharacterCount) {
+  return {
+    id: episodeId,
+    story_id: storyId,
+    episode_no: episodeNo,
+    title: validated.episode.title,
+    public_summary: validated.episode.summary || null,
+    body_text: validated.episode.body || null,
+    character_count: validated.analysis.characterCount,
+    paragraph_count: validated.analysis.paragraphCount,
+    estimated_read_minutes: validated.estimatedReadMinutes,
+    preview_character_count: previewCharacterCount
+  };
+}
+
+async function insertStoryHeavenEpisodeRevision(connection, episodeId, revisionNo, actorUserId, kind, validated, hash) {
+  await connection.execute(
+    `insert into storyheaven_episode_revisions (
+      id, episode_id, revision_no, actor_user_id, revision_kind,
+      title, public_summary, body_text, content_hash, quality_json
+    ) values (
+      :id, :episode_id, :revision_no, :actor_user_id, :revision_kind,
+      :title, :public_summary, :body_text, :content_hash, :quality_json
+    )`,
+    {
+      id: randomId(), episode_id: episodeId, revision_no: revisionNo,
+      actor_user_id: actorUserId, revision_kind: kind,
+      title: validated.episode.title, public_summary: validated.episode.summary || null,
+      body_text: validated.episode.body || null, content_hash: hash,
+      quality_json: clobJson({ ...validated.analysis, estimatedReadMinutes: validated.estimatedReadMinutes })
+    }
+  );
+}
+
+async function updateStoryHeavenEpisode(connection, episodeId, validated, previewCharacterCount, revisionNo, status) {
+  await connection.execute(
+    `update storyheaven_episodes
+        set title = :title, public_summary = :public_summary, body_text = :body_text,
+            character_count = :character_count, paragraph_count = :paragraph_count,
+            estimated_read_minutes = :estimated_read_minutes,
+            preview_character_count = :preview_character_count,
+            current_revision_no = :revision_no, episode_status = :episode_status,
+            review_decision = case
+              when :episode_status = 'moderation' then 'pending'
+              when :episode_status = 'published' then 'approved'
+              else 'none'
+            end,
+            review_note = null,
+            updated_at = systimestamp
+      where id = :episode_id`,
+    {
+      episode_id: episodeId, title: validated.episode.title,
+      public_summary: validated.episode.summary || null, body_text: validated.episode.body || null,
+      character_count: validated.analysis.characterCount,
+      paragraph_count: validated.analysis.paragraphCount,
+      estimated_read_minutes: validated.estimatedReadMinutes,
+      preview_character_count: previewCharacterCount,
+      revision_no: revisionNo, episode_status: status
+    }
+  );
+}
+
+async function lockStoryHeavenEpisode(connection, storyId, episodeNo, userId) {
+  const result = await connection.execute(
+    `select e.id, e.episode_status, e.current_revision_no
+       from storyheaven_episodes e
+       join storyheaven_stories s on s.id = e.story_id
+      where e.story_id = :story_id and e.episode_no = :episode_no
+        and s.author_user_id = :user_id
+      for update`,
+    { story_id: storyId, episode_no: episodeNo, user_id: userId }
+  );
+  if (!result.rows.length) throw httpError("episode_not_found", 404);
+  return result.rows[0];
+}
+
+async function selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, userId) {
+  const result = await connection.execute(
+    `select e.id, e.episode_no, e.title, e.public_summary, e.body_text,
+            e.character_count, e.paragraph_count, e.estimated_read_minutes,
+            e.episode_status, e.current_revision_no, e.published_at, e.updated_at
+       from storyheaven_episodes e
+       join storyheaven_stories s on s.id = e.story_id
+      where e.story_id = :story_id and e.episode_no = :episode_no
+        and s.author_user_id = :user_id`,
+    { story_id: storyId, episode_no: episodeNo, user_id: userId }
+  );
+  if (!result.rows.length) throw httpError("episode_not_found", 404);
+  return {
+    ...mapStoryHeavenEpisodeSummary(result.rows[0]),
+    body: String(result.rows[0].BODY_TEXT || "")
+  };
+}
+
+function mapStoryHeavenEpisodeSummary(row) {
+  return {
+    id: row.ID,
+    episodeNo: Number(row.EPISODE_NO),
+    title: row.TITLE,
+    summary: row.PUBLIC_SUMMARY || "",
+    characterCount: Number(row.CHARACTER_COUNT || 0),
+    paragraphCount: Number(row.PARAGRAPH_COUNT || 0),
+    estimatedReadMinutes: Number(row.ESTIMATED_READ_MINUTES || 1),
+    status: row.EPISODE_STATUS,
+    revisionNo: Number(row.CURRENT_REVISION_NO || 0),
+    publishedAt: row.PUBLISHED_AT || null,
+    updatedAt: row.UPDATED_AT,
+    progress: Number(row.LAST_CHARACTER_OFFSET || 0) > 0 ? {
+      lastCharacterOffset: Number(row.LAST_CHARACTER_OFFSET || 0),
+      completionRate: Number(row.COMPLETION_RATE || 0)
+    } : null
+  };
+}
+
 function assertActiveStoryHeavenNickname(profile) {
   if (profile.nicknameStatus !== "active") {
     throw httpError("storyheaven_nickname_required", 409);
@@ -2434,6 +3098,8 @@ function storyHeavenStoryBinds(storyId, slug, userId, packet, revisionNo) {
     tags_json: clobJson(packet.tags),
     content_rating: packet.rating === "all" ? "all" : "teen",
     rating_detail: packet.rating,
+    content_origin: packet.contentOrigin,
+    ai_disclosure_version: packet.contentOrigin === "human_ai_assisted" ? "storyheaven-ai-assisted/v1" : null,
     current_revision_no: revisionNo
   };
 }
@@ -2452,6 +3118,8 @@ async function updateStoryHeavenCurrentPacket(connection, storyId, packet, revis
             tags_json = :tags_json,
             content_rating = :content_rating,
             rating_detail = :rating_detail,
+            content_origin = :content_origin,
+            ai_disclosure_version = :ai_disclosure_version,
             current_revision_no = :current_revision_no,
             review_decision = :review_decision,
             review_note = :review_note
@@ -2468,6 +3136,8 @@ async function updateStoryHeavenCurrentPacket(connection, storyId, packet, revis
       tags_json: binds.tags_json,
       content_rating: binds.content_rating,
       rating_detail: binds.rating_detail,
+      content_origin: binds.content_origin,
+      ai_disclosure_version: binds.ai_disclosure_version,
       current_revision_no: binds.current_revision_no,
       review_decision: reviewDecision,
       review_note: reviewNote
@@ -2565,6 +3235,10 @@ function storyHeavenOwnerSelect() {
                  s.eligibility_score, s.published_at, s.created_at, s.updated_at,
                  p.nickname, p.display_name, p.account_type,
                  r.packet_json,
+                 (select count(*) from storyheaven_episodes episode_count
+                   where episode_count.story_id = s.id and episode_count.episode_status = 'published') as episode_count,
+                 (select max(latest_episode.published_at) from storyheaven_episodes latest_episode
+                   where latest_episode.story_id = s.id and latest_episode.episode_status = 'published') as latest_episode_at,
                  (select count(*) from storyheaven_likes likes where likes.story_id = s.id) as like_count,
                  case when exists (
                    select 1 from storyheaven_likes mine
@@ -2623,7 +3297,8 @@ async function setStoryHeavenLike(storyIdValue, userId, liked, req = null) {
       throw httpError("author_cannot_like_own_story", 403);
     }
 
-    const ranked = story.rows[0].COMPETITION_ELIGIBLE === "Y" && story.rows[0].CONTENT_ORIGIN === "human";
+    const ranked = story.rows[0].COMPETITION_ELIGIBLE === "Y"
+      && new Set(["human", "human_ai_assisted"]).has(story.rows[0].CONTENT_ORIGIN);
     let roundEntry = null;
     let previousVote = null;
     if (ranked) {
@@ -2804,6 +3479,8 @@ function mapStoryHeavenStory(row) {
     aiDisclosureVersion: row.AI_DISCLOSURE_VERSION || null,
     coverPath: row.COVER_PATH || "",
     publishedAt: row.PUBLISHED_AT,
+    episodeCount: Number(row.EPISODE_COUNT || 0),
+    latestEpisodeAt: row.LATEST_EPISODE_AT || null,
     author: {
       nickname: row.NICKNAME || row.DISPLAY_NAME || "이야기씨앗",
       accountType: row.ACCOUNT_TYPE || "human"

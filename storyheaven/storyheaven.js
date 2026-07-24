@@ -2,22 +2,7 @@
   const SUPABASE_URL = "https://anjbgbqkeukllsdxgckv.supabase.co";
   const SUPABASE_KEY = "sb_publishable_k6DOGCJ3PVC1av1RVxDt5w_NvOZubsE";
   const API_BASE = (document.querySelector("meta[name='storyheaven-api-base']")?.content || "").replace(/\/+$/, "");
-  const FALLBACK_STORIES = [
-    ["seed-last-platform", "막차가 떠난 뒤의 승강장", "종착역에 홀로 남은 청소부가 매일 한 칸씩 가까워지는 정체불명의 열차를 발견한다.", "미스터리", ["폐역", "선택"], "../webtoon/assets/guide/awakening-episode-01-last-train-v4.webp"],
-    ["seed-rain-memory", "비를 보관하는 잡화점", "잊고 싶은 기억을 빗물에 담아 파는 소녀가 자신의 병만 비어 있음을 발견한다.", "감성판타지", ["비", "기억"], "../webtoon/assets/guide/awakening-episode-02-boot-trail-v4.webp"],
-    ["seed-night-auditor", "13번 야간 감사관", "괴물의 민원을 처리하는 말단 공무원이 인간 세계의 마지막 민원서를 접수한다.", "현대판타지", ["공무원", "괴담"], "../webtoon/assets/guide/awakening-episode-03-inspector-v4.webp"],
-    ["seed-rescue-window", "구조 요청은 한 번만", "하루에 단 한 명만 구할 수 있는 구조사가 두 곳에서 동시에 울린 신호 앞에 선다.", "재난드라마", ["구조", "가족"], "../webtoon/assets/guide/awakening-episode-04-rescue-v4.webp"],
-    ["seed-airlock-choice", "한 사람만 나갈 수 있다", "산소가 끊긴 연구소에서 서로를 의심하는 생존자들이 마지막 문 앞에서 투표를 시작한다.", "SF스릴러", ["밀실", "생존"], "../webtoon/assets/guide/awakening-episode-05-airlock-choice-v4.webp"],
-    ["seed-wash-away", "이름을 씻어내는 밤", "지워진 이름이 하수구에서 되살아나는 도시에서 세탁공이 자신의 이름을 발견한다.", "다크판타지", ["이름", "추적"], "../webtoon/assets/guide/awakening-episode-06-pressure-wash-v4.webp"]
-  ].map(([id, title, logline, genre, tags, coverPath]) => ({
-    id, title, logline, genre, tags, coverPath,
-    contentOrigin: "ai_seed",
-    competitionEligible: false,
-    author: { nickname: "AI 이야기 씨앗", accountType: "system_ai" },
-    likeCount: 0,
-    likedByMe: false,
-    endorsement: null
-  }));
+  const FALLBACK_STORIES = window.StoryHeavenSeeds?.stories || [];
 
   const state = {
     client: null,
@@ -187,10 +172,19 @@
       link.href = "/storyheaven/story/?id=" + encodeURIComponent(story.id);
     });
     card.querySelector(".logline").textContent = story.logline;
+    card.querySelector("[data-episode-count]").textContent = story.episodeCount
+      ? `연재 ${Number(story.episodeCount)}화`
+      : "첫 화 준비 중";
+    card.querySelector("[data-latest-episode]").textContent = story.latestEpisodeAt
+      ? `최근 ${formatShortDate(story.latestEpisodeAt)}`
+      : "";
 
     const originBadge = card.querySelector(".origin-badge");
     if (story.contentOrigin === "ai_seed") {
       originBadge.textContent = "AI 시드 스토리";
+    } else if (story.contentOrigin === "human_ai_assisted") {
+      originBadge.textContent = "AI 보조 투고";
+      originBadge.classList.add("is-human");
     } else {
       originBadge.textContent = "독자 투고";
       originBadge.classList.add("is-human");
@@ -274,6 +268,10 @@
 
   function formatDate(value) {
     return new Intl.DateTimeFormat("ko", { month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+  }
+
+  function formatShortDate(value) {
+    return new Intl.DateTimeFormat("ko", { month: "short", day: "numeric" }).format(new Date(value));
   }
 
   async function toggleLike(story, button) {

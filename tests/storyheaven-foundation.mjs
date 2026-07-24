@@ -6,7 +6,7 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   for (const viewport of [
-    { name: "desktop", width: 1440, height: 1000, expectedColumns: 3 },
+    { name: "desktop", width: 1440, height: 1000, expectedColumns: 1 },
     { name: "mobile", width: 390, height: 844, expectedColumns: 1 }
   ]) {
     const page = await browser.newPage({ viewport });
@@ -23,7 +23,7 @@ try {
     await page.goto(baseUrl, { waitUntil: "networkidle" });
     const cards = page.locator(".seed-section .story-card");
     await cards.first().waitFor({ state: "visible" });
-    assert.equal(await cards.count(), 6, viewport.name + " seed count");
+    assert.equal(await cards.count(), 1, viewport.name + " curated serial count");
 
     for (let index = 0; index < await cards.count(); index += 1) {
       await cards.nth(index).scrollIntoViewIfNeeded();
@@ -32,11 +32,11 @@ try {
 
     const metrics = await page.evaluate(() => {
       const first = document.querySelector(".seed-section .story-card");
-      const second = first?.nextElementSibling;
+      const grid = document.querySelector(".seed-section .story-grid");
       return {
         viewportWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
-        columns: first && second && Math.abs(first.getBoundingClientRect().top - second.getBoundingClientRect().top) < 4 ? 3 : 1,
+        columns: grid ? getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length : 0,
         brokenImages: [...document.querySelectorAll(".seed-section img")]
           .filter((image) => image.naturalWidth === 0)
           .map((image) => image.src),

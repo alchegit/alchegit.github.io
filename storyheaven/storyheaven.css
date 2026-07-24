@@ -33,7 +33,7 @@ button { color: inherit; }
 .intro-copy h1 { max-width: 900px; margin: 0; font-size: clamp(52px, 7.2vw, 126px); line-height: .93; font-weight: 950; word-break: keep-all; }
 .intro-copy h1 span { color: var(--paper); }
 .intro-summary { max-width: 680px; margin: 30px 0 0; font-size: clamp(17px, 1.5vw, 23px); line-height: 1.75; font-weight: 700; }
-.intro-actions { display: flex; align-items: center; gap: 22px; margin-top: 36px; }
+.intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 22px; margin-top: 36px; }
 .plain-link { padding: 10px 0; border-bottom: 2px solid currentColor; font-weight: 900; }
 .story-ticket { min-height: 100%; display: flex; flex-direction: column; justify-content: center; padding: clamp(36px, 5vw, 80px); color: var(--white); background: var(--ink); border-left: 3px solid var(--ink); }
 .ticket-top { display: flex; align-items: end; justify-content: space-between; color: var(--yellow); font-family: Consolas, monospace; font-weight: 900; }
@@ -58,6 +58,13 @@ button { color: inherit; }
 .feed-tabs button { min-width: 92px; padding: 0 14px; color: var(--white); background: transparent; border: 0; box-shadow: none; }
 .feed-tabs button.is-active { color: var(--ink); background: var(--white); }
 .seed-section { background: #dff4ff; border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
+.seed-section .story-grid { grid-template-columns:1fr; }
+.seed-section .story-card { min-height:520px; display:grid; grid-template-columns:minmax(320px,.82fr) minmax(0,1.18fr); }
+.seed-section .story-cover { height:100%; aspect-ratio:auto; border-right:2px solid var(--ink); border-bottom:0; }
+.seed-section .story-content { justify-content:center; padding:clamp(32px,5vw,76px); }
+.seed-section .story-content h3 { max-width:760px; margin:20px 0 14px; font-size:clamp(38px,4.8vw,76px); line-height:1.04; }
+.seed-section .logline { max-width:760px; flex:0; font-size:clamp(17px,1.45vw,23px); line-height:1.75; }
+.seed-section .serial-meta { margin-top:18px; font-size:13px; }
 .story-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
 .story-card { min-width: 0; overflow: hidden; display: flex; flex-direction: column; background: var(--white); border: 2px solid var(--ink); border-radius: 6px; box-shadow: var(--shadow); }
 .story-cover { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: #272d38; border-bottom: 2px solid var(--ink); }
@@ -70,6 +77,8 @@ button { color: inherit; }
 .story-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; font-weight: 850; }
 .story-content h3 { margin: 14px 0 8px; font-size: clamp(22px, 2vw, 30px); line-height: 1.25; word-break: keep-all; }
 .logline { flex: 1; margin: 0; color: #3f4450; line-height: 1.65; font-weight: 650; }
+.serial-meta { display:flex; flex-wrap:wrap; gap:8px 14px; color:#626977; font-size:12px; font-weight:900; }
+.serial-meta span:first-child { color:#087a5b; }
 .tag-list { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; margin-top: 18px; }
 .tag-list span { padding: 5px 8px; background: #f0ede6; border-radius: 3px; color: #505562; font-size: 11px; font-weight: 800; }
 .story-footer { display: flex; align-items: center; gap: 9px; min-height: 50px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
@@ -135,6 +144,11 @@ footer > a:last-child { font-weight: 850; text-decoration: underline; }
   .feed-tabs button { flex: 1; }
   .story-grid { grid-template-columns: 1fr; gap: 22px; }
   .story-card { box-shadow: 4px 4px 0 var(--ink); }
+  .seed-section .story-card { min-height:0; display:flex; }
+  .seed-section .story-cover { height:auto; aspect-ratio:16 / 11; border-right:0; border-bottom:2px solid var(--ink); }
+  .seed-section .story-content { padding:20px 18px; }
+  .seed-section .story-content h3 { margin:14px 0 8px; font-size:30px; line-height:1.15; }
+  .seed-section .logline { font-size:15px; line-height:1.65; }
   .story-cover { aspect-ratio: 16 / 11; }
   .story-content { padding: 18px; }
   .empty-state { align-items: flex-start; flex-direction: column; }

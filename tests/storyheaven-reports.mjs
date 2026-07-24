@@ -33,6 +33,7 @@ try {
       const json = (body) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
       if (path === "/api/storyheaven/profile") return json({ profile: { nickname: "신고테스터", nicknameStatus: "active", isAdmin: true } });
       if (path === "/api/storyheaven/stories/story-report") return json({ story: { id: "story-report", title: "유리숲의 편지", logline: "유리로 변한 숲에서 우체부가 마지막 수신인을 찾는다.", synopsis: "유리 나뭇잎이 울리는 밤, 우체부는 주소가 지워진 편지를 들고 숲으로 들어간다.", genre: "미스터리", contentOrigin: "human", contentRating: "all", coverPath: "/webtoon/assets/guide/awakening-episode-01-last-train-v4.webp", author: { nickname: "숲지기" }, likeCount: 3 } });
+      if (path === "/api/storyheaven/stories/story-report/episodes") return json({ episodes: [] });
       if (path === "/api/storyheaven/stories/story-report/report" && request.method() === "POST") {
         requests.push({ type: "report", body: request.postDataJSON() });
         return route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ reportId: "report-test", status: "pending" }) });
@@ -44,6 +45,7 @@ try {
         return route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ appealId: "appeal-test", reportId: "report-test", status: "pending" }) });
       }
       if (path === "/api/storyheaven/operator/submissions") return json({ submissions: [] });
+      if (path === "/api/storyheaven/operator/episodes") return json({ episodes: [] });
       if (path === "/api/storyheaven/operator/reports") return json({ reports: [{ id: "report-admin", storyId: "story-report", storyTitle: "유리숲의 편지", author: "숲지기", reporterKey: "V-ABCDEF0123", category: "rights", details: "권리 관계를 확인할 수 있는 원본 게시 주소가 있습니다.", referenceUrl: "https://example.com/evidence", status: "pending", createdAt: "2026-07-24T04:00:00Z", appeal: null }] });
       if (path === "/api/storyheaven/operator/reports/report-admin/resolve" && request.method() === "POST") {
         requests.push({ type: "resolve", body: request.postDataJSON() });

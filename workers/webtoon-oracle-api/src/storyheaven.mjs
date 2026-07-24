@@ -27,6 +27,27 @@ export const STORYHEAVEN_STORY_LIMITS = Object.freeze({
   total: 5000
 });
 
+export const STORYHEAVEN_EPISODE_LIMITS = Object.freeze({
+  title: Object.freeze({ min: 2, max: 80 }),
+  summary: Object.freeze({ min: 80, max: 500 }),
+  body: Object.freeze({ min: 2500, recommendedMin: 4000, recommendedMax: 7000, max: 12000 }),
+  paragraphs: Object.freeze({ min: 8, max: 240 }),
+  draftsPerSeries: 5,
+  publishedPerSeries: 300,
+  requestBodyBytes: 64 * 1024,
+  guestPreview: Object.freeze({ ratio: 0.35, min: 1200, max: 2500 }),
+  readingCharactersPerMinute: 450,
+  urls: 3,
+  duplicateParagraphRatio: 0.35
+});
+
+export const STORYHEAVEN_REACTIONS = Object.freeze([
+  "next_episode",
+  "character",
+  "world",
+  "tension"
+]);
+
 export const STORYHEAVEN_GENRES = Object.freeze([
   "현대판타지",
   "로맨스",
@@ -43,6 +64,7 @@ export const STORYHEAVEN_GENRES = Object.freeze([
 ]);
 
 const storyRatings = new Set(["all", "12", "15"]);
+const readerStoryOrigins = new Set(["human", "human_ai_assisted"]);
 const turningPointKeys = ["intro", "turn", "crisis", "decision", "hook"];
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
@@ -60,8 +82,15 @@ export const STORYHEAVEN_RESERVED_NICKNAMES = Object.freeze([
 ]);
 
 const forbiddenPattern = /[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2060-\u206f]/u;
+const contentControlPattern = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2060-\u206f]/u;
 const allowedPattern = /^[\p{Script=Hangul}\p{Letter}\p{Number}_ -]+$/u;
 const contactPattern = /(?:https?:\/\/|www\.|@|\.(?:com|net|org|kr)\b)/iu;
+const executableMarkupPattern = /<\s*\/?\s*(?:script|iframe|object|embed|svg|link|meta|style|form|input|button|textarea|video|audio)\b/iu;
+const browserExecutionPattern = /(?:javascript|vbscript|data)\s*:|\bon(?:error|load|click|mouseover|focus|animationstart)\s*=|\b(?:eval|setTimeout|setInterval)\s*\(|\bdocument\s*\.\s*(?:cookie|write)|\bwindow\s*\.\s*location/iu;
+const destructiveSqlPattern = /\b(?:drop\s+(?:table|database|user)|truncate\s+table|alter\s+table|union\s+(?:all\s+)?select|execute\s+immediate|dbms_[a-z0-9_]+|or\s+1\s*=\s*1)\b/iu;
+const sqlStatementPattern = /(?:^|[;\n])\s*(?:select\s+.{1,160}\s+from|insert\s+into|update\s+[a-z0-9_$#]+\s+set|delete\s+from)\b/imu;
+const sqlCommentPattern = /(?:--[^\n]*|\/\*[\s\S]*?\*\/)/u;
+const urlPattern = /https?:\/\/[^\s<>{}\[\]"']+/giu;
 
 export function normalizeStoryHeavenNickname(value) {
   return String(value || "")
@@ -113,6 +142,9 @@ export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
     obstacleStakes: cleanMultiline(input.obstacleStakes),
     genre: cleanText(input.genre) || STORYHEAVEN_GENRES[0],
     secondaryGenre: cleanText(input.secondaryGenre),
+    contentOrigin: readerStoryOrigins.has(String(input.contentOrigin || "human"))
+      ? String(input.contentOrigin || "human")
+      : "human",
     rating: storyRatings.has(requestedRating)
       ? requestedRating
       : "all",
@@ -136,6 +168,9 @@ export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
   }
   if (!storyRatings.has(requestedRating)) {
     errors.push({ field: "rating", code: "story_rating_invalid" });
+  }
+  if (!readerStoryOrigins.has(String(input.contentOrigin || "human"))) {
+    errors.push({ field: "contentOrigin", code: "story_origin_invalid" });
   }
   packet.tags.forEach((tag, index) => {
     if (graphemeLength(tag) > STORYHEAVEN_STORY_LIMITS.tag) {
@@ -161,12 +196,116 @@ export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
   validateEditorialList(errors, "mustAvoid", packet.editorial.mustAvoid, STORYHEAVEN_STORY_LIMITS.listItem);
   validateEditorialList(errors, "visualAnchors", packet.editorial.visualAnchors, STORYHEAVEN_STORY_LIMITS.visualAnchor);
 
+  for (const [field, text] of storyPacketTextEntries(packet)) {
+    const threat = detectStoryHeavenTextThreat(text);
+    if (threat) errors.push({ field, code: "unsafe_content_pattern", threat });
+  }
+
   const totalLength = storyPacketLength(packet);
   if (totalLength > STORYHEAVEN_STORY_LIMITS.total) {
     errors.push({ field: "story", code: "story_total_too_long", max: STORYHEAVEN_STORY_LIMITS.total, actual: totalLength });
   }
 
   return { ok: errors.length === 0, errors, packet, totalLength };
+}
+
+export function validateStoryHeavenEpisode(value, { mode = "draft" } = {}) {
+  const input = value && typeof value === "object" ? value : {};
+  const episode = {
+    title: cleanText(input.title),
+    summary: cleanMultiline(input.summary),
+    body: cleanEpisodeBody(input.body ?? input.bodyText)
+  };
+  const errors = [];
+  const submitting = mode === "submit";
+  const mediaFields = ["image", "images", "media", "file", "files", "attachment", "attachments", "illustration"];
+
+  if (mediaFields.some((field) => Object.prototype.hasOwnProperty.call(input, field))) {
+    errors.push({ field: "body", code: "episode_media_not_allowed" });
+  }
+
+  validateLength(errors, "title", episode.title, STORYHEAVEN_EPISODE_LIMITS.title, true);
+  validateOptionalLength(errors, "summary", episode.summary, STORYHEAVEN_EPISODE_LIMITS.summary, submitting);
+  validateOptionalLength(errors, "body", episode.body, STORYHEAVEN_EPISODE_LIMITS.body, submitting);
+
+  const analysis = analyzeStoryHeavenEpisode(episode.body);
+  if (analysis.paragraphCount > STORYHEAVEN_EPISODE_LIMITS.paragraphs.max) {
+    errors.push({ field: "body", code: "episode_too_many_paragraphs", max: STORYHEAVEN_EPISODE_LIMITS.paragraphs.max, actual: analysis.paragraphCount });
+  }
+  if (submitting && analysis.paragraphCount < STORYHEAVEN_EPISODE_LIMITS.paragraphs.min) {
+    errors.push({ field: "body", code: "episode_too_few_paragraphs", min: STORYHEAVEN_EPISODE_LIMITS.paragraphs.min, actual: analysis.paragraphCount });
+  }
+  if (submitting && analysis.duplicateParagraphRatio > STORYHEAVEN_EPISODE_LIMITS.duplicateParagraphRatio) {
+    errors.push({ field: "body", code: "episode_repeated_content", maxRatio: STORYHEAVEN_EPISODE_LIMITS.duplicateParagraphRatio, actualRatio: analysis.duplicateParagraphRatio });
+  }
+  if (analysis.urlCount > STORYHEAVEN_EPISODE_LIMITS.urls) {
+    errors.push({ field: "body", code: "episode_too_many_urls", max: STORYHEAVEN_EPISODE_LIMITS.urls, actual: analysis.urlCount });
+  }
+
+  for (const [field, text] of [["title", episode.title], ["summary", episode.summary], ["body", episode.body]]) {
+    const threat = detectStoryHeavenTextThreat(text);
+    if (threat) errors.push({ field, code: "unsafe_content_pattern", threat });
+  }
+
+  return {
+    ok: errors.length === 0,
+    errors,
+    episode,
+    analysis,
+    estimatedReadMinutes: Math.max(1, Math.ceil(analysis.characterCount / STORYHEAVEN_EPISODE_LIMITS.readingCharactersPerMinute))
+  };
+}
+
+export function analyzeStoryHeavenEpisode(value) {
+  const body = cleanEpisodeBody(value);
+  const paragraphs = body.split(/\n\s*\n/gu).map((item) => item.trim()).filter(Boolean);
+  const normalizedParagraphs = paragraphs.map((item) => item.toLocaleLowerCase("ko-KR").replace(/\s+/gu, " "));
+  const counts = new Map();
+  normalizedParagraphs.forEach((item) => counts.set(item, (counts.get(item) || 0) + 1));
+  const duplicateCharacters = normalizedParagraphs.reduce((total, item) => (
+    total + ((counts.get(item) || 0) > 1 ? graphemeLength(item) : 0)
+  ), 0);
+  const characterCount = graphemeLength(body.replace(/\s/gu, ""));
+  return {
+    characterCount,
+    paragraphCount: paragraphs.length,
+    duplicateParagraphRatio: characterCount ? Number((duplicateCharacters / characterCount).toFixed(4)) : 0,
+    urlCount: (body.match(urlPattern) || []).length
+  };
+}
+
+export function createStoryHeavenGuestPreview(value) {
+  const body = cleanEpisodeBody(value);
+  const length = graphemeLength(body);
+  if (!length) return { body: "", previewCharacters: 0, totalCharacters: 0, truncated: false };
+  const target = Math.min(
+    STORYHEAVEN_EPISODE_LIMITS.guestPreview.max,
+    Math.max(STORYHEAVEN_EPISODE_LIMITS.guestPreview.min, Math.ceil(length * STORYHEAVEN_EPISODE_LIMITS.guestPreview.ratio))
+  );
+  if (length <= target) return { body, previewCharacters: length, totalCharacters: length, truncated: false };
+
+  const segments = typeof Intl?.Segmenter === "function"
+    ? [...new Intl.Segmenter("ko", { granularity: "grapheme" }).segment(body)]
+    : [...body].map((segment) => ({ segment }));
+  let cut = target;
+  const searchEnd = Math.min(segments.length, target + 240);
+  for (let index = target; index < searchEnd; index += 1) {
+    if (/[.!?。！？]\s|\n\s*\n/u.test(segments[index]?.segment + (segments[index + 1]?.segment || ""))) {
+      cut = index + 1;
+      break;
+    }
+  }
+  const preview = segments.slice(0, cut).map((item) => item.segment).join("").trimEnd();
+  return { body: preview, previewCharacters: graphemeLength(preview), totalCharacters: length, truncated: true };
+}
+
+export function detectStoryHeavenTextThreat(value) {
+  const text = String(value || "");
+  if (contentControlPattern.test(text)) return "control_characters";
+  if (executableMarkupPattern.test(text)) return "executable_markup";
+  if (browserExecutionPattern.test(text)) return "browser_execution";
+  if (destructiveSqlPattern.test(text) || (sqlStatementPattern.test(text) && sqlCommentPattern.test(text))) return "database_execution";
+  return null;
 }
 
 export function storyPacketLength(packet) {
@@ -178,6 +317,17 @@ export function storyPacketLength(packet) {
   };
   visit(packet);
   return total;
+}
+
+function storyPacketTextEntries(packet) {
+  const entries = [];
+  const visit = (value, path) => {
+    if (typeof value === "string") entries.push([path, value]);
+    else if (Array.isArray(value)) value.forEach((item, index) => visit(item, `${path}.${index}`));
+    else if (value && typeof value === "object") Object.entries(value).forEach(([key, item]) => visit(item, path ? `${path}.${key}` : key));
+  };
+  visit(packet, "");
+  return entries;
 }
 
 export function storyHeavenRoundSchedule(value = new Date(), { nextAfterCutoff = false } = {}) {
@@ -276,6 +426,18 @@ function cleanMultiline(value) {
     .map((line) => line.trim().replace(/[ \t]+/gu, " "))
     .join("\n")
     .replace(/\n{3,}/gu, "\n\n")
+    .trim();
+}
+
+function cleanEpisodeBody(value) {
+  return String(value || "")
+    .normalize("NFKC")
+    .replace(/\r\n?/gu, "\n")
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2060-\u206f]/gu, "")
+    .split("\n")
+    .map((line) => line.replace(/[ \t]+$/gu, ""))
+    .join("\n")
+    .replace(/\n{4,}/gu, "\n\n\n")
     .trim();
 }
 

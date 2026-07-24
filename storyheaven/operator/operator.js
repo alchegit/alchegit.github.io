@@ -11,14 +11,16 @@
       return;
     }
     try {
-      const [submissions, reports] = await Promise.all([
+      const [submissions, reports, episodes] = await Promise.all([
         StoryHeavenCommon.api("/api/storyheaven/operator/submissions"),
-        StoryHeavenCommon.api("/api/storyheaven/operator/reports")
+        StoryHeavenCommon.api("/api/storyheaven/operator/reports"),
+        StoryHeavenCommon.api("/api/storyheaven/operator/episodes")
       ]);
       document.querySelector("[data-access-gate]").hidden = true;
       document.querySelector("[data-operator]").hidden = false;
       renderSubmissions(submissions.submissions || []);
       renderReports(reports.reports || []);
+      renderEpisodeSubmissions(episodes.episodes || []);
       await refreshRound();
     } catch (error) {
       showAccess();
@@ -295,11 +297,110 @@
     document.querySelector("[data-empty]").hidden = stories.length > 0;
   }
 
+  function renderEpisodeSubmissions(episodes) {
+    document.querySelector("[data-episode-queue-count]").textContent = `${episodes.length}화`;
+    const list = document.querySelector("[data-episode-review-list]");
+    list.replaceChildren(...episodes.map(episodeSubmissionCard));
+    document.querySelector("[data-episode-empty]").hidden = episodes.length > 0;
+  }
+
+  function episodeSubmissionCard(episode) {
+    const article = document.createElement("article");
+    article.className = "review-card episode-review-card";
+
+    const header = document.createElement("header");
+    const heading = document.createElement("div");
+    const meta = document.createElement("p");
+    meta.className = "eyebrow";
+    meta.textContent = `${episode.author || episode.authorNickname || "작성자"} · ${episode.storyTitle || "작품"}`;
+    const title = document.createElement("h3");
+    title.textContent = `${episode.episodeNo}화. ${episode.title}`;
+    heading.append(meta, title);
+    const status = document.createElement("span");
+    status.className = "status-chip";
+    status.textContent = `대기 ${formatDate(episode.submittedAt)}`;
+    header.append(heading, status);
+
+    const grid = document.createElement("div");
+    grid.className = "review-grid";
+    const manuscript = document.createElement("div");
+    const summary = document.createElement("p");
+    const summaryLabel = document.createElement("strong");
+    summaryLabel.textContent = "회차 소개";
+    summary.append(summaryLabel, document.createElement("br"), document.createTextNode(episode.summary || "-"));
+    const details = document.createElement("details");
+    details.className = "episode-manuscript";
+    const detailsTitle = document.createElement("summary");
+    detailsTitle.textContent = `원고 읽기 · ${Number(episode.bodyLength || 0).toLocaleString("ko-KR")}자`;
+    const body = document.createElement("div");
+    body.className = "episode-manuscript-body";
+    for (const paragraph of String(episode.body || "").split(/\n{2,}/).filter(Boolean)) {
+      const line = document.createElement("p");
+      line.textContent = paragraph;
+      body.append(line);
+    }
+    details.append(detailsTitle, body);
+    manuscript.append(summary, details);
+
+    const controls = document.createElement("div");
+    controls.className = "review-controls";
+    const noteLabel = document.createElement("label");
+    noteLabel.textContent = "회차 검수 메모";
+    const note = document.createElement("textarea");
+    note.maxLength = 1000;
+    note.dataset.episodeNote = "";
+    note.placeholder = "공개, 보강 또는 반려 근거";
+    noteLabel.append(note);
+    const buttons = document.createElement("div");
+    buttons.className = "review-buttons";
+    for (const item of [
+      ["approved", "공개 승인", "button"],
+      ["changes_requested", "보강 요청", "button warning"],
+      ["rejected", "반려", "button danger"]
+    ]) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = item[2];
+      button.textContent = item[1];
+      button.addEventListener("click", () => reviewEpisode(episode.id, item[0], article));
+      buttons.append(button);
+    }
+    controls.append(noteLabel, buttons);
+    grid.append(manuscript, controls);
+    article.append(header, grid);
+    return article;
+  }
+
+  async function reviewEpisode(id, decision, article) {
+    const note = article.querySelector("[data-episode-note]").value.trim();
+    if (decision !== "approved" && note.length < 10) {
+      StoryHeavenCommon.toast("보강이나 반려 사유를 10자 이상 적어주세요.");
+      article.querySelector("[data-episode-note]").focus();
+      return;
+    }
+    article.querySelectorAll("button").forEach((button) => { button.disabled = true; });
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/episodes/${encodeURIComponent(id)}/review`, {
+        method: "POST",
+        body: { decision, note }
+      });
+      article.remove();
+      StoryHeavenCommon.toast(decision === "approved" ? "회차를 공개했습니다." : "회차 검수 결과를 저장했습니다.");
+      const count = document.querySelectorAll(".episode-review-card").length;
+      document.querySelector("[data-episode-queue-count]").textContent = `${count}화`;
+      document.querySelector("[data-episode-empty]").hidden = count > 0;
+    } catch (error) {
+      article.querySelectorAll("button").forEach((button) => { button.disabled = false; });
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
   function submissionCard(story) {
     const article = document.createElement("article");
     article.className = "review-card";
     const packet = story.packet || story;
-    article.innerHTML = `<header><div><p class="eyebrow">${escapeHtml(story.author?.nickname || "")} · ${escapeHtml(story.genre || "")}</p><h3>${escapeHtml(story.title)}</h3></div><span class="status-chip">대기 ${formatDate(story.submittedAt)}</span></header><div class="review-grid"><div><p><strong>한 줄</strong><br>${escapeHtml(story.logline)}</p><p><strong>줄거리</strong><br>${escapeHtml(packet.synopsis || story.synopsis || "")}</p><p><strong>목표</strong><br>${escapeHtml(packet.protagonistGoal || "")}</p><p><strong>장애물과 대가</strong><br>${escapeHtml(packet.obstacleStakes || "")}</p></div><div class="review-controls"><label>적격성 점수<input type="number" min="0" max="100" value="65" data-score></label><label>검수 메모<textarea maxlength="1000" data-note placeholder="보강 또는 반려 사유"></textarea></label><div class="review-buttons"><button class="button" type="button" data-decision="approved">공개 승인</button><button class="button warning" type="button" data-decision="changes_requested">보강 요청</button><button class="button danger" type="button" data-decision="rejected">반려</button></div></div></div>`;
+    const originLabel = story.contentOrigin === "human_ai_assisted" ? "AI 보조 작성" : "직접 작성";
+    article.innerHTML = `<header><div><p class="eyebrow">${escapeHtml(story.author?.nickname || "")} · ${escapeHtml(story.genre || "")} · ${originLabel}</p><h3>${escapeHtml(story.title)}</h3></div><span class="status-chip">대기 ${formatDate(story.submittedAt)}</span></header><div class="review-grid"><div><p><strong>한 줄</strong><br>${escapeHtml(story.logline)}</p><p><strong>줄거리</strong><br>${escapeHtml(packet.synopsis || story.synopsis || "")}</p><p><strong>목표</strong><br>${escapeHtml(packet.protagonistGoal || "")}</p><p><strong>장애물과 대가</strong><br>${escapeHtml(packet.obstacleStakes || "")}</p></div><div class="review-controls"><label>적격성 점수<input type="number" min="0" max="100" value="65" data-score></label><label>검수 메모<textarea maxlength="1000" data-note placeholder="보강 또는 반려 사유"></textarea></label><div class="review-buttons"><button class="button" type="button" data-decision="approved">공개 승인</button><button class="button warning" type="button" data-decision="changes_requested">보강 요청</button><button class="button danger" type="button" data-decision="rejected">반려</button></div></div></div>`;
     article.querySelectorAll("[data-decision]").forEach((button) => button.addEventListener("click", () => review(story.id, button.dataset.decision, article)));
     return article;
   }

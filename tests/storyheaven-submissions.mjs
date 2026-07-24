@@ -15,6 +15,10 @@ try {
     page.on("pageerror", (error) => pageErrors.push(error.message));
     await page.addInitScript(() => {
       const session = { access_token: "browser-test-token", user: { id: "test-user" } };
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: { writeText: async (value) => { window.__copiedSubmissionGuide = value; } }
+      });
       window.supabase = {
         createClient: () => ({
           auth: {
@@ -49,6 +53,10 @@ try {
         await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ reports: [] }) });
         return;
       }
+      if (path === "/api/storyheaven/operator/episodes") {
+        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ episodes: [] }) });
+        return;
+      }
       if (path === "/api/storyheaven/rounds/current") {
         await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ round: { id: "round-test", key: "2026-07-20", type: "weekly", status: "auditing", entries: [], votingEndsAt: "2026-07-26T12:00:00.000Z" } }) });
         return;
@@ -76,8 +84,20 @@ try {
 
     await page.goto(`${root}/storyheaven/write/`, { waitUntil: "networkidle" });
     await page.locator("[data-editor]").waitFor({ state: "visible" });
+    const guide = page.locator("[data-submission-guide]");
+    assert.equal(await guide.getAttribute("open"), "", `${viewport.name} guide starts open`);
+    assert.equal(await page.locator('input[type="file"]').count(), 0, `${viewport.name} image upload absent`);
+    await page.locator("[data-copy-submission-guide]").click();
+    assert.match(await page.evaluate(() => window.__copiedSubmissionGuide || ""), /최소 2,500자/u, `${viewport.name} guide copies limits`);
+    assert.match(await page.evaluate(() => window.__copiedSubmissionGuide || ""), /그림, 첨부파일/u, `${viewport.name} guide copies text-only rule`);
+    await guide.locator("summary").click();
+    assert.equal(await guide.getAttribute("open"), null, `${viewport.name} guide folds`);
+    await guide.locator("summary").click();
+    assert.equal(await guide.getAttribute("open"), "", `${viewport.name} guide reopens`);
+    await guide.screenshot({ path: `test-results/storyheaven-submission-guide-${viewport.name}.png` });
     await page.locator('[name="title"]').fill("막차가 떠난 뒤의 승강장");
     await page.locator('[name="logline"]').fill("폐역 청소부가 매일 가까워지는 유령 열차를 멈추기 위해 마지막 승객의 이름을 찾는다.");
+    await page.evaluate(() => scrollTo(0, 0));
     const metrics = await page.evaluate(() => {
       const editor = document.querySelector(".editor-layout").getBoundingClientRect();
       const form = document.querySelector(".editor-form").getBoundingClientRect();
