@@ -19,10 +19,22 @@
   };
 
   const frameByScene = {
-    idea: { top: "17%", left: "16%", width: "38%", height: "52%" },
-    cut: { top: "9%", left: "43%", width: "44%", height: "40%" },
-    dialogue: { top: "25%", left: "32%", width: "50%", height: "34%" },
-    hook: { top: "43%", left: "51%", width: "39%", height: "44%" }
+    idea: {
+      top: "12%", left: "8%", width: "34%", height: "62%",
+      label: "IDEA / 01", position: "8%", drift: "0", scale: "1.05"
+    },
+    cut: {
+      top: "7%", left: "56%", width: "37%", height: "31%",
+      label: "CUT / 02", position: "52%", drift: "-2%", scale: "1.1"
+    },
+    dialogue: {
+      top: "31%", left: "15%", width: "72%", height: "23%",
+      label: "DIALOGUE / 03", position: "70%", drift: "-4%", scale: "1.08"
+    },
+    hook: {
+      top: "55%", left: "58%", width: "34%", height: "34%",
+      label: "HOOK / 04", position: "92%", drift: "-8%", scale: "1.14"
+    }
   };
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -195,7 +207,7 @@
     const count = section.querySelector("[data-story-count]");
     const title = section.querySelector("[data-story-title]");
     const beats = [...section.querySelectorAll("[data-story-beat]")];
-    let activeBeat = beats[0];
+    let activeBeat = null;
 
     const activate = (beat) => {
       if (!beat || beat === activeBeat && beat.classList.contains("is-active")) {
@@ -204,19 +216,31 @@
       activeBeat = beat;
       beats.forEach((item) => item.classList.toggle("is-active", item === beat));
       const scene = beat.dataset.scene || "idea";
-      art?.style.setProperty("--story-position", beat.dataset.position || "18%");
-      stage?.style.setProperty("--story-drift", scene === "hook" ? "-4%" : "0");
+      const nextFrame = frameByScene[scene] || frameByScene.idea;
+      art?.style.setProperty("--story-position", nextFrame.position || beat.dataset.position || "18%");
+      stage?.style.setProperty("--story-drift", nextFrame.drift || "0");
+      stage?.style.setProperty("--story-scale", nextFrame.scale || "1.05");
+      if (stage) {
+        stage.dataset.focusScene = scene;
+      }
       if (count) {
         count.textContent = beat.dataset.count || "01";
       }
       if (title) {
         title.textContent = beat.dataset.title || "";
       }
-      const nextFrame = frameByScene[scene] || frameByScene.idea;
       if (frame) {
-        Object.entries(nextFrame).forEach(([property, value]) => {
+        const { label, position, drift, scale, ...frameStyles } = nextFrame;
+        Object.entries(frameStyles).forEach(([property, value]) => {
           frame.style[property] = value;
         });
+        const frameLabel = frame.querySelector(".focus-frame-label");
+        if (frameLabel) {
+          frameLabel.textContent = label || "FOCUS";
+        }
+        frame.classList.remove("is-shifting");
+        void frame.offsetWidth;
+        frame.classList.add("is-shifting");
       }
     };
 

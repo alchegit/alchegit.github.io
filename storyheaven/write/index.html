@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#11131a">
+    <meta name="description" content="StoryHeaven에 웹툰이 될 이야기를 간단하게 투고합니다.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; object-src 'none'; base-uri 'self'; frame-src 'none';">
+    <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <title>이야기 쓰기 | StoryHeaven</title>
+    <link rel="stylesheet" href="../workspace.css?v=20260724-submit1">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="../common.js?v=20260724-submit1"></script>
+    <script defer src="./write.js?v=20260724-submit1"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/storyheaven/"><span class="brand-mark">S</span><span><strong>StoryHeaven</strong><small>스토리천국</small></span></a>
+      <nav class="main-nav" aria-label="주요 메뉴"><a href="/storyheaven/">이야기</a><a href="/storyheaven/write/" aria-current="page">투고</a><a href="/storyheaven/my/">내 이야기</a><a href="/webtoon/">웹툰 스튜디오</a></nav>
+      <div class="account-actions"><span class="user-chip" data-common-user hidden></span><button class="button" type="button" data-common-login>Google 로그인</button><button class="icon-button" type="button" data-common-logout hidden aria-label="로그아웃">↪</button></div>
+    </header>
+    <main>
+      <header class="page-hero"><p class="eyebrow">PLANT YOUR STORY</p><h1>떠오른 이야기를<br>한 편의 씨앗으로.</h1><p>핵심만 먼저 적어도 괜찮습니다. 세부 설정은 필요할 때 펼치고, 공개 전에는 운영진 검수를 거칩니다.</p></header>
+      <div class="page-shell">
+        <section class="gate" data-login-gate hidden><h2>이야기를 이어서 보관할게요.</h2><p>초안과 수정 이력을 안전하게 구분하기 위해 Google 로그인이 필요합니다.</p><button class="button" type="button" data-common-login>Google 로그인</button></section>
+        <section class="gate" data-nickname-gate hidden><h2>활동 이름을 먼저 정해주세요.</h2><p>Google 이름 대신 공개할 작가 이름입니다. 첫 투고 전에 한 번만 확정하면 됩니다.</p><a class="button" href="/storyheaven/#nickname">활동 이름 정하기</a></section>
+        <div class="editor-layout" data-editor hidden>
+          <form class="editor-form" data-story-form novalidate>
+            <section class="form-section">
+              <h2>이야기의 중심</h2><p class="section-help">독자가 제목과 한 줄 소개만 보고도 다음 문장을 궁금해하도록 적어보세요.</p>
+              <label class="field"><span class="field-label"><span>제목</span><small><b data-count-for="title">0</b>/60</small></span><input name="title" maxlength="60" autocomplete="off" placeholder="예: 막차가 떠난 뒤의 승강장"><p class="field-error" data-error-for="title"></p></label>
+              <label class="field"><span class="field-label"><span>한 줄 소개</span><small><b data-count-for="logline">0</b>/160 · 제출 30자 이상</small></span><textarea name="logline" maxlength="160" placeholder="주인공, 원하는 것, 막아서는 위험을 한 문장에 담아주세요."></textarea><p class="field-error" data-error-for="logline"></p></label>
+              <div class="field-row">
+                <label class="field"><span class="field-label"><span>주 장르</span></span><select name="genre"></select><p class="field-error" data-error-for="genre"></p></label>
+                <label class="field"><span class="field-label"><span>연령과 보조 장르</span></span><div class="field-row"><select name="rating"><option value="all">전체</option><option value="12">12세</option><option value="15">15세</option></select><select name="secondaryGenre"><option value="">없음</option></select></div><p class="field-error" data-error-for="rating"></p></label>
+              </div>
+              <label class="field"><span class="field-label"><span>태그</span><small>쉼표로 구분 · 최대 5개</small></span><input name="tags" maxlength="80" placeholder="폐역, 가족, 선택"><p class="field-error" data-error-for="tags"></p></label>
+            </section>
+            <section class="form-section">
+              <h2>독자가 읽을 줄거리</h2><p class="section-help">도입, 사건, 선택, 다음 장면이 궁금해지는 끝을 순서대로 적어주세요.</p>
+              <label class="field"><span class="field-label"><span>공개 줄거리</span><small><b data-count-for="synopsis">0</b>/1200 · 제출 400자 이상</small></span><textarea class="tall" name="synopsis" maxlength="1200" placeholder="이 이야기가 어떻게 시작되고, 주인공이 어떤 선택 앞에 놓이는지 적어주세요."></textarea><p class="field-error" data-error-for="synopsis"></p></label>
+              <div class="field-row">
+                <label class="field"><span class="field-label"><span>주인공의 목표</span><small><b data-count-for="protagonistGoal">0</b>/300</small></span><textarea name="protagonistGoal" maxlength="300"></textarea><p class="field-error" data-error-for="protagonistGoal"></p></label>
+                <label class="field"><span class="field-label"><span>장애물과 대가</span><small><b data-count-for="obstacleStakes">0</b>/300</small></span><textarea name="obstacleStakes" maxlength="300"></textarea><p class="field-error" data-error-for="obstacleStakes"></p></label>
+              </div>
+            </section>
+            <details class="advanced form-section">
+              <summary>작가용 세부 설계 펼치기</summary>
+              <div class="advanced-body">
+                <p class="section-help">이 내용은 공개 피드에 표시하지 않으며, 검수와 웹툰 각색에서 이야기의 의도를 지키는 데 사용합니다.</p>
+                <label class="field"><span class="field-label"><span>원하는 결말 방향</span><small><b data-count-for="endingDirection">0</b>/500</small></span><textarea name="endingDirection" maxlength="500"></textarea><p class="field-error" data-error-for="editorial.endingDirection"></p></label>
+                <label class="field"><span class="field-label"><span>세계의 규칙</span><small><b data-count-for="worldRules">0</b>/700</small></span><textarea name="worldRules" maxlength="700"></textarea><p class="field-error" data-error-for="editorial.worldRules"></p></label>
+                <div class="field-row"><label class="field"><span class="field-label"><span>주인공 이름</span></span><input name="characterName" maxlength="160"></label><label class="field"><span class="field-label"><span>주인공이 원하는 것</span></span><input name="characterDesire" maxlength="160"></label></div>
+                <div class="field-row"><label class="field"><span class="field-label"><span>두려움</span></span><input name="characterFear" maxlength="160"></label><label class="field"><span class="field-label"><span>숨긴 사실</span></span><input name="characterSecret" maxlength="160"></label></div>
+                <div class="field-row"><label class="field"><span class="field-label"><span>도입 장면</span></span><textarea name="turnIntro" maxlength="300"></textarea></label><label class="field"><span class="field-label"><span>사건의 전환</span></span><textarea name="turnTurn" maxlength="300"></textarea></label></div>
+                <div class="field-row"><label class="field"><span class="field-label"><span>가장 큰 위기</span></span><textarea name="turnCrisis" maxlength="300"></textarea></label><label class="field"><span class="field-label"><span>주인공의 선택</span></span><textarea name="turnDecision" maxlength="300"></textarea></label></div>
+                <label class="field"><span class="field-label"><span>다음 화 후킹</span></span><textarea name="turnHook" maxlength="300"></textarea></label>
+                <label class="field"><span class="field-label"><span>반드시 지킬 것</span><small>줄바꿈으로 구분 · 최대 5개</small></span><textarea name="mustKeep" maxlength="650"></textarea></label>
+                <label class="field"><span class="field-label"><span>피해야 할 것</span><small>줄바꿈으로 구분 · 최대 5개</small></span><textarea name="mustAvoid" maxlength="650"></textarea></label>
+                <label class="field"><span class="field-label"><span>꼭 보여줄 이미지</span><small>줄바꿈으로 구분 · 최대 8개</small></span><textarea name="visualAnchors" maxlength="1300"></textarea></label>
+              </div>
+            </details>
+            <section class="form-section">
+              <h2>제출 전 확인</h2><p class="section-help">초안 저장에는 필요하지 않으며, 검수 요청 때만 확인합니다.</p>
+              <div class="consent-list">
+                <label class="consent"><input type="checkbox" name="consentDisplay"><span>StoryHeaven 피드에 제목, 줄거리와 작가 닉네임을 공개하는 데 동의합니다. <b>필수</b></span></label>
+                <label class="consent"><input type="checkbox" name="consentOriginality"><span>타인의 작품을 무단 복제하지 않았고, 이 이야기를 투고할 권리가 있음을 확인합니다. <b>필수</b></span></label>
+                <label class="consent"><input type="checkbox" name="consentAdult"><span>초기 파일럿의 성인 창작자 제출 조건을 확인합니다. <b>필수</b></span></label>
+                <label class="consent"><input type="checkbox" name="consentTraining"><span>스토리 품질 개선 연구에 익명화된 원고를 사용하는 데 선택적으로 동의합니다. <b>선택</b></span></label>
+              </div>
+            </section>
+            <div class="form-actions"><button class="button secondary" type="button" data-save>초안 저장</button><button class="button" type="button" data-submit>검수 요청</button></div>
+          </form>
+          <aside class="side-panel"><p class="eyebrow">STORY CHECK</p><h2>투고 준비도</h2><div class="progress-track"><span data-progress-bar></span></div><p class="progress-copy"><b data-progress-value>0</b>% · 저장은 제목과 한 줄 소개부터 가능해요.</p><ul class="checklist"><li data-check="title">기억할 제목</li><li data-check="logline">30자 한 줄 소개</li><li data-check="synopsis">400자 공개 줄거리</li><li data-check="protagonistGoal">주인공의 목표</li><li data-check="obstacleStakes">장애물과 대가</li><li data-check="endingDirection">결말 방향</li></ul><p class="progress-copy" data-save-state>아직 저장하지 않았습니다.</p></aside>
+        </div>
+      </div>
+    </main>
+    <div class="toast" data-common-toast hidden></div>
+  </body>
+</html>

@@ -50,7 +50,7 @@
     }),
     outfit: Object.freeze({
       label: "의상",
-      note: "얼굴, 자세, 배경과 구도를 유지하고 승인된 의상 기준에 맞춰 수정합니다."
+      note: "얼굴, 자세, 배경과 구도를 유지하고 확정된 의상 기준에 맞춰 수정합니다."
     }),
     prop: Object.freeze({
       label: "소품",
@@ -662,6 +662,11 @@
     const regenerationInstruction = byId("regenerationInstruction");
     const regenerationInstructionCount = byId("regenerationInstructionCount");
     const regenerationPreserveNote = byId("regenerationPreserveNote");
+    const regenerationCameraAngle = byId("regenerationCameraAngle");
+    const regenerationCharacterFacing = byId("regenerationCharacterFacing");
+    const regenerationCostDialog = byId("regenerationCostDialog");
+    const confirmRegenerationCostButton = byId("confirmRegenerationCostButton");
+    const studioAssetShelf = byId("studioAssetShelf");
     const selectedPanelLabel = byId("selectedPanelLabel");
     const requestRegenerationButton = byId("requestRegenerationButton");
     const closeRegenerationButton = byId("closeRegenerationButton");
@@ -692,6 +697,7 @@
     let regenerationMaskDraw = null;
     let regenerationMaskTool = "paint";
     let regenerationTarget = "background";
+    let regenerationCostConfirmed = false;
     let generationPollTimer = 0;
     const completedStudioSteps = new Set();
     const incomingTemplateId = getIncomingTemplateId();
@@ -724,6 +730,7 @@
     renderStoryDevelopment(project);
     renderStoryboardApproval(project, selectedPanelId);
     renderGenerationQueue(project);
+    renderStudioAssetShelf(project, selectedPanelId);
     updateIdeaLimitState();
     if (project.panels.length) {
       completedStudioSteps.add("run");
@@ -783,7 +790,7 @@
       });
       studioGenerating = true;
       draftButton.disabled = true;
-      setStudioProgress(6, "콘티 설계", "승인한 이야기만 사용해 장면의 목적과 카메라를 정하고 있습니다.");
+      setStudioProgress(6, "콘티 설계", "선택한 이야기만 사용해 장면의 목적과 카메라를 정하고 있습니다.");
       await runStudioProgress();
 
       storyAnalysis = analyzeStory(ideaInput.value);
@@ -799,7 +806,7 @@
       completedStudioSteps.clear();
       completedStudioSteps.add("run");
       completedStudioSteps.add("view");
-      setStudioProgress(100, "콘티 준비", "장면의 목적과 구도를 확인한 뒤 그림 만들기를 승인해주세요.");
+      setStudioProgress(100, "콘티 준비", "장면의 목적과 구도를 확인한 뒤 마음에 들면 시안 만들기를 이어가세요.");
       renderAll();
       updateStudioSteps();
       preview.querySelector("[data-studio-panel-id]")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -902,9 +909,9 @@
       }
       approveStoryDevelopment(project, { sourceOnly: false });
       renderStoryDevelopment(project);
-      setStudioProgress(28, "이야기 승인", "승인한 내용만 사용해 세로 콘티를 구성합니다.");
+      setStudioProgress(28, "이야기 선택", "선택한 내용만 사용해 세로 콘티를 구성합니다.");
       saveProject(project);
-      flash("이야기 승인 완료");
+      flash("선택한 이야기로 콘티를 만듭니다");
       draftButton.click();
     });
 
@@ -944,7 +951,7 @@
       project.productionStage = isStoryboardReady(project) ? "storyboard-approved" : "storyboard-review";
       project.promptPackages = [];
       renderAll();
-      flash(panel.storyboardStatus === "approved" ? "콘티 승인" : "콘티 승인 취소");
+      flash(panel.storyboardStatus === "approved" ? "이 구도 선택" : "구도 선택 취소");
     });
 
     approveAllStoryboardButton?.addEventListener("click", () => {
@@ -952,7 +959,7 @@
       project.productionStage = "storyboard-approved";
       project.promptPackages = [];
       renderAll();
-      flash("모든 콘티를 승인했습니다");
+      flash("이 구도로 시안을 이어갑니다");
     });
 
     resetStoryboardApprovalButton?.addEventListener("click", () => {
@@ -960,7 +967,7 @@
       project.productionStage = "storyboard-review";
       project.promptPackages = [];
       renderAll();
-      flash("콘티 승인을 초기화했습니다");
+      flash("장면 설정을 다시 열었습니다");
     });
 
     generationQueuePanel?.addEventListener("input", (event) => {
@@ -969,7 +976,7 @@
         if (scopeInput.value === "remaining" && !isRepresentativeBatchApproved(project)) {
           project.generationScope = "representative";
           renderGenerationQueue(project);
-          flash("대표 3컷을 먼저 승인해주세요");
+          flash("대표 3컷을 먼저 선택해주세요");
           return;
         }
         project.generationScope = scopeInput.value === "remaining" ? "remaining" : "representative";
@@ -1305,9 +1312,19 @@
         ensurePanelProductionState(panel, project.panels.indexOf(panel), project);
         if (specField === "camera.shotSize") {
           panel.panelSpec.camera.shotSize = target.value;
+          panel.panelSpec.camera.lensFeel = lensFeelForShot(target.value, panel.panelSpec.camera.angle);
+          panel.panelSpec.camera.directorIntent = directorIntentForShot(panel.phase, panel.panelSpec.camera.angle, target.value);
           panel.camera = target.value;
+        } else if (specField === "camera.angle") {
+          panel.panelSpec.camera.angle = target.value;
+          panel.panelSpec.camera.height = cameraHeightForAngle(target.value);
+          panel.panelSpec.camera.lensFeel = lensFeelForShot(panel.panelSpec.camera.shotSize, target.value);
+          panel.panelSpec.camera.directorIntent = directorIntentForShot(panel.phase, target.value, panel.panelSpec.camera.shotSize);
         } else if (specField === "subject.screenPosition") {
           panel.panelSpec.subjects[0].screenPosition = target.value;
+        } else if (specField === "subject.facing") {
+          panel.panelSpec.subjects[0].facing = target.value;
+          panel.panelSpec.camera.movementAxis = movementAxisForFacing(target.value);
         } else if (["mustInclude", "mustAvoid"].includes(specField)) {
           panel.panelSpec[specField] = splitConstraintLines(target.value);
         }
@@ -1426,7 +1443,7 @@
         await activatePanelVersion(panel, version);
         selectedPanelId = panel.id;
         renderAll();
-        flash(version.status === "approved" ? "승인된 버전으로 전환" : "후보 버전으로 전환");
+        flash(version.status === "approved" ? "선택한 버전으로 전환" : "후보 버전으로 전환");
         return;
       }
       const visibilityInput = event.target.closest("[data-visibility]");
@@ -1585,7 +1602,7 @@
           project.promptPackages = [];
           saveProject(project);
           renderAll();
-          flash("승인 시안을 완성화 참조로 저장했습니다");
+          flash("선택 시안을 완성화 참조로 저장했습니다");
         } catch (error) {
           version.assetSyncStatus = "failed";
           renderAll();
@@ -1644,11 +1661,11 @@
           if (renderStage === "draft" && project.visualWorkflow.generationPass === "final" && !unsyncedDraftCount) {
             project.generationScope = "representative";
             project.promptPackages = [];
-            flash("모든 시안 승인 · 이제 승인 구도로 완성화합니다");
+            flash("모든 시안 선택 완료 · 이 구도로 완성화합니다");
           } else if (renderStage === "draft" && unsyncedDraftCount) {
-            flash(`시안 구도 승인 · 서버 참조 저장 ${unsyncedDraftCount}컷 필요`);
+            flash(`시안 구도 선택 · 서버 참조 저장 ${unsyncedDraftCount}컷 필요`);
           } else {
-            flash(renderStage === "draft" ? "시안 구도 승인" : "완성본 최종 승인");
+            flash(renderStage === "draft" ? "이 시안 구도 사용" : "이 완성본 사용");
           }
         } else {
           const renderStage = version.renderStage || getVisualRenderStage(project);
@@ -1693,7 +1710,7 @@
         await activatePanelVersion(panel, version);
         selectedPanelId = panel.id;
         renderAll();
-        flash(version.status === "approved" ? "승인본 선택" : "비교할 후보 선택");
+        flash(version.status === "approved" ? "사용할 버전 선택" : "비교할 후보 선택");
         return;
       }
       if (action === "prepare-qc-fix") {
@@ -2165,6 +2182,54 @@
       });
     });
 
+    [regenerationCameraAngle, regenerationCharacterFacing].forEach((select) => {
+      select?.addEventListener("change", () => {
+        const panel = project.panels.find((item) => item.id === selectedPanelId);
+        if (!panel) return;
+        ensurePanelProductionState(panel, project.panels.indexOf(panel), project);
+        if (select === regenerationCameraAngle) {
+          panel.panelSpec.camera.angle = select.value;
+          panel.panelSpec.camera.height = cameraHeightForAngle(select.value);
+          panel.panelSpec.camera.lensFeel = lensFeelForShot(panel.panelSpec.camera.shotSize, select.value);
+          panel.panelSpec.camera.directorIntent = directorIntentForShot(panel.phase, select.value, panel.panelSpec.camera.shotSize);
+        } else if (panel.panelSpec.subjects?.[0]) {
+          panel.panelSpec.subjects[0].facing = select.value;
+          panel.panelSpec.camera.movementAxis = movementAxisForFacing(select.value);
+        }
+        invalidatePanelStoryboard(project, panel);
+        project.hasUnpublishedChanges = true;
+        renderStudioPreview(preview, project, selectedPanelId);
+        renderStoryboardApproval(project, selectedPanelId);
+        renderGenerationQueue(project);
+        saveProject(project);
+      });
+    });
+
+    confirmRegenerationCostButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      regenerationCostConfirmed = true;
+      regenerationCostDialog?.close();
+      requestRegenerationButton?.click();
+    });
+
+    studioAssetShelf?.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-reuse-scene]");
+      if (!button) return;
+      const sourcePanel = project.panels.find((item) => item.id === button.dataset.sourcePanelId);
+      const sourceVersion = sourcePanel?.imageVersions?.find((item) => item.id === button.dataset.versionId);
+      const targetPanel = project.panels.find((item) => item.id === selectedPanelId);
+      if (!sourcePanel || !sourceVersion || !targetPanel) return;
+      try {
+        await reuseStoredScene(project, sourcePanel, sourceVersion, targetPanel);
+        completedStudioSteps.add("reuse");
+        renderAll();
+        updateStudioSteps();
+        flash(`${project.panels.indexOf(sourcePanel) + 1}컷 그림을 선택한 컷에 새 버전으로 넣었습니다.`);
+      } catch (error) {
+        flash(error?.message || "보관한 그림을 불러오지 못했습니다.");
+      }
+    });
+
     regenerationRegionModeButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const panel = project.panels.find((item) => item.id === selectedPanelId);
@@ -2266,6 +2331,18 @@
         flash("웹툰 제작 기능은 현재 개발 중입니다.");
         return;
       }
+      if (!regenerationCostConfirmed) {
+        const camera = panel.panelSpec?.camera?.angle || "eye-level";
+        const facing = panel.panelSpec?.subjects?.[0]?.facing || "three-quarter-left";
+        byId("regenerationCostCamera").textContent = cameraAngleLabel(camera);
+        byId("regenerationCostFacing").textContent = characterFacingLabel(facing);
+        byId("regenerationCostDialog")?.querySelector("[data-regeneration-cost]")?.replaceChildren(accessState.isAdmin ? "관리자 · 차감 없음" : "도토리 1개");
+        const adminNote = byId("regenerationCostDialog")?.querySelector("[data-regeneration-admin-note]");
+        if (adminNote) adminNote.hidden = !accessState.isAdmin;
+        regenerationCostDialog?.showModal();
+        return;
+      }
+      regenerationCostConfirmed = false;
 
       const instruction = clipText(regenerationInstruction?.value || "", contentLimits.regenerationInstructionMax).trim();
       const sourceVersion = getCurrentImageVersion(panel);
@@ -2403,6 +2480,12 @@
       const panel = project.panels.find((item) => item.id === selectedPanelId);
       if (!panel) return;
       const subjects = Array.isArray(panel.panelSpec?.subjects) ? panel.panelSpec.subjects : [];
+      if (regenerationCameraAngle) {
+        regenerationCameraAngle.value = panel.panelSpec?.camera?.angle || "eye-level";
+      }
+      if (regenerationCharacterFacing) {
+        regenerationCharacterFacing.value = subjects[0]?.facing || "three-quarter-left";
+      }
       const savedCharacterId = panel.regenerationDraftCharacterId || subjects[0]?.characterId || "";
       if (regenerationCharacterSelect) {
         regenerationCharacterSelect.innerHTML = subjects.length
@@ -2696,6 +2779,7 @@
       renderStoryboardApproval(project, selectedPanelId);
       renderGenerationQueue(project);
       renderQualityReview(project);
+      renderStudioAssetShelf(project, selectedPanelId);
       syncRegenerateButton();
       addPanelButton.disabled = project.panels.length >= contentLimits.sceneMax;
       addPanelButton.title = addPanelButton.disabled
@@ -2762,7 +2846,7 @@
       renderAll();
       const activeSlot = panelList.querySelector(`[data-panel-id="${panel.id}"] .image-slot`);
       activeSlot?.classList.add("is-active");
-      flash(`${visualStageLabel(renderStage)} 후보 반영 · 검수 후 승인해주세요`);
+      flash(`${visualStageLabel(renderStage)} 후보 반영 · 마음에 들면 이 버전을 사용하세요`);
     }
   }
 
@@ -3111,7 +3195,7 @@
   function buildPanelSpec(scene, development, index) {
     const bible = development?.seriesBible || {};
     const storyIntent = development?.storyIntent || {};
-    const hero = bible.characters?.[0] || { id: "hero", name: "주인공", outfitState: "승인된 기본 의상" };
+    const hero = bible.characters?.[0] || { id: "hero", name: "주인공", outfitState: "확정된 기본 의상" };
     const location = bible.locations?.[0] || { id: "location-primary", name: "이야기의 첫 장소", lighting: "연속된 조명" };
     const shot = planShotForScene(scene.phase, index);
     return {
@@ -3126,9 +3210,10 @@
         action: sceneAction(scene.phase),
         emotion: sceneEmotion(scene.phase),
         gaze: sceneGaze(scene.phase),
+        facing: shot.facing,
         screenPosition: shot.subjectPosition,
         pose: scenePose(scene.phase),
-        outfitState: hero.outfitState || "승인된 기본 의상"
+        outfitState: hero.outfitState || "확정된 기본 의상"
       }],
       setting: {
         locationId: location.id || "location-primary",
@@ -3151,7 +3236,7 @@
         previousPanelId: index > 0 ? "previous-panel" : "",
         entranceDirection: index > 0 ? "앞 컷의 이동·시선 방향 유지" : "첫 방향 설정",
         carriedProps: hero.fixedProps || [],
-        characterState: hero.outfitState || "승인된 기본 상태",
+        characterState: hero.outfitState || "확정된 기본 상태",
         locationState: location.lighting || "첫 장소 상태"
       },
       mustInclude: [scene.storyFact, hero.name, ...(storyIntent.mustKeep || [])].filter(Boolean),
@@ -3166,31 +3251,58 @@
   }
 
   function planShotForScene(phase, index) {
+    const directed = window.NeoKIMWebtoonDirector?.select?.(phase, index);
+    if (directed) {
+      return {
+        subjectPosition: directed.subjectPosition,
+        facing: directed.facing,
+        focalPoint: directed.intent,
+        depth: directed.depthPlan,
+        negativeSpace: directed.negativeSpace,
+        foreground: directed.shotSize === "detail" ? "핵심 단서 또는 손을 크게 배치" : directed.depthPlan.split(",")[0],
+        camera: {
+          shotSize: directed.shotSize,
+          angle: directed.angle,
+          height: cameraHeightForAngle(directed.angle),
+          perspective: directed.depthPlan,
+          movement: phase === "climax" ? "행동 방향을 따라가는 역동적 프레이밍" : "장면 목적을 선명하게 유지하는 고정 카메라",
+          focalTarget: directed.intent,
+          lensFeel: lensFeelForShot(directed.shotSize, directed.angle),
+          movementAxis: movementAxisForFacing(directed.facing),
+          directorIntent: directed.intent,
+          framingDevice: directed.framingDevice,
+          sequenceRule: directed.sequenceRule,
+          mustAvoidComposition: directed.avoid,
+          knowledgeVersion: window.NeoKIMWebtoonDirector.schemaVersion
+        }
+      };
+    }
     const shots = {
-      "cold-open": ["wide", "eye-level", "center", "불길한 결과 또는 단서", "넓은 공간 정보", "upper-right"],
-      setup: ["medium-wide", "eye-level", index % 2 ? "right" : "left", "주인공의 일상 행동", "인물과 장소를 함께 읽는 깊이", "opposite-subject"],
-      hook: ["detail", "eye-level", "center", "처음 나타난 이상 징후", "얕은 초점", "upper-left"],
-      inciting: ["medium-close", "slightly-low", "left", "사건 요소와 주인공의 반응", "전경과 인물의 두 층", "upper-right"],
-      stakes: ["close", "eye-level", "center", "실패 조건을 받아들이는 표정", "얕은 초점", "upper-left"],
-      goal: ["medium", "eye-level", "left", "목표를 선택하는 행동", "인물 중심", "upper-right"],
-      threat: ["wide", "low-angle", "lower-left", "위협과 인물의 거리", "큰 원근 대비", "upper-right"],
-      ability: ["detail", "over-shoulder", "center", "능력 또는 소품의 작동", "손과 대상의 두 층", "upper-left"],
-      progress: ["medium", "eye-level", "right", "첫 성공의 결과", "행동 방향이 읽히는 깊이", "upper-left"],
-      complication: ["wide", "slightly-high", "center", "상황이 더 불리해진 공간", "장소 전체", "upper-right"],
-      midpoint: ["medium-close", "eye-level", "right", "새로운 진실을 본 반응", "인물과 단서", "upper-left"],
-      reversal: ["close", "dutch-subtle", "center", "규칙이 뒤집히는 순간", "불안정한 깊이", "upper-right"],
-      decision: ["medium-close", "slightly-low", "left", "결정을 내린 표정과 자세", "인물 중심", "upper-right"],
-      payoff: ["detail", "over-shoulder", "center", "앞에서 준비한 소품의 쓰임", "손·소품·대상의 세 층", "upper-left"],
-      climax: ["wide", "low-angle", "center", "가장 큰 행동의 정점", "강한 전경과 배경 원근", "upper-right"],
-      resolution: ["medium-wide", "eye-level", "right", "해결 직후의 안도", "차분한 공간", "upper-left"],
-      cost: ["close", "eye-level", "center", "해결의 대가를 확인하는 표정", "얕은 초점", "upper-right"],
-      reveal: ["wide", "high-angle", "lower-center", "더 큰 사건 범위", "장소 전체", "upper-left"],
-      cliffhanger: ["detail", "eye-level", "center", "다음 질문을 만드는 단서", "단서 중심", "upper-right"],
-      "next-episode": ["wide", "eye-level", "lower-left", "새로 열린 공간 또는 인물", "깊은 원근", "upper-right"]
+      "cold-open": ["wide", "bird-eye", "center", "불길한 결과 또는 단서", "넓은 공간 정보", "upper-right", "back"],
+      setup: ["medium-wide", "profile-side", index % 2 ? "right" : "left", "주인공의 일상 행동", "인물과 장소를 함께 읽는 깊이", "opposite-subject", index % 2 ? "left-profile" : "right-profile"],
+      hook: ["detail", "over-shoulder", "center", "처음 나타난 이상 징후", "얕은 초점", "upper-left", "back"],
+      inciting: ["medium-close", "ground-low-diagonal", "left", "사건 요소와 주인공의 반응", "전경과 인물의 두 층", "upper-right", "three-quarter-right"],
+      stakes: ["close", "high-angle", "center", "실패 조건을 받아들이는 표정", "얕은 초점", "upper-left", "front"],
+      goal: ["medium", "profile-side", "left", "목표를 선택하는 행동", "인물 중심", "upper-right", "right-profile"],
+      threat: ["wide", "low-angle", "lower-left", "위협과 인물의 거리", "큰 원근 대비", "upper-right", "back"],
+      ability: ["detail", "over-shoulder", "center", "능력 또는 소품의 작동", "손과 대상의 두 층", "upper-left", "back"],
+      progress: ["medium", "eye-level", "right", "첫 성공의 결과", "행동 방향이 읽히는 깊이", "upper-left", "three-quarter-left"],
+      complication: ["wide", "bird-eye", "center", "상황이 더 불리해진 공간", "장소 전체", "upper-right", "back"],
+      midpoint: ["medium-close", "profile-side", "right", "새로운 진실을 본 반응", "인물과 단서", "upper-left", "left-profile"],
+      reversal: ["close", "dutch-subtle", "center", "규칙이 뒤집히는 순간", "불안정한 깊이", "upper-right", "front"],
+      decision: ["medium-close", "low-angle", "left", "결정을 내린 표정과 자세", "인물 중심", "upper-right", "three-quarter-right"],
+      payoff: ["detail", "over-shoulder", "center", "앞에서 준비한 소품의 쓰임", "손·소품·대상의 세 층", "upper-left", "back"],
+      climax: ["wide", "ground-low-diagonal", "center", "가장 큰 행동의 정점", "강한 전경과 배경 원근", "upper-right", "three-quarter-left"],
+      resolution: ["medium-wide", "high-angle", "right", "해결 직후의 안도", "차분한 공간", "upper-left", "three-quarter-left"],
+      cost: ["close", "profile-side", "center", "해결의 대가를 확인하는 표정", "얕은 초점", "upper-right", "left-profile"],
+      reveal: ["wide", "bird-eye", "lower-center", "더 큰 사건 범위", "장소 전체", "upper-left", "back"],
+      cliffhanger: ["detail", "ground-low-diagonal", "center", "다음 질문을 만드는 단서", "단서 중심", "upper-right", "front"],
+      "next-episode": ["wide", "over-shoulder", "lower-left", "새로 열린 공간 또는 인물", "깊은 원근", "upper-right", "back"]
     };
-    const [shotSize, angle, subjectPosition, focalPoint, depth, negativeSpace] = shots[phase] || ["medium", "eye-level", "center", "현재 사건", "인물 중심", "upper-right"];
+    const [shotSize, angle, subjectPosition, focalPoint, depth, negativeSpace, facing] = shots[phase] || ["medium", "eye-level", "center", "현재 사건", "인물 중심", "upper-right", "three-quarter-left"];
     return {
       subjectPosition,
+      facing,
       focalPoint,
       depth,
       negativeSpace,
@@ -3198,10 +3310,13 @@
       camera: {
         shotSize,
         angle,
-        height: angle.includes("low") ? "허리 아래" : angle.includes("high") ? "머리 위" : "눈높이",
+        height: cameraHeightForAngle(angle),
         perspective: shotSize === "wide" ? "공간 깊이가 분명한 원근" : "인물과 단서가 읽히는 자연스러운 원근",
         movement: phase === "climax" ? "행동 방향을 따라가는 역동적 프레이밍" : "고정 카메라",
-        focalTarget: focalPoint
+        focalTarget: focalPoint,
+        lensFeel: lensFeelForShot(shotSize, angle),
+        movementAxis: movementAxisForFacing(facing),
+        directorIntent: directorIntentForShot(phase, angle, shotSize)
       }
     };
   }
@@ -3979,6 +4094,22 @@
     panel.panelSpec.purpose = panel.panelSpec.purpose || scene.purpose;
     panel.panelSpec.moment = panel.panelSpec.moment || scene.moment;
     panel.panelSpec.emotionBeforeAfter = panel.panelSpec.emotionBeforeAfter || scene.emotionBeforeAfter;
+    const plannedShot = planShotForScene(phase, index);
+    panel.panelSpec.camera = { ...plannedShot.camera, ...(panel.panelSpec.camera || {}) };
+    panel.panelSpec.camera.angle = panel.panelSpec.camera.angle || "eye-level";
+    panel.panelSpec.camera.height = panel.panelSpec.camera.height || cameraHeightForAngle(panel.panelSpec.camera.angle);
+    panel.panelSpec.camera.lensFeel = panel.panelSpec.camera.lensFeel
+      || lensFeelForShot(panel.panelSpec.camera.shotSize, panel.panelSpec.camera.angle);
+    panel.panelSpec.camera.directorIntent = panel.panelSpec.camera.directorIntent
+      || directorIntentForShot(phase, panel.panelSpec.camera.angle, panel.panelSpec.camera.shotSize);
+    panel.panelSpec.subjects = Array.isArray(panel.panelSpec.subjects) && panel.panelSpec.subjects.length
+      ? panel.panelSpec.subjects.map((subject, subjectIndex) => ({
+          ...subject,
+          facing: subject.facing || (subjectIndex === 0 ? plannedShot.facing : "three-quarter-left")
+        }))
+      : buildPanelSpec(scene, project, index).subjects;
+    panel.panelSpec.camera.movementAxis = panel.panelSpec.camera.movementAxis
+      || movementAxisForFacing(panel.panelSpec.subjects[0]?.facing);
     panel.storyboardStatus = ["pending", "approved"].includes(panel.storyboardStatus)
       ? panel.storyboardStatus
       : (project?.schemaVersion === projectSchemaVersion && project?.productionStage ? "pending" : "approved");
@@ -4493,12 +4624,12 @@
         creativeLocks: {}
       },
       episodePlan: {
-        objective: analysis.signals.goal ? "사용자 원고에 명시된 목표를 유지" : "승인된 보강안에서 이번 화의 목표를 확정",
-        stakes: analysis.signals.conflict ? "사용자 원고에 명시된 실패 위험을 유지" : "승인된 보강안에서 실패 위험을 확정",
+        objective: analysis.signals.goal ? "사용자 원고에 명시된 목표를 유지" : "선택한 보강안에서 이번 화의 목표를 확정",
+        stakes: analysis.signals.conflict ? "사용자 원고에 명시된 실패 위험을 유지" : "선택한 보강안에서 실패 위험을 확정",
         openingHook: facts[0] || "첫 장면의 질문을 확정",
-        turningPoint: "승인된 중반 전환을 사용",
-        climax: "승인된 주인공의 선택을 사용",
-        closingHook: "승인된 마지막 질문을 사용",
+        turningPoint: "선택한 중반 전환을 사용",
+        climax: "선택한 주인공의 결정을 사용",
+        closingHook: "선택한 마지막 질문을 사용",
         episodeStory: analysis.episodeOneStory || sourceText,
         nextEpisodeStory: analysis.nextEpisodeStory || "",
         developmentApprovedAt: now
@@ -4582,7 +4713,7 @@
     panel.dataset.state = approved ? "approved" : "pending";
     const state = byId("storyDevelopmentState");
     if (state) {
-      state.textContent = approved ? "이야기 승인됨" : "승인 전";
+      state.textContent = approved ? "이야기 선택됨" : "확인 전";
     }
     facts.innerHTML = (project.storyIntent.facts || []).map((fact) => `<li>${escapeHtml(fact)}</li>`).join("")
       || "<li>원고에서 유지할 사건을 찾고 있습니다.</li>";
@@ -4662,16 +4793,16 @@
             </span>
             <i>${escapeHtml(cameraLabel(spec.camera?.shotSize))}</i>
           </button>
-          <button class="storyboard-approve-button" type="button" data-storyboard-approve="${escapeHtml(panel.id)}" aria-pressed="${approved}">${approved ? "승인됨" : "승인"}</button>
+          <button class="storyboard-approve-button" type="button" data-storyboard-approve="${escapeHtml(panel.id)}" aria-pressed="${approved}">${approved ? "선택됨" : "이 구도"}</button>
         </article>
       `;
     }).join("");
     readinessNode.dataset.state = readiness.ready ? "ready" : readiness.structuralIssues.length ? "blocked" : "pending";
     readinessNode.innerHTML = readiness.ready
-      ? `<strong>그림 만들기 준비 완료</strong><span>모든 컷의 사건과 구도를 승인했습니다.</span>`
+      ? `<strong>그림 만들기 준비 완료</strong><span>모든 컷의 사건과 구도를 골랐습니다.</span>`
       : readiness.structuralIssues.length
         ? `<strong>확인이 필요한 항목 ${readiness.structuralIssues.length}개</strong><span>${escapeHtml(readiness.structuralIssues[0])}</span>`
-        : `<strong>${project.panels.length - approvedCount}컷 승인 필요</strong><span>컷을 누르면 오른쪽 세로 콘티에서 바로 확인할 수 있습니다.</span>`;
+        : `<strong>${project.panels.length - approvedCount}컷 확인 필요</strong><span>컷을 누르면 오른쪽 세로 콘티에서 바로 확인할 수 있습니다.</span>`;
     if (byId("approveAllStoryboardButton")) {
       byId("approveAllStoryboardButton").disabled = Boolean(readiness.structuralIssues.length);
     }
@@ -4680,7 +4811,7 @@
   function getGenerationReadiness(project) {
     const structuralIssues = [];
     if (!isStoryDevelopmentApproved(project, project?.idea || "")) {
-      structuralIssues.push("이야기 보강안을 먼저 승인해야 합니다.");
+      structuralIssues.push("사용할 이야기 보강안을 먼저 골라주세요.");
     }
     const unapprovedSuggestions = (project?.aiSuggestions || []).filter((item) => item.approval === "pending" || item.approval === "edited");
     if (unapprovedSuggestions.length) {
@@ -4716,6 +4847,66 @@
       close: "근경",
       detail: "세부"
     }[value] || "중경";
+  }
+
+  function cameraAngleLabel(value) {
+    return {
+      "eye-level": "눈높이",
+      "profile-side": "인물 옆에서",
+      "bird-eye": "천장에서 아래로",
+      "high-angle": "위에서 내려다보기",
+      "slightly-high": "살짝 위에서",
+      "low-angle": "아래에서 올려다보기",
+      "slightly-low": "살짝 아래에서",
+      "ground-low-diagonal": "바닥에서 대각선 위로",
+      "over-shoulder": "어깨 너머로",
+      "dutch-subtle": "살짝 기울인 화면"
+    }[value] || "눈높이";
+  }
+
+  function characterFacingLabel(value) {
+    return {
+      front: "앞모습",
+      back: "뒷모습",
+      "left-profile": "왼쪽 옆모습",
+      "right-profile": "오른쪽 옆모습",
+      "three-quarter-left": "왼쪽 반측면",
+      "three-quarter-right": "오른쪽 반측면"
+    }[value] || "왼쪽 반측면";
+  }
+
+  function cameraHeightForAngle(angle) {
+    if (["bird-eye", "high-angle", "slightly-high"].includes(angle)) return angle === "bird-eye" ? "천장 높이" : "머리 위";
+    if (["ground-low-diagonal", "low-angle", "slightly-low"].includes(angle)) return angle === "ground-low-diagonal" ? "바닥 가까이" : "허리 아래";
+    if (angle === "over-shoulder") return "인물 어깨 높이";
+    return "눈높이";
+  }
+
+  function lensFeelForShot(shotSize, angle) {
+    if (["bird-eye", "wide", "medium-wide"].includes(angle) || ["wide", "medium-wide"].includes(shotSize)) return "공간 깊이와 이동 경로가 읽히는 넓은 화각";
+    if (["detail", "close"].includes(shotSize)) return "표정과 단서만 분리하는 얕은 심도";
+    if (["ground-low-diagonal", "low-angle"].includes(angle)) return "전경을 크게 두어 원근과 힘을 강조하는 화각";
+    return "인물 왜곡이 적고 행동이 자연스러운 표준 화각";
+  }
+
+  function movementAxisForFacing(facing) {
+    if (["left-profile", "three-quarter-left"].includes(facing)) return "화면 오른쪽에서 왼쪽으로 이어지는 시선·행동 축";
+    if (["right-profile", "three-quarter-right"].includes(facing)) return "화면 왼쪽에서 오른쪽으로 이어지는 시선·행동 축";
+    if (facing === "back") return "인물 뒤에서 화면 깊이 방향으로 이어지는 축";
+    return "카메라를 향하는 중심 축";
+  }
+
+  function directorIntentForShot(phase, angle, shotSize) {
+    const emotionalPurpose = {
+      "cold-open": "공간 속 고립감과 첫 의문을 동시에 제시",
+      setup: "행동 방향과 생활 공간을 자연스럽게 소개",
+      hook: "인물이 발견한 단서를 독자도 같은 순서로 보게 함",
+      threat: "위협의 크기와 인물의 열세를 강조",
+      climax: "행동의 속도와 충돌 방향을 가장 강하게 전달",
+      reveal: "인물이 몰랐던 사건의 전체 규모를 공개",
+      cliffhanger: "다음 컷을 넘기게 할 정보 하나만 강하게 남김"
+    }[phase] || "이 컷의 핵심 감정과 행동을 한눈에 전달";
+    return `${emotionalPurpose}; ${cameraAngleLabel(angle)} ${cameraLabel(shotSize)} 구도를 사용하되 앞뒤 컷과 같은 거리·각도를 반복하지 않음`;
   }
 
   function getRepresentativePanelIds(project) {
@@ -4815,23 +5006,23 @@
     const scopeHint = byId("generationScopeHint");
     if (scopeHint) {
       scopeHint.textContent = representativeApproved
-        ? `대표 ${renderLabel}이 승인되었습니다. 나머지 컷을 이어서 요청할 수 있습니다.`
+        ? `대표 ${renderLabel}을 골랐습니다. 나머지 컷을 이어서 요청할 수 있습니다.`
         : renderStage === "draft"
           ? "도입·중간·마지막 대표 시안으로 이야기와 구도를 먼저 확인합니다."
-          : "승인한 대표 시안의 위치와 카메라를 유지한 완성본부터 확인합니다.";
+          : "선택한 대표 시안의 위치와 카메라를 유지한 완성본부터 확인합니다.";
     }
     const title = byId("generationQueueTitle");
     const kicker = byId("generationQueueKicker");
     const copy = byId("generationQueueCopy");
     const costNote = byId("generationCostNote");
-    if (title) title.textContent = renderStage === "draft" ? "저비용 시안 만들기" : "승인한 시안 완성화";
+    if (title) title.textContent = renderStage === "draft" ? "저비용 시안 만들기" : "선택한 시안 완성화";
     if (kicker) kicker.textContent = renderStage === "draft" ? "Visual draft" : "Final rendering";
     if (copy) copy.textContent = renderStage === "draft"
       ? "완성 작화 전에 인물 위치, 이야기 전달과 카메라 구도를 빠르게 확인합니다."
-      : "승인한 시안을 구도 기준으로 고정하고, 인물과 배경을 게시 가능한 완성 작화로 다듬습니다.";
+      : "선택한 시안을 구도 기준으로 고정하고, 인물과 배경을 게시 가능한 완성 작화로 다듬습니다.";
     if (costNote) costNote.textContent = renderStage === "draft"
       ? `콘티는 무료입니다. 시안 요청은 ${generationPassCost}도토리를 사용하며 작화 완성도 대신 구도를 확인합니다.`
-      : `완성화 요청은 ${generationPassCost}도토리를 사용합니다. 승인한 시안 구도를 바꾸지 않고 최종 품질로 제작합니다.`;
+      : `완성화 요청은 ${generationPassCost}도토리를 사용합니다. 선택한 시안 구도를 바꾸지 않고 최종 품질로 제작합니다.`;
     const generationBatch = getGenerationBatch(project);
     root.dataset.state = queued ? "queued" : readiness.ready ? "approved" : "pending";
     state.textContent = queued ? "작업 접수됨" : readiness.ready ? `${generationBatch.length}컷 준비` : "준비 전";
@@ -4857,7 +5048,7 @@
             <i>${escapeHtml({ queued: "접수", ready: "대기", running: `${Math.round(item.progress || 0)}%`, done: "도착", failed: "실패" }[item.status] || "준비")}</i>
           </div>
         `).join("")
-      : `<div class="generation-lock-message"><strong>${reference.ready ? "콘티 승인이 필요합니다" : "인물·장소 기준을 먼저 확정해주세요"}</strong><span>${escapeHtml(readiness.issues[0] || "준비 항목을 확인해주세요.")}</span></div>`;
+      : `<div class="generation-lock-message"><strong>${reference.ready ? "콘티 확인이 필요합니다" : "인물·장소 기준을 먼저 확정해주세요"}</strong><span>${escapeHtml(readiness.issues[0] || "준비 항목을 확인해주세요.")}</span></div>`;
     queueButton.disabled = !readiness.ready || queued || !generationBatch.length;
     queueButton.textContent = queued ? `${renderLabel} 작업 접수됨` : `${project.generationScope === "remaining" ? "나머지" : "대표"} ${generationBatch.length}컷 ${renderStage === "draft" ? "시안" : "완성화"} 요청 · ${generationPassCost}도토리`;
     copyButton.disabled = !readiness.ready || !project.promptPackages.length;
@@ -4890,7 +5081,7 @@
     if (kicker) kicker.textContent = renderStage === "draft" ? "Draft review" : "Final review";
     if (copy) copy.textContent = renderStage === "draft"
       ? "시안에서는 이야기, 인물 위치와 카메라 구도만 확인합니다. 세부 작화는 완성화 단계에서 다듬습니다."
-      : "완성본의 이야기 일치, 인물 연속성, 손과 얼굴, 배경과 글자 여백을 확인한 뒤 최종 승인합니다.";
+      : "완성본의 이야기 일치, 인물 연속성, 손과 얼굴, 배경과 글자 여백을 확인한 뒤 사용할 버전을 고릅니다.";
     root.querySelectorAll("[data-publish-locale]").forEach((input) => {
       input.checked = input.dataset.publishLocale === "ko" || (project.publishLocales || ["ko"]).includes(input.dataset.publishLocale);
     });
@@ -4899,7 +5090,7 @@
     list.innerHTML = project.panels.map((panel, index) => {
       const current = getCurrentVersionForStage(panel, renderStage);
       const approved = isPanelStageApproved(panel, renderStage);
-      const label = approved ? `${renderLabel} 승인` : current?.status === "needs-fix" ? "수정 필요" : current ? "검수 전" : `${renderLabel} 대기`;
+      const label = approved ? `${renderLabel} 선택` : current?.status === "needs-fix" ? "수정 필요" : current ? "검수 전" : `${renderLabel} 대기`;
       return `
         <button class="quality-review-item" type="button" data-quality-panel="${escapeHtml(panel.id)}" data-state="${approved ? "approved" : current?.status || "missing"}">
           <span>${String(index + 1).padStart(2, "0")}</span>
@@ -4910,8 +5101,8 @@
     }).join("");
     publish.innerHTML = renderStage === "draft"
       ? approvedCount === project.panels.length
-        ? "<strong>시안 승인 완료</strong><span>승인한 구도를 기준으로 완성화를 시작할 수 있습니다.</span>"
-        : `<strong>완성화 전 확인</strong><span>${project.panels.length - approvedCount}컷의 시안 구도를 더 승인해야 합니다.</span>`
+        ? "<strong>시안 선택 완료</strong><span>고른 구도를 기준으로 완성화를 시작할 수 있습니다.</span>"
+        : `<strong>완성화 전 확인</strong><span>${project.panels.length - approvedCount}컷의 시안 구도를 더 골라야 합니다.</span>`
       : readiness.ready
         ? "<strong>게시 준비 완료</strong><span>모든 컷의 완성본이 최종 검수를 통과했습니다.</span>"
         : `<strong>게시 전 확인</strong><span>${escapeHtml(readiness.issues[0] || "완성본 검수가 필요합니다.")}</span>`;
@@ -4937,10 +5128,10 @@
   function getPublishReadiness(project) {
     const issues = [];
     if (!isStoryDevelopmentApproved(project, project.idea || "")) {
-      issues.push("이야기 보강안을 먼저 승인해야 합니다.");
+      issues.push("사용할 이야기 보강안을 먼저 골라주세요.");
     }
     if (!isStoryboardReady(project)) {
-      issues.push("모든 세로 콘티를 먼저 승인해야 합니다.");
+      issues.push("모든 세로 콘티를 먼저 확인해주세요.");
     }
     (project.panels || []).forEach((panel, index) => {
       ensurePanelVersionState(panel, project);
@@ -4948,7 +5139,7 @@
       if (!current) {
         issues.push(`${index + 1}컷 완성본이 없습니다.`);
       } else if (current.id !== (panel.finalApprovedVersionId || panel.approvedVersionId) || current.qc?.overall !== "approved") {
-        issues.push(`${index + 1}컷의 완성본을 검수하고 최종 승인해야 합니다.`);
+        issues.push(`${index + 1}컷의 완성본을 확인하고 사용할 버전을 골라주세요.`);
       }
       issues.push(...getPanelTextPublishingIssues(panel, project.publishLocales || ["ko"], index));
     });
@@ -4996,7 +5187,7 @@
     if (repeated.length) notes.push("바로 이어지는 컷에서 같은 대사가 반복됩니다. 한쪽을 표정이나 침묵으로 바꿔보세요.");
     if (panels.length && !panels.some((panel) => panel.gapAfter >= 70)) notes.push("감정 전환이나 반전 뒤에 긴 세로 여백을 한 번 두면 호흡이 선명해집니다.");
     if (panels.length && !/\?|까|나|다음|하지만|그때/u.test(`${panels.at(-1).line} ${panels.at(-1).beat}`)) notes.push("마지막 컷에 다음 화를 궁금하게 하는 질문이나 변화가 약합니다.");
-    if (!notes.length) notes.push("이미지 승인, 글자 배치, 번역과 모바일 호흡이 게시 기준을 통과했습니다.");
+    if (!notes.length) notes.push("이미지 선택, 글자 배치, 번역과 모바일 호흡이 게시 기준을 통과했습니다.");
     return [...new Set(notes)].slice(0, 5);
   }
 
@@ -5020,15 +5211,15 @@
     const storyboard = getGenerationReadiness(project);
     const reference = getReferenceReadiness(project);
     const issues = [...storyboard.structuralIssues];
-    if (storyboard.approvedCount !== storyboard.total) issues.push(`${storyboard.total - storyboard.approvedCount}개의 콘티가 승인되지 않았습니다.`);
+    if (storyboard.approvedCount !== storyboard.total) issues.push(`${storyboard.total - storyboard.approvedCount}개의 콘티를 아직 확인하지 않았습니다.`);
     if (getVisualRenderStage(project) === "final") {
       const missingDrafts = (project.panels || []).filter((panel) => !isPanelStageApproved(panel, "draft"));
-      if (missingDrafts.length) issues.push(`${missingDrafts.length}개의 시안 구도를 먼저 승인해야 합니다.`);
+      if (missingDrafts.length) issues.push(`${missingDrafts.length}개의 시안 구도를 먼저 골라주세요.`);
       const unsyncedDrafts = (project.panels || []).filter((panel) => {
         const version = getApprovedVersionForStage(panel, "draft");
         return version && !approvedDraftReferenceSource(version);
       });
-      if (unsyncedDrafts.length) issues.push(`${unsyncedDrafts.length}개의 승인 시안을 서버 참조 파일로 저장해야 합니다.`);
+      if (unsyncedDrafts.length) issues.push(`${unsyncedDrafts.length}개의 선택 시안을 서버 참조 파일로 저장해야 합니다.`);
     }
     issues.push(...reference.issues);
     return { ready: storyboard.ready && reference.ready && !issues.length, issues: [...new Set(issues)] };
@@ -5145,10 +5336,10 @@
           "- 이후 완성화가 같은 구도를 재사용할 수 있도록 피사체 경계와 빈 말풍선 영역을 분명히 남기세요."
         ]
       : [
-          "[이번 출력: 승인 시안 완성화]",
-          "- 참조 목록의 approved-draft 이미지를 가장 우선하는 구도 기준으로 사용하세요.",
-          "- 승인 시안의 카메라 거리, 인물 위치, 시선 방향, 행동, 소품 위치, 빈 말풍선 영역을 바꾸지 마세요.",
-          "- 승인 구도를 게시 가능한 한국 세로 웹툰 완성 작화로 정교하게 렌더링하세요.",
+          "[이번 출력: 선택한 시안 완성화]",
+          "- 참조 목록의 선택 시안 이미지를 가장 우선하는 구도 기준으로 사용하세요.",
+          "- 선택 시안의 카메라 거리, 인물 위치, 시선 방향, 행동, 소품 위치, 빈 말풍선 영역을 바꾸지 마세요.",
+          "- 선택한 구도를 게시 가능한 한국 세로 웹툰 완성 작화로 정교하게 렌더링하세요.",
           "- 인물 외형, 손과 얼굴의 형태, 배경 원근, 재질, 조명과 색을 자연스럽게 마감하되 새 사건이나 소품을 추가하지 마세요."
         ];
     const bullets = (items) => (items?.length ? items.map((item) => `- ${typeof item === "string" ? item : JSON.stringify(item)}`) : ["- 없음"]);
@@ -5170,12 +5361,12 @@
       ...bullets((project.storyIntent?.mustAvoid || []).map((item) => `금지: ${item}`)),
       "",
       "[고정 인물 기준]",
-      `- ${character.name || "주인공"}: ${character.appearance || "승인된 외형"}`,
-      `- 의상과 상태: ${character.outfitState || "승인된 기본 의상"}`,
+      `- ${character.name || "주인공"}: ${character.appearance || "확정된 외형"}`,
+      `- 의상과 상태: ${character.outfitState || "확정된 기본 의상"}`,
       `- 고정 소품: ${(character.fixedProps || []).join(", ") || "없음"}`,
       "",
       "[고정 장소 기준]",
-      `- ${location.name || "주요 장소"}: ${location.structure || "승인된 공간 구조"}`,
+      `- ${location.name || "주요 장소"}: ${location.structure || "확정된 공간 구조"}`,
       `- 조명: ${location.lighting || "앞뒤 컷과 같은 방향"}`,
       "",
       "[앞 컷에서 이어지는 상태]",
@@ -5192,10 +5383,17 @@
       `- 감정 변화: ${spec.emotionBeforeAfter}`,
       "",
       "[인물 연기와 위치]",
-      ...spec.subjects.map((subject) => `- ${subject.name || subject.characterId}: ${subject.action}; 표정 ${subject.emotion}; 시선 ${subject.gaze}; 위치 ${subject.screenPosition}; 자세 ${subject.pose}`),
+      ...spec.subjects.map((subject) => `- ${subject.name || subject.characterId}: ${subject.action}; 표정 ${subject.emotion}; 시선 ${subject.gaze}; 화면 방향 ${characterFacingLabel(subject.facing)}(${subject.facing || "three-quarter-left"}); 위치 ${subject.screenPosition}; 자세 ${subject.pose}`),
       "",
       "[카메라와 화면 구성]",
-      `- 세로 2:3 단일 패널, ${cameraLabel(spec.camera.shotSize)}(${spec.camera.shotSize}), ${spec.camera.angle}, 카메라 높이 ${spec.camera.height}`,
+      `- 세로 2:3 단일 패널, ${cameraLabel(spec.camera.shotSize)}(${spec.camera.shotSize}), ${cameraAngleLabel(spec.camera.angle)}(${spec.camera.angle}), 카메라 높이 ${spec.camera.height}`,
+      `- 연출 의도: ${spec.camera.directorIntent || directorIntentForShot(panel.phase, spec.camera.angle, spec.camera.shotSize)}`,
+      `- 화각과 심도: ${spec.camera.lensFeel || lensFeelForShot(spec.camera.shotSize, spec.camera.angle)}`,
+      `- 시선·행동 축: ${spec.camera.movementAxis || movementAxisForFacing(spec.subjects?.[0]?.facing)}`,
+      ...(spec.camera.framingDevice ? [`- 프레이밍 장치: ${spec.camera.framingDevice}`] : []),
+      ...(spec.camera.sequenceRule ? [`- 컷 연속 규칙: ${spec.camera.sequenceRule}`] : []),
+      ...(spec.camera.mustAvoidComposition ? [`- 피할 상투 구도: ${spec.camera.mustAvoidComposition}`] : []),
+      "- 앞뒤 컷과 같은 거리·각도·인물 방향을 기계적으로 반복하지 말고, 사건의 정보와 감정에 맞는 영화적 시점 변화를 사용하세요.",
       `- 초점: ${spec.camera.focalTarget}`,
       `- 전경: ${spec.composition.foreground}`,
       `- 중경: ${spec.composition.midground}`,
@@ -5212,7 +5410,7 @@
       "[말풍선 안전 영역]",
       ...spec.overlaySafeZones.map((zone) => `- ${zone.type}: ${zone.area}`),
       "",
-      `[참조 파일] ${references.length ? references.map((item) => `${item.type}:${item.source}`).join(", ") : "첨부 이미지가 없으므로 위에서 승인한 텍스트 기준을 엄격히 유지"}`,
+      `[참조 파일] ${references.length ? references.map((item) => `${item.type}:${item.source}`).join(", ") : "첨부 이미지가 없으므로 위에서 확정한 텍스트 기준을 엄격히 유지"}`,
       "",
       `출력 파일 식별자: ${project.id}_${String(index + 1).padStart(2, "0")}_${panel.id}`
     ].join("\n");
@@ -5319,7 +5517,7 @@
     if (/청소|알바/u.test(story)) return "작업복과 현장 소품";
     if (/학생|학교/u.test(story)) return "학생복 또는 일상복";
     if (/헌터|던전/u.test(story)) return "현대적인 헌터 장비와 일상복의 혼합";
-    return "사용자 승인 전 의상 미정";
+    return "사용자 선택 전 의상 미정";
   }
 
   function inferHeroAppearance(story) {
@@ -5376,6 +5574,96 @@
     return JSON.parse(JSON.stringify(value));
   }
 
+  function renderStudioAssetShelf(project, selectedPanelId = "") {
+    const root = byId("studioAssetShelf");
+    if (!root) return;
+    const entries = (project?.panels || []).flatMap((panel, panelIndex) => {
+      ensurePanelVersionState(panel, project);
+      return (panel.imageVersions || []).map((version, versionIndex) => ({ panel, panelIndex, version, versionIndex }));
+    });
+    if (!entries.length) {
+      root.innerHTML = '<p class="studio-asset-empty">그림을 만들거나 가져오면 장면별 버전이 이곳에 자동으로 모입니다.</p>';
+      return;
+    }
+    root.innerHTML = entries.map(({ panel, panelIndex, version, versionIndex }) => {
+      const category = ["character", "specific-character", "face", "outfit"].includes(version.editTarget) ? "인물" : "장면";
+      return `
+        <article class="studio-asset-card ${panel.id === selectedPanelId ? "is-current-panel" : ""}">
+          <span class="studio-asset-thumb" data-asset-thumbnail="${escapeHtml(panel.id)}:${escapeHtml(version.id)}">${String(panelIndex + 1).padStart(2, "0")}</span>
+          <div>
+            <small>${escapeHtml(category)} · ${escapeHtml(visualStageLabel(version.renderStage))}</small>
+            <strong>${panelIndex + 1}컷 · v${versionIndex + 1}</strong>
+            <span>${escapeHtml(shorten(panel.panelSpec?.moment || panel.beat, 50))}</span>
+          </div>
+          <button class="tool-button mini" type="button" data-reuse-scene data-source-panel-id="${escapeHtml(panel.id)}" data-version-id="${escapeHtml(version.id)}">선택 컷에 넣기</button>
+        </article>
+      `;
+    }).join("");
+    entries.forEach(async ({ panel, version }) => {
+      const key = `${panel.id}:${version.id}`;
+      const node = Array.from(root.querySelectorAll("[data-asset-thumbnail]")).find((item) => item.dataset.assetThumbnail === key);
+      if (!node) return;
+      const source = version.sourceUrl
+        || (version.id === panel.currentVersionId ? panel.imageData : "")
+        || (await getPanelImage(version.imageKey).catch(() => null))?.dataUrl
+        || "";
+      if (!source || !node.isConnected) return;
+      const image = document.createElement("img");
+      image.src = source;
+      image.alt = "";
+      image.loading = "lazy";
+      node.replaceChildren(image);
+    });
+  }
+
+  async function reuseStoredScene(project, sourcePanel, sourceVersion, targetPanel) {
+    ensurePanelVersionState(sourcePanel, project);
+    ensurePanelVersionState(targetPanel, project);
+    const stored = await getPanelImage(sourceVersion.imageKey).catch(() => null);
+    const source = sourceVersion.sourceUrl
+      || (sourceVersion.id === sourcePanel.currentVersionId ? sourcePanel.imageData : "")
+      || stored?.dataUrl
+      || "";
+    if (!source) throw new Error("보관한 그림 파일을 찾지 못했습니다.");
+    const createdAt = new Date().toISOString();
+    const versionId = `version-reuse-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const imageKey = panelImageKey(project, targetPanel, versionId);
+    if (/^data:/i.test(source)) {
+      await putPanelImage(imageKey, {
+        key: imageKey,
+        dataUrl: source,
+        name: `reused-panel-${sourcePanel.id}.webp`,
+        updatedAt: createdAt
+      });
+    }
+    const current = getCurrentImageVersion(targetPanel);
+    const version = {
+      ...sourceVersion,
+      id: versionId,
+      parentVersionId: current?.id || "",
+      sourceAssetId: `reuse:${sourcePanel.id}:${sourceVersion.id}`,
+      imageKey,
+      name: `재사용 · ${sourcePanel.id}`,
+      sourceUrl: /^data:/i.test(source) ? "" : source,
+      createdAt,
+      status: "candidate",
+      qc: createPanelQc(),
+      editTarget: "reuse",
+      reusedFrom: { panelId: sourcePanel.id, versionId: sourceVersion.id }
+    };
+    targetPanel.imageVersions.push(version);
+    targetPanel.currentVersionId = version.id;
+    targetPanel.imageKey = imageKey;
+    targetPanel.imageData = source;
+    targetPanel.imageName = version.name;
+    targetPanel.imageUpdatedAt = createdAt;
+    targetPanel.qcStatus = "pending";
+    targetPanel.lastReuseSource = version.reusedFrom;
+    project.hasUnpublishedChanges = true;
+    project.updatedAt = createdAt;
+    syncVisualWorkflow(project);
+  }
+
   function renderPanelList(container, project) {
     container.innerHTML = project.panels.map((panel, index) => {
       ensurePanelEditingState(panel);
@@ -5387,7 +5675,7 @@
       const currentRenderStage = currentVersion?.renderStage || activeRenderStage;
       const currentStageApproved = Boolean(currentVersion && getApprovedVersionForStage(panel, currentRenderStage)?.id === currentVersion.id);
       const versionStateLabel = currentVersion?.status === "approved"
-        ? `${visualStageLabel(currentRenderStage)} 승인`
+        ? `${visualStageLabel(currentRenderStage)} 선택`
         : currentVersion?.status === "needs-fix"
           ? "수정 필요"
           : currentVersion ? "검수 전" : "이미지 없음";
@@ -5487,7 +5775,9 @@
             <summary><strong>구도와 필수 요소</strong><span>상세 연출</span></summary>
             <div class="panel-spec-grid">
               <label><span>카메라 거리</span><select data-spec-field="camera.shotSize"><option value="wide" ${panel.panelSpec?.camera?.shotSize === "wide" ? "selected" : ""}>원경</option><option value="medium-wide" ${panel.panelSpec?.camera?.shotSize === "medium-wide" ? "selected" : ""}>중원경</option><option value="medium" ${panel.panelSpec?.camera?.shotSize === "medium" ? "selected" : ""}>중경</option><option value="medium-close" ${panel.panelSpec?.camera?.shotSize === "medium-close" ? "selected" : ""}>중근경</option><option value="close" ${panel.panelSpec?.camera?.shotSize === "close" ? "selected" : ""}>근경</option><option value="detail" ${panel.panelSpec?.camera?.shotSize === "detail" ? "selected" : ""}>세부</option></select></label>
+              <label><span>카메라 각도</span><select data-spec-field="camera.angle"><option value="eye-level" ${panel.panelSpec?.camera?.angle === "eye-level" ? "selected" : ""}>눈높이</option><option value="profile-side" ${panel.panelSpec?.camera?.angle === "profile-side" ? "selected" : ""}>인물 옆에서</option><option value="bird-eye" ${panel.panelSpec?.camera?.angle === "bird-eye" ? "selected" : ""}>천장에서 아래로</option><option value="high-angle" ${panel.panelSpec?.camera?.angle === "high-angle" ? "selected" : ""}>위에서 내려다보기</option><option value="low-angle" ${panel.panelSpec?.camera?.angle === "low-angle" ? "selected" : ""}>아래에서 올려다보기</option><option value="ground-low-diagonal" ${panel.panelSpec?.camera?.angle === "ground-low-diagonal" ? "selected" : ""}>바닥에서 대각선 위로</option><option value="over-shoulder" ${panel.panelSpec?.camera?.angle === "over-shoulder" ? "selected" : ""}>어깨 너머로</option><option value="dutch-subtle" ${panel.panelSpec?.camera?.angle === "dutch-subtle" ? "selected" : ""}>살짝 기울인 화면</option></select></label>
               <label><span>주인공 위치</span><select data-spec-field="subject.screenPosition"><option value="left midground" ${/left/u.test(panel.panelSpec?.subjects?.[0]?.screenPosition || "") ? "selected" : ""}>왼쪽</option><option value="center midground" ${/center/u.test(panel.panelSpec?.subjects?.[0]?.screenPosition || "") ? "selected" : ""}>가운데</option><option value="right midground" ${/right/u.test(panel.panelSpec?.subjects?.[0]?.screenPosition || "") ? "selected" : ""}>오른쪽</option></select></label>
+              <label><span>주인공 방향</span><select data-spec-field="subject.facing"><option value="three-quarter-left" ${panel.panelSpec?.subjects?.[0]?.facing === "three-quarter-left" ? "selected" : ""}>왼쪽 반측면</option><option value="three-quarter-right" ${panel.panelSpec?.subjects?.[0]?.facing === "three-quarter-right" ? "selected" : ""}>오른쪽 반측면</option><option value="front" ${panel.panelSpec?.subjects?.[0]?.facing === "front" ? "selected" : ""}>앞모습</option><option value="back" ${panel.panelSpec?.subjects?.[0]?.facing === "back" ? "selected" : ""}>뒷모습</option><option value="left-profile" ${panel.panelSpec?.subjects?.[0]?.facing === "left-profile" ? "selected" : ""}>왼쪽 옆모습</option><option value="right-profile" ${panel.panelSpec?.subjects?.[0]?.facing === "right-profile" ? "selected" : ""}>오른쪽 옆모습</option></select></label>
               <label><span>반드시 보일 것</span><textarea rows="2" maxlength="500" data-spec-field="mustInclude">${escapeHtml((panel.panelSpec?.mustInclude || []).join("\n"))}</textarea></label>
               <label><span>보이면 안 될 것</span><textarea rows="2" maxlength="500" data-spec-field="mustAvoid">${escapeHtml((panel.panelSpec?.mustAvoid || []).join("\n"))}</textarea></label>
             </div>
@@ -5523,13 +5813,13 @@
               <div class="image-version-head">
                 <label><span>그림 버전</span>
                   <select data-image-version aria-label="${index + 1}컷 그림 버전">
-                    ${panel.imageVersions.map((version, versionIndex) => `<option value="${escapeHtml(version.id)}" ${version.id === panel.currentVersionId ? "selected" : ""}>v${versionIndex + 1} · ${visualStageLabel(version.renderStage)} · ${version.status === "approved" ? "승인" : version.status === "needs-fix" ? "수정 필요" : "후보"}</option>`).join("")}
+                    ${panel.imageVersions.map((version, versionIndex) => `<option value="${escapeHtml(version.id)}" ${version.id === panel.currentVersionId ? "selected" : ""}>v${versionIndex + 1} · ${visualStageLabel(version.renderStage)} · ${version.status === "approved" ? "선택" : version.status === "needs-fix" ? "수정 필요" : "후보"}</option>`).join("")}
                   </select>
                 </label>
                 <strong>${escapeHtml(versionStateLabel)}</strong>
               </div>
               <p>${currentVersion?.sourcePromptHash ? `프롬프트 ${escapeHtml(shorten(currentVersion.sourcePromptHash, 22))}` : "이전 제작 이미지"}</p>
-              ${panel.imageVersions.length > 1 ? `<div class="image-version-strip" aria-label="${index + 1}컷 버전 비교">${panel.imageVersions.map((version, versionIndex) => `<button type="button" data-action="select-image-version" data-version-id="${escapeHtml(version.id)}" class="${version.id === panel.currentVersionId ? "is-current" : ""}" aria-label="버전 ${versionIndex + 1} 보기"><span data-version-thumbnail="${escapeHtml(version.id)}">v${versionIndex + 1}</span><i>${version.status === "approved" ? "승인" : version.status === "needs-fix" ? "수정" : "후보"}</i></button>`).join("")}</div>` : ""}
+              ${panel.imageVersions.length > 1 ? `<div class="image-version-strip" aria-label="${index + 1}컷 버전 비교">${panel.imageVersions.map((version, versionIndex) => `<button type="button" data-action="select-image-version" data-version-id="${escapeHtml(version.id)}" class="${version.id === panel.currentVersionId ? "is-current" : ""}" aria-label="버전 ${versionIndex + 1} 보기"><span data-version-thumbnail="${escapeHtml(version.id)}">v${versionIndex + 1}</span><i>${version.status === "approved" ? "선택" : version.status === "needs-fix" ? "수정" : "후보"}</i></button>`).join("")}</div>` : ""}
               <div class="image-qc-badges" aria-label="그림 검수 요약">
                 <span data-state="${storyQc.state}">이야기 ${storyQc.label}</span>
                 <span data-state="${continuityQc.state}">연속성 ${continuityQc.label}</span>
@@ -5544,7 +5834,7 @@
                 <button class="tool-button mini" type="button" data-action="prepare-qc-fix">검수 내용으로 수정문 만들기</button>
               </details>
               <div class="image-version-actions">
-                <button class="tool-button mini primary" type="button" data-action="approve-image-version" ${currentStageApproved ? "disabled" : ""}>${currentRenderStage === "draft" ? "시안 구도 승인" : "완성본 최종 승인"}</button>
+                <button class="tool-button mini primary" type="button" data-action="approve-image-version" ${currentStageApproved ? "disabled" : ""}>${currentRenderStage === "draft" ? "이 구도로 완성하기" : "이 완성본 사용"}</button>
                 ${currentRenderStage === "draft" && currentStageApproved && !approvedDraftReferenceSource(currentVersion) ? '<button class="tool-button mini" type="button" data-action="sync-draft-asset">완성화 참조 저장</button>' : ""}
                 <button class="tool-button mini" type="button" data-action="flag-image-version" ${currentVersion ? "" : "disabled"}>수정 필요</button>
               </div>

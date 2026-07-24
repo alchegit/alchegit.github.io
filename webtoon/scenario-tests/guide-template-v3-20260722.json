@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "webtoon-guide-scenario-test/v2",
+  "testedAt": "2026-07-22T19:02:09+09:00",
+  "templateVersion": "awakening-subway-intro/v3",
+  "runner": "tests/webtoon-guide-scenario.mjs",
+  "result": "passed",
+  "timing": {
+    "measuredStepTotalMs": 16079,
+    "steps": [
+      { "id": "story", "label": "원고 입력과 진단", "durationMs": 822 },
+      { "id": "draft", "label": "6컷 시안 생성과 검토", "durationMs": 5761 },
+      { "id": "final", "label": "선택 시안 완성화와 안전 영역 검수", "durationMs": 5177 },
+      { "id": "lettering", "label": "말풍선·나레이션·효과음 편집", "durationMs": 1623 },
+      { "id": "redraw", "label": "도토리 안내 후 선택 컷 재연출", "durationMs": 2656 },
+      { "id": "reuse", "label": "보관 장면을 회상 컷으로 재사용", "durationMs": 40 }
+    ]
+  },
+  "visualWorkflow": {
+    "draftAssetCount": 6,
+    "finalAssetCount": 6,
+    "draftAndFinalAreDistinct": true,
+    "width": 1024,
+    "height": 1536,
+    "redrawVariant": "awakening-episode-14-choice-birdeye-v3.webp"
+  },
+  "outcome": {
+    "initialPanelCount": 6,
+    "finalPanelCount": 7,
+    "redrawCount": 1,
+    "reusedFlashback": true,
+    "completedCapabilities": ["create", "continue", "lettering", "redraw", "reuse"]
+  },
+  "assertions": {
+    "draftStageFilesCorrect": true,
+    "finalStageFilesCorrect": true,
+    "allImagesVertical": true,
+    "brokenImageCount": 0,
+    "duplicateIdCount": 0,
+    "desktopHorizontalOverflow": false,
+    "mobile390HorizontalOverflow": false,
+    "browserErrorCount": 0
+  },
+  "boundary": "가이드는 저장된 샘플 자산을 사용하므로 실제 이미지 공급자 시간과 도토리 차감은 이 테스트에 포함하지 않는다."
+}

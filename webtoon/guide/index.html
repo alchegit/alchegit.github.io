@@ -5,21 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'self' blob:">
   <meta name="webtoon-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
-    <meta name="description" content="준비된 원고로 콘티와 시안을 만들고, 구도를 승인해 완성화한 뒤 말풍선과 원하는 컷만 수정하는 NeoKIM 웹툰 가이드입니다.">
+    <meta name="description" content="준비된 원고로 시안을 만들고, 마음에 들면 완성한 뒤 글자·구도·인물 방향과 원하는 컷만 수정하는 NeoKIM 웹툰 가이드입니다.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alchegit.github.io/webtoon/guide/">
     <meta property="og:title" content="웹툰 만들기 가이드 | NeoKIM Webtoon Studio">
-    <meta property="og:description" content="샘플 원고로 시안을 만들고 승인한 구도만 완성화한 뒤 원하는 부분을 직접 수정해보세요.">
+    <meta property="og:description" content="샘플 원고로 시안을 만들고 글자와 구도를 다듬으며 필요한 컷만 다시 만들어보세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alchegit.github.io/webtoon/guide/">
     <meta property="og:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>웹툰 만들기 가이드 | NeoKIM Webtoon Studio</title>
     <link rel="stylesheet" href="../webtoon.css?v=20260716-tunnel2">
-    <link rel="stylesheet" href="../webtoon-app.css?v=20260721-visual2">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260722-artdirection1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../webtoon.js?v=20260721-visual2"></script>
+    <script defer src="../directing-knowledge.js?v=20260722-director2"></script>
+    <script defer src="../webtoon.js?v=20260722-director2"></script>
     <script defer src="../webtoon-app.js?v=20260720-reader1"></script>
-    <script defer src="./guide.js?v=20260721-visual2"></script>
+    <script defer src="./guide.js?v=20260724-causality1"></script>
   </head>
   <body class="webtoon-app-page page-guide">
     <a class="skip-link" href="#guideStage">가이드로 이동</a>
@@ -52,7 +53,7 @@
         </div>
         <div class="guide-finish-card">
           <span>완료</span>
-          <strong id="guideDoneCount">0 / 7</strong>
+          <strong id="guideDoneCount">0 / 5</strong>
         </div>
       </section>
 
@@ -60,13 +61,13 @@
         <aside class="guide-control" aria-labelledby="runnerTitle">
           <div class="column-head">
             <h2 id="runnerTitle">따라하기</h2>
-            <span class="tag">약 2분</span>
+            <span class="tag">약 75초</span>
           </div>
 
           <div class="guide-intro-card">
             <p class="kicker">Interactive walkthrough</p>
-            <strong>직접 만들며 익혀보세요.</strong>
-            <p>원고 입력부터 시안 확인, 구도 승인, 완성화와 원하는 컷 수정까지 실제 작업 순서대로 익힙니다.</p>
+            <strong>6컷 도입부를 직접 완성해보세요.</strong>
+            <p>결과를 보고 판단한 뒤 다음으로 넘어갑니다. 시안이 아쉬우면 돌아가고, 필요한 컷만 고쳐 씁니다.</p>
             <button id="startTourButton" class="tool-button primary" type="button">가이드 시작</button>
           </div>
 
@@ -79,13 +80,12 @@
             <small id="guidePromptLimit" class="field-hint">가이드 체험은 최대 600자까지 입력할 수 있습니다.</small>
           </label>
 
-          <button id="runGuideButton" class="tool-button primary guide-run-button" data-tour-target="run" type="button" disabled>콘티와 시안 만들기</button>
+          <button id="runGuideButton" class="tool-button primary guide-run-button" data-tour-target="run" type="button" disabled>시안 만들기</button>
 
           <ol id="guideVisualFlow" class="guide-visual-flow" aria-label="그림 제작 단계" aria-live="polite">
-            <li data-visual-stage="storyboard"><span>1</span><strong>콘티</strong></li>
-            <li data-visual-stage="draft"><span>2</span><strong>시안</strong></li>
-            <li data-visual-stage="final"><span>3</span><strong>완성화</strong></li>
-            <li data-visual-stage="approval"><span>4</span><strong>최종 승인</strong></li>
+            <li data-visual-stage="draft"><span>1</span><strong>시안</strong></li>
+            <li data-visual-stage="final"><span>2</span><strong>완성화</strong></li>
+            <li data-visual-stage="edit"><span>3</span><strong>직접 편집</strong></li>
           </ol>
 
           <div class="guide-progress-card" data-tour-target="progress" aria-live="polite">
@@ -96,40 +96,110 @@
             <div class="guide-progress-track">
               <div id="progressFill" class="guide-progress-fill"></div>
             </div>
-            <p id="progressLog">완성도를 올리기 전에 콘티와 시안을 먼저 확인합니다.</p>
+            <p id="progressLog">가벼운 시안으로 이야기와 구도를 먼저 확인합니다.</p>
           </div>
 
           <ol id="guideSteps" class="guide-steps" aria-label="Guide steps">
-            <li data-step="run" class="is-current"><span>1</span>콘티 만들기</li>
-            <li data-step="draft"><span>2</span>시안 확인</li>
-            <li data-step="draft-approve"><span>3</span>시안 구도 승인</li>
-            <li data-step="final-approve"><span>4</span>완성화·최종 승인</li>
-            <li data-step="speech"><span>5</span>말풍선 수정</li>
-            <li data-step="move"><span>6</span>인물·구도 이동</li>
-            <li data-step="regen"><span>7</span>선택한 컷 수정</li>
+            <li data-step="create" class="is-current"><span>1</span>시안 만들기</li>
+            <li data-step="continue"><span>2</span>완성 이어가기</li>
+            <li data-step="lettering"><span>3</span>글자·위치 편집</li>
+            <li data-step="redraw"><span>4</span>선택 컷 다시 그리기</li>
+            <li data-step="reuse"><span>5</span>장면 보관·재사용</li>
           </ol>
+
+          <details id="guideDecisionLogSection" class="guide-decision-log" open>
+            <summary><span>AI 편집 비서 판단 기록</span><strong id="guideDecisionCount">0 / 6</strong></summary>
+            <p>각 결과를 확인하고 무엇을 유지하거나 고쳤는지, 실제 걸린 시간과 함께 기록합니다.</p>
+            <ol id="guideDecisionList" aria-live="polite">
+              <li class="is-waiting"><span>대기</span><strong>가이드를 시작하면 판단 기록이 쌓입니다.</strong></li>
+            </ol>
+            <div class="guide-decision-actions">
+              <button id="copyGuideLogButton" class="tool-button mini" type="button" disabled>로그 복사</button>
+              <a class="tool-button mini" href="../scenario-tests/guide-template-v4-20260724.md">전체 테스트 기록</a>
+            </div>
+          </details>
         </aside>
 
         <section class="guide-preview" aria-labelledby="previewTitle">
           <div class="column-head">
             <h2 id="previewTitle">시안 미리보기</h2>
             <div class="guide-actions">
-              <button id="guideApprovalButton" class="tool-button primary" data-tour-target="approval" type="button" disabled>시안 구도 승인</button>
-              <button id="regenPanelButton" class="tool-button yellow" type="button" disabled>선택한 컷 다시 만들기</button>
+              <button id="guideBackButton" class="tool-button" type="button" hidden>장면 설정 바꾸기</button>
+              <button id="guideApprovalButton" class="tool-button primary" data-tour-target="continue" type="button" disabled>이대로 완성하기</button>
+              <button id="regenPanelButton" class="tool-button yellow" type="button" disabled>컷 다시 그리기</button>
               <a id="guideReaderLink" class="tool-button is-disabled" href="/webtoon/reader/?scenario=guide-episode" aria-disabled="true" tabindex="-1">1화 감상</a>
               <a class="tool-button" href="/webtoon/studio/?template=awakening-subway-gate&amp;scenario=guide-episode">작업대로 이동</a>
             </div>
           </div>
 
+          <span id="guideLetteringToolbarAnchor" hidden></span>
+          <section id="guideLetteringToolbar" class="guide-lettering-toolbar" role="toolbar" aria-label="선택한 글자 서식" hidden>
+            <div class="guide-lettering-current">
+              <strong id="guideLetteringLabel">말풍선</strong>
+              <small id="guideLetteringHint">글자를 누르면 서식을 바꿀 수 있어요.</small>
+            </div>
+            <label class="guide-lettering-font"><span>글꼴</span><select id="guideLetteringFont"><option value="sans">고딕</option><option value="serif">명조</option><option value="hand">손글씨</option><option value="mono">모노</option></select></label>
+            <label class="guide-lettering-size"><span>크기 <output id="guideLetteringSizeValue" for="guideLetteringSize">100%</output></span><input id="guideLetteringSize" type="range" min="75" max="160" step="5" value="100"></label>
+            <button id="guideLetteringBold" class="guide-format-toggle" type="button" aria-pressed="true" title="굵게"><strong aria-hidden="true">B</strong><span class="sr-only">굵게</span></button>
+            <div class="guide-color-swatches" role="group" aria-label="글자 색상">
+              <button type="button" data-guide-letter-color="#0b1018" style="--letter-swatch:#0b1018" aria-label="검정"></button>
+              <button type="button" data-guide-letter-color="#f8f3e8" style="--letter-swatch:#f8f3e8" aria-label="아이보리"></button>
+              <button type="button" data-guide-letter-color="#4ee0b5" style="--letter-swatch:#4ee0b5" aria-label="민트"></button>
+              <button type="button" data-guide-letter-color="#ffd457" style="--letter-swatch:#ffd457" aria-label="노랑"></button>
+              <button type="button" data-guide-letter-color="#ff6f7d" style="--letter-swatch:#ff6f7d" aria-label="코랄"></button>
+              <input id="guideLetteringCustomColor" type="color" value="#0b1018" aria-label="직접 색상 선택" title="직접 색상 선택">
+            </div>
+            <button id="guideLetteringReset" class="guide-format-reset" type="button">기본값</button>
+          </section>
+
           <div id="guideCanvas" class="guide-canvas is-empty" data-tour-target="canvas" aria-live="polite">
             <div class="guide-empty">
               <strong>먼저 가벼운 시안으로 확인해보세요.</strong>
-              <span>마음에 드는 구도를 승인하면 같은 장면을 완성본으로 다듬습니다.</span>
+              <span>마음에 들면 그대로 완성하고, 아니면 돌아가 장면을 바꿀 수 있습니다.</span>
             </div>
           </div>
+
+          <section id="guideRedrawControls" class="guide-redraw-controls" data-tour-target="redraw" hidden aria-labelledby="guideRedrawTitle">
+            <div>
+              <p class="kicker">Direct the shot</p>
+              <h3 id="guideRedrawTitle">다섯 번째 컷 다시 그리기</h3>
+              <p>장면에 필요한 카메라와 인물 방향을 고릅니다. 실제 작업에서는 새 이미지 생성 전에 도토리 비용을 확인합니다.</p>
+            </div>
+            <div class="guide-redraw-grid">
+              <label><span>카메라 각도</span><select id="guideCameraAngle"><option value="profile-side">인물 옆에서</option><option value="bird-eye" selected>천장에서 아래로</option><option value="high-angle">위에서 내려다보기</option><option value="low-angle">아래에서 올려다보기</option><option value="ground-low-diagonal">바닥에서 대각선 위로</option><option value="over-shoulder">어깨 너머로</option></select></label>
+              <label><span>인물 방향</span><select id="guideCharacterFacing"><option value="three-quarter-left">왼쪽 반측면</option><option value="three-quarter-right">오른쪽 반측면</option><option value="front" selected>앞모습</option><option value="back">뒷모습</option><option value="left-profile">왼쪽 옆모습</option><option value="right-profile">오른쪽 옆모습</option></select></label>
+            </div>
+            <button id="guideRedrawRequestButton" class="tool-button yellow" type="button">이 설정으로 다시 그리기</button>
+          </section>
+
+          <section id="guideAssetShelf" class="guide-asset-shelf" data-tour-target="assets" hidden aria-labelledby="guideAssetTitle">
+            <div class="guide-asset-head">
+              <div><p class="kicker">Saved automatically</p><h3 id="guideAssetTitle">장면 보관함</h3></div>
+              <span>자동 분류</span>
+            </div>
+            <p>만들어진 장면과 인물은 자동으로 보관됩니다. 이전 장면을 현재 컷에 다시 쓰거나 회상 컷으로 가져올 수 있습니다.</p>
+            <div id="guideAssetList" class="guide-asset-list"></div>
+          </section>
         </section>
       </section>
     </main>
+
+    <dialog id="guideCostDialog" class="guide-cost-dialog" aria-labelledby="guideCostTitle">
+      <form method="dialog">
+        <p class="kicker">Generation cost</p>
+        <h2 id="guideCostTitle">새 그림을 만들까요?</h2>
+        <p><strong>실제 작업: 도토리 1개</strong><span>선택한 컷만 새 버전으로 만들며 기존 그림은 보관함에 남습니다.</span></p>
+        <dl>
+          <div><dt>카메라</dt><dd id="guideCostCamera">천장에서 아래로</dd></div>
+          <div><dt>인물 방향</dt><dd id="guideCostFacing">앞모습</dd></div>
+        </dl>
+        <small>이 가이드는 준비된 샘플을 사용하므로 도토리를 차감하지 않습니다.</small>
+        <div class="guide-cost-actions">
+          <button class="tool-button" value="cancel">취소</button>
+          <button id="confirmGuideRedrawButton" class="tool-button yellow" value="default">무료로 체험하기</button>
+        </div>
+      </form>
+    </dialog>
 
     <div id="guideTour" class="guide-tour" hidden>
       <div id="guideSpotlight" class="guide-spotlight" aria-hidden="true">
@@ -137,7 +207,7 @@
       </div>
       <aside id="guideCoach" class="guide-coach" role="dialog" aria-labelledby="guideCoachTitle" aria-describedby="guideCoachText" aria-live="polite">
         <div class="guide-coach-topline">
-          <span id="guideCoachCounter">STEP 1 / 10</span>
+          <span id="guideCoachCounter">STEP 1 / 6</span>
           <button id="closeTourButton" class="guide-coach-close" type="button" aria-label="가이드 닫기">×</button>
         </div>
         <h2 id="guideCoachTitle">한 줄 원고부터 시작</h2>

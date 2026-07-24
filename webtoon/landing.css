@@ -711,43 +711,112 @@ img {
   height: 100%;
   object-fit: cover;
   object-position: var(--story-position, 18%) center;
-  transform: translateX(var(--story-drift, 0)) scale(1.05);
+  transform: translateX(var(--story-drift, 0)) scale(var(--story-scale, 1.05));
   transition: object-position 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .focus-frame {
+  --focus-accent: var(--lemon);
   position: absolute;
-  top: 17%;
-  left: 16%;
+  top: 12%;
+  left: 8%;
   z-index: 3;
-  width: 38%;
-  height: 52%;
-  border: 1px solid rgba(255, 212, 87, 0.8);
+  width: 34%;
+  height: 62%;
+  overflow: visible;
+  border: 3px solid rgba(255, 212, 87, 0.82);
+  background:
+    linear-gradient(var(--focus-accent), var(--focus-accent)) left top / 38px 6px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) left top / 6px 38px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) right top / 38px 6px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) right top / 6px 38px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) left bottom / 38px 6px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) left bottom / 6px 38px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) right bottom / 38px 6px no-repeat,
+    linear-gradient(var(--focus-accent), var(--focus-accent)) right bottom / 6px 38px no-repeat;
+  box-shadow:
+    0 0 0 1px rgba(11, 16, 24, 0.42),
+    0 0 28px rgba(255, 212, 87, 0.28),
+    inset 0 0 24px rgba(255, 212, 87, 0.08);
   pointer-events: none;
-  transition: inset 550ms ease, width 550ms ease, height 550ms ease;
-}
-
-.focus-frame::before,
-.focus-frame::after {
-  content: "";
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-color: var(--lemon);
+  transform-origin: center;
+  will-change: top, left, width, height, transform;
+  transition:
+    top 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    left 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    width 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 380ms ease;
 }
 
 .focus-frame::before {
-  top: -3px;
-  left: -3px;
-  border-top: 3px solid;
-  border-left: 3px solid;
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.42;
+  background:
+    linear-gradient(to right, transparent calc(33.333% - 1px), var(--focus-accent) 33.333%, transparent calc(33.333% + 1px)),
+    linear-gradient(to right, transparent calc(66.666% - 1px), var(--focus-accent) 66.666%, transparent calc(66.666% + 1px)),
+    linear-gradient(to bottom, transparent calc(33.333% - 1px), var(--focus-accent) 33.333%, transparent calc(33.333% + 1px)),
+    linear-gradient(to bottom, transparent calc(66.666% - 1px), var(--focus-accent) 66.666%, transparent calc(66.666% + 1px));
 }
 
 .focus-frame::after {
-  right: -3px;
-  bottom: -3px;
-  border-right: 3px solid;
-  border-bottom: 3px solid;
+  content: "";
+  position: absolute;
+  right: 7px;
+  left: 7px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--focus-accent) 18%, #fff6bf 50%, var(--focus-accent) 82%, transparent);
+  box-shadow: 0 0 14px rgba(255, 212, 87, 0.72);
+  animation: focus-frame-scan 2.8s ease-in-out infinite;
+}
+
+.focus-frame-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-width: max-content;
+  padding: 5px 8px 4px;
+  border: 1px solid rgba(255, 212, 87, 0.76);
+  background: rgba(11, 16, 24, 0.86);
+  color: var(--focus-accent);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.focus-frame.is-shifting {
+  animation: focus-frame-arrive 760ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes focus-frame-arrive {
+  0% {
+    opacity: 0.28;
+    transform: scale(0.76);
+    filter: saturate(0.7);
+  }
+  58% {
+    opacity: 1;
+    transform: scale(1.045);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1);
+  }
+}
+
+@keyframes focus-frame-scan {
+  0%, 100% {
+    top: 9px;
+    opacity: 0.2;
+  }
+  50% {
+    top: calc(100% - 12px);
+    opacity: 0.9;
+  }
 }
 
 .story-caption {

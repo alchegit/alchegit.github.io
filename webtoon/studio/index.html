@@ -19,9 +19,10 @@
     <meta name="twitter:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>NeoKIM Webtoon Studio | 현대 판타지 각성물 제작 작업대</title>
     <link rel="stylesheet" href="../webtoon.css?v=20260718-home2">
-    <link rel="stylesheet" href="../webtoon-app.css?v=20260721-visual1">
+    <link rel="stylesheet" href="../webtoon-app.css?v=20260722-artdirection1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../webtoon.js?v=20260721-visual1"></script>
+    <script defer src="../directing-knowledge.js?v=20260722-director2"></script>
+    <script defer src="../webtoon.js?v=20260722-director2"></script>
     <script defer src="../webtoon-app.js?v=20260720-reader1"></script>
   </head>
   <body class="webtoon-app-page page-studio">
@@ -103,7 +104,7 @@
                 <p class="kicker">Story intent</p>
                 <h2 id="storyDevelopmentTitle">이야기 보강안 확인</h2>
               </div>
-              <strong id="storyDevelopmentState" class="production-state">승인 전</strong>
+              <strong id="storyDevelopmentState" class="production-state">확인 전</strong>
             </div>
             <p class="production-panel-copy">내가 쓴 사실은 잠그고, 편집 비서가 보탠 내용만 골라서 사용합니다.</p>
             <div class="story-fact-block">
@@ -146,8 +147,8 @@
             <div id="storyboardSceneList" class="storyboard-scene-list"></div>
             <div id="storyboardReadiness" class="storyboard-readiness" aria-live="polite"></div>
             <div class="production-panel-actions">
-              <button id="resetStoryboardApprovalButton" class="tool-button" type="button">승인 초기화</button>
-              <button id="approveAllStoryboardButton" class="tool-button primary" type="button">모든 콘티 승인</button>
+              <button id="resetStoryboardApprovalButton" class="tool-button" type="button">장면 설정 다시 보기</button>
+              <button id="approveAllStoryboardButton" class="tool-button primary" type="button">이대로 시안 만들기</button>
             </div>
           </section>
 
@@ -155,8 +156,7 @@
             <ol>
               <li data-visual-step="storyboard"><span>1</span><strong>콘티</strong><small>구도 확인</small></li>
               <li data-visual-step="draft"><span>2</span><strong>시안</strong><small>저비용 확인</small></li>
-              <li data-visual-step="final"><span>3</span><strong>완성화</strong><small>승인 구도 유지</small></li>
-              <li data-visual-step="approval"><span>4</span><strong>최종 승인</strong><small>게시 준비</small></li>
+              <li data-visual-step="final"><span>3</span><strong>완성화</strong><small>선택 구도 유지</small></li>
             </ol>
           </nav>
 
@@ -181,7 +181,7 @@
               <button id="copyAllPromptPackagesButton" class="tool-button" type="button" disabled>전체 프롬프트 보기</button>
               <button id="queueGenerationButton" class="tool-button primary" type="button" disabled>그림 작업 요청</button>
             </div>
-            <small id="generationCostNote" class="generation-cost-note">콘티는 무료입니다. 시안과 완성화는 승인 단계를 나누어 요청합니다.</small>
+            <small id="generationCostNote" class="generation-cost-note">콘티는 무료입니다. 시안을 보고 마음에 들면 완성화를 이어갑니다.</small>
           </section>
 
           <section id="qualityReviewPanel" class="studio-production-panel quality-review-panel" aria-labelledby="qualityReviewTitle" hidden>
@@ -192,7 +192,7 @@
               </div>
               <strong id="qualityReviewState" class="production-state">0 / 0</strong>
             </div>
-            <p id="qualityReviewCopy" class="production-panel-copy">시안에서는 이야기, 인물 위치와 카메라 구도만 확인합니다. 승인한 시안을 기준으로 완성화를 진행합니다.</p>
+            <p id="qualityReviewCopy" class="production-panel-copy">시안에서는 이야기, 인물 위치와 카메라 구도만 확인합니다. 마음에 들면 그대로 완성화를 이어갑니다.</p>
             <fieldset class="publish-locale-settings">
               <legend>게시 언어</legend>
               <label><input type="checkbox" data-publish-locale="ko" checked disabled>한국어</label>
@@ -205,11 +205,11 @@
           </section>
 
           <ol id="studioSteps" class="guide-steps studio-guide-steps" aria-label="웹툰 제작 순서">
-            <li data-studio-step="run" class="is-current"><span>1</span>웹툰 만들기</li>
-            <li data-studio-step="view"><span>2</span>결과 확인</li>
-            <li data-studio-step="speech"><span>3</span>텍스트 수정·배치</li>
-            <li data-studio-step="move"><span>4</span>인물·구도 이동</li>
-            <li data-studio-step="regen"><span>5</span>선택한 컷 수정</li>
+            <li data-studio-step="run" class="is-current"><span>1</span>시안 만들기</li>
+            <li data-studio-step="view"><span>2</span>마음에 들면 계속</li>
+            <li data-studio-step="speech"><span>3</span>글자·위치 편집</li>
+            <li data-studio-step="regen"><span>4</span>선택 컷 다시 그리기</li>
+            <li data-studio-step="reuse"><span>5</span>장면 보관·재사용</li>
           </ol>
 
           <div class="studio-extensions" aria-label="상세 기능">
@@ -289,6 +289,21 @@
               </div>
             </details>
 
+            <details class="studio-extension" data-studio-section="assets">
+              <summary>
+                <span><strong>장면 보관함</strong><small>장면·인물 자동 분류와 재사용</small></span>
+                <i aria-hidden="true"></i>
+              </summary>
+              <div class="studio-extension-body">
+                <div class="studio-asset-vault-head">
+                  <div><p class="kicker">Saved automatically</p><h2>다시 쓸 수 있는 그림</h2></div>
+                  <span>자동 보관</span>
+                </div>
+                <p class="studio-asset-vault-copy">만든 컷과 각 버전은 지워지지 않고 장면별로 모입니다. 선택한 컷에 그대로 넣어 회상 장면이나 반복 연출로 사용할 수 있습니다.</p>
+                <div id="studioAssetShelf" class="studio-asset-shelf" aria-live="polite"></div>
+              </div>
+            </details>
+
             <details class="studio-extension" data-studio-section="output">
               <summary>
                 <span><strong>저장 및 내보내기</strong><small>미리보기, 저장, 게시</small></span>
@@ -349,6 +364,32 @@
               <button class="segment-button" type="button" data-regeneration-target="composition" aria-pressed="false">구도</button>
               <button class="segment-button" type="button" data-regeneration-target="full" aria-pressed="false">전체</button>
             </div>
+            <div class="regeneration-direction-grid">
+              <label class="field">
+                <span>카메라 각도</span>
+                <select id="regenerationCameraAngle">
+                  <option value="eye-level">눈높이</option>
+                  <option value="profile-side">인물 옆에서</option>
+                  <option value="bird-eye">천장에서 아래로</option>
+                  <option value="high-angle">위에서 내려다보기</option>
+                  <option value="low-angle">아래에서 올려다보기</option>
+                  <option value="ground-low-diagonal">바닥에서 대각선 위로</option>
+                  <option value="over-shoulder">어깨 너머로</option>
+                  <option value="dutch-subtle">살짝 기울인 화면</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>인물 방향</span>
+                <select id="regenerationCharacterFacing">
+                  <option value="three-quarter-left">왼쪽 반측면</option>
+                  <option value="three-quarter-right">오른쪽 반측면</option>
+                  <option value="front">앞모습</option>
+                  <option value="back">뒷모습</option>
+                  <option value="left-profile">왼쪽 옆모습</option>
+                  <option value="right-profile">오른쪽 옆모습</option>
+                </select>
+              </label>
+            </div>
             <label id="regenerationCharacterField" class="field regeneration-character-field" hidden>
               <span>다시 그릴 인물</span>
               <select id="regenerationCharacterSelect" aria-label="다시 그릴 특정 인물"></select>
@@ -388,6 +429,23 @@
         </section>
       </section>
     </main>
+
+    <dialog id="regenerationCostDialog" class="guide-cost-dialog studio-cost-dialog" aria-labelledby="regenerationCostTitle">
+      <form method="dialog">
+        <p class="kicker">Redraw one cut</p>
+        <h2 id="regenerationCostTitle">선택한 컷을 새로 그릴까요?</h2>
+        <p><strong data-regeneration-cost>도토리 1개</strong><span>기존 그림은 장면 보관함에 남고 새 버전이 추가됩니다.</span></p>
+        <dl>
+          <div><dt>카메라</dt><dd id="regenerationCostCamera">눈높이</dd></div>
+          <div><dt>인물 방향</dt><dd id="regenerationCostFacing">왼쪽 반측면</dd></div>
+        </dl>
+        <small data-regeneration-admin-note hidden>관리자 테스트에서는 도토리가 차감되지 않습니다.</small>
+        <div class="guide-cost-actions">
+          <button class="tool-button" value="cancel">취소</button>
+          <button id="confirmRegenerationCostButton" class="tool-button yellow" value="default">새 버전 만들기</button>
+        </div>
+      </form>
+    </dialog>
 
     <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
   </body>

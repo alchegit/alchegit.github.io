@@ -6,7 +6,7 @@
   "description": "Oracle-backed API server for NeoKIM Webtoon Studio.",
   "scripts": {
     "start": "node src/server.mjs",
-    "check": "node --check src/server.mjs"
+    "check": "node --check src/server.mjs && node --check src/storyheaven.mjs && node scripts/check-storyheaven.mjs"
   },
   "engines": {
     "node": ">=20"

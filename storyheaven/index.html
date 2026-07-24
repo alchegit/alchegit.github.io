@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#11131a">
+    <meta name="description" content="짧은 이야기 아이디어를 나누고, 독자가 고른 이야기를 웹툰으로 만드는 StoryHeaven 커뮤니티입니다.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
+    <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+    <link rel="canonical" href="https://alchegit.github.io/storyheaven/">
+    <title>StoryHeaven | 스토리가 웹툰이 되는 곳</title>
+    <link rel="stylesheet" href="./storyheaven.css?v=20260724-foundation1">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="./storyheaven.js?v=20260724-foundation1"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">본문으로 이동</a>
+    <header class="site-header">
+      <a class="brand" href="/storyheaven/" aria-label="StoryHeaven 홈">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span><strong>StoryHeaven</strong><small>스토리천국</small></span>
+      </a>
+      <nav class="main-nav" aria-label="주요 메뉴">
+        <a href="#weekly">이번 주</a>
+        <a href="#discover">이야기</a>
+        <a href="#winners">당선작</a>
+        <a href="/storyheaven/my/">내 이야기</a>
+        <a href="/webtoon/">웹툰 스튜디오</a>
+      </nav>
+      <div class="account-actions">
+        <button class="text-button nickname-button" type="button" data-nickname-button hidden></button>
+        <button class="solid-button login-button" type="button" data-login>Google 로그인</button>
+        <button class="icon-button logout-button" type="button" data-logout hidden aria-label="로그아웃" title="로그아웃">↪</button>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="intro-band" aria-labelledby="introTitle">
+        <div class="intro-copy">
+          <p class="eyebrow">FOUNDING SEASON · 2026</p>
+          <h1 id="introTitle">당신의 이야기가<br><span>다음 웹툰</span>이 됩니다.</h1>
+          <p class="intro-summary">떠오른 장면을 짧게 적어주세요. 독자의 선택을 받은 이야기는 한 편의 세로 웹툰으로 이어집니다.</p>
+          <div class="intro-actions">
+            <a class="solid-button submit-button" href="/storyheaven/write/">이야기 투고</a>
+            <a class="plain-link" href="/webtoon/guide/">웹툰 제작 과정 보기 <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="story-ticket" aria-label="이번 주 이야기 선발 방식">
+          <div class="ticket-top"><span data-round-status>WEEKLY PASS</span><strong>01</strong></div>
+          <p>좋아요는 한 사람당 한 번.<br>가장 많은 선택을 받은 이야기를 웹툰으로 만듭니다.</p>
+          <ol>
+            <li><span>월</span> 투고 시작</li>
+            <li><span>일</span> 자정 마감</li>
+            <li><span>다음 주</span> 파일럿 제작</li>
+          </ol>
+          <p class="round-clock" data-round-clock>창립 시즌 후보를 기다리고 있습니다.</p>
+        </div>
+      </section>
+
+      <section id="weekly" class="weekly-section section-shell" aria-labelledby="weeklyTitle">
+        <div class="section-heading">
+          <div><p class="eyebrow">THIS WEEK</p><h2 id="weeklyTitle">이번 주 독자의 선택</h2></div>
+          <p data-weekly-meta>실제 독자의 좋아요만 순위에 반영됩니다.</p>
+        </div>
+        <div class="weekly-list" data-weekly-list>
+          <div class="empty-state"><strong>첫 주인공을 기다리고 있어요.</strong><span>창립 시즌의 첫 투고가 올라오면 이곳에서 순위가 시작됩니다.</span></div>
+        </div>
+      </section>
+
+      <section id="discover" class="discover-section section-shell" aria-labelledby="discoverTitle">
+        <div class="section-heading">
+          <div><p class="eyebrow">DISCOVER</p><h2 id="discoverTitle">새로운 이야기</h2></div>
+          <div class="feed-tabs" role="tablist" aria-label="이야기 정렬">
+            <button type="button" class="is-active" role="tab" aria-selected="true" data-feed-filter="latest">최신</button>
+            <button type="button" role="tab" aria-selected="false" data-feed-filter="popular">떠오르는</button>
+          </div>
+        </div>
+        <div class="story-grid" data-human-feed></div>
+        <div class="empty-state human-empty" data-human-empty hidden>
+          <strong>아직 공개된 독자 이야기가 없습니다.</strong>
+          <span>투고가 열리면 최신 이야기부터 이곳에 표시됩니다.</span>
+        </div>
+      </section>
+
+      <section class="seed-section section-shell" aria-labelledby="seedTitle">
+        <div class="section-heading seed-heading">
+          <div><p class="eyebrow">AI SEED SHELF</p><h2 id="seedTitle">이야기의 씨앗</h2></div>
+          <p>초기 감상을 위해 AI가 만든 예시입니다. 주간 순위에는 참여하지 않습니다.</p>
+        </div>
+        <div class="story-grid" data-seed-feed aria-live="polite"></div>
+      </section>
+
+      <section id="winners" class="winner-band" aria-labelledby="winnerTitle">
+        <p class="eyebrow">FROM STORY TO WEBTOON</p>
+        <h2 id="winnerTitle">이번 주의 한 줄이<br>다음 주의 첫 컷으로.</h2>
+        <p>선정된 이야기는 원작자 동의 후 각색, 시안, 완성의 순서로 제작됩니다.</p>
+        <a class="solid-button" href="/webtoon/reader/">완성 웹툰 감상</a>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="/storyheaven/">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span><strong>StoryHeaven</strong><small>Stories chosen by readers</small></span>
+      </a>
+      <p>AI 시드와 운영진 추천은 실제 독자 좋아요와 분리해 표시합니다.</p>
+      <a href="/webtoon/privacy/">개인정보 안내</a>
+    </footer>
+
+    <dialog class="nickname-dialog" data-nickname-dialog>
+      <form method="dialog" data-nickname-form>
+        <button class="dialog-close" type="button" data-dialog-close aria-label="닫기">×</button>
+        <p class="eyebrow">PUBLIC NAME</p>
+        <h2>활동 이름 정하기</h2>
+        <p>스토리와 좋아요에 Google 이름 대신 이 이름이 표시됩니다.</p>
+        <label for="nicknameInput">닉네임</label>
+        <div class="nickname-field">
+          <input id="nicknameInput" name="nickname" type="text" minlength="2" maxlength="20" autocomplete="off" spellcheck="false" required>
+          <span><b data-nickname-count>0</b>/20</span>
+        </div>
+        <p class="field-status" data-nickname-status>한글, 영문, 숫자, 띄어쓰기, 밑줄과 하이픈을 사용할 수 있습니다.</p>
+        <button class="solid-button save-nickname" type="submit" disabled>이 이름 사용</button>
+        <small>첫 변경 이후에는 30일마다 바꿀 수 있으며, 이전 이름은 90일간 보호됩니다.</small>
+      </form>
+    </dialog>
+
+    <div class="toast" data-toast role="status" aria-live="polite" hidden></div>
+    <template id="storyCardTemplate">
+      <article class="story-card">
+        <a class="story-cover" href="#" data-story-link>
+          <img alt="" loading="lazy">
+          <span class="origin-badge"></span>
+          <span class="editor-badge" hidden></span>
+        </a>
+        <div class="story-content">
+          <div class="story-meta"><span class="genre"></span><span class="author"></span></div>
+          <h3><a href="#" data-story-link></a></h3>
+          <p class="logline"></p>
+          <div class="tag-list"></div>
+          <div class="story-footer">
+            <button class="like-button" type="button" aria-pressed="false"><span aria-hidden="true">♥</span><b>0</b></button>
+            <button class="endorse-button" type="button" hidden title="운영진 추천 강도 변경">추천 +</button>
+            <span class="competition-note"></span>
+          </div>
+        </div>
+      </article>
+    </template>
+  </body>
+</html>

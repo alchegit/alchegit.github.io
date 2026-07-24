@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "webtoon-guide-scenario-test/v3",
+  "testedAt": "2026-07-24T09:26:17+09:00",
+  "templateVersion": "awakening-subway-intro/v4",
+  "runner": "tests/webtoon-guide-scenario.mjs",
+  "result": "passed",
+  "assetProduction": {
+    "finalPanelCount": 6,
+    "draftPanelCount": 6,
+    "alternateCameraCount": 1,
+    "reviewMethod": "각 완성 컷을 생성 직후 육안 검토하고, 원인·결과·접지·광원·연속성 기준을 통과한 뒤 다음 컷으로 이동",
+    "revisionCount": 1,
+    "revision": {
+      "panel": "p2",
+      "firstPassProblem": "한 사람이 걸어서 남길 수 있는 수보다 많은 안전화 자국이 생성됨",
+      "change": "기존 자국을 모두 제거하고 좌우가 번갈아 찍힌 정확히 8개의 자국으로 재생성",
+      "result": "accepted"
+    }
+  },
+  "physicalLogicChecks": {
+    "p1": ["실제 승객의 몸이 열차 안에 보임", "모든 그림자와 반사가 신체·광원에 연결됨", "도윤과 카트가 바닥에 접지됨"],
+    "p2": ["안전화 자국이 정확히 8개", "좌우 교대와 현실적인 보폭", "배관 누수에서 시작해 이동 방향으로 점차 마름"],
+    "p3": ["검표원의 두 부츠가 문턱과 바닥에 닿음", "그림자가 부츠에서 시작됨", "도윤이 실제 카트 뒤에 몸을 숨김"],
+    "p4": ["무너진 문틀이 철제 구조물에 지지됨", "두 사람의 손과 손목이 자연스럽게 연결됨", "발·무릎의 하중점이 보임"],
+    "p5": ["두 개의 연속문을 가진 물리적 에어록", "두 사람이 서로 다른 압력판을 밟음", "열린 문과 잠긴 문의 공간 관계가 읽힘"],
+    "p6": ["호스가 펌프에서 세척봉까지 끊김 없이 연결됨", "두 인물의 자세가 반동과 하중을 설명함", "검표원의 두 발이 충격 중에도 접지됨"]
+  },
+  "timing": {
+    "browserRunElapsedMs": 41100,
+    "measuredStepTotalMs": 16183,
+    "steps": [
+      { "id": "story", "label": "원고 입력과 진단", "durationMs": 822 },
+      { "id": "draft", "label": "6컷 시안 생성과 검토", "durationMs": 5758 },
+      { "id": "final", "label": "선택 시안 완성화와 안전 영역 검수", "durationMs": 5165 },
+      { "id": "lettering", "label": "말풍선·나레이션·효과음 편집", "durationMs": 1704 },
+      { "id": "redraw", "label": "도토리 안내 후 선택 컷 재연출", "durationMs": 2686 },
+      { "id": "reuse", "label": "보관 장면을 회상 컷으로 재사용", "durationMs": 48 }
+    ]
+  },
+  "visualWorkflow": {
+    "draftAndFinalAreDistinct": true,
+    "width": 1024,
+    "height": 1536,
+    "format": "webp",
+    "redrawVariant": "awakening-episode-05-airlock-choice-birdeye-v4.webp"
+  },
+  "assertions": {
+    "realityCheckCountPerPanel": 3,
+    "draftStageFilesCorrect": true,
+    "finalStageFilesCorrect": true,
+    "allImagesVertical": true,
+    "brokenImageCount": 0,
+    "duplicateIdCount": 0,
+    "desktopHorizontalOverflow": false,
+    "mobile390HorizontalOverflow": false,
+    "browserErrorCount": 0
+  },
+  "boundary": "물리·개연성 검수는 생성 직후 사람이 컷을 보고 통과 여부를 판단했으며, 자동 테스트는 파일 계약·화면 동작·검수 항목 등록·레이아웃을 검증한다."
+}

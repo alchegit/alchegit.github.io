@@ -17,6 +17,10 @@ secrets/
 webtoon/design-db.json
 webtoon/implementation-report.md
 webtoon/summary.txt
+webtoon/storyheaven-implementation-*.md
+webtoon/storyheaven-product-plan.md
+webtoon/storyheaven-summary.txt
+bk/
 
 # Runtime/build output
 node_modules/
@@ -30,6 +34,7 @@ workers/**/outbox/
 workers/**/data/
 workers/**/.webtoon-download-watcher-state.json
 test-results/
+webtoon/assets/guide/*-v4.png
 
 # Logs
 *.log
