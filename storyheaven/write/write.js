@@ -11,7 +11,7 @@
 
 [제출 기준]
 - 1화 제목: 2~80자
-- 회차 소개: 80~500자, 결말 스포일러 제외
+- 회차 소개: 원고에서 자동 생성
 - 원고: 공백 제외 최소 2,500자, 권장 4,000~7,000자, 최대 12,000자
 - 문단: 최소 8개, 최대 240개. 장면이 바뀌면 한 줄을 비워 구분
 - 외부 링크: 최대 3개
@@ -22,24 +22,28 @@
 - 주인공이 직접 판단하고 행동하나요?
 - 한 화 안에서 상황이나 관계가 달라지나요?
 - 마지막에 다음 장면을 궁금하게 만드는 변화가 있나요?`;
-  const state = { storyId: new URLSearchParams(location.search).get("id"), story: null, episode: null, ready: false, saving: false };
+  const state = {
+    storyId: new URLSearchParams(location.search).get("id"),
+    story: null,
+    episode: null,
+    genre: "",
+    genreComposing: false,
+    tags: [],
+    tagComposing: false,
+    ready: false,
+    saving: false
+  };
   document.addEventListener("DOMContentLoaded", init);
 
   async function init() {
-    fillGenres();
     bindForm();
     await window.StoryHeavenCommon.init(onAuth);
   }
 
-  function fillGenres() {
-    const primary = document.querySelector('[name="genre"]');
-    const secondary = document.querySelector('[name="secondaryGenre"]');
-    genres.forEach((genre) => primary.add(new Option(genre, genre)));
-    genres.forEach((genre) => secondary.add(new Option(genre, genre)));
-  }
-
   function bindForm() {
     const form = document.querySelector("[data-story-form]");
+    bindGenreEditor();
+    bindTagEditor();
     form.addEventListener("input", () => { updateCounters(); updateProgress(); updateManuscriptHealth(); clearFieldErrors(); });
     document.querySelector("[data-save]").addEventListener("click", saveDraft);
     document.querySelector("[data-submit]").addEventListener("click", submitStory);
@@ -47,6 +51,180 @@
     updateCounters();
     updateProgress();
     updateManuscriptHealth();
+  }
+
+  function bindGenreEditor() {
+    const input = document.querySelector("[data-genre-input]");
+    input.addEventListener("compositionstart", () => { state.genreComposing = true; });
+    input.addEventListener("compositionend", () => {
+      state.genreComposing = false;
+      commitGenreInput();
+    });
+    input.addEventListener("input", () => {
+      if (!state.genreComposing) commitGenreInput();
+    });
+    input.addEventListener("keydown", (event) => {
+      if (state.genreComposing) return;
+      if ((event.key === "Enter" || event.key === "Tab") && input.value.trim()) {
+        event.preventDefault();
+        commitGenreInput(true);
+      } else if (event.key === "Backspace" && !input.value && state.genre) {
+        setGenre("");
+      }
+    });
+    input.addEventListener("blur", () => commitGenreInput(true));
+    document.querySelector("[data-genre-chip]").addEventListener("click", () => {
+      const removed = state.genre;
+      setGenre("");
+      setGenreStatus(`${removed} 장르를 삭제했습니다.`, false);
+      input.focus();
+    });
+    renderGenre();
+  }
+
+  function commitGenreInput(force = false) {
+    const input = document.querySelector("[data-genre-input]");
+    const hasSeparator = /[,\s]/u.test(input.value);
+    const raw = input.value.split(/[,\s]+/u)[0]?.trim() || "";
+    const matched = genres.find((genre) => genre.toLocaleLowerCase("ko-KR") === raw.toLocaleLowerCase("ko-KR"));
+    if (matched) {
+      setGenre(matched);
+      input.value = "";
+      return true;
+    }
+    if ((force || hasSeparator) && raw) {
+      setGenreStatus("목록에 있는 장르를 입력해주세요.", true);
+      if (hasSeparator) input.value = raw;
+    }
+    return false;
+  }
+
+  function setGenre(value) {
+    state.genre = value;
+    document.querySelector('[name="genre"]').value = value;
+    if (value) setGenreStatus("", false);
+    renderGenre();
+    updateProgress();
+  }
+
+  function renderGenre() {
+    const container = document.querySelector("[data-genre-chip]");
+    if (!state.genre) {
+      container.replaceChildren();
+      return;
+    }
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "tag-chip genre-chip";
+    chip.setAttribute("aria-label", `${state.genre} 장르 삭제`);
+    chip.title = "눌러서 삭제";
+    chip.textContent = `${state.genre} ×`;
+    container.replaceChildren(chip);
+  }
+
+  function setGenreStatus(message, isError) {
+    const status = document.querySelector("[data-genre-status]");
+    status.textContent = message;
+    status.classList.toggle("is-error", isError);
+  }
+
+  function bindTagEditor() {
+    const input = document.querySelector("[data-tag-input]");
+    input.addEventListener("compositionstart", () => { state.tagComposing = true; });
+    input.addEventListener("compositionend", () => {
+      state.tagComposing = false;
+      commitTagInput();
+    });
+    input.addEventListener("input", () => {
+      if (!state.tagComposing) commitTagInput();
+    });
+    input.addEventListener("keydown", (event) => {
+      if (state.tagComposing) return;
+      if ((event.key === "Enter" || event.key === "Tab") && input.value.trim()) {
+        event.preventDefault();
+        addTag(input.value);
+        input.value = "";
+      } else if (event.key === "Backspace" && !input.value && state.tags.length) {
+        removeTag(state.tags.length - 1);
+      }
+    });
+    input.addEventListener("blur", () => {
+      if (input.value.trim()) {
+        addTag(input.value);
+        input.value = "";
+      }
+    });
+    document.querySelector("[data-tag-chips]").addEventListener("click", (event) => {
+      const chip = event.target.closest("[data-tag-index]");
+      if (chip) removeTag(Number(chip.dataset.tagIndex));
+    });
+    renderTags();
+  }
+
+  function commitTagInput() {
+    const input = document.querySelector("[data-tag-input]");
+    const raw = input.value;
+    if (!/[,\s]/u.test(raw)) return;
+    const endsWithSeparator = /[,\s]$/u.test(raw);
+    const parts = raw.split(/[,\s]+/u);
+    const remainder = endsWithSeparator ? "" : parts.pop() || "";
+    parts.filter(Boolean).forEach(addTag);
+    input.value = remainder;
+  }
+
+  function addTag(value) {
+    const status = document.querySelector("[data-tag-status]");
+    const tag = String(value || "").normalize("NFKC").trim().replace(/^#+/u, "");
+    if (!tag) return false;
+    if ([...tag].length > 12) {
+      setTagStatus("태그는 12자까지 입력할 수 있습니다.", true);
+      return false;
+    }
+    if (state.tags.some((item) => item.toLocaleLowerCase("ko-KR") === tag.toLocaleLowerCase("ko-KR"))) {
+      setTagStatus("이미 등록한 태그입니다.", true);
+      return false;
+    }
+    if (state.tags.length >= 5) {
+      setTagStatus("태그는 최대 5개까지 등록할 수 있습니다.", true);
+      return false;
+    }
+    state.tags.push(tag);
+    status.textContent = "";
+    status.classList.remove("is-error");
+    renderTags();
+    return true;
+  }
+
+  function removeTag(index) {
+    if (!Number.isInteger(index) || index < 0 || index >= state.tags.length) return;
+    const [removed] = state.tags.splice(index, 1);
+    setTagStatus(`${removed} 태그를 삭제했습니다.`, false);
+    renderTags();
+    document.querySelector("[data-tag-input]").focus();
+  }
+
+  function renderTags() {
+    const container = document.querySelector("[data-tag-chips]");
+    const fragment = document.createDocumentFragment();
+    state.tags.forEach((tag, index) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "tag-chip";
+      chip.dataset.tagIndex = String(index);
+      chip.setAttribute("aria-label", `${tag} 태그 삭제`);
+      chip.title = "눌러서 삭제";
+      chip.textContent = `#${tag} ×`;
+      fragment.append(chip);
+    });
+    container.replaceChildren(fragment);
+    document.querySelector('[name="tags"]').value = state.tags.join(",");
+    document.querySelector("[data-tag-count]").textContent = String(state.tags.length);
+  }
+
+  function setTagStatus(message, isError) {
+    const status = document.querySelector("[data-tag-status]");
+    status.textContent = message;
+    status.classList.toggle("is-error", isError);
   }
 
   async function copySubmissionGuide() {
@@ -119,15 +297,24 @@
     setBusy(true, "저장 중");
     clearFieldErrors();
     try {
+      commitPendingInputs();
+      if (!validateBasics()) return false;
       const packet = collectPacket();
       const path = state.storyId ? `/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/draft` : "/api/storyheaven/stories";
       const payload = await StoryHeavenCommon.api(path, { method: state.storyId ? "PATCH" : "POST", body: { packet } });
       state.story = payload.story;
       state.storyId = payload.story.id;
       history.replaceState(null, "", "?id=" + encodeURIComponent(state.storyId));
-      await saveEpisodeDraft();
+      const episodeIncluded = hasEpisodeInput() || Boolean(state.episode);
+      if (episodeIncluded) await saveEpisodeDraft();
+      const form = document.querySelector("[data-story-form]");
+      if (!form.synopsis.value.trim() && packet.synopsis) {
+        form.synopsis.value = packet.synopsis;
+        document.querySelector("[data-synopsis-status]").textContent = "1화 원고에서 줄거리를 자동으로 만들었습니다. 자유롭게 고쳐도 됩니다.";
+        updateCounters();
+      }
       document.querySelector("[data-save-state]").textContent = `수정본 ${state.story.revisionNo} · 방금 저장됨`;
-      StoryHeavenCommon.toast("작품 소개와 1화 초안을 안전하게 저장했습니다.");
+      StoryHeavenCommon.toast(episodeIncluded ? "이야기와 1화 초안을 저장했습니다." : "이야기를 저장했습니다. 1화는 나중에 이어서 쓸 수 있습니다.");
       return true;
     } catch (error) {
       showErrors(error);
@@ -154,12 +341,26 @@
   async function submitStory() {
     if (state.saving) return;
     if (!state.storyId && !(await saveDraft())) return;
+    if (!hasEpisodeInput() && !state.episode) {
+      const episodeSection = document.querySelector("[data-episode-section]");
+      episodeSection.open = true;
+      episodeSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      StoryHeavenCommon.toast("이야기는 저장했습니다. 공개 검수는 1화 원고를 작성한 뒤 요청할 수 있습니다.");
+      return;
+    }
     if (!state.episode && !(await saveDraft())) return;
+    const form = document.querySelector("[data-story-form]");
+    if (![form.consentDisplay, form.consentOriginality, form.consentAdult].every((input) => input.checked)) {
+      const consentSection = document.querySelector("[data-consent-section]");
+      consentSection.open = true;
+      consentSection.scrollIntoView({ behavior: "smooth", block: "center" });
+      StoryHeavenCommon.toast("공개 검수에 필요한 세 가지 항목을 먼저 확인해주세요.");
+      return;
+    }
     state.saving = true;
     setBusy(true, "제출 중");
     clearFieldErrors();
     try {
-      const form = document.querySelector("[data-story-form]");
       const payload = await StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/submit`, {
         method: "POST",
         body: {
@@ -190,12 +391,19 @@
     const f = document.querySelector("[data-story-form]");
     const lines = (name, max) => f[name].value.split("\n").map((item) => item.trim()).filter(Boolean).slice(0, max);
     const character = { name:f.characterName.value, desire:f.characterDesire.value, fear:f.characterFear.value, secret:f.characterSecret.value };
+    const automaticSynopsis = createExcerpt(f.episodeBody.value, 700, 360);
+    const synopsis = f.synopsis.value.trim() || automaticSynopsis;
+    const existingLogline = state.story?.packet?.logline || state.story?.logline || "";
+    const keepExistingLogline = existingLogline && !/의 이야기를 준비하고 있습니다[.]?$/u.test(existingLogline);
     return {
-      title:f.title.value, logline:f.logline.value, synopsis:f.synopsis.value,
-      protagonistGoal:f.protagonistGoal.value, obstacleStakes:f.obstacleStakes.value,
-      genre:f.genre.value, secondaryGenre:f.secondaryGenre.value, rating:f.rating.value,
+      title:f.title.value,
+      logline:keepExistingLogline ? existingLogline : createLogline(synopsis || f.episodeBody.value, f.title.value),
+      synopsis,
+      genre:state.genre,
+      secondaryGenre:"",
+      rating:f.rating.value,
       contentOrigin:f.contentOrigin.value,
-      tags:f.tags.value.split(",").map((item) => item.trim()).filter(Boolean).slice(0,5),
+      tags:[...state.tags],
       editorial:{
         endingDirection:f.endingDirection.value, worldRules:f.worldRules.value,
         characters:Object.values(character).some(Boolean) ? [character] : [],
@@ -208,20 +416,77 @@
   function collectEpisode() {
     const f = document.querySelector("[data-story-form]");
     return {
-      title: f.episodeTitle.value,
-      summary: f.episodeSummary.value,
+      title: f.episodeTitle.value.trim() || (f.episodeBody.value.trim() ? "1화" : ""),
+      summary: createExcerpt(f.episodeBody.value, 300, 100),
       body: f.episodeBody.value
     };
+  }
+
+  function hasEpisodeInput() {
+    const f = document.querySelector("[data-story-form]");
+    return Boolean(f.episodeTitle.value.trim() || f.episodeBody.value.trim());
+  }
+
+  function commitPendingInputs() {
+    const tagInput = document.querySelector("[data-tag-input]");
+    if (tagInput.value.trim()) {
+      addTag(tagInput.value);
+      tagInput.value = "";
+    }
+    commitGenreInput(true);
+  }
+
+  function validateBasics() {
+    const f = document.querySelector("[data-story-form]");
+    let first = null;
+    if ([...f.title.value.trim()].length < 2) {
+      const error = document.querySelector('[data-error-for="title"]');
+      error.textContent = "제목을 2자 이상 적어주세요.";
+      f.title.setAttribute("aria-invalid", "true");
+      first = f.title;
+    }
+    if (!state.genre) {
+      const error = document.querySelector('[data-error-for="genre"]');
+      error.textContent = "장르를 하나 선택해주세요.";
+      const input = document.querySelector("[data-genre-input]");
+      input.setAttribute("aria-invalid", "true");
+      first ||= input;
+    }
+    first?.focus();
+    return !first;
+  }
+
+  function createLogline(source, title) {
+    const excerpt = createExcerpt(source, 150, 30);
+    return excerpt || `${String(title || "이 이야기").trim()}의 이야기를 준비하고 있습니다.`;
+  }
+
+  function createExcerpt(value, maximum, preferredMinimum) {
+    const text = String(value || "").normalize("NFKC").replace(/\s+/gu, " ").trim();
+    if (!text) return "";
+    const units = [...text];
+    if (units.length <= maximum) return text;
+    let punctuation = 0;
+    for (let index = preferredMinimum - 1; index < maximum; index += 1) {
+      if (/[.!?。！？]/u.test(units[index] || "") && (!units[index + 1] || /\s/u.test(units[index + 1]))) {
+        punctuation = index + 1;
+      }
+    }
+    return units.slice(0, punctuation || maximum).join("").trim();
   }
 
   function applyPacket(packet) {
     const f = document.querySelector("[data-story-form]");
     const set = (name, value) => { if (f[name]) f[name].value = value || ""; };
-    ["title","logline","synopsis","protagonistGoal","obstacleStakes","genre","secondaryGenre"].forEach((name) => set(name, packet[name]));
+    ["title","synopsis"].forEach((name) => set(name, packet[name]));
+    setGenre(packet.genre || "");
     const origin = packet.contentOrigin || "human";
     const originInput = f.querySelector(`[name="contentOrigin"][value="${CSS.escape(origin)}"]`);
     if (originInput) originInput.checked = true;
-    set("rating", packet.rating || "all"); set("tags", (packet.tags || []).join(", "));
+    set("rating", packet.rating || "all");
+    state.tags = [];
+    (packet.tags || []).forEach(addTag);
+    renderTags();
     const e = packet.editorial || {}; set("endingDirection", e.endingDirection); set("worldRules", e.worldRules);
     const c = e.characters?.[0] || {}; set("characterName", c.name); set("characterDesire", c.desire); set("characterFear", c.fear); set("characterSecret", c.secret);
     const t = e.turningPoints || {}; set("turnIntro", t.intro); set("turnTurn", t.turn); set("turnCrisis", t.crisis); set("turnDecision", t.decision); set("turnHook", t.hook);
@@ -232,8 +497,8 @@
   function applyEpisode(episode) {
     const f = document.querySelector("[data-story-form]");
     f.episodeTitle.value = episode.title || "";
-    f.episodeSummary.value = episode.summary || "";
     f.episodeBody.value = episode.body || "";
+    document.querySelector("[data-episode-section]").open = true;
     updateCounters();
     updateProgress();
     updateManuscriptHealth();
@@ -241,26 +506,19 @@
 
   function updateCounters() {
     document.querySelectorAll("[data-count-for]").forEach((counter) => {
-      counter.textContent = String([...document.querySelector(`[name="${counter.dataset.countFor}"]`).value].length);
+      const field = document.querySelector(`[name="${counter.dataset.countFor}"]`);
+      counter.textContent = String(field ? [...field.value].length : 0);
     });
   }
 
   function updateProgress() {
     const f = document.querySelector("[data-story-form]");
-    const episodeBodyLength = compactLength(f.episodeBody.value);
-    const paragraphCount = countParagraphs(f.episodeBody.value);
     const checks = {
       title:f.title.value.trim().length>=2,
-      logline:[...f.logline.value.trim()].length>=30,
-      synopsis:[...f.synopsis.value.trim()].length>=400,
-      protagonistGoal:[...f.protagonistGoal.value.trim()].length>=40,
-      obstacleStakes:[...f.obstacleStakes.value.trim()].length>=40,
-      episodeTitle:[...f.episodeTitle.value.trim()].length>=2,
-      episodeSummary:[...f.episodeSummary.value.trim()].length>=80,
-      episodeBody:episodeBodyLength>=2500,
-      episodeParagraphs:paragraphCount>=8
+      genre:Boolean(state.genre),
+      rating:["all","12","15"].includes(f.rating.value)
     };
-    Object.entries(checks).forEach(([name,done]) => document.querySelector(`[data-check="${name}"]`).classList.toggle("done",done));
+    Object.entries(checks).forEach(([name,done]) => document.querySelector(`[data-check="${name}"]`)?.classList.toggle("done",done));
     const value = Math.round(Object.values(checks).filter(Boolean).length / Object.keys(checks).length * 100);
     document.querySelector("[data-progress-bar]").style.width = value + "%";
     document.querySelector("[data-progress-value]").textContent = String(value);

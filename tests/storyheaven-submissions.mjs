@@ -12,6 +12,8 @@ try {
     const page = await browser.newPage({ viewport });
     const pageErrors = [];
     const moderationRequests = [];
+    const storyCreateRequests = [];
+    const episodeCreateRequests = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
     await page.addInitScript(() => {
       const session = { access_token: "browser-test-token", user: { id: "test-user" } };
@@ -35,6 +37,16 @@ try {
       const path = new URL(route.request().url()).pathname;
       if (path === "/api/storyheaven/profile") {
         await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ profile: { nickname: "테스트작가", nicknameStatus: "active", isAdmin: true } }) });
+        return;
+      }
+      if (path === "/api/storyheaven/stories" && route.request().method() === "POST") {
+        storyCreateRequests.push(route.request().postDataJSON());
+        await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ story: { id: `story-${viewport.name}`, revisionNo: 1, status: "draft" } }) });
+        return;
+      }
+      if (path.endsWith("/episodes") && route.request().method() === "POST") {
+        episodeCreateRequests.push(route.request().postDataJSON());
+        await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ episode: { id: "episode-test", episodeNo: 1, status: "draft" } }) });
         return;
       }
       if (path === "/api/storyheaven/me/stories") {
@@ -84,9 +96,29 @@ try {
 
     await page.goto(`${root}/storyheaven/write/`, { waitUntil: "networkidle" });
     await page.locator("[data-editor]").waitFor({ state: "visible" });
+    const episodeSection = page.locator("[data-episode-section]");
+    assert.equal(await episodeSection.getAttribute("open"), null, `${viewport.name} optional episode starts folded`);
+    await episodeSection.locator(":scope > summary").click();
     const guide = page.locator("[data-submission-guide]");
     assert.equal(await guide.getAttribute("open"), "", `${viewport.name} guide starts open`);
     assert.equal(await page.locator('input[type="file"]').count(), 0, `${viewport.name} image upload absent`);
+    assert.equal(await page.locator('[name="protagonistGoal"]').count(), 0, `${viewport.name} protagonist goal removed`);
+    assert.equal(await page.locator('[name="obstacleStakes"]').count(), 0, `${viewport.name} obstacle and stakes removed`);
+    assert.equal(await page.locator('[name="logline"]').count(), 0, `${viewport.name} logline input removed`);
+    assert.equal(await page.locator('[name="secondaryGenre"]').count(), 0, `${viewport.name} secondary genre removed`);
+    assert.equal(await page.locator('[name="episodeSummary"]').count(), 0, `${viewport.name} episode summary input removed`);
+    const genreInput = page.locator("[data-genre-input]");
+    await genreInput.fill("미스터리,");
+    await page.getByRole("button", { name: "미스터리 장르 삭제" }).waitFor();
+    assert.equal(await page.locator('[name="genre"]').inputValue(), "미스터리", `${viewport.name} genre separator creates chip`);
+    const tagInput = page.locator("[data-tag-input]");
+    await tagInput.fill("폐역 ");
+    await page.getByRole("button", { name: "폐역 태그 삭제" }).waitFor();
+    await tagInput.fill("가족,");
+    assert.equal(await page.locator("[data-tag-chips] .tag-chip").count(), 2, `${viewport.name} separators create tags`);
+    await page.getByRole("button", { name: "폐역 태그 삭제" }).click();
+    assert.equal(await page.locator("[data-tag-chips] .tag-chip").count(), 1, `${viewport.name} tag removes on click`);
+    assert.equal(await page.locator('[name="tags"]').inputValue(), "가족", `${viewport.name} hidden tag value stays synchronized`);
     await page.locator("[data-copy-submission-guide]").click();
     assert.match(await page.evaluate(() => window.__copiedSubmissionGuide || ""), /최소 2,500자/u, `${viewport.name} guide copies limits`);
     assert.match(await page.evaluate(() => window.__copiedSubmissionGuide || ""), /그림, 첨부파일/u, `${viewport.name} guide copies text-only rule`);
@@ -96,7 +128,6 @@ try {
     assert.equal(await guide.getAttribute("open"), "", `${viewport.name} guide reopens`);
     await guide.screenshot({ path: `test-results/storyheaven-submission-guide-${viewport.name}.png` });
     await page.locator('[name="title"]').fill("막차가 떠난 뒤의 승강장");
-    await page.locator('[name="logline"]').fill("폐역 청소부가 매일 가까워지는 유령 열차를 멈추기 위해 마지막 승객의 이름을 찾는다.");
     await page.evaluate(() => scrollTo(0, 0));
     const metrics = await page.evaluate(() => {
       const editor = document.querySelector(".editor-layout").getBoundingClientRect();
@@ -117,6 +148,13 @@ try {
     assert.equal(metrics.buttonsFit, true, `${viewport.name} action buttons fit`);
     assert.ok(metrics.progress > 0, `${viewport.name} progress reacts`);
     assert.equal(metrics.sideBesideForm, viewport.name === "desktop", `${viewport.name} responsive editor layout`);
+    const createRequest = page.waitForRequest((request) => new URL(request.url()).pathname === "/api/storyheaven/stories" && request.method() === "POST");
+    await page.locator("[data-save]").click();
+    await createRequest;
+    assert.equal(storyCreateRequests.length, 1, `${viewport.name} story saves with basic fields`);
+    assert.equal(episodeCreateRequests.length, 0, `${viewport.name} empty episode is not created`);
+    assert.equal(storyCreateRequests[0].packet.synopsis, "", `${viewport.name} synopsis may stay empty without episode`);
+    assert.equal(storyCreateRequests[0].packet.tags.join(","), "가족", `${viewport.name} tags included in story packet`);
     assert.deepEqual(pageErrors, [], `${viewport.name} page errors`);
 
     await page.goto(`${root}/storyheaven/my/`, { waitUntil: "networkidle" });

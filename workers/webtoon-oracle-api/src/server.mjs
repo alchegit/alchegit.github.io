@@ -2642,9 +2642,9 @@ async function saveStoryHeavenDraft(storyIdValue, userId, input) {
 
 async function submitStoryHeavenStory(storyIdValue, user, input, req) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
-  const validated = requireStoryHeavenPacket(input.packet || {}, "submit");
   const episodeNo = requireStoryHeavenEpisodeNo(input.episodeNo || 1);
   const validatedEpisode = await requireStoryHeavenEpisode(input.episode || {}, "submit", req, user.id);
+  const validated = requireStoryHeavenPacket(input.packet || {}, "submit", validatedEpisode.episode.body);
   const consent = input.consents && typeof input.consents === "object" ? input.consents : {};
   const requiredConsents = ["display", "originality", "adult"];
   const missing = requiredConsents.filter((name) => consent[name] !== true);
@@ -2993,8 +2993,8 @@ async function createStoryHeavenRunoff(connection, parentRound, tied) {
   return runoff;
 }
 
-function requireStoryHeavenPacket(input, mode) {
-  const result = validateStoryHeavenPacket(input, { mode });
+function requireStoryHeavenPacket(input, mode, episodeBody = "") {
+  const result = validateStoryHeavenPacket(input, { mode, episodeBody });
   if (!result.ok) {
     const error = httpError("story_validation_failed", 400);
     error.details = result.errors;

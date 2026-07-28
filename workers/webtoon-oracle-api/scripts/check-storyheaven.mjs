@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
+  createStoryHeavenEpisodeSummary,
   createStoryHeavenGuestPreview,
+  createStoryHeavenSynopsis,
   normalizeStoryHeavenNickname,
   storyHeavenRoundSchedule,
   temporaryStoryHeavenNickname,
@@ -43,13 +45,25 @@ const completePacket = {
   }
 };
 assert.equal(validateStoryHeavenPacket(completePacket, { mode: "submit" }).ok, true);
+const simplifiedPacket = { ...completePacket };
+delete simplifiedPacket.protagonistGoal;
+delete simplifiedPacket.obstacleStakes;
+assert.equal(validateStoryHeavenPacket(simplifiedPacket, { mode: "submit" }).ok, true);
+const basicPacket = validateStoryHeavenPacket({
+  title: "막차가 사라진 뒤",
+  genre: "미스터리",
+  rating: "12",
+  tags: ["폐역", "가족"]
+}, { mode: "draft" });
+assert.equal(basicPacket.ok, true);
+assert.equal(basicPacket.packet.synopsis, "");
+assert.match(basicPacket.packet.logline, /이야기를 준비하고 있습니다/u);
 assert.equal(validateStoryHeavenPacket({ ...completePacket, contentOrigin: "human_ai_assisted" }, { mode: "submit" }).packet.contentOrigin, "human_ai_assisted");
 assert.equal(validateStoryHeavenPacket({ ...completePacket, contentOrigin: "system_ai" }, { mode: "submit" }).ok, false);
 assert.ok(validateStoryHeavenPacket({ ...completePacket, title: "<script>alert(1)</script>" }, { mode: "submit" }).errors.some((item) => item.code === "unsafe_content_pattern"));
 const incompletePacket = validateStoryHeavenPacket({ title: "짧은 제목", logline: "너무 짧다" }, { mode: "submit" });
 assert.equal(incompletePacket.ok, false);
-assert.ok(incompletePacket.errors.some((item) => item.field === "synopsis"));
-assert.ok(incompletePacket.errors.some((item) => item.field === "logline"));
+assert.ok(incompletePacket.errors.some((item) => item.field === "genre"));
 assert.equal(validateStoryHeavenPacket({ ...completePacket, rating: "adult" }, { mode: "submit" }).ok, false);
 
 const episodeParagraphs = Array.from({ length: 28 }, (_, index) => (
@@ -65,6 +79,14 @@ const completeEpisode = {
 const checkedEpisode = validateStoryHeavenEpisode(completeEpisode, { mode: "submit" });
 assert.equal(checkedEpisode.ok, true);
 assert.ok(checkedEpisode.analysis.characterCount >= 2500);
+const automaticCopyEpisode = validateStoryHeavenEpisode({ body: completeEpisode.body }, { mode: "submit" });
+assert.equal(automaticCopyEpisode.ok, true);
+assert.equal(automaticCopyEpisode.episode.title, "1화");
+assert.equal(automaticCopyEpisode.episode.summary, createStoryHeavenEpisodeSummary(completeEpisode.body));
+assert.equal(
+  validateStoryHeavenPacket(basicPacket.packet, { mode: "submit", episodeBody: completeEpisode.body }).packet.synopsis,
+  createStoryHeavenSynopsis(completeEpisode.body)
+);
 assert.equal(validateStoryHeavenEpisode({ ...completeEpisode, body: "안녕" }, { mode: "submit" }).ok, false);
 assert.ok(validateStoryHeavenEpisode({ ...completeEpisode, body: `${completeEpisode.body}\n\n<script>alert(1)</script>` }, { mode: "submit" }).errors.some((item) => item.code === "unsafe_content_pattern"));
 assert.ok(validateStoryHeavenEpisode({ ...completeEpisode, body: `${completeEpisode.body}\n\nDROP TABLE users` }, { mode: "submit" }).errors.some((item) => item.code === "unsafe_content_pattern"));

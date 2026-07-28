@@ -131,16 +131,18 @@ export function temporaryStoryHeavenNickname(userId, attempt = 0) {
   return `이야기씨앗-${digest}`;
 }
 
-export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
+export function validateStoryHeavenPacket(value, { episodeBody = "" } = {}) {
   const input = value && typeof value === "object" ? value : {};
   const requestedRating = String(input.rating || input.contentRating || "all");
+  const automaticSynopsis = createStoryHeavenSynopsis(episodeBody);
+  const synopsis = cleanMultiline(input.synopsis ?? input.publicSynopsis) || automaticSynopsis;
   const packet = {
     title: cleanText(input.title),
-    logline: cleanText(input.logline),
-    synopsis: cleanMultiline(input.synopsis ?? input.publicSynopsis),
+    logline: cleanText(input.logline) || createStoryHeavenLogline(synopsis || episodeBody, input.title),
+    synopsis,
     protagonistGoal: cleanMultiline(input.protagonistGoal),
     obstacleStakes: cleanMultiline(input.obstacleStakes),
-    genre: cleanText(input.genre) || STORYHEAVEN_GENRES[0],
+    genre: cleanText(input.genre),
     secondaryGenre: cleanText(input.secondaryGenre),
     contentOrigin: readerStoryOrigins.has(String(input.contentOrigin || "human"))
       ? String(input.contentOrigin || "human")
@@ -152,13 +154,11 @@ export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
     editorial: normalizeEditorial(input.editorial || input.privateEditorial || {})
   };
   const errors = [];
-  const submitting = mode === "submit";
-
   validateLength(errors, "title", packet.title, STORYHEAVEN_STORY_LIMITS.title, true);
-  validateLength(errors, "logline", packet.logline, STORYHEAVEN_STORY_LIMITS.logline, submitting);
-  validateLength(errors, "synopsis", packet.synopsis, STORYHEAVEN_STORY_LIMITS.synopsis, submitting);
-  validateLength(errors, "protagonistGoal", packet.protagonistGoal, STORYHEAVEN_STORY_LIMITS.protagonistGoal, submitting);
-  validateLength(errors, "obstacleStakes", packet.obstacleStakes, STORYHEAVEN_STORY_LIMITS.obstacleStakes, submitting);
+  validateOptionalLength(errors, "logline", packet.logline, STORYHEAVEN_STORY_LIMITS.logline, false);
+  validateOptionalLength(errors, "synopsis", packet.synopsis, STORYHEAVEN_STORY_LIMITS.synopsis, false);
+  validateOptionalLength(errors, "protagonistGoal", packet.protagonistGoal, STORYHEAVEN_STORY_LIMITS.protagonistGoal, false);
+  validateOptionalLength(errors, "obstacleStakes", packet.obstacleStakes, STORYHEAVEN_STORY_LIMITS.obstacleStakes, false);
 
   if (!STORYHEAVEN_GENRES.includes(packet.genre)) {
     errors.push({ field: "genre", code: "story_genre_invalid" });
@@ -178,7 +178,7 @@ export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
     }
   });
 
-  validateOptionalLength(errors, "editorial.endingDirection", packet.editorial.endingDirection, STORYHEAVEN_STORY_LIMITS.endingDirection, submitting);
+  validateOptionalLength(errors, "editorial.endingDirection", packet.editorial.endingDirection, STORYHEAVEN_STORY_LIMITS.endingDirection, false);
   validateOptionalLength(errors, "editorial.worldRules", packet.editorial.worldRules, STORYHEAVEN_STORY_LIMITS.worldRules, false);
   packet.editorial.characters.forEach((character, index) => {
     ["name", "desire", "fear", "secret"].forEach((key) => {
@@ -211,10 +211,11 @@ export function validateStoryHeavenPacket(value, { mode = "draft" } = {}) {
 
 export function validateStoryHeavenEpisode(value, { mode = "draft" } = {}) {
   const input = value && typeof value === "object" ? value : {};
+  const body = cleanEpisodeBody(input.body ?? input.bodyText);
   const episode = {
-    title: cleanText(input.title),
-    summary: cleanMultiline(input.summary),
-    body: cleanEpisodeBody(input.body ?? input.bodyText)
+    title: cleanText(input.title) || (body ? "1화" : ""),
+    summary: cleanMultiline(input.summary) || createStoryHeavenEpisodeSummary(body),
+    body
   };
   const errors = [];
   const submitting = mode === "submit";
@@ -254,6 +255,19 @@ export function validateStoryHeavenEpisode(value, { mode = "draft" } = {}) {
     analysis,
     estimatedReadMinutes: Math.max(1, Math.ceil(analysis.characterCount / STORYHEAVEN_EPISODE_LIMITS.readingCharactersPerMinute))
   };
+}
+
+export function createStoryHeavenSynopsis(value) {
+  return createStoryExcerpt(cleanEpisodeBody(value), 700, 360);
+}
+
+export function createStoryHeavenEpisodeSummary(value) {
+  return createStoryExcerpt(cleanEpisodeBody(value), 300, 100);
+}
+
+export function createStoryHeavenLogline(value, title = "") {
+  return createStoryExcerpt(cleanMultiline(value), 150, 30)
+    || `${cleanText(title) || "이 이야기"}의 이야기를 준비하고 있습니다.`;
 }
 
 export function analyzeStoryHeavenEpisode(value) {
@@ -439,6 +453,22 @@ function cleanEpisodeBody(value) {
     .join("\n")
     .replace(/\n{4,}/gu, "\n\n\n")
     .trim();
+}
+
+function createStoryExcerpt(value, maximum, preferredMinimum) {
+  const text = String(value || "").replace(/\s+/gu, " ").trim();
+  if (!text) return "";
+  const units = typeof Intl?.Segmenter === "function"
+    ? [...new Intl.Segmenter("ko", { granularity: "grapheme" }).segment(text)].map((item) => item.segment)
+    : [...text];
+  if (units.length <= maximum) return text;
+  let punctuation = 0;
+  for (let index = preferredMinimum - 1; index < maximum; index += 1) {
+    if (/[.!?。！？]/u.test(units[index] || "") && (!units[index + 1] || /\s/u.test(units[index + 1]))) {
+      punctuation = index + 1;
+    }
+  }
+  return units.slice(0, punctuation || maximum).join("").trim();
 }
 
 function cleanList(value, maximum) {
