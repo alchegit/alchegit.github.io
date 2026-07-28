@@ -110,7 +110,12 @@ try {
     const genreInput = page.locator("[data-genre-input]");
     await genreInput.fill("미스터리,");
     await page.getByRole("button", { name: "미스터리 장르 삭제" }).waitFor();
-    assert.equal(await page.locator('[name="genre"]').inputValue(), "미스터리", `${viewport.name} genre separator creates chip`);
+    await genreInput.fill("생활밀착SF ");
+    await page.getByRole("button", { name: "생활밀착SF 장르 삭제" }).waitFor();
+    assert.equal(await page.locator("[data-genre-chips] .tag-chip").count(), 2, `${viewport.name} separators create multiple genres`);
+    assert.equal(await page.locator('[name="genre"]').inputValue(), "미스터리,생활밀착SF", `${viewport.name} hidden genre value stays synchronized`);
+    await page.getByRole("button", { name: "미스터리 장르 삭제" }).click();
+    assert.equal(await page.locator("[data-genre-chips] .tag-chip").count(), 1, `${viewport.name} genre removes on click`);
     const tagInput = page.locator("[data-tag-input]");
     await tagInput.fill("폐역 ");
     await page.getByRole("button", { name: "폐역 태그 삭제" }).waitFor();
@@ -154,6 +159,8 @@ try {
     assert.equal(storyCreateRequests.length, 1, `${viewport.name} story saves with basic fields`);
     assert.equal(episodeCreateRequests.length, 0, `${viewport.name} empty episode is not created`);
     assert.equal(storyCreateRequests[0].packet.synopsis, "", `${viewport.name} synopsis may stay empty without episode`);
+    assert.deepEqual(storyCreateRequests[0].packet.genres, ["생활밀착SF"], `${viewport.name} multiple genre array included in story packet`);
+    assert.equal(storyCreateRequests[0].packet.genre, "생활밀착SF", `${viewport.name} first genre keeps legacy compatibility`);
     assert.equal(storyCreateRequests[0].packet.tags.join(","), "가족", `${viewport.name} tags included in story packet`);
     assert.deepEqual(pageErrors, [], `${viewport.name} page errors`);
 

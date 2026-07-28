@@ -58,6 +58,16 @@ const basicPacket = validateStoryHeavenPacket({
 assert.equal(basicPacket.ok, true);
 assert.equal(basicPacket.packet.synopsis, "");
 assert.match(basicPacket.packet.logline, /이야기를 준비하고 있습니다/u);
+assert.deepEqual(basicPacket.packet.genres, ["미스터리"]);
+const multiGenrePacket = validateStoryHeavenPacket({
+  ...completePacket,
+  genres: ["미스터리", "현대판타지", "생활밀착SF"]
+}, { mode: "draft" });
+assert.equal(multiGenrePacket.ok, true);
+assert.deepEqual(multiGenrePacket.packet.genres, ["미스터리", "현대판타지", "생활밀착SF"]);
+assert.equal(multiGenrePacket.packet.genre, "미스터리");
+assert.equal(multiGenrePacket.packet.secondaryGenre, "현대판타지");
+assert.equal(validateStoryHeavenPacket({ ...completePacket, genres: ["미스터리", "장르 이름에 공백"] }).ok, false);
 assert.equal(validateStoryHeavenPacket({ ...completePacket, contentOrigin: "human_ai_assisted" }, { mode: "submit" }).packet.contentOrigin, "human_ai_assisted");
 assert.equal(validateStoryHeavenPacket({ ...completePacket, contentOrigin: "system_ai" }, { mode: "submit" }).ok, false);
 assert.ok(validateStoryHeavenPacket({ ...completePacket, title: "<script>alert(1)</script>" }, { mode: "submit" }).errors.some((item) => item.code === "unsafe_content_pattern"));
@@ -173,6 +183,9 @@ const submissionMigration = await readFile(new URL("../../../oracle/20260724-sto
 for (const table of ["storyheaven_revisions", "storyheaven_consents", "storyheaven_activity"]) {
   assert.ok(submissionMigration.includes(table), "missing submission table: " + table);
 }
+const multipleGenresMigration = await readFile(new URL("../../../oracle/20260728-storyheaven-multiple-genres.sql", import.meta.url), "utf8");
+assert.ok(multipleGenresMigration.includes("genres_json"));
+assert.ok(multipleGenresMigration.includes("json_array(genre, secondary_genre"));
 assert.ok(submissionMigration.includes("review_decision"));
 
 const weeklyMigration = await readFile(new URL("../../../oracle/20260724-storyheaven-weekly-rounds.sql", import.meta.url), "utf8");

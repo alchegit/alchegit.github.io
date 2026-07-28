@@ -31,14 +31,14 @@
               <label class="field"><span class="field-label"><span>제목</span><small><b data-count-for="title">0</b>/60</small></span><input name="title" maxlength="60" autocomplete="off" placeholder="예: 막차가 떠난 뒤의 승강장"><p class="field-error" data-error-for="title"></p></label>
               <div class="field-row">
                 <div class="field" role="group" aria-labelledby="storyGenreLabel">
-                  <span class="field-label"><label id="storyGenreLabel" for="storyGenre">장르</label><small>1개</small></span>
+                  <span class="field-label"><label id="storyGenreLabel" for="storyGenre">장르</label><small><b data-genre-count>0</b>/5</small></span>
                   <div class="tag-editor genre-editor" data-genre-editor>
-                    <div class="tag-chips" data-genre-chip aria-live="polite"></div>
+                    <div class="tag-chips" data-genre-chips aria-live="polite"></div>
                     <input id="storyGenre" class="tag-input" data-genre-input list="storyGenreOptions" maxlength="20" autocomplete="off" aria-describedby="storyGenreHelp storyGenreStatus" placeholder="장르 입력 후 띄어쓰기 또는 쉼표">
                     <input type="hidden" name="genre">
                   </div>
                   <datalist id="storyGenreOptions"><option value="현대판타지"><option value="로맨스"><option value="로맨스판타지"><option value="미스터리"><option value="스릴러"><option value="SF"><option value="드라마"><option value="코미디"><option value="액션"><option value="공포"><option value="일상"><option value="기타"></datalist>
-                  <p class="tag-help" id="storyGenreHelp">목록의 장르를 입력하면 바로 등록됩니다. 등록된 장르를 누르면 삭제됩니다.</p>
+                  <p class="tag-help" id="storyGenreHelp">추천어를 참고하거나 직접 입력하세요. 최대 5개까지 띄어쓰기나 쉼표로 등록되며, 누르면 삭제됩니다.</p>
                   <p class="field-status" id="storyGenreStatus" data-genre-status aria-live="polite"></p>
                   <p class="field-error" data-error-for="genre"></p>
                 </div>
@@ -137,7 +137,7 @@
             </details>
             <div class="form-actions"><button class="button secondary" type="button" data-save>이야기 저장</button><button class="button" type="button" data-submit>1화 검수 요청</button></div>
           </form>
-          <aside class="side-panel"><p class="eyebrow">QUICK START</p><h2>저장 준비</h2><div class="progress-track"><span data-progress-bar></span></div><p class="progress-copy"><b data-progress-value>0</b>% · 줄거리와 1화는 나중에 추가할 수 있습니다.</p><ul class="checklist"><li data-check="title">이야기 제목</li><li data-check="genre">장르 1개</li><li data-check="rating">독자 연령</li></ul><p class="progress-copy" data-save-state>아직 저장하지 않았습니다.</p></aside>
+          <aside class="side-panel"><p class="eyebrow">QUICK START</p><h2>저장 준비</h2><div class="progress-track"><span data-progress-bar></span></div><p class="progress-copy"><b data-progress-value>0</b>% · 줄거리와 1화는 나중에 추가할 수 있습니다.</p><ul class="checklist"><li data-check="title">이야기 제목</li><li data-check="genre">장르 1개 이상</li><li data-check="rating">독자 연령</li></ul><p class="progress-copy" data-save-state>아직 저장하지 않았습니다.</p></aside>
         </div>
       </div>
     </main>

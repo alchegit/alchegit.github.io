@@ -61,6 +61,7 @@ create table storyheaven_stories (
   obstacle_stakes varchar2(500 char),
   genre varchar2(40 char) default '현대판타지' not null,
   secondary_genre varchar2(40 char),
+  genres_json clob check (genres_json is json),
   tags_json clob check (tags_json is json),
   content_rating varchar2(20) default 'all' not null check (content_rating in ('all', 'teen', 'adult')),
   rating_detail varchar2(10) default 'all' not null check (rating_detail in ('all', '12', '15')),

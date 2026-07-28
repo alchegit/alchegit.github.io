@@ -1262,7 +1262,7 @@ async function listStoryHeavenFeed({ userId = null, limit = 24 } = {}) {
     const result = await connection.execute(
       `select * from (
          select s.id, s.slug, s.title, s.logline, s.public_synopsis, s.genre,
-                s.tags_json, s.content_rating, s.content_origin,
+                s.genres_json, s.tags_json, s.content_rating, s.content_origin,
                 s.competition_eligible, s.ai_disclosure_version, s.cover_path,
                 s.published_at, s.view_count, p.nickname, p.display_name, p.account_type,
                 (select count(*) from storyheaven_episodes episode_count
@@ -2576,12 +2576,12 @@ async function createStoryHeavenDraft(userId, input) {
     await connection.execute(
       `insert into storyheaven_stories (
         id, slug, author_user_id, title, logline, public_synopsis,
-        protagonist_goal, obstacle_stakes, genre, secondary_genre, tags_json,
+        protagonist_goal, obstacle_stakes, genre, secondary_genre, genres_json, tags_json,
         content_rating, rating_detail, content_origin, ai_disclosure_version, competition_eligible,
         story_status, current_revision_no, review_decision
       ) values (
         :id, :slug, :author_user_id, :title, :logline, :public_synopsis,
-        :protagonist_goal, :obstacle_stakes, :genre, :secondary_genre, :tags_json,
+        :protagonist_goal, :obstacle_stakes, :genre, :secondary_genre, :genres_json, :tags_json,
         :content_rating, :rating_detail, :content_origin, :ai_disclosure_version, 'N',
         'draft', :current_revision_no, 'none'
       )`,
@@ -3195,6 +3195,7 @@ function storyHeavenStoryBinds(storyId, slug, userId, packet, revisionNo) {
     obstacle_stakes: packet.obstacleStakes || null,
     genre: packet.genre,
     secondary_genre: packet.secondaryGenre || null,
+    genres_json: clobJson(packet.genres),
     tags_json: clobJson(packet.tags),
     content_rating: packet.rating === "all" ? "all" : "teen",
     rating_detail: packet.rating,
@@ -3215,6 +3216,7 @@ async function updateStoryHeavenCurrentPacket(connection, storyId, packet, revis
             obstacle_stakes = :obstacle_stakes,
             genre = :genre,
             secondary_genre = :secondary_genre,
+            genres_json = :genres_json,
             tags_json = :tags_json,
             content_rating = :content_rating,
             rating_detail = :rating_detail,
@@ -3233,6 +3235,7 @@ async function updateStoryHeavenCurrentPacket(connection, storyId, packet, revis
       obstacle_stakes: binds.obstacle_stakes,
       genre: binds.genre,
       secondary_genre: binds.secondary_genre,
+      genres_json: binds.genres_json,
       tags_json: binds.tags_json,
       content_rating: binds.content_rating,
       rating_detail: binds.rating_detail,
@@ -3328,7 +3331,7 @@ async function insertStoryHeavenActivity(connection, { storyId, actorUserId, typ
 function storyHeavenOwnerSelect() {
   return `select s.id, s.slug, s.author_user_id, s.title, s.logline, s.public_synopsis,
                  s.protagonist_goal, s.obstacle_stakes, s.genre, s.secondary_genre,
-                 s.tags_json, s.content_rating, s.rating_detail, s.content_origin,
+                 s.genres_json, s.tags_json, s.content_rating, s.rating_detail, s.content_origin,
                  s.competition_eligible, s.ai_disclosure_version, s.cover_path,
                  s.story_status, s.current_revision_no, s.submitted_revision_no,
                  s.submitted_at, s.reviewed_at, s.review_decision, s.review_note,
@@ -3565,13 +3568,17 @@ async function setStoryHeavenEndorsement(storyIdValue, input, adminUserId) {
 }
 
 function mapStoryHeavenStory(row) {
+  const legacyGenres = [row.GENRE, row.SECONDARY_GENRE].filter(Boolean);
+  const storedGenres = parseJson(row.GENRES_JSON, legacyGenres);
+  const genres = Array.isArray(storedGenres) && storedGenres.length ? storedGenres : legacyGenres;
   return {
     id: row.ID,
     slug: row.SLUG,
     title: row.TITLE,
     logline: row.LOGLINE,
     synopsis: row.PUBLIC_SYNOPSIS || "",
-    genre: row.GENRE,
+    genre: genres[0] || row.GENRE,
+    genres,
     tags: parseJson(row.TAGS_JSON, []),
     contentRating: row.CONTENT_RATING,
     contentOrigin: row.CONTENT_ORIGIN,

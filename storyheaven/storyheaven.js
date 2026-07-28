@@ -191,7 +191,9 @@
     const image = card.querySelector("img");
     image.src = normalizeCover(story.coverPath);
     image.alt = story.title + " 이야기 표지";
-    card.querySelector(".genre").textContent = story.genre || "이야기";
+    const storyGenres = Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre].filter(Boolean);
+    const visibleGenres = storyGenres.slice(0, 3).join(" · ");
+    card.querySelector(".genre").textContent = `${visibleGenres}${storyGenres.length > 3 ? ` +${storyGenres.length - 3}` : ""}` || "이야기";
     card.querySelector(".author").textContent = story.author?.nickname || "이야기씨앗";
     card.querySelector("h3 [data-story-link]").textContent = story.title;
     card.querySelectorAll("[data-story-link]").forEach((link) => {

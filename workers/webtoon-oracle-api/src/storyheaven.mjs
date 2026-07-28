@@ -22,6 +22,8 @@ export const STORYHEAVEN_STORY_LIMITS = Object.freeze({
   listItem: 120,
   visualAnchorCount: 8,
   visualAnchor: 160,
+  genreCount: 5,
+  genre: 20,
   tagCount: 5,
   tag: 12,
   total: 5000
@@ -84,6 +86,7 @@ export const STORYHEAVEN_RESERVED_NICKNAMES = Object.freeze([
 const forbiddenPattern = /[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2060-\u206f]/u;
 const contentControlPattern = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2060-\u206f]/u;
 const allowedPattern = /^[\p{Script=Hangul}\p{Letter}\p{Number}_ -]+$/u;
+const genrePattern = /^[\p{Letter}\p{Number}&+._-]+$/u;
 const contactPattern = /(?:https?:\/\/|www\.|@|\.(?:com|net|org|kr)\b)/iu;
 const executableMarkupPattern = /<\s*\/?\s*(?:script|iframe|object|embed|svg|link|meta|style|form|input|button|textarea|video|audio)\b/iu;
 const browserExecutionPattern = /(?:javascript|vbscript|data)\s*:|\bon(?:error|load|click|mouseover|focus|animationstart)\s*=|\b(?:eval|setTimeout|setInterval)\s*\(|\bdocument\s*\.\s*(?:cookie|write)|\bwindow\s*\.\s*location/iu;
@@ -136,14 +139,21 @@ export function validateStoryHeavenPacket(value, { episodeBody = "" } = {}) {
   const requestedRating = String(input.rating || input.contentRating || "all");
   const automaticSynopsis = createStoryHeavenSynopsis(episodeBody);
   const synopsis = cleanMultiline(input.synopsis ?? input.publicSynopsis) || automaticSynopsis;
+  const requestedGenres = cleanList(
+    Array.isArray(input.genres) || typeof input.genres === "string"
+      ? input.genres
+      : [input.genre, input.secondaryGenre],
+    STORYHEAVEN_STORY_LIMITS.genreCount
+  );
   const packet = {
     title: cleanText(input.title),
     logline: cleanText(input.logline) || createStoryHeavenLogline(synopsis || episodeBody, input.title),
     synopsis,
     protagonistGoal: cleanMultiline(input.protagonistGoal),
     obstacleStakes: cleanMultiline(input.obstacleStakes),
-    genre: cleanText(input.genre),
-    secondaryGenre: cleanText(input.secondaryGenre),
+    genres: requestedGenres,
+    genre: requestedGenres[0] || "",
+    secondaryGenre: requestedGenres[1] || "",
     contentOrigin: readerStoryOrigins.has(String(input.contentOrigin || "human"))
       ? String(input.contentOrigin || "human")
       : "human",
@@ -160,12 +170,16 @@ export function validateStoryHeavenPacket(value, { episodeBody = "" } = {}) {
   validateOptionalLength(errors, "protagonistGoal", packet.protagonistGoal, STORYHEAVEN_STORY_LIMITS.protagonistGoal, false);
   validateOptionalLength(errors, "obstacleStakes", packet.obstacleStakes, STORYHEAVEN_STORY_LIMITS.obstacleStakes, false);
 
-  if (!STORYHEAVEN_GENRES.includes(packet.genre)) {
+  if (!packet.genres.length) {
     errors.push({ field: "genre", code: "story_genre_invalid" });
   }
-  if (packet.secondaryGenre && !STORYHEAVEN_GENRES.includes(packet.secondaryGenre)) {
-    errors.push({ field: "secondaryGenre", code: "story_genre_invalid" });
-  }
+  packet.genres.forEach((genre, index) => {
+    if (graphemeLength(genre) > STORYHEAVEN_STORY_LIMITS.genre) {
+      errors.push({ field: `genres.${index}`, code: "story_field_too_long", max: STORYHEAVEN_STORY_LIMITS.genre });
+    } else if (!genrePattern.test(genre)) {
+      errors.push({ field: `genres.${index}`, code: "story_genre_invalid" });
+    }
+  });
   if (!storyRatings.has(requestedRating)) {
     errors.push({ field: "rating", code: "story_rating_invalid" });
   }

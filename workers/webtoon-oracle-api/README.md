@@ -23,7 +23,7 @@ The application listens on `127.0.0.1` by default so the public entry point rema
 
 ## Setup
 
-1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql`. StoryHeaven additionally requires `20260724-storyheaven-foundation.sql`, `20260724-storyheaven-submissions.sql`, `20260724-storyheaven-weekly-rounds.sql`, `20260724-storyheaven-round-moderation.sql`, and `20260724-storyheaven-reports.sql` in that order before deploying the matching API.
+1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql`. StoryHeaven additionally requires the `20260724-storyheaven-*.sql` migrations in their dated order, followed by `20260728-storyheaven-multiple-genres.sql`, before deploying the matching API.
 2. Copy `.env.example` to `.env` on `EENTA_REPO3`.
 3. Fill in Oracle connection values, Supabase Auth values, the exact administrator Google email, and long random server secrets.
 4. Install dependencies and start:

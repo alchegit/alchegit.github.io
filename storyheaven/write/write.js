@@ -26,7 +26,7 @@
     storyId: new URLSearchParams(location.search).get("id"),
     story: null,
     episode: null,
-    genre: "",
+    genres: [],
     genreComposing: false,
     tags: [],
     tagComposing: false,
@@ -68,58 +68,85 @@
       if ((event.key === "Enter" || event.key === "Tab") && input.value.trim()) {
         event.preventDefault();
         commitGenreInput(true);
-      } else if (event.key === "Backspace" && !input.value && state.genre) {
-        setGenre("");
+      } else if (event.key === "Backspace" && !input.value && state.genres.length) {
+        removeGenre(state.genres.length - 1);
       }
     });
     input.addEventListener("blur", () => commitGenreInput(true));
-    document.querySelector("[data-genre-chip]").addEventListener("click", () => {
-      const removed = state.genre;
-      setGenre("");
-      setGenreStatus(`${removed} 장르를 삭제했습니다.`, false);
-      input.focus();
+    document.querySelector("[data-genre-chips]").addEventListener("click", (event) => {
+      const chip = event.target.closest("[data-genre-index]");
+      if (chip) removeGenre(Number(chip.dataset.genreIndex));
     });
-    renderGenre();
+    renderGenres();
   }
 
   function commitGenreInput(force = false) {
     const input = document.querySelector("[data-genre-input]");
-    const hasSeparator = /[,\s]/u.test(input.value);
-    const raw = input.value.split(/[,\s]+/u)[0]?.trim() || "";
-    const matched = genres.find((genre) => genre.toLocaleLowerCase("ko-KR") === raw.toLocaleLowerCase("ko-KR"));
-    if (matched) {
-      setGenre(matched);
-      input.value = "";
-      return true;
-    }
-    if ((force || hasSeparator) && raw) {
-      setGenreStatus("목록에 있는 장르를 입력해주세요.", true);
-      if (hasSeparator) input.value = raw;
-    }
-    return false;
+    const raw = input.value;
+    const hasSeparator = /[,\s]/u.test(raw);
+    if (!hasSeparator && !force) return false;
+    const endsWithSeparator = /[,\s]$/u.test(raw);
+    const parts = raw.split(/[,\s]+/u);
+    const remainder = endsWithSeparator || force ? "" : parts.pop() || "";
+    let added = false;
+    parts.filter(Boolean).forEach((value) => { added = addGenre(value) || added; });
+    if (force && remainder) added = addGenre(remainder) || added;
+    input.value = remainder;
+    return added;
   }
 
-  function setGenre(value) {
-    state.genre = value;
-    document.querySelector('[name="genre"]').value = value;
-    if (value) setGenreStatus("", false);
-    renderGenre();
+  function addGenre(value) {
+    const raw = String(value || "").normalize("NFKC").trim();
+    if (!raw) return false;
+    if ([...raw].length > 20) {
+      setGenreStatus("장르 이름은 20자까지 입력할 수 있습니다.", true);
+      return false;
+    }
+    if (!/^[\p{L}\p{N}&+._-]+$/u.test(raw)) {
+      setGenreStatus("장르는 글자와 숫자로 간단하게 입력해주세요.", true);
+      return false;
+    }
+    const matched = genres.find((genre) => genre.toLocaleLowerCase("ko-KR") === raw.toLocaleLowerCase("ko-KR")) || raw;
+    if (state.genres.some((genre) => genre.toLocaleLowerCase("ko-KR") === matched.toLocaleLowerCase("ko-KR"))) {
+      setGenreStatus("이미 등록된 장르입니다.", true);
+      return false;
+    }
+    if (state.genres.length >= 5) {
+      setGenreStatus("장르는 최대 5개까지 등록할 수 있습니다.", true);
+      return false;
+    }
+    state.genres.push(matched);
+    setGenreStatus("", false);
+    renderGenres();
     updateProgress();
+    return true;
   }
 
-  function renderGenre() {
-    const container = document.querySelector("[data-genre-chip]");
-    if (!state.genre) {
-      container.replaceChildren();
-      return;
-    }
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "tag-chip genre-chip";
-    chip.setAttribute("aria-label", `${state.genre} 장르 삭제`);
-    chip.title = "눌러서 삭제";
-    chip.textContent = `${state.genre} ×`;
-    container.replaceChildren(chip);
+  function removeGenre(index) {
+    if (!Number.isInteger(index) || index < 0 || index >= state.genres.length) return;
+    const [removed] = state.genres.splice(index, 1);
+    setGenreStatus(`${removed} 장르를 삭제했습니다.`, false);
+    renderGenres();
+    updateProgress();
+    document.querySelector("[data-genre-input]").focus();
+  }
+
+  function renderGenres() {
+    const container = document.querySelector("[data-genre-chips]");
+    const fragment = document.createDocumentFragment();
+    state.genres.forEach((genre, index) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "tag-chip genre-chip";
+      chip.dataset.genreIndex = String(index);
+      chip.setAttribute("aria-label", `${genre} 장르 삭제`);
+      chip.title = "눌러서 삭제";
+      chip.textContent = `${genre} ×`;
+      fragment.append(chip);
+    });
+    container.replaceChildren(fragment);
+    document.querySelector('[name="genre"]').value = state.genres.join(",");
+    document.querySelector("[data-genre-count]").textContent = String(state.genres.length);
   }
 
   function setGenreStatus(message, isError) {
@@ -399,8 +426,9 @@
       title:f.title.value,
       logline:keepExistingLogline ? existingLogline : createLogline(synopsis || f.episodeBody.value, f.title.value),
       synopsis,
-      genre:state.genre,
-      secondaryGenre:"",
+      genres:[...state.genres],
+      genre:state.genres[0] || "",
+      secondaryGenre:state.genres[1] || "",
       rating:f.rating.value,
       contentOrigin:f.contentOrigin.value,
       tags:[...state.tags],
@@ -445,9 +473,9 @@
       f.title.setAttribute("aria-invalid", "true");
       first = f.title;
     }
-    if (!state.genre) {
+    if (!state.genres.length) {
       const error = document.querySelector('[data-error-for="genre"]');
-      error.textContent = "장르를 하나 선택해주세요.";
+      error.textContent = "장르를 한 개 이상 입력해주세요.";
       const input = document.querySelector("[data-genre-input]");
       input.setAttribute("aria-invalid", "true");
       first ||= input;
@@ -479,7 +507,12 @@
     const f = document.querySelector("[data-story-form]");
     const set = (name, value) => { if (f[name]) f[name].value = value || ""; };
     ["title","synopsis"].forEach((name) => set(name, packet[name]));
-    setGenre(packet.genre || "");
+    state.genres = [];
+    const savedGenres = Array.isArray(packet.genres) && packet.genres.length
+      ? packet.genres
+      : [packet.genre, packet.secondaryGenre].filter(Boolean);
+    savedGenres.forEach(addGenre);
+    renderGenres();
     const origin = packet.contentOrigin || "human";
     const originInput = f.querySelector(`[name="contentOrigin"][value="${CSS.escape(origin)}"]`);
     if (originInput) originInput.checked = true;
@@ -515,7 +548,7 @@
     const f = document.querySelector("[data-story-form]");
     const checks = {
       title:f.title.value.trim().length>=2,
-      genre:Boolean(state.genre),
+      genre:state.genres.length > 0,
       rating:["all","12","15"].includes(f.rating.value)
     };
     Object.entries(checks).forEach(([name,done]) => document.querySelector(`[data-check="${name}"]`)?.classList.toggle("done",done));
