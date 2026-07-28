@@ -10,9 +10,9 @@
     <title>연재 읽기 | StoryHeaven</title>
     <link rel="stylesheet" href="../workspace.css?v=20260724-serial1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../common.js?v=20260724-serial1"></script>
-    <script defer src="../seed-library.js?v=20260724-serial1"></script>
-    <script defer src="./story.js?v=20260724-serial1"></script>
+    <script defer src="../common.js?v=20260728-auth2"></script>
+    <script defer src="../seed-library.js?v=20260727-views1"></script>
+    <script defer src="./story.js?v=20260727-views1"></script>
   </head>
   <body>
     <header class="site-header">
@@ -28,7 +28,7 @@
           <div class="series-copy">
             <p class="eyebrow" data-origin></p>
             <h1 data-title></h1>
-            <div class="detail-meta"><span data-author></span><span data-genre></span><span data-rating></span><span data-likes></span></div>
+            <div class="detail-meta"><span data-author></span><span data-genre></span><span data-rating></span><span data-likes></span><span data-views></span></div>
             <p class="detail-logline" data-logline></p>
             <p class="detail-synopsis" data-synopsis></p>
             <p class="ai-disclosure" data-disclosure hidden></p>
@@ -45,16 +45,10 @@
         <section class="novel-reader" data-reader hidden aria-labelledby="readerTitle">
           <header class="reader-heading">
             <div><p class="eyebrow" data-reader-number></p><h2 id="readerTitle" data-reader-title></h2></div>
-            <div class="reader-stats"><span data-reader-length></span><span data-reader-time></span></div>
+            <div class="reader-stats"><span data-reader-length></span><span data-reader-time></span><span data-reader-views></span></div>
           </header>
           <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
           <div class="novel-body" data-reader-body></div>
-          <section class="reader-login-wall" data-reader-login-wall hidden>
-            <p class="eyebrow">PREVIEW COMPLETE</p>
-            <h3>여기까지 재미있었다면,<br>같은 문장에서 이어 읽으세요.</h3>
-            <p>Google 로그인 후 남은 원고와 다음 회차를 읽을 수 있습니다. 읽던 위치도 계정에 저장됩니다.</p>
-            <button class="button" type="button" data-reader-login>로그인하고 이어 읽기</button>
-          </section>
           <section class="reader-finish" data-reader-finish hidden>
             <p class="eyebrow">AFTER READING</p>
             <h3>어떤 점이 다음 화를 기다리게 했나요?</h3>

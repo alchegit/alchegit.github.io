@@ -12,6 +12,7 @@ import {
 
 assert.equal(normalizeStoryHeavenNickname("  Ｓｔｏｒｙ  씨앗  "), "story 씨앗");
 assert.deepEqual(validateStoryHeavenNickname("관리자"), { ok: false, error: "nickname_reserved" });
+assert.equal(validateStoryHeavenNickname("관리자", { allowReserved: true }).ok, true);
 assert.equal(validateStoryHeavenNickname("작가_17").ok, true);
 assert.equal(validateStoryHeavenNickname("hello@example.com").error, "nickname_invalid_characters");
 assert.equal(validateStoryHeavenNickname("한").error, "nickname_length_out_of_range");
@@ -92,8 +93,10 @@ for (const route of [
   "/api/storyheaven/stories/:id/submit",
   "/api/storyheaven/stories/:id/like",
   "/api/storyheaven/stories/:id/report",
+  "/api/storyheaven/stories/:id/view",
   "/api/storyheaven/stories/:id/episodes",
   "/api/storyheaven/stories/:id/episodes/:episodeNo",
+  "/api/storyheaven/stories/:id/episodes/:episodeNo/view",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/draft",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/submit",
   "/api/storyheaven/stories/:id/reading-progress",
@@ -125,6 +128,11 @@ assert.ok(server.includes("createStoryHeavenGuestPreview"));
 assert.ok(server.includes('app.use("/api/storyheaven", express.json({ limit: "64kb" }))'));
 assert.ok(server.includes('eventType: "storyheaven_unsafe_content_blocked"'));
 assert.ok(server.includes('throw httpError("episode_review_required", 409)'));
+assert.ok(server.includes('!allowReserved && current.NICKNAME_STATUS === "active"'));
+assert.ok(server.includes('/api/webtoon/projects/:id/view'));
+assert.ok(server.includes("view_count = view_count + 1"));
+assert.ok(server.includes("const counted = !isAdminIdentity(user)"));
+assert.ok(server.includes("loginRequired: false"));
 
 const migration = await readFile(new URL("../../../oracle/20260724-storyheaven-foundation.sql", import.meta.url), "utf8");
 for (const table of [
@@ -173,6 +181,12 @@ for (const table of ["storyheaven_episodes", "storyheaven_episode_revisions", "s
   assert.ok(serialMigration.includes(table), "missing serial table: " + table);
 }
 assert.ok(serialMigration.includes("episode_review_result"));
+
+const viewMigration = await readFile(new URL("../../../oracle/20260727-public-view-counts.sql", import.meta.url), "utf8");
+for (const table of ["storyheaven_stories", "storyheaven_episodes", "webtoon_projects"]) {
+  assert.ok(viewMigration.includes(table), "missing view-count table: " + table);
+}
+assert.ok(viewMigration.includes("view_count"));
 
 const page = await readFile(new URL("../../../storyheaven/index.html", import.meta.url), "utf8");
 assert.ok(page.includes("실제 독자의 좋아요만 순위에 반영됩니다."));

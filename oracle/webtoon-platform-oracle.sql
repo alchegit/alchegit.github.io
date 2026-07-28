@@ -79,6 +79,7 @@ create table storyheaven_stories (
   eligibility_score number(3) check (eligibility_score between 0 and 100),
   rights_confirmed char(1) default 'N' not null check (rights_confirmed in ('Y', 'N')),
   adult_confirmed char(1) default 'N' not null check (adult_confirmed in ('Y', 'N')),
+  view_count number(19) default 0 not null check (view_count >= 0),
   published_at timestamp with time zone,
   created_at timestamp with time zone default systimestamp not null,
   updated_at timestamp with time zone default systimestamp not null
@@ -126,6 +127,7 @@ create table storyheaven_episodes (
   submitted_at timestamp with time zone,
   reviewed_at timestamp with time zone,
   reviewed_by varchar2(80),
+  view_count number(19) default 0 not null check (view_count >= 0),
   published_at timestamp with time zone,
   created_at timestamp with time zone default systimestamp not null,
   updated_at timestamp with time zone default systimestamp not null,
@@ -411,6 +413,7 @@ create table webtoon_projects (
   project_json clob check (project_json is json),
   status varchar2(40) default 'draft' not null check (status in ('draft', 'archived', 'published')),
   is_public char(1) default 'N' not null check (is_public in ('Y', 'N')),
+  view_count number(19) default 0 not null check (view_count >= 0),
   created_at timestamp with time zone default systimestamp not null,
   updated_at timestamp with time zone default systimestamp not null
 );

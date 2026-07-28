@@ -30,15 +30,15 @@ try {
       title: document.querySelector("[data-title]")?.textContent,
       paragraphs: document.querySelectorAll("[data-reader-body] p").length,
       previewCharacters: document.querySelector("[data-reader-body]")?.textContent.length,
-      loginWall: !document.querySelector("[data-reader-login-wall]")?.hidden,
+      loginWallCount: document.querySelectorAll("[data-reader-login-wall]").length,
       hasEnding: document.querySelector("[data-reader-body]")?.textContent.includes("시간을 견딜 수 있는 자"),
       overflow: document.documentElement.scrollWidth > innerWidth
     }));
     assert.equal(guestState.title, "여덟 초를 싣는 막차", `${viewport.name} serial title`);
-    assert.ok(guestState.paragraphs >= 8, `${viewport.name} meaningful preview paragraphs`);
-    assert.ok(guestState.previewCharacters >= 1200 && guestState.previewCharacters <= 2600, `${viewport.name} preview limit`);
-    assert.equal(guestState.loginWall, true, `${viewport.name} guest login wall`);
-    assert.equal(guestState.hasEnding, false, `${viewport.name} ending protected`);
+    assert.ok(guestState.paragraphs >= 20, `${viewport.name} full manuscript paragraphs`);
+    assert.ok(guestState.previewCharacters >= 4000, `${viewport.name} full manuscript length`);
+    assert.equal(guestState.loginWallCount, 0, `${viewport.name} has no login reading wall`);
+    assert.equal(guestState.hasEnding, true, `${viewport.name} guest can read the ending`);
     assert.equal(guestState.overflow, false, `${viewport.name} no horizontal overflow`);
     assert.deepEqual(errors, [], `${viewport.name} guest page errors`);
     await guest.screenshot({ path: `test-results/storyheaven-serial-${viewport.name}.png`, fullPage: true });
@@ -60,7 +60,7 @@ try {
     await member.goto(`${root}/storyheaven/story/?id=seed-last-platform`, { waitUntil: "networkidle" });
     await member.locator("[data-read-first]").click();
     await member.locator("[data-reader-body] p").first().waitFor({ state: "visible" });
-    assert.equal(await member.locator("[data-reader-login-wall]").isHidden(), true, `${viewport.name} member full access`);
+    assert.equal(await member.locator("[data-reader-login-wall]").count(), 0, `${viewport.name} member has no login reading wall`);
     assert.equal(await member.locator("[data-reader-body]").textContent().then((text) => text.includes("시간을 견딜 수 있는 자")), true, `${viewport.name} member ending`);
     await member.close();
   }

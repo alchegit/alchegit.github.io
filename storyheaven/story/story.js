@@ -2,28 +2,19 @@
   "use strict";
 
   const id = new URLSearchParams(location.search).get("id");
-  const state = { story: null, episodes: [], current: null, local: false, progressTimer: 0, lastSession: false, lastProgressAt: 0, lastProgressRatio: 0 };
+  const state = { story: null, episodes: [], current: null, local: false, progressTimer: 0, storyViewRecorded: false, lastProgressAt: 0, lastProgressRatio: 0 };
 
   document.addEventListener("DOMContentLoaded", init);
 
   async function init() {
     document.querySelector("[data-report-form]").addEventListener("submit", submitReport);
     document.querySelector("[data-read-first]").addEventListener("click", () => openEpisode(state.episodes[0]?.episodeNo, true));
-    document.querySelector("[data-reader-login]").addEventListener("click", StoryHeavenCommon.login);
     document.querySelector("[data-prev-episode]").addEventListener("click", () => moveEpisode(-1));
     document.querySelector("[data-next-episode]").addEventListener("click", () => moveEpisode(1));
     document.querySelectorAll("[data-reaction]").forEach((button) => button.addEventListener("click", () => toggleReaction(button)));
     addEventListener("scroll", onReaderScroll, { passive: true });
-    await StoryHeavenCommon.init(onAuthChange);
+    await StoryHeavenCommon.init();
     await load();
-  }
-
-  async function onAuthChange(auth) {
-    const signedIn = Boolean(auth.session);
-    if (signedIn && !state.lastSession && state.current?.guestPreview) {
-      await openEpisode(state.current.episodeNo, false);
-    }
-    state.lastSession = signedIn;
   }
 
   async function load() {
@@ -47,6 +38,7 @@
       renderEpisodeList();
       document.querySelector("[data-loading]").hidden = true;
       document.querySelector("[data-detail]").hidden = false;
+      recordStoryView();
       const requestedEpisode = Number(new URLSearchParams(location.search).get("episode"));
       if (requestedEpisode && state.episodes.some((episode) => episode.episodeNo === requestedEpisode)) {
         await openEpisode(requestedEpisode, false);
@@ -70,6 +62,7 @@
     document.querySelector("[data-genre]").textContent = story.genre;
     document.querySelector("[data-rating]").textContent = story.contentRating === "all" ? "전체 이용" : `${story.contentRating || 12}세 이상`;
     document.querySelector("[data-likes]").textContent = `좋아요 ${story.likeCount || 0}`;
+    document.querySelector("[data-views]").textContent = `조회 ${Number(story.viewCount || 0).toLocaleString("ko-KR")}`;
     document.querySelector("[data-logline]").textContent = story.logline;
     document.querySelector("[data-synopsis]").textContent = story.synopsis || "아직 공개된 작품 소개가 없습니다.";
     const disclosure = document.querySelector("[data-disclosure]");
@@ -98,7 +91,7 @@
       copy.append(title, summary);
       const meta = document.createElement("span");
       meta.className = "episode-row-meta";
-      meta.textContent = `${episode.estimatedReadMinutes || 1}분${episode.progress?.completionRate ? ` · ${Math.round(episode.progress.completionRate * 100)}%` : ""}`;
+      meta.textContent = `${episode.estimatedReadMinutes || 1}분 · 조회 ${Number(episode.viewCount || 0).toLocaleString("ko-KR")}${episode.progress?.completionRate ? ` · ${Math.round(episode.progress.completionRate * 100)}%` : ""}`;
       button.append(number, copy, meta);
       button.addEventListener("click", () => openEpisode(episode.episodeNo, true));
       return button;
@@ -109,6 +102,40 @@
       : "첫 회차 검수 중";
   }
 
+  async function recordStoryView() {
+    if (state.local || state.storyViewRecorded) return;
+    state.storyViewRecorded = true;
+    try {
+      const view = await StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(id)}/view`, {
+        method: "POST",
+        auth: Boolean(StoryHeavenCommon.state.session)
+      });
+      state.story.viewCount = Number(view.viewCount || 0);
+      document.querySelector("[data-views]").textContent = `조회 ${state.story.viewCount.toLocaleString("ko-KR")}`;
+    } catch {
+      // A temporary counter failure must never interrupt free reading.
+    }
+  }
+
+  async function recordEpisodeView(episode) {
+    if (state.local) return;
+    try {
+      const view = await StoryHeavenCommon.api(
+        `/api/storyheaven/stories/${encodeURIComponent(id)}/episodes/${encodeURIComponent(episode.episodeNo)}/view`,
+        { method: "POST", auth: Boolean(StoryHeavenCommon.state.session) }
+      );
+      const summary = state.episodes.find((item) => item.episodeNo === episode.episodeNo);
+      if (summary) summary.viewCount = Number(view.viewCount || 0);
+      if (state.current?.episodeNo === episode.episodeNo) {
+        state.current.viewCount = Number(view.viewCount || 0);
+        document.querySelector("[data-reader-views]").textContent = `조회 ${state.current.viewCount.toLocaleString("ko-KR")}`;
+      }
+      renderEpisodeList();
+    } catch {
+      // Counting remains best-effort so the manuscript is always readable.
+    }
+  }
+
   async function openEpisode(episodeNo, scrollToReader) {
     if (!episodeNo) return;
     try {
@@ -116,7 +143,7 @@
       if (state.local) {
         const source = state.episodes.find((item) => item.episodeNo === Number(episodeNo));
         if (!source) throw new Error("episode_not_found");
-        episode = localEpisodeForViewer(source, Boolean(StoryHeavenCommon.state.session));
+        episode = localEpisodeForViewer(source);
       } else {
         ({ episode } = await StoryHeavenCommon.api(
           `/api/storyheaven/stories/${encodeURIComponent(id)}/episodes/${encodeURIComponent(episodeNo)}`,
@@ -125,6 +152,7 @@
       }
       state.current = episode;
       renderReader();
+      recordEpisodeView(episode);
       const url = new URL(location.href);
       url.searchParams.set("episode", String(episode.episodeNo));
       history.replaceState(null, "", url);
@@ -134,12 +162,9 @@
     }
   }
 
-  function localEpisodeForViewer(source, signedIn) {
-    if (signedIn) return { ...source, storyId: id, storyTitle: state.story.title, author: state.story.author.nickname, guestPreview: false, loginRequired: false, totalCharacters: source.characterCount, previewCharacters: source.characterCount, reactions: emptyReactions() };
-    const characters = [...source.body];
-    const target = Math.min(2500, Math.max(1200, Math.ceil(characters.length * 0.35)));
-    if (characters.length <= target) return { ...source, storyId: id, guestPreview: false, loginRequired: false, totalCharacters: characters.length, previewCharacters: characters.length, reactions: emptyReactions() };
-    return { ...source, storyId: id, body: characters.slice(0, target).join("").trimEnd(), guestPreview: true, loginRequired: true, totalCharacters: characters.length, previewCharacters: target, reactions: emptyReactions() };
+  function localEpisodeForViewer(source) {
+    const characterCount = source.characterCount || [...String(source.body || "")].length;
+    return { ...source, storyId: id, storyTitle: state.story.title, author: state.story.author.nickname, guestPreview: false, loginRequired: false, totalCharacters: characterCount, previewCharacters: characterCount, viewCount: source.viewCount || 0, reactions: emptyReactions() };
   }
 
   function renderReader() {
@@ -150,14 +175,14 @@
     document.querySelector("[data-reader-title]").textContent = episode.title;
     document.querySelector("[data-reader-length]").textContent = `${Number(episode.totalCharacters || episode.characterCount || 0).toLocaleString()}자`;
     document.querySelector("[data-reader-time]").textContent = `약 ${episode.estimatedReadMinutes || 1}분`;
+    document.querySelector("[data-reader-views]").textContent = `조회 ${Number(episode.viewCount || 0).toLocaleString("ko-KR")}`;
     const body = document.querySelector("[data-reader-body]");
     body.replaceChildren(...String(episode.body || "").split(/\n\s*\n/gu).filter(Boolean).map((text) => {
       const paragraph = document.createElement("p");
       paragraph.textContent = text;
       return paragraph;
     }));
-    document.querySelector("[data-reader-login-wall]").hidden = !episode.loginRequired;
-    document.querySelector("[data-reader-finish]").hidden = episode.loginRequired;
+    document.querySelector("[data-reader-finish]").hidden = false;
     renderReactions(episode.reactions || emptyReactions());
     updateEpisodeNavigation();
     updateReadingProgress();
@@ -166,7 +191,7 @@
   function updateEpisodeNavigation() {
     const index = state.episodes.findIndex((episode) => episode.episodeNo === state.current?.episodeNo);
     document.querySelector("[data-prev-episode]").disabled = index <= 0;
-    document.querySelector("[data-next-episode]").disabled = state.current?.loginRequired || index < 0 || index >= state.episodes.length - 1;
+    document.querySelector("[data-next-episode]").disabled = index < 0 || index >= state.episodes.length - 1;
   }
 
   function moveEpisode(direction) {
@@ -178,7 +203,7 @@
   function onReaderScroll() {
     if (!state.current || document.querySelector("[data-reader]").hidden) return;
     updateReadingProgress();
-    if (!StoryHeavenCommon.state.session || state.current.guestPreview || state.local) return;
+    if (!StoryHeavenCommon.state.session || state.local) return;
     clearTimeout(state.progressTimer);
     state.progressTimer = setTimeout(saveReadingProgress, 700);
   }

@@ -48,16 +48,21 @@
     });
     const { data } = await state.client.auth.getSession();
     state.session = data.session;
+    renderAccount();
     state.client.auth.onAuthStateChange((_event, session) => {
+      const previousUserId = state.session?.user?.id || null;
+      const previousAccessToken = state.session?.access_token || null;
       state.session = session;
-      if (session) loadProfile();
-      else {
+      if (!session) {
         state.profile = null;
-        renderAccount();
       }
+      renderAccount();
+      if (session && (
+        session.user?.id !== previousUserId
+        || session.access_token !== previousAccessToken
+      )) loadProfile();
     });
     if (state.session) await loadProfile();
-    else renderAccount();
   }
 
   async function login() {
@@ -65,10 +70,29 @@
       showToast("로그인 모듈을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.");
       return;
     }
-    await state.client.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.href.split("#")[0] }
-    });
+    const buttons = [...document.querySelectorAll("[data-login]")];
+    buttons.forEach((button) => { button.disabled = true; });
+    try {
+      const { error } = await state.client.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: new URL(
+            `${window.location.pathname}${window.location.search}`,
+            window.location.origin
+          ).href
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      const detail = `${error?.code || ""} ${error?.message || ""}`.toLowerCase();
+      showToast(detail.includes("provider") && (detail.includes("not enabled") || detail.includes("unsupported"))
+        ? "Google 로그인이 아직 인증 서버에서 활성화되지 않았습니다."
+        : detail.includes("redirect") && detail.includes("allow")
+          ? "현재 페이지가 로그인 복귀 주소로 등록되지 않았습니다."
+          : "Google 로그인을 시작하지 못했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      buttons.forEach((button) => { button.disabled = false; });
+    }
   }
 
   async function logout() {
@@ -99,12 +123,14 @@
     const logoutButton = document.querySelector("[data-logout]");
     const nicknameButton = document.querySelector("[data-nickname-button]");
     const signedIn = Boolean(state.session);
-    loginButton.hidden = signedIn;
-    logoutButton.hidden = !signedIn;
-    nicknameButton.hidden = !signedIn;
+    if (loginButton) loginButton.hidden = signedIn;
+    if (logoutButton) logoutButton.hidden = !signedIn;
+    if (nicknameButton) nicknameButton.hidden = !signedIn;
     if (signedIn) {
-      nicknameButton.textContent = state.profile?.nickname || "닉네임 설정";
-      nicknameButton.title = "공개 닉네임 변경";
+      if (nicknameButton) {
+        nicknameButton.textContent = state.profile?.nickname || "닉네임 설정";
+        nicknameButton.title = "공개 닉네임 변경";
+      }
     }
   }
 
@@ -178,6 +204,7 @@
     card.querySelector("[data-latest-episode]").textContent = story.latestEpisodeAt
       ? `최근 ${formatShortDate(story.latestEpisodeAt)}`
       : "";
+    card.querySelector("[data-view-count]").textContent = `조회 ${Number(story.viewCount || 0).toLocaleString("ko-KR")}`;
 
     const originBadge = card.querySelector(".origin-badge");
     if (story.contentOrigin === "ai_seed") {
@@ -424,7 +451,8 @@
       nickname_invalid_characters: "한글, 영문, 숫자, 띄어쓰기, 밑줄과 하이픈만 사용할 수 있습니다.",
       nickname_contact_info_not_allowed: "연락처나 웹 주소는 닉네임으로 사용할 수 없습니다.",
       nickname_reserved: "서비스 운영에 사용하는 이름이라 선택할 수 없습니다.",
-      nickname_unavailable: "이미 사용 중이거나 보호 중인 이름입니다."
+      nickname_unavailable: "이미 사용 중이거나 보호 중인 이름입니다.",
+      nickname_change_cooldown: "활동 이름은 마지막 변경 후 30일이 지나야 다시 바꿀 수 있습니다."
     })[code] || "이 이름은 사용할 수 없습니다.";
   }
 

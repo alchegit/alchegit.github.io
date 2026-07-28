@@ -66,6 +66,7 @@
     likedByMe: false,
     episodeCount: 1,
     latestEpisodeAt: "2026-07-24T09:00:00+09:00",
+    viewCount: 0,
     disclosure: "생성형 AI로 초안을 만들고 운영진이 설정·문장·개연성을 검토한 쇼케이스입니다.",
     episodes: [{
       id: "seed-last-platform-episode-1",
@@ -77,6 +78,7 @@
       paragraphCount: firstEpisode.split(/\n\s*\n/gu).length,
       estimatedReadMinutes: Math.max(1, Math.ceil([...firstEpisode.replace(/\s/gu, "")].length / 450)),
       status: "published",
+      viewCount: 0,
       publishedAt: "2026-07-24T09:00:00+09:00"
     }]
   }];

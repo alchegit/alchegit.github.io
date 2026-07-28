@@ -4,6 +4,7 @@
   --line: #d7d1c6; --shadow: 5px 5px 0 var(--ink);
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body { margin: 0; color: var(--ink); background: var(--paper); font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif; letter-spacing: 0; }
 button, input { font: inherit; }

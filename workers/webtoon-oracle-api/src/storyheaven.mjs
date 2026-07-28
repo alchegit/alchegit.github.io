@@ -100,7 +100,7 @@ export function normalizeStoryHeavenNickname(value) {
     .toLocaleLowerCase("ko-KR");
 }
 
-export function validateStoryHeavenNickname(value) {
+export function validateStoryHeavenNickname(value, { allowReserved = false } = {}) {
   const nickname = String(value || "").normalize("NFKC").trim().replace(/\s+/gu, " ");
   const length = graphemeLength(nickname);
 
@@ -115,7 +115,7 @@ export function validateStoryHeavenNickname(value) {
   }
 
   const normalized = normalizeStoryHeavenNickname(nickname);
-  if (STORYHEAVEN_RESERVED_NICKNAMES.includes(normalized)) {
+  if (!allowReserved && STORYHEAVEN_RESERVED_NICKNAMES.includes(normalized)) {
     return { ok: false, error: "nickname_reserved" };
   }
   return { ok: true, nickname, normalized, length };

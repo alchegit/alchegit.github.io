@@ -27,19 +27,20 @@
     });
     const { data } = await state.client.auth.getSession();
     state.session = data.session;
+    renderAccount();
+    notify();
     if (state.session) await loadProfile();
-    else {
+    state.client.auth.onAuthStateChange(async (_event, session) => {
+      const previousUserId = state.session?.user?.id || null;
+      const previousAccessToken = state.session?.access_token || null;
+      state.session = session;
+      if (!session) state.profile = null;
       renderAccount();
       notify();
-    }
-    state.client.auth.onAuthStateChange(async (_event, session) => {
-      state.session = session;
-      state.profile = null;
-      if (session) await loadProfile();
-      else {
-        renderAccount();
-        notify();
-      }
+      if (session && (
+        session.user?.id !== previousUserId
+        || session.access_token !== previousAccessToken
+      )) await loadProfile();
     });
     return state;
   }
@@ -79,10 +80,29 @@
       toast("로그인 모듈을 불러오지 못했습니다.");
       return;
     }
-    await state.client.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.href.split("#")[0] }
-    });
+    const buttons = [...document.querySelectorAll("[data-common-login]")];
+    buttons.forEach((button) => { button.disabled = true; });
+    try {
+      const { error } = await state.client.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: new URL(
+            `${window.location.pathname}${window.location.search}`,
+            window.location.origin
+          ).href
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      const detail = `${error?.code || ""} ${error?.message || ""}`.toLowerCase();
+      toast(detail.includes("provider") && (detail.includes("not enabled") || detail.includes("unsupported"))
+        ? "Google 로그인이 아직 인증 서버에서 활성화되지 않았습니다."
+        : detail.includes("redirect") && detail.includes("allow")
+          ? "현재 페이지가 로그인 복귀 주소로 등록되지 않았습니다."
+          : "Google 로그인을 시작하지 못했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      buttons.forEach((button) => { button.disabled = false; });
+    }
   }
 
   async function logout() {

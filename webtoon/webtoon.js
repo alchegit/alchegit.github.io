@@ -366,13 +366,8 @@
 
     renderAccount(root, { loading: true });
 
-    root.querySelector("[data-auth-action='login']")?.addEventListener("click", async () => {
-      await client.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: window.location.href.split("#")[0]
-        }
-      });
+    root.querySelector("[data-auth-action='login']")?.addEventListener("click", (event) => {
+      startGoogleLogin(client, event.currentTarget);
     });
 
     root.querySelector("[data-auth-action='logout']")?.addEventListener("click", async () => {
@@ -421,13 +416,8 @@
 
     if (loginButton) {
       loginButton.textContent = "Google로 로그인";
-      loginButton.addEventListener("click", async () => {
-        await client.auth.signInWithOAuth({
-          provider: "google",
-          options: {
-            redirectTo: window.location.href.split("#")[0]
-          }
-        });
+      loginButton.addEventListener("click", () => {
+        startGoogleLogin(client, loginButton);
       });
     }
 
@@ -620,6 +610,13 @@
   }
 
   function accountErrorMessage(error) {
+    const detail = `${error?.code || ""} ${error?.message || ""}`.toLowerCase();
+    if (detail.includes("provider") && (detail.includes("not enabled") || detail.includes("unsupported"))) {
+      return "Google 로그인이 아직 인증 서버에서 활성화되지 않았습니다.";
+    }
+    if (detail.includes("redirect") && detail.includes("allow")) {
+      return "현재 페이지가 로그인 복귀 주소로 등록되지 않았습니다.";
+    }
     const messages = {
       account_banned: "이 계정은 이용이 제한되었습니다.",
       google_login_required: "Google 로그인이 필요합니다.",
@@ -629,6 +626,30 @@
       rate_limited: "요청이 많습니다. 잠시 후 다시 시도해주세요."
     };
     return messages[error?.code] || "계정 정보를 확인하지 못했습니다.";
+  }
+
+  async function startGoogleLogin(client, button) {
+    if (!client) {
+      flash("로그인 모듈을 불러오지 못했습니다.");
+      return;
+    }
+    if (button) button.disabled = true;
+    try {
+      const { error } = await client.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: new URL(
+            `${window.location.pathname}${window.location.search}`,
+            window.location.origin
+          ).href
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      flash(accountErrorMessage(error));
+    } finally {
+      if (button) button.disabled = false;
+    }
   }
 
   function initStudio() {
@@ -2897,6 +2918,7 @@
     ensureProjectSchemaV2(project);
     const readerLanguage = byId("readerLanguage");
     let readerLocale = new URLSearchParams(window.location.search).get("lang") || "ko";
+    let countedProjectId = "";
     if (!["ko", "en", "ja"].includes(readerLocale)) readerLocale = "ko";
     const useLocalDraft = query.get("draft") === "local";
     if (forceScenario) {
@@ -2915,21 +2937,21 @@
         renderReaderProject(project);
         return;
       }
-      if (event.detail.signedIn || useLocalDraft) {
+      if (useLocalDraft) {
         const localProject = loadProject();
         project = isSupportedProject(localProject) ? localProject : project;
         renderReaderProject(project);
         return;
       }
 
-      await renderLatestPublicProject();
+      await renderLatestPublicProject({ countView: true });
     });
 
     if (!useLocalDraft && !forceScenario) {
       renderLatestPublicProject();
     }
 
-    async function renderLatestPublicProject() {
+    async function renderLatestPublicProject({ countView = false } = {}) {
       const publicProject = await loadLatestPublicProject();
       if (!publicProject) {
         renderReaderProject(project);
@@ -2937,6 +2959,23 @@
       }
       project = publicProject;
       renderReaderProject(project);
+      if (countView) recordPublicProjectView(project);
+    }
+
+    async function recordPublicProjectView(currentProject) {
+      const projectId = String(currentProject.remoteId || "").trim();
+      if (!projectId || !currentProject.isPublic || countedProjectId === projectId || !getOracleApiBase()) return;
+      countedProjectId = projectId;
+      try {
+        const view = await oracleFetch(`/api/webtoon/projects/${encodeURIComponent(projectId)}/view`, {
+          method: "POST",
+          auth: accessState.signedIn
+        });
+        currentProject.viewCount = Number(view.viewCount || 0);
+        if (project === currentProject) byId("readerViews").textContent = currentProject.viewCount.toLocaleString("ko-KR");
+      } catch {
+        // Public reading must remain available when the counter is unavailable.
+      }
     }
 
     function renderReaderProject(currentProject) {
@@ -2960,6 +2999,7 @@
       byId("readerPanels").textContent = String(readerPanelCount);
       byId("readerGenre").textContent = genreLabel(currentProject.genre);
       byId("readerMinutes").textContent = `${estimateReaderMinutes(readerPanelCount)}분`;
+      byId("readerViews").textContent = Number(currentProject.viewCount || 0).toLocaleString("ko-KR");
       reader.innerHTML = renderReader(currentProject, readerLocale);
     }
   }

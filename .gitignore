@@ -10,6 +10,7 @@
 service-role*.json
 service-role*.key
 credentials*.json
+client_secret_*.json
 secrets/
 
 # Local-only webtoon planning material. Public operator/plan routes contain

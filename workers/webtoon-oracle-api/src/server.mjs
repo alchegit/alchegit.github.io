@@ -260,7 +260,11 @@ app.get("/api/storyheaven/profile", requireUser, async (req, res, next) => {
 
 app.get("/api/storyheaven/nicknames/availability", optionalUser, async (req, res, next) => {
   try {
-    const result = await storyHeavenNicknameAvailability(req.query.value, req.user?.id || null);
+    const result = await storyHeavenNicknameAvailability(
+      req.query.value,
+      req.user?.id || null,
+      isAdminIdentity(req.user)
+    );
     res.json(result);
   } catch (error) {
     next(error);
@@ -295,6 +299,15 @@ app.get("/api/storyheaven/stories/:id", optionalUser, async (req, res, next) => 
   }
 });
 
+app.post("/api/storyheaven/stories/:id/view", optionalUser, async (req, res, next) => {
+  try {
+    const view = await recordStoryHeavenStoryView(req.params.id, req.user || null);
+    res.set("Cache-Control", "no-store").json(view);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/api/storyheaven/stories/:id/episodes", optionalUser, async (req, res, next) => {
   try {
     const episodes = await listStoryHeavenEpisodes(req.params.id, req.user || null);
@@ -308,6 +321,15 @@ app.get("/api/storyheaven/stories/:id/episodes/:episodeNo", optionalUser, async 
   try {
     const episode = await getStoryHeavenEpisode(req.params.id, req.params.episodeNo, req.user || null);
     res.set("Cache-Control", req.user ? "private, no-store" : "public, max-age=60").json({ episode });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/view", optionalUser, async (req, res, next) => {
+  try {
+    const view = await recordStoryHeavenEpisodeView(req.params.id, req.params.episodeNo, req.user || null);
+    res.set("Cache-Control", "no-store").json(view);
   } catch (error) {
     next(error);
   }
@@ -597,6 +619,15 @@ app.get("/api/webtoon/projects/:id", optionalUser, async (req, res, next) => {
       return;
     }
     res.json({ project });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/webtoon/projects/:id/view", optionalUser, async (req, res, next) => {
+  try {
+    const view = await recordWebtoonProjectView(req.params.id, req.user || null);
+    res.set("Cache-Control", "no-store").json(view);
   } catch (error) {
     next(error);
   }
@@ -1075,8 +1106,10 @@ async function ensureUserProfile(user, req) {
 }
 
 async function allocateInitialStoryHeavenIdentity(connection, userId, isAdmin, displayName) {
-  const preferred = isAdmin ? validateStoryHeavenNickname(displayName || config.adminDisplayName) : null;
-  if (preferred?.ok && !(await isStoryHeavenNicknameUnavailable(connection, preferred.normalized, userId))) {
+  const preferred = isAdmin
+    ? validateStoryHeavenNickname(displayName || config.adminDisplayName, { allowReserved: true })
+    : null;
+  if (preferred?.ok && !(await isStoryHeavenNicknameUnavailable(connection, preferred.normalized, userId, isAdmin))) {
     return { nickname: preferred.nickname, normalized: preferred.normalized, status: "active" };
   }
 
@@ -1090,13 +1123,13 @@ async function allocateInitialStoryHeavenIdentity(connection, userId, isAdmin, d
   throw httpError("nickname_allocation_failed", 503);
 }
 
-async function storyHeavenNicknameAvailability(value, userId = null) {
-  const validation = validateStoryHeavenNickname(value);
+async function storyHeavenNicknameAvailability(value, userId = null, allowReserved = false) {
+  const validation = validateStoryHeavenNickname(value, { allowReserved });
   if (!validation.ok) {
     return { available: false, reason: validation.error, limits: STORYHEAVEN_NICKNAME_LIMITS };
   }
   const unavailable = await withConnection((connection) => (
-    isStoryHeavenNicknameUnavailable(connection, validation.normalized, userId)
+    isStoryHeavenNicknameUnavailable(connection, validation.normalized, userId, allowReserved)
   ));
   return {
     available: !unavailable,
@@ -1106,27 +1139,30 @@ async function storyHeavenNicknameAvailability(value, userId = null) {
   };
 }
 
-async function isStoryHeavenNicknameUnavailable(connection, normalized, userId = null) {
+async function isStoryHeavenNicknameUnavailable(connection, normalized, userId = null, allowReserved = false) {
   const result = await connection.execute(
     `select (
        (select count(*) from webtoon_profiles
          where nickname_normalized = :nickname_normalized
            and (:user_id is null or user_id <> :user_id))
-       + (select count(*) from storyheaven_reserved_names
-           where nickname_normalized = :nickname_normalized)
+       + case when :allow_reserved = 'Y' then 0 else
+           (select count(*) from storyheaven_reserved_names
+             where nickname_normalized = :nickname_normalized)
+         end
        + (select count(*) from storyheaven_nickname_history
            where nickname_normalized = :nickname_normalized
              and reserved_until > systimestamp
              and (:user_id is null or user_id <> :user_id))
      ) as unavailable_count
      from dual`,
-    { nickname_normalized: normalized, user_id: userId }
+    { nickname_normalized: normalized, user_id: userId, allow_reserved: allowReserved ? "Y" : "N" }
   );
   return Number(result.rows?.[0]?.UNAVAILABLE_COUNT || 0) > 0;
 }
 
 async function updateStoryHeavenNickname(user, value, req) {
-  const validation = validateStoryHeavenNickname(value);
+  const allowReserved = isAdminIdentity(user);
+  const validation = validateStoryHeavenNickname(value, { allowReserved });
   if (!validation.ok) {
     throw httpError(validation.error, 400);
   }
@@ -1152,7 +1188,7 @@ async function updateStoryHeavenNickname(user, value, req) {
 
       const changedAt = current.NICKNAME_CHANGED_AT ? new Date(current.NICKNAME_CHANGED_AT).getTime() : 0;
       const cooldownMs = STORYHEAVEN_NICKNAME_LIMITS.cooldownDays * 24 * 60 * 60 * 1000;
-      if (current.NICKNAME_STATUS === "active" && changedAt && Date.now() - changedAt < cooldownMs) {
+      if (!allowReserved && current.NICKNAME_STATUS === "active" && changedAt && Date.now() - changedAt < cooldownMs) {
         const error = httpError("nickname_change_cooldown", 409);
         error.details = [{
           availableAt: new Date(changedAt + cooldownMs).toISOString(),
@@ -1161,7 +1197,7 @@ async function updateStoryHeavenNickname(user, value, req) {
         throw error;
       }
 
-      if (await isStoryHeavenNicknameUnavailable(connection, validation.normalized, user.id)) {
+      if (await isStoryHeavenNicknameUnavailable(connection, validation.normalized, user.id, allowReserved)) {
         throw httpError("nickname_unavailable", 409);
       }
 
@@ -1228,7 +1264,7 @@ async function listStoryHeavenFeed({ userId = null, limit = 24 } = {}) {
          select s.id, s.slug, s.title, s.logline, s.public_synopsis, s.genre,
                 s.tags_json, s.content_rating, s.content_origin,
                 s.competition_eligible, s.ai_disclosure_version, s.cover_path,
-                s.published_at, p.nickname, p.display_name, p.account_type,
+                s.published_at, s.view_count, p.nickname, p.display_name, p.account_type,
                 (select count(*) from storyheaven_episodes episode_count
                   where episode_count.story_id = s.id and episode_count.episode_status = 'published') as episode_count,
                 (select max(latest_episode.published_at) from storyheaven_episodes latest_episode
@@ -2107,7 +2143,7 @@ async function listStoryHeavenEpisodes(storyIdValue, user) {
     const result = await connection.execute(
       `select e.id, e.episode_no, e.title, e.public_summary, e.character_count,
               e.paragraph_count, e.estimated_read_minutes, e.episode_status,
-              e.current_revision_no, e.published_at, e.updated_at,
+              e.current_revision_no, e.view_count, e.published_at, e.updated_at,
               nvl(p.last_character_offset, 0) as last_character_offset,
               nvl(p.completion_rate, 0) as completion_rate
          from storyheaven_episodes e
@@ -2134,7 +2170,7 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
       `select e.id, e.story_id, e.episode_no, e.title, e.public_summary, e.body_text,
               e.character_count, e.paragraph_count, e.estimated_read_minutes,
               e.preview_character_count, e.episode_status, e.current_revision_no,
-              e.published_at, e.updated_at, s.title as story_title,
+              e.view_count, e.published_at, e.updated_at, s.title as story_title,
               s.author_user_id, s.story_status, p.nickname, p.display_name,
               nvl(progress.last_character_offset, 0) as last_character_offset,
               nvl(progress.completion_rate, 0) as completion_rate
@@ -2154,7 +2190,6 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
     if (!isPublic && !mayReadPrivate) throw httpError("episode_not_found", 404);
 
     const body = String(row.BODY_TEXT || "");
-    const guestPreview = !user && isPublic ? createStoryHeavenGuestPreview(body) : null;
     const reactions = await connection.execute(
       `select reaction_type, count(*) as reaction_count,
               max(case when user_id = :viewer_user_id then 1 else 0 end) as reacted_by_me
@@ -2170,7 +2205,7 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
       episodeNo: Number(row.EPISODE_NO),
       title: row.TITLE,
       summary: row.PUBLIC_SUMMARY || "",
-      body: guestPreview?.body ?? body,
+      body,
       characterCount: Number(row.CHARACTER_COUNT || 0),
       paragraphCount: Number(row.PARAGRAPH_COUNT || 0),
       estimatedReadMinutes: Number(row.ESTIMATED_READ_MINUTES || 1),
@@ -2179,10 +2214,11 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
       publishedAt: row.PUBLISHED_AT || null,
       updatedAt: row.UPDATED_AT,
       author: row.NICKNAME || row.DISPLAY_NAME || "이야기씨앗",
-      guestPreview: Boolean(guestPreview?.truncated),
-      loginRequired: Boolean(guestPreview?.truncated),
-      previewCharacters: guestPreview?.previewCharacters ?? Number(row.CHARACTER_COUNT || 0),
-      totalCharacters: guestPreview?.totalCharacters ?? Number(row.CHARACTER_COUNT || 0),
+      viewCount: Number(row.VIEW_COUNT || 0),
+      guestPreview: false,
+      loginRequired: false,
+      previewCharacters: Number(row.CHARACTER_COUNT || 0),
+      totalCharacters: Number(row.CHARACTER_COUNT || 0),
       progress: user ? {
         lastCharacterOffset: Number(row.LAST_CHARACTER_OFFSET || 0),
         completionRate: Number(row.COMPLETION_RATE || 0)
@@ -2191,6 +2227,69 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
         const reaction = reactions.rows.find((item) => item.REACTION_TYPE === type);
         return [type, { count: Number(reaction?.REACTION_COUNT || 0), selected: reaction?.REACTED_BY_ME === 1 }];
       }))
+    };
+  });
+}
+
+async function recordStoryHeavenStoryView(storyIdValue, user) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const counted = !isAdminIdentity(user);
+  return withTransaction(async (connection) => {
+    const target = await connection.execute(
+      `select id from storyheaven_stories
+        where id = :story_id and story_status = 'published'`,
+      { story_id: storyId }
+    );
+    if (!target.rows.length) throw httpError("story_not_found", 404);
+    if (counted) {
+      await connection.execute(
+        `update storyheaven_stories
+            set view_count = view_count + 1
+          where id = :story_id`,
+        { story_id: storyId }
+      );
+    }
+    const result = await connection.execute(
+      `select view_count from storyheaven_stories where id = :story_id`,
+      { story_id: storyId }
+    );
+    return { storyId, viewCount: Number(result.rows[0].VIEW_COUNT || 0), counted };
+  });
+}
+
+async function recordStoryHeavenEpisodeView(storyIdValue, episodeNoValue, user) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
+  const counted = !isAdminIdentity(user);
+  return withTransaction(async (connection) => {
+    const target = await connection.execute(
+      `select e.id
+         from storyheaven_episodes e
+         join storyheaven_stories s on s.id = e.story_id
+        where e.story_id = :story_id
+          and e.episode_no = :episode_no
+          and e.episode_status = 'published'
+          and s.story_status = 'published'`,
+      { story_id: storyId, episode_no: episodeNo }
+    );
+    if (!target.rows.length) throw httpError("episode_not_found", 404);
+    if (counted) {
+      await connection.execute(
+        `update storyheaven_episodes
+            set view_count = view_count + 1
+          where id = :episode_id`,
+        { episode_id: target.rows[0].ID }
+      );
+    }
+    const result = await connection.execute(
+      `select view_count from storyheaven_episodes where id = :episode_id`,
+      { episode_id: target.rows[0].ID }
+    );
+    return {
+      storyId,
+      episodeNo,
+      viewCount: Number(result.rows[0].VIEW_COUNT || 0),
+      counted
     };
   });
 }
@@ -3052,6 +3151,7 @@ function mapStoryHeavenEpisodeSummary(row) {
     characterCount: Number(row.CHARACTER_COUNT || 0),
     paragraphCount: Number(row.PARAGRAPH_COUNT || 0),
     estimatedReadMinutes: Number(row.ESTIMATED_READ_MINUTES || 1),
+    viewCount: Number(row.VIEW_COUNT || 0),
     status: row.EPISODE_STATUS,
     revisionNo: Number(row.CURRENT_REVISION_NO || 0),
     publishedAt: row.PUBLISHED_AT || null,
@@ -3232,7 +3332,7 @@ function storyHeavenOwnerSelect() {
                  s.competition_eligible, s.ai_disclosure_version, s.cover_path,
                  s.story_status, s.current_revision_no, s.submitted_revision_no,
                  s.submitted_at, s.reviewed_at, s.review_decision, s.review_note,
-                 s.eligibility_score, s.published_at, s.created_at, s.updated_at,
+                 s.eligibility_score, s.view_count, s.published_at, s.created_at, s.updated_at,
                  p.nickname, p.display_name, p.account_type,
                  r.packet_json,
                  (select count(*) from storyheaven_episodes episode_count
@@ -3481,6 +3581,7 @@ function mapStoryHeavenStory(row) {
     publishedAt: row.PUBLISHED_AT,
     episodeCount: Number(row.EPISODE_COUNT || 0),
     latestEpisodeAt: row.LATEST_EPISODE_AT || null,
+    viewCount: Number(row.VIEW_COUNT || 0),
     author: {
       nickname: row.NICKNAME || row.DISPLAY_NAME || "이야기씨앗",
       accountType: row.ACCOUNT_TYPE || "human"
@@ -3894,7 +3995,7 @@ async function syncPanelProductionRecords(connection, project) {
 async function latestPublicProject() {
   return withConnection(async (connection) => {
     const result = await connection.execute(
-      `select id, user_id, title, idea, genre, panels_json, project_json, status, is_public, updated_at
+      `select id, user_id, title, idea, genre, panels_json, project_json, status, is_public, view_count, updated_at
          from webtoon_projects
         where is_public = 'Y'
           and status = 'published'
@@ -3910,7 +4011,7 @@ async function getProject(id, existingConnection = null) {
   const projectId = boundedString(id, "id", 36, { required: true });
   const run = async (connection) => {
     const result = await connection.execute(
-      `select id, user_id, title, idea, genre, panels_json, project_json, status, is_public, updated_at
+      `select id, user_id, title, idea, genre, panels_json, project_json, status, is_public, view_count, updated_at
          from webtoon_projects
         where id = :id`,
       { id: projectId }
@@ -3919,6 +4020,34 @@ async function getProject(id, existingConnection = null) {
   };
 
   return existingConnection ? run(existingConnection) : withConnection(run);
+}
+
+async function recordWebtoonProjectView(projectIdValue, user) {
+  const projectId = boundedString(projectIdValue, "projectId", 36, { required: true });
+  const counted = !isAdminIdentity(user);
+  return withTransaction(async (connection) => {
+    const target = await connection.execute(
+      `select id from webtoon_projects
+        where id = :project_id
+          and is_public = 'Y'
+          and status = 'published'`,
+      { project_id: projectId }
+    );
+    if (!target.rows.length) throw httpError("not_found", 404);
+    if (counted) {
+      await connection.execute(
+        `update webtoon_projects
+            set view_count = view_count + 1
+          where id = :project_id`,
+        { project_id: projectId }
+      );
+    }
+    const result = await connection.execute(
+      `select view_count from webtoon_projects where id = :project_id`,
+      { project_id: projectId }
+    );
+    return { projectId, viewCount: Number(result.rows[0].VIEW_COUNT || 0), counted };
+  });
 }
 
 async function createJob(input, user, req) {
@@ -4811,6 +4940,7 @@ function mapProject(row) {
     panels,
     status: row.STATUS,
     isPublic: row.IS_PUBLIC === "Y",
+    viewCount: Number(row.VIEW_COUNT || 0),
     updatedAt: row.UPDATED_AT
   };
 }
