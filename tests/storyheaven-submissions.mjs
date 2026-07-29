@@ -146,12 +146,14 @@ try {
         sideWidth: side.width,
         sideBesideForm: Math.abs(side.top - form.top) < 5 && side.left > form.right,
         buttonsFit: buttons.every((box) => box.left >= editor.left - 1 && box.right <= editor.right + 1),
-        progress: Number(document.querySelector("[data-progress-value]").textContent)
+        nextStep: document.querySelector("[data-next-step]").textContent,
+        saveDisabled: document.querySelector("[data-save]").disabled
       };
     });
     assert.equal(metrics.documentWidth, metrics.viewportWidth, `${viewport.name} horizontal overflow`);
     assert.equal(metrics.buttonsFit, true, `${viewport.name} action buttons fit`);
-    assert.ok(metrics.progress > 0, `${viewport.name} progress reacts`);
+    assert.match(metrics.nextStep, /회차 원고/u, `${viewport.name} next action reacts`);
+    assert.equal(metrics.saveDisabled, false, `${viewport.name} draft save is ready`);
     assert.equal(metrics.sideBesideForm, viewport.name === "desktop", `${viewport.name} responsive editor layout`);
     const createRequest = page.waitForRequest((request) => new URL(request.url()).pathname === "/api/storyheaven/stories" && request.method() === "POST");
     await page.locator("[data-save]").click();
@@ -190,6 +192,39 @@ try {
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth === innerWidth), true, `${viewport.name} operator overflow`);
     await page.close();
   }
+
+  const reviewPage = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  let batchStatusRequests = 0;
+  let legacyStatusRequests = 0;
+  reviewPage.on("request", (request) => {
+    const path = new URL(request.url()).pathname;
+    if (path === "/api/storyheaven/me/review-statuses") batchStatusRequests += 1;
+    if (/\/api\/storyheaven\/stories\/[^/]+\/review-status$/u.test(path)) legacyStatusRequests += 1;
+  });
+  await reviewPage.addInitScript(() => {
+    const session = { access_token: "browser-test-token", user: { id: "review-list-user" } };
+    window.supabase = { createClient: () => ({ auth: {
+      getSession: async () => ({ data: { session } }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+      signInWithOAuth: async () => ({}), signOut: async () => ({})
+    } }) };
+  });
+  await reviewPage.route("https://cdn.jsdelivr.net/**", (route) => route.abort());
+  await reviewPage.route("https://harvard-museum-nails-mission.trycloudflare.com/**", async (route) => {
+    const path = new URL(route.request().url()).pathname;
+    const json = (body) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+    if (path === "/api/storyheaven/profile") return json({ profile: { nickname: "검수작가", nicknameStatus: "active", isAdmin: false } });
+    if (path === "/api/storyheaven/me/stories") return json({ stories: [1, 2].map((id) => ({ id: `moderation-${id}`, title: `검수 이야기 ${id}`, genre: "미스터리", status: "moderation", revisionNo: 1, updatedAt: "2026-07-29T00:00:00.000Z" })) });
+    if (path === "/api/storyheaven/me/notifications") return json({ notifications: [] });
+    if (path === "/api/storyheaven/me/review-statuses") return json({ reviews: [1, 2].map((id) => ({ storyId: `moderation-${id}`, status: "running", stage: "ai_running", message: "AI가 원고를 검수하고 있습니다.", estimateLabel: "보통 3~5분", totalCount: 2, completedCount: 1 })) });
+    return route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ error: "not_found" }) });
+  });
+  await reviewPage.goto(`${root}/storyheaven/my/`, { waitUntil: "networkidle" });
+  await reviewPage.locator("[data-story-list] .list-panel").first().waitFor();
+  assert.equal(await reviewPage.locator("[data-story-list] .list-panel").count(), 2, "two moderation stories render");
+  assert.equal(batchStatusRequests, 1, "moderation statuses load in one batch request");
+  assert.equal(legacyStatusRequests, 0, "legacy per-story status requests are removed");
+  await reviewPage.close();
 
   const publicPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await publicPage.goto(`${root}/storyheaven/`, { waitUntil: "networkidle" });

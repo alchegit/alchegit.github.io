@@ -5,6 +5,8 @@ import {
   createStoryHeavenGuestPreview,
   createStoryHeavenSynopsis,
   normalizeStoryHeavenNickname,
+  parseStoryHeavenAiReview,
+  storyHeavenAiReviewMessages,
   storyHeavenRoundSchedule,
   temporaryStoryHeavenNickname,
   validateStoryHeavenEpisode,
@@ -92,6 +94,7 @@ assert.ok(checkedEpisode.analysis.characterCount >= 2500);
 const automaticCopyEpisode = validateStoryHeavenEpisode({ body: completeEpisode.body }, { mode: "submit" });
 assert.equal(automaticCopyEpisode.ok, true);
 assert.equal(automaticCopyEpisode.episode.title, "1화");
+assert.equal(validateStoryHeavenEpisode({ body: completeEpisode.body }, { mode: "submit", episodeNo: 7 }).episode.title, "7화");
 assert.equal(automaticCopyEpisode.episode.summary, createStoryHeavenEpisodeSummary(completeEpisode.body));
 assert.equal(
   validateStoryHeavenPacket(basicPacket.packet, { mode: "submit", episodeBody: completeEpisode.body }).packet.synopsis,
@@ -105,6 +108,22 @@ const preview = createStoryHeavenGuestPreview(`${completeEpisode.body}\n\n마지
 assert.equal(preview.truncated, true);
 assert.ok(preview.body.length >= 1200 && preview.body.length <= 2500);
 assert.equal(preview.body.includes("마지막 반전"), false);
+
+const aiReview = parseStoryHeavenAiReview(JSON.stringify({
+  decision: "approved",
+  score: 91,
+  categories: ["quality", "quality"],
+  reason: "기계 검수 이후 공개 가능한 원고로 확인했습니다."
+}));
+assert.equal(aiReview.ok, true);
+assert.equal(aiReview.review.score, 91);
+assert.deepEqual(aiReview.review.categories, ["quality"]);
+assert.equal(parseStoryHeavenAiReview("not-json").error, "ai_review_invalid_json");
+assert.equal(parseStoryHeavenAiReview({ decision: "changes_required", score: 50, reason: "짧음" }).ok, false);
+const aiMessages = storyHeavenAiReviewMessages({ targetType: "episode", story: completePacket, episode: completeEpisode });
+assert.equal(aiMessages.length, 2);
+assert.ok(aiMessages[0].content.includes("untrusted data"));
+assert.ok(aiMessages[1].content.includes("첫 번째 정차역"));
 
 const round = storyHeavenRoundSchedule("2026-07-22T03:00:00.000Z");
 assert.equal(round.roundKey, "2026-07-20");
@@ -123,10 +142,12 @@ for (const route of [
   "/api/storyheaven/me/stories",
   "/api/storyheaven/stories/:id/draft",
   "/api/storyheaven/stories/:id/submit",
+  "/api/storyheaven/stories/:id/review-status",
   "/api/storyheaven/stories/:id/like",
   "/api/storyheaven/stories/:id/report",
   "/api/storyheaven/stories/:id/view",
   "/api/storyheaven/stories/:id/episodes",
+  "/api/storyheaven/stories/:id/episodes/batch-draft",
   "/api/storyheaven/stories/:id/episodes/:episodeNo",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/view",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/draft",
@@ -157,7 +178,12 @@ assert.ok(server.includes('affectsReaderLikeCount: false'));
 assert.ok(server.includes('author_cannot_like_own_story'));
 assert.ok(server.includes('new Set(["human", "human_ai_assisted"])'));
 assert.ok(server.includes("createStoryHeavenGuestPreview"));
-assert.ok(server.includes('app.use("/api/storyheaven", express.json({ limit: "64kb" }))'));
+assert.ok(server.includes('app.use("/api/storyheaven", express.json({ limit: "512kb" }))'));
+assert.ok(server.includes("storyheaven_ai_review_batches"));
+assert.ok(server.includes("processNextStoryHeavenAiReview"));
+assert.ok(server.includes("episode_review_batch_duplicate_content"));
+assert.ok(server.includes("story_review_already_in_progress"));
+assert.ok(server.includes("estimateStoryHeavenReviewMinutes"));
 assert.ok(server.includes('eventType: "storyheaven_unsafe_content_blocked"'));
 assert.ok(server.includes('throw httpError("episode_review_required", 409)'));
 assert.ok(server.includes('!allowReserved && current.NICKNAME_STATUS === "active"'));
@@ -187,6 +213,11 @@ const multipleGenresMigration = await readFile(new URL("../../../oracle/20260728
 assert.ok(multipleGenresMigration.includes("genres_json"));
 assert.ok(multipleGenresMigration.includes("json_array(genre, secondary_genre"));
 assert.ok(submissionMigration.includes("review_decision"));
+const automatedReviewMigration = await readFile(new URL("../../../oracle/20260728-storyheaven-automated-moderation.sql", import.meta.url), "utf8");
+for (const table of ["storyheaven_ai_review_batches", "storyheaven_ai_reviews"]) {
+  assert.ok(automatedReviewMigration.includes(table), "missing automated review table: " + table);
+}
+assert.ok(automatedReviewMigration.includes("provider_pending"));
 
 const weeklyMigration = await readFile(new URL("../../../oracle/20260724-storyheaven-weekly-rounds.sql", import.meta.url), "utf8");
 for (const table of ["storyheaven_rounds", "storyheaven_entries", "storyheaven_votes", "storyheaven_vote_audit"]) {
@@ -234,5 +265,7 @@ assert.ok(seedLibrary.includes("contentOrigin: \"ai_seed\""));
 const writePage = await readFile(new URL("../../../storyheaven/write/index.html", import.meta.url), "utf8");
 assert.ok(writePage.includes("data-submission-guide"));
 assert.ok(writePage.includes("그림·첨부파일·HTML은 불가능"));
+assert.ok(writePage.includes("한 번에 최대 10화"));
+assert.ok(writePage.includes("기계 검수 후 AI"));
 
 console.log("StoryHeaven foundation checks passed");

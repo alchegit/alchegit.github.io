@@ -1,0 +1,30 @@
+[Unit]
+Description=NeoKIM StoryHeaven isolated Codex moderation worker
+Wants=network-online.target
+After=network-online.target neokim-eenta-repo3-api-tunnel.service
+Requires=neokim-eenta-repo3-api-tunnel.service
+
+[Service]
+Type=simple
+User=storyreview
+Group=storyreview
+WorkingDirectory=/opt/neokim-storyheaven-codex-review-worker
+EnvironmentFile=/opt/neokim-storyheaven-codex-review-worker/.env
+Environment=HOME=/var/lib/neokim-storyheaven-review
+Environment=CODEX_HOME=/var/lib/neokim-storyheaven-review/codex
+ExecStart=/usr/bin/node /opt/neokim-storyheaven-codex-review-worker/src/worker.mjs
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/var/lib/neokim-storyheaven-review
+
+[Install]
+WantedBy=multi-user.target

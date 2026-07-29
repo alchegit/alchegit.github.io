@@ -1,0 +1,15 @@
+{
+  "name": "neokim-storyheaven-codex-review-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Isolated Codex CLI moderation worker for StoryHeaven submissions.",
+  "scripts": {
+    "start": "node src/worker.mjs",
+    "once": "node src/worker.mjs --once",
+    "check": "node --check src/moderation.mjs && node --check src/worker.mjs && node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

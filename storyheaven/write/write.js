@@ -10,11 +10,12 @@
 5. 다음 화: 새로운 사실, 선택 또는 위험을 남겨주세요.
 
 [제출 기준]
-- 1화 제목: 2~80자
+- 회차 제목: 선택, 최대 80자. 비우면 회차 번호로 자동 저장
 - 회차 소개: 원고에서 자동 생성
 - 원고: 공백 제외 최소 2,500자, 권장 4,000~7,000자, 최대 12,000자
 - 문단: 최소 8개, 최대 240개. 장면이 바뀌면 한 줄을 비워 구분
 - 외부 링크: 최대 3개
+- 묶음 제출: 한 번에 최대 10화
 - 허용 형식: 일반 글만 가능. 그림, 첨부파일, HTML, 스크립트, DB 명령은 불가능
 
 [붙여넣기 전 확인]
@@ -25,13 +26,17 @@
   const state = {
     storyId: new URLSearchParams(location.search).get("id"),
     story: null,
-    episode: null,
+    episodes: [{ episodeNo: 1, id: null, title: "", body: "", status: "draft" }],
     genres: [],
     genreComposing: false,
     tags: [],
     tagComposing: false,
     ready: false,
-    saving: false
+    saving: false,
+    dirty: false,
+    hydrating: false,
+    consentAutoOpened: false,
+    expandedEpisodes: new Set([1])
   };
   document.addEventListener("DOMContentLoaded", init);
 
@@ -42,12 +47,32 @@
 
   function bindForm() {
     const form = document.querySelector("[data-story-form]");
+    const guide = document.querySelector("[data-submission-guide]");
+    guide.open = localStorage.getItem("storyheaven.submission-guide-seen") !== "1";
+    guide.addEventListener("toggle", () => {
+      if (!guide.open) localStorage.setItem("storyheaven.submission-guide-seen", "1");
+    });
     bindGenreEditor();
     bindTagEditor();
-    form.addEventListener("input", () => { updateCounters(); updateProgress(); updateManuscriptHealth(); clearFieldErrors(); });
+    form.addEventListener("input", () => {
+      markDirty();
+      updateCounters();
+      updateProgress();
+      updateManuscriptHealth();
+      clearFieldErrors();
+    });
+    document.querySelector("[data-add-episode]").addEventListener("click", addEpisodeDraft);
+    document.querySelector("[data-episode-list]").addEventListener("input", handleEpisodeInput);
+    document.querySelector("[data-episode-list]").addEventListener("click", handleEpisodeAction);
     document.querySelector("[data-save]").addEventListener("click", saveDraft);
     document.querySelector("[data-submit]").addEventListener("click", submitStory);
     document.querySelector("[data-copy-submission-guide]").addEventListener("click", copySubmissionGuide);
+    window.addEventListener("beforeunload", (event) => {
+      if (!state.dirty) return;
+      event.preventDefault();
+      event.returnValue = "";
+    });
+    renderEpisodes();
     updateCounters();
     updateProgress();
     updateManuscriptHealth();
@@ -118,6 +143,7 @@
     state.genres.push(matched);
     setGenreStatus("", false);
     renderGenres();
+    markDirty();
     updateProgress();
     return true;
   }
@@ -127,6 +153,7 @@
     const [removed] = state.genres.splice(index, 1);
     setGenreStatus(`${removed} 장르를 삭제했습니다.`, false);
     renderGenres();
+    markDirty();
     updateProgress();
     document.querySelector("[data-genre-input]").focus();
   }
@@ -219,6 +246,8 @@
     status.textContent = "";
     status.classList.remove("is-error");
     renderTags();
+    markDirty();
+    updateProgress();
     return true;
   }
 
@@ -227,6 +256,8 @@
     const [removed] = state.tags.splice(index, 1);
     setTagStatus(`${removed} 태그를 삭제했습니다.`, false);
     renderTags();
+    markDirty();
+    updateProgress();
     document.querySelector("[data-tag-input]").focus();
   }
 
@@ -258,6 +289,7 @@
     const status = document.querySelector("[data-guide-copy-status]");
     try {
       await copyText(submissionGuideText);
+      localStorage.setItem("storyheaven.submission-guide-seen", "1");
       status.textContent = "가이드를 복사했습니다. 작성 도구에 붙여넣어 활용하세요.";
       StoryHeavenCommon.toast("회차 원고 가이드를 복사했습니다.");
     } catch {
@@ -296,26 +328,52 @@
     try {
       const payload = await StoryHeavenCommon.api("/api/storyheaven/stories/" + encodeURIComponent(state.storyId));
       state.story = payload.story;
-      if (state.story.status !== "draft") {
-        StoryHeavenCommon.toast("검수 중이거나 공개된 이야기는 이 화면에서 수정할 수 없습니다.");
+      if (!new Set(["draft", "published"]).has(state.story.status)) {
+        StoryHeavenCommon.toast("검수 중인 이야기는 결과가 나온 뒤 다시 수정할 수 있습니다.");
         location.href = "/storyheaven/my/";
         return;
       }
       applyPacket(state.story.packet || state.story);
-      await loadEpisode();
+      await loadEpisodes();
+      applyPublishedStoryMode();
+      state.dirty = false;
+      updateProgress();
       document.querySelector("[data-save-state]").textContent = `수정본 ${state.story.revisionNo} · 저장됨`;
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
   }
 
-  async function loadEpisode() {
+  async function loadEpisodes() {
     const payload = await StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/episodes`);
-    const first = (payload.episodes || []).find((episode) => Number(episode.episodeNo) === 1);
-    if (!first) return;
-    const detail = await StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/episodes/1`);
-    state.episode = detail.episode;
-    applyEpisode(state.episode);
+    const allEpisodes = payload.episodes || [];
+    const drafts = allEpisodes.filter((episode) => episode.status === "draft").slice(0, 10);
+    if (drafts.length) {
+      const details = await Promise.all(drafts.map((episode) => (
+        StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/episodes/${episode.episodeNo}`)
+      )));
+      state.episodes = details.map((item) => ({ ...item.episode, body: item.episode.body || "" }));
+    } else {
+      const nextEpisodeNo = Math.max(0, ...allEpisodes.map((episode) => Number(episode.episodeNo) || 0)) + 1;
+      state.episodes = [{ episodeNo: nextEpisodeNo, id: null, title: "", body: "", status: "draft" }];
+    }
+    const activeDraft = state.episodes.find((episode) => !episodeIsReviewReady(episode)) || state.episodes.at(-1);
+    state.expandedEpisodes = new Set(activeDraft ? [Number(activeDraft.episodeNo)] : []);
+    renderEpisodes();
+    document.querySelector("[data-episode-section]").open = drafts.length > 0;
+  }
+
+  function applyPublishedStoryMode() {
+    const published = state.story?.status === "published";
+    document.querySelectorAll('[data-story-form] > .form-section:not([data-episode-section]) input, [data-story-form] > .form-section:not([data-episode-section]) textarea, [data-story-form] > .form-section:not([data-episode-section]) select').forEach((field) => {
+      if (!field.closest("[data-consent-section]")) field.disabled = published;
+    });
+    document.querySelectorAll("[data-genre-chips] button, [data-tag-chips] button").forEach((button) => {
+      button.disabled = published;
+    });
+    document.querySelector("[data-consent-section]").hidden = published;
+    document.querySelector("[data-save]").textContent = published ? "회차 초안 저장" : "초안 저장";
+    document.querySelector("[data-submit]").textContent = published ? "새 회차 검수 요청" : "작성한 회차 검수 요청";
   }
 
   async function saveDraft() {
@@ -327,21 +385,25 @@
       commitPendingInputs();
       if (!validateBasics()) return false;
       const packet = collectPacket();
-      const path = state.storyId ? `/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/draft` : "/api/storyheaven/stories";
-      const payload = await StoryHeavenCommon.api(path, { method: state.storyId ? "PATCH" : "POST", body: { packet } });
-      state.story = payload.story;
-      state.storyId = payload.story.id;
-      history.replaceState(null, "", "?id=" + encodeURIComponent(state.storyId));
-      const episodeIncluded = hasEpisodeInput() || Boolean(state.episode);
-      if (episodeIncluded) await saveEpisodeDraft();
+      if (state.story?.status !== "published") {
+        const path = state.storyId ? `/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/draft` : "/api/storyheaven/stories";
+        const payload = await StoryHeavenCommon.api(path, { method: state.storyId ? "PATCH" : "POST", body: { packet } });
+        state.story = payload.story;
+        state.storyId = payload.story.id;
+        history.replaceState(null, "", "?id=" + encodeURIComponent(state.storyId));
+      }
+      const episodeIncluded = hasEpisodeInput() || state.episodes.some((episode) => episode.id);
+      if (episodeIncluded) await saveEpisodeDrafts();
       const form = document.querySelector("[data-story-form]");
       if (!form.synopsis.value.trim() && packet.synopsis) {
         form.synopsis.value = packet.synopsis;
-        document.querySelector("[data-synopsis-status]").textContent = "1화 원고에서 줄거리를 자동으로 만들었습니다. 자유롭게 고쳐도 됩니다.";
+        document.querySelector("[data-synopsis-status]").textContent = "첫 원고에서 줄거리를 자동으로 만들었습니다. 자유롭게 고쳐도 됩니다.";
         updateCounters();
       }
       document.querySelector("[data-save-state]").textContent = `수정본 ${state.story.revisionNo} · 방금 저장됨`;
-      StoryHeavenCommon.toast(episodeIncluded ? "이야기와 1화 초안을 저장했습니다." : "이야기를 저장했습니다. 1화는 나중에 이어서 쓸 수 있습니다.");
+      state.dirty = false;
+      updateProgress();
+      StoryHeavenCommon.toast(episodeIncluded ? "이야기와 작성한 회차 초안을 저장했습니다." : "이야기를 저장했습니다. 회차는 나중에 이어서 쓸 수 있습니다.");
       return true;
     } catch (error) {
       showErrors(error);
@@ -353,35 +415,49 @@
     }
   }
 
-  async function saveEpisodeDraft() {
-    const episode = collectEpisode();
-    const path = state.episode
-      ? `/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/episodes/${state.episode.episodeNo}/draft`
-      : `/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/episodes`;
-    const payload = await StoryHeavenCommon.api(path, {
-      method: state.episode ? "PATCH" : "POST",
-      body: { episode }
+  async function saveEpisodeDrafts() {
+    const drafts = state.episodes.filter((draft) => draft.title.trim() || draft.body.trim() || draft.id);
+    if (!drafts.length) return;
+    const payload = await StoryHeavenCommon.api(
+      `/api/storyheaven/stories/${encodeURIComponent(state.storyId)}/episodes/batch-draft`,
+      {
+        method: "POST",
+        body: {
+          episodes: drafts.map((draft) => ({ episodeNo: draft.episodeNo, ...collectEpisode(draft) }))
+        }
+      }
+    );
+    (payload.episodes || []).forEach((saved) => {
+      const draft = state.episodes.find((item) => item.episodeNo === Number(saved.episodeNo));
+      if (draft) Object.assign(draft, saved, { body: saved.body || draft.body });
     });
-    state.episode = payload.episode;
+    renderEpisodes();
   }
 
   async function submitStory() {
     if (state.saving) return;
-    if (!state.storyId && !(await saveDraft())) return;
-    if (!hasEpisodeInput() && !state.episode) {
+    commitPendingInputs();
+    const readiness = getSubmissionReadiness();
+    if (!readiness.canSubmit) {
+      focusSubmissionIssue(readiness);
+      return;
+    }
+    const createdNow = !state.storyId;
+    if (createdNow && !(await saveDraft())) return;
+    if (!hasEpisodeInput() && !state.episodes.some((episode) => episode.id && episode.body.trim())) {
       const episodeSection = document.querySelector("[data-episode-section]");
       episodeSection.open = true;
       episodeSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      StoryHeavenCommon.toast("이야기는 저장했습니다. 공개 검수는 1화 원고를 작성한 뒤 요청할 수 있습니다.");
+      StoryHeavenCommon.toast("이야기는 저장했습니다. 공개 검수는 회차 원고를 작성한 뒤 요청할 수 있습니다.");
       return;
     }
-    if (!state.episode && !(await saveDraft())) return;
+    if (!createdNow && !(await saveDraft())) return;
     const form = document.querySelector("[data-story-form]");
-    if (![form.consentDisplay, form.consentOriginality, form.consentAdult].every((input) => input.checked)) {
+    if (state.story.status !== "published" && ![form.consentDisplay, form.consentOriginality, form.consentAdult].every((input) => input.checked)) {
       const consentSection = document.querySelector("[data-consent-section]");
       consentSection.open = true;
       consentSection.scrollIntoView({ behavior: "smooth", block: "center" });
-      StoryHeavenCommon.toast("공개 검수에 필요한 세 가지 항목을 먼저 확인해주세요.");
+      StoryHeavenCommon.toast("첫 공개 검수에 필요한 세 가지 항목을 먼저 확인해주세요.");
       return;
     }
     state.saving = true;
@@ -392,8 +468,9 @@
         method: "POST",
         body: {
           packet: collectPacket(),
-          episodeNo: state.episode?.episodeNo || 1,
-          episode: collectEpisode(),
+          episodes: state.episodes
+            .filter((episode) => episode.id && episode.body.trim())
+            .map((episode) => ({ episodeNo: episode.episodeNo, ...collectEpisode(episode) })),
           consents: {
             display: form.consentDisplay.checked,
             originality: form.consentOriginality.checked,
@@ -403,8 +480,9 @@
         }
       });
       state.story = payload.story;
-      StoryHeavenCommon.toast("작품 소개와 1화 검수 요청을 보냈습니다. 승인 전에는 공개되지 않습니다.");
-      setTimeout(() => { location.href = "/storyheaven/my/"; }, 800);
+      state.dirty = false;
+      StoryHeavenCommon.toast(`${payload.review?.estimateLabel || "보통 3~5분"} 안에 자동 검수 결과를 알려드립니다.`);
+      setTimeout(() => { location.href = "/storyheaven/my/"; }, 1200);
     } catch (error) {
       showErrors(error);
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -415,16 +493,20 @@
   }
 
   function collectPacket() {
+    if (state.story?.status === "published" && state.story.packet) {
+      return structuredClone(state.story.packet);
+    }
     const f = document.querySelector("[data-story-form]");
     const lines = (name, max) => f[name].value.split("\n").map((item) => item.trim()).filter(Boolean).slice(0, max);
     const character = { name:f.characterName.value, desire:f.characterDesire.value, fear:f.characterFear.value, secret:f.characterSecret.value };
-    const automaticSynopsis = createExcerpt(f.episodeBody.value, 700, 360);
+    const firstBody = state.episodes.find((episode) => episode.body.trim())?.body || "";
+    const automaticSynopsis = createExcerpt(firstBody, 700, 360);
     const synopsis = f.synopsis.value.trim() || automaticSynopsis;
     const existingLogline = state.story?.packet?.logline || state.story?.logline || "";
     const keepExistingLogline = existingLogline && !/의 이야기를 준비하고 있습니다[.]?$/u.test(existingLogline);
     return {
       title:f.title.value,
-      logline:keepExistingLogline ? existingLogline : createLogline(synopsis || f.episodeBody.value, f.title.value),
+      logline:keepExistingLogline ? existingLogline : createLogline(synopsis || firstBody, f.title.value),
       synopsis,
       genres:[...state.genres],
       genre:state.genres[0] || "",
@@ -441,18 +523,90 @@
     };
   }
 
-  function collectEpisode() {
-    const f = document.querySelector("[data-story-form]");
+  function collectEpisode(draft) {
     return {
-      title: f.episodeTitle.value.trim() || (f.episodeBody.value.trim() ? "1화" : ""),
-      summary: createExcerpt(f.episodeBody.value, 300, 100),
-      body: f.episodeBody.value
+      title: draft.title.trim() || (draft.body.trim() ? `${draft.episodeNo}화` : ""),
+      summary: createExcerpt(draft.body, 300, 100),
+      body: draft.body
     };
   }
 
   function hasEpisodeInput() {
-    const f = document.querySelector("[data-story-form]");
-    return Boolean(f.episodeTitle.value.trim() || f.episodeBody.value.trim());
+    return state.episodes.some((episode) => episode.title.trim() || episode.body.trim());
+  }
+
+  function addEpisodeDraft() {
+    if (state.episodes.length >= 10) {
+      StoryHeavenCommon.toast("한 번에 최대 10화까지 작성할 수 있습니다.");
+      return;
+    }
+    const nextEpisodeNo = Math.max(0, ...state.episodes.map((episode) => Number(episode.episodeNo) || 0)) + 1;
+    state.episodes.push({ episodeNo: nextEpisodeNo, id: null, title: "", body: "", status: "draft" });
+    state.expandedEpisodes.clear();
+    state.expandedEpisodes.add(nextEpisodeNo);
+    markDirty();
+    renderEpisodes();
+    document.querySelector(`[data-episode-card="${nextEpisodeNo}"] [data-episode-title]`)?.focus();
+  }
+
+  function handleEpisodeInput(event) {
+    const card = event.target.closest("[data-episode-card]");
+    if (!card) return;
+    const draft = state.episodes.find((episode) => episode.episodeNo === Number(card.dataset.episodeCard));
+    if (!draft) return;
+    if (event.target.matches("[data-episode-title]")) draft.title = event.target.value;
+    if (event.target.matches("[data-episode-body]")) draft.body = event.target.value;
+    updateEpisodeCardHealth(card, draft);
+    updateReviewEstimate();
+    updateProgress();
+  }
+
+  function handleEpisodeAction(event) {
+    const button = event.target.closest("[data-remove-episode]");
+    if (!button) return;
+    const episodeNo = Number(button.dataset.removeEpisode);
+    const draft = state.episodes.find((episode) => episode.episodeNo === episodeNo);
+    if (!draft || draft.id) return;
+    state.episodes = state.episodes.filter((episode) => episode !== draft);
+    state.expandedEpisodes.delete(episodeNo);
+    if (!state.episodes.length) state.episodes.push({ episodeNo: 1, id: null, title: "", body: "", status: "draft" });
+    if (!state.expandedEpisodes.size) state.expandedEpisodes.add(Number(state.episodes.at(-1).episodeNo));
+    markDirty();
+    renderEpisodes();
+  }
+
+  function renderEpisodes() {
+    const list = document.querySelector("[data-episode-list]");
+    list.replaceChildren(...state.episodes.map((episode, index) => {
+      const details = document.createElement("details");
+      details.className = "episode-draft-card";
+      details.dataset.episodeCard = String(episode.episodeNo);
+      details.open = state.expandedEpisodes.has(Number(episode.episodeNo));
+      details.innerHTML = `<summary><span><span class="eyebrow">EPISODE ${episode.episodeNo}</span><strong>${escapeHtml(episode.title || `${episode.episodeNo}화 원고`)}</strong></span><span class="episode-summary-meta"><b data-episode-summary-state>작성 전</b><i aria-hidden="true"></i></span></summary>
+        <div class="episode-draft-body">
+          ${!episode.id && state.episodes.length > 1 ? `<div class="episode-draft-tools"><button class="button secondary episode-remove" type="button" data-remove-episode="${episode.episodeNo}" aria-label="${episode.episodeNo}화 입력칸 삭제">이 회차 삭제</button></div>` : ""}
+          <label class="field"><span class="field-label"><span>회차 제목 <em>선택</em></span><small><b data-episode-title-count>${[...String(episode.title || "")].length}</b>/80</small></span><input data-episode-title maxlength="80" autocomplete="off" value="${escapeHtml(episode.title || "")}" placeholder="비우면 ${episode.episodeNo}화로 저장됩니다"><p class="field-error" data-error-for="episodes.${index}.title"></p></label>
+          <label class="field manuscript-field"><span class="field-label"><span>${episode.episodeNo}화 원고</span><small><b data-episode-body-count>${compactLength(episode.body).toLocaleString()}</b>/12,000 · 최소 2,500자</small></span><textarea class="manuscript" data-episode-body maxlength="12000" spellcheck="true" placeholder="문단 사이를 한 줄 비워 장면과 호흡을 나눠주세요. 일반 글만 입력할 수 있습니다.">${escapeHtml(episode.body || "")}</textarea><p class="field-error" data-error-for="episodes.${index}.body"></p></label>
+          <div class="manuscript-health" data-manuscript-health aria-live="polite"><div><span>원고 분량</span><strong data-manuscript-length>시작 전</strong></div><div><span>문단 호흡</span><strong data-manuscript-paragraphs>0개</strong></div><div><span>예상 읽기</span><strong data-manuscript-time>0분</strong></div></div>
+        </div>`;
+      details.addEventListener("toggle", () => {
+        const episodeNo = Number(details.dataset.episodeCard);
+        if (details.open) state.expandedEpisodes.add(episodeNo);
+        else state.expandedEpisodes.delete(episodeNo);
+      });
+      updateEpisodeCardHealth(details, episode);
+      return details;
+    }));
+    document.querySelector("[data-add-episode]").disabled = state.episodes.length >= 10;
+    document.querySelector("[data-episode-limit]").textContent = `회차 원고 ${state.episodes.length}/10 · 작성한 회차를 함께 저장하고 한 번에 검수합니다.`;
+    updateReviewEstimate();
+    updateProgress();
+  }
+
+  function updateReviewEstimate() {
+    const count = Math.max(1, state.episodes.filter((episode) => episode.body.trim()).length);
+    const center = 4 + Math.floor(count / 2);
+    document.querySelector("[data-review-estimate]").textContent = `${count}화 기준 보통 ${center - 1}~${center + 1}분`;
   }
 
   function commitPendingInputs() {
@@ -504,6 +658,7 @@
   }
 
   function applyPacket(packet) {
+    state.hydrating = true;
     const f = document.querySelector("[data-story-form]");
     const set = (name, value) => { if (f[name]) f[name].value = value || ""; };
     ["title","synopsis"].forEach((name) => set(name, packet[name]));
@@ -524,17 +679,8 @@
     const c = e.characters?.[0] || {}; set("characterName", c.name); set("characterDesire", c.desire); set("characterFear", c.fear); set("characterSecret", c.secret);
     const t = e.turningPoints || {}; set("turnIntro", t.intro); set("turnTurn", t.turn); set("turnCrisis", t.crisis); set("turnDecision", t.decision); set("turnHook", t.hook);
     set("mustKeep", (e.mustKeep || []).join("\n")); set("mustAvoid", (e.mustAvoid || []).join("\n")); set("visualAnchors", (e.visualAnchors || []).join("\n"));
+    state.hydrating = false;
     updateCounters(); updateProgress();
-  }
-
-  function applyEpisode(episode) {
-    const f = document.querySelector("[data-story-form]");
-    f.episodeTitle.value = episode.title || "";
-    f.episodeBody.value = episode.body || "";
-    document.querySelector("[data-episode-section]").open = true;
-    updateCounters();
-    updateProgress();
-    updateManuscriptHealth();
   }
 
   function updateCounters() {
@@ -545,27 +691,147 @@
   }
 
   function updateProgress() {
-    const f = document.querySelector("[data-story-form]");
+    const readiness = getSubmissionReadiness();
     const checks = {
-      title:f.title.value.trim().length>=2,
-      genre:state.genres.length > 0,
-      rating:["all","12","15"].includes(f.rating.value)
+      title: readiness.titleReady,
+      genre: readiness.genreReady,
+      manuscript: readiness.manuscriptReady
     };
-    Object.entries(checks).forEach(([name,done]) => document.querySelector(`[data-check="${name}"]`)?.classList.toggle("done",done));
-    const value = Math.round(Object.values(checks).filter(Boolean).length / Object.keys(checks).length * 100);
-    document.querySelector("[data-progress-bar]").style.width = value + "%";
-    document.querySelector("[data-progress-value]").textContent = String(value);
+    Object.entries(checks).forEach(([name, done]) => {
+      document.querySelector(`[data-check="${name}"]`)?.classList.toggle("done", done);
+    });
+
+    document.querySelector("[data-next-step]").textContent = readiness.nextStep;
+    document.querySelector("[data-action-guidance]").textContent = readiness.nextStep;
+
+    const saveButton = document.querySelector("[data-save]");
+    const submitButton = document.querySelector("[data-submit]");
+    saveButton.disabled = state.saving || !readiness.basicsReady;
+    submitButton.disabled = state.saving || !readiness.canSubmit;
+    saveButton.textContent = state.story?.status === "published" ? "회차 초안 저장" : "초안 저장";
+    submitButton.textContent = readiness.submitLabel;
+
+    if (readiness.shouldOpenConsent && !state.consentAutoOpened) {
+      document.querySelector("[data-consent-section]").open = true;
+      state.consentAutoOpened = true;
+    }
+  }
+
+  function getSubmissionReadiness() {
+    const form = document.querySelector("[data-story-form]");
+    const titleReady = [...form.title.value.trim()].length >= 2;
+    const genreReady = state.genres.length > 0;
+    const basicsReady = titleReady && genreReady;
+    const enteredEpisodes = state.episodes.filter((episode) => episode.title.trim() || episode.body.trim());
+    const firstInvalidEpisode = enteredEpisodes.find((episode) => !episodeIsReviewReady(episode)) || null;
+    const manuscriptReady = enteredEpisodes.length > 0 && !firstInvalidEpisode;
+    const published = state.story?.status === "published";
+    const consentReady = published || [form.consentDisplay, form.consentOriginality, form.consentAdult].every((input) => input.checked);
+    const canSubmit = basicsReady && manuscriptReady && consentReady;
+    let nextStep = `${enteredEpisodes.length}화가 준비되었습니다. 한 번에 자동 검수를 요청합니다.`;
+    let issue = null;
+
+    if (!titleReady) {
+      nextStep = "이야기 제목을 2자 이상 적어주세요.";
+      issue = { type: "title" };
+    } else if (!genreReady) {
+      nextStep = "장르를 1개 이상 입력해주세요.";
+      issue = { type: "genre" };
+    } else if (!enteredEpisodes.length) {
+      nextStep = "회차 원고를 추가하면 공개 검수를 요청할 수 있습니다.";
+      issue = { type: "episode", episode: state.episodes[0] };
+    } else if (firstInvalidEpisode) {
+      const metrics = episodeMetrics(firstInvalidEpisode);
+      if (!firstInvalidEpisode.body.trim()) {
+        nextStep = `${firstInvalidEpisode.episodeNo}화 원고를 붙여넣어주세요.`;
+      } else if (metrics.length < 2500) {
+        nextStep = `${firstInvalidEpisode.episodeNo}화 원고를 ${(2500 - metrics.length).toLocaleString()}자 더 적어주세요.`;
+      } else {
+        nextStep = `${firstInvalidEpisode.episodeNo}화 원고를 ${8 - metrics.paragraphs}문단 더 나눠주세요.`;
+      }
+      issue = { type: "episode", episode: firstInvalidEpisode };
+    } else if (!consentReady) {
+      nextStep = "공개 확인 3가지만 체크하면 검수를 요청할 수 있습니다.";
+      issue = { type: "consent" };
+    }
+
+    let submitLabel = `${enteredEpisodes.length || 1}화 검수 요청`;
+    if (!enteredEpisodes.length) submitLabel = "원고를 추가하면 검수 가능";
+    else if (!manuscriptReady) submitLabel = "원고 기준을 확인해주세요";
+    else if (!consentReady) submitLabel = "공개 확인이 필요합니다";
+
+    return {
+      titleReady,
+      genreReady,
+      basicsReady,
+      manuscriptReady,
+      consentReady,
+      canSubmit,
+      enteredEpisodes,
+      firstInvalidEpisode,
+      nextStep,
+      submitLabel,
+      issue,
+      shouldOpenConsent: basicsReady && manuscriptReady && !consentReady && !published
+    };
+  }
+
+  function focusSubmissionIssue(readiness) {
+    const issue = readiness.issue;
+    if (issue?.type === "title") document.querySelector('[name="title"]').focus();
+    if (issue?.type === "genre") document.querySelector("[data-genre-input]").focus();
+    if (issue?.type === "episode") {
+      document.querySelector("[data-episode-section]").open = true;
+      const card = document.querySelector(`[data-episode-card="${issue.episode?.episodeNo || state.episodes[0].episodeNo}"]`);
+      if (card) {
+        card.open = true;
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        card.querySelector("[data-episode-body]")?.focus({ preventScroll: true });
+      }
+    }
+    if (issue?.type === "consent") {
+      const consent = document.querySelector("[data-consent-section]");
+      consent.open = true;
+      consent.scrollIntoView({ behavior: "smooth", block: "center" });
+      consent.querySelector('input:not(:checked)')?.focus({ preventScroll: true });
+    }
+    StoryHeavenCommon.toast(readiness.nextStep);
   }
 
   function updateManuscriptHealth() {
-    const body = document.querySelector('[name="episodeBody"]').value;
-    const length = compactLength(body);
-    const paragraphs = countParagraphs(body);
+    document.querySelectorAll("[data-episode-card]").forEach((card) => {
+      const draft = state.episodes.find((episode) => episode.episodeNo === Number(card.dataset.episodeCard));
+      if (draft) updateEpisodeCardHealth(card, draft);
+    });
+    updateReviewEstimate();
+  }
+
+  function updateEpisodeCardHealth(card, draft) {
+    const { length, paragraphs } = episodeMetrics(draft);
     const lengthLabel = length < 2500 ? `${length.toLocaleString()}자 · 더 필요해요` : length <= 7000 ? `${length.toLocaleString()}자 · 적당해요` : `${length.toLocaleString()}자 · 긴 호흡`;
-    document.querySelector("[data-manuscript-length]").textContent = lengthLabel;
-    document.querySelector("[data-manuscript-paragraphs]").textContent = `${paragraphs}개${paragraphs >= 8 ? " · 좋아요" : " · 8개 이상"}`;
-    document.querySelector("[data-manuscript-time]").textContent = `${length ? Math.max(1, Math.ceil(length / 450)) : 0}분`;
-    document.querySelector("[data-manuscript-health]").classList.toggle("is-ready", length >= 2500 && paragraphs >= 8);
+    card.querySelector("[data-manuscript-length]").textContent = lengthLabel;
+    card.querySelector("[data-manuscript-paragraphs]").textContent = `${paragraphs}개${paragraphs >= 8 ? " · 좋아요" : " · 8개 이상"}`;
+    card.querySelector("[data-manuscript-time]").textContent = `${length ? Math.max(1, Math.ceil(length / 450)) : 0}분`;
+    card.querySelector("[data-manuscript-health]").classList.toggle("is-ready", length >= 2500 && paragraphs >= 8);
+    card.querySelector("[data-episode-title-count]").textContent = String([...draft.title].length);
+    card.querySelector("[data-episode-body-count]").textContent = length.toLocaleString();
+    card.querySelector("summary > span:first-child > strong").textContent = draft.title.trim() || `${draft.episodeNo}화 원고`;
+    const summaryState = card.querySelector("[data-episode-summary-state]");
+    if (!draft.title.trim() && !draft.body.trim()) summaryState.textContent = "작성 전";
+    else if (!draft.body.trim()) summaryState.textContent = "원고 없음";
+    else if (length < 2500) summaryState.textContent = `${(2500 - length).toLocaleString()}자 더 필요`;
+    else if (paragraphs < 8) summaryState.textContent = `${8 - paragraphs}문단 더 필요`;
+    else summaryState.textContent = "검수 준비됨";
+    card.classList.toggle("is-ready", length >= 2500 && paragraphs >= 8);
+  }
+
+  function episodeMetrics(episode) {
+    return { length: compactLength(episode?.body), paragraphs: countParagraphs(episode?.body) };
+  }
+
+  function episodeIsReviewReady(episode) {
+    const metrics = episodeMetrics(episode);
+    return Boolean(episode?.body?.trim()) && metrics.length >= 2500 && metrics.paragraphs >= 8;
   }
 
   function compactLength(value) {
@@ -602,7 +868,19 @@
   }
 
   function setBusy(busy, label="") {
-    document.querySelectorAll("[data-save],[data-submit]").forEach((button) => { button.disabled=busy; });
     if (busy) document.querySelector("[data-save-state]").textContent = label + "…";
+    updateProgress();
+  }
+
+  function markDirty() {
+    if (state.hydrating || state.saving) return;
+    state.dirty = true;
+    document.querySelector("[data-save-state]").textContent = "저장되지 않은 변경이 있습니다.";
+  }
+
+  function escapeHtml(value) {
+    const span = document.createElement("span");
+    span.textContent = String(value || "");
+    return span.innerHTML;
   }
 })();

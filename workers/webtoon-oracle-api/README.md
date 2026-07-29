@@ -23,7 +23,7 @@ The application listens on `127.0.0.1` by default so the public entry point rema
 
 ## Setup
 
-1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql`. StoryHeaven additionally requires the `20260724-storyheaven-*.sql` migrations in their dated order, followed by `20260728-storyheaven-multiple-genres.sql`, before deploying the matching API.
+1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql`. StoryHeaven additionally requires the `20260724-storyheaven-*.sql` migrations in their dated order, followed by `20260728-storyheaven-multiple-genres.sql`, `20260728-storyheaven-automated-moderation.sql`, and `20260729-storyheaven-codex-review-worker.sql`, before deploying the matching API.
 2. Copy `.env.example` to `.env` on `EENTA_REPO3`.
 3. Fill in Oracle connection values, Supabase Auth values, the exact administrator Google email, and long random server secrets.
 4. Install dependencies and start:
@@ -58,10 +58,12 @@ npm start
 - `GET /api/storyheaven/nicknames/availability`
 - `PATCH /api/storyheaven/me/nickname`
 - `GET /api/storyheaven/me/stories`
+- `GET /api/storyheaven/me/review-statuses`
 - `GET /api/storyheaven/stories/:id`
 - `POST /api/storyheaven/stories`
 - `PATCH /api/storyheaven/stories/:id/draft`
 - `POST /api/storyheaven/stories/:id/submit`
+- `GET /api/storyheaven/stories/:id/review-status`
 - `POST /api/storyheaven/stories/:id/like`
 - `DELETE /api/storyheaven/stories/:id/like`
 - `POST /api/storyheaven/stories/:id/report`
@@ -92,7 +94,17 @@ Raw IP addresses are not stored. The API records an HMAC-derived connection fing
 
 StoryHeaven reader likes and editorial endorsements are separate records. A like is unique per story and authenticated account; an editorial endorsement never changes the public reader-like total or weekly ranking. AI seed stories use `content_origin=ai_seed`, remain ineligible for the human weekly competition, and must keep their visible disclosure.
 
-Human StoryHeaven drafts remain private until an administrator approves a submitted immutable revision. Submission requires an active public nickname, display/originality/adult confirmations, and the server-side story limits. The optional training consent is stored separately and defaults to off. Authors cannot like their own published stories.
+Human StoryHeaven drafts remain private until deterministic preflight and a configured real AI moderation provider approve every immutable revision in the submission batch. One batch may contain 1-10 sequential episodes; omitted episode titles become `N화`. The story and every episode in an initial batch are published atomically, never one at a time. Submission requires an active public nickname, display/originality/adult confirmations, and the server-side story limits. The optional training consent is stored separately and defaults to off. Authors cannot like their own published stories.
+
+The automated moderation adapter supports two modes. `STORYHEAVEN_AI_REVIEW_MODE=http` uses an OpenAI-compatible chat-completions endpoint configured through `STORYHEAVEN_AI_REVIEW_URL`, `STORYHEAVEN_AI_REVIEW_MODEL`, and the optional API key. `external-worker` leases content-hash-bound chunks of up to three immutable revisions to the private worker in `workers/storyheaven-codex-review-worker`. The worker uses a low-cost first pass and escalates only ambiguous or rejected items. Lease expiry, missing credentials, timeouts, malformed output, and exhausted retries fail closed: the batch remains private and its status is visible to the author. Deterministic checks alone never auto-publish and are never presented as AI review. The operator queue remains only for provider recovery, reports, appeals, and exceptional safety handling.
+
+The external worker contract is protected by `WEBTOON_WORKER_TOKEN`:
+
+- `POST /api/storyheaven/worker/reviews/claim`
+- `POST /api/storyheaven/worker/reviews/complete`
+- `POST /api/storyheaven/worker/reviews/fail`
+
+Worker callbacks are accepted only when worker ID, lease ID, review ID, and immutable input hash all match. Apply `oracle/20260729-storyheaven-codex-review-worker.sql` before enabling this mode.
 
 Weekly candidate votes are stored separately from all-time story likes. KST schedules are server-generated, one author can enter one story per round, and tied first-place stories create a 24-hour runoff instead of an arbitrary winner. Vote-risk fingerprints are HMAC-derived, never contain raw IP addresses, expire after the configured retention period, and are not an automatic penalty signal.
 
@@ -106,4 +118,4 @@ Story reports are structured, authenticated, and unique per account/story/catego
 - Jobs: allowlisted job types, server-owned acorn costs, 64KiB request and 128KiB result payloads.
 - Images: JPG, PNG, or WebP only, maximum 12MiB, with MIME and file-signature validation.
 - API: 60 requests per minute per client IP, 10 creation requests per minute per account, and 30 administrator requests per minute per account by default.
-- StoryHeaven: 60-character title, 160-character logline, 400-1,200-character submitted synopsis, 5,000-character total packet, up to 5 tags, and up to 10 active drafts per member.
+- StoryHeaven: 60-character title, 160-character logline, optional auto-generated synopsis, 5,000-character total packet, up to 5 genres, up to 5 tags, up to 10 active story drafts per member, up to 10 episode drafts per series, and up to 10 sequential episodes per review batch. Each episode is 2,500-12,000 non-whitespace characters with 8-240 paragraphs.

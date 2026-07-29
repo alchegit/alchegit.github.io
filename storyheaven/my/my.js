@@ -1,8 +1,9 @@
 (() => {
-  const state = { stories: [], notifications: [], filter: "all", loaded: false };
+  const state = { stories: [], notifications: [], filter: "all", loaded: false, pollTimer: null, pollDelayMs: 15000 };
 
   document.addEventListener("DOMContentLoaded", async () => {
     bindFilters();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     await StoryHeavenCommon.init(onAuth);
   });
 
@@ -32,11 +33,61 @@
       ]);
       state.stories = stories.stories || [];
       state.notifications = notifications.notifications || [];
+      await loadReviewStatuses();
       renderStories();
       renderNotifications();
+      scheduleReviewPoll();
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
+  }
+
+  async function loadReviewStatuses() {
+    const pendingStories = state.stories.filter((story) => story.status === "moderation");
+    if (!pendingStories.length) return;
+    try {
+      const payload = await StoryHeavenCommon.api("/api/storyheaven/me/review-statuses");
+      const reviewsByStoryId = new Map((payload.reviews || []).map((review) => [review.storyId, review]));
+      pendingStories.forEach((story) => {
+        story.review = reviewsByStoryId.get(story.id) || null;
+        if (story.review?.status === "approved") story.status = "published";
+        if (story.review?.status === "changes_required") {
+          story.status = "draft";
+          story.reviewDecision = "changes_requested";
+          story.reviewNote = story.review.message;
+        }
+      });
+    } catch {
+      pendingStories.forEach((story) => { story.review = null; });
+    }
+  }
+
+  function scheduleReviewPoll() {
+    clearTimeout(state.pollTimer);
+    state.pollTimer = null;
+    const pending = state.stories.filter((story) => story.status === "moderation");
+    if (!pending.length || document.hidden) return;
+    const stages = pending.map((story) => story.review?.stage || "ai_queued");
+    state.pollDelayMs = stages.includes("ai_running") ? 15000
+      : stages.includes("ai_queued") ? 25000
+        : 45000;
+    state.pollTimer = setTimeout(async () => {
+      await loadReviewStatuses();
+      renderStories();
+      scheduleReviewPoll();
+    }, state.pollDelayMs);
+  }
+
+  async function handleVisibilityChange() {
+    if (document.hidden) {
+      clearTimeout(state.pollTimer);
+      state.pollTimer = null;
+      return;
+    }
+    if (!state.stories.some((story) => story.status === "moderation")) return;
+    await loadReviewStatuses();
+    renderStories();
+    scheduleReviewPoll();
   }
 
   function renderStories() {
@@ -124,12 +175,24 @@
     const article = document.createElement("article");
     article.className = "list-panel";
     const status = statusInfo(story);
-    article.innerHTML = `<header><div><p class="eyebrow">${escapeHtml(story.genre || "이야기")} · REV ${Number(story.revisionNo || 0)}</p><h3>${escapeHtml(story.title)}</h3></div><span class="status-chip">${status.label}</span></header><p>${escapeHtml(story.logline || "")}</p><div class="list-meta"><span>수정 ${formatDate(story.updatedAt)}</span>${story.eligibilityScore == null ? "" : `<span>검수 ${story.eligibilityScore}점</span>`}${story.likeCount ? `<span>좋아요 ${story.likeCount}</span>` : ""}</div>${story.reviewNote ? `<p><strong>검수 메모</strong><br>${escapeHtml(story.reviewNote)}</p>` : ""}<div class="list-actions">${story.status === "draft" ? `<a class="button" href="/storyheaven/write/?id=${encodeURIComponent(story.id)}">이어 쓰기</a>` : ""}${story.status === "published" ? `<a class="button secondary" href="/storyheaven/story/?id=${encodeURIComponent(story.id)}">공개 페이지</a>` : ""}</div>`;
+    const review = story.review;
+    const reviewProgress = review && story.status === "moderation"
+      ? `<section class="review-status-line"><div><b>${escapeHtml(status.label)}</b><span>${escapeHtml(review.estimateLabel || "")}</span></div><p>${escapeHtml(review.message || "")}</p>${review.totalCount ? `<small>${Math.min(review.completedCount, review.totalCount)} / ${review.totalCount} 확인 · 페이지를 나가도 자동으로 계속됩니다.</small>` : `<small>페이지를 나가도 자동으로 계속됩니다.</small>`}</section>`
+      : "";
+    article.innerHTML = `<header><div><p class="eyebrow">${escapeHtml(story.genre || "이야기")} · REV ${Number(story.revisionNo || 0)}</p><h3>${escapeHtml(story.title)}</h3></div><span class="status-chip">${status.label}</span></header><p>${escapeHtml(story.logline || "")}</p>${reviewProgress}<div class="list-meta"><span>수정 ${formatDate(story.updatedAt)}</span>${story.eligibilityScore == null ? "" : `<span>검수 ${story.eligibilityScore}점</span>`}${story.likeCount ? `<span>좋아요 ${story.likeCount}</span>` : ""}</div>${story.reviewNote ? `<p><strong>검수 메모</strong><br>${escapeHtml(story.reviewNote)}</p>` : ""}<div class="list-actions">${story.status === "draft" ? `<a class="button" href="/storyheaven/write/?id=${encodeURIComponent(story.id)}">이어 쓰기</a>` : ""}${story.status === "published" ? `<a class="button secondary" href="/storyheaven/story/?id=${encodeURIComponent(story.id)}">공개 페이지</a>` : ""}</div>`;
     return article;
   }
 
   function statusInfo(story) {
-    if (story.status === "moderation") return { label: "검수 중" };
+    if (story.status === "moderation") {
+      const labels = {
+        provider_pending: "AI 연결 대기",
+        retry_wait: "자동 재시도 대기",
+        ai_running: "AI 검수 중",
+        ai_queued: "AI 검수 대기"
+      };
+      return { label: labels[story.review?.stage] || "자동 검수 중" };
+    }
     if (story.status === "published") return { label: "공개" };
     if (story.status === "archived") return { label: "반려" };
     if (story.reviewDecision === "changes_requested") return { label: "보강 필요" };

@@ -1,0 +1,17 @@
+approval_policy = "never"
+default_permissions = "moderation"
+model_reasoning_effort = "low"
+web_search = "disabled"
+allow_login_shell = false
+
+[agents]
+enabled = false
+
+[permissions.moderation.filesystem]
+":root" = "deny"
+":minimal" = "read"
+":tmpdir" = "deny"
+":slash_tmp" = "deny"
+
+[permissions.moderation.network]
+enabled = false

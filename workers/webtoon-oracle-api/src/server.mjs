@@ -11,11 +11,14 @@ import oracledb from "oracledb";
 import {
   STORYHEAVEN_EPISODE_LIMITS,
   STORYHEAVEN_REACTIONS,
+  STORYHEAVEN_REVIEW_LIMITS,
   STORYHEAVEN_STORY_LIMITS,
   STORYHEAVEN_NICKNAME_LIMITS,
   createStoryHeavenGuestPreview,
   detectStoryHeavenTextThreat,
   normalizeStoryHeavenNickname,
+  parseStoryHeavenAiReview,
+  storyHeavenAiReviewMessages,
   storyHeavenRoundSchedule,
   temporaryStoryHeavenNickname,
   validateStoryHeavenEpisode,
@@ -98,8 +101,56 @@ const config = {
   rateLimitWindowMs: clampInt(process.env.RATE_LIMIT_WINDOW_MS, 10_000, 600_000, 60_000),
   rateLimitPerWindow: clampInt(process.env.RATE_LIMIT_PER_WINDOW, 10, 300, 60),
   creationRateLimitPerWindow: clampInt(process.env.CREATION_RATE_LIMIT_PER_WINDOW, 1, 30, 10),
-  adminRateLimitPerWindow: clampInt(process.env.ADMIN_RATE_LIMIT_PER_WINDOW, 5, 120, 30)
+  adminRateLimitPerWindow: clampInt(process.env.ADMIN_RATE_LIMIT_PER_WINDOW, 5, 120, 30),
+  storyHeavenAiReviewMode: String(process.env.STORYHEAVEN_AI_REVIEW_MODE || "http").trim().toLowerCase(),
+  storyHeavenAiReviewUrl: trimTrailingSlash(process.env.STORYHEAVEN_AI_REVIEW_URL || ""),
+  storyHeavenAiReviewApiKey: process.env.STORYHEAVEN_AI_REVIEW_API_KEY || "",
+  storyHeavenAiReviewModel: process.env.STORYHEAVEN_AI_REVIEW_MODEL || "",
+  storyHeavenAiReviewProvider: process.env.STORYHEAVEN_AI_REVIEW_PROVIDER || "openai-compatible",
+  storyHeavenAiReviewEstimateMinutes: clampInt(
+    process.env.STORYHEAVEN_AI_REVIEW_ESTIMATE_MINUTES,
+    1,
+    120,
+    STORYHEAVEN_REVIEW_LIMITS.estimatedMinutes
+  ),
+  storyHeavenAiReviewTimeoutMs: clampInt(process.env.STORYHEAVEN_AI_REVIEW_TIMEOUT_MS, 5_000, 120_000, 45_000),
+  storyHeavenAiReviewPollMs: clampInt(process.env.STORYHEAVEN_AI_REVIEW_POLL_MS, 2_000, 300_000, 10_000),
+  storyHeavenAiReviewMaxAttempts: clampInt(
+    process.env.STORYHEAVEN_AI_REVIEW_MAX_ATTEMPTS,
+    1,
+    10,
+    STORYHEAVEN_REVIEW_LIMITS.maxAttempts
+  ),
+  storyHeavenAiReviewRetryMinutes: clampInt(
+    process.env.STORYHEAVEN_AI_REVIEW_RETRY_MINUTES,
+    1,
+    60,
+    STORYHEAVEN_REVIEW_LIMITS.retryMinutes
+  ),
+  storyHeavenAiReviewWorkerBatchSize: clampInt(
+    process.env.STORYHEAVEN_AI_REVIEW_WORKER_BATCH_SIZE,
+    1,
+    STORYHEAVEN_EPISODE_LIMITS.reviewBatchMax,
+    STORYHEAVEN_EPISODE_LIMITS.reviewBatchMax
+  ),
+  storyHeavenAiReviewLeaseSeconds: clampInt(
+    process.env.STORYHEAVEN_AI_REVIEW_LEASE_SECONDS,
+    60,
+    1800,
+    900
+  )
 };
+
+if (!new Set(["disabled", "http", "external-worker"]).has(config.storyHeavenAiReviewMode)) {
+  throw new Error("STORYHEAVEN_AI_REVIEW_MODE must be disabled, http, or external-worker.");
+}
+
+const storyHeavenInternalReviewEnabled = Boolean(
+  config.storyHeavenAiReviewMode === "http" &&
+  config.storyHeavenAiReviewUrl && config.storyHeavenAiReviewModel
+);
+const storyHeavenExternalReviewEnabled = config.storyHeavenAiReviewMode === "external-worker";
+const storyHeavenAiReviewConfigured = storyHeavenInternalReviewEnabled || storyHeavenExternalReviewEnabled;
 
 if (!config.allowedOrigins.length) {
   throw new Error("ALLOWED_ORIGINS must contain at least one trusted origin");
@@ -154,7 +205,7 @@ app.use(cors({
   maxAge: 600,
   optionsSuccessStatus: 204
 }));
-app.use("/api/storyheaven", express.json({ limit: "64kb" }));
+app.use("/api/storyheaven", express.json({ limit: "512kb" }));
 app.use(express.json({ limit: "2mb" }));
 app.use("/api/webtoon", createRateLimiter({
   name: "api_ip",
@@ -290,6 +341,15 @@ app.get("/api/storyheaven/me/stories", requireUser, async (req, res, next) => {
   }
 });
 
+app.get("/api/storyheaven/me/review-statuses", requireUser, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    res.set("Cache-Control", "no-store").json({ reviews: await listMyStoryHeavenReviewStatuses(req.user.id) });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/api/storyheaven/stories/:id", optionalUser, async (req, res, next) => {
   try {
     const story = await getStoryHeavenStory(req.params.id, req.user || null);
@@ -357,6 +417,22 @@ app.post("/api/storyheaven/stories/:id/episodes", requireUser, creationRateLimit
   }
 });
 
+app.post("/api/storyheaven/stories/:id/episodes/batch-draft", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    const profile = await ensureUserProfile(req.user, req);
+    assertActiveStoryHeavenNickname(profile);
+    const episodes = await saveStoryHeavenEpisodeDraftBatch(
+      req.params.id,
+      req.user.id,
+      req.body?.episodes || [],
+      req
+    );
+    res.json({ episodes, limits: STORYHEAVEN_EPISODE_LIMITS });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.patch("/api/storyheaven/stories/:id/episodes/:episodeNo/draft", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     await ensureUserProfile(req.user, req);
@@ -413,6 +489,15 @@ app.post("/api/storyheaven/stories/:id/submit", requireUser, creationRateLimiter
     assertActiveStoryHeavenNickname(profile);
     const result = await submitStoryHeavenStory(req.params.id, req.user, req.body || {}, req);
     res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/stories/:id/review-status", requireUser, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    res.json({ review: await getStoryHeavenReviewStatus(req.params.id, req.user) });
   } catch (error) {
     next(error);
   }
@@ -790,6 +875,41 @@ app.post("/api/webtoon/assets/upload", requireWorker, upload.single("image"), as
   }
 });
 
+app.post("/api/storyheaven/worker/reviews/claim", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!storyHeavenExternalReviewEnabled) throw httpError("external_review_worker_disabled", 409);
+    const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    const limit = clampInt(req.body?.limit, 1, config.storyHeavenAiReviewWorkerBatchSize, config.storyHeavenAiReviewWorkerBatchSize);
+    res.json(await claimStoryHeavenAiReviewChunk({ workerId, limit }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/worker/reviews/complete", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!storyHeavenExternalReviewEnabled) throw httpError("external_review_worker_disabled", 409);
+    const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    const leaseId = boundedString(req.body?.leaseId, "leaseId", 36, { required: true });
+    const results = Array.isArray(req.body?.results) ? req.body.results : [];
+    res.json(await completeStoryHeavenAiReviewChunk({ workerId, leaseId, results }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/worker/reviews/fail", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!storyHeavenExternalReviewEnabled) throw httpError("external_review_worker_disabled", 409);
+    const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    const leaseId = boundedString(req.body?.leaseId, "leaseId", 36, { required: true });
+    const errorCode = boundedString(req.body?.errorCode || "codex_review_failed", "errorCode", 80, { required: true });
+    res.json(await failStoryHeavenAiReviewChunk({ workerId, leaseId, errorCode }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use((_req, res) => {
   res.status(404).json({ error: "not_found" });
 });
@@ -813,10 +933,25 @@ app.use((error, _req, res, _next) => {
 
 const server = app.listen(config.port, config.host, () => {
   console.log(`[webtoon-oracle-api] listening on ${config.host}:${config.port}`);
+  if (!storyHeavenAiReviewConfigured) {
+    console.warn("[storyheaven] AI review provider is not configured; submitted batches remain private in provider_pending");
+  } else if (storyHeavenExternalReviewEnabled) {
+    console.log("[storyheaven] external AI review worker mode enabled");
+  }
 });
+
+let storyHeavenReviewWorkerBusy = false;
+const storyHeavenReviewTimer = setInterval(() => {
+  processNextStoryHeavenAiReview().catch((error) => {
+    console.error("[storyheaven] AI review worker failed", error?.message || error);
+  });
+}, config.storyHeavenAiReviewPollMs);
+storyHeavenReviewTimer.unref();
+setTimeout(() => processNextStoryHeavenAiReview().catch(() => {}), 1_000).unref();
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, async () => {
+    clearInterval(storyHeavenReviewTimer);
     server.close();
     await pool.close(5).catch(() => {});
     process.exit(0);
@@ -2105,6 +2240,137 @@ async function listMyStoryHeavenStories(userId) {
   });
 }
 
+async function getStoryHeavenReviewStatus(storyIdValue, user) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  return withConnection(async (connection) => {
+    const access = await connection.execute(
+      `select author_user_id from storyheaven_stories where id = :story_id`,
+      { story_id: storyId }
+    );
+    if (!access.rows.length) throw httpError("story_not_found", 404);
+    if (access.rows[0].AUTHOR_USER_ID !== user.id && !isAdminIdentity(user)) {
+      throw httpError("story_access_denied", 403);
+    }
+    const result = await connection.execute(
+      `select * from (
+         select batch.id, batch.batch_status, batch.episode_count, batch.completed_count,
+                batch.estimated_minutes, batch.public_message, batch.failure_code,
+                batch.submitted_at, batch.started_at, batch.completed_at,
+                (select count(*) from storyheaven_ai_reviews review
+                  where review.batch_id = batch.id) as total_count,
+                (select count(*) from storyheaven_ai_reviews review
+                  where review.batch_id = batch.id and review.review_status = 'running') as running_count
+           from storyheaven_ai_review_batches batch
+          where batch.story_id = :story_id
+          order by batch.created_at desc
+       ) where rownum = 1`,
+      { story_id: storyId }
+    );
+    if (!result.rows.length) {
+      return {
+        status: "none",
+        stage: "not_submitted",
+        message: "아직 검수를 요청하지 않았습니다.",
+        estimatedMinutes: 0,
+        estimateLabel: ""
+      };
+    }
+    return mapStoryHeavenReviewStatus(result.rows[0]);
+  });
+}
+
+async function listMyStoryHeavenReviewStatuses(userId) {
+  return withConnection(async (connection) => {
+    const result = await connection.execute(
+      `select * from (
+         select batch.story_id, batch.id, batch.batch_status, batch.episode_count,
+                batch.completed_count, batch.estimated_minutes, batch.public_message,
+                batch.failure_code, batch.submitted_at, batch.started_at, batch.completed_at,
+                (select count(*) from storyheaven_ai_reviews review
+                  where review.batch_id = batch.id) as total_count,
+                (select count(*) from storyheaven_ai_reviews review
+                  where review.batch_id = batch.id and review.review_status = 'running') as running_count,
+                row_number() over (partition by batch.story_id order by batch.created_at desc) as row_rank
+           from storyheaven_ai_review_batches batch
+           join storyheaven_stories story on story.id = batch.story_id
+          where story.author_user_id = :user_id
+       ) where row_rank = 1`,
+      { user_id: userId }
+    );
+    return result.rows.map((row) => ({ storyId: row.STORY_ID, ...mapStoryHeavenReviewStatus(row) }));
+  });
+}
+
+function mapStoryHeavenReviewStatus(row) {
+  const status = row.BATCH_STATUS || "queued";
+  const stages = {
+    queued: "ai_queued",
+    running: "ai_running",
+    provider_pending: "provider_pending",
+    retry_wait: "retry_wait",
+    approved: "published",
+    changes_required: "changes_required",
+    error: "review_error"
+  };
+  const messages = {
+    queued: "기계 검수를 통과했고 AI 검수를 기다리고 있습니다.",
+    running: "AI가 원고를 검수하고 있습니다.",
+    provider_pending: "AI 검수 연결을 기다리고 있습니다. 원고는 비공개로 안전하게 보관됩니다.",
+    retry_wait: "AI 검수를 잠시 후 자동으로 다시 시도합니다.",
+    approved: "자동 검수를 통과해 공개되었습니다.",
+    changes_required: "검수 결과 수정이 필요한 부분이 있습니다.",
+    error: "자동 검수를 완료하지 못했습니다. 원고는 공개되지 않았습니다."
+  };
+  const estimatedMinutes = Number(row.ESTIMATED_MINUTES || config.storyHeavenAiReviewEstimateMinutes);
+  const submittedAt = row.SUBMITTED_AT ? new Date(row.SUBMITTED_AT) : null;
+  return {
+    batchId: row.ID,
+    status,
+    stage: stages[status] || "ai_queued",
+    message: row.PUBLIC_MESSAGE || messages[status] || messages.queued,
+    episodeCount: Number(row.EPISODE_COUNT || 0),
+    completedCount: Number(row.COMPLETED_COUNT || 0),
+    totalCount: Number(row.TOTAL_COUNT || 0),
+    runningCount: Number(row.RUNNING_COUNT || 0),
+    estimatedMinutes,
+    estimateLabel: storyHeavenReviewEstimateLabel(estimatedMinutes),
+    estimatedCompleteAt: submittedAt
+      ? new Date(submittedAt.getTime() + estimatedMinutes * 60_000).toISOString()
+      : null,
+    submittedAt: row.SUBMITTED_AT || null,
+    startedAt: row.STARTED_AT || null,
+    completedAt: row.COMPLETED_AT || null,
+    failureCode: row.FAILURE_CODE || ""
+  };
+}
+
+function storyHeavenReviewEstimateLabel(minutes) {
+  const center = Math.max(1, Number(minutes) || STORYHEAVEN_REVIEW_LIMITS.estimatedMinutes);
+  return `보통 ${Math.max(1, center - 1)}~${center + 1}분`;
+}
+
+async function estimateStoryHeavenReviewMinutes(connection, episodeCount) {
+  const fallback = Math.min(
+    120,
+    config.storyHeavenAiReviewEstimateMinutes + Math.floor(Math.max(1, episodeCount) / 2)
+  );
+  const result = await connection.execute(
+    `select avg(elapsed_minutes / greatest(1, episode_count)) as minutes_per_episode
+       from (
+         select (cast(completed_at as date) - cast(started_at as date)) * 1440 as elapsed_minutes,
+                episode_count
+           from storyheaven_ai_review_batches
+          where batch_status in ('approved', 'changes_required')
+            and started_at is not null and completed_at is not null
+            and completed_at >= systimestamp - interval '30' day
+          order by completed_at desc
+       ) where rownum <= 30`
+  );
+  const perEpisode = Number(result.rows?.[0]?.MINUTES_PER_EPISODE || 0);
+  if (!Number.isFinite(perEpisode) || perEpisode <= 0) return fallback;
+  return Math.max(2, Math.min(120, Math.ceil(1 + perEpisode * Math.max(1, episodeCount))));
+}
+
 async function getStoryHeavenStory(storyIdValue, user) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
   return withConnection(async (connection) => {
@@ -2347,7 +2613,7 @@ async function createStoryHeavenEpisode(storyIdValue, userId, input, req) {
 async function saveStoryHeavenEpisodeDraft(storyIdValue, episodeNoValue, userId, input, req) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
   const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
-  const validated = await requireStoryHeavenEpisode(input, "draft", req, userId);
+  const validated = await requireStoryHeavenEpisode(input, "draft", req, userId, episodeNo);
   return withTransaction(async (connection) => {
     const current = await lockStoryHeavenEpisode(connection, storyId, episodeNo, userId);
     if (current.EPISODE_STATUS !== "draft") throw httpError("episode_not_editable", 409);
@@ -2359,32 +2625,122 @@ async function saveStoryHeavenEpisodeDraft(storyIdValue, episodeNoValue, userId,
   });
 }
 
+async function saveStoryHeavenEpisodeDraftBatch(storyIdValue, userId, input, req) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  if (!Array.isArray(input) || !input.length || input.length > STORYHEAVEN_EPISODE_LIMITS.reviewBatchMax) {
+    throw httpError("episode_draft_batch_size_invalid", 400);
+  }
+  const checked = [];
+  for (let index = 0; index < input.length; index += 1) {
+    const episodeNo = requireStoryHeavenEpisodeNo(input[index]?.episodeNo);
+    try {
+      checked.push({
+        episodeNo,
+        validated: await requireStoryHeavenEpisode(input[index], "draft", req, userId, episodeNo)
+      });
+    } catch (error) {
+      if (Array.isArray(error.details)) {
+        error.details = error.details.map((detail) => ({
+          ...detail,
+          field: `episodes.${index}.${String(detail.field || "body").replace(/^episode\./u, "")}`
+        }));
+      }
+      throw error;
+    }
+  }
+  checked.sort((left, right) => left.episodeNo - right.episodeNo);
+  if (new Set(checked.map((item) => item.episodeNo)).size !== checked.length) {
+    throw httpError("episode_review_batch_duplicate_number", 400);
+  }
+
+  return withTransaction(async (connection) => {
+    const story = await connection.execute(
+      `select story_status from storyheaven_stories
+        where id = :story_id and author_user_id = :user_id for update`,
+      { story_id: storyId, user_id: userId }
+    );
+    if (!story.rows.length) throw httpError("story_not_found", 404);
+    if (!new Set(["draft", "published"]).has(story.rows[0].STORY_STATUS)) {
+      throw httpError("story_not_editable", 409);
+    }
+    const existingResult = await connection.execute(
+      `select id, episode_no, episode_status, current_revision_no
+         from storyheaven_episodes where story_id = :story_id order by episode_no for update`,
+      { story_id: storyId }
+    );
+    const existing = new Map(existingResult.rows.map((row) => [Number(row.EPISODE_NO), row]));
+    const currentDraftCount = existingResult.rows.filter((row) => row.EPISODE_STATUS === "draft").length;
+    const newCount = checked.filter((item) => !existing.has(item.episodeNo)).length;
+    if (currentDraftCount + newCount > STORYHEAVEN_EPISODE_LIMITS.draftsPerSeries) {
+      throw httpError("episode_draft_limit_reached", 409);
+    }
+    let maximumEpisodeNo = Math.max(0, ...existing.keys());
+    const output = [];
+    for (const item of checked) {
+      const current = existing.get(item.episodeNo);
+      const preview = createStoryHeavenGuestPreview(item.validated.episode.body);
+      if (current) {
+        if (current.EPISODE_STATUS !== "draft") throw httpError("episode_not_editable", 409);
+        const revisionNo = Number(current.CURRENT_REVISION_NO || 0) + 1;
+        await updateStoryHeavenEpisode(connection, current.ID, item.validated, preview.previewCharacters, revisionNo, "draft");
+        await insertStoryHeavenEpisodeRevision(
+          connection,
+          current.ID,
+          revisionNo,
+          userId,
+          "draft",
+          item.validated,
+          hashStoryHeavenEpisode(item.validated.episode)
+        );
+      } else {
+        if (item.episodeNo !== maximumEpisodeNo + 1) throw httpError("episode_draft_batch_not_sequential", 400);
+        maximumEpisodeNo = item.episodeNo;
+        const episodeId = randomId();
+        await connection.execute(
+          `insert into storyheaven_episodes (
+            id, story_id, episode_no, title, public_summary, body_text,
+            character_count, paragraph_count, estimated_read_minutes,
+            preview_character_count, episode_status, current_revision_no
+          ) values (
+            :id, :story_id, :episode_no, :title, :public_summary, :body_text,
+            :character_count, :paragraph_count, :estimated_read_minutes,
+            :preview_character_count, 'draft', 1
+          )`,
+          storyHeavenEpisodeBinds(episodeId, storyId, item.episodeNo, item.validated, preview.previewCharacters)
+        );
+        await insertStoryHeavenEpisodeRevision(
+          connection,
+          episodeId,
+          1,
+          userId,
+          "draft",
+          item.validated,
+          hashStoryHeavenEpisode(item.validated.episode)
+        );
+        await insertStoryHeavenActivity(connection, {
+          storyId,
+          actorUserId: userId,
+          type: "episode_created",
+          toStatus: "draft",
+          details: { episodeId, episodeNo: item.episodeNo, characterCount: item.validated.analysis.characterCount }
+        });
+      }
+      output.push(await selectStoryHeavenEpisodeForOwner(connection, storyId, item.episodeNo, userId));
+    }
+    return output;
+  });
+}
+
 async function submitStoryHeavenEpisode(storyIdValue, episodeNoValue, user, input, req) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
   const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
-  const validated = await requireStoryHeavenEpisode(input, "submit", req, user.id);
-  return withTransaction(async (connection) => {
-    const current = await lockStoryHeavenEpisode(connection, storyId, episodeNo, user.id);
-    if (current.EPISODE_STATUS !== "draft") throw httpError("episode_not_submittable", 409);
-    const revisionNo = Number(current.CURRENT_REVISION_NO || 0) + 1;
-    const preview = createStoryHeavenGuestPreview(validated.episode.body);
-    const nextStatus = isAdminIdentity(user) ? "published" : "moderation";
-    await updateStoryHeavenEpisode(connection, current.ID, validated, preview.previewCharacters, revisionNo, nextStatus);
-    await connection.execute(
-      `update storyheaven_episodes
-          set submitted_at = systimestamp,
-              published_at = case when :episode_status = 'published' then systimestamp else published_at end
-        where id = :episode_id`,
-      { episode_id: current.ID, episode_status: nextStatus }
-    );
-    await insertStoryHeavenEpisodeRevision(connection, current.ID, revisionNo, user.id, "submit", validated, hashStoryHeavenEpisode(validated.episode));
-    await insertStoryHeavenActivity(connection, {
-      storyId, actorUserId: user.id, type: nextStatus === "published" ? "episode_published" : "episode_submitted",
-      fromStatus: "draft", toStatus: nextStatus,
-      details: { episodeId: current.ID, episodeNo, characterCount: validated.analysis.characterCount }
-    });
-    return selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, user.id);
-  });
+  const story = await getStoryHeavenStory(storyId, user);
+  if (story.status !== "published") throw httpError("use_story_batch_submission", 409);
+  const result = await submitStoryHeavenStory(storyId, user, {
+    packet: story.packet,
+    episodes: [{ episodeNo, ...input }]
+  }, req);
+  return result.episode;
 }
 
 async function listStoryHeavenEpisodeSubmissions() {
@@ -2399,6 +2755,13 @@ async function listStoryHeavenEpisodeSubmissions() {
          join storyheaven_stories s on s.id = e.story_id
          join webtoon_profiles p on p.user_id = s.author_user_id
         where e.episode_status = 'moderation'
+          and not exists (
+            select 1 from storyheaven_ai_reviews automated
+             where automated.target_type = 'episode'
+               and automated.target_id = e.id
+               and automated.revision_no = e.current_revision_no
+               and automated.review_status in ('queued', 'running', 'provider_pending', 'retry_wait')
+          )
         order by e.submitted_at asc`
     );
     return result.rows.map((row) => ({
@@ -2642,106 +3005,919 @@ async function saveStoryHeavenDraft(storyIdValue, userId, input) {
 
 async function submitStoryHeavenStory(storyIdValue, user, input, req) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
-  const episodeNo = requireStoryHeavenEpisodeNo(input.episodeNo || 1);
-  const validatedEpisode = await requireStoryHeavenEpisode(input.episode || {}, "submit", req, user.id);
-  const validated = requireStoryHeavenPacket(input.packet || {}, "submit", validatedEpisode.episode.body);
+  const submittedEpisodes = Array.isArray(input.episodes)
+    ? input.episodes
+    : [{ episodeNo: input.episodeNo || 1, ...(input.episode || {}) }];
+  if (!submittedEpisodes.length || submittedEpisodes.length > STORYHEAVEN_EPISODE_LIMITS.reviewBatchMax) {
+    throw httpError("episode_review_batch_size_invalid", 400);
+  }
+  const episodeNumbers = submittedEpisodes.map((item) => requireStoryHeavenEpisodeNo(item.episodeNo));
+  if (new Set(episodeNumbers).size !== episodeNumbers.length) {
+    throw httpError("episode_review_batch_duplicate_number", 400);
+  }
+  const sortedNumbers = [...episodeNumbers].sort((left, right) => left - right);
+  if (sortedNumbers.some((number, index) => index > 0 && number !== sortedNumbers[index - 1] + 1)) {
+    throw httpError("episode_review_batch_not_sequential", 400);
+  }
+  const validatedEpisodes = [];
+  for (let index = 0; index < submittedEpisodes.length; index += 1) {
+    const episodeNo = episodeNumbers[index];
+    try {
+      validatedEpisodes.push({
+        episodeNo,
+        validated: await requireStoryHeavenEpisode(submittedEpisodes[index], "submit", req, user.id, episodeNo)
+      });
+    } catch (error) {
+      if (Array.isArray(error.details)) {
+        error.details = error.details.map((detail) => ({
+          ...detail,
+          field: `episodes.${index}.${String(detail.field || "body").replace(/^episode\./u, "")}`
+        }));
+      }
+      throw error;
+    }
+  }
+  const validated = requireStoryHeavenPacket(input.packet || {}, "submit", validatedEpisodes[0].validated.episode.body);
   const consent = input.consents && typeof input.consents === "object" ? input.consents : {};
   const requiredConsents = ["display", "originality", "adult"];
-  const missing = requiredConsents.filter((name) => consent[name] !== true);
-  if (missing.length) {
-    const error = httpError("story_consent_required", 400);
-    error.details = missing.map((field) => ({ field: `consents.${field}`, code: "story_consent_required" }));
-    throw error;
-  }
 
   return withTransaction(async (connection) => {
     const current = await lockStoryHeavenStory(connection, storyId, user.id);
-    if (current.STORY_STATUS !== "draft") {
+    const initialPublication = current.STORY_STATUS === "draft";
+    if (!new Set(["draft", "published"]).has(current.STORY_STATUS)) {
       throw httpError("story_not_submittable", 409);
     }
-    const currentEpisode = await lockStoryHeavenEpisode(connection, storyId, episodeNo, user.id);
-    if (currentEpisode.EPISODE_STATUS !== "draft") throw httpError("episode_not_submittable", 409);
-    const revisionNo = Number(current.CURRENT_REVISION_NO || 0) + 1;
-    const hash = hashStoryHeavenPacket(validated.packet);
-    await updateStoryHeavenCurrentPacket(connection, storyId, validated.packet, revisionNo, {
-      reviewDecision: "pending",
-      reviewNote: null
-    });
-    await insertStoryHeavenRevision(connection, {
-      storyId,
-      revisionNo,
-      actorUserId: user.id,
-      kind: "submit",
-      packet: validated.packet,
-      hash
-    });
-    await connection.execute(
-      `update storyheaven_stories
-          set story_status = 'moderation',
-              submitted_revision_no = :revision_no,
-              submitted_at = systimestamp,
-              reviewed_at = null,
-              reviewed_by = null,
-              review_decision = 'pending',
-              review_note = null,
-              eligibility_score = null,
-              rights_confirmed = 'Y',
-              adult_confirmed = 'Y',
-              competition_eligible = 'N'
-        where id = :story_id`,
-      { story_id: storyId, revision_no: revisionNo }
+    if (initialPublication) {
+      const missing = requiredConsents.filter((name) => consent[name] !== true);
+      if (missing.length) {
+        const error = httpError("story_consent_required", 400);
+        error.details = missing.map((field) => ({ field: `consents.${field}`, code: "story_consent_required" }));
+        throw error;
+      }
+    }
+
+    const recentBatches = await connection.execute(
+      `select count(*) as batch_count
+         from storyheaven_ai_review_batches
+        where author_user_id = :author_user_id
+          and created_at > systimestamp - interval '1' hour`,
+      { author_user_id: user.id }
     );
-    for (const type of [...requiredConsents, "training"]) {
-      await upsertStoryHeavenConsent(connection, {
+    if (Number(recentBatches.rows[0].BATCH_COUNT || 0) >= STORYHEAVEN_REVIEW_LIMITS.batchesPerHour) {
+      throw httpError("story_review_rate_limited", 429);
+    }
+    const activeBatches = await connection.execute(
+      `select count(*) as batch_count
+         from storyheaven_ai_review_batches
+        where author_user_id = :author_user_id
+          and batch_status in ('queued', 'running', 'provider_pending', 'retry_wait')`,
+      { author_user_id: user.id }
+    );
+    if (Number(activeBatches.rows[0].BATCH_COUNT || 0) > 0) {
+      throw httpError("story_review_already_in_progress", 409);
+    }
+
+    const lockedEpisodes = [];
+    const hashes = new Set();
+    for (const item of validatedEpisodes) {
+      const currentEpisode = await lockStoryHeavenEpisode(connection, storyId, item.episodeNo, user.id);
+      if (currentEpisode.EPISODE_STATUS !== "draft") throw httpError("episode_not_submittable", 409);
+      const episodeHash = hashStoryHeavenEpisode(item.validated.episode);
+      if (hashes.has(episodeHash)) throw httpError("episode_review_batch_duplicate_content", 400);
+      hashes.add(episodeHash);
+      const duplicate = await connection.execute(
+        `select count(*) as duplicate_count
+           from storyheaven_episode_revisions revision
+           join storyheaven_episodes episode on episode.id = revision.episode_id
+           join storyheaven_stories story on story.id = episode.story_id
+          where revision.content_hash = :content_hash
+            and story.author_user_id = :author_user_id
+            and episode.id <> :episode_id`,
+        { content_hash: episodeHash, author_user_id: user.id, episode_id: currentEpisode.ID }
+      );
+      if (Number(duplicate.rows[0].DUPLICATE_COUNT || 0) > 0) {
+        throw httpError("episode_duplicate_manuscript", 409);
+      }
+      lockedEpisodes.push({ ...item, current: currentEpisode, hash: episodeHash });
+    }
+
+    const revisionNo = initialPublication
+      ? Number(current.CURRENT_REVISION_NO || 0) + 1
+      : Number(current.CURRENT_REVISION_NO || 0);
+    const hash = hashStoryHeavenPacket(validated.packet);
+    if (initialPublication) {
+      await updateStoryHeavenCurrentPacket(connection, storyId, validated.packet, revisionNo, {
+        reviewDecision: "pending",
+        reviewNote: null
+      });
+      await insertStoryHeavenRevision(connection, {
         storyId,
-        userId: user.id,
-        type,
-        accepted: consent[type] === true,
+        revisionNo,
+        actorUserId: user.id,
+        kind: "submit",
+        packet: validated.packet,
         hash
       });
+      await connection.execute(
+        `update storyheaven_stories
+            set story_status = 'moderation',
+                submitted_revision_no = :revision_no,
+                submitted_at = systimestamp,
+                reviewed_at = null,
+                reviewed_by = null,
+                review_decision = 'pending',
+                review_note = null,
+                eligibility_score = null,
+                rights_confirmed = 'Y',
+                adult_confirmed = 'Y',
+                competition_eligible = 'N'
+          where id = :story_id`,
+        { story_id: storyId, revision_no: revisionNo }
+      );
+      for (const type of [...requiredConsents, "training"]) {
+        await upsertStoryHeavenConsent(connection, {
+          storyId,
+          userId: user.id,
+          type,
+          accepted: consent[type] === true,
+          hash
+        });
+      }
     }
-    await insertStoryHeavenActivity(connection, {
-      storyId,
-      actorUserId: user.id,
-      type: "submitted_for_review",
-      fromStatus: "draft",
-      toStatus: "moderation",
-      details: { revisionNo, totalLength: validated.totalLength, trainingConsent: consent.training === true }
-    });
 
-    const episodeRevisionNo = Number(currentEpisode.CURRENT_REVISION_NO || 0) + 1;
-    const preview = createStoryHeavenGuestPreview(validatedEpisode.episode.body);
-    const episodeStatus = isAdminIdentity(user) ? "published" : "moderation";
-    await updateStoryHeavenEpisode(connection, currentEpisode.ID, validatedEpisode, preview.previewCharacters, episodeRevisionNo, episodeStatus);
+    const batchId = randomId();
+    const queueStatus = storyHeavenAiReviewConfigured ? "queued" : "provider_pending";
+    const estimatedMinutes = await estimateStoryHeavenReviewMinutes(connection, lockedEpisodes.length);
     await connection.execute(
-      `update storyheaven_episodes
-          set submitted_at = systimestamp,
-              published_at = case when :episode_status = 'published' then systimestamp else published_at end
-        where id = :episode_id`,
-      { episode_id: currentEpisode.ID, episode_status: episodeStatus }
+      `insert into storyheaven_ai_review_batches (
+        id, story_id, author_user_id, story_revision_no, batch_status,
+        episode_count, estimated_minutes, provider_name, model_name,
+        public_message, next_attempt_at
+      ) values (
+        :id, :story_id, :author_user_id, :story_revision_no, :batch_status,
+        :episode_count, :estimated_minutes, :provider_name, :model_name,
+        :public_message, systimestamp
+      )`,
+      {
+        id: batchId,
+        story_id: storyId,
+        author_user_id: user.id,
+        story_revision_no: revisionNo,
+        batch_status: queueStatus,
+        episode_count: lockedEpisodes.length,
+        estimated_minutes: estimatedMinutes,
+        provider_name: config.storyHeavenAiReviewProvider,
+        model_name: config.storyHeavenAiReviewModel || null,
+        public_message: storyHeavenAiReviewConfigured ? "AI 검수를 기다리고 있습니다." : "AI 검수 연결을 기다리고 있습니다."
+      }
     );
-    await insertStoryHeavenEpisodeRevision(
-      connection,
-      currentEpisode.ID,
-      episodeRevisionNo,
-      user.id,
-      "submit",
-      validatedEpisode,
-      hashStoryHeavenEpisode(validatedEpisode.episode)
-    );
+
+    if (initialPublication) {
+      await insertStoryHeavenAiReview(connection, {
+        batchId,
+        storyId,
+        targetType: "story",
+        targetId: storyId,
+        revisionNo,
+        inputHash: hash,
+        status: queueStatus
+      });
+    }
+
+    const outputEpisodes = [];
+    for (const item of lockedEpisodes) {
+      const episodeRevisionNo = Number(item.current.CURRENT_REVISION_NO || 0) + 1;
+      const preview = createStoryHeavenGuestPreview(item.validated.episode.body);
+      await updateStoryHeavenEpisode(
+        connection,
+        item.current.ID,
+        item.validated,
+        preview.previewCharacters,
+        episodeRevisionNo,
+        "moderation"
+      );
+      await connection.execute(
+        `update storyheaven_episodes set submitted_at = systimestamp where id = :episode_id`,
+        { episode_id: item.current.ID }
+      );
+      await insertStoryHeavenEpisodeRevision(
+        connection,
+        item.current.ID,
+        episodeRevisionNo,
+        user.id,
+        "submit",
+        item.validated,
+        item.hash
+      );
+      await insertStoryHeavenAiReview(connection, {
+        batchId,
+        storyId,
+        targetType: "episode",
+        targetId: item.current.ID,
+        revisionNo: episodeRevisionNo,
+        inputHash: item.hash,
+        status: queueStatus
+      });
+      await insertStoryHeavenActivity(connection, {
+        storyId,
+        actorUserId: user.id,
+        type: "episode_submitted",
+        fromStatus: "draft",
+        toStatus: "moderation",
+        details: {
+          batchId,
+          episodeId: item.current.ID,
+          episodeNo: item.episodeNo,
+          characterCount: item.validated.analysis.characterCount
+        }
+      });
+      outputEpisodes.push(await selectStoryHeavenEpisodeForOwner(connection, storyId, item.episodeNo, user.id));
+    }
+
     await insertStoryHeavenActivity(connection, {
       storyId,
       actorUserId: user.id,
-      type: episodeStatus === "published" ? "episode_published" : "episode_submitted",
-      fromStatus: "draft",
-      toStatus: episodeStatus,
-      details: { episodeId: currentEpisode.ID, episodeNo, characterCount: validatedEpisode.analysis.characterCount }
+      type: "automated_review_queued",
+      fromStatus: current.STORY_STATUS,
+      toStatus: initialPublication ? "moderation" : "published",
+      details: { batchId, revisionNo, episodeCount: lockedEpisodes.length, estimatedMinutes, queueStatus }
     });
 
     return {
       story: await selectStoryHeavenOwnerStory(connection, storyId, user.id),
-      episode: await selectStoryHeavenEpisodeForOwner(connection, storyId, episodeNo, user.id)
+      episode: outputEpisodes[0],
+      episodes: outputEpisodes,
+      review: {
+        batchId,
+        status: queueStatus,
+        stage: queueStatus === "queued" ? "ai_queued" : "provider_pending",
+        episodeCount: lockedEpisodes.length,
+        completedCount: 0,
+        estimatedMinutes,
+        estimateLabel: storyHeavenReviewEstimateLabel(estimatedMinutes)
+      }
     };
+  });
+}
+
+async function processNextStoryHeavenAiReview() {
+  if (storyHeavenReviewWorkerBusy || !storyHeavenInternalReviewEnabled) return false;
+  storyHeavenReviewWorkerBusy = true;
+  let job = null;
+  try {
+    job = await claimStoryHeavenAiReview();
+    if (!job) return false;
+    const payload = await loadStoryHeavenAiReviewPayload(job);
+    const review = await requestStoryHeavenAiReview(payload);
+    await completeStoryHeavenAiReview(job, review);
+    return true;
+  } catch (error) {
+    if (job) await failStoryHeavenAiReview(job, error).catch((failure) => {
+      console.error("[storyheaven] failed to record AI review error", failure?.message || failure);
+    });
+    return false;
+  } finally {
+    storyHeavenReviewWorkerBusy = false;
+  }
+}
+
+async function claimStoryHeavenAiReview({ batchId = null, workerId = null, leaseId = null } = {}) {
+  return withTransaction(async (connection) => {
+    const result = await connection.execute(
+      `select * from (
+         select review.id, review.batch_id, review.story_id, review.target_type,
+                review.target_id, review.revision_no, review.input_hash,
+                review.attempt_count, review.review_status
+           from storyheaven_ai_reviews review
+           join storyheaven_ai_review_batches batch on batch.id = review.batch_id
+          where review.review_status in ('queued', 'provider_pending', 'retry_wait')
+            and (review.next_attempt_at is null or review.next_attempt_at <= systimestamp)
+            and batch.batch_status not in ('approved', 'changes_required', 'error')
+            and (:batch_id is null or review.batch_id = :batch_id)
+          order by review.created_at asc
+       ) where rownum = 1`,
+      { batch_id: batchId }
+    );
+    if (!result.rows.length) return null;
+    const row = result.rows[0];
+    const updated = await connection.execute(
+      `update storyheaven_ai_reviews
+          set review_status = 'running', attempt_count = attempt_count + 1,
+              started_at = coalesce(started_at, systimestamp),
+              next_attempt_at = null, failure_code = null,
+              lease_id = :lease_id, worker_id = :worker_id,
+              lease_expires_at = case when :lease_id is null then null
+                else systimestamp + numtodsinterval(:lease_seconds, 'SECOND') end,
+              updated_at = systimestamp
+        where id = :id and review_status in ('queued', 'provider_pending', 'retry_wait')`,
+      {
+        id: row.ID,
+        lease_id: leaseId,
+        worker_id: workerId,
+        lease_seconds: config.storyHeavenAiReviewLeaseSeconds
+      }
+    );
+    if (Number(updated.rowsAffected || 0) !== 1) return null;
+    await connection.execute(
+      `update storyheaven_ai_review_batches
+          set batch_status = 'running', started_at = coalesce(started_at, systimestamp),
+              public_message = 'AI가 원고를 검수하고 있습니다.',
+              failure_code = null, updated_at = systimestamp
+        where id = :batch_id and batch_status not in ('approved', 'changes_required', 'error')`,
+      { batch_id: row.BATCH_ID }
+    );
+    return {
+      id: row.ID,
+      batchId: row.BATCH_ID,
+      storyId: row.STORY_ID,
+      targetType: row.TARGET_TYPE,
+      targetId: row.TARGET_ID,
+      revisionNo: Number(row.REVISION_NO),
+      inputHash: row.INPUT_HASH,
+      attemptCount: Number(row.ATTEMPT_COUNT || 0) + 1,
+      leaseId,
+      workerId
+    };
+  });
+}
+
+async function claimStoryHeavenAiReviewChunk({ workerId, limit }) {
+  await releaseExpiredStoryHeavenAiReviewLeases();
+  const leaseId = randomId();
+  const first = await claimStoryHeavenAiReview({ workerId, leaseId });
+  if (!first) return { leaseId: null, jobs: [] };
+
+  const jobs = [first];
+  while (jobs.length < limit) {
+    const next = await claimStoryHeavenAiReview({
+      batchId: first.batchId,
+      workerId,
+      leaseId
+    });
+    if (!next) break;
+    jobs.push(next);
+  }
+
+  const payloads = [];
+  for (const job of jobs) {
+    payloads.push({
+      id: job.id,
+      inputHash: job.inputHash,
+      targetType: job.targetType,
+      attemptCount: job.attemptCount,
+      payload: await loadStoryHeavenAiReviewPayload(job)
+    });
+  }
+  return {
+    leaseId,
+    leaseSeconds: config.storyHeavenAiReviewLeaseSeconds,
+    jobs: payloads
+  };
+}
+
+async function completeStoryHeavenAiReviewChunk({ workerId, leaseId, results }) {
+  if (!results.length || results.length > config.storyHeavenAiReviewWorkerBatchSize) {
+    throw httpError("invalid_review_result_count", 400);
+  }
+  const normalized = [];
+  const ids = new Set();
+  for (const item of results) {
+    const id = boundedString(item?.id, "reviewId", 36, { required: true });
+    const inputHash = String(item?.inputHash || "").trim().toLowerCase();
+    if (!/^[a-f0-9]{64}$/u.test(inputHash)) throw httpError("invalid_review_input_hash", 400);
+    if (ids.has(id)) throw httpError("duplicate_review_result", 400);
+    ids.add(id);
+    const parsed = parseStoryHeavenAiReview(item?.review || item);
+    if (!parsed.ok) throw httpError(parsed.error, 400);
+    let review = parsed.review;
+    if (review.decision === "approved" && review.score < 65) {
+      review = {
+        ...review,
+        decision: "changes_required",
+        categories: [...new Set([...review.categories, "minimum_quality"])],
+        reason: "공개 기준 점수가 부족합니다. 장면의 흐름과 원고 완성도를 보강해주세요."
+      };
+    }
+    const confidence = Math.round(Number(item?.confidence ?? 100));
+    if (!Number.isInteger(confidence) || confidence < 0 || confidence > 100) {
+      throw httpError("invalid_review_confidence", 400);
+    }
+    normalized.push({
+      id,
+      inputHash,
+      review,
+      confidence,
+      model: boundedString(item?.model || config.storyHeavenAiReviewModel, "model", 160, { required: true }),
+      tier: new Set(["primary", "secondary"]).has(item?.tier) ? item.tier : "primary",
+      audit: Array.isArray(item?.audit) ? item.audit.slice(0, 2) : []
+    });
+  }
+
+  const batchIds = await withTransaction(async (connection) => {
+    const leased = await connection.execute(
+      `select id, batch_id, input_hash
+         from storyheaven_ai_reviews
+        where lease_id = :lease_id and worker_id = :worker_id and review_status = 'running'
+        for update`,
+      { lease_id: leaseId, worker_id: workerId }
+    );
+    if (leased.rows.length !== normalized.length) throw httpError("review_lease_mismatch", 409);
+    const rows = new Map(leased.rows.map((row) => [row.ID, row]));
+    for (const item of normalized) {
+      const row = rows.get(item.id);
+      if (!row || row.INPUT_HASH !== item.inputHash) throw httpError("review_revision_mismatch", 409);
+      await connection.execute(
+        `update storyheaven_ai_reviews
+            set review_status = :review_status, score = :score, decision = :decision,
+                category_json = :category_json, public_reason = :public_reason,
+                result_json = :result_json, provider_name = :provider_name,
+                model_name = :model_name, failure_code = null,
+                completed_at = systimestamp, lease_id = null, worker_id = null,
+                lease_expires_at = null, updated_at = systimestamp
+          where id = :id and lease_id = :lease_id and review_status = 'running'`,
+        {
+          id: item.id,
+          lease_id: leaseId,
+          review_status: item.review.decision,
+          score: item.review.score,
+          decision: item.review.decision,
+          category_json: clobJson(item.review.categories),
+          public_reason: item.review.reason,
+          result_json: clobJson({
+            ...item.review,
+            confidence: item.confidence,
+            tier: item.tier,
+            model: item.model,
+            audit: item.audit
+          }),
+          provider_name: config.storyHeavenAiReviewProvider,
+          model_name: item.model
+        }
+      );
+    }
+    return [...new Set(leased.rows.map((row) => row.BATCH_ID))];
+  });
+
+  for (const batchId of batchIds) await refreshStoryHeavenAiReviewBatch(batchId);
+  return { accepted: normalized.length, batchIds };
+}
+
+async function failStoryHeavenAiReviewChunk({ workerId, leaseId, errorCode }) {
+  const state = await withTransaction(async (connection) => {
+    const leased = await connection.execute(
+      `select id, batch_id, attempt_count
+         from storyheaven_ai_reviews
+        where lease_id = :lease_id and worker_id = :worker_id and review_status = 'running'
+        for update`,
+      { lease_id: leaseId, worker_id: workerId }
+    );
+    if (!leased.rows.length) throw httpError("review_lease_mismatch", 409);
+    const batchIds = [...new Set(leased.rows.map((row) => row.BATCH_ID))];
+    let terminal = false;
+    for (const row of leased.rows) {
+      const retry = Number(row.ATTEMPT_COUNT || 0) < config.storyHeavenAiReviewMaxAttempts;
+      terminal ||= !retry;
+      await connection.execute(
+        `update storyheaven_ai_reviews
+            set review_status = :review_status, failure_code = :failure_code,
+                next_attempt_at = case when :review_status = 'retry_wait'
+                  then systimestamp + numtodsinterval(:retry_minutes, 'MINUTE') else null end,
+                lease_id = null, worker_id = null, lease_expires_at = null,
+                updated_at = systimestamp
+          where id = :id and lease_id = :lease_id`,
+        {
+          id: row.ID,
+          lease_id: leaseId,
+          review_status: retry ? "retry_wait" : "error",
+          failure_code: errorCode,
+          retry_minutes: config.storyHeavenAiReviewRetryMinutes
+        }
+      );
+    }
+    for (const batchId of batchIds) {
+      await connection.execute(
+        `update storyheaven_ai_review_batches
+            set batch_status = :batch_status, failure_code = :failure_code,
+                public_message = :public_message,
+                next_attempt_at = case when :batch_status = 'retry_wait'
+                  then systimestamp + numtodsinterval(:retry_minutes, 'MINUTE') else null end,
+                updated_at = systimestamp
+          where id = :batch_id and batch_status not in ('approved', 'changes_required')`,
+        {
+          batch_id: batchId,
+          batch_status: terminal ? "error" : "retry_wait",
+          failure_code: errorCode,
+          public_message: terminal
+            ? "자동 검수를 완료하지 못했습니다. 원고는 비공개로 보관됩니다."
+            : "자동 검수를 잠시 후 다시 시도합니다.",
+          retry_minutes: config.storyHeavenAiReviewRetryMinutes
+        }
+      );
+    }
+    return { released: leased.rows.length, terminal, batchIds };
+  });
+  return state;
+}
+
+async function releaseExpiredStoryHeavenAiReviewLeases() {
+  return withTransaction(async (connection) => {
+    const expired = await connection.execute(
+      `select id, batch_id, attempt_count
+         from storyheaven_ai_reviews
+        where review_status = 'running'
+          and lease_expires_at is not null
+          and lease_expires_at <= systimestamp
+        for update`
+    );
+    if (!expired.rows.length) return { released: 0 };
+    const terminalBatches = new Set();
+    const retryBatches = new Set();
+    for (const row of expired.rows) {
+      const retry = Number(row.ATTEMPT_COUNT || 0) < config.storyHeavenAiReviewMaxAttempts;
+      (retry ? retryBatches : terminalBatches).add(row.BATCH_ID);
+      await connection.execute(
+        `update storyheaven_ai_reviews
+            set review_status = :review_status, failure_code = 'worker_lease_expired',
+                next_attempt_at = case when :review_status = 'retry_wait'
+                  then systimestamp + numtodsinterval(:retry_minutes, 'MINUTE') else null end,
+                lease_id = null, worker_id = null, lease_expires_at = null,
+                updated_at = systimestamp
+          where id = :id`,
+        {
+          id: row.ID,
+          review_status: retry ? "retry_wait" : "error",
+          retry_minutes: config.storyHeavenAiReviewRetryMinutes
+        }
+      );
+    }
+    for (const batchId of new Set([...retryBatches, ...terminalBatches])) {
+      const terminal = terminalBatches.has(batchId);
+      await connection.execute(
+        `update storyheaven_ai_review_batches
+            set batch_status = :batch_status, failure_code = 'worker_lease_expired',
+                public_message = :public_message, updated_at = systimestamp
+          where id = :batch_id and batch_status not in ('approved', 'changes_required')`,
+        {
+          batch_id: batchId,
+          batch_status: terminal ? "error" : "retry_wait",
+          public_message: terminal
+            ? "자동 검수를 완료하지 못했습니다. 원고는 비공개로 보관됩니다."
+            : "자동 검수를 다시 준비하고 있습니다."
+        }
+      );
+    }
+    return { released: expired.rows.length };
+  });
+}
+
+async function loadStoryHeavenAiReviewPayload(job) {
+  return withConnection(async (connection) => {
+    const story = await connection.execute(
+      `select revision.packet_json
+         from storyheaven_ai_review_batches batch
+         join storyheaven_revisions revision
+           on revision.story_id = batch.story_id
+          and revision.revision_no = batch.story_revision_no
+        where batch.id = :batch_id`,
+      { batch_id: job.batchId }
+    );
+    if (!story.rows.length) throw new Error("ai_review_story_revision_missing");
+    const packet = parseJson(story.rows[0].PACKET_JSON, null);
+    if (!packet) throw new Error("ai_review_story_packet_invalid");
+    if (job.targetType === "story") {
+      return { targetType: "story", story: packet, episode: null };
+    }
+    const episode = await connection.execute(
+      `select title, public_summary, body_text
+         from storyheaven_episode_revisions
+        where episode_id = :episode_id and revision_no = :revision_no`,
+      { episode_id: job.targetId, revision_no: job.revisionNo }
+    );
+    if (!episode.rows.length) throw new Error("ai_review_episode_revision_missing");
+    return {
+      targetType: "episode",
+      story: packet,
+      episode: {
+        title: episode.rows[0].TITLE,
+        summary: episode.rows[0].PUBLIC_SUMMARY || "",
+        body: String(episode.rows[0].BODY_TEXT || "")
+      }
+    };
+  });
+}
+
+async function requestStoryHeavenAiReview(payload) {
+  const headers = { "Content-Type": "application/json" };
+  if (config.storyHeavenAiReviewApiKey) {
+    headers.Authorization = `Bearer ${config.storyHeavenAiReviewApiKey}`;
+  }
+  const response = await fetch(config.storyHeavenAiReviewUrl, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      model: config.storyHeavenAiReviewModel,
+      messages: storyHeavenAiReviewMessages(payload),
+      temperature: 0,
+      max_tokens: 600,
+      response_format: { type: "json_object" }
+    }),
+    signal: AbortSignal.timeout(config.storyHeavenAiReviewTimeoutMs)
+  });
+  if (!response.ok) throw new Error(`ai_provider_http_${response.status}`);
+  const body = await response.json();
+  const content = extractStoryHeavenAiReviewContent(body);
+  const parsed = parseStoryHeavenAiReview(content);
+  if (!parsed.ok) throw new Error(parsed.error);
+  if (parsed.review.decision === "approved" && parsed.review.score < 65) {
+    return {
+      ...parsed.review,
+      decision: "changes_required",
+      categories: [...new Set([...parsed.review.categories, "minimum_quality"])],
+      reason: "공개 기준 점수가 부족합니다. 장면의 흐름과 원고 완성도를 보강해주세요."
+    };
+  }
+  return parsed.review;
+}
+
+function extractStoryHeavenAiReviewContent(body) {
+  const content = body?.choices?.[0]?.message?.content ?? body?.output_text ?? body?.response ?? body;
+  if (Array.isArray(content)) {
+    return content.map((item) => item?.text || item?.content || "").join("");
+  }
+  return typeof content === "object" ? content : String(content || "");
+}
+
+async function completeStoryHeavenAiReview(job, review) {
+  await withTransaction(async (connection) => {
+    await connection.execute(
+      `update storyheaven_ai_reviews
+          set review_status = :review_status, score = :score, decision = :decision,
+              category_json = :category_json, public_reason = :public_reason,
+              result_json = :result_json, provider_name = :provider_name,
+              model_name = :model_name, failure_code = null,
+              completed_at = systimestamp, updated_at = systimestamp
+        where id = :id and review_status = 'running'`,
+      {
+        id: job.id,
+        review_status: review.decision,
+        score: review.score,
+        decision: review.decision,
+        category_json: clobJson(review.categories),
+        public_reason: review.reason,
+        result_json: clobJson(review),
+        provider_name: config.storyHeavenAiReviewProvider,
+        model_name: config.storyHeavenAiReviewModel
+      }
+    );
+  });
+  await refreshStoryHeavenAiReviewBatch(job.batchId);
+}
+
+async function failStoryHeavenAiReview(job, error) {
+  const code = String(error?.message || "ai_review_failed").trim().slice(0, 80) || "ai_review_failed";
+  const retry = job.attemptCount < config.storyHeavenAiReviewMaxAttempts;
+  await withTransaction(async (connection) => {
+    await connection.execute(
+      `update storyheaven_ai_reviews
+          set review_status = :review_status, failure_code = :failure_code,
+              next_attempt_at = case when :review_status = 'retry_wait'
+                then systimestamp + numtodsinterval(:retry_minutes, 'MINUTE') else null end,
+              updated_at = systimestamp
+        where id = :id`,
+      {
+        id: job.id,
+        review_status: retry ? "retry_wait" : "error",
+        failure_code: code,
+        retry_minutes: config.storyHeavenAiReviewRetryMinutes
+      }
+    );
+    await connection.execute(
+      `update storyheaven_ai_review_batches
+          set batch_status = :batch_status, failure_code = :failure_code,
+              public_message = :public_message,
+              next_attempt_at = case when :batch_status = 'retry_wait'
+                then systimestamp + numtodsinterval(:retry_minutes, 'MINUTE') else null end,
+              updated_at = systimestamp
+        where id = :batch_id`,
+      {
+        batch_id: job.batchId,
+        batch_status: retry ? "retry_wait" : "error",
+        failure_code: code,
+        public_message: retry
+          ? "AI 검수를 잠시 후 자동으로 다시 시도합니다."
+          : "자동 검수를 완료하지 못했습니다. 원고는 공개되지 않았습니다.",
+        retry_minutes: config.storyHeavenAiReviewRetryMinutes
+      }
+    );
+  });
+}
+
+async function refreshStoryHeavenAiReviewBatch(batchId) {
+  const state = await withTransaction(async (connection) => {
+    const result = await connection.execute(
+      `select count(*) as total_count,
+              sum(case when review_status in ('approved', 'changes_required') then 1 else 0 end) as completed_count,
+              sum(case when review_status = 'changes_required' then 1 else 0 end) as changes_count,
+              sum(case when review_status = 'error' then 1 else 0 end) as error_count
+         from storyheaven_ai_reviews where batch_id = :batch_id`,
+      { batch_id: batchId }
+    );
+    const row = result.rows[0];
+    const summary = {
+      total: Number(row.TOTAL_COUNT || 0),
+      completed: Number(row.COMPLETED_COUNT || 0),
+      changes: Number(row.CHANGES_COUNT || 0),
+      errors: Number(row.ERROR_COUNT || 0)
+    };
+    await connection.execute(
+      `update storyheaven_ai_review_batches
+          set completed_count = :completed_count, updated_at = systimestamp
+        where id = :batch_id`,
+      { batch_id: batchId, completed_count: summary.completed }
+    );
+    return summary;
+  });
+  if (state.errors > 0) return false;
+  if (state.total === 0 || state.completed < state.total) return false;
+  if (state.changes > 0) return finalizeStoryHeavenAiReviewChanges(batchId);
+  return finalizeStoryHeavenAiReviewApproval(batchId);
+}
+
+async function finalizeStoryHeavenAiReviewApproval(batchId) {
+  return withTransaction(async (connection) => {
+    const batchResult = await connection.execute(
+      `select id, story_id, author_user_id, batch_status
+         from storyheaven_ai_review_batches where id = :batch_id for update`,
+      { batch_id: batchId }
+    );
+    if (!batchResult.rows.length) throw new Error("ai_review_batch_missing");
+    const batch = batchResult.rows[0];
+    if (new Set(["approved", "changes_required"]).has(batch.BATCH_STATUS)) return false;
+    const reviews = await connection.execute(
+      `select target_type, target_id, score from storyheaven_ai_reviews
+        where batch_id = :batch_id order by created_at`,
+      { batch_id: batchId }
+    );
+    const storyIncluded = reviews.rows.some((item) => item.TARGET_TYPE === "story");
+    const episodeIds = reviews.rows.filter((item) => item.TARGET_TYPE === "episode").map((item) => item.TARGET_ID);
+    const score = Math.max(65, Math.round(
+      reviews.rows.reduce((total, item) => total + Number(item.SCORE || 65), 0) / Math.max(1, reviews.rows.length)
+    ));
+
+    for (const episodeId of episodeIds) {
+      await connection.execute(
+        `update storyheaven_episodes
+            set episode_status = 'published', review_decision = 'approved',
+                review_note = null, reviewed_at = systimestamp,
+                reviewed_by = :reviewed_by, published_at = coalesce(published_at, systimestamp),
+                updated_at = systimestamp
+          where id = :episode_id and episode_status = 'moderation'`,
+        { episode_id: episodeId, reviewed_by: `ai:${config.storyHeavenAiReviewProvider}`.slice(0, 80) }
+      );
+    }
+
+    if (storyIncluded) {
+      const story = await connection.execute(
+        `select content_origin from storyheaven_stories where id = :story_id for update`,
+        { story_id: batch.STORY_ID }
+      );
+      const eligible = new Set(["human", "human_ai_assisted"]).has(story.rows[0].CONTENT_ORIGIN);
+      await connection.execute(
+        `update storyheaven_stories
+            set story_status = 'published', review_decision = 'approved', review_note = null,
+                eligibility_score = :eligibility_score, reviewed_at = systimestamp,
+                reviewed_by = :reviewed_by, published_at = coalesce(published_at, systimestamp),
+                competition_eligible = :competition_eligible, updated_at = systimestamp
+          where id = :story_id and story_status = 'moderation'`,
+        {
+          story_id: batch.STORY_ID,
+          eligibility_score: score,
+          reviewed_by: `ai:${config.storyHeavenAiReviewProvider}`.slice(0, 80),
+          competition_eligible: eligible ? "Y" : "N"
+        }
+      );
+      if (eligible) {
+        try {
+          await assignStoryHeavenEntry(connection, {
+            storyId: batch.STORY_ID,
+            authorUserId: batch.AUTHOR_USER_ID,
+            eligibilityScore: score
+          });
+        } catch (error) {
+          if (error?.message !== "round_author_entry_exists") throw error;
+          await connection.execute(
+            `update storyheaven_stories set competition_eligible = 'N' where id = :story_id`,
+            { story_id: batch.STORY_ID }
+          );
+        }
+      }
+    }
+
+    await connection.execute(
+      `update storyheaven_ai_review_batches
+          set batch_status = 'approved', completed_count = (
+                select count(*) from storyheaven_ai_reviews where batch_id = :batch_id
+              ), public_message = '자동 검수를 통과해 공개되었습니다.',
+              failure_code = null, completed_at = systimestamp, updated_at = systimestamp
+        where id = :batch_id`,
+      { batch_id: batchId }
+    );
+    await insertStoryHeavenActivity(connection, {
+      storyId: batch.STORY_ID,
+      actorUserId: null,
+      type: "automated_review_approved",
+      fromStatus: storyIncluded ? "moderation" : "published",
+      toStatus: "published",
+      details: { batchId, episodeCount: episodeIds.length, score, provider: config.storyHeavenAiReviewProvider }
+    });
+    await insertStoryHeavenNotification(connection, {
+      userId: batch.AUTHOR_USER_ID,
+      storyId: batch.STORY_ID,
+      type: "episode_review_result",
+      title: "자동 검수가 완료되었습니다",
+      message: `${episodeIds.length}개 회차가 검수를 통과해 공개되었습니다.`,
+      actionPath: `/storyheaven/my/?story=${encodeURIComponent(batch.STORY_ID)}`
+    });
+    return true;
+  });
+}
+
+async function finalizeStoryHeavenAiReviewChanges(batchId) {
+  return withTransaction(async (connection) => {
+    const batchResult = await connection.execute(
+      `select id, story_id, author_user_id, batch_status
+         from storyheaven_ai_review_batches where id = :batch_id for update`,
+      { batch_id: batchId }
+    );
+    if (!batchResult.rows.length) throw new Error("ai_review_batch_missing");
+    const batch = batchResult.rows[0];
+    if (new Set(["approved", "changes_required"]).has(batch.BATCH_STATUS)) return false;
+    const reviews = await connection.execute(
+      `select target_type, target_id, public_reason
+         from storyheaven_ai_reviews where batch_id = :batch_id order by created_at`,
+      { batch_id: batchId }
+    );
+    const storyIncluded = reviews.rows.some((item) => item.TARGET_TYPE === "story");
+    const episodeIds = reviews.rows.filter((item) => item.TARGET_TYPE === "episode").map((item) => item.TARGET_ID);
+    const reason = reviews.rows
+      .filter((item) => item.PUBLIC_REASON)
+      .map((item) => item.PUBLIC_REASON)
+      .join(" ")
+      .slice(0, 500) || "원고의 공개 기준을 다시 확인해주세요.";
+    for (const episodeId of episodeIds) {
+      await connection.execute(
+        `update storyheaven_episodes
+            set episode_status = 'draft', review_decision = 'changes_requested',
+                review_note = :review_note, reviewed_at = systimestamp,
+                reviewed_by = :reviewed_by, updated_at = systimestamp
+          where id = :episode_id and episode_status = 'moderation'`,
+        {
+          episode_id: episodeId,
+          review_note: reason,
+          reviewed_by: `ai:${config.storyHeavenAiReviewProvider}`.slice(0, 80)
+        }
+      );
+    }
+    if (storyIncluded) {
+      await connection.execute(
+        `update storyheaven_stories
+            set story_status = 'draft', review_decision = 'changes_requested',
+                review_note = :review_note, reviewed_at = systimestamp,
+                reviewed_by = :reviewed_by, competition_eligible = 'N', updated_at = systimestamp
+          where id = :story_id and story_status = 'moderation'`,
+        {
+          story_id: batch.STORY_ID,
+          review_note: reason,
+          reviewed_by: `ai:${config.storyHeavenAiReviewProvider}`.slice(0, 80)
+        }
+      );
+    }
+    await connection.execute(
+      `update storyheaven_ai_review_batches
+          set batch_status = 'changes_required', completed_count = (
+                select count(*) from storyheaven_ai_reviews where batch_id = :batch_id
+              ), public_message = :public_message, failure_code = null,
+              completed_at = systimestamp, updated_at = systimestamp
+        where id = :batch_id`,
+      { batch_id: batchId, public_message: reason }
+    );
+    await insertStoryHeavenActivity(connection, {
+      storyId: batch.STORY_ID,
+      actorUserId: null,
+      type: "automated_review_changes_required",
+      fromStatus: storyIncluded ? "moderation" : "published",
+      toStatus: storyIncluded ? "draft" : "published",
+      details: { batchId, episodeCount: episodeIds.length, reason }
+    });
+    await insertStoryHeavenNotification(connection, {
+      userId: batch.AUTHOR_USER_ID,
+      storyId: batch.STORY_ID,
+      type: "episode_review_result",
+      title: "원고에 수정이 필요합니다",
+      message: reason,
+      actionPath: `/storyheaven/write/?id=${encodeURIComponent(batch.STORY_ID)}`
+    });
+    return true;
   });
 }
 
@@ -2750,6 +3926,11 @@ async function listStoryHeavenSubmissions() {
     const result = await connection.execute(
       `${storyHeavenOwnerSelect()}
         where s.story_status = 'moderation'
+          and not exists (
+            select 1 from storyheaven_ai_review_batches automated
+             where automated.story_id = s.id
+               and automated.batch_status in ('queued', 'running', 'provider_pending', 'retry_wait')
+          )
         order by s.submitted_at asc`,
       { viewer_user_id: null }
     );
@@ -3003,12 +4184,12 @@ function requireStoryHeavenPacket(input, mode, episodeBody = "") {
   return result;
 }
 
-async function requireStoryHeavenEpisode(input, mode, req, userId) {
+async function requireStoryHeavenEpisode(input, mode, req, userId, episodeNo = 1) {
   const requestBytes = Buffer.byteLength(JSON.stringify(input || {}), "utf8");
   if (requestBytes > STORYHEAVEN_EPISODE_LIMITS.requestBodyBytes) {
     throw httpError("episode_request_too_large", 413);
   }
-  const result = validateStoryHeavenEpisode(input, { mode });
+  const result = validateStoryHeavenEpisode(input, { mode, episodeNo });
   if (!result.ok) {
     const threats = result.errors.filter((item) => item.code === "unsafe_content_pattern");
     if (threats.length) {
@@ -3078,6 +4259,38 @@ async function insertStoryHeavenEpisodeRevision(connection, episodeId, revisionN
       title: validated.episode.title, public_summary: validated.episode.summary || null,
       body_text: validated.episode.body || null, content_hash: hash,
       quality_json: clobJson({ ...validated.analysis, estimatedReadMinutes: validated.estimatedReadMinutes })
+    }
+  );
+}
+
+async function insertStoryHeavenAiReview(connection, {
+  batchId,
+  storyId,
+  targetType,
+  targetId,
+  revisionNo,
+  inputHash,
+  status
+}) {
+  await connection.execute(
+    `insert into storyheaven_ai_reviews (
+      id, batch_id, story_id, target_type, target_id, revision_no,
+      review_status, input_hash, provider_name, model_name, next_attempt_at
+    ) values (
+      :id, :batch_id, :story_id, :target_type, :target_id, :revision_no,
+      :review_status, :input_hash, :provider_name, :model_name, systimestamp
+    )`,
+    {
+      id: randomId(),
+      batch_id: batchId,
+      story_id: storyId,
+      target_type: targetType,
+      target_id: targetId,
+      revision_no: revisionNo,
+      review_status: status,
+      input_hash: inputHash,
+      provider_name: config.storyHeavenAiReviewProvider,
+      model_name: config.storyHeavenAiReviewModel || null
     }
   );
 }

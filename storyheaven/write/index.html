@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#11131a">
-    <meta name="description" content="StoryHeaven에 연재 작품 소개와 실제 첫 회 원고를 투고합니다.">
+    <meta name="description" content="StoryHeaven에 작품과 최대 10개 회차 원고를 한 번에 투고합니다.">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
     <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
     <title>이야기 쓰기 | StoryHeaven</title>
-    <link rel="stylesheet" href="../workspace.css?v=20260728-simple1">
+    <link rel="stylesheet" href="../workspace.css?v=20260729-smart1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../common.js?v=20260728-auth2"></script>
-    <script defer src="./write.js?v=20260728-simple1"></script>
+    <script defer src="../common.js?v=20260729-smart1"></script>
+    <script defer src="./write.js?v=20260729-smart1"></script>
   </head>
   <body>
     <header class="site-header">
@@ -28,10 +28,10 @@
           <form class="editor-form" data-story-form novalidate>
             <section class="form-section">
               <h2>이야기 기본정보</h2><p class="section-help">작품을 구분할 최소 정보만 먼저 정합니다. 저장한 뒤 언제든 이어서 쓸 수 있습니다.</p>
-              <label class="field"><span class="field-label"><span>제목</span><small><b data-count-for="title">0</b>/60</small></span><input name="title" maxlength="60" autocomplete="off" placeholder="예: 막차가 떠난 뒤의 승강장"><p class="field-error" data-error-for="title"></p></label>
+              <label class="field"><span class="field-label"><span>제목 <em>필수</em></span><small><b data-count-for="title">0</b>/60</small></span><input name="title" maxlength="60" autocomplete="off" placeholder="예: 막차가 떠난 뒤의 승강장"><p class="field-error" data-error-for="title"></p></label>
               <div class="field-row">
                 <div class="field" role="group" aria-labelledby="storyGenreLabel">
-                  <span class="field-label"><label id="storyGenreLabel" for="storyGenre">장르</label><small><b data-genre-count>0</b>/5</small></span>
+                  <span class="field-label"><label id="storyGenreLabel" for="storyGenre">장르 <em>1개 이상</em></label><small><b data-genre-count>0</b>/5</small></span>
                   <div class="tag-editor genre-editor" data-genre-editor>
                     <div class="tag-chips" data-genre-chips aria-live="polite"></div>
                     <input id="storyGenre" class="tag-input" data-genre-input list="storyGenreOptions" maxlength="20" autocomplete="off" aria-describedby="storyGenreHelp storyGenreStatus" placeholder="장르 입력 후 띄어쓰기 또는 쉼표">
@@ -45,7 +45,7 @@
                 <label class="field"><span class="field-label"><span>연령</span></span><select name="rating"><option value="all">전체 이용가</option><option value="12">12세 이용가</option><option value="15">15세 이용가</option></select><p class="field-error" data-error-for="rating"></p></label>
               </div>
               <div class="field" role="group" aria-labelledby="storyTagsLabel">
-                <span class="field-label"><label id="storyTagsLabel" for="storyTags">태그</label><small><b data-tag-count>0</b>/5</small></span>
+                <span class="field-label"><label id="storyTagsLabel" for="storyTags">태그 <em>선택</em></label><small><b data-tag-count>0</b>/5</small></span>
                 <div class="tag-editor" data-tag-editor>
                   <div class="tag-chips" data-tag-chips aria-live="polite"></div>
                   <input id="storyTags" class="tag-input" data-tag-input maxlength="80" autocomplete="off" aria-describedby="storyTagsHelp storyTagsStatus" placeholder="단어 입력 후 띄어쓰기 또는 쉼표">
@@ -67,10 +67,10 @@
               </div>
             </details>
             <details class="optional-builder form-section episode-editor" data-episode-section>
-              <summary><span><b>1화 추가하기</b><small>선택 · 작품만 먼저 저장해도 됩니다</small></span><span aria-hidden="true"></span></summary>
+              <summary><span><b>회차 원고 추가하기</b><small>선택 · 한 번에 최대 10화까지</small></span><span aria-hidden="true"></span></summary>
               <div class="optional-builder-body">
               <p class="section-help">원고가 준비됐다면 한 회씩 추가하세요. 회차 소개는 원고에서 자동으로 만들어집니다.</p>
-              <details class="submission-guide" data-submission-guide open>
+              <details class="submission-guide" data-submission-guide>
                 <summary>
                   <span><b>회차 원고 가이드</b><small>분량과 구성, 제출 기준을 확인하세요.</small></span>
                   <span class="submission-guide-state" aria-hidden="true"></span>
@@ -91,20 +91,20 @@
                   <div class="guide-rule-grid">
                     <section><b>분량</b><p>최소 2,500자<br>권장 4,000~7,000자<br>최대 12,000자</p></section>
                     <section><b>문단</b><p>최소 8개, 최대 240개<br>장면이 바뀌면 한 줄을 비워 구분</p></section>
-                    <section><b>회차 소개</b><p>별도 입력 없음<br>원고에서 자동 생성</p></section>
+                    <section><b>회차 제목</b><p>생략 가능<br>비우면 N화로 자동 저장</p></section>
                     <section><b>허용 형식</b><p>일반 글만 가능<br>그림·첨부파일·HTML은 불가능</p></section>
                   </div>
                   <div class="guide-final-check"><b>붙여넣기 전 확인</b><span>같은 문단을 반복하지 않았나요?</span><span>외부 링크가 3개를 넘지 않나요?</span><span>마지막에 다음 장면을 궁금하게 만드는 변화가 있나요?</span></div>
                   <p class="guide-copy-status" data-guide-copy-status aria-live="polite">가이드를 복사하면 메모장이나 작성 도구 옆에 두고 확인할 수 있습니다.</p>
                 </div>
               </details>
-              <label class="field"><span class="field-label"><span>1화 제목</span><small><b data-count-for="episodeTitle">0</b>/80</small></span><input name="episodeTitle" maxlength="80" autocomplete="off" placeholder="예: 존재하지 않는 막차"><p class="field-error" data-error-for="episode.title"></p></label>
-              <label class="field manuscript-field"><span class="field-label"><span>1화 원고</span><small><b data-count-for="episodeBody">0</b>/12,000 · 최소 2,500자 · 권장 4,000~7,000자</small></span><textarea class="manuscript" name="episodeBody" maxlength="12000" spellcheck="true" placeholder="문단 사이를 한 줄 비워 장면과 호흡을 나눠주세요. HTML 태그가 아닌 일반 글만 입력할 수 있습니다."></textarea><p class="field-error" data-error-for="episode.body"></p></label>
-              <div class="manuscript-health" data-manuscript-health aria-live="polite">
-                <div><span>원고 분량</span><strong data-manuscript-length>시작 전</strong></div>
-                <div><span>문단 호흡</span><strong data-manuscript-paragraphs>0개</strong></div>
-                <div><span>예상 읽기</span><strong data-manuscript-time>0분</strong></div>
-              </div>
+              <div class="episode-draft-list" data-episode-list></div>
+              <button class="button secondary add-episode-button" type="button" data-add-episode>다음 회차 추가</button>
+              <p class="episode-limit-copy" data-episode-limit>회차 원고 1/10 · 작성한 회차를 함께 저장하고 한 번에 검수합니다.</p>
+              <section class="review-expectation" aria-label="자동 검수 안내">
+                <div><span class="review-pulse" aria-hidden="true"></span><p><b>기계 검수 후 AI가 한 번 더 확인합니다.</b><small data-review-estimate>1화 기준 보통 3~5분</small></p></div>
+                <p>모든 회차가 통과하면 자동 공개됩니다. 연결 오류나 판정 실패 때에는 공개하지 않고 상태와 수정 이유를 알려드립니다.</p>
+              </section>
               <p class="plain-text-note">원고는 실행 가능한 HTML이 아닌 평문으로 보관됩니다. 그림과 첨부파일은 받지 않으며 스크립트·DB 명령·과도한 링크·반복 문단은 공개 요청 단계에서 차단됩니다.</p>
               </div>
             </details>
@@ -126,7 +126,7 @@
             </details>
             <details class="advanced form-section" data-consent-section>
               <summary>공개 검수 전에 확인</summary>
-              <div class="advanced-body"><p class="section-help">이야기 저장에는 필요하지 않으며, 1화 공개 검수를 요청할 때만 확인합니다.</p>
+              <div class="advanced-body"><p class="section-help">이야기 저장에는 필요하지 않으며, 첫 공개 검수를 요청할 때만 확인합니다.</p>
               <div class="consent-list">
                 <label class="consent"><input type="checkbox" name="consentDisplay"><span>StoryHeaven 피드에 제목, 줄거리와 작가 닉네임을 공개하는 데 동의합니다. <b>필수</b></span></label>
                 <label class="consent"><input type="checkbox" name="consentOriginality"><span>타인의 작품을 무단 복제하지 않았고, 이 이야기를 투고할 권리가 있음을 확인합니다. <b>필수</b></span></label>
@@ -135,9 +135,9 @@
               </div>
               </div>
             </details>
-            <div class="form-actions"><button class="button secondary" type="button" data-save>이야기 저장</button><button class="button" type="button" data-submit>1화 검수 요청</button></div>
+            <div class="form-actions"><p class="action-guidance" data-action-guidance aria-live="polite">제목과 장르를 입력하면 초안을 저장할 수 있습니다.</p><button class="button secondary" type="button" data-save>초안 저장</button><button class="button" type="button" data-submit>원고를 추가하면 검수 가능</button></div>
           </form>
-          <aside class="side-panel"><p class="eyebrow">QUICK START</p><h2>저장 준비</h2><div class="progress-track"><span data-progress-bar></span></div><p class="progress-copy"><b data-progress-value>0</b>% · 줄거리와 1화는 나중에 추가할 수 있습니다.</p><ul class="checklist"><li data-check="title">이야기 제목</li><li data-check="genre">장르 1개 이상</li><li data-check="rating">독자 연령</li></ul><p class="progress-copy" data-save-state>아직 저장하지 않았습니다.</p></aside>
+          <aside class="side-panel"><p class="eyebrow">NEXT STEP</p><h2>지금 할 일</h2><p class="next-step-copy" data-next-step aria-live="polite">이야기 제목을 2자 이상 적어주세요.</p><ul class="checklist"><li data-check="title">제목 2자 이상</li><li data-check="genre">장르 1개 이상</li><li data-check="manuscript">원고 2,500자·8문단</li></ul><p class="progress-copy" data-save-state>아직 저장하지 않았습니다.</p></aside>
         </div>
       </div>
     </main>
