@@ -16,12 +16,15 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode } from "../src/serial-service.mjs";
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 3,
+  adminMinimumEpisodeCount: 1,
   recommendationThreshold: 11
 });
+assert.equal(continuationMinimumEpisode("reader_threshold"), 3);
+assert.equal(continuationMinimumEpisode("admin_request"), 1);
 assert.deepEqual(STORYHEAVEN_SERIAL_STORY_CONTROL.visibilities, ["public", "private", "archived"]);
 assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "public", continuationMode: "auto" }).ok, true);
 assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "private", continuationMode: "manual" }).ok, true);

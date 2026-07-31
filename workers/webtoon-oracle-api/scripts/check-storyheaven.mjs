@@ -349,6 +349,8 @@ assert.ok(serialService.includes('!reusableRun && currentStatus !== "fulfilled"'
 assert.ok(serialService.includes("recentTechniquePlans"));
 assert.ok(serialService.includes("schedule.publication_mode = 'auto_public'"));
 assert.ok(serialService.includes("pipeline.ACTIVE_COUNT || 0) > 0"));
+assert.ok(serialService.includes("lastFailed"));
+assert.ok(serialService.includes("queueProgressView"));
 assert.ok(serialService.includes("storyheaven_serial_story_controls"));
 assert.ok(serialService.includes("serial_story_auto_continuation_disabled"));
 assert.ok(serialService.includes("control.CONTINUATION_MODE !== \"auto\""));
@@ -364,6 +366,15 @@ const multiPrimaryGenreMigration = await readFile(new URL("../../../oracle/20260
 assert.ok(multiPrimaryGenreMigration.includes("primary_genres_json"));
 assert.ok(multiPrimaryGenreMigration.includes("subgenres_by_genre_json"));
 const continuationMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-episode-continuation.sql", import.meta.url), "utf8");
+const adminContinuationMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-admin-continuation-bootstrap.sql", import.meta.url), "utf8");
+assert.ok(adminContinuationMigration.includes("source_episode_no between 1 and 299"));
+assert.ok(adminContinuationMigration.includes("target_episode_no between 2 and 300"));
+const editorialBiblesMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-editorial-bibles.sql", import.meta.url), "utf8");
+for (const storyId of ["seed-last-platform", "seed-rain-memory", "seed-night-auditor", "seed-rescue-window", "seed-airlock-choice", "seed-wash-away"]) {
+  assert.ok(editorialBiblesMigration.includes(storyId), "missing editorial bible: " + storyId);
+}
+assert.ok(editorialBiblesMigration.includes("storyheaven_serial_bibles"));
+assert.ok(editorialBiblesMigration.includes("narrative_blueprint_json"));
 assert.ok(continuationMigration.includes("storyheaven_episode_votes"));
 assert.ok(continuationMigration.includes("primary key (episode_id, user_id)"));
 assert.ok(continuationMigration.includes("storyheaven_serial_continuations"));

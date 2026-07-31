@@ -9,11 +9,11 @@
   <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
   <title>소설 연재 관리 | StoryHeaven</title>
   <link rel="stylesheet" href="../../workspace.css?v=20260724-serial1">
-  <link rel="stylesheet" href="./serial.css?v=20260731-queue1">
+  <link rel="stylesheet" href="./serial.css?v=20260731-progress2">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
   <script defer src="../../common.js?v=20260731-adminnav1"></script>
   <script defer src="./genre-catalog.js?v=20260731-genre2"></script>
-  <script defer src="./serial.js?v=20260731-queue1"></script>
+  <script defer src="./serial.js?v=20260731-progress2"></script>
 </head>
 <body>
   <header class="site-header">
@@ -56,6 +56,11 @@
 
         <section class="serial-band queue-band">
           <header><div><p class="eyebrow">SINGLE WORK QUEUE</p><h2>제작 대기열</h2><p>한 번에 한 작품만 제작합니다. 다른 작품 요청은 순서대로 기다리며, 시작 전에는 취소할 수 있습니다.</p></div><span class="queue-rule">한 번에 1개씩</span></header>
+          <div class="queue-live" data-queue-live aria-live="polite">
+            <div><span>현재 작업을 확인하고 있습니다.</span><strong>서버 연결 중</strong></div>
+            <div class="queue-live-meter" aria-hidden="true"><span></span></div>
+            <small>잠시만 기다려주세요.</small>
+          </div>
           <div class="queue-last" data-queue-last><strong>직전 연재 작업 기록 없음</strong><span>첫 작업이 끝나면 실제 소요 시간과 AI 작업 수가 표시됩니다.</span></div>
           <div class="queue-list" data-queue-list></div>
           <p class="queue-note" data-queue-note>사용량과 작업 기록을 확인하는 중입니다.</p>

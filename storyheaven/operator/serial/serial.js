@@ -1,6 +1,7 @@
 (() => {
   const selectors = {};
   const scheduleById = new Map();
+  const queueByScheduleId = new Map();
   const selectedPrimaryGenres = new Set(["fantasy"]);
   const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
   const primaryGenreLimit = 3;
@@ -31,6 +32,7 @@
     selectors.scheduleForm = document.querySelector("[data-schedule-form]");
     selectors.scheduleList = document.querySelector("[data-schedule-list]");
     selectors.queueList = document.querySelector("[data-queue-list]");
+    selectors.queueLive = document.querySelector("[data-queue-live]");
     selectors.queueLast = document.querySelector("[data-queue-last]");
     selectors.queueNote = document.querySelector("[data-queue-note]");
     selectors.primaryGenres = document.querySelector("[data-primary-genres]");
@@ -60,7 +62,9 @@
       selectors.gate.hidden = true;
       selectors.dashboard.hidden = false;
       clearInterval(queueRefreshTimer);
-      queueRefreshTimer = window.setInterval(() => refreshSchedules().catch(() => {}), 15_000);
+      queueRefreshTimer = window.setInterval(() => {
+        if (!document.hidden) refreshSchedules().catch(markQueueRefreshFailure);
+      }, 6_000);
     } catch (error) {
       showAccess();
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -224,11 +228,19 @@
   async function refreshSchedules() {
     const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules");
     selectors.engineState.textContent = payload.enabled ? "자동 연재 연결됨" : "자동 연재 멈춤";
+    const queue = payload.queue || {};
+    queueByScheduleId.clear();
+    for (const item of queue.items || []) {
+      if (item.scheduleId) queueByScheduleId.set(item.scheduleId, item);
+    }
+    if (!queueByScheduleId.size && payload.schedules?.length === 1 && queue.items?.length) {
+      queueByScheduleId.set(payload.schedules[0].id, queue.items.find((item) => item.status === "running") || queue.items[0]);
+    }
     scheduleById.clear();
     for (const schedule of payload.schedules || []) scheduleById.set(schedule.id, schedule);
     selectors.scheduleList.replaceChildren(...(payload.schedules || []).map(scheduleRow));
     if (!payload.schedules?.length) selectors.scheduleList.append(message("아직 시작한 자동 연재가 없습니다."));
-    renderQueue(payload.queue || {});
+    renderQueue(queue);
   }
 
   function scheduleRow(schedule) {
@@ -260,6 +272,8 @@
     actions.append(actionButton("설정 불러오기", "secondary", () => loadScheduleIntoForm(schedule)));
     if (schedule.lastRunId) actions.append(actionButton("최근 기록", "", () => loadRun(schedule.lastRunId)));
     row.append(copy, actions);
+    const activeWork = queueByScheduleId.get(schedule.id);
+    if (activeWork) row.append(renderScheduleProgress(activeWork));
     return row;
   }
 
@@ -341,6 +355,7 @@
 
   function renderQueue(queue) {
     const items = Array.isArray(queue.items) ? queue.items : [];
+    renderQueueLive(items, queue.updatedAt, queue.lastFailed);
     selectors.queueList.replaceChildren(...items.map(queueRow));
     if (!items.length) selectors.queueList.append(message("대기 중인 제작이 없습니다."));
     selectors.queueNote.textContent = queue.quotaNote || "실제 AI 작업 수와 소요 시간을 작업별로 기록합니다.";
@@ -358,6 +373,67 @@
     selectors.queueLast.append(title, detail);
   }
 
+  function renderQueueLive(items, updatedAt, lastFailed) {
+    const active = items.find((item) => item.status === "running") || items[0] || null;
+    selectors.queueLive.classList.toggle("is-idle", !active);
+    selectors.queueLive.classList.remove("is-stale");
+    selectors.queueLive.classList.toggle("is-error", !active && Boolean(lastFailed));
+    selectors.queueLive.replaceChildren();
+    const copy = document.createElement("div");
+    const label = document.createElement("span");
+    const title = document.createElement("strong");
+    const meter = document.createElement("div");
+    meter.className = "queue-live-meter";
+    const fill = document.createElement("span");
+    const detail = document.createElement("small");
+    meter.append(fill);
+    if (active) {
+      const progress = productionProgressState(active);
+      label.textContent = active.status === "running" ? "현재 제작 중" : `대기 ${active.queuePosition}번`;
+      title.textContent = `${active.workLabel || active.title} · ${progress.steps[progress.currentIndex]}`;
+      meter.style.setProperty("--progress", `${progress.percent}%`);
+      meter.setAttribute("role", "progressbar");
+      meter.setAttribute("aria-valuemin", "0");
+      meter.setAttribute("aria-valuemax", "100");
+      meter.setAttribute("aria-valuenow", String(progress.percent));
+      detail.textContent = `${progress.percent}% · ${active.status === "running" ? `경과 ${formatDuration(active.elapsedSeconds)}` : "앞선 작업 완료 후 시작"} · ${formatRefreshTime(updatedAt)}`;
+    } else if (lastFailed) {
+      const progress = productionProgressState(lastFailed);
+      label.textContent = "최근 작업 중단";
+      title.textContent = `${lastFailed.workLabel || lastFailed.title} · ${failureLabel(lastFailed.failureCode)}`;
+      meter.style.setProperty("--progress", `${progress.percent}%`);
+      meter.setAttribute("role", "progressbar");
+      meter.setAttribute("aria-valuemin", "0");
+      meter.setAttribute("aria-valuemax", "100");
+      meter.setAttribute("aria-valuenow", String(progress.percent));
+      detail.textContent = `${stageLabel(lastFailed.stage)}에서 중단 · ${formatDate(lastFailed.completedAt)} · 다시 실행할 수 있습니다.`;
+    } else {
+      label.textContent = "현재 작업";
+      title.textContent = "제작 중이거나 대기 중인 작품이 없습니다.";
+      meter.style.setProperty("--progress", "0%");
+      detail.textContent = `마지막 확인 ${formatRefreshTime(updatedAt)}`;
+    }
+    copy.append(label, title);
+    selectors.queueLive.append(copy, meter, detail);
+  }
+
+  function markQueueRefreshFailure() {
+    selectors.queueLive.classList.add("is-stale");
+    const title = selectors.queueLive.querySelector("strong");
+    const detail = selectors.queueLive.querySelector("small");
+    if (title) title.textContent = "진행 정보를 새로 불러오지 못했습니다.";
+    if (detail) detail.textContent = "서버 연결을 확인하는 중입니다. 다음 자동 갱신에서 다시 시도합니다.";
+  }
+
+  function failureLabel(code) {
+    return ({
+      codex_auth_required: "Codex 로그인이 필요합니다",
+      codex_model_unavailable: "Codex 모델 연결 실패",
+      codex_rate_limited: "Codex 사용량 제한 대기",
+      serial_job_attempts_exhausted: "재시도 횟수 초과"
+    })[String(code || "")] || "작업 오류";
+  }
+
   function queueRow(item) {
     const row = document.createElement("article");
     row.className = `queue-row ${item.status}`;
@@ -365,6 +441,7 @@
     position.className = "queue-position";
     position.textContent = item.status === "running" ? "제작 중" : `대기 ${item.queuePosition}번`;
     const copy = document.createElement("div");
+    copy.className = "queue-copy";
     const title = document.createElement("strong");
     title.textContent = item.workLabel || item.title;
     const stage = document.createElement("p");
@@ -374,7 +451,122 @@
     if (item.cancelable) {
       row.append(actionButton("대기 취소", "secondary queue-cancel", () => cancelQueue(item)));
     }
+    row.append(renderProductionProgress(item));
     return row;
+  }
+
+  function renderProductionProgress(item) {
+    const state = productionProgressState(item);
+    const section = document.createElement("section");
+    section.className = "production-progress";
+    section.setAttribute("aria-label", `${item.workLabel || item.title} 제작 진행 상황`);
+
+    const heading = document.createElement("div");
+    heading.className = "production-progress-heading";
+    const current = document.createElement("strong");
+    current.textContent = item.status === "running"
+      ? `현재 · ${state.steps[state.currentIndex]}`
+      : `시작 예정 · ${state.steps[state.currentIndex]}`;
+    const count = document.createElement("span");
+    count.textContent = `${state.completedCount} / ${state.steps.length}단계 완료`;
+    const percent = document.createElement("b");
+    percent.className = "production-progress-percent";
+    percent.textContent = `${state.percent}%`;
+    heading.append(current, count, percent);
+
+    const scroller = document.createElement("div");
+    scroller.className = "production-track-scroller";
+    const track = document.createElement("ol");
+    track.className = "production-track";
+    track.style.setProperty("--production-step-count", state.steps.length);
+    state.steps.forEach((label, index) => {
+      const step = document.createElement("li");
+      const status = index < state.currentIndex
+        ? "complete"
+        : index === state.currentIndex
+          ? (item.status === "running" ? "current" : "waiting")
+          : "upcoming";
+      step.className = `production-step is-${status}`;
+      if (status === "current" || status === "waiting") step.setAttribute("aria-current", "step");
+      const number = document.createElement("span");
+      number.className = "production-step-number";
+      number.textContent = String(index + 1).padStart(2, "0");
+      const title = document.createElement("strong");
+      title.textContent = label;
+      const copy = document.createElement("small");
+      copy.textContent = ({ complete: "완료", current: "진행 중", waiting: "대기", upcoming: "예정" })[status];
+      step.append(number, title, copy);
+      track.append(step);
+    });
+    scroller.append(track);
+
+    const meter = document.createElement("progress");
+    meter.className = "production-progress-meter";
+    meter.max = 100;
+    meter.value = state.percent;
+    meter.setAttribute("aria-label", `${item.workLabel || item.title} ${state.percent}% 진행`);
+    meter.textContent = `${state.percent}%`;
+    section.append(heading, scroller, meter);
+    window.requestAnimationFrame(() => {
+      const activeStep = track.children[state.currentIndex];
+      if (!activeStep || scroller.scrollWidth <= scroller.clientWidth) return;
+      scroller.scrollLeft = Math.max(0, activeStep.offsetLeft - ((scroller.clientWidth - activeStep.offsetWidth) / 2));
+    });
+    return section;
+  }
+
+  function productionProgressState(item) {
+    const initialBatch = String(item.workLabel || "").includes("기본 3화");
+    const bootstrapPlan = item.bootstrapPlan === true;
+    const steps = initialBatch
+      ? ["아이디어", "설정집", "장기 전개", "1화", "2화", "3화", "공개 준비"]
+      : bootstrapPlan
+        ? ["설정집", "장기 전개", "회차 구성", "원고 작성", "편집 검수", "공개 준비"]
+        : ["회차 구성", "원고 작성", "편집 검수", "공개 준비"];
+    const stage = String(item.stage || "queued");
+    let currentIndex = 0;
+    if (initialBatch) {
+      if (stage === "build_bible") currentIndex = 1;
+      else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
+      else if (["build_episode_card", "write_draft", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
+        currentIndex = 2 + Math.min(3, Math.max(1, Number(item.episodeNo || 1)));
+      } else if (["publication_ready", "published"].includes(stage)) currentIndex = 6;
+    } else if (bootstrapPlan) {
+      if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
+      else if (stage === "build_episode_card") currentIndex = 2;
+      else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
+      else if (["editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
+      else if (["publication_ready", "published"].includes(stage)) currentIndex = 5;
+    } else {
+      if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 1;
+      else if (["editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 2;
+      else if (["publication_ready", "published"].includes(stage)) currentIndex = 3;
+    }
+    const fallbackPercent = Math.round(((currentIndex + (item.status === "running" ? 0.5 : 0)) / steps.length) * 100);
+    const apiPercent = Number(item.progress?.percent);
+    const percent = Number.isFinite(apiPercent) ? Math.max(0, Math.min(99, Math.round(apiPercent))) : fallbackPercent;
+    return { steps, currentIndex, completedCount: currentIndex, percent };
+  }
+
+  function renderScheduleProgress(item) {
+    const progress = productionProgressState(item);
+    const wrapper = document.createElement("div");
+    wrapper.className = "schedule-progress";
+    const title = document.createElement("strong");
+    title.textContent = `${item.status === "running" ? "제작 중" : `대기 ${item.queuePosition}번`} · ${progress.steps[progress.currentIndex]}`;
+    const meter = document.createElement("div");
+    meter.className = "schedule-progress-meter";
+    meter.style.setProperty("--progress", `${progress.percent}%`);
+    meter.setAttribute("role", "progressbar");
+    meter.setAttribute("aria-valuemin", "0");
+    meter.setAttribute("aria-valuemax", "100");
+    meter.setAttribute("aria-valuenow", String(progress.percent));
+    const fill = document.createElement("span");
+    meter.append(fill);
+    const copy = document.createElement("small");
+    copy.textContent = `${progress.percent}%${item.status === "running" ? ` · ${formatDuration(item.elapsedSeconds)}` : ""}`;
+    wrapper.append(title, meter, copy);
+    return wrapper;
   }
 
   async function cancelQueue(item) {
@@ -763,6 +955,12 @@
     const hours = Math.floor(minutes / 60);
     const minutesRest = minutes % 60;
     return minutesRest ? `${hours}시간 ${minutesRest}분` : `${hours}시간`;
+  }
+
+  function formatRefreshTime(value) {
+    const date = value ? new Date(value) : new Date();
+    if (Number.isNaN(date.getTime())) return "방금 갱신";
+    return `${new Intl.DateTimeFormat("ko-KR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(date)} 기준`;
   }
 
   function runStatus(run) {

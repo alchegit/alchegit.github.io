@@ -215,7 +215,7 @@
       serial_episode_already_queued: "이 회차는 이미 제작 중입니다.",
       serial_episode_sequence_required: "이전 회차를 먼저 공개한 뒤 다음 회차를 만들어주세요.",
       serial_arc_episode_not_planned: "현재 장기 흐름에 포함되지 않은 회차입니다.",
-      serial_continuation_episode_invalid: "3화 이후의 최신 회차에서 다음 화를 요청할 수 있습니다.",
+      serial_continuation_episode_invalid: "최신 공개 회차에서 다음 화를 요청해주세요.",
       serial_continuation_latest_episode_required: "가장 최근에 공개된 회차에서만 다음 화를 요청할 수 있습니다.",
       serial_continuation_unavailable: "이 작품은 자동 연재와 연결되어 있지 않습니다.",
       serial_recommendation_threshold_pending: "추천 11개가 모이면 다음 화를 준비합니다.",

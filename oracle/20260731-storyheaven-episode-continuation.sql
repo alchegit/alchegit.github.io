@@ -28,8 +28,8 @@ begin
       id varchar2(36) primary key,
       story_id varchar2(36) not null references storyheaven_stories(id),
       source_episode_id varchar2(36) not null references storyheaven_episodes(id),
-      source_episode_no number(5) not null check (source_episode_no between 3 and 299),
-      target_episode_no number(5) not null check (target_episode_no between 4 and 300),
+      source_episode_no number(5) not null check (source_episode_no between 1 and 299),
+      target_episode_no number(5) not null check (target_episode_no between 2 and 300),
       trigger_type varchar2(30) not null
         check (trigger_type in ('reader_threshold', 'admin_request')),
       requested_by varchar2(80) references webtoon_profiles(user_id),

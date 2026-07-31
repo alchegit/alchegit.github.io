@@ -13,8 +13,15 @@ const SYSTEM_AUTHOR_ID = "storyheaven-system-ai";
 const RUN_STATES_DONE = new Set(["approved", "blocked", "published", "error"]);
 export const STORYHEAVEN_CONTINUATION_POLICY = Object.freeze({
   initialEpisodeCount: 3,
+  adminMinimumEpisodeCount: 1,
   recommendationThreshold: 11
 });
+
+export function continuationMinimumEpisode(triggerType) {
+  return triggerType === "admin_request"
+    ? STORYHEAVEN_CONTINUATION_POLICY.adminMinimumEpisodeCount
+    : STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount;
+}
 
 export function createStoryHeavenSerialService({
   withConnection,
@@ -413,38 +420,109 @@ export function createStoryHeavenSerialService({
       if (story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
         throw failure("serial_story_not_system_owned", 409);
       }
-      const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
-        title: input.concept?.title || story.TITLE,
-        logline: input.concept?.logline || story.LOGLINE,
-        synopsis: input.concept?.synopsis || story.PUBLIC_SYNOPSIS,
-        genres: input.concept?.genres || parseJson(story.GENRES_JSON, [story.GENRE]),
-        tags: input.concept?.tags || parseJson(story.TAGS_JSON, []),
-        rating: story.CONTENT_RATING === "all" ? "all" : "teen",
-        readerPromise: input.concept?.readerPromise || `매 회차 ${story.TITLE}의 핵심 갈등을 진전시키며 다음 화의 질문을 남긴다.`,
-        familiarPleasure: input.concept?.familiarPleasure || "장르 독자가 기대하는 사건 해결과 성장의 즐거움",
-        novelTwist: input.concept?.novelTwist || "작품 고유의 세계 규칙이 인물의 선택마다 다른 대가를 만든다.",
-        targetAge: story.CONTENT_RATING === "all" ? "all" : "teen"
-      });
-      await upsertBibleConcept(connection, storyId, concept);
-      const run = await createRun(connection, {
-        storyId,
-        runType: "planning",
-        stage: "build_bible",
-        userId,
-        input: {
-          autoEpisode: input.autoEpisode === true,
-          releaseAt: dateOrNull(input.releaseAt)?.toISOString() || null,
-          concept
-        }
-      });
-      await queueJob(connection, {
-        runId: run.id,
-        storyId,
-        type: "build_bible",
-        input: { story: publicStory(story), concept }
-      });
-      return run;
+      return queueStoryPlanning(connection, story, userId, input);
     });
+  }
+
+  async function queueStoryPlanning(connection, story, userId, input = {}) {
+    const existing = await selectOne(connection,
+      `select * from (
+         select serial_run.* from storyheaven_serial_runs serial_run
+          where serial_run.story_id = :story_id
+            and serial_run.run_type = 'planning'
+            and serial_run.run_status in ('queued', 'running', 'rewrite')
+            and serial_run.queue_canceled_at is null
+          order by serial_run.created_at desc
+       ) where rownum = 1`,
+      { story_id: story.ID });
+    if (existing) return { ...mapRun(existing), reused: true };
+    const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+      title: input.concept?.title || story.TITLE,
+      logline: input.concept?.logline || story.LOGLINE,
+      synopsis: input.concept?.synopsis || story.PUBLIC_SYNOPSIS,
+      genres: input.concept?.genres || parseJson(story.GENRES_JSON, [story.GENRE]),
+      tags: input.concept?.tags || parseJson(story.TAGS_JSON, []),
+      rating: story.CONTENT_RATING === "all" ? "all" : "teen",
+      readerPromise: input.concept?.readerPromise || `매 회차 ${story.TITLE}의 핵심 갈등을 진전시키며 다음 화의 질문을 남긴다.`,
+      familiarPleasure: input.concept?.familiarPleasure || "장르 독자가 기대하는 사건 해결과 성장의 즐거움",
+      novelTwist: input.concept?.novelTwist || "작품 고유의 세계 규칙이 인물의 선택마다 다른 대가를 만든다.",
+      targetAge: story.CONTENT_RATING === "all" ? "all" : "teen"
+    });
+    await upsertBibleConcept(connection, story.ID, concept);
+    const run = await createRun(connection, {
+      storyId: story.ID,
+      runType: "planning",
+      stage: "build_bible",
+      userId,
+      input: {
+        autoEpisode: input.autoEpisode === true,
+        releaseAt: dateOrNull(input.releaseAt)?.toISOString() || null,
+        concept
+      }
+    });
+    await queueJob(connection, {
+      runId: run.id,
+      storyId: story.ID,
+      type: "build_bible",
+      input: { story: publicStory(story), concept }
+    });
+    return run;
+  }
+
+  async function queueStoryContinuationBootstrap(connection, story, userId, targetEpisodeNo) {
+    const bible = await selectOne(connection,
+      `select story_id from storyheaven_serial_bibles
+        where story_id = :story_id and bible_status = 'active'`,
+      { story_id: story.ID });
+    if (!bible) return queueStoryPlanning(connection, story, userId, { autoEpisode: true });
+
+    const existing = await selectOne(connection,
+      `select * from (
+         select serial_run.* from storyheaven_serial_runs serial_run
+          where serial_run.story_id = :story_id
+            and serial_run.run_status in ('queued', 'running', 'rewrite')
+            and serial_run.queue_canceled_at is null
+          order by serial_run.created_at desc
+       ) where rownum = 1`,
+      { story_id: story.ID });
+    if (existing) return { ...mapRun(existing), reused: true };
+
+    const context = await loadSerialContext(connection, story.ID, { requireArc: false });
+    if (context.arc?.episodePlan.some((item) => Number(item.episodeNo) === targetEpisodeNo)) {
+      return createEpisodeRun(connection, {
+        storyId: story.ID,
+        userId,
+        episodeNo: targetEpisodeNo,
+        releaseAt: null,
+        notes: "",
+        scheduleId: null
+      });
+    }
+
+    const nextArcNo = Math.max(0, ...context.priorArcs.map((arc) => Number(arc.arcNo || 0))) + 1;
+    const planning = await createRun(connection, {
+      storyId: story.ID,
+      runType: "planning",
+      stage: "build_arc",
+      userId,
+      input: { autoEpisode: true, releaseAt: null }
+    });
+    await queueJob(connection, {
+      runId: planning.id,
+      storyId: story.ID,
+      type: "build_arc",
+      input: {
+        story: context.story,
+        concept: context.bible.concept,
+        bible: context.bible,
+        arcNo: nextArcNo,
+        firstEpisodeNo: targetEpisodeNo,
+        priorArcs: context.priorArcs,
+        canon: context.canon,
+        autoEpisode: true
+      }
+    });
+    return planning;
   }
 
   async function queueEpisode(storyIdValue, userId, input = {}) {
@@ -467,11 +545,11 @@ export function createStoryHeavenSerialService({
   } = {}) {
     const storyId = requireId(storyIdValue, "story_id");
     const sourceEpisodeNo = Number(sourceEpisodeNoValue);
-    if (!Number.isInteger(sourceEpisodeNo) || sourceEpisodeNo < STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount || sourceEpisodeNo >= 300) {
-      throw failure("serial_continuation_episode_invalid", 400);
-    }
     if (!new Set(["reader_threshold", "admin_request"]).has(triggerType)) {
       throw failure("serial_continuation_trigger_invalid", 400);
+    }
+    if (!Number.isInteger(sourceEpisodeNo) || sourceEpisodeNo < continuationMinimumEpisode(triggerType) || sourceEpisodeNo >= 300) {
+      throw failure("serial_continuation_episode_invalid", 400);
     }
     const targetEpisodeNo = sourceEpisodeNo + 1;
     return withTransaction(async (connection) => {
@@ -499,9 +577,6 @@ export function createStoryHeavenSerialService({
       if (triggerType === "reader_threshold"
         && (source.STORY_STATUS !== "published" || source.VISIBILITY !== "public" || source.CONTINUATION_MODE !== "auto")) {
         throw failure("serial_story_auto_continuation_disabled", 409);
-      }
-      if (triggerType === "admin_request" && !new Set(["auto", "manual"]).has(source.CONTINUATION_MODE)) {
-        throw failure("serial_story_continuation_paused", 409);
       }
       if (Number(source.LATEST_EPISODE_NO || 0) !== sourceEpisodeNo) {
         throw failure("serial_continuation_latest_episode_required", 409);
@@ -536,14 +611,47 @@ export function createStoryHeavenSerialService({
               and serial_run.run_status = 'published'
               and serial_run.schedule_id is not null
             order by serial_run.created_at desc
-         ) where rownum = 1`,
+        ) where rownum = 1`,
         { story_id: storyId, episode_no: sourceEpisodeNo });
+      if (!sourceRun && triggerType === "admin_request") {
+        const story = await selectOne(connection,
+          `select id, title, logline, public_synopsis, genre, genres_json, tags_json,
+                  content_rating, content_origin, author_user_id
+             from storyheaven_stories where id = :story_id for update`,
+          { story_id: storyId });
+        const planningRun = await queueStoryContinuationBootstrap(connection, story, requestedBy, targetEpisodeNo);
+        const requestId = randomId();
+        await connection.execute(
+          `insert into storyheaven_serial_continuations (
+            id, story_id, source_episode_id, source_episode_no, target_episode_no,
+            trigger_type, requested_by, recommendation_count, request_status, run_id
+          ) values (
+            :id, :story_id, :source_episode_id, :source_episode_no, :target_episode_no,
+            'admin_request', :requested_by, :recommendation_count, 'queued', :run_id
+          )`,
+          {
+            id: requestId,
+            story_id: storyId,
+            source_episode_id: source.EPISODE_ID,
+            source_episode_no: sourceEpisodeNo,
+            target_episode_no: targetEpisodeNo,
+            requested_by: requestedBy,
+            recommendation_count: recommendationCount,
+            run_id: planningRun.id
+          }
+        );
+        const created = await selectOne(connection,
+          `select * from storyheaven_serial_continuations where id = :id`, { id: requestId });
+        return mapContinuation(created);
+      }
       if (!sourceRun) throw failure("serial_continuation_unavailable", 409);
       const schedule = await selectOne(connection,
         `select cadence_days, cadence_minutes, created_by, publication_mode
            from storyheaven_serial_schedules
-          where id = :id and schedule_status = 'active' for update`,
-        { id: sourceRun.SCHEDULE_ID });
+          where id = :id
+            and (schedule_status = 'active' or :trigger_type = 'admin_request')
+          for update`,
+        { id: sourceRun.SCHEDULE_ID, trigger_type: triggerType });
       if (!schedule) throw failure("serial_schedule_paused", 409);
 
       const existingEpisode = await selectOne(connection,
@@ -1878,7 +1986,9 @@ function summarizeQueue(rows = []) {
       runningJobs: 0,
       maxEpisodeNo: 0,
       stage: row.CURRENT_STAGE || "queued",
+      failureCode: row.FAILURE_CODE || null,
       hasConcept: false,
+      hasPlanning: false,
       hasError: false
     };
     group.storyId ||= row.STORY_ID || null;
@@ -1897,7 +2007,9 @@ function summarizeQueue(rows = []) {
     group.runningJobs += Number(row.RUNNING_JOB_COUNT || 0);
     group.maxEpisodeNo = Math.max(group.maxEpisodeNo, Number(row.EPISODE_NO || 0));
     group.hasConcept ||= row.RUN_TYPE === "concept";
+    group.hasPlanning ||= row.RUN_TYPE === "planning";
     group.hasError ||= row.RUN_STATUS === "error";
+    if (row.FAILURE_CODE) group.failureCode = row.FAILURE_CODE;
     if (Number(row.ACTIVE_JOB_COUNT || 0) > 0) group.stage = row.CURRENT_STAGE || group.stage;
     groups.set(id, group);
   }
@@ -1929,23 +2041,41 @@ function summarizeQueue(rows = []) {
         elapsedSeconds: elapsedSeconds(completed[0].startedAt || completed[0].requestedAt, completed[0].completedAt)
       })
     : null;
+  const failed = all
+    .filter((group) => !group.canceledAt && group.hasError)
+    .sort((left, right) => (right.completedAt || right.requestedAt || 0) - (left.completedAt || left.requestedAt || 0));
+  const lastFailed = failed[0]
+    ? queueGroupView(failed[0], {
+        status: "error",
+        queuePosition: null,
+        cancelable: false,
+        elapsedSeconds: elapsedSeconds(failed[0].startedAt || failed[0].requestedAt, failed[0].completedAt)
+      })
+    : null;
   return {
     concurrency: 1,
     running: hasRunning,
     items,
     lastCompleted,
+    lastFailed,
+    updatedAt: new Date().toISOString(),
     quotaPercent: null,
     quotaNote: "구독 계정의 남은 사용량 비율은 서버에서 조회할 수 없어 표시하지 않습니다. 대신 실제 AI 작업 수와 소요 시간을 기록합니다."
   };
 }
 
 function queueGroupView(group, overrides) {
-  return {
+  const view = {
     id: group.id,
     scheduleId: group.scheduleId,
     storyId: group.storyId,
     title: group.title,
-    workLabel: group.hasConcept ? "새 작품 · 기본 3화" : `${group.title} · ${group.maxEpisodeNo || "다음"}화`,
+    workLabel: group.hasConcept
+      ? "새 작품 · 기본 3화"
+      : group.hasPlanning
+        ? `${group.title} · 다음 화 준비`
+        : `${group.title} · ${group.maxEpisodeNo || "다음"}화`,
+    bootstrapPlan: group.hasPlanning && !group.hasConcept,
     primaryGenres: group.primaryGenres,
     subgenresByGenre: group.subgenresByGenre,
     episodeNo: group.maxEpisodeNo || null,
@@ -1955,7 +2085,48 @@ function queueGroupView(group, overrides) {
     completedAt: isoTime(group.completedAt),
     totalJobs: group.totalJobs,
     completedJobs: group.completedJobs,
+    failureCode: group.failureCode,
     ...overrides
+  };
+  view.progress = queueProgressView(group, view.status);
+  return view;
+}
+
+function queueProgressView(group, status) {
+  const initialBatch = group.hasConcept;
+  const bootstrapPlan = group.hasPlanning && !group.hasConcept;
+  const steps = initialBatch
+    ? ["concept", "bible", "arc", "episode-1", "episode-2", "episode-3", "publication"]
+    : bootstrapPlan
+      ? ["bible", "arc", "episode-card", "draft", "review", "publication"]
+      : ["episode-card", "draft", "review", "publication"];
+  const stage = String(group.stage || "queued");
+  let currentIndex = 0;
+  if (initialBatch) {
+    if (stage === "build_bible") currentIndex = 1;
+    else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
+    else if (["build_episode_card", "write_draft", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
+      currentIndex = 2 + Math.min(3, Math.max(1, Number(group.maxEpisodeNo || 1)));
+    } else if (["publication_ready", "published"].includes(stage)) currentIndex = 6;
+  } else if (bootstrapPlan) {
+    if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
+    else if (stage === "build_episode_card") currentIndex = 2;
+    else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
+    else if (["editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
+    else if (["publication_ready", "published"].includes(stage)) currentIndex = 5;
+  } else {
+    if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 1;
+    else if (["editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 2;
+    else if (["publication_ready", "published"].includes(stage)) currentIndex = 3;
+  }
+  const percent = status === "complete"
+    ? 100
+    : Math.min(99, Math.round(((currentIndex + (status === "running" ? 0.5 : 0)) / steps.length) * 100));
+  return {
+    stage,
+    completedSteps: currentIndex,
+    totalSteps: steps.length,
+    percent
   };
 }
 

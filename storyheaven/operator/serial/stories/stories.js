@@ -119,18 +119,18 @@
     const grid = document.createElement("div");
     grid.className = "metric-grid";
     grid.append(
-      metric("최신 회차", story.latestEpisodeNo ? `${story.latestEpisodeNo}화 · ${story.latestEpisodeTitle || "제목 없음"}` : "공개 회차 없음"),
-      metric("공개 / 전체", `${story.publishedEpisodeCount} / ${story.episodeCount}`),
-      metric("누적 조회", number(story.viewCount)),
-      metric("누적 추천", number(story.recommendationCount)),
-      metric("공개 대기", `${number(story.readyPublicationCount)}화`),
-      metric("최근 제작", runLabel(story.latestRunStatus))
+      metric("최신 회차", story.latestEpisodeNo ? `${story.latestEpisodeNo}화 · ${story.latestEpisodeTitle || "제목 없음"}` : "공개 회차 없음", "latest"),
+      metric("공개 / 전체", `${story.publishedEpisodeCount} / ${story.episodeCount}`, "published"),
+      metric("누적 조회", number(story.viewCount), "views"),
+      metric("누적 추천", number(story.recommendationCount), "recommendations"),
+      metric("공개 대기", `${number(story.readyPublicationCount)}화`, "ready"),
+      metric("최근 제작", runLabel(story.latestRunStatus), "run")
     );
     const schedule = document.createElement("p");
     schedule.className = "schedule-note";
     schedule.textContent = story.schedule
       ? `자동 연재 설정 · ${story.schedule.status === "active" ? "가동 중" : "멈춤"}`
-      : "연결된 자동 연재 일정이 없습니다.";
+      : "자동 연재 설정 없음 · 다음 화 요청 시 작품 설정부터 자동 준비합니다.";
     metrics.append(grid, schedule);
 
     const controls = document.createElement("section");
@@ -141,27 +141,26 @@
     const continuation = selectField("다음 화 제작", [
       ["auto", "추천 11개가 모이면 자동"], ["manual", "운영자 요청으로만"], ["paused", "일시 정지"], ["ended", "연재 종료"]
     ], story.continuationMode);
-    const noteDetails = document.createElement("details");
-    noteDetails.className = "operator-note";
-    const noteSummary = document.createElement("summary");
-    noteSummary.textContent = story.operatorNote ? "운영 메모 확인" : "운영 메모 추가";
-    const note = document.createElement("textarea");
-    note.maxLength = 1000;
-    note.placeholder = "독자에게 보이지 않는 메모";
-    note.value = story.operatorNote || "";
-    noteDetails.append(noteSummary, note);
-
     const saveState = document.createElement("div");
     saveState.className = "story-save-state";
     saveState.textContent = story.controlUpdatedAt ? `마지막 설정 ${formatDate(story.controlUpdatedAt)}` : "기본 정책 적용 중";
     const actions = document.createElement("div");
     actions.className = "story-actions";
-    const save = actionButton("설정 저장", "", () => saveControl(story, row, visibility.select, continuation.select, note, save));
+    const save = actionButton("설정 저장", "", () => saveControl(story, row, visibility.select, continuation.select, save));
     save.disabled = true;
     const next = actionButton("다음 화 작성", "warning", () => requestNextEpisode(story, next));
     const nextReason = nextEpisodeBlockReason(story);
     next.disabled = Boolean(nextReason);
-    if (nextReason) next.title = nextReason;
+    const nextHelp = document.createElement("p");
+    nextHelp.className = "next-episode-help";
+    if (nextReason) {
+      next.title = nextReason;
+      nextHelp.id = `next-episode-help-${story.id}`;
+      nextHelp.textContent = `다음 화를 만들 수 없는 이유 · ${nextReason}`;
+      next.setAttribute("aria-describedby", nextHelp.id);
+    } else {
+      nextHelp.hidden = true;
+    }
     const view = document.createElement("a");
     view.className = "button secondary";
     view.href = `/storyheaven/story/?id=${encodeURIComponent(story.id)}`;
@@ -173,8 +172,7 @@
     const markDirty = () => {
       normalizeControlPair(visibility.select, continuation.select);
       const dirty = visibility.select.value !== story.visibility
-        || continuation.select.value !== story.continuationMode
-        || note.value.trim() !== (story.operatorNote || "");
+        || continuation.select.value !== story.continuationMode;
       save.disabled = !dirty;
       saveState.textContent = dirty ? "저장하지 않은 변경이 있습니다." : (story.controlUpdatedAt ? `마지막 설정 ${formatDate(story.controlUpdatedAt)}` : "기본 정책 적용 중");
       saveState.classList.toggle("is-dirty", dirty);
@@ -182,11 +180,24 @@
     };
     visibility.select.addEventListener("change", markDirty);
     continuation.select.addEventListener("change", markDirty);
-    note.addEventListener("input", markDirty);
     updateAutoOption(visibility.select, continuation.select);
 
-    controls.append(visibility.label, continuation.label, noteDetails, saveState, actions);
-    row.append(summary, metrics, controls);
+    controls.append(visibility.label, continuation.label, saveState, nextHelp, actions);
+
+    const management = document.createElement("details");
+    management.className = "story-management";
+    management.open = !window.matchMedia("(max-width: 820px)").matches;
+    const managementSummary = document.createElement("summary");
+    const managementTitle = document.createElement("strong");
+    managementTitle.textContent = "관리·통계";
+    const managementPreview = document.createElement("small");
+    managementPreview.textContent = `${story.latestEpisodeNo ? `${story.latestEpisodeNo}화` : "회차 없음"} · 조회 ${number(story.viewCount)} · 추천 ${number(story.recommendationCount)}`;
+    managementSummary.append(managementTitle, managementPreview);
+    const managementContent = document.createElement("div");
+    managementContent.className = "story-management-content";
+    managementContent.append(metrics, controls);
+    management.append(managementSummary, managementContent);
+    row.append(summary, management);
     return row;
   }
 
@@ -200,13 +211,13 @@
     auto.disabled = visibility.value !== "public";
   }
 
-  async function saveControl(story, row, visibility, continuation, note, button) {
+  async function saveControl(story, row, visibility, continuation, button) {
     if (!confirmControlChange(story, visibility.value, continuation.value)) return;
     button.disabled = true;
     try {
       const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/control`, {
         method: "PATCH",
-        body: { visibility: visibility.value, continuationMode: continuation.value, operatorNote: note.value }
+        body: { visibility: visibility.value, continuationMode: continuation.value, operatorNote: story.operatorNote || "" }
       });
       const index = state.stories.findIndex((item) => item.id === story.id);
       if (index >= 0) state.stories[index] = { ...payload.story, queue: story.queue || null };
@@ -234,7 +245,8 @@
   }
 
   async function requestNextEpisode(story, button) {
-    if (!window.confirm(`${story.title} ${story.latestEpisodeNo + 1}화를 제작 대기열에 넣을까요?`)) return;
+    const preparation = story.schedule ? "" : "\n\n작품 설정이 없으면 설정집과 장기 전개부터 자동으로 준비합니다.";
+    if (!window.confirm(`${story.title} ${story.latestEpisodeNo + 1}화를 제작 대기열에 넣을까요?${preparation}`)) return;
     button.disabled = true;
     try {
       await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/episodes/${story.latestEpisodeNo}/continue`, {
@@ -266,12 +278,11 @@
 
   function nextEpisodeBlockReason(story) {
     if (!state.enabled) return "자동 연재 엔진 전체 설정이 멈춰 있습니다.";
-    if (!story.latestEpisodeNo || story.latestEpisodeNo < 3) return "3화까지 준비된 뒤 운영자가 다음 화를 요청할 수 있습니다.";
-    if (!["auto", "manual"].includes(story.continuationMode)) return "작품의 다음 화 제작이 멈춰 있습니다.";
-    if (!story.schedule || story.schedule.status !== "active") return "연결된 자동 연재 일정이 멈춰 있습니다.";
     if (story.queue) return story.queue.status === "running" ? "현재 다음 화를 제작하고 있습니다." : `제작 대기 ${story.queue.queuePosition}번입니다.`;
     if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 공개를 기다리는 회차가 있습니다.";
-    return "";
+    const reasons = [];
+    if (!story.latestEpisodeNo) reasons.push("먼저 공개된 회차가 한 편 이상 있어야 합니다.");
+    return reasons.join(" ");
   }
 
   function selectField(text, options, selected) {
@@ -305,8 +316,9 @@
     return element;
   }
 
-  function metric(label, value) {
+  function metric(label, value, key) {
     const element = document.createElement("div");
+    element.dataset.metric = key;
     const title = document.createElement("span");
     title.textContent = label;
     const copy = document.createElement("strong");

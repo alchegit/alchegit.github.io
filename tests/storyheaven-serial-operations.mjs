@@ -42,16 +42,16 @@ const stories = [
     continuationMode: "manual",
     operatorNote: "2화의 중반 전개를 다시 확인할 것",
     viewCount: 92,
-    episodeCount: 3,
-    publishedEpisodeCount: 3,
-    latestEpisodeNo: 3,
-    latestEpisodeTitle: "돌아온 얼룩",
+    episodeCount: 2,
+    publishedEpisodeCount: 2,
+    latestEpisodeNo: 2,
+    latestEpisodeTitle: "지워지지 않는 얼룩",
     latestEpisodeAt: "2026-07-29T03:00:00.000Z",
     recommendationCount: 4,
     activeRunCount: 0,
     latestRunStatus: "published",
     readyPublicationCount: 0,
-    schedule: { id: "schedule-b", name: "미스터리 실험", status: "active", publicationMode: "test_private" },
+    schedule: null,
     createdAt: "2026-07-24T03:00:00.000Z",
     updatedAt: "2026-07-29T03:00:00.000Z",
     controlUpdatedAt: "2026-07-30T03:00:00.000Z"
@@ -91,6 +91,7 @@ try {
     const errors = [];
     const patchRequests = [];
     const canceled = [];
+    const continuationRequests = [];
     let queued = true;
     page.on("pageerror", (error) => errors.push(error.message));
     await page.addInitScript(() => {
@@ -125,6 +126,7 @@ try {
         return json({ story: { ...stories[0], ...body, controlUpdatedAt: "2026-07-31T05:00:00.000Z" } });
       }
       if (path.endsWith("/continue") && request.method() === "POST") {
+        continuationRequests.push(path);
         return json({ continuation: { status: "queued" } }, 202);
       }
       return json({ error: "not_found" }, 404);
@@ -144,13 +146,42 @@ try {
     assert.equal(layout.documentWidth, layout.viewport, `${viewport.name} horizontal overflow`);
     assert.equal(layout.title, "0번 버스의 마지막 승객", `${viewport.name} title`);
     assert.equal(layout.hasExecutableImage, false, `${viewport.name} text-only rendering`);
+    assert.equal(await page.locator(".operator-note").count(), 0, `${viewport.name} operator notes are not exposed`);
+    assert.equal(
+      await page.locator(".managed-story").nth(2).getByRole("button", { name: "다음 화 작성", includeHidden: true }).evaluate((button) => button.disabled),
+      false,
+      `${viewport.name} explicit operator request overrides paused continuation mode`
+    );
+    const legacyStory = page.locator(".managed-story").nth(1);
+    assert.equal(
+      await legacyStory.getByRole("button", { name: "다음 화 작성", includeHidden: true }).evaluate((button) => button.disabled),
+      false,
+      `${viewport.name} operator can continue a two-episode story without a schedule`
+    );
+    assert.match(await legacyStory.locator(".schedule-note").textContent(), /작품 설정부터 자동 준비/u, `${viewport.name} explains automatic bootstrap`);
     assert.match(await page.locator(".managed-story").first().locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
+    const firstManagement = page.locator(".managed-story").first().locator(".story-management");
+    assert.equal(await firstManagement.evaluate((element) => element.open), viewport.name === "desktop", `${viewport.name} management disclosure default`);
+    if (viewport.name === "mobile") {
+      await firstManagement.locator(":scope > summary").click();
+      assert.equal(await firstManagement.evaluate((element) => element.open), true, "mobile opens management controls on demand");
+      const expandedLayout = await page.evaluate(() => ({ viewport: innerWidth, documentWidth: document.documentElement.scrollWidth }));
+      assert.equal(expandedLayout.documentWidth, expandedLayout.viewport, "mobile expanded controls do not overflow");
+      await page.screenshot({ path: "test-results/storyheaven-serial-operations-mobile-expanded.png", fullPage: true });
+    }
     assert.equal(await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).count(), 1, `${viewport.name} queue cancellation control`);
 
     page.once("dialog", (dialog) => dialog.accept());
     await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).click();
     await page.waitForFunction(() => !document.querySelector(".managed-story .state-badge.waiting"));
     assert.equal(canceled.length, 1, `${viewport.name} cancels queued continuation`);
+
+    if (viewport.name === "desktop") {
+      page.once("dialog", (dialog) => dialog.accept());
+      await legacyStory.getByRole("button", { name: "다음 화 작성" }).click();
+      await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("대기열에 넣었습니다"));
+      assert.match(continuationRequests[0], /\/episodes\/2\/continue$/u, "legacy story requests episode 3 directly");
+    }
 
     await page.locator("[data-visibility-filter]").selectOption("private");
     assert.equal(await page.locator(".managed-story").count(), 1, `${viewport.name} visibility filter`);
