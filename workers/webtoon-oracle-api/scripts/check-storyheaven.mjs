@@ -181,6 +181,7 @@ for (const route of [
   "/api/storyheaven/operator/serial-engine/stories/:id",
   "/api/storyheaven/operator/serial-engine/stories/:id/plan",
   "/api/storyheaven/operator/serial-engine/stories/:id/episodes",
+  "/api/storyheaven/operator/serial-engine/queue/:id/cancel",
   "/api/storyheaven/operator/serial-engine/runs/:id",
   "/api/storyheaven/worker/serial-engine/claim",
   "/api/storyheaven/worker/serial-engine/complete",
@@ -367,6 +368,13 @@ assert.ok(continuationMigration.includes("storyheaven_episode_votes"));
 assert.ok(continuationMigration.includes("primary key (episode_id, user_id)"));
 assert.ok(continuationMigration.includes("storyheaven_serial_continuations"));
 assert.ok(continuationMigration.includes("uq_sh_serial_continue"));
+const singleQueueMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-single-work-queue.sql", import.meta.url), "utf8");
+for (const column of ["cadence_minutes", "last_cycle_completed_at", "queue_group_id", "queue_canceled_at"]) {
+  assert.ok(singleQueueMigration.includes(column), "missing single queue column: " + column);
+}
+assert.ok(serialService.includes("candidate_run.queue_group_id"));
+assert.match(serialService, /inFlight[\s\S]+reused:\s*true/u, "duplicate schedule starts must reuse active work");
+assert.ok(serialService.includes("running_job.job_status = 'running'"));
 const storyControlsMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-serial-story-controls.sql", import.meta.url), "utf8");
 assert.ok(storyControlsMigration.includes("storyheaven_serial_story_controls"));
 assert.ok(storyControlsMigration.includes("continuation_mode"));
@@ -379,6 +387,8 @@ const designDb = JSON.parse(await readFile(new URL("../../../webtoon/design-db.j
 assert.equal(designDb.storyHeavenSerialEngine20260731.qualityThresholds.canonConsistency, 95);
 assert.equal(designDb.storyHeavenSerialEngine20260731.implementationPhases[0].state, "implemented");
 assert.equal(designDb.storyHeavenSerialEngine20260731.operatorControls.continuationPolicy.initialEpisodes, 3);
+assert.equal(designDb.storyHeavenSerialEngine20260731.operatorControls.singleWorkQueue.concurrency, 1);
+assert.equal(designDb.storyHeavenSerialEngine20260731.operatorControls.cadence.default, "360분(6시간)");
 assert.equal(designDb.storyHeavenSerialStoryOperations20260731.controls.visibility.private, "공개 피드에서 숨기되 원고, 회차, 집계와 제작 기록은 보존한다.");
 const readerPage = await readFile(new URL("../../../storyheaven/story/index.html", import.meta.url), "utf8");
 assert.ok(readerPage.includes('data-episode-vote="recommend"'));

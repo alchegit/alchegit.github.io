@@ -100,7 +100,11 @@
     stateLine.className = "story-state-line";
     stateLine.append(badge(visibilityLabels[story.visibility] || story.visibility, story.visibility));
     stateLine.append(badge(continuationLabels[story.continuationMode] || story.continuationMode, story.continuationMode));
-    if (story.activeRunCount > 0) stateLine.append(badge("제작 중", "auto"));
+    if (story.queue) {
+      stateLine.append(badge(story.queue.status === "running" ? "제작 중" : `대기 ${story.queue.queuePosition}번`, story.queue.status));
+    } else if (story.activeRunCount > 0) {
+      stateLine.append(badge("제작 준비 중", "auto"));
+    }
     const title = document.createElement("h3");
     title.textContent = story.title;
     const logline = document.createElement("p");
@@ -125,7 +129,7 @@
     const schedule = document.createElement("p");
     schedule.className = "schedule-note";
     schedule.textContent = story.schedule
-      ? `${story.schedule.name || "연결된 일정"} · ${story.schedule.status === "active" ? "가동 중" : "멈춤"}`
+      ? `자동 연재 설정 · ${story.schedule.status === "active" ? "가동 중" : "멈춤"}`
       : "연결된 자동 연재 일정이 없습니다.";
     metrics.append(grid, schedule);
 
@@ -162,7 +166,9 @@
     view.className = "button secondary";
     view.href = `/storyheaven/story/?id=${encodeURIComponent(story.id)}`;
     view.textContent = "작품 확인";
-    actions.append(save, next, view);
+    actions.append(save, next);
+    if (story.queue?.cancelable) actions.append(actionButton("대기 취소", "secondary", () => cancelQueuedWork(story)));
+    actions.append(view);
 
     const markDirty = () => {
       normalizeControlPair(visibility.select, continuation.select);
@@ -203,7 +209,7 @@
         body: { visibility: visibility.value, continuationMode: continuation.value, operatorNote: note.value }
       });
       const index = state.stories.findIndex((item) => item.id === story.id);
-      if (index >= 0) state.stories[index] = payload.story;
+      if (index >= 0) state.stories[index] = { ...payload.story, queue: story.queue || null };
       renderSummary();
       renderList();
       StoryHeavenCommon.toast("작품 운영 설정을 저장했습니다.");
@@ -235,10 +241,25 @@
         method: "POST",
         body: {}
       });
-      StoryHeavenCommon.toast(`${story.latestEpisodeNo + 1}화 제작을 요청했습니다.`);
+      StoryHeavenCommon.toast(`${story.latestEpisodeNo + 1}화를 제작 대기열에 넣었습니다.`);
       await refresh();
     } catch (error) {
       button.disabled = false;
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function cancelQueuedWork(story) {
+    if (!story.queue?.cancelable) return;
+    if (!window.confirm(`${story.title}의 대기 중인 다음 화 제작을 취소할까요?`)) return;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(story.queue.id)}/cancel`, {
+        method: "POST",
+        body: {}
+      });
+      await refresh();
+      StoryHeavenCommon.toast("대기 중인 제작을 취소했습니다.");
+    } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
   }
@@ -248,6 +269,7 @@
     if (!story.latestEpisodeNo || story.latestEpisodeNo < 3) return "3화까지 준비된 뒤 운영자가 다음 화를 요청할 수 있습니다.";
     if (!["auto", "manual"].includes(story.continuationMode)) return "작품의 다음 화 제작이 멈춰 있습니다.";
     if (!story.schedule || story.schedule.status !== "active") return "연결된 자동 연재 일정이 멈춰 있습니다.";
+    if (story.queue) return story.queue.status === "running" ? "현재 다음 화를 제작하고 있습니다." : `제작 대기 ${story.queue.queuePosition}번입니다.`;
     if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 공개를 기다리는 회차가 있습니다.";
     return "";
   }

@@ -89,16 +89,17 @@ assert.equal(comedySchedule.schedule.creativeControls.humorShare, 65);
 assert.equal(validateStoryHeavenSerialSchedule({ ...comedySchedule.schedule, humorIntensity: "too-much" }).ok, false);
 
 const schedule = validateStoryHeavenSerialSchedule({
-  name: "주간 판타지 연재",
   primaryGenre: "fantasy",
   subgenres: ["modern-fantasy", "hunter-dungeon"],
   publicationMode: "test_private",
-  cadenceDays: 7,
-  maxActiveSerials: 4,
+  cadenceMinutes: 90,
   targetAge: "teen",
   conceptPolicy: "자연스러운 한국어와 선택의 결과를 중심에 두고 같은 도입과 후킹을 연속해서 반복하지 않는다."
 });
 assert.equal(schedule.ok, true);
+assert.equal(schedule.schedule.cadenceMinutes, 90);
+assert.equal(schedule.schedule.maxActiveSerials, 1);
+assert.match(schedule.schedule.name, /자동 연재/u);
 assert.deepEqual(schedule.schedule.genrePool, ["판타지", "현대판타지", "헌터·던전"]);
 assert.equal(validateStoryHeavenSerialSchedule({ ...schedule.schedule, subgenresByGenre: { fantasy: ["office-romance"] } }).ok, false);
 assert.equal(validateStoryHeavenSerialSchedule({ ...schedule.schedule, subgenresByGenre: { fantasy: [] } }).ok, false);

@@ -189,14 +189,16 @@
 }
 
 .state-badge.public,
-.state-badge.auto {
+.state-badge.auto,
+.state-badge.running {
   color: #075c46;
   background: #d9fff3;
   border-color: #087c5d;
 }
 
 .state-badge.private,
-.state-badge.manual {
+.state-badge.manual,
+.state-badge.waiting {
   color: #6b5100;
   background: #fff3c2;
   border-color: #9b7912;

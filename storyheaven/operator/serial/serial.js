@@ -5,10 +5,12 @@
   const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
   const primaryGenreLimit = 3;
   const subgenreLimit = 10;
-  const draftStorageKey = "storyheaven.operator.serial-draft.v2";
+  const draftStorageKey = "storyheaven.operator.serial-draft.v3";
+  const legacyDraftStorageKey = "storyheaven.operator.serial-draft.v2";
   let draftReady = false;
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
+  let queueRefreshTimer = 0;
 
   document.addEventListener("DOMContentLoaded", async () => {
     cache();
@@ -16,6 +18,7 @@
     renderPrimaryGenres();
     renderSubgenres();
     bind();
+    syncCadenceBounds();
     draftReady = true;
     updateDraftStatus(restoredDraftAt ? `마지막 설정 ${formatDraftTime(restoredDraftAt)} 복원` : "설정 자동 저장");
     await StoryHeavenCommon.init(onAuth);
@@ -27,6 +30,9 @@
     selectors.engineState = document.querySelector("[data-engine-state]");
     selectors.scheduleForm = document.querySelector("[data-schedule-form]");
     selectors.scheduleList = document.querySelector("[data-schedule-list]");
+    selectors.queueList = document.querySelector("[data-queue-list]");
+    selectors.queueLast = document.querySelector("[data-queue-last]");
+    selectors.queueNote = document.querySelector("[data-queue-note]");
     selectors.primaryGenres = document.querySelector("[data-primary-genres]");
     selectors.subgenres = document.querySelector("[data-subgenres]");
     selectors.subgenreCount = document.querySelector("[data-subgenre-count]");
@@ -44,6 +50,7 @@
     selectors.runSearch.addEventListener("submit", loadRunFromForm);
     document.querySelector("[data-process-due]").addEventListener("click", processDue);
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
+    selectors.scheduleForm.elements.cadenceUnit.addEventListener("change", syncCadenceBounds);
   }
 
   async function onAuth(auth) {
@@ -52,6 +59,8 @@
       await refreshSchedules();
       selectors.gate.hidden = true;
       selectors.dashboard.hidden = false;
+      clearInterval(queueRefreshTimer);
+      queueRefreshTimer = window.setInterval(() => refreshSchedules().catch(() => {}), 15_000);
     } catch (error) {
       showAccess();
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -62,6 +71,7 @@
     selectors.gate.hidden = false;
     selectors.dashboard.hidden = true;
     selectors.engineState.textContent = "관리자 확인 필요";
+    clearInterval(queueRefreshTimer);
   }
 
   function renderPrimaryGenres() {
@@ -218,6 +228,7 @@
     for (const schedule of payload.schedules || []) scheduleById.set(schedule.id, schedule);
     selectors.scheduleList.replaceChildren(...(payload.schedules || []).map(scheduleRow));
     if (!payload.schedules?.length) selectors.scheduleList.append(message("아직 시작한 자동 연재가 없습니다."));
+    renderQueue(payload.queue || {});
   }
 
   function scheduleRow(schedule) {
@@ -227,13 +238,13 @@
     const heading = document.createElement("div");
     heading.className = "schedule-heading";
     const title = document.createElement("strong");
-    title.textContent = schedule.name;
+    title.textContent = genreLabels(schedule).join(" × ") || "랜덤 장르";
     const status = badge(schedule.status === "active" ? "가동 중" : "멈춤", schedule.status);
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
     const detail = document.createElement("p");
     const humor = schedulePrimaryGenres(schedule).includes("comedy") ? ` · 웃음 ${schedule.humorLabel || humorLabel(schedule.humorIntensity)}` : "";
-    detail.textContent = `${genreLabels(schedule).join(" × ")} · ${subgenreLabels(schedule).join(" · ")}${humor} · ${schedule.cadenceDays}일마다 새 작품 기획`;
+    detail.textContent = `${subgenreLabels(schedule).join(" · ")}${humor} · 기본 3화 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 확인 ${formatDate(schedule.nextRunAt)}` : "서비스를 다시 시작할 때까지 생성과 공개가 멈춥니다.";
     copy.append(heading, detail, next);
@@ -269,28 +280,32 @@
         [...(selectedSubgenresByGenre.get(genreId) || [])]
       ]));
       const subgenres = Object.values(subgenresByGenre).flat();
-      await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules", {
+      const cadenceMinutes = readCadenceMinutes();
+      if (!cadenceMinutes) return;
+      const created = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules", {
         method: "POST",
         body: {
-          name: form.get("name"),
           primaryGenre: primaryGenres[0],
           primaryGenres,
           subgenres,
           subgenresByGenre,
           publicationMode: form.get("publicationMode"),
-          cadenceDays: Number(form.get("cadenceDays")),
-          maxActiveSerials: Number(form.get("maxActiveSerials")),
+          cadenceMinutes,
           humorIntensity: selectors.humorControl.hidden ? "light" : form.get("humorIntensity"),
           targetAge: "teen",
           status: "active",
           conceptPolicy: form.get("conceptPolicy")
         }
       });
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/schedules/${encodeURIComponent(created.schedule.id)}/run`, {
+        method: "POST",
+        body: {}
+      });
       await refreshSchedules();
       saveDraftNow();
       StoryHeavenCommon.toast(selectedPrimaryGenres.has("random") || subgenres.includes("random")
-        ? "랜덤 장르를 확정하고 자동 연재를 시작했습니다."
-        : "자동 연재를 시작했습니다.");
+        ? "랜덤 장르의 기본 3화 제작을 대기열에 넣었습니다."
+        : "기본 3화 제작을 대기열에 넣었습니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
@@ -303,14 +318,12 @@
       await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/schedules/${encodeURIComponent(schedule.id)}`, {
         method: "PATCH",
         body: {
-          name: schedule.name,
           primaryGenre: schedule.primaryGenre,
           primaryGenres: schedulePrimaryGenres(schedule),
           subgenres: schedule.subgenres,
           subgenresByGenre: scheduleSubgenresByGenre(schedule),
           publicationMode: schedule.publicationMode,
-          cadenceDays: schedule.cadenceDays,
-          maxActiveSerials: schedule.maxActiveSerials,
+          cadenceMinutes: schedule.cadenceMinutes,
           humorIntensity: schedule.humorIntensity || "light",
           targetAge: schedule.targetAge,
           status: schedule.status,
@@ -321,6 +334,58 @@
       });
       await refreshSchedules();
       StoryHeavenCommon.toast(changes.status === "paused" ? "자동 연재를 멈췄습니다." : "연재 설정을 반영했습니다.");
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  function renderQueue(queue) {
+    const items = Array.isArray(queue.items) ? queue.items : [];
+    selectors.queueList.replaceChildren(...items.map(queueRow));
+    if (!items.length) selectors.queueList.append(message("대기 중인 제작이 없습니다."));
+    selectors.queueNote.textContent = queue.quotaNote || "실제 AI 작업 수와 소요 시간을 작업별로 기록합니다.";
+    const last = queue.lastCompleted;
+    selectors.queueLast.replaceChildren();
+    const title = document.createElement("strong");
+    const detail = document.createElement("span");
+    if (last) {
+      title.textContent = `직전 연재 작업 ${formatDuration(last.elapsedSeconds)}`;
+      detail.textContent = `${last.workLabel} · AI 작업 ${last.completedJobs}회 · ${formatDate(last.completedAt)}`;
+    } else {
+      title.textContent = "직전 연재 작업 기록 없음";
+      detail.textContent = "첫 작업이 끝나면 실제 소요 시간과 AI 작업 수가 표시됩니다.";
+    }
+    selectors.queueLast.append(title, detail);
+  }
+
+  function queueRow(item) {
+    const row = document.createElement("article");
+    row.className = `queue-row ${item.status}`;
+    const position = document.createElement("span");
+    position.className = "queue-position";
+    position.textContent = item.status === "running" ? "제작 중" : `대기 ${item.queuePosition}번`;
+    const copy = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = item.workLabel || item.title;
+    const stage = document.createElement("p");
+    stage.textContent = `${stageLabel(item.stage)} · AI 작업 ${item.completedJobs}/${Math.max(item.totalJobs, item.completedJobs)}회 · ${item.status === "running" ? `경과 ${formatDuration(item.elapsedSeconds)}` : `${formatDate(item.requestedAt)} 요청`}`;
+    copy.append(title, stage);
+    row.append(position, copy);
+    if (item.cancelable) {
+      row.append(actionButton("대기 취소", "secondary queue-cancel", () => cancelQueue(item)));
+    }
+    return row;
+  }
+
+  async function cancelQueue(item) {
+    if (!window.confirm(`${item.workLabel || item.title} 작업을 대기열에서 취소할까요? 이미 완료된 기록은 지우지 않습니다.`)) return;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(item.id)}/cancel`, {
+        method: "POST",
+        body: {}
+      });
+      await refreshSchedules();
+      StoryHeavenCommon.toast("대기 작업을 취소했습니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
@@ -491,6 +556,38 @@
     return schedule.primaryGenre ? { [schedule.primaryGenre]: schedule.subgenres || [] } : {};
   }
 
+  function readCadenceMinutes() {
+    const valueInput = selectors.scheduleForm.elements.cadenceValue;
+    const value = Number(valueInput.value);
+    const unit = selectors.scheduleForm.elements.cadenceUnit.value;
+    const minutes = Math.round(value * (unit === "hours" ? 60 : 1));
+    valueInput.setCustomValidity(minutes < 15 || minutes > 10_080 ? "15분 이상 7일 이하로 설정해주세요." : "");
+    if (!valueInput.reportValidity()) return null;
+    return minutes;
+  }
+
+  function syncCadenceBounds() {
+    const input = selectors.scheduleForm.elements.cadenceValue;
+    const unit = selectors.scheduleForm.elements.cadenceUnit.value;
+    input.min = unit === "hours" ? "1" : "15";
+    input.max = unit === "hours" ? "168" : "10080";
+    input.setCustomValidity("");
+  }
+
+  function cadenceFields(minutesValue) {
+    const minutes = Number(minutesValue || 360);
+    return minutes % 60 === 0
+      ? { value: minutes / 60, unit: "hours" }
+      : { value: minutes, unit: "minutes" };
+  }
+
+  function formatCadence(minutesValue) {
+    const minutes = Number(minutesValue || 360);
+    if (minutes % 1_440 === 0) return `${minutes / 1_440}일`;
+    if (minutes % 60 === 0) return `${minutes / 60}시간`;
+    return `${minutes}분`;
+  }
+
   function queueDraftSave() {
     if (!draftReady) return;
     clearTimeout(draftSaveTimer);
@@ -504,16 +601,15 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 2,
+      version: 3,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
         genreId,
         [...(selectedSubgenresByGenre.get(genreId) || [])]
       ])),
-      name: String(form.get("name") || ""),
-      cadenceDays: String(form.get("cadenceDays") || "7"),
-      maxActiveSerials: String(form.get("maxActiveSerials") || "6"),
+      cadenceValue: String(form.get("cadenceValue") || "6"),
+      cadenceUnit: String(form.get("cadenceUnit") || "hours"),
       publicationMode: String(form.get("publicationMode") || "test_private"),
       humorIntensity: String(form.get("humorIntensity") || "balanced"),
       conceptPolicy: String(form.get("conceptPolicy") || "")
@@ -530,15 +626,19 @@
   function restoreDraft() {
     let draft;
     try {
-      draft = JSON.parse(localStorage.getItem(draftStorageKey) || "null");
+      draft = JSON.parse(localStorage.getItem(draftStorageKey) || localStorage.getItem(legacyDraftStorageKey) || "null");
     } catch {
       return;
     }
-    if (!draft || draft.version !== 2) return;
+    if (!draft || ![2, 3].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
-    setFormValue("name", draft.name);
-    setFormValue("cadenceDays", draft.cadenceDays);
-    setFormValue("maxActiveSerials", draft.maxActiveSerials);
+    if (draft.version === 2) {
+      setFormValue("cadenceValue", Math.min(168, Math.max(1, Number(draft.cadenceDays || 1) * 24)));
+      setFormValue("cadenceUnit", "hours");
+    } else {
+      setFormValue("cadenceValue", draft.cadenceValue);
+      setFormValue("cadenceUnit", draft.cadenceUnit);
+    }
     setFormValue("publicationMode", draft.publicationMode);
     setFormValue("humorIntensity", draft.humorIntensity);
     setFormValue("conceptPolicy", draft.conceptPolicy);
@@ -590,18 +690,18 @@
 
   function loadScheduleIntoForm(schedule) {
     applyGenreSelection(schedulePrimaryGenres(schedule), scheduleSubgenresByGenre(schedule));
-    setFormValue("name", `${schedule.name} 복사`);
-    setFormValue("cadenceDays", schedule.cadenceDays);
-    setFormValue("maxActiveSerials", schedule.maxActiveSerials);
+    const cadence = cadenceFields(schedule.cadenceMinutes);
+    setFormValue("cadenceValue", cadence.value);
+    setFormValue("cadenceUnit", cadence.unit);
     setFormValue("publicationMode", schedule.publicationMode);
     setFormValue("humorIntensity", schedule.humorIntensity || "balanced");
     setFormValue("conceptPolicy", schedule.conceptPolicy);
     renderPrimaryGenres();
     renderSubgenres();
+    syncCadenceBounds();
     saveDraftNow();
     selectors.scheduleForm.scrollIntoView({ behavior: "smooth", block: "start" });
-    selectors.scheduleForm.elements.name.focus({ preventScroll: true });
-    selectors.scheduleForm.elements.name.select();
+    selectors.primaryGenres.querySelector("input:checked")?.focus({ preventScroll: true });
     StoryHeavenCommon.toast("기존 설정을 새 연재 입력란에 불러왔습니다.");
   }
 
@@ -612,8 +712,9 @@
     selectDefaultGenre();
     renderPrimaryGenres();
     renderSubgenres();
+    syncCadenceBounds();
     saveDraftNow();
-    selectors.scheduleForm.elements.name.focus();
+    selectors.primaryGenres.querySelector("input:checked")?.focus();
     StoryHeavenCommon.toast("새 연재 기본값으로 돌아왔습니다.");
   }
 
@@ -637,6 +738,31 @@
 
   function humorLabel(value) {
     return ({ light: "미소 중심", balanced: "균형", "comedy-first": "웃음 우선" })[value] || "미소 중심";
+  }
+
+  function stageLabel(value) {
+    return ({
+      concept_gate: "작품 아이디어 검토",
+      build_bible: "세계관과 인물 설정",
+      build_arc: "장기 전개 설계",
+      build_episode_card: "회차 장면 구성",
+      write_draft: "원고 작성",
+      editorial_review: "편집 검수",
+      rewrite_draft: "원고 보완",
+      queued: "작업 준비"
+    })[value] || "작업 준비";
+  }
+
+  function formatDuration(secondsValue) {
+    const seconds = Number(secondsValue);
+    if (!Number.isFinite(seconds)) return "측정 중";
+    if (seconds < 60) return `${seconds}초`;
+    const minutes = Math.floor(seconds / 60);
+    const secondsRest = seconds % 60;
+    if (minutes < 60) return secondsRest ? `${minutes}분 ${secondsRest}초` : `${minutes}분`;
+    const hours = Math.floor(minutes / 60);
+    const minutesRest = minutes % 60;
+    return minutesRest ? `${hours}시간 ${minutesRest}분` : `${hours}시간`;
   }
 
   function runStatus(run) {

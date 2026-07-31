@@ -12,6 +12,8 @@ const JOB_TYPES = new Set([
 
 export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   conceptPolicy: 4_000,
+  cadenceMinutesMin: 15,
+  cadenceMinutesMax: 10_080,
   episodesPerArcMin: 6,
   episodesPerArcMax: 30,
   scenesMin: 3,
@@ -84,13 +86,17 @@ export function validateStoryHeavenSerialStoryControl(input = {}) {
 
 export function validateStoryHeavenSerialSchedule(input = {}) {
   const errors = [];
-  const name = text(input.name, 80);
   const genre = validateSerialGenreSelection(
     input.primaryGenres || input.primaryGenre,
     input.subgenresByGenre || input.subgenres
   );
-  const cadenceDays = integer(input.cadenceDays, 1, 30, 7);
-  const maxActiveSerials = integer(input.maxActiveSerials, 1, 20, 6);
+  const legacyCadence = Number(input.cadenceDays) * 1_440;
+  const cadenceMinutes = integer(
+    input.cadenceMinutes ?? (Number.isFinite(legacyCadence) ? legacyCadence : undefined),
+    STORYHEAVEN_SERIAL_LIMITS.cadenceMinutesMin,
+    STORYHEAVEN_SERIAL_LIMITS.cadenceMinutesMax,
+    360
+  );
   const humorIntensity = String(input.humorIntensity || "light").trim();
   const humorProfile = STORYHEAVEN_HUMOR_PROFILES[humorIntensity];
   const targetAge = ["all", "teen"].includes(input.targetAge) ? input.targetAge : "teen";
@@ -98,7 +104,6 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     ? input.publicationMode
     : "test_private";
   const conceptPolicy = text(input.conceptPolicy, STORYHEAVEN_SERIAL_LIMITS.conceptPolicy);
-  if (name.length < 2) errors.push(fieldError("name", "schedule_name_too_short"));
   if (!genre.ok) errors.push(fieldError("subgenres", genre.error));
   if (!humorProfile) errors.push(fieldError("humorIntensity", "serial_humor_intensity_invalid"));
   if (conceptPolicy.length < 30) errors.push(fieldError("conceptPolicy", "concept_policy_too_short"));
@@ -106,7 +111,7 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     ok: errors.length === 0,
     errors,
     schedule: {
-      name,
+      name: genre.ok ? `${genre.primaryLabels.join(" × ")} 자동 연재` : "자동 연재",
       primaryGenre: genre.primaryGenre,
       primaryGenreLabel: genre.primaryLabel || "",
       primaryGenres: genre.primaryGenres || [],
@@ -116,8 +121,9 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
       subgenresByGenre: genre.subgenresByGenre || {},
       subgenreLabelsByGenre: genre.subgenreLabelsByGenre || {},
       genrePool: genre.ok ? [...genre.primaryLabels, ...genre.subgenreLabels] : [],
-      cadenceDays,
-      maxActiveSerials,
+      cadenceMinutes,
+      cadenceDays: Math.max(1, Math.ceil(cadenceMinutes / 1_440)),
+      maxActiveSerials: 1,
       targetAge,
       publicationMode,
       conceptPolicy,

@@ -119,6 +119,18 @@
   grid-column: 1 / -1;
 }
 
+.interval-field small {
+  color: #9fa8b9;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.interval-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  gap: 10px;
+}
+
 .genre-fieldset,
 .mode-fieldset,
 .humor-fieldset {
@@ -352,9 +364,90 @@
 }
 
 .schedule-list,
+.queue-list,
 .run-state {
   display: grid;
   gap: 12px;
+}
+
+.queue-rule {
+  flex: 0 0 auto;
+  border: 1px solid #4fe0b3;
+  padding: 8px 10px;
+  color: #4fe0b3;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.queue-last {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid #475064;
+  padding: 15px 17px;
+  background: #171b25;
+}
+
+.queue-last strong {
+  color: #fff;
+}
+
+.queue-last span,
+.queue-note {
+  color: #aeb6c7;
+  font-size: 0.84rem;
+}
+
+.queue-note {
+  margin: -8px 0 0;
+}
+
+.queue-row {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  border: 2px solid #353d4e;
+  padding: 17px;
+  background: #fff;
+  color: #11131a;
+}
+
+.queue-row.running {
+  border-color: #4fe0b3;
+  box-shadow: inset 5px 0 #4fe0b3;
+}
+
+.queue-position {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border: 1px solid #646f82;
+  background: #eef1f5;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.queue-row.running .queue-position {
+  border-color: #087c5d;
+  background: #d9fff3;
+  color: #075c46;
+}
+
+.queue-row strong {
+  font-size: 1rem;
+}
+
+.queue-row p {
+  margin: 5px 0 0;
+  color: #5e687a;
+  font-size: 0.86rem;
+}
+
+.queue-cancel {
+  white-space: nowrap;
 }
 
 .schedule-row {
@@ -560,8 +653,24 @@
   .humor-options,
   .run-search,
   .score-grid,
-  .schedule-row {
+  .schedule-row,
+  .queue-row {
     grid-template-columns: 1fr;
+  }
+
+  .interval-input {
+    grid-template-columns: minmax(0, 1fr) 104px;
+  }
+
+  .queue-last {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .queue-position {
+    justify-self: start;
+    min-width: 82px;
   }
 
   .schedule-form .button,

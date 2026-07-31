@@ -788,7 +788,11 @@ app.post("/api/storyheaven/operator/rounds/:id/finalize", requireUser, requireAd
 
 app.get("/api/storyheaven/operator/serial-engine/schedules", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
   try {
-    res.json({ enabled: config.storyHeavenSerialEngineEnabled, schedules: await storyHeavenSerialService.listSchedules() });
+    const [schedules, queue] = await Promise.all([
+      storyHeavenSerialService.listSchedules(),
+      storyHeavenSerialService.getQueueState()
+    ]);
+    res.json({ enabled: config.storyHeavenSerialEngineEnabled, schedules, queue });
   } catch (error) {
     next(error);
   }
@@ -835,9 +839,15 @@ app.post("/api/storyheaven/operator/serial-engine/process", requireUser, require
 
 app.get("/api/storyheaven/operator/serial-engine/stories", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
   try {
+    const [stories, queue] = await Promise.all([
+      storyHeavenSerialService.listManagedStories(),
+      storyHeavenSerialService.getQueueState()
+    ]);
+    const queueByStory = new Map((queue.items || []).filter((item) => item.storyId).map((item) => [item.storyId, item]));
     res.json({
       enabled: config.storyHeavenSerialEngineEnabled,
-      stories: await storyHeavenSerialService.listManagedStories()
+      stories: stories.map((story) => ({ ...story, queue: queueByStory.get(story.id) || null })),
+      queue
     });
   } catch (error) {
     next(error);
@@ -892,6 +902,16 @@ app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes", require
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
     await ensureUserProfile(req.user, req);
     res.status(202).json({ run: await storyHeavenSerialService.queueEpisode(req.params.id, req.user.id, req.body || {}) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/queue/:id/cancel", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const result = await storyHeavenSerialService.cancelQueueGroup(req.params.id, req.user.id);
+    res.json(result);
   } catch (error) {
     next(error);
   }

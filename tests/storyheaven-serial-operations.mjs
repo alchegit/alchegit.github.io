@@ -22,7 +22,8 @@ const stories = [
     latestEpisodeTitle: "지워진 정류장",
     latestEpisodeAt: "2026-07-31T03:00:00.000Z",
     recommendationCount: 18,
-    activeRunCount: 0,
+    activeRunCount: 1,
+    queue: { id: "queue-next-4", status: "waiting", queuePosition: 2, cancelable: true },
     latestRunStatus: "published",
     readyPublicationCount: 0,
     schedule: { id: "schedule-a", name: "주간 판타지", status: "active", publicationMode: "auto_public" },
@@ -89,6 +90,8 @@ try {
     const page = await browser.newPage({ viewport });
     const errors = [];
     const patchRequests = [];
+    const canceled = [];
+    let queued = true;
     page.on("pageerror", (error) => errors.push(error.message));
     await page.addInitScript(() => {
       const session = { access_token: "operator-test-token", user: { id: "operator-test" } };
@@ -106,7 +109,15 @@ try {
       const json = (body, status = 200) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
       if (path === "/api/storyheaven/profile") return json({ profile: { nickname: "운영자", isAdmin: true } });
       if (path === "/api/storyheaven/operator/serial-engine/stories" && request.method() === "GET") {
-        return json({ enabled: true, stories });
+        const liveStories = stories.map((story, index) => index === 0
+          ? { ...story, queue: queued ? story.queue : null }
+          : story);
+        return json({ enabled: true, stories: liveStories, queue: { concurrency: 1, items: queued ? [stories[0].queue] : [] } });
+      }
+      if (path === "/api/storyheaven/operator/serial-engine/queue/queue-next-4/cancel" && request.method() === "POST") {
+        canceled.push(path);
+        queued = false;
+        return json({ canceled: true, queueGroupId: "queue-next-4" });
       }
       if (path.endsWith("/control") && request.method() === "PATCH") {
         const body = request.postDataJSON();
@@ -133,6 +144,13 @@ try {
     assert.equal(layout.documentWidth, layout.viewport, `${viewport.name} horizontal overflow`);
     assert.equal(layout.title, "0번 버스의 마지막 승객", `${viewport.name} title`);
     assert.equal(layout.hasExecutableImage, false, `${viewport.name} text-only rendering`);
+    assert.match(await page.locator(".managed-story").first().locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
+    assert.equal(await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).count(), 1, `${viewport.name} queue cancellation control`);
+
+    page.once("dialog", (dialog) => dialog.accept());
+    await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).click();
+    await page.waitForFunction(() => !document.querySelector(".managed-story .state-badge.waiting"));
+    assert.equal(canceled.length, 1, `${viewport.name} cancels queued continuation`);
 
     await page.locator("[data-visibility-filter]").selectOption("private");
     assert.equal(await page.locator(".managed-story").count(), 1, `${viewport.name} visibility filter`);
