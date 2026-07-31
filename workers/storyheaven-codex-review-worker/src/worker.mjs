@@ -290,7 +290,10 @@ function classifyCodexError(stderr, code) {
   const text = String(stderr || "").toLowerCase();
   if (text.includes("login") || text.includes("authentication")) return "codex_auth_required";
   if (text.includes("rate limit") || text.includes("usage limit")) return "codex_rate_limited";
-  if (text.includes("model") && text.includes("not")) return "codex_model_unavailable";
+  if (text.includes("invalid_json_schema")) return "codex_output_schema_invalid";
+  if (text.includes("model") && (text.includes("not found") || text.includes("unavailable") || text.includes("does not exist"))) {
+    return "codex_model_unavailable";
+  }
   return `codex_exit_${Number(code) || 1}`;
 }
 

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import {
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
@@ -17,6 +18,13 @@ import {
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
 import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode } from "../src/serial-service.mjs";
+
+const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
+assert.match(
+  serialServiceSource,
+  /insert \(\s*story_id, bible_version, bible_status, concept_json, narrative_blueprint_json\s*\)/u,
+  "new story bibles must seed the required narrative blueprint"
+);
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 3,

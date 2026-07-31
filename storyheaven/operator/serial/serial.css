@@ -411,6 +411,29 @@
   white-space: nowrap;
 }
 
+.queue-live-context {
+  margin: 3px 0 0;
+  color: #d6dbe5;
+  font-size: 0.78rem;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.queue-live-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid #3b4352;
+  padding-top: 12px;
+}
+
+.queue-retry {
+  color: #0b1713;
+  background: #4fe0b3;
+  border-color: #4fe0b3;
+}
+
 .queue-live-meter,
 .schedule-progress-meter {
   position: relative;
@@ -792,6 +815,38 @@
   padding-top: 12px;
 }
 
+.schedule-failure {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+  border-top: 1px solid #ff6b76;
+  padding-top: 12px;
+}
+
+.schedule-failure > div {
+  display: grid;
+  gap: 3px;
+}
+
+.schedule-failure strong {
+  color: #d74f5e;
+  font-size: 0.84rem;
+}
+
+.schedule-failure small {
+  color: #697286;
+  font-size: 0.74rem;
+  font-weight: 750;
+}
+
+.schedule-row.is-focused {
+  outline: 4px solid #ffd45c;
+  outline-offset: 4px;
+}
+
 .schedule-progress strong {
   color: #4fe0b3;
   font-size: 0.84rem;
@@ -910,6 +965,17 @@
   .queue-live,
   .schedule-progress {
     grid-template-columns: 1fr;
+  }
+
+  .queue-live-actions,
+  .schedule-failure {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .queue-live-actions .button,
+  .schedule-failure .button {
+    width: 100%;
   }
 
   .queue-live > div:first-child strong {

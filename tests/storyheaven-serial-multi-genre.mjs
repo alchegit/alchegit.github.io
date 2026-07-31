@@ -15,6 +15,7 @@ try {
     const saved = [];
     const runs = [];
     const canceled = [];
+    const retries = [];
     const runningSchedule = {
       id: "schedule-running",
       status: "active",
@@ -30,6 +31,7 @@ try {
       conceptPolicy: "test"
     };
     let waitingQueueVisible = true;
+    let failureMode = false;
     page.on("pageerror", (error) => errors.push(error.message));
     await page.addInitScript(() => {
       const session = { access_token: "operator-test-token", user: { id: "operator-test" } };
@@ -50,10 +52,11 @@ try {
         return json({ enabled: true, schedules: [runningSchedule], queue: {
           concurrency: 1,
           updatedAt: "2026-07-31T05:01:00.000Z",
-          items: [
-            { id: "queue-running", status: "running", queuePosition: 0, cancelable: false, workLabel: "새 작품 · 기본 3화", stage: "write_draft", episodeNo: 2, completedJobs: 8, totalJobs: 9, elapsedSeconds: 246, requestedAt: "2026-07-31T04:56:00.000Z" },
+          items: failureMode ? [] : [
+            { id: "queue-running", scheduleId: "schedule-running", status: "running", queuePosition: 0, cancelable: false, workLabel: "새 작품 · 기본 3화", stage: "write_draft", episodeNo: 2, completedJobs: 8, totalJobs: 9, elapsedSeconds: 246, requestedAt: "2026-07-31T04:56:00.000Z" },
             ...(waitingQueueVisible ? [{ id: "queue-a", status: "waiting", queuePosition: 1, cancelable: true, workLabel: "미스터리 · 4화", stage: "write_draft", episodeNo: 4, completedJobs: 1, totalJobs: 3, requestedAt: "2026-07-31T05:00:00.000Z" }] : [])
           ],
+          lastFailed: failureMode ? { id: "failed-run", scheduleId: "schedule-running", status: "error", workLabel: "새 작품 · 기본 3화", stage: "concept_gate", failureCode: "codex_model_unavailable", completedAt: "2026-07-31T04:51:00.000Z", completedJobs: 0, totalJobs: 1 } : null,
           lastCompleted: { workLabel: "판타지 · 기본 3화", elapsedSeconds: 754, completedJobs: 14, completedAt: "2026-07-31T04:00:00.000Z" },
           quotaNote: "실제 AI 작업 수와 소요 시간을 기록합니다."
         } });
@@ -70,6 +73,11 @@ try {
       if (path === "/api/storyheaven/operator/serial-engine/schedules/hybrid-schedule/run" && request.method() === "POST") {
         runs.push(path);
         return json({ run: { id: "new-run", queueGroupId: "new-run" } }, 202);
+      }
+      if (path === "/api/storyheaven/operator/serial-engine/schedules/schedule-running/run" && request.method() === "POST") {
+        retries.push(path);
+        failureMode = false;
+        return json({ run: { id: "retry-run", queueGroupId: "retry-run" } }, 202);
       }
       return json({ error: "not_found" }, 404);
     });
@@ -139,6 +147,18 @@ try {
     assert.deepEqual(errors, [], `${viewport.name} page errors`);
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     await page.screenshot({ path: `test-results/storyheaven-serial-multi-genre-${viewport.name}.png`, fullPage: true });
+
+    failureMode = true;
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    assert.match(await page.locator("[data-queue-live]").textContent(), /판타지.*자동 연재 설정은 가동 중/u, `${viewport.name} failed work is tied to its schedule`);
+    assert.equal(await page.locator(".schedule-row .schedule-failure").count(), 1, `${viewport.name} schedule exposes its failed attempt`);
+    await page.locator("[data-queue-live]").getByRole("button", { name: "연결된 설정 보기" }).click();
+    await page.waitForFunction(() => document.querySelector(".schedule-row")?.classList.contains("is-focused"));
+    await page.screenshot({ path: `test-results/storyheaven-serial-retry-${viewport.name}.png`, fullPage: true });
+    await page.locator("[data-queue-live]").getByRole("button", { name: "같은 설정으로 다시 제작" }).click();
+    await page.waitForFunction(() => document.querySelector("[data-queue-live]")?.textContent.includes("현재 제작 중"));
+    assert.equal(retries.length, 1, `${viewport.name} failed schedule is retried directly`);
     await page.close();
   }
   console.log("StoryHeaven multi-genre UI checks passed");

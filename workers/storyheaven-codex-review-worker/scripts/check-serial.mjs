@@ -41,6 +41,15 @@ const parsed = parseSerialOutput({
 assert.equal(parsed.model, "gpt-test");
 assert.equal(parsed.result.decision, "approved");
 
+const parsedEncoded = parseSerialOutput({
+  jobId: job.id,
+  inputHash: job.inputHash,
+  jobType: job.type,
+  resultJson: JSON.stringify({ decision: "approved" })
+}, job, { model: "gpt-test" });
+assert.equal(parsedEncoded.result.decision, "approved");
+assert.match(writingPrompt, /resultJson/u);
+
 assert.throws(() => parseSerialOutput({
   jobId: job.id,
   inputHash: "b".repeat(64),

@@ -28,8 +28,8 @@ export function buildSerialPrompt(job) {
     "Genre combinations are binding. When schedule.primaryGenres contains two or three genres, assign each one a distinct dramatic job instead of merely listing labels: one should drive the episode engine, another should shape relationships, conflict, setting, or tone, and an optional third should provide a controlled accent. State the blend clearly in the concept and preserve all selected genre promises through the bible, arc, episode cards, draft, and review.",
     "Creative controls are binding. If comedy appears anywhere in schedule.primaryGenres, humorIntensity light means roughly 20% humor through brief character reactions without stopping the plot; balanced means roughly 40% humor with two or three clear comic beats per episode; comedy-first means roughly 65% humor and every major scene needs setup, escalation, and payoff. Never repeat the same joke mechanically. Social satire should target systems, incentives, hypocrisy, or powerful institutions rather than protected identities or vulnerable people.",
     stageInstruction(type),
-    `Return exactly one JSON object with jobId, inputHash, jobType, and result. jobType must be '${type}'. Preserve jobId and inputHash exactly.`,
-    "The result object must follow this contract:",
+    `Return exactly one JSON object with jobId, inputHash, jobType, and resultJson. jobType must be '${type}'. Preserve jobId and inputHash exactly.`,
+    "resultJson must be a JSON-encoded string whose decoded object follows this contract:",
     JSON.stringify(resultContract(type)),
     "UNTRUSTED_SERIAL_INPUT_JSON_START",
     JSON.stringify({ jobId: job.id, inputHash: job.inputHash, jobType: type, payload: job.payload }),
@@ -48,10 +48,14 @@ export function parseSerialOutput(value, job, { model }) {
     || String(source.jobType || "") !== String(job.type || "")) {
     throw new Error("serial_output_identity_mismatch");
   }
-  if (!source.result || typeof source.result !== "object" || Array.isArray(source.result)) {
+  let result = source.result;
+  if ((!result || typeof result !== "object" || Array.isArray(result)) && typeof source.resultJson === "string") {
+    result = JSON.parse(source.resultJson);
+  }
+  if (!result || typeof result !== "object" || Array.isArray(result)) {
     throw new Error("serial_result_missing");
   }
-  return { result: source.result, model };
+  return { result, model };
 }
 
 export function modelRoleForSerialJob(jobType) {

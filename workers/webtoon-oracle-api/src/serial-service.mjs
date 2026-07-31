@@ -1821,9 +1821,16 @@ export function createStoryHeavenSerialService({
        using (select :story_id story_id from dual) source on (target.story_id = source.story_id)
        when matched then update set target.concept_json = :concept_json,
          target.bible_status = 'draft', target.updated_at = systimestamp
-       when not matched then insert (story_id, bible_version, bible_status, concept_json)
-         values (:story_id, 1, 'draft', :concept_json)`,
-      { story_id: storyId, concept_json: clobJson(concept) }
+       when not matched then insert (
+         story_id, bible_version, bible_status, concept_json, narrative_blueprint_json
+       ) values (
+         :story_id, 1, 'draft', :concept_json, :narrative_blueprint_json
+       )`,
+      {
+        story_id: storyId,
+        concept_json: clobJson(concept),
+        narrative_blueprint_json: clobJson({})
+      }
     );
   }
 

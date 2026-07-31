@@ -2,6 +2,7 @@
   const selectors = {};
   const scheduleById = new Map();
   const queueByScheduleId = new Map();
+  const failedByScheduleId = new Map();
   const selectedPrimaryGenres = new Set(["fantasy"]);
   const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
   const primaryGenreLimit = 3;
@@ -230,12 +231,14 @@
     selectors.engineState.textContent = payload.enabled ? "자동 연재 연결됨" : "자동 연재 멈춤";
     const queue = payload.queue || {};
     queueByScheduleId.clear();
+    failedByScheduleId.clear();
     for (const item of queue.items || []) {
       if (item.scheduleId) queueByScheduleId.set(item.scheduleId, item);
     }
     if (!queueByScheduleId.size && payload.schedules?.length === 1 && queue.items?.length) {
       queueByScheduleId.set(payload.schedules[0].id, queue.items.find((item) => item.status === "running") || queue.items[0]);
     }
+    if (queue.lastFailed?.scheduleId) failedByScheduleId.set(queue.lastFailed.scheduleId, queue.lastFailed);
     scheduleById.clear();
     for (const schedule of payload.schedules || []) scheduleById.set(schedule.id, schedule);
     selectors.scheduleList.replaceChildren(...(payload.schedules || []).map(scheduleRow));
@@ -246,11 +249,12 @@
   function scheduleRow(schedule) {
     const row = document.createElement("article");
     row.className = "schedule-row";
+    row.dataset.scheduleId = schedule.id;
     const copy = document.createElement("div");
     const heading = document.createElement("div");
     heading.className = "schedule-heading";
     const title = document.createElement("strong");
-    title.textContent = genreLabels(schedule).join(" × ") || "랜덤 장르";
+    title.textContent = scheduleLabel(schedule);
     const status = badge(schedule.status === "active" ? "가동 중" : "멈춤", schedule.status);
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
@@ -274,6 +278,10 @@
     row.append(copy, actions);
     const activeWork = queueByScheduleId.get(schedule.id);
     if (activeWork) row.append(renderScheduleProgress(activeWork));
+    else {
+      const failedWork = failedByScheduleId.get(schedule.id);
+      if (failedWork) row.append(renderScheduleFailure(schedule, failedWork));
+    }
     return row;
   }
 
@@ -382,6 +390,8 @@
     const copy = document.createElement("div");
     const label = document.createElement("span");
     const title = document.createElement("strong");
+    const context = document.createElement("p");
+    context.className = "queue-live-context";
     const meter = document.createElement("div");
     meter.className = "queue-live-meter";
     const fill = document.createElement("span");
@@ -389,8 +399,12 @@
     meter.append(fill);
     if (active) {
       const progress = productionProgressState(active);
+      const schedule = active.scheduleId ? scheduleById.get(active.scheduleId) : null;
       label.textContent = active.status === "running" ? "현재 제작 중" : `대기 ${active.queuePosition}번`;
       title.textContent = `${active.workLabel || active.title} · ${progress.steps[progress.currentIndex]}`;
+      context.textContent = schedule
+        ? `‘${scheduleLabel(schedule)}’ 자동 연재 설정이 실행한 제작입니다.`
+        : "작품 제작 대기열에서 처리 중입니다.";
       meter.style.setProperty("--progress", `${progress.percent}%`);
       meter.setAttribute("role", "progressbar");
       meter.setAttribute("aria-valuemin", "0");
@@ -399,8 +413,12 @@
       detail.textContent = `${progress.percent}% · ${active.status === "running" ? `경과 ${formatDuration(active.elapsedSeconds)}` : "앞선 작업 완료 후 시작"} · ${formatRefreshTime(updatedAt)}`;
     } else if (lastFailed) {
       const progress = productionProgressState(lastFailed);
+      const schedule = lastFailed.scheduleId ? scheduleById.get(lastFailed.scheduleId) : null;
       label.textContent = "최근 작업 중단";
       title.textContent = `${lastFailed.workLabel || lastFailed.title} · ${failureLabel(lastFailed.failureCode)}`;
+      context.textContent = schedule
+        ? `‘${scheduleLabel(schedule)}’ 자동 연재 설정은 가동 중이며, 이 설정이 실행한 최근 제작 시도만 중단됐습니다.`
+        : "최근 제작 시도가 중단됐습니다. 연결된 작품 관리 화면에서 다시 요청할 수 있습니다.";
       meter.style.setProperty("--progress", `${progress.percent}%`);
       meter.setAttribute("role", "progressbar");
       meter.setAttribute("aria-valuemin", "0");
@@ -410,11 +428,21 @@
     } else {
       label.textContent = "현재 작업";
       title.textContent = "제작 중이거나 대기 중인 작품이 없습니다.";
+      context.textContent = "가동 중인 자동 연재 설정은 다음 확인 시각에 새 작업을 요청합니다.";
       meter.style.setProperty("--progress", "0%");
       detail.textContent = `마지막 확인 ${formatRefreshTime(updatedAt)}`;
     }
-    copy.append(label, title);
+    copy.append(label, title, context);
     selectors.queueLive.append(copy, meter, detail);
+    if (!active && lastFailed?.scheduleId && scheduleById.has(lastFailed.scheduleId)) {
+      const actions = document.createElement("div");
+      actions.className = "queue-live-actions";
+      actions.append(
+        actionButton("같은 설정으로 다시 제작", "queue-retry", () => retrySchedule(lastFailed.scheduleId)),
+        actionButton("연결된 설정 보기", "secondary", () => focusSchedule(lastFailed.scheduleId))
+      );
+      selectors.queueLive.append(actions);
+    }
   }
 
   function markQueueRefreshFailure() {
@@ -429,9 +457,50 @@
     return ({
       codex_auth_required: "Codex 로그인이 필요합니다",
       codex_model_unavailable: "Codex 모델 연결 실패",
+      codex_output_schema_invalid: "Codex 결과 형식 오류",
       codex_rate_limited: "Codex 사용량 제한 대기",
       serial_job_attempts_exhausted: "재시도 횟수 초과"
     })[String(code || "")] || "작업 오류";
+  }
+
+  function renderScheduleFailure(schedule, failedWork) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "schedule-failure";
+    const copy = document.createElement("div");
+    const title = document.createElement("strong");
+    const detail = document.createElement("small");
+    title.textContent = `설정은 가동 중 · 최근 제작 시도는 중단`;
+    detail.textContent = `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
+    copy.append(title, detail);
+    wrapper.append(copy, actionButton("다시 제작", "queue-retry", () => retrySchedule(schedule.id)));
+    return wrapper;
+  }
+
+  async function retrySchedule(scheduleId) {
+    const schedule = scheduleById.get(scheduleId);
+    if (!schedule) return StoryHeavenCommon.toast("연결된 자동 연재 설정을 찾지 못했습니다.");
+    try {
+      const result = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/schedules/${encodeURIComponent(scheduleId)}/run`, {
+        method: "POST",
+        body: {}
+      });
+      await refreshSchedules();
+      StoryHeavenCommon.toast(result.run?.reused
+        ? "이미 진행 중인 같은 작업으로 연결했습니다."
+        : `‘${scheduleLabel(schedule)}’ 제작을 대기열에 다시 넣었습니다.`);
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  function focusSchedule(scheduleId) {
+    const row = [...selectors.scheduleList.querySelectorAll("[data-schedule-id]")]
+      .find((item) => item.dataset.scheduleId === scheduleId);
+    if (!row) return StoryHeavenCommon.toast("연결된 자동 연재 설정을 찾지 못했습니다.");
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+    row.classList.remove("is-focused");
+    window.requestAnimationFrame(() => row.classList.add("is-focused"));
+    window.setTimeout(() => row.classList.remove("is-focused"), 2_400);
   }
 
   function queueRow(item) {
@@ -741,6 +810,10 @@
 
   function genreLabels(schedule) {
     return schedulePrimaryGenres(schedule).map(genreLabel);
+  }
+
+  function scheduleLabel(schedule) {
+    return genreLabels(schedule).join(" × ") || "랜덤 장르";
   }
 
   function scheduleSubgenresByGenre(schedule) {
