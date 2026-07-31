@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/worker.mjs",
     "once": "node src/worker.mjs --once",
-    "check": "node --check src/moderation.mjs && node --check src/worker.mjs && node scripts/check.mjs"
+    "check": "node --check src/moderation.mjs && node --check src/serial.mjs && node --check src/worker.mjs && node scripts/check.mjs && node scripts/check-serial.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -13,6 +13,11 @@ import {
   shouldEscalateReview,
   toApiResult
 } from "./moderation.mjs";
+import {
+  buildSerialPrompt,
+  modelRoleForSerialJob,
+  parseSerialOutput
+} from "./serial.mjs";
 
 await loadDotEnv();
 
@@ -37,7 +42,13 @@ const config = {
   reasoningEffort: process.env.CODEX_REASONING_EFFORT || "low",
   confidenceBelow: boundedInt(process.env.CODEX_ESCALATE_CONFIDENCE_BELOW, 1, 100, 80),
   approvalScoreBelow: boundedInt(process.env.CODEX_ESCALATE_APPROVAL_SCORE_BELOW, 1, 100, 75),
-  schemaPath: path.join(packageRoot, "schemas", "review-results.schema.json")
+  schemaPath: path.join(packageRoot, "schemas", "review-results.schema.json"),
+  serialEnabled: parseBoolean(process.env.STORYHEAVEN_SERIAL_ENGINE_ENABLED, false),
+  serialWriterModel: process.env.CODEX_SERIAL_WRITER_MODEL || process.env.CODEX_SECONDARY_MODEL || "gpt-5.6-terra",
+  serialEditorModel: process.env.CODEX_SERIAL_EDITOR_MODEL || process.env.CODEX_PRIMARY_MODEL || "gpt-5.6-luna",
+  serialReasoningEffort: process.env.CODEX_SERIAL_REASONING_EFFORT || "medium",
+  serialTimeoutMs: boundedInt(process.env.STORYHEAVEN_SERIAL_CODEX_TIMEOUT_MS, 60_000, 1_200_000, 480_000),
+  serialSchemaPath: path.join(packageRoot, "schemas", "serial-result.schema.json")
 };
 config.pollMaxMs = Math.max(config.pollMs, config.pollMaxMs);
 
@@ -54,7 +65,8 @@ await mkdir(config.workspace, { recursive: true });
 
 console.log(
   `[storyheaven-review-worker] id=${config.workerId} claim=${config.batchSize} ` +
-  `request=${config.requestMaxItems}/${config.requestMaxCharacters} primary=${config.primaryModel}`
+  `request=${config.requestMaxItems}/${config.requestMaxCharacters} primary=${config.primaryModel} ` +
+  `serial=${config.serialEnabled ? `${config.serialWriterModel}/${config.serialEditorModel}` : "off"}`
 );
 
 if (args.has("--once")) {
@@ -85,7 +97,7 @@ async function tick() {
     limit: config.batchSize
   });
   const jobs = Array.isArray(lease.jobs) ? lease.jobs : [];
-  if (!jobs.length) return false;
+  if (!jobs.length) return config.serialEnabled ? tickSerial() : false;
 
   try {
     const primaryGroups = partitionModerationJobs(jobs, {
@@ -143,6 +155,40 @@ async function tick() {
   }
 }
 
+async function tickSerial() {
+  const lease = await apiRequest("/api/storyheaven/worker/serial-engine/claim", {
+    workerId: config.workerId
+  });
+  const job = lease.job;
+  if (!job) return false;
+  const role = modelRoleForSerialJob(job.type);
+  const model = role === "editor" ? config.serialEditorModel : config.serialWriterModel;
+  try {
+    const parsed = await runCodexSerial(job, model);
+    await apiRequest("/api/storyheaven/worker/serial-engine/complete", {
+      workerId: config.workerId,
+      leaseId: lease.leaseId,
+      jobId: job.id,
+      inputHash: job.inputHash,
+      result: parsed.result,
+      model: parsed.model
+    });
+    console.log(`[storyheaven-review-worker] serial ${job.type} completed run=${job.runId} model=${model}`);
+    return true;
+  } catch (error) {
+    const errorCode = safeErrorCode(error);
+    await apiRequest("/api/storyheaven/worker/serial-engine/fail", {
+      workerId: config.workerId,
+      leaseId: lease.leaseId,
+      jobId: job.id,
+      errorCode
+    }).catch((reportError) => {
+      console.error(`[storyheaven-review-worker] serial failure callback failed: ${safeErrorCode(reportError)}`);
+    });
+    throw error;
+  }
+}
+
 async function runCodexReview(jobs, model, tier) {
   const outputPath = path.join(config.stateDir, `review-${crypto.randomUUID()}.json`);
   const prompt = buildModerationPrompt(jobs, { tier });
@@ -165,6 +211,32 @@ async function runCodexReview(jobs, model, tier) {
     await runProcess(config.codexBinary, childArgs, prompt, config.codexTimeoutMs);
     const output = await readFile(outputPath, "utf8");
     return parseModerationOutput(output, jobs, { model, tier });
+  } finally {
+    await unlink(outputPath).catch(() => {});
+  }
+}
+
+async function runCodexSerial(job, model) {
+  const outputPath = path.join(config.stateDir, `serial-${crypto.randomUUID()}.json`);
+  const prompt = buildSerialPrompt(job);
+  const childArgs = [
+    "exec",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--model",
+    model,
+    "--config",
+    `model_reasoning_effort=\"${config.serialReasoningEffort}\"`,
+    "--output-schema",
+    config.serialSchemaPath,
+    "--output-last-message",
+    outputPath,
+    "-"
+  ];
+  try {
+    await runProcess(config.codexBinary, childArgs, prompt, config.serialTimeoutMs);
+    const output = await readFile(outputPath, "utf8");
+    return parseSerialOutput(output, job, { model });
   } finally {
     await unlink(outputPath).catch(() => {});
   }
@@ -239,6 +311,11 @@ function requiredEnv(name) {
 function boundedInt(value, min, max, fallback) {
   const parsed = Number.parseInt(value, 10);
   return Number.isInteger(parsed) ? Math.min(max, Math.max(min, parsed)) : fallback;
+}
+
+function parseBoolean(value, fallback) {
+  if (value === undefined || value === null || value === "") return fallback;
+  return new Set(["1", "true", "yes", "on"]).has(String(value).trim().toLowerCase());
 }
 
 async function loadDotEnv() {

@@ -69,6 +69,24 @@
       element.hidden = !signedIn;
       element.textContent = state.profile?.nickname || "로그인 중";
     });
+    renderAdminNavigation();
+  }
+
+  function renderAdminNavigation() {
+    const nav = document.querySelector(".main-nav");
+    if (!nav) return;
+    const existing = nav.querySelector("[data-storyheaven-admin-nav]");
+    if (!state.profile?.isAdmin) {
+      existing?.remove();
+      return;
+    }
+    if (existing || nav.querySelector('a[href="/storyheaven/operator/serial/"]')) return;
+    const link = document.createElement("a");
+    link.href = "/storyheaven/operator/serial/";
+    link.dataset.storyheavenAdminNav = "";
+    link.textContent = "소설 연재 관리";
+    link.setAttribute("aria-label", "관리자 전용 소설 연재 관리");
+    nav.append(link);
   }
 
   function notify() {
@@ -159,6 +177,16 @@
       episode_request_too_large: "한 번에 전송할 수 있는 원고 크기를 넘었습니다.",
       invalid_episode_number: "올바른 회차 번호가 아닙니다.",
       invalid_episode_reaction: "선택할 수 없는 독자 반응입니다.",
+      invalid_episode_recommendation: "추천과 비추천 중 하나를 선택해주세요.",
+      admin_episode_vote_not_allowed: "운영자 평가는 독자 추천 수에 포함되지 않습니다.",
+      comment_required: "댓글 내용을 입력해주세요.",
+      comment_too_short: "댓글을 두 글자 이상 입력해주세요.",
+      comment_too_long: "댓글은 500자까지 작성할 수 있습니다.",
+      comment_unsafe_content: "실행 코드나 위험한 명령이 포함된 문장은 등록할 수 없습니다.",
+      comment_too_many_urls: "댓글에는 웹 주소를 하나까지만 넣을 수 있습니다.",
+      comment_parent_not_found: "답글을 달 댓글을 찾을 수 없습니다.",
+      comment_reply_depth_exceeded: "답글에는 다시 답글을 달 수 없습니다.",
+      rate_limited: "요청이 너무 잦습니다. 잠시 뒤 다시 시도해주세요.",
       author_cannot_like_own_story: "자신의 이야기에는 좋아요를 누를 수 없습니다.",
       round_author_entry_exists: "이번 라운드에는 이미 다른 이야기가 후보로 등록되어 있습니다.",
       round_voting_closed: "현재 이 이야기의 주간 투표 시간이 아닙니다.",
@@ -179,6 +207,27 @@
       report_resolution_too_short: "판정 근거를 20자 이상 적어주세요.",
       appeal_resolution_too_short: "이의제기 판정 근거를 20자 이상 적어주세요.",
       admin_account_required: "관리자만 접근할 수 있습니다.",
+      serial_engine_disabled: "연재 엔진이 아직 서버에서 시작되지 않았습니다.",
+      serial_schedule_invalid: "연재 이름, 기본 장르 1~3개, 세부장르 전체 1~10개와 기획 원칙을 확인해주세요.",
+      serial_schedule_not_found: "제작 일정을 찾을 수 없습니다.",
+      serial_story_not_system_owned: "운영 예시 작품만 자동 연재 엔진에 연결할 수 있습니다.",
+      serial_plan_required: "설정집과 장기 흐름을 먼저 만들어주세요.",
+      serial_episode_already_queued: "이 회차는 이미 제작 중입니다.",
+      serial_episode_sequence_required: "이전 회차를 먼저 공개한 뒤 다음 회차를 만들어주세요.",
+      serial_arc_episode_not_planned: "현재 장기 흐름에 포함되지 않은 회차입니다.",
+      serial_continuation_episode_invalid: "3화 이후의 최신 회차에서 다음 화를 요청할 수 있습니다.",
+      serial_continuation_latest_episode_required: "가장 최근에 공개된 회차에서만 다음 화를 요청할 수 있습니다.",
+      serial_continuation_unavailable: "이 작품은 자동 연재와 연결되어 있지 않습니다.",
+      serial_recommendation_threshold_pending: "추천 11개가 모이면 다음 화를 준비합니다.",
+      serial_schedule_paused: "자동 연재가 멈춰 있어 다음 화를 요청할 수 없습니다.",
+      serial_story_visibility_invalid: "작품의 공개 상태를 다시 선택해주세요.",
+      serial_story_continuation_mode_invalid: "다음 화 제작 방식을 다시 선택해주세요.",
+      serial_private_story_auto_invalid: "비공개 작품은 자동 연재할 수 없습니다. 수동 또는 일시 정지를 선택해주세요.",
+      serial_archived_story_must_end: "보관 작품은 연재 종료 상태로 저장해주세요.",
+      serial_story_publish_requires_episode: "공개할 회차가 한 편 이상 있어야 작품을 공개할 수 있습니다.",
+      serial_story_auto_continuation_disabled: "이 작품은 추천 기반 자동 연재 대상이 아닙니다.",
+      serial_story_continuation_paused: "이 작품은 다음 화 제작이 멈춰 있습니다.",
+      serial_run_not_found: "실행 기록을 찾을 수 없습니다.",
       api_unavailable: "서버 연결 주소를 확인해주세요.",
       server_error: "서버에서 요청을 처리하지 못했습니다."
     })[error?.message] || "요청을 처리하지 못했습니다. 잠시 후 다시 시도해주세요.";

@@ -136,6 +136,7 @@ assert.equal(storyHeavenRoundSchedule("2026-07-24T10:00:00.000Z", { nextAfterCut
 const server = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
 for (const route of [
   "/api/storyheaven/feed",
+  "/api/storyheaven/discovery",
   "/api/storyheaven/nicknames/availability",
   "/api/storyheaven/me/nickname",
   "/api/storyheaven/rounds/current",
@@ -146,10 +147,12 @@ for (const route of [
   "/api/storyheaven/stories/:id/like",
   "/api/storyheaven/stories/:id/report",
   "/api/storyheaven/stories/:id/view",
+  "/api/storyheaven/stories/:id/comments",
   "/api/storyheaven/stories/:id/episodes",
   "/api/storyheaven/stories/:id/episodes/batch-draft",
   "/api/storyheaven/stories/:id/episodes/:episodeNo",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/view",
+  "/api/storyheaven/stories/:id/episodes/:episodeNo/comments",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/draft",
   "/api/storyheaven/stories/:id/episodes/:episodeNo/submit",
   "/api/storyheaven/stories/:id/reading-progress",
@@ -169,7 +172,19 @@ for (const route of [
   "/api/storyheaven/operator/votes/:id/invalidate",
   "/api/storyheaven/operator/entries/:id/disqualify",
   "/api/storyheaven/operator/stories/:id/review",
-  "/api/storyheaven/operator/rounds/:id/finalize"
+  "/api/storyheaven/operator/rounds/:id/finalize",
+  "/api/storyheaven/operator/serial-engine/schedules",
+  "/api/storyheaven/operator/serial-engine/schedules/:id/run",
+  "/api/storyheaven/operator/serial-engine/process",
+  "/api/storyheaven/operator/serial-engine/stories",
+  "/api/storyheaven/operator/serial-engine/stories/:id/control",
+  "/api/storyheaven/operator/serial-engine/stories/:id",
+  "/api/storyheaven/operator/serial-engine/stories/:id/plan",
+  "/api/storyheaven/operator/serial-engine/stories/:id/episodes",
+  "/api/storyheaven/operator/serial-engine/runs/:id",
+  "/api/storyheaven/worker/serial-engine/claim",
+  "/api/storyheaven/worker/serial-engine/complete",
+  "/api/storyheaven/worker/serial-engine/fail"
 ]) {
   assert.ok(server.includes(route), "missing route: " + route);
 }
@@ -190,7 +205,13 @@ assert.ok(server.includes('!allowReserved && current.NICKNAME_STATUS === "active
 assert.ok(server.includes('/api/webtoon/projects/:id/view'));
 assert.ok(server.includes("view_count = view_count + 1"));
 assert.ok(server.includes("const counted = !isAdminIdentity(user)"));
+assert.ok(server.includes("storyheaven_comment_user"));
+assert.ok(server.includes("detectStoryHeavenTextThreat(bodyText)"));
+assert.ok(server.includes("parent.rows[0].PARENT_COMMENT_ID"));
+assert.ok(server.includes("json_table("));
 assert.ok(server.includes("loginRequired: false"));
+assert.ok(server.includes("requireUser, requireAdminAccount, adminRateLimiter"));
+assert.ok(server.includes("requireWorker, requireJsonBody"));
 
 const migration = await readFile(new URL("../../../oracle/20260724-storyheaven-foundation.sql", import.meta.url), "utf8");
 for (const table of [
@@ -258,10 +279,114 @@ const page = await readFile(new URL("../../../storyheaven/index.html", import.me
 assert.ok(page.includes("실제 독자의 좋아요만 순위에 반영됩니다."));
 assert.ok(page.includes("Google 로그인"));
 const pageScript = await readFile(new URL("../../../storyheaven/storyheaven.js", import.meta.url), "utf8");
-assert.ok(pageScript.includes("AI 시드 스토리"));
+assert.ok(pageScript.includes("편집부 연재"));
+assert.ok(pageScript.includes("data-storyheaven-admin-nav"));
+assert.ok(pageScript.includes("소설 연재 관리"));
+const commonScript = await readFile(new URL("../../../storyheaven/common.js", import.meta.url), "utf8");
+assert.ok(commonScript.includes("data-storyheaven-admin-nav"));
+assert.ok(commonScript.includes("state.profile?.isAdmin"));
 const seedLibrary = await readFile(new URL("../../../storyheaven/seed-library.js", import.meta.url), "utf8");
-assert.ok(seedLibrary.includes("여덟 초를 싣는 막차"));
-assert.ok(seedLibrary.includes("contentOrigin: \"ai_seed\""));
+assert.ok(seedLibrary.includes("8초를 싣는 막차"));
+assert.ok(seedLibrary.includes("contentOrigin: \"admin_seed\""));
+assert.ok(seedLibrary.includes("비를 보관하는 잡화점"));
+assert.ok(seedLibrary.includes("첫 투표에는 여섯 표가 나왔다"));
+const editorialEpisodes = await readFile(new URL("../../../storyheaven/editorial-episodes.js", import.meta.url), "utf8");
+for (const marker of ["내일 죽을 사람의 어제", "비 오는 날의 가족사진", "민원인은 이미 사망했습니다", "남은 시간 04:00", "누가 인간인가", "한도윤은 오늘도 출근했다"]) {
+  assert.ok(editorialEpisodes.includes(marker), "missing editorial continuation: " + marker);
+}
+assert.ok(editorialEpisodes.includes("narrativeStyle"));
+const editorialEpisodeMigration = await readFile(new URL("../../../oracle/20260730-storyheaven-editorial-episodes.sql", import.meta.url), "utf8");
+assert.ok(editorialEpisodeMigration.includes("view_count"));
+assert.ok(editorialEpisodeMigration.includes("seed-last-platform-episode-2"));
+assert.ok(editorialEpisodeMigration.includes("seed-wash-away-episode-2"));
+assert.ok(editorialEpisodeMigration.includes("반납되지 않은 8초"));
+const serialEngineReport = await readFile(new URL("../../../storyheaven/serial-engine-report.md", import.meta.url), "utf8");
+assert.ok(serialEngineReport.includes("독립 편집 검수"));
+assert.ok(serialEngineReport.includes("문제가 있는 장면만 최대 2회"));
+const serialEngineMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-serial-engine.sql", import.meta.url), "utf8");
+for (const table of [
+  "storyheaven_serial_schedules",
+  "storyheaven_serial_bibles",
+  "storyheaven_serial_arcs",
+  "storyheaven_episode_cards",
+  "storyheaven_canon_facts",
+  "storyheaven_reveal_ledger",
+  "storyheaven_serial_runs",
+  "storyheaven_serial_jobs",
+  "storyheaven_serial_drafts",
+  "storyheaven_editorial_reviews",
+  "storyheaven_publication_queue",
+  "storyheaven_quality_metrics"
+]) {
+  assert.ok(serialEngineMigration.includes(table), "missing serial-engine table: " + table);
+}
+const serialOperatorPage = await readFile(new URL("../../../storyheaven/operator/serial/index.html", import.meta.url), "utf8");
+assert.ok(serialOperatorPage.includes('name="robots" content="noindex,nofollow"'));
+assert.ok(serialOperatorPage.includes("data-access-gate"));
+assert.ok(serialOperatorPage.includes("장르를 조합하면"));
+assert.ok(serialOperatorPage.includes("소설 연재 관리"));
+assert.ok(serialOperatorPage.includes("기본 장르를 최대 세 개까지 조합"));
+assert.ok(serialOperatorPage.includes("로맨스 SF, 코믹 판타지"));
+assert.ok(serialOperatorPage.includes('value="test_private"'));
+assert.ok(serialOperatorPage.includes('value="auto_public"'));
+const serialWorksPage = await readFile(new URL("../../../storyheaven/operator/serial/stories/index.html", import.meta.url), "utf8");
+assert.ok(serialWorksPage.includes('name="robots" content="noindex,nofollow"'));
+assert.ok(serialWorksPage.includes("data-managed-list"));
+assert.ok(serialWorksPage.includes("연재 작품 관리"));
+const serialWorksScript = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.js", import.meta.url), "utf8");
+assert.ok(serialWorksScript.includes("operatorNote"));
+assert.ok(serialWorksScript.includes("다음 화 작성"));
+assert.ok(serialWorksScript.includes("textContent"));
+const serialService = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
+assert.ok(serialService.includes('throw failure("serial_episode_sequence_required"'));
+assert.ok(serialService.includes("episode.episode_status = 'published'"));
+assert.ok(serialService.includes("STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount"));
+assert.ok(serialService.includes('triggerType = "reader_threshold"'));
+assert.ok(serialService.includes("storyheaven_serial_continuations"));
+assert.ok(serialService.includes('new Set(["blocked", "error"])'));
+assert.ok(serialService.includes('!reusableRun && currentStatus !== "fulfilled"'));
+assert.ok(serialService.includes("recentTechniquePlans"));
+assert.ok(serialService.includes("schedule.publication_mode = 'auto_public'"));
+assert.ok(serialService.includes("pipeline.ACTIVE_COUNT || 0) > 0"));
+assert.ok(serialService.includes("storyheaven_serial_story_controls"));
+assert.ok(serialService.includes("serial_story_auto_continuation_disabled"));
+assert.ok(serialService.includes("control.CONTINUATION_MODE !== \"auto\""));
+assert.ok(serialService.includes("primary_genres_json"));
+assert.ok(serialService.includes("subgenres_by_genre_json"));
+const serialNarrativeMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-serial-narrative-dna.sql", import.meta.url), "utf8");
+for (const column of ["primary_genre", "subgenres_json", "publication_mode", "narrative_blueprint_json", "narrative_plan_json", "technique_plan_json", "score_evidence_json", "audience_lenses_json"]) {
+  assert.ok(serialNarrativeMigration.includes(column), "missing serial narrative column: " + column);
+}
+assert.ok(serialNarrativeMigration.includes("test_private"));
+assert.ok(serialNarrativeMigration.includes("auto_public"));
+const multiPrimaryGenreMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-multi-primary-genres.sql", import.meta.url), "utf8");
+assert.ok(multiPrimaryGenreMigration.includes("primary_genres_json"));
+assert.ok(multiPrimaryGenreMigration.includes("subgenres_by_genre_json"));
+const continuationMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-episode-continuation.sql", import.meta.url), "utf8");
+assert.ok(continuationMigration.includes("storyheaven_episode_votes"));
+assert.ok(continuationMigration.includes("primary key (episode_id, user_id)"));
+assert.ok(continuationMigration.includes("storyheaven_serial_continuations"));
+assert.ok(continuationMigration.includes("uq_sh_serial_continue"));
+const storyControlsMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-serial-story-controls.sql", import.meta.url), "utf8");
+assert.ok(storyControlsMigration.includes("storyheaven_serial_story_controls"));
+assert.ok(storyControlsMigration.includes("continuation_mode"));
+assert.ok(storyControlsMigration.includes("operator_note"));
+const discoveryCommentsMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-discovery-comments.sql", import.meta.url), "utf8");
+assert.ok(discoveryCommentsMigration.includes("storyheaven_comments"));
+assert.ok(discoveryCommentsMigration.includes("parent_comment_id"));
+assert.ok(discoveryCommentsMigration.includes("varchar2(500 char)"));
+const designDb = JSON.parse(await readFile(new URL("../../../webtoon/design-db.json", import.meta.url), "utf8"));
+assert.equal(designDb.storyHeavenSerialEngine20260731.qualityThresholds.canonConsistency, 95);
+assert.equal(designDb.storyHeavenSerialEngine20260731.implementationPhases[0].state, "implemented");
+assert.equal(designDb.storyHeavenSerialEngine20260731.operatorControls.continuationPolicy.initialEpisodes, 3);
+assert.equal(designDb.storyHeavenSerialStoryOperations20260731.controls.visibility.private, "공개 피드에서 숨기되 원고, 회차, 집계와 제작 기록은 보존한다.");
+const readerPage = await readFile(new URL("../../../storyheaven/story/index.html", import.meta.url), "utf8");
+assert.ok(readerPage.includes('data-episode-vote="recommend"'));
+assert.ok(readerPage.includes('data-episode-vote="not_recommend"'));
+assert.ok(readerPage.includes("data-request-next-episode"));
+assert.ok(readerPage.includes('data-comment-form="story"'));
+assert.ok(readerPage.includes('data-comment-form="episode"'));
+assert.ok(readerPage.includes("data-reader-inline-next"));
 const writePage = await readFile(new URL("../../../storyheaven/write/index.html", import.meta.url), "utf8");
 assert.ok(writePage.includes("data-submission-guide"));
 assert.ok(writePage.includes("그림·첨부파일·HTML은 불가능"));

@@ -23,7 +23,9 @@ The application listens on `127.0.0.1` by default so the public entry point rema
 
 ## Setup
 
-1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql`. StoryHeaven additionally requires the `20260724-storyheaven-*.sql` migrations in their dated order, followed by `20260728-storyheaven-multiple-genres.sql`, `20260728-storyheaven-automated-moderation.sql`, and `20260729-storyheaven-codex-review-worker.sql`, before deploying the matching API.
+1. For a new database, run `oracle/webtoon-platform-oracle.sql` as the Oracle application user. For an existing database, apply the dated migrations in order. The visual draft release requires `20260720-webtoon-panel-version-audit.sql` followed by `20260721-webtoon-visual-draft-workflow.sql`. StoryHeaven additionally requires the `20260724-storyheaven-*.sql` migrations in their dated order, followed by `20260728-storyheaven-multiple-genres.sql`, `20260728-storyheaven-automated-moderation.sql`, `20260729-storyheaven-codex-review-worker.sql`, the two `20260730-storyheaven-editorial-*.sql` files, and the `20260731-storyheaven-*.sql` migrations in operational order. Apply `20260731-storyheaven-multi-primary-genres.sql` before deploying an API that accepts combined primary genres. Regenerate the editorial episode migration with `node scripts/generate-editorial-episodes-sql.mjs` whenever the curated manuscripts change, then run `node scripts/check-editorial-korean.mjs` before syncing it.
+
+   When `sqlplus` is unavailable on the API host, dated PL/SQL migrations can be applied with the same Oracle environment used by the service: `npm run migrate -- /absolute/path/to/migration.sql`. The runner never prints connection secrets and requires SQL*Plus `/` block terminators.
 2. Copy `.env.example` to `.env` on `EENTA_REPO3`.
 3. Fill in Oracle connection values, Supabase Auth values, the exact administrator Google email, and long random server secrets.
 4. Install dependencies and start:
@@ -81,6 +83,15 @@ npm start
 - `POST /api/storyheaven/operator/entries/:id/disqualify`
 - `POST /api/storyheaven/operator/rounds/:id/finalize`
 - `POST /api/storyheaven/operator/stories/:id/review`
+- `GET /api/storyheaven/operator/serial-engine/schedules`
+- `POST /api/storyheaven/operator/serial-engine/schedules`
+- `PATCH /api/storyheaven/operator/serial-engine/schedules/:id`
+- `POST /api/storyheaven/operator/serial-engine/schedules/:id/run`
+- `POST /api/storyheaven/operator/serial-engine/process`
+- `GET /api/storyheaven/operator/serial-engine/stories/:id`
+- `POST /api/storyheaven/operator/serial-engine/stories/:id/plan`
+- `POST /api/storyheaven/operator/serial-engine/stories/:id/episodes`
+- `GET /api/storyheaven/operator/serial-engine/runs/:id`
 
 Browser endpoints require a verified Supabase access token created by Google login. Administrator endpoints additionally require the exact `ADMIN_GOOGLE_EMAIL` identity. Worker endpoints require the server-only `X-Webtoon-Worker-Token`.
 
@@ -92,7 +103,7 @@ Keep `ADMIN_ONLY_CREATION=true` during private testing. In this mode, project wr
 
 Raw IP addresses are not stored. The API records an HMAC-derived connection fingerprint, a coarse device/browser category, and selected security events for 30 days by default. Disclose this processing in the public privacy notice and adjust the retention period to the minimum needed for operation.
 
-StoryHeaven reader likes and editorial endorsements are separate records. A like is unique per story and authenticated account; an editorial endorsement never changes the public reader-like total or weekly ranking. AI seed stories use `content_origin=ai_seed`, remain ineligible for the human weekly competition, and must keep their visible disclosure.
+StoryHeaven reader likes and editorial endorsements are separate records. A like is unique per story and authenticated account; an editorial endorsement never changes the public reader-like total or weekly ranking. Editorial sample serials use `content_origin=admin_seed`, remain ineligible for the reader weekly competition, and keep production provenance in private operational records rather than public discovery labels.
 
 Human StoryHeaven drafts remain private until deterministic preflight and a configured real AI moderation provider approve every immutable revision in the submission batch. One batch may contain 1-10 sequential episodes; omitted episode titles become `N화`. The story and every episode in an initial batch are published atomically, never one at a time. Submission requires an active public nickname, display/originality/adult confirmations, and the server-side story limits. The optional training consent is stored separately and defaults to off. Authors cannot like their own published stories.
 
@@ -103,8 +114,13 @@ The external worker contract is protected by `WEBTOON_WORKER_TOKEN`:
 - `POST /api/storyheaven/worker/reviews/claim`
 - `POST /api/storyheaven/worker/reviews/complete`
 - `POST /api/storyheaven/worker/reviews/fail`
+- `POST /api/storyheaven/worker/serial-engine/claim`
+- `POST /api/storyheaven/worker/serial-engine/complete`
+- `POST /api/storyheaven/worker/serial-engine/fail`
 
 Worker callbacks are accepted only when worker ID, lease ID, review ID, and immutable input hash all match. Apply `oracle/20260729-storyheaven-codex-review-worker.sql` before enabling this mode.
+
+The private serial engine keeps concept, story bible, narrative DNA, arc, episode card, draft, blind editorial review, targeted rewrite, canon commit, and publication as separate durable stages. An operator selects one to three primary genres and at least one compatible subgenre for each, with ten subgenres total across the blend; the API rejects a fourth primary genre or an eleventh subgenre instead of truncating it. Combined genres receive explicit dramatic jobs so examples such as romantic SF or comic fantasy behave as one causal premise instead of disconnected tags. Primary `random` remains exclusive, while subgenre `random` is exclusive inside its own primary genre and resolves once before persistence. Schedules containing comedy also persist a `light`, `balanced`, or `comedy-first` creative control inside `concept_policy_json`, so humor intent reaches the story bible without another schema column. Only the Oracle API can admit a draft into the publication queue or publish it; no human per-episode approval is required. It rejects out-of-order episodes, malformed scene ranges, unresolved safety failures, weak score evidence, and Korean time or quantity expressions such as `열한 해` where `11년` is the intended fast-reading form. Canon and reveal updates are committed only for a quality-passed draft, and a story publishes strictly one episode after its latest published episode. Both publication modes build the first three episodes. Starting with episode four, only the latest published episode can request one successor, either when its mutually exclusive reader recommendation count reaches 11 or when the operator uses the dedicated continuation action. The unique continuation record prevents the automatic and operator paths from queuing the same episode twice. Apply `oracle/20260731-storyheaven-episode-continuation.sql` before enabling the serial engine.
 
 Weekly candidate votes are stored separately from all-time story likes. KST schedules are server-generated, one author can enter one story per round, and tied first-place stories create a 24-hour runoff instead of an arbitrary winner. Vote-risk fingerprints are HMAC-derived, never contain raw IP addresses, expire after the configured retention period, and are not an automatic penalty signal.
 

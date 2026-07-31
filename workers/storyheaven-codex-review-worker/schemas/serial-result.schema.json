@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["jobId", "inputHash", "jobType", "result"],
+  "properties": {
+    "jobId": { "type": "string", "minLength": 1, "maxLength": 36 },
+    "inputHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "jobType": {
+      "type": "string",
+      "enum": ["concept_gate", "build_bible", "build_arc", "build_episode_card", "write_draft", "editorial_review", "rewrite_draft"]
+    },
+    "result": { "type": "object" }
+  }
+}

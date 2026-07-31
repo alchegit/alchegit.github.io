@@ -8,11 +8,13 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
     <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
     <title>연재 읽기 | StoryHeaven</title>
-    <link rel="stylesheet" href="../workspace.css?v=20260724-serial1">
+    <link rel="stylesheet" href="../workspace.css?v=20260731-smartreader1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../common.js?v=20260728-auth2"></script>
-    <script defer src="../seed-library.js?v=20260727-views1"></script>
-    <script defer src="./story.js?v=20260727-views1"></script>
+    <script defer src="../common.js?v=20260731-adminnav1"></script>
+    <script defer src="../seed-library.js?v=20260730-editorial1"></script>
+    <script defer src="../editorial-episodes.js?v=20260730-continuations1"></script>
+    <script defer src="../reading-history.js?v=20260731-smartreader1"></script>
+    <script defer src="./story.js?v=20260731-smartreader1"></script>
   </head>
   <body>
     <header class="site-header">
@@ -42,6 +44,21 @@
           <div class="operator-empty" data-episode-empty hidden>아직 공개된 회차가 없습니다.</div>
         </section>
 
+        <section class="comment-section work-comments" aria-labelledby="workCommentsTitle" data-comment-section="story">
+          <header class="comment-heading">
+            <div><p class="eyebrow">SERIES TALK</p><h2 id="workCommentsTitle">작품 댓글 <span data-comment-count="story">(0)</span></h2></div>
+            <p>작품 전체에 관한 이야기를 남겨주세요.</p>
+          </header>
+          <div class="comment-list" data-comment-list="story" aria-live="polite"></div>
+          <p class="comment-empty" data-comment-empty="story">아직 댓글이 없습니다. 첫 감상을 남겨보세요.</p>
+          <form class="comment-form" data-comment-form="story">
+            <div class="reply-context" data-reply-context="story" hidden><span></span><button type="button" data-reply-cancel="story">취소</button></div>
+            <label for="storyComment">작품 댓글</label>
+            <textarea id="storyComment" name="bodyText" minlength="2" maxlength="500" rows="3" placeholder="작품에 대한 생각을 2~500자로 남겨주세요." data-comment-input="story" required></textarea>
+            <div class="comment-form-footer"><small>텍스트만 등록됩니다. <b data-comment-length="story">0</b>/500</small><button class="button" type="submit" data-comment-submit="story">댓글 쓰기</button></div>
+          </form>
+        </section>
+
         <section class="novel-reader" data-reader hidden aria-labelledby="readerTitle">
           <header class="reader-heading">
             <div><p class="eyebrow" data-reader-number></p><h2 id="readerTitle" data-reader-title></h2></div>
@@ -49,15 +66,49 @@
           </header>
           <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
           <div class="novel-body" data-reader-body></div>
+          <div class="reader-inline-next" data-reader-inline-next hidden>
+            <div><small>계속 읽기</small><strong data-inline-next-title></strong></div>
+            <button class="button" type="button" data-inline-next>다음 화</button>
+          </div>
           <section class="reader-finish" data-reader-finish hidden>
             <p class="eyebrow">AFTER READING</p>
-            <h3>어떤 점이 다음 화를 기다리게 했나요?</h3>
+            <div class="episode-recommendation" data-episode-recommendation>
+              <h3>이 회차, 다음 화도 읽고 싶나요?</h3>
+              <p class="recommendation-guide" data-recommendation-guide>추천과 비추천 중 하나만 선택할 수 있습니다.</p>
+              <div class="recommendation-buttons" data-recommendation-buttons>
+                <button type="button" data-episode-vote="recommend" aria-pressed="false"><span aria-hidden="true">👍</span><span>추천</span><b>0</b></button>
+                <button type="button" data-episode-vote="not_recommend" aria-pressed="false"><span aria-hidden="true">👎</span><span>비추천</span><b>0</b></button>
+              </div>
+              <div class="operator-continuation" data-operator-continuation hidden>
+                <p>초기 독자가 적은 동안 운영자가 다음 회차 집필을 직접 요청할 수 있습니다.</p>
+                <button class="button" type="button" data-request-next-episode>다음 화 작성</button>
+              </div>
+              <p class="continuation-status" data-continuation-status role="status" aria-live="polite"></p>
+            </div>
+            <div class="reader-reaction-prompt">
+              <h3>어떤 점이 다음 화를 기다리게 했나요?</h3>
+              <p>여러 항목을 선택해도 됩니다.</p>
+            </div>
             <div class="reaction-buttons">
               <button type="button" data-reaction="next_episode">다음 화가 궁금해요 <b>0</b></button>
               <button type="button" data-reaction="character">주인공이 매력적이에요 <b>0</b></button>
               <button type="button" data-reaction="world">세계관이 흥미로워요 <b>0</b></button>
               <button type="button" data-reaction="tension">긴장감이 좋았어요 <b>0</b></button>
             </div>
+            <section class="comment-section episode-comments" aria-labelledby="episodeCommentsTitle" data-comment-section="episode">
+              <header class="comment-heading">
+                <div><p class="eyebrow">EPISODE TALK</p><h3 id="episodeCommentsTitle">회차 댓글 <span data-comment-count="episode">(0)</span></h3></div>
+                <p>방금 읽은 회차에 관한 이야기를 나눠보세요.</p>
+              </header>
+              <div class="comment-list" data-comment-list="episode" aria-live="polite"></div>
+              <p class="comment-empty" data-comment-empty="episode">아직 댓글이 없습니다.</p>
+              <form class="comment-form" data-comment-form="episode">
+                <div class="reply-context" data-reply-context="episode" hidden><span></span><button type="button" data-reply-cancel="episode">취소</button></div>
+                <label for="episodeComment">회차 댓글</label>
+                <textarea id="episodeComment" name="bodyText" minlength="2" maxlength="500" rows="3" placeholder="이 회차의 감상을 2~500자로 남겨주세요." data-comment-input="episode" required></textarea>
+                <div class="comment-form-footer"><small>텍스트만 등록됩니다. <b data-comment-length="episode">0</b>/500</small><button class="button" type="submit" data-comment-submit="episode">댓글 쓰기</button></div>
+              </form>
+            </section>
           </section>
           <nav class="episode-navigation" aria-label="회차 이동"><button class="button secondary" type="button" data-prev-episode disabled>이전 화</button><button class="button" type="button" data-next-episode disabled>다음 화</button></nav>
         </section>

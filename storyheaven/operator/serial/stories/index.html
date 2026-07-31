@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#11131a">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
+  <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
+  <title>연재 작품 관리 | StoryHeaven</title>
+  <link rel="stylesheet" href="../../../workspace.css?v=20260731-storycontrol1">
+  <link rel="stylesheet" href="./stories.css?v=20260731-storycontrol1">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+  <script defer src="../../../common.js?v=20260731-storycontrol1"></script>
+  <script defer src="./stories.js?v=20260731-storycontrol1"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/storyheaven/"><span class="brand-mark">S</span><span><strong>StoryHeaven</strong><small>연재 작품 관리</small></span></a>
+    <nav class="main-nav" aria-label="관리자 메뉴"><a href="/storyheaven/operator/">검수</a><a href="/storyheaven/operator/serial/">자동 연재 설정</a><a href="/storyheaven/operator/serial/stories/" aria-current="page">연재 작품 관리</a><a href="/webtoon/operator/">회원 관리</a></nav>
+    <div class="account-actions"><span class="user-chip" data-common-user hidden></span><button class="button" type="button" data-common-login>관리자 로그인</button><button class="icon-button" type="button" data-common-logout hidden aria-label="로그아웃">↪</button></div>
+  </header>
+
+  <main>
+    <header class="page-hero works-hero">
+      <div><p class="eyebrow">PRIVATE SERIAL LIBRARY</p><h1>연재 중인 작품을<br>한곳에서 조정합니다.</h1><p>작품별 공개 범위와 다음 화 제작 방식을 나누어 관리합니다. 비공개와 일시 정지는 원고를 지우지 않습니다.</p></div>
+      <div class="engine-state" data-engine-state>연결 확인 중</div>
+    </header>
+
+    <div class="page-shell works-shell">
+      <section class="gate" data-access-gate>
+        <h2>관리자 확인이 필요합니다.</h2>
+        <p>로그인하면 서버에서 관리자 권한을 다시 확인합니다.</p>
+        <button class="button" type="button" data-common-login>관리자 로그인</button>
+      </section>
+
+      <section class="works-dashboard" data-works-dashboard hidden>
+        <section class="summary-strip" aria-label="연재 작품 요약">
+          <div><span>전체</span><strong data-summary-total>0</strong></div>
+          <div><span>공개</span><strong data-summary-public>0</strong></div>
+          <div><span>멈춤·종료</span><strong data-summary-stopped>0</strong></div>
+          <div><span>공개 대기 회차</span><strong data-summary-ready>0</strong></div>
+        </section>
+
+        <section class="work-tools" aria-label="작품 검색과 필터">
+          <label class="search-field"><span>작품 검색</span><input type="search" maxlength="80" placeholder="제목이나 장르" data-story-search></label>
+          <label><span>공개 상태</span><select data-visibility-filter><option value="all">전체</option><option value="public">공개</option><option value="private">비공개</option><option value="archived">보관</option></select></label>
+          <label><span>연재 방식</span><select data-continuation-filter><option value="all">전체</option><option value="auto">추천 자동</option><option value="manual">운영자 요청</option><option value="paused">일시 정지</option><option value="ended">연재 종료</option></select></label>
+          <button class="button secondary refresh-button" type="button" data-refresh>새로고침</button>
+        </section>
+
+        <div class="list-heading"><div><p class="eyebrow">SERIALS</p><h2>작품 목록</h2></div><p data-result-count>0편</p></div>
+        <section class="managed-list" data-managed-list aria-live="polite"></section>
+      </section>
+    </div>
+  </main>
+  <div class="toast" data-common-toast hidden></div>
+</body>
+</html>

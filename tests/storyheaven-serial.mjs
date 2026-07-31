@@ -34,7 +34,7 @@ try {
       hasEnding: document.querySelector("[data-reader-body]")?.textContent.includes("시간을 견딜 수 있는 자"),
       overflow: document.documentElement.scrollWidth > innerWidth
     }));
-    assert.equal(guestState.title, "여덟 초를 싣는 막차", `${viewport.name} serial title`);
+    assert.equal(guestState.title, "8초를 싣는 막차", `${viewport.name} serial title`);
     assert.ok(guestState.paragraphs >= 20, `${viewport.name} full manuscript paragraphs`);
     assert.ok(guestState.previewCharacters >= 4000, `${viewport.name} full manuscript length`);
     assert.equal(guestState.loginWallCount, 0, `${viewport.name} has no login reading wall`);

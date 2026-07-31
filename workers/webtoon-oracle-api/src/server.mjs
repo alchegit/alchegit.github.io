@@ -25,6 +25,10 @@ import {
   validateStoryHeavenPacket,
   validateStoryHeavenNickname
 } from "./storyheaven.mjs";
+import {
+  STORYHEAVEN_CONTINUATION_POLICY,
+  createStoryHeavenSerialService
+} from "./serial-service.mjs";
 
 await loadDotEnv();
 
@@ -73,6 +77,14 @@ const storyHeavenReportCategories = new Set([
   "spam",
   "other"
 ]);
+
+const STORYHEAVEN_COMMENT_LIMITS = Object.freeze({
+  min: 2,
+  max: 500,
+  rootPageSize: 20,
+  maxUrls: 1,
+  rateLimitPerMinute: 12
+});
 
 const config = {
   host: process.env.HOST || "127.0.0.1",
@@ -138,7 +150,12 @@ const config = {
     60,
     1800,
     900
-  )
+  ),
+  storyHeavenSerialEngineEnabled: parseBoolean(process.env.STORYHEAVEN_SERIAL_ENGINE_ENABLED, false),
+  storyHeavenSerialPollMs: clampInt(process.env.STORYHEAVEN_SERIAL_POLL_MS, 10_000, 600_000, 60_000),
+  storyHeavenSerialLeaseSeconds: clampInt(process.env.STORYHEAVEN_SERIAL_LEASE_SECONDS, 60, 1800, 900),
+  storyHeavenSerialRetryMinutes: clampInt(process.env.STORYHEAVEN_SERIAL_RETRY_MINUTES, 1, 60, 3),
+  storyHeavenSerialMaxAttempts: clampInt(process.env.STORYHEAVEN_SERIAL_MAX_ATTEMPTS, 1, 10, 3)
 };
 
 if (!new Set(["disabled", "http", "external-worker"]).has(config.storyHeavenAiReviewMode)) {
@@ -169,6 +186,16 @@ const pool = await oracledb.createPool({
   poolMin: config.poolMin,
   poolMax: config.poolMax,
   poolIncrement: 1
+});
+
+const storyHeavenSerialService = createStoryHeavenSerialService({
+  withConnection,
+  withTransaction,
+  clob: (value) => ({ val: String(value ?? ""), type: oracledb.CLOB }),
+  clobJson,
+  leaseSeconds: config.storyHeavenSerialLeaseSeconds,
+  retryMinutes: config.storyHeavenSerialRetryMinutes,
+  maxAttempts: config.storyHeavenSerialMaxAttempts
 });
 
 const upload = multer({
@@ -239,6 +266,13 @@ const creationRateLimiter = createRateLimiter({
   keyResolver: (req) => `user:${req.user?.id || "unknown"}`
 });
 
+const commentRateLimiter = createRateLimiter({
+  name: "storyheaven_comment_user",
+  limit: STORYHEAVEN_COMMENT_LIMITS.rateLimitPerMinute,
+  windowMs: 60_000,
+  keyResolver: (req) => `comment:${req.user?.id || "unknown"}`
+});
+
 const adminRateLimiter = createRateLimiter({
   name: "admin_user",
   limit: config.adminRateLimitPerWindow,
@@ -278,7 +312,8 @@ app.get("/api/storyheaven/feed", optionalUser, async (req, res, next) => {
   try {
     const stories = await listStoryHeavenFeed({
       userId: req.user?.id || null,
-      limit: clampInt(req.query.limit, 1, 40, 24)
+      limit: clampInt(req.query.limit, 1, 40, 24),
+      genre: boundedString(req.query.genre || "", "genre", 30)
     });
     res.json({
       schemaVersion: "storyheaven-feed/v1",
@@ -286,6 +321,14 @@ app.get("/api/storyheaven/feed", optionalUser, async (req, res, next) => {
       rankingPolicy: "reader_likes_only",
       stories
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/discovery", optionalUser, async (_req, res, next) => {
+  try {
+    res.json(await getStoryHeavenDiscovery());
   } catch (error) {
     next(error);
   }
@@ -368,6 +411,32 @@ app.post("/api/storyheaven/stories/:id/view", optionalUser, async (req, res, nex
   }
 });
 
+app.get("/api/storyheaven/stories/:id/comments", optionalUser, async (req, res, next) => {
+  try {
+    res.json(await listStoryHeavenComments({
+      storyIdValue: req.params.id,
+      user: req.user || null
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/comments", requireUser, commentRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    const profile = await ensureUserProfile(req.user, req);
+    assertActiveStoryHeavenNickname(profile);
+    const result = await createStoryHeavenComment({
+      storyIdValue: req.params.id,
+      user: req.user,
+      body: req.body || {}
+    });
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/api/storyheaven/stories/:id/episodes", optionalUser, async (req, res, next) => {
   try {
     const episodes = await listStoryHeavenEpisodes(req.params.id, req.user || null);
@@ -380,7 +449,35 @@ app.get("/api/storyheaven/stories/:id/episodes", optionalUser, async (req, res, 
 app.get("/api/storyheaven/stories/:id/episodes/:episodeNo", optionalUser, async (req, res, next) => {
   try {
     const episode = await getStoryHeavenEpisode(req.params.id, req.params.episodeNo, req.user || null);
-    res.set("Cache-Control", req.user ? "private, no-store" : "public, max-age=60").json({ episode });
+    res.set("Cache-Control", "no-store").json({ episode });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/stories/:id/episodes/:episodeNo/comments", optionalUser, async (req, res, next) => {
+  try {
+    res.json(await listStoryHeavenComments({
+      storyIdValue: req.params.id,
+      episodeNoValue: req.params.episodeNo,
+      user: req.user || null
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/comments", requireUser, commentRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    const profile = await ensureUserProfile(req.user, req);
+    assertActiveStoryHeavenNickname(profile);
+    const result = await createStoryHeavenComment({
+      storyIdValue: req.params.id,
+      episodeNoValue: req.params.episodeNo,
+      user: req.user,
+      body: req.body || {}
+    });
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -468,6 +565,21 @@ app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/reactions", requireUs
     await ensureUserProfile(req.user, req);
     const reactions = await setStoryHeavenEpisodeReaction(req.params.id, req.params.episodeNo, req.user.id, req.body || {});
     res.json({ reactions });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/recommendation", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const recommendation = await setStoryHeavenEpisodeRecommendation(
+      req.params.id,
+      req.params.episodeNo,
+      req.user,
+      req.body || {}
+    );
+    res.json({ recommendation });
   } catch (error) {
     next(error);
   }
@@ -669,6 +781,125 @@ app.post("/api/storyheaven/operator/rounds/:id/finalize", requireUser, requireAd
     await ensureUserProfile(req.user, req);
     const result = await finalizeStoryHeavenRound(req.params.id, req.user.id);
     res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/operator/serial-engine/schedules", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
+  try {
+    res.json({ enabled: config.storyHeavenSerialEngineEnabled, schedules: await storyHeavenSerialService.listSchedules() });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/schedules", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const schedule = await storyHeavenSerialService.saveSchedule(req.body || {}, req.user.id);
+    res.status(201).json({ schedule });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.patch("/api/storyheaven/operator/serial-engine/schedules/:id", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const schedule = await storyHeavenSerialService.saveSchedule(req.body || {}, req.user.id, req.params.id);
+    res.json({ schedule });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/schedules/:id/run", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    res.status(202).json({ run: await storyHeavenSerialService.runSchedule(req.params.id, req.user.id) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/process", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (_req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    res.json(await storyHeavenSerialService.processDue());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/operator/serial-engine/stories", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
+  try {
+    res.json({
+      enabled: config.storyHeavenSerialEngineEnabled,
+      stories: await storyHeavenSerialService.listManagedStories()
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.patch("/api/storyheaven/operator/serial-engine/stories/:id/control", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const story = await storyHeavenSerialService.updateStoryControl(req.params.id, req.body || {}, req.user.id);
+    res.json({ story });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes/:episodeNo/continue", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    const continuation = await storyHeavenSerialService.requestContinuation(
+      req.params.id,
+      req.params.episodeNo,
+      { requestedBy: req.user.id, triggerType: "admin_request" }
+    );
+    res.status(202).json({ continuation });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/operator/serial-engine/stories/:id", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
+  try {
+    res.json(await storyHeavenSerialService.getStoryState(req.params.id));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/stories/:id/plan", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    res.status(202).json({ run: await storyHeavenSerialService.planStory(req.params.id, req.user.id, req.body || {}) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    res.status(202).json({ run: await storyHeavenSerialService.queueEpisode(req.params.id, req.user.id, req.body || {}) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/storyheaven/operator/serial-engine/runs/:id", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
+  try {
+    res.json(await storyHeavenSerialService.getRun(req.params.id));
   } catch (error) {
     next(error);
   }
@@ -886,6 +1117,49 @@ app.post("/api/storyheaven/worker/reviews/claim", requireWorker, requireJsonBody
   }
 });
 
+app.post("/api/storyheaven/worker/serial-engine/claim", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    res.json(await storyHeavenSerialService.claimJob({ workerId }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/worker/serial-engine/complete", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    const leaseId = boundedString(req.body?.leaseId, "leaseId", 36, { required: true });
+    const jobId = boundedString(req.body?.jobId, "jobId", 36, { required: true });
+    const inputHash = boundedString(req.body?.inputHash, "inputHash", 64, { required: true }).toLowerCase();
+    if (!/^[a-f0-9]{64}$/u.test(inputHash)) throw httpError("serial_input_hash_invalid", 400);
+    if (!req.body?.result || typeof req.body.result !== "object" || Array.isArray(req.body.result)) {
+      throw httpError("serial_result_invalid", 400);
+    }
+    const model = boundedString(req.body?.model || "codex-cli", "model", 160, { required: true });
+    res.json(await storyHeavenSerialService.completeJob({
+      workerId, leaseId, jobId, inputHash, result: req.body.result, model
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/worker/serial-engine/fail", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    const leaseId = boundedString(req.body?.leaseId, "leaseId", 36, { required: true });
+    const jobId = boundedString(req.body?.jobId, "jobId", 36, { required: true });
+    const errorCode = boundedString(req.body?.errorCode || "serial_worker_failed", "errorCode", 100, { required: true });
+    res.json(await storyHeavenSerialService.failJob({ workerId, leaseId, jobId, errorCode }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/storyheaven/worker/reviews/complete", requireWorker, requireJsonBody, async (req, res, next) => {
   try {
     if (!storyHeavenExternalReviewEnabled) throw httpError("external_review_worker_disabled", 409);
@@ -938,6 +1212,7 @@ const server = app.listen(config.port, config.host, () => {
   } else if (storyHeavenExternalReviewEnabled) {
     console.log("[storyheaven] external AI review worker mode enabled");
   }
+  console.log(`[storyheaven] serial engine ${config.storyHeavenSerialEngineEnabled ? "enabled" : "disabled"}`);
 });
 
 let storyHeavenReviewWorkerBusy = false;
@@ -949,9 +1224,22 @@ const storyHeavenReviewTimer = setInterval(() => {
 storyHeavenReviewTimer.unref();
 setTimeout(() => processNextStoryHeavenAiReview().catch(() => {}), 1_000).unref();
 
+const storyHeavenSerialTimer = config.storyHeavenSerialEngineEnabled
+  ? setInterval(() => {
+    storyHeavenSerialService.processDue().catch((error) => {
+      console.error("[storyheaven] serial scheduler failed", error?.message || error);
+    });
+  }, config.storyHeavenSerialPollMs)
+  : null;
+storyHeavenSerialTimer?.unref();
+if (storyHeavenSerialTimer) {
+  setTimeout(() => storyHeavenSerialService.processDue().catch(() => {}), 2_000).unref();
+}
+
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, async () => {
     clearInterval(storyHeavenReviewTimer);
+    if (storyHeavenSerialTimer) clearInterval(storyHeavenSerialTimer);
     server.close();
     await pool.close(5).catch(() => {});
     process.exit(0);
@@ -1392,12 +1680,12 @@ async function updateStoryHeavenNickname(user, value, req) {
   }
 }
 
-async function listStoryHeavenFeed({ userId = null, limit = 24 } = {}) {
+async function listStoryHeavenFeed({ userId = null, limit = 24, genre = "" } = {}) {
   return withConnection(async (connection) => {
     const result = await connection.execute(
       `select * from (
          select s.id, s.slug, s.title, s.logline, s.public_synopsis, s.genre,
-                s.genres_json, s.tags_json, s.content_rating, s.content_origin,
+                s.secondary_genre, s.genres_json, s.tags_json, s.content_rating, s.content_origin,
                 s.competition_eligible, s.ai_disclosure_version, s.cover_path,
                 s.published_at, s.view_count, p.nickname, p.display_name, p.account_type,
                 (select count(*) from storyheaven_episodes episode_count
@@ -1436,11 +1724,108 @@ async function listStoryHeavenFeed({ userId = null, limit = 24 } = {}) {
            join webtoon_profiles p on p.user_id = s.author_user_id
            left join storyheaven_endorsements e on e.story_id = s.id
           where s.story_status = 'published'
+            and (
+              :genre_filter is null
+              or s.genre = :genre_filter
+              or s.secondary_genre = :genre_filter
+              or exists (
+                select 1
+                  from json_table(
+                    s.genres_json,
+                    '$[*]' columns (genre_value varchar2(30 char) path '$')
+                  ) genre_item
+                 where genre_item.genre_value = :genre_filter
+              )
+            )
           order by weekly_vote_count desc, nvl(e.endorsement_level, 0) desc, like_count desc, s.published_at desc
        ) where rownum <= ${clampInt(limit, 1, 40, 24)}`,
-      { viewer_user_id: userId }
+      { viewer_user_id: userId, genre_filter: genre || null }
     );
     return result.rows.map(mapStoryHeavenStory);
+  });
+}
+
+async function getStoryHeavenDiscovery() {
+  return withConnection(async (connection) => {
+    const genreRows = await connection.execute(
+      `select s.genre, s.secondary_genre, s.genres_json
+         from storyheaven_stories s
+        where s.story_status = 'published'`
+    );
+    const rankingRows = await connection.execute(
+      `select s.id, s.title, s.genre, s.cover_path, s.view_count, s.published_at,
+                p.nickname, p.display_name,
+                count(distinct e.id) as episode_count,
+                max(e.published_at) as latest_episode_at,
+                nvl(sum(case when v.updated_at >= systimestamp - numtodsinterval(1, 'DAY') then 1 else 0 end), 0) as daily_count,
+                nvl(sum(case when v.updated_at >= systimestamp - numtodsinterval(7, 'DAY') then 1 else 0 end), 0) as weekly_count,
+                nvl(sum(case when v.updated_at >= systimestamp - numtodsinterval(30, 'DAY') then 1 else 0 end), 0) as monthly_count,
+                nvl(sum(case when v.updated_at >= systimestamp - numtodsinterval(365, 'DAY') then 1 else 0 end), 0) as yearly_count
+           from storyheaven_stories s
+           join webtoon_profiles p on p.user_id = s.author_user_id
+           left join storyheaven_episodes e
+             on e.story_id = s.id and e.episode_status = 'published'
+           left join storyheaven_episode_votes v
+             on v.episode_id = e.id and v.vote_type = 'recommend'
+          where s.story_status = 'published'
+          group by s.id, s.title, s.genre, s.cover_path, s.view_count, s.published_at,
+                   p.nickname, p.display_name`
+    );
+
+    const genreCounts = new Map();
+    genreRows.rows.forEach((row) => {
+      const stored = parseJson(row.GENRES_JSON, []);
+      const values = Array.isArray(stored) && stored.length
+        ? stored
+        : [row.GENRE, row.SECONDARY_GENRE];
+      [...new Set(values.map((value) => String(value || "").trim()).filter(Boolean))]
+        .forEach((value) => genreCounts.set(value, (genreCounts.get(value) || 0) + 1));
+    });
+
+    const rankingSource = rankingRows.rows.map((row) => ({
+      id: row.ID,
+      title: row.TITLE,
+      genre: row.GENRE || "이야기",
+      coverPath: row.COVER_PATH || "",
+      author: row.NICKNAME || row.DISPLAY_NAME || "이야기씨앗",
+      episodeCount: Number(row.EPISODE_COUNT || 0),
+      viewCount: Number(row.VIEW_COUNT || 0),
+      latestEpisodeAt: row.LATEST_EPISODE_AT || null,
+      publishedAt: row.PUBLISHED_AT || null,
+      counts: {
+        daily: Number(row.DAILY_COUNT || 0),
+        weekly: Number(row.WEEKLY_COUNT || 0),
+        monthly: Number(row.MONTHLY_COUNT || 0),
+        yearly: Number(row.YEARLY_COUNT || 0)
+      }
+    }));
+
+    const periods = Object.fromEntries([
+      ["daily", "최근 1일"],
+      ["weekly", "최근 7일"],
+      ["monthly", "최근 30일"],
+      ["yearly", "최근 365일"]
+    ].map(([key, label]) => [key, {
+      label,
+      items: [...rankingSource]
+        .sort((a, b) => (
+          b.counts[key] - a.counts[key]
+          || b.viewCount - a.viewCount
+          || new Date(b.latestEpisodeAt || b.publishedAt || 0) - new Date(a.latestEpisodeAt || a.publishedAt || 0)
+          || a.title.localeCompare(b.title, "ko")
+        ))
+        .slice(0, 5)
+        .map(({ counts, ...story }) => ({ ...story, recommendationCount: counts[key] }))
+    }]));
+
+    return {
+      schemaVersion: "storyheaven-discovery/v1",
+      rankingMetric: "published_episode_current_recommendations",
+      genres: [...genreCounts.entries()]
+        .map(([name, storyCount]) => ({ name, storyCount }))
+        .sort((a, b) => b.storyCount - a.storyCount || a.name.localeCompare(b.name, "ko")),
+      periods
+    };
   });
 }
 
@@ -2410,6 +2795,12 @@ async function listStoryHeavenEpisodes(storyIdValue, user) {
       `select e.id, e.episode_no, e.title, e.public_summary, e.character_count,
               e.paragraph_count, e.estimated_read_minutes, e.episode_status,
               e.current_revision_no, e.view_count, e.published_at, e.updated_at,
+              (select count(*) from storyheaven_episode_votes vote_count
+                where vote_count.episode_id = e.id
+                  and vote_count.vote_type = 'recommend') as recommendation_count,
+              (select count(*) from storyheaven_comments comment_count
+                where comment_count.episode_id = e.id
+                  and comment_count.comment_status = 'active') as comment_count,
               nvl(p.last_character_offset, 0) as last_character_offset,
               nvl(p.completion_rate, 0) as completion_rate
          from storyheaven_episodes e
@@ -2437,7 +2828,10 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
               e.character_count, e.paragraph_count, e.estimated_read_minutes,
               e.preview_character_count, e.episode_status, e.current_revision_no,
               e.view_count, e.published_at, e.updated_at, s.title as story_title,
-              s.author_user_id, s.story_status, p.nickname, p.display_name,
+               s.author_user_id, s.story_status, s.content_origin, p.nickname, p.display_name,
+               (select max(latest.episode_no) from storyheaven_episodes latest
+                 where latest.story_id = e.story_id
+                   and latest.episode_status = 'published') as latest_published_episode_no,
               nvl(progress.last_character_offset, 0) as last_character_offset,
               nvl(progress.completion_rate, 0) as completion_rate
          from storyheaven_episodes e
@@ -2456,14 +2850,14 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
     if (!isPublic && !mayReadPrivate) throw httpError("episode_not_found", 404);
 
     const body = String(row.BODY_TEXT || "");
-    const reactions = await connection.execute(
+    const [reactions, recommendation] = await Promise.all([connection.execute(
       `select reaction_type, count(*) as reaction_count,
               max(case when user_id = :viewer_user_id then 1 else 0 end) as reacted_by_me
          from storyheaven_episode_reactions
         where episode_id = :episode_id
         group by reaction_type`,
       { episode_id: row.ID, viewer_user_id: user?.id || null }
-    );
+    ), loadStoryHeavenEpisodeRecommendation(connection, row, user)]);
     return {
       id: row.ID,
       storyId: row.STORY_ID,
@@ -2492,9 +2886,176 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
       reactions: Object.fromEntries(STORYHEAVEN_REACTIONS.map((type) => {
         const reaction = reactions.rows.find((item) => item.REACTION_TYPE === type);
         return [type, { count: Number(reaction?.REACTION_COUNT || 0), selected: reaction?.REACTED_BY_ME === 1 }];
-      }))
+      })),
+      recommendation
     };
   });
+}
+
+async function listStoryHeavenComments({ storyIdValue, episodeNoValue = null, user = null }) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = episodeNoValue === null || episodeNoValue === undefined
+    ? null
+    : requireStoryHeavenEpisodeNo(episodeNoValue);
+
+  return withConnection(async (connection) => {
+    const scope = await resolveStoryHeavenCommentScope(connection, storyId, episodeNo);
+    const scopeBinds = { story_id: storyId, episode_id: scope.episodeId };
+    const countResult = await connection.execute(
+      `select count(*) as comment_count
+         from storyheaven_comments c
+        where c.story_id = :story_id
+          and ((:episode_id is null and c.episode_id is null) or c.episode_id = :episode_id)
+          and c.comment_status = 'active'`,
+      scopeBinds
+    );
+    const result = await connection.execute(
+      `with ranked_roots as (
+         select id, created_at
+           from (
+             select c.id, c.created_at
+               from storyheaven_comments c
+              where c.story_id = :story_id
+                and ((:episode_id is null and c.episode_id is null) or c.episode_id = :episode_id)
+                and c.parent_comment_id is null
+                and c.comment_status = 'active'
+              order by c.created_at desc
+           )
+          where rownum <= :root_limit
+       )
+       select c.id, c.parent_comment_id, c.user_id, c.body_text,
+              c.created_at, c.updated_at, p.nickname, p.display_name,
+              root.created_at as root_created_at
+         from ranked_roots root
+         join storyheaven_comments c
+           on c.id = root.id or c.parent_comment_id = root.id
+         join webtoon_profiles p on p.user_id = c.user_id
+        where c.comment_status = 'active'
+        order by root.created_at desc,
+                 case when c.parent_comment_id is null then 0 else 1 end,
+                 c.created_at asc`,
+      { ...scopeBinds, root_limit: STORYHEAVEN_COMMENT_LIMITS.rootPageSize }
+    );
+
+    const roots = [];
+    const byId = new Map();
+    result.rows.forEach((row) => {
+      if (row.PARENT_COMMENT_ID) return;
+      const comment = mapStoryHeavenComment(row, user);
+      comment.replies = [];
+      roots.push(comment);
+      byId.set(comment.id, comment);
+    });
+    result.rows.forEach((row) => {
+      if (!row.PARENT_COMMENT_ID) return;
+      byId.get(row.PARENT_COMMENT_ID)?.replies.push(mapStoryHeavenComment(row, user));
+    });
+
+    return {
+      comments: roots,
+      count: Number(countResult.rows[0]?.COMMENT_COUNT || 0),
+      limits: STORYHEAVEN_COMMENT_LIMITS
+    };
+  });
+}
+
+async function createStoryHeavenComment({ storyIdValue, episodeNoValue = null, user, body }) {
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = episodeNoValue === null || episodeNoValue === undefined
+    ? null
+    : requireStoryHeavenEpisodeNo(episodeNoValue);
+  const bodyText = boundedString(body?.bodyText, "comment", STORYHEAVEN_COMMENT_LIMITS.max, { required: true });
+  const parentCommentId = nullableBoundedString(body?.parentCommentId, "parentCommentId", 36);
+
+  if ([...bodyText].length < STORYHEAVEN_COMMENT_LIMITS.min) {
+    throw httpError("comment_too_short", 400);
+  }
+  if (detectStoryHeavenTextThreat(bodyText)) {
+    throw httpError("comment_unsafe_content", 400);
+  }
+  if ((bodyText.match(/https?:\/\/[^\s]+/giu) || []).length > STORYHEAVEN_COMMENT_LIMITS.maxUrls) {
+    throw httpError("comment_too_many_urls", 400);
+  }
+
+  return withTransaction(async (connection) => {
+    const scope = await resolveStoryHeavenCommentScope(connection, storyId, episodeNo);
+    if (parentCommentId) {
+      const parent = await connection.execute(
+        `select id, parent_comment_id
+           from storyheaven_comments
+          where id = :parent_comment_id
+            and story_id = :story_id
+            and nvl(episode_id, '-') = nvl(:episode_id, '-')
+            and comment_status = 'active'`,
+        { parent_comment_id: parentCommentId, story_id: storyId, episode_id: scope.episodeId }
+      );
+      if (!parent.rows.length) throw httpError("comment_parent_not_found", 404);
+      if (parent.rows[0].PARENT_COMMENT_ID) throw httpError("comment_reply_depth_exceeded", 400);
+    }
+
+    const commentId = randomId();
+    await connection.execute(
+      `insert into storyheaven_comments (
+        id, story_id, episode_id, parent_comment_id, user_id, body_text
+      ) values (
+        :id, :story_id, :episode_id, :parent_comment_id, :user_id, :body_text
+      )`,
+      {
+        id: commentId,
+        story_id: storyId,
+        episode_id: scope.episodeId,
+        parent_comment_id: parentCommentId,
+        user_id: user.id,
+        body_text: bodyText
+      }
+    );
+    const result = await connection.execute(
+      `select c.id, c.parent_comment_id, c.user_id, c.body_text,
+              c.created_at, c.updated_at, p.nickname, p.display_name
+         from storyheaven_comments c
+         join webtoon_profiles p on p.user_id = c.user_id
+        where c.id = :id`,
+      { id: commentId }
+    );
+    return {
+      comment: mapStoryHeavenComment(result.rows[0], user),
+      limits: STORYHEAVEN_COMMENT_LIMITS
+    };
+  });
+}
+
+async function resolveStoryHeavenCommentScope(connection, storyId, episodeNo) {
+  const story = await connection.execute(
+    `select id
+       from storyheaven_stories
+      where id = :story_id and story_status = 'published'`,
+    { story_id: storyId }
+  );
+  if (!story.rows.length) throw httpError("story_not_found", 404);
+  if (episodeNo === null) return { storyId, episodeId: null, episodeNo: null };
+
+  const episode = await connection.execute(
+    `select id
+       from storyheaven_episodes
+      where story_id = :story_id
+        and episode_no = :episode_no
+        and episode_status = 'published'`,
+    { story_id: storyId, episode_no: episodeNo }
+  );
+  if (!episode.rows.length) throw httpError("episode_not_found", 404);
+  return { storyId, episodeId: episode.rows[0].ID, episodeNo };
+}
+
+function mapStoryHeavenComment(row, user) {
+  return {
+    id: row.ID,
+    parentCommentId: row.PARENT_COMMENT_ID || null,
+    bodyText: String(row.BODY_TEXT || ""),
+    author: row.NICKNAME || row.DISPLAY_NAME || "이야기 독자",
+    isMine: Boolean(user?.id && row.USER_ID === user.id),
+    createdAt: row.CREATED_AT,
+    updatedAt: row.UPDATED_AT
+  };
 }
 
 async function recordStoryHeavenStoryView(storyIdValue, user) {
@@ -2916,6 +3477,139 @@ async function setStoryHeavenEpisodeReaction(storyIdValue, episodeNoValue, userI
         }
       ]));
   });
+}
+
+async function setStoryHeavenEpisodeRecommendation(storyIdValue, episodeNoValue, user, input) {
+  if (isAdminIdentity(user)) throw httpError("admin_episode_vote_not_allowed", 403);
+  const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
+  const episodeNo = requireStoryHeavenEpisodeNo(episodeNoValue);
+  const voteType = boundedString(input.voteType, "voteType", 20, { required: true });
+  if (!new Set(["recommend", "not_recommend"]).has(voteType)) {
+    throw httpError("invalid_episode_recommendation", 400);
+  }
+  const recommendation = await withTransaction(async (connection) => {
+    const episode = await connection.execute(
+      `select e.id, e.story_id, e.episode_no, s.content_origin,
+              (select max(latest.episode_no) from storyheaven_episodes latest
+                where latest.story_id = e.story_id
+                  and latest.episode_status = 'published') as latest_published_episode_no
+         from storyheaven_episodes e
+         join storyheaven_stories s on s.id = e.story_id
+        where e.story_id = :story_id and e.episode_no = :episode_no
+          and e.episode_status = 'published' and s.story_status = 'published'`,
+      { story_id: storyId, episode_no: episodeNo }
+    );
+    if (!episode.rows.length) throw httpError("episode_not_found", 404);
+    const row = episode.rows[0];
+    await connection.execute(
+      `merge into storyheaven_episode_votes target
+       using (select :episode_id episode_id, :user_id user_id from dual) source
+          on (target.episode_id = source.episode_id and target.user_id = source.user_id)
+       when matched then update set target.vote_type = :vote_type, target.updated_at = systimestamp
+       when not matched then insert (episode_id, user_id, vote_type)
+       values (:episode_id, :user_id, :vote_type)`,
+      { episode_id: row.ID, user_id: user.id, vote_type: voteType }
+    );
+    return loadStoryHeavenEpisodeRecommendation(connection, row, user);
+  });
+
+  if (
+    config.storyHeavenSerialEngineEnabled
+    && recommendation.autoContinuationEligible
+    && recommendation.isLatestPublished
+    && recommendation.recommend.count >= STORYHEAVEN_CONTINUATION_POLICY.recommendationThreshold
+    && !recommendation.continuation
+  ) {
+    try {
+      recommendation.continuation = await storyHeavenSerialService.requestContinuation(
+        storyId,
+        episodeNo,
+        { requestedBy: user.id, triggerType: "reader_threshold" }
+      );
+      recommendation.canRequestNext = false;
+    } catch (error) {
+      console.error("[storyheaven] recommendation continuation failed", error?.message || error);
+      recommendation.continuationRetryPending = true;
+    }
+  }
+  return recommendation;
+}
+
+async function loadStoryHeavenEpisodeRecommendation(connection, episodeRow, user) {
+  const [votes, continuationResult, serialResult] = await Promise.all([
+    connection.execute(
+      `select vote_type, count(*) as vote_count,
+              max(case when user_id = :viewer_user_id then 1 else 0 end) as selected_by_me
+         from storyheaven_episode_votes
+        where episode_id = :episode_id
+        group by vote_type`,
+      { episode_id: episodeRow.ID, viewer_user_id: user?.id || null }
+    ),
+    connection.execute(
+      `select * from (
+         select request_status, trigger_type, target_episode_no, recommendation_count,
+                run_id, created_at, updated_at
+           from storyheaven_serial_continuations
+          where story_id = :story_id and source_episode_no = :source_episode_no
+          order by created_at desc
+       ) where rownum = 1`,
+      { story_id: episodeRow.STORY_ID, source_episode_no: episodeRow.EPISODE_NO }
+    ),
+    connection.execute(
+      `select count(*) as serial_count
+         from storyheaven_serial_runs serial_run
+         join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
+        where serial_run.story_id = :story_id
+          and serial_run.episode_no = :episode_no
+          and serial_run.run_type = 'episode'
+          and serial_run.run_status = 'published'
+          and schedule.schedule_status = 'active'`,
+      { story_id: episodeRow.STORY_ID, episode_no: episodeRow.EPISODE_NO }
+    )
+  ]);
+  const vote = (type) => {
+    const row = votes.rows.find((item) => item.VOTE_TYPE === type);
+    return {
+      count: Number(row?.VOTE_COUNT || 0),
+      selected: Number(row?.SELECTED_BY_ME || 0) === 1
+    };
+  };
+  const recommendation = vote("recommend");
+  const notRecommend = vote("not_recommend");
+  const continuation = continuationResult.rows[0]
+    ? mapStoryHeavenContinuation(continuationResult.rows[0])
+    : null;
+  const episodeNo = Number(episodeRow.EPISODE_NO);
+  const isLatestPublished = Number(episodeRow.LATEST_PUBLISHED_EPISODE_NO || 0) === episodeNo;
+  const autoContinuationEligible = episodeRow.CONTENT_ORIGIN === "admin_seed"
+    && Number(serialResult.rows[0]?.SERIAL_COUNT || 0) > 0
+    && episodeNo >= STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount;
+  const operatorAvailable = Boolean(isAdminIdentity(user) && autoContinuationEligible && isLatestPublished);
+  return {
+    recommend: recommendation,
+    notRecommend,
+    canVote: Boolean(user && !isAdminIdentity(user)),
+    isLatestPublished,
+    autoContinuationEligible,
+    operatorAvailable,
+    canRequestNext: operatorAvailable && !continuation,
+    initialEpisodeCount: STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount,
+    threshold: STORYHEAVEN_CONTINUATION_POLICY.recommendationThreshold,
+    targetEpisodeNo: episodeNo + 1,
+    continuation
+  };
+}
+
+function mapStoryHeavenContinuation(row) {
+  return {
+    status: row.REQUEST_STATUS,
+    triggerType: row.TRIGGER_TYPE,
+    targetEpisodeNo: Number(row.TARGET_EPISODE_NO),
+    recommendationCount: Number(row.RECOMMENDATION_COUNT || 0),
+    runId: row.RUN_ID || null,
+    createdAt: row.CREATED_AT,
+    updatedAt: row.UPDATED_AT
+  };
 }
 
 async function createStoryHeavenDraft(userId, input) {
@@ -4365,6 +5059,8 @@ function mapStoryHeavenEpisodeSummary(row) {
     paragraphCount: Number(row.PARAGRAPH_COUNT || 0),
     estimatedReadMinutes: Number(row.ESTIMATED_READ_MINUTES || 1),
     viewCount: Number(row.VIEW_COUNT || 0),
+    recommendationCount: Number(row.RECOMMENDATION_COUNT || 0),
+    commentCount: Number(row.COMMENT_COUNT || 0),
     status: row.EPISODE_STATUS,
     revisionNo: Number(row.CURRENT_REVISION_NO || 0),
     publishedAt: row.PUBLISHED_AT || null,
@@ -4556,6 +5252,10 @@ function storyHeavenOwnerSelect() {
                  (select max(latest_episode.published_at) from storyheaven_episodes latest_episode
                    where latest_episode.story_id = s.id and latest_episode.episode_status = 'published') as latest_episode_at,
                  (select count(*) from storyheaven_likes likes where likes.story_id = s.id) as like_count,
+                 (select count(*) from storyheaven_comments comments
+                   where comments.story_id = s.id
+                     and comments.episode_id is null
+                     and comments.comment_status = 'active') as comment_count,
                  case when exists (
                    select 1 from storyheaven_likes mine
                     where mine.story_id = s.id and mine.user_id = :viewer_user_id
@@ -4807,6 +5507,7 @@ function mapStoryHeavenStory(row) {
       accountType: row.ACCOUNT_TYPE || "human"
     },
     likeCount: Number(row.LIKE_COUNT || 0),
+    commentCount: Number(row.COMMENT_COUNT || 0),
     weeklyVoteCount: Number(row.WEEKLY_VOTE_COUNT || 0),
     weeklyRoundId: row.WEEKLY_ROUND_ID || null,
     likedByMe: row.WEEKLY_ROUND_ID ? row.WEEKLY_VOTED_BY_ME === "Y" : row.LIKED_BY_ME === "Y",
