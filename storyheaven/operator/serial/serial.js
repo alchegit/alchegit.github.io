@@ -523,11 +523,17 @@
       const title = document.createElement("strong");
       const detail = document.createElement("p");
       title.textContent = item.title && item.title !== "새 작품 기획" ? item.title : item.workLabel;
-      detail.textContent = `${stageLabel(item.stage)}에서 멈춤 · ${formatDate(item.completedAt || item.requestedAt)} · ${failureLabel(item.failureCode)}`;
+      detail.textContent = item.attentionType === "quality_hold"
+        ? `제작은 끝났지만 편집 기준을 통과하지 못했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
+        : `${stageLabel(item.stage)}에서 멈춤 · ${formatDate(item.completedAt || item.requestedAt)} · ${failureLabel(item.failureCode)}`;
       copy.append(title, detail);
       const actions = document.createElement("div");
       actions.className = "attention-actions";
-      actions.append(actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(item)));
+      if (item.attentionType === "quality_hold" && item.latestRunId) {
+        actions.append(actionButton("검수 결과 보기", "queue-retry", () => loadRun(item.latestRunId)));
+      } else {
+        actions.append(actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(item)));
+      }
       if (item.scheduleId) actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(item.scheduleId)));
       row.append(copy, actions);
       selectors.attentionList.append(row);
@@ -624,6 +630,7 @@
       running: "진행 중",
       waiting: "대기",
       error: "중단",
+      blocked: "품질 보류",
       canceled: "취소",
       stopped: "종료",
       queued: "대기",
@@ -697,10 +704,17 @@
     const copy = document.createElement("div");
     const title = document.createElement("strong");
     const detail = document.createElement("small");
-    title.textContent = `설정은 가동 중 · 최근 제작 시도는 중단`;
-    detail.textContent = `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
+    title.textContent = failedWork.attentionType === "quality_hold"
+      ? "설정은 가동 중 · 최근 원고는 품질 보류"
+      : "설정은 가동 중 · 최근 제작 시도는 중단";
+    detail.textContent = failedWork.attentionType === "quality_hold"
+      ? `최종 편집 기준 미달 · ${formatDate(failedWork.completedAt)}`
+      : `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
     copy.append(title, detail);
-    wrapper.append(copy, actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(failedWork)));
+    const action = failedWork.attentionType === "quality_hold" && failedWork.latestRunId
+      ? actionButton("검수 결과 보기", "queue-retry", () => loadRun(failedWork.latestRunId))
+      : actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(failedWork));
+    wrapper.append(copy, action);
     return wrapper;
   }
 
@@ -1313,6 +1327,7 @@
       build_episode_card: "회차 장면 구성",
       write_draft: "원고 작성",
       editorial_review: "편집 검수",
+      editorial_blocked: "품질 검수 보류",
       rewrite_draft: "원고 보완",
       queued: "작업 준비"
     })[value] || "작업 준비";

@@ -2144,7 +2144,8 @@ function summarizeQueue(rows = [], timingRows = []) {
       failureCode: row.FAILURE_CODE || null,
       hasConcept: false,
       hasPlanning: false,
-      hasError: false
+      hasError: false,
+      hasBlocked: false
     };
     group.latestRunId ||= row.ID || null;
     group.storyId ||= row.STORY_ID || null;
@@ -2168,6 +2169,7 @@ function summarizeQueue(rows = [], timingRows = []) {
     group.hasConcept ||= row.RUN_TYPE === "concept";
     group.hasPlanning ||= row.RUN_TYPE === "planning";
     group.hasError ||= row.RUN_STATUS === "error";
+    group.hasBlocked ||= row.RUN_STATUS === "blocked" && !row.QUEUE_CANCELED_AT;
     if (row.FAILURE_CODE) group.failureCode = row.FAILURE_CODE;
     if (Number(row.ACTIVE_JOB_COUNT || 0) > 0) group.stage = row.CURRENT_STAGE || group.stage;
     groups.set(id, group);
@@ -2208,7 +2210,7 @@ function summarizeQueue(rows = [], timingRows = []) {
     });
   });
   const completed = all
-    .filter((group) => !group.canceledAt && group.activeJobs === 0 && group.totalJobs > 0 && group.completedJobs === group.totalJobs)
+    .filter((group) => !group.canceledAt && !group.hasBlocked && group.activeJobs === 0 && group.totalJobs > 0 && group.completedJobs === group.totalJobs)
     .sort((left, right) => (right.completedAt || 0) - (left.completedAt || 0));
   const lastCompleted = completed[0]
     ? queueGroupView(completed[0], {
@@ -2219,7 +2221,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       })
     : null;
   const failed = all
-    .filter((group) => !group.canceledAt && group.hasError)
+    .filter((group) => !group.canceledAt && (group.hasError || group.hasBlocked))
     .sort((left, right) => (right.completedAt || right.requestedAt || 0) - (left.completedAt || left.requestedAt || 0));
   const latestHealthyTimeBySchedule = new Map();
   for (const group of [...active, ...completed]) {
@@ -2265,9 +2267,11 @@ function summarizeQueue(rows = [], timingRows = []) {
           ? (group.runningJobs > 0 ? "running" : "waiting")
           : group.hasError
             ? "error"
-            : group.completedJobs === group.totalJobs
-              ? "complete"
-              : "stopped";
+            : group.hasBlocked
+              ? "blocked"
+              : group.completedJobs === group.totalJobs
+                ? "complete"
+                : "stopped";
       return queueGroupView(group, {
         status,
         queuePosition: null,
@@ -2330,6 +2334,8 @@ function queueGroupView(group, overrides) {
     totalJobs: group.totalJobs,
     completedJobs: group.completedJobs,
     failureCode: group.failureCode,
+    attentionType: group.hasBlocked ? "quality_hold" : group.hasError ? "system_error" : null,
+    retryable: group.hasError,
     ...overrides
   };
   view.progress = queueProgressView(group, view.status);

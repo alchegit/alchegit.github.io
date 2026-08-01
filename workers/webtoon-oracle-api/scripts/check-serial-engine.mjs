@@ -30,6 +30,7 @@ assert.match(
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
+assert.match(serialServiceSource, /attentionType: group\.hasBlocked \? "quality_hold"/u, "quality holds must be separate from system failures");
 assert.match(serialServiceSource, /episode-\$\{index \+ 1\}-card/u, "initial production progress must track episode planning");
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
