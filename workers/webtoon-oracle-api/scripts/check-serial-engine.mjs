@@ -6,6 +6,7 @@ import {
   analyzeStoryHeavenSerialDraft,
   calculateStoryHeavenReaderExperienceScore,
   decideStoryHeavenSerialReview,
+  storyHeavenSerialQualityThresholds,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenEpisodeRun,
   validateStoryHeavenSerialSchedule,
@@ -27,11 +28,11 @@ assert.match(
 );
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
-  initialEpisodeCount: 3,
+  initialEpisodeCount: 1,
   adminMinimumEpisodeCount: 1,
   recommendationThreshold: 11
 });
-assert.equal(continuationMinimumEpisode("reader_threshold"), 3);
+assert.equal(continuationMinimumEpisode("reader_threshold"), 1);
 assert.equal(continuationMinimumEpisode("admin_request"), 1);
 assert.deepEqual(STORYHEAVEN_SERIAL_STORY_CONTROL.visibilities, ["public", "private", "archived"]);
 assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "public", continuationMode: "auto" }).ok, true);
@@ -109,7 +110,12 @@ const schedule = validateStoryHeavenSerialSchedule({
 });
 assert.equal(schedule.ok, true);
 assert.equal(schedule.schedule.cadenceMinutes, 90);
+assert.equal(schedule.schedule.targetEpisodeCount, 1);
 assert.equal(schedule.schedule.maxActiveSerials, 1);
+const fiveEpisodeSchedule = validateStoryHeavenSerialSchedule({ ...schedule.schedule, targetEpisodeCount: 5 });
+assert.equal(fiveEpisodeSchedule.ok, true);
+assert.equal(fiveEpisodeSchedule.schedule.targetEpisodeCount, 5);
+assert.equal(validateStoryHeavenSerialSchedule({ ...schedule.schedule, targetEpisodeCount: 11 }).ok, false);
 assert.match(schedule.schedule.name, /자동 연재/u);
 assert.deepEqual(schedule.schedule.genrePool, ["판타지", "현대판타지", "헌터·던전"]);
 assert.equal(validateStoryHeavenSerialSchedule({ ...schedule.schedule, subgenresByGenre: { fantasy: ["office-romance"] } }).ok, false);
@@ -261,6 +267,17 @@ const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);
 assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 93.9);
+assert.equal(storyHeavenSerialQualityThresholds(1).openingGrip, 90);
+assert.equal(storyHeavenSerialQualityThresholds(1).curiosityAndHook, 92);
+assert.equal(storyHeavenSerialQualityThresholds(2).openingGrip, 75);
+const weakFirstEpisode = decideStoryHeavenSerialReview({
+  qa,
+  review: { ...review, scores: { ...scores, openingGrip: 85 } },
+  rewriteCount: 0,
+  episodeNo: 1
+});
+assert.equal(weakFirstEpisode.state, "rewrite_required");
+assert.equal(weakFirstEpisode.failedMetrics[0].name, "openingGrip");
 
 const visuallyWeakReview = { ...review, decision: "rewrite_required", scores: { ...scores, sceneVisualization: 70 } };
 const visualRewrite = decideStoryHeavenSerialReview({ qa, review: visuallyWeakReview, rewriteCount: 0 });

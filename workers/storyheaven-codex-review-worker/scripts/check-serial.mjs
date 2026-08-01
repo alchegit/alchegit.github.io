@@ -21,6 +21,7 @@ assert.match(prompt, new RegExp(SERIAL_EDITORIAL_POLICY_VERSION, "u"));
 assert.match(prompt, /three clearly labeled reading lenses/u);
 assert.match(prompt, /Genre combinations are binding/u);
 assert.match(prompt, /distinct dramatic job/u);
+assert.match(prompt, /Episode 1 is a retention gate/u);
 assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
@@ -31,6 +32,7 @@ assert.match(writingPrompt, /two to four memorable concrete details per scene/u)
 
 const planningPrompt = buildSerialPrompt({ ...job, type: "build_episode_card" });
 assert.match(planningPrompt, /lock a spatial anchor, character blocking/u);
+assert.match(planningPrompt, /force the protagonist into a costly or irreversible choice/u);
 
 const parsed = parseSerialOutput({
   jobId: job.id,

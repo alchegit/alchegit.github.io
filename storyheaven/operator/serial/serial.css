@@ -119,7 +119,14 @@
   grid-column: 1 / -1;
 }
 
-.interval-field small {
+.initial-settings {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(320px, 1.3fr);
+  gap: 16px;
+}
+
+.interval-field small,
+.target-field small {
   color: #9fa8b9;
   font-size: 0.82rem;
   font-weight: 650;
@@ -498,6 +505,87 @@
 .queue-note {
   color: #aeb6c7;
   font-size: 0.84rem;
+}
+
+.timing-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  border-left: 5px solid #ffd45c;
+  padding: 12px 16px;
+  background: #24202a;
+  color: #fff;
+}
+
+.timing-summary span {
+  color: #d8dce5;
+  font-size: 0.84rem;
+}
+
+.run-history {
+  border-top: 2px solid #475064;
+  color: #eef2f8;
+}
+
+.run-history > summary {
+  padding: 16px 0;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.run-history-list {
+  display: grid;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
+.run-history-item {
+  border-left: 4px solid #667086;
+  padding: 11px 14px;
+  background: #171b25;
+}
+
+.run-history-item.is-complete {
+  border-color: #4fe0b3;
+}
+
+.run-history-item.is-error,
+.run-history-item.is-stopped {
+  border-color: #ff6b76;
+}
+
+.run-history-item > div,
+.stage-timing-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.run-history-item > div span {
+  color: #aeb6c7;
+  font-size: 0.8rem;
+}
+
+.run-history-item details {
+  margin-top: 8px;
+}
+
+.run-history-item summary {
+  cursor: pointer;
+  color: #9debd2;
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.stage-timing-list {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0 0;
+  padding-left: 22px;
+  color: #dfe4ec;
+  font-size: 0.8rem;
 }
 
 .queue-note {
@@ -952,6 +1040,7 @@
   }
 
   .schedule-form,
+  .initial-settings,
   .primary-genres,
   .mode-fieldset,
   .humor-options,
@@ -995,6 +1084,14 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 6px;
+  }
+
+  .timing-summary,
+  .run-history-item > div,
+  .stage-timing-list li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .queue-position {

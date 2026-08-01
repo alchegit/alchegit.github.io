@@ -792,7 +792,12 @@ app.get("/api/storyheaven/operator/serial-engine/schedules", requireUser, requir
       storyHeavenSerialService.listSchedules(),
       storyHeavenSerialService.getQueueState()
     ]);
-    res.json({ enabled: config.storyHeavenSerialEngineEnabled, schedules, queue });
+    res.json({
+      enabled: config.storyHeavenSerialEngineEnabled,
+      pollSeconds: Math.max(1, Math.round(config.storyHeavenSerialPollMs / 1_000)),
+      schedules,
+      queue
+    });
   } catch (error) {
     next(error);
   }
@@ -823,6 +828,16 @@ app.post("/api/storyheaven/operator/serial-engine/schedules/:id/run", requireUse
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
     await ensureUserProfile(req.user, req);
     res.status(202).json({ run: await storyHeavenSerialService.runSchedule(req.params.id, req.user.id) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    res.status(202).json(await storyHeavenSerialService.retryQueueGroup(req.params.id));
   } catch (error) {
     next(error);
   }

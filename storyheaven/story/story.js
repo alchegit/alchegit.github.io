@@ -598,7 +598,7 @@
       autoContinuationEligible: false,
       operatorAvailable: false,
       canRequestNext: false,
-      initialEpisodeCount: 3,
+      initialEpisodeCount: 1,
       threshold: 11,
       targetEpisodeNo: Number(state.current?.episodeNo || 0) + 1,
       continuation: null

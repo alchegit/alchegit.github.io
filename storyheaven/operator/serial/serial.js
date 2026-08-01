@@ -7,8 +7,8 @@
   const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
   const primaryGenreLimit = 3;
   const subgenreLimit = 10;
-  const draftStorageKey = "storyheaven.operator.serial-draft.v3";
-  const legacyDraftStorageKey = "storyheaven.operator.serial-draft.v2";
+  const draftStorageKey = "storyheaven.operator.serial-draft.v5";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   let draftReady = false;
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
@@ -21,6 +21,7 @@
     renderSubgenres();
     bind();
     syncCadenceBounds();
+    updateTargetButton();
     draftReady = true;
     updateDraftStatus(restoredDraftAt ? `마지막 설정 ${formatDraftTime(restoredDraftAt)} 복원` : "설정 자동 저장");
     await StoryHeavenCommon.init(onAuth);
@@ -36,6 +37,8 @@
     selectors.queueLive = document.querySelector("[data-queue-live]");
     selectors.queueLast = document.querySelector("[data-queue-last]");
     selectors.queueNote = document.querySelector("[data-queue-note]");
+    selectors.timingSummary = document.querySelector("[data-timing-summary]");
+    selectors.runHistory = document.querySelector("[data-run-history]");
     selectors.primaryGenres = document.querySelector("[data-primary-genres]");
     selectors.subgenres = document.querySelector("[data-subgenres]");
     selectors.subgenreCount = document.querySelector("[data-subgenre-count]");
@@ -54,6 +57,7 @@
     document.querySelector("[data-process-due]").addEventListener("click", processDue);
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
     selectors.scheduleForm.elements.cadenceUnit.addEventListener("change", syncCadenceBounds);
+    selectors.scheduleForm.elements.targetEpisodeCount.addEventListener("input", updateTargetButton);
   }
 
   async function onAuth(auth) {
@@ -228,7 +232,10 @@
 
   async function refreshSchedules() {
     const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules");
-    selectors.engineState.textContent = payload.enabled ? "자동 연재 연결됨" : "자동 연재 멈춤";
+    const pollSeconds = Math.max(1, Number(payload.pollSeconds) || 60);
+    selectors.engineState.textContent = payload.enabled
+      ? `자동 연재 연결됨 · ${pollSeconds}초마다 예약 확인`
+      : "자동 연재 서버 멈춤";
     const queue = payload.queue || {};
     queueByScheduleId.clear();
     failedByScheduleId.clear();
@@ -260,7 +267,7 @@
     heading.append(title, status, mode);
     const detail = document.createElement("p");
     const humor = schedulePrimaryGenres(schedule).includes("comedy") ? ` · 웃음 ${schedule.humorLabel || humorLabel(schedule.humorIntensity)}` : "";
-    detail.textContent = `${subgenreLabels(schedule).join(" · ")}${humor} · 기본 3화 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
+    detail.textContent = `${subgenreLabels(schedule).join(" · ")}${humor} · ${schedule.targetEpisodeCount || 1}화까지 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 확인 ${formatDate(schedule.nextRunAt)}` : "서비스를 다시 시작할 때까지 생성과 공개가 멈춥니다.";
     copy.append(heading, detail, next);
@@ -304,6 +311,8 @@
       const subgenres = Object.values(subgenresByGenre).flat();
       const cadenceMinutes = readCadenceMinutes();
       if (!cadenceMinutes) return;
+      const targetEpisodeCount = readTargetEpisodeCount();
+      if (!targetEpisodeCount) return;
       const created = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules", {
         method: "POST",
         body: {
@@ -313,6 +322,7 @@
           subgenresByGenre,
           publicationMode: form.get("publicationMode"),
           cadenceMinutes,
+          targetEpisodeCount,
           humorIntensity: selectors.humorControl.hidden ? "light" : form.get("humorIntensity"),
           targetAge: "teen",
           status: "active",
@@ -326,8 +336,8 @@
       await refreshSchedules();
       saveDraftNow();
       StoryHeavenCommon.toast(selectedPrimaryGenres.has("random") || subgenres.includes("random")
-        ? "랜덤 장르의 기본 3화 제작을 대기열에 넣었습니다."
-        : "기본 3화 제작을 대기열에 넣었습니다.");
+        ? `랜덤 장르의 ${targetEpisodeCount}화까지 제작을 대기열에 넣었습니다.`
+        : `${targetEpisodeCount}화까지 제작을 대기열에 넣었습니다.`);
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
@@ -346,6 +356,7 @@
           subgenresByGenre: scheduleSubgenresByGenre(schedule),
           publicationMode: schedule.publicationMode,
           cadenceMinutes: schedule.cadenceMinutes,
+          targetEpisodeCount: schedule.targetEpisodeCount || 1,
           humorIntensity: schedule.humorIntensity || "light",
           targetAge: schedule.targetAge,
           status: schedule.status,
@@ -379,6 +390,80 @@
       detail.textContent = "첫 작업이 끝나면 실제 소요 시간과 AI 작업 수가 표시됩니다.";
     }
     selectors.queueLast.append(title, detail);
+    renderTimingSummary();
+    renderRunHistory(queue.history || []);
+  }
+
+  function renderTimingSummary() {
+    const schedules = [...scheduleById.values()];
+    const sampleCount = schedules.reduce((sum, schedule) => sum + Number(schedule.episode1Timing?.sampleCount || 0), 0);
+    const weightedSeconds = schedules.reduce((sum, schedule) => {
+      const samples = Number(schedule.episode1Timing?.sampleCount || 0);
+      return sum + Number(schedule.episode1Timing?.averageSeconds || 0) * samples;
+    }, 0);
+    selectors.timingSummary.replaceChildren();
+    const title = document.createElement("strong");
+    const detail = document.createElement("span");
+    title.textContent = "평균 1화 작업 예상 시간";
+    detail.textContent = sampleCount > 0
+      ? `${formatDuration(Math.round(weightedSeconds / sampleCount))} · 완료 ${sampleCount}건 기준`
+      : "첫 1화가 완성되면 실제 측정값으로 자동 계산합니다.";
+    selectors.timingSummary.append(title, detail);
+  }
+
+  function renderRunHistory(history) {
+    selectors.runHistory.replaceChildren();
+    if (!history.length) {
+      selectors.runHistory.append(message("아직 기록된 자동 연재 실행이 없습니다."));
+      return;
+    }
+    for (const run of history) {
+      const item = document.createElement("article");
+      item.className = `run-history-item is-${run.status}`;
+      const header = document.createElement("div");
+      const title = document.createElement("strong");
+      const meta = document.createElement("span");
+      title.textContent = run.workLabel || run.title;
+      meta.textContent = `${historyStatusLabel(run.status)} · ${formatDuration(run.elapsedSeconds)} · ${formatDate(run.completedAt || run.startedAt || run.requestedAt)}`;
+      header.append(title, meta);
+      item.append(header);
+
+      const timings = Array.isArray(run.stageTimings) ? run.stageTimings : [];
+      if (timings.length) {
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = `단계별 시간 ${timings.length}건`;
+        const list = document.createElement("ol");
+        list.className = "stage-timing-list";
+        for (const timing of timings) {
+          const row = document.createElement("li");
+          const label = document.createElement("span");
+          const value = document.createElement("b");
+          label.textContent = `${timing.episodeNo ? `${timing.episodeNo}화 · ` : ""}${stageLabel(timing.type)}`;
+          value.textContent = timing.durationSeconds === null
+            ? historyStatusLabel(timing.status)
+            : formatDuration(timing.durationSeconds);
+          row.append(label, value);
+          list.append(row);
+        }
+        details.append(summary, list);
+        item.append(details);
+      }
+      selectors.runHistory.append(item);
+    }
+  }
+
+  function historyStatusLabel(status) {
+    return ({
+      complete: "완료",
+      running: "진행 중",
+      waiting: "대기",
+      error: "중단",
+      canceled: "취소",
+      stopped: "종료",
+      queued: "대기",
+      retry_wait: "재시도 대기"
+    })[String(status || "")] || String(status || "확인 중");
   }
 
   function renderQueueLive(items, updatedAt, lastFailed) {
@@ -438,7 +523,7 @@
       const actions = document.createElement("div");
       actions.className = "queue-live-actions";
       actions.append(
-        actionButton("같은 설정으로 다시 제작", "queue-retry", () => retrySchedule(lastFailed.scheduleId)),
+        actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(lastFailed)),
         actionButton("연결된 설정 보기", "secondary", () => focusSchedule(lastFailed.scheduleId))
       );
       selectors.queueLive.append(actions);
@@ -472,8 +557,24 @@
     title.textContent = `설정은 가동 중 · 최근 제작 시도는 중단`;
     detail.textContent = `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
     copy.append(title, detail);
-    wrapper.append(copy, actionButton("다시 제작", "queue-retry", () => retrySchedule(schedule.id)));
+    wrapper.append(copy, actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(failedWork)));
     return wrapper;
+  }
+
+  async function resumeQueue(failedWork) {
+    if (!failedWork?.id) return retrySchedule(failedWork?.scheduleId);
+    try {
+      const result = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(failedWork.id)}/retry`, {
+        method: "POST",
+        body: {}
+      });
+      await refreshSchedules();
+      StoryHeavenCommon.toast(result.reused
+        ? "이미 재개된 작업을 계속 진행하고 있습니다."
+        : "실패한 단계부터 작업을 재개했습니다.");
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
   }
 
   async function retrySchedule(scheduleId) {
@@ -585,10 +686,12 @@
   }
 
   function productionProgressState(item) {
-    const initialBatch = String(item.workLabel || "").includes("기본 3화");
+    const initialBatch = item.initialBatch === true || /^새 작품 ·/u.test(String(item.workLabel || ""));
     const bootstrapPlan = item.bootstrapPlan === true;
+    const targetEpisodeCount = Math.max(1, Math.min(10, Number(item.targetEpisodeCount || 1)));
+    const episodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => `${index + 1}화`);
     const steps = initialBatch
-      ? ["아이디어", "설정집", "장기 전개", "1화", "2화", "3화", "공개 준비"]
+      ? ["아이디어", "설정집", "장기 전개", ...episodeSteps, "공개 준비"]
       : bootstrapPlan
         ? ["설정집", "장기 전개", "회차 구성", "원고 작성", "편집 검수", "공개 준비"]
         : ["회차 구성", "원고 작성", "편집 검수", "공개 준비"];
@@ -598,8 +701,8 @@
       if (stage === "build_bible") currentIndex = 1;
       else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
       else if (["build_episode_card", "write_draft", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
-        currentIndex = 2 + Math.min(3, Math.max(1, Number(item.episodeNo || 1)));
-      } else if (["publication_ready", "published"].includes(stage)) currentIndex = 6;
+        currentIndex = 2 + Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1)));
+      } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
     } else if (bootstrapPlan) {
       if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
       else if (stage === "build_episode_card") currentIndex = 2;
@@ -723,7 +826,7 @@
     const list = document.createElement("ol");
     for (const job of payload.jobs || []) {
       const item = document.createElement("li");
-      item.textContent = `${job.type} · ${job.status}${job.attemptCount > 1 ? ` · ${job.attemptCount}회 시도` : ""}`;
+      item.textContent = `${stageLabel(job.type)} · ${historyStatusLabel(job.status)}${job.durationSeconds === null ? "" : ` · ${formatDuration(job.durationSeconds)}`}${job.attemptCount > 1 ? ` · ${job.attemptCount}회 시도` : ""}`;
       list.append(item);
     }
     jobs.append(jobSummary, list);
@@ -831,6 +934,22 @@
     return minutes;
   }
 
+  function readTargetEpisodeCount() {
+    const input = selectors.scheduleForm.elements.targetEpisodeCount;
+    const value = Math.round(Number(input.value));
+    input.setCustomValidity(value < 1 || value > 10 ? "1화 이상 10화 이하로 설정해주세요." : "");
+    if (!input.reportValidity()) return null;
+    return value;
+  }
+
+  function updateTargetButton() {
+    const input = selectors.scheduleForm?.elements.targetEpisodeCount;
+    const button = selectors.scheduleForm?.querySelector("button[type='submit']");
+    if (!input || !button) return;
+    const value = Math.max(1, Math.min(10, Math.round(Number(input.value) || 1)));
+    button.textContent = `${value}화까지 제작을 대기열에 추가`;
+  }
+
   function syncCadenceBounds() {
     const input = selectors.scheduleForm.elements.cadenceValue;
     const unit = selectors.scheduleForm.elements.cadenceUnit.value;
@@ -840,14 +959,14 @@
   }
 
   function cadenceFields(minutesValue) {
-    const minutes = Number(minutesValue || 360);
+    const minutes = Number(minutesValue || 120);
     return minutes % 60 === 0
       ? { value: minutes / 60, unit: "hours" }
       : { value: minutes, unit: "minutes" };
   }
 
   function formatCadence(minutesValue) {
-    const minutes = Number(minutesValue || 360);
+    const minutes = Number(minutesValue || 120);
     if (minutes % 1_440 === 0) return `${minutes / 1_440}일`;
     if (minutes % 60 === 0) return `${minutes / 60}시간`;
     return `${minutes}분`;
@@ -866,15 +985,16 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 3,
+      version: 5,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
         genreId,
         [...(selectedSubgenresByGenre.get(genreId) || [])]
       ])),
-      cadenceValue: String(form.get("cadenceValue") || "6"),
+      cadenceValue: String(form.get("cadenceValue") || "2"),
       cadenceUnit: String(form.get("cadenceUnit") || "hours"),
+      targetEpisodeCount: String(form.get("targetEpisodeCount") || "1"),
       publicationMode: String(form.get("publicationMode") || "test_private"),
       humorIntensity: String(form.get("humorIntensity") || "balanced"),
       conceptPolicy: String(form.get("conceptPolicy") || "")
@@ -891,19 +1011,23 @@
   function restoreDraft() {
     let draft;
     try {
-      draft = JSON.parse(localStorage.getItem(draftStorageKey) || localStorage.getItem(legacyDraftStorageKey) || "null");
+      const stored = localStorage.getItem(draftStorageKey)
+        || legacyDraftStorageKeys.map((key) => localStorage.getItem(key)).find(Boolean)
+        || "null";
+      draft = JSON.parse(stored);
     } catch {
       return;
     }
-    if (!draft || ![2, 3].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
-    if (draft.version === 2) {
-      setFormValue("cadenceValue", Math.min(168, Math.max(1, Number(draft.cadenceDays || 1) * 24)));
+    if (draft.version < 5) {
+      setFormValue("cadenceValue", "2");
       setFormValue("cadenceUnit", "hours");
     } else {
       setFormValue("cadenceValue", draft.cadenceValue);
       setFormValue("cadenceUnit", draft.cadenceUnit);
     }
+    setFormValue("targetEpisodeCount", draft.targetEpisodeCount || 1);
     setFormValue("publicationMode", draft.publicationMode);
     setFormValue("humorIntensity", draft.humorIntensity);
     setFormValue("conceptPolicy", draft.conceptPolicy);
@@ -958,12 +1082,14 @@
     const cadence = cadenceFields(schedule.cadenceMinutes);
     setFormValue("cadenceValue", cadence.value);
     setFormValue("cadenceUnit", cadence.unit);
+    setFormValue("targetEpisodeCount", schedule.targetEpisodeCount || 1);
     setFormValue("publicationMode", schedule.publicationMode);
     setFormValue("humorIntensity", schedule.humorIntensity || "balanced");
     setFormValue("conceptPolicy", schedule.conceptPolicy);
     renderPrimaryGenres();
     renderSubgenres();
     syncCadenceBounds();
+    updateTargetButton();
     saveDraftNow();
     selectors.scheduleForm.scrollIntoView({ behavior: "smooth", block: "start" });
     selectors.primaryGenres.querySelector("input:checked")?.focus({ preventScroll: true });
@@ -978,6 +1104,7 @@
     renderPrimaryGenres();
     renderSubgenres();
     syncCadenceBounds();
+    updateTargetButton();
     saveDraftNow();
     selectors.primaryGenres.querySelector("input:checked")?.focus();
     StoryHeavenCommon.toast("새 연재 기본값으로 돌아왔습니다.");
@@ -1019,7 +1146,8 @@
   }
 
   function formatDuration(secondsValue) {
-    const seconds = Number(secondsValue);
+    if (secondsValue === null || secondsValue === undefined || secondsValue === "") return "측정 중";
+    const seconds = Math.max(0, Math.round(Number(secondsValue)));
     if (!Number.isFinite(seconds)) return "측정 중";
     if (seconds < 60) return `${seconds}초`;
     const minutes = Math.floor(seconds / 60);

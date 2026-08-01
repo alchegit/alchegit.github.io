@@ -14,6 +14,8 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   conceptPolicy: 4_000,
   cadenceMinutesMin: 15,
   cadenceMinutesMax: 10_080,
+  targetEpisodeCountMin: 1,
+  targetEpisodeCountMax: 10,
   episodesPerArcMin: 6,
   episodesPerArcMax: 30,
   scenesMin: 3,
@@ -35,6 +37,17 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
     characterAgency: 75,
     novelty: 75
   })
+});
+
+const STORYHEAVEN_FIRST_EPISODE_QUALITY = Object.freeze({
+  sceneVisualization: 88,
+  openingGrip: 90,
+  narrativeMomentum: 86,
+  emotionalPayoff: 82,
+  genrePromise: 88,
+  curiosityAndHook: 92,
+  characterAgency: 82,
+  novelty: 86
 });
 
 export const STORYHEAVEN_HUMOR_PROFILES = Object.freeze({
@@ -95,8 +108,17 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     input.cadenceMinutes ?? (Number.isFinite(legacyCadence) ? legacyCadence : undefined),
     STORYHEAVEN_SERIAL_LIMITS.cadenceMinutesMin,
     STORYHEAVEN_SERIAL_LIMITS.cadenceMinutesMax,
-    360
+    120
   );
+  const targetEpisodeCount = integer(
+    input.targetEpisodeCount,
+    STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin,
+    STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMax,
+    1
+  );
+  const rawTargetEpisodeCount = input.targetEpisodeCount === undefined || input.targetEpisodeCount === null
+    ? 1
+    : Number(input.targetEpisodeCount);
   const humorIntensity = String(input.humorIntensity || "light").trim();
   const humorProfile = STORYHEAVEN_HUMOR_PROFILES[humorIntensity];
   const targetAge = ["all", "teen"].includes(input.targetAge) ? input.targetAge : "teen";
@@ -105,6 +127,11 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     : "test_private";
   const conceptPolicy = text(input.conceptPolicy, STORYHEAVEN_SERIAL_LIMITS.conceptPolicy);
   if (!genre.ok) errors.push(fieldError("subgenres", genre.error));
+  if (!Number.isInteger(rawTargetEpisodeCount)
+    || rawTargetEpisodeCount < STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin
+    || rawTargetEpisodeCount > STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMax) {
+    errors.push(fieldError("targetEpisodeCount", "serial_target_episode_count_invalid"));
+  }
   if (!humorProfile) errors.push(fieldError("humorIntensity", "serial_humor_intensity_invalid"));
   if (conceptPolicy.length < 30) errors.push(fieldError("conceptPolicy", "concept_policy_too_short"));
   return {
@@ -123,6 +150,7 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
       genrePool: genre.ok ? [...genre.primaryLabels, ...genre.subgenreLabels] : [],
       cadenceMinutes,
       cadenceDays: Math.max(1, Math.ceil(cadenceMinutes / 1_440)),
+      targetEpisodeCount,
       maxActiveSerials: 1,
       targetAge,
       publicationMode,
@@ -241,9 +269,15 @@ export function analyzeStoryHeavenSerialDraft(input = {}) {
   };
 }
 
-export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0 }) {
+export function storyHeavenSerialQualityThresholds(episodeNo = null) {
+  return Number(episodeNo) === 1
+    ? Object.freeze({ ...STORYHEAVEN_SERIAL_LIMITS.quality, ...STORYHEAVEN_FIRST_EPISODE_QUALITY })
+    : STORYHEAVEN_SERIAL_LIMITS.quality;
+}
+
+export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, episodeNo = null }) {
   const scores = review?.scores || {};
-  const thresholds = STORYHEAVEN_SERIAL_LIMITS.quality;
+  const thresholds = storyHeavenSerialQualityThresholds(episodeNo);
   const readerExperienceScore = calculateStoryHeavenReaderExperienceScore(scores);
   const failedMetrics = Object.entries(thresholds)
     .filter(([name, threshold]) => Number(scores[name]) < threshold)
