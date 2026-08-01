@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import {
+  STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_SERIAL_LIMITS,
   analyzeStoryHeavenSerialDraft,
   decideStoryHeavenSerialReview,
@@ -2060,6 +2061,20 @@ function mapSchedule(row) {
   const primaryGenres = parseJson(row.PRIMARY_GENRES_JSON, row.PRIMARY_GENRE ? [row.PRIMARY_GENRE] : []);
   const subgenres = parseJson(row.SUBGENRES_JSON, []);
   const subgenresByGenre = parseJson(row.SUBGENRES_BY_GENRE_JSON, row.PRIMARY_GENRE ? { [row.PRIMARY_GENRE]: subgenres } : {});
+  const storedCreativeControls = policy.creativeControls && typeof policy.creativeControls === "object"
+    ? policy.creativeControls
+    : {};
+  const legacyHumor = storedCreativeControls.humorIntensity === "comedy-first"
+    ? 5
+    : storedCreativeControls.humorIntensity === "balanced"
+      ? 3
+      : STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS.humor;
+  const creativeControls = {
+    ...STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
+    humor: legacyHumor,
+    preset: "balanced",
+    ...storedCreativeControls
+  };
   return {
     id: row.ID,
     name: row.SCHEDULE_NAME,
@@ -2070,8 +2085,9 @@ function mapSchedule(row) {
     targetAge: row.TARGET_AGE,
     genrePool: parseJson(row.GENRE_POOL_JSON, []),
     conceptPolicy: policy.instruction || "",
-    humorIntensity: policy.creativeControls?.humorIntensity || "light",
-    humorLabel: policy.creativeControls?.humorLabel || "미소 중심",
+    creativeControls,
+    humorIntensity: creativeControls.humorIntensity || "light",
+    humorLabel: creativeControls.humorLabel || "미소 중심",
     randomized: policy.randomized || { primaryGenre: false, subgenres: false },
     primaryGenre: row.PRIMARY_GENRE,
     primaryGenres,
@@ -2116,6 +2132,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       startedAt: null,
       completedAt: null,
       canceledAt: null,
+      latestRunId: null,
       totalJobs: 0,
       completedJobs: 0,
       activeJobs: 0,
@@ -2129,6 +2146,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       hasPlanning: false,
       hasError: false
     };
+    group.latestRunId ||= row.ID || null;
     group.storyId ||= row.STORY_ID || null;
     if (row.STORY_TITLE) group.title = row.STORY_TITLE;
     if (!group.primaryGenres.length) {
@@ -2203,12 +2221,37 @@ function summarizeQueue(rows = [], timingRows = []) {
   const failed = all
     .filter((group) => !group.canceledAt && group.hasError)
     .sort((left, right) => (right.completedAt || right.requestedAt || 0) - (left.completedAt || left.requestedAt || 0));
-  const lastFailed = failed[0]
-    ? queueGroupView(failed[0], {
+  const latestHealthyTimeBySchedule = new Map();
+  for (const group of [...active, ...completed]) {
+    if (!group.scheduleId) continue;
+    const time = group.completedAt || group.startedAt || group.requestedAt || 0;
+    latestHealthyTimeBySchedule.set(
+      group.scheduleId,
+      Math.max(latestHealthyTimeBySchedule.get(group.scheduleId) || 0, time)
+    );
+  }
+  const attentionGroups = [];
+  const seenFailedSchedules = new Set();
+  for (const group of failed) {
+    const key = group.scheduleId || group.id;
+    if (seenFailedSchedules.has(key)) continue;
+    seenFailedSchedules.add(key);
+    const failedAt = group.completedAt || group.requestedAt || 0;
+    if (group.scheduleId && (latestHealthyTimeBySchedule.get(group.scheduleId) || 0) > failedAt) continue;
+    attentionGroups.push(group);
+  }
+  const attention = attentionGroups.slice(0, 5).map((group) => queueGroupView(group, {
+    status: "error",
+    queuePosition: null,
+    cancelable: false,
+    elapsedSeconds: elapsedSeconds(group.startedAt || group.requestedAt, group.completedAt)
+  }));
+  const lastFailed = attentionGroups[0]
+    ? queueGroupView(attentionGroups[0], {
         status: "error",
         queuePosition: null,
         cancelable: false,
-        elapsedSeconds: elapsedSeconds(failed[0].startedAt || failed[0].requestedAt, failed[0].completedAt)
+        elapsedSeconds: elapsedSeconds(attentionGroups[0].startedAt || attentionGroups[0].requestedAt, attentionGroups[0].completedAt)
       })
     : null;
   const history = all
@@ -2241,6 +2284,19 @@ function summarizeQueue(rows = [], timingRows = []) {
     items,
     lastCompleted,
     lastFailed,
+    attention,
+    recentCompleted: completed.slice(0, 5).map((group) => queueGroupView(group, {
+      status: "complete",
+      queuePosition: null,
+      cancelable: false,
+      elapsedSeconds: elapsedSeconds(group.startedAt || group.requestedAt, group.completedAt)
+    })),
+    statusCounts: {
+      running: items.filter((item) => item.status === "running").length,
+      waiting: items.filter((item) => item.status === "waiting").length,
+      complete: completed.length,
+      attention: attention.length
+    },
     history,
     updatedAt: new Date().toISOString(),
     quotaPercent: null,
@@ -2251,6 +2307,7 @@ function summarizeQueue(rows = [], timingRows = []) {
 function queueGroupView(group, overrides) {
   const view = {
     id: group.id,
+    latestRunId: group.latestRunId,
     scheduleId: group.scheduleId,
     storyId: group.storyId,
     title: group.title,
@@ -2283,7 +2340,11 @@ function queueProgressView(group, status) {
   const initialBatch = group.hasConcept;
   const bootstrapPlan = group.hasPlanning && !group.hasConcept;
   const targetEpisodeCount = Math.max(1, Number(group.targetEpisodeCount || STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount));
-  const initialEpisodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => `episode-${index + 1}`);
+  const initialEpisodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => [
+    `episode-${index + 1}-card`,
+    `episode-${index + 1}-draft`,
+    `episode-${index + 1}-review`
+  ]).flat();
   const steps = initialBatch
     ? ["concept", "bible", "arc", ...initialEpisodeSteps, "publication"]
     : bootstrapPlan
@@ -2295,7 +2356,13 @@ function queueProgressView(group, status) {
     if (stage === "build_bible") currentIndex = 1;
     else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
     else if (["build_episode_card", "write_draft", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
-      currentIndex = 2 + Math.min(targetEpisodeCount, Math.max(1, Number(group.maxEpisodeNo || 1)));
+      const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(group.maxEpisodeNo || 1))) - 1;
+      const stageOffset = stage === "build_episode_card"
+        ? 0
+        : ["write_draft", "rewrite_draft"].includes(stage)
+          ? 1
+          : 2;
+      currentIndex = 3 + (episodeIndex * 3) + stageOffset;
     } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
   } else if (bootstrapPlan) {
     if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;

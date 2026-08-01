@@ -71,6 +71,21 @@ export const STORYHEAVEN_HUMOR_PROFILES = Object.freeze({
   })
 });
 
+export const STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS = Object.freeze({
+  pace: 3,
+  suspense: 3,
+  curiosity: 4,
+  surprise: 3,
+  emotion: 3,
+  romance: 2,
+  action: 3,
+  description: 3,
+  humor: 2
+});
+
+const STORYHEAVEN_CREATIVE_CONTROL_KEYS = Object.freeze(Object.keys(STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS));
+const STORYHEAVEN_CREATIVE_PRESETS = new Set(["balanced", "fast", "emotional", "custom"]);
+
 export const STORYHEAVEN_SERIAL_STORY_CONTROL = Object.freeze({
   visibilities: Object.freeze(["public", "private", "archived"]),
   continuationModes: Object.freeze(["auto", "manual", "paused", "ended"]),
@@ -120,7 +135,9 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     ? 1
     : Number(input.targetEpisodeCount);
   const humorIntensity = String(input.humorIntensity || "light").trim();
-  const humorProfile = STORYHEAVEN_HUMOR_PROFILES[humorIntensity];
+  const creativeControls = normalizeCreativeControls(input.creativeControls, humorIntensity);
+  const normalizedHumorIntensity = humorIntensityForLevel(creativeControls.values.humor);
+  const humorProfile = STORYHEAVEN_HUMOR_PROFILES[normalizedHumorIntensity];
   const targetAge = ["all", "teen"].includes(input.targetAge) ? input.targetAge : "teen";
   const publicationMode = ["test_private", "auto_public"].includes(input.publicationMode)
     ? input.publicationMode
@@ -132,7 +149,10 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     || rawTargetEpisodeCount > STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMax) {
     errors.push(fieldError("targetEpisodeCount", "serial_target_episode_count_invalid"));
   }
-  if (!humorProfile) errors.push(fieldError("humorIntensity", "serial_humor_intensity_invalid"));
+  if (input.humorIntensity !== undefined && !STORYHEAVEN_HUMOR_PROFILES[humorIntensity]) {
+    errors.push(fieldError("humorIntensity", "serial_humor_intensity_invalid"));
+  }
+  if (!creativeControls.valid) errors.push(fieldError("creativeControls", "serial_creative_controls_invalid"));
   if (conceptPolicy.length < 30) errors.push(fieldError("conceptPolicy", "concept_policy_too_short"));
   return {
     ok: errors.length === 0,
@@ -156,14 +176,63 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
       publicationMode,
       conceptPolicy,
       creativeControls: {
-        humorIntensity: humorProfile ? humorIntensity : "light",
+        ...creativeControls.values,
+        preset: creativeControls.preset,
+        humorIntensity: humorProfile ? normalizedHumorIntensity : "light",
         humorLabel: humorProfile?.label || STORYHEAVEN_HUMOR_PROFILES.light.label,
         humorGuidance: humorProfile?.guidance || STORYHEAVEN_HUMOR_PROFILES.light.guidance,
         storyShare: humorProfile?.storyShare || STORYHEAVEN_HUMOR_PROFILES.light.storyShare,
-        humorShare: humorProfile?.humorShare || STORYHEAVEN_HUMOR_PROFILES.light.humorShare
+        humorShare: humorProfile?.humorShare || STORYHEAVEN_HUMOR_PROFILES.light.humorShare,
+        guidance: creativeControlGuidance(creativeControls.values)
       },
       randomized: genre.randomized || { primaryGenre: false, subgenres: false }
     }
+  };
+}
+
+function normalizeCreativeControls(input, legacyHumorIntensity) {
+  const source = input && typeof input === "object" && !Array.isArray(input) ? input : {};
+  const values = {};
+  let valid = true;
+  for (const key of STORYHEAVEN_CREATIVE_CONTROL_KEYS) {
+    const fallback = key === "humor"
+      ? humorLevelForIntensity(legacyHumorIntensity)
+      : STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS[key];
+    const raw = source[key] === undefined || source[key] === null || source[key] === ""
+      ? fallback
+      : Number(source[key]);
+    if (!Number.isInteger(raw) || raw < 1 || raw > 5) valid = false;
+    values[key] = Math.max(1, Math.min(5, Number.isFinite(raw) ? Math.round(raw) : fallback));
+  }
+  const preset = STORYHEAVEN_CREATIVE_PRESETS.has(String(source.preset || ""))
+    ? String(source.preset)
+    : "balanced";
+  return { valid, values, preset };
+}
+
+function humorLevelForIntensity(value) {
+  if (value === "comedy-first") return 5;
+  if (value === "balanced") return 3;
+  return 2;
+}
+
+function humorIntensityForLevel(value) {
+  if (value >= 4) return "comedy-first";
+  if (value >= 3) return "balanced";
+  return "light";
+}
+
+function creativeControlGuidance(values) {
+  return {
+    pace: `전개 속도 ${values.pace}/5: 낮을수록 여운과 탐색을 허용하고, 높을수록 사건과 선택의 간격을 줄이되 인과를 생략하지 않는다.`,
+    suspense: `긴장 ${values.suspense}/5: 위험과 불확실성의 압력을 조절하고 매 장면을 같은 고조 상태로 만들지 않는다.`,
+    curiosity: `호기심 ${values.curiosity}/5: 독자가 답을 알고 싶은 인과 질문의 밀도를 조절하고 공정한 단서를 함께 둔다.`,
+    surprise: `반전 ${values.surprise}/5: 예상 전환의 빈도와 크기를 조절하되 사전 단서 없는 임의 반전을 금지한다.`,
+    emotion: `감정 진폭 ${values.emotion}/5: 인물 선택의 정서적 대가와 회수 강도를 조절한다.`,
+    romance: `관계·로맨스 ${values.romance}/5: 관계 변화가 차지하는 장면 비중을 조절하며 선택 장르의 약속을 침범하지 않는다.`,
+    action: `액션 ${values.action}/5: 물리적 충돌과 즉각적 행동 보상의 빈도를 조절하고 공간 인과를 유지한다.`,
+    description: `묘사 밀도 ${values.description}/5: 독자가 장면을 그릴 구체물과 감각의 양을 조절하되 장식적 나열을 피한다.`,
+    humor: `웃음 ${values.humor}/5: 인물과 상황에서 나오는 웃음의 빈도와 보상 크기를 조절한다.`
   };
 }
 

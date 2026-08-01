@@ -7,8 +7,25 @@
   const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
   const primaryGenreLimit = 3;
   const subgenreLimit = 10;
-  const draftStorageKey = "storyheaven.operator.serial-draft.v5";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const seoulTimeZone = "Asia/Seoul";
+  const creativeFields = Object.freeze({
+    pace: "creativePace",
+    suspense: "creativeSuspense",
+    curiosity: "creativeCuriosity",
+    surprise: "creativeSurprise",
+    emotion: "creativeEmotion",
+    romance: "creativeRomance",
+    action: "creativeAction",
+    description: "creativeDescription",
+    humor: "creativeHumor"
+  });
+  const creativePresets = Object.freeze({
+    balanced: Object.freeze({ pace: 3, suspense: 3, curiosity: 4, surprise: 3, emotion: 3, romance: 2, action: 3, description: 3, humor: 2 }),
+    fast: Object.freeze({ pace: 5, suspense: 4, curiosity: 4, surprise: 3, emotion: 3, romance: 1, action: 4, description: 2, humor: 2 }),
+    emotional: Object.freeze({ pace: 2, suspense: 2, curiosity: 3, surprise: 2, emotion: 5, romance: 4, action: 1, description: 4, humor: 2 })
+  });
+  const draftStorageKey = "storyheaven.operator.serial-draft.v6";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   let draftReady = false;
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
@@ -34,6 +51,15 @@
     selectors.scheduleForm = document.querySelector("[data-schedule-form]");
     selectors.scheduleList = document.querySelector("[data-schedule-list]");
     selectors.queueList = document.querySelector("[data-queue-list]");
+    selectors.attentionList = document.querySelector("[data-attention-list]");
+    selectors.completedList = document.querySelector("[data-completed-list]");
+    selectors.completedCaption = document.querySelector("[data-completed-caption]");
+    selectors.waitingCaption = document.querySelector("[data-waiting-caption]");
+    selectors.historySummary = document.querySelector("[data-history-summary]");
+    selectors.statusRunning = document.querySelector("[data-status-running]");
+    selectors.statusWaiting = document.querySelector("[data-status-waiting]");
+    selectors.statusComplete = document.querySelector("[data-status-complete]");
+    selectors.statusAttention = document.querySelector("[data-status-attention]");
     selectors.queueLive = document.querySelector("[data-queue-live]");
     selectors.queueLast = document.querySelector("[data-queue-last]");
     selectors.queueNote = document.querySelector("[data-queue-note]");
@@ -43,7 +69,9 @@
     selectors.subgenres = document.querySelector("[data-subgenres]");
     selectors.subgenreCount = document.querySelector("[data-subgenre-count]");
     selectors.subgenreHelp = document.querySelector("[data-subgenre-help]");
-    selectors.humorControl = document.querySelector("[data-humor-control]");
+    selectors.creativeControls = document.querySelector("[data-creative-controls]");
+    selectors.creativeSummary = document.querySelector("[data-creative-summary]");
+    selectors.creativeWarning = document.querySelector("[data-creative-warning]");
     selectors.draftStatus = document.querySelector("[data-draft-status]");
     selectors.runSearch = document.querySelector("[data-run-search]");
     selectors.runState = document.querySelector("[data-run-state]");
@@ -58,6 +86,17 @@
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
     selectors.scheduleForm.elements.cadenceUnit.addEventListener("change", syncCadenceBounds);
     selectors.scheduleForm.elements.targetEpisodeCount.addEventListener("input", updateTargetButton);
+    for (const input of selectors.scheduleForm.querySelectorAll("input[name='creativePreset']")) {
+      input.addEventListener("change", () => {
+        if (input.checked && input.value !== "custom") applyCreativePreset(input.value);
+      });
+    }
+    for (const name of Object.values(creativeFields)) {
+      selectors.scheduleForm.elements[name].addEventListener("input", () => {
+        setCreativePreset("custom");
+        renderCreativeControls();
+      });
+    }
   }
 
   async function onAuth(auth) {
@@ -227,7 +266,64 @@
   }
 
   function renderHumorControl() {
-    selectors.humorControl.hidden = !selectedPrimaryGenres.has("comedy");
+    if (!selectors.creativeControls) return;
+    selectors.creativeControls.classList.toggle("has-comedy", selectedPrimaryGenres.has("comedy"));
+    renderCreativeControls();
+  }
+
+  function applyCreativePreset(name) {
+    const preset = creativePresets[name];
+    if (!preset) return;
+    for (const [key, fieldName] of Object.entries(creativeFields)) {
+      selectors.scheduleForm.elements[fieldName].value = String(preset[key]);
+    }
+    setCreativePreset(name);
+    renderCreativeControls();
+  }
+
+  function setCreativePreset(name) {
+    const input = selectors.scheduleForm.querySelector(`input[name='creativePreset'][value='${name}']`);
+    if (input) input.checked = true;
+  }
+
+  function readCreativeControls() {
+    const values = {};
+    for (const [key, fieldName] of Object.entries(creativeFields)) {
+      values[key] = Math.max(1, Math.min(5, Math.round(Number(selectors.scheduleForm.elements[fieldName].value) || 3)));
+    }
+    values.preset = String(new FormData(selectors.scheduleForm).get("creativePreset") || "custom");
+    return values;
+  }
+
+  function renderCreativeControls() {
+    if (!selectors.creativeControls) return;
+    const values = readCreativeControls();
+    for (const [key, fieldName] of Object.entries(creativeFields)) {
+      const input = selectors.scheduleForm.elements[fieldName];
+      const output = input.closest("label")?.querySelector("output");
+      if (output) output.value = String(values[key]);
+      input.style.setProperty("--range-value", `${(values[key] - 1) * 25}%`);
+    }
+    const presetLabels = { balanced: "균형 설정", fast: "빠른 몰입 설정", emotional: "감정 중심 설정", custom: "직접 조정" };
+    selectors.creativeSummary.textContent = presetLabels[values.preset] || "직접 조정";
+    const maximumCount = Object.entries(values).filter(([key, value]) => key !== "preset" && value === 5).length;
+    selectors.creativeWarning.hidden = maximumCount < 4;
+  }
+
+  function creativeControlSummary(values = {}) {
+    const entries = [
+      ["속도", values.pace],
+      ["긴장", values.suspense],
+      ["호기심", values.curiosity],
+      ["감정", values.emotion]
+    ].filter(([, value]) => Number(value) >= 4);
+    return entries.length ? entries.map(([label, value]) => `${label} ${value}`).join(" · ") : "균형";
+  }
+
+  function humorIntensityFromControls(values) {
+    if (Number(values?.humor) >= 4) return "comedy-first";
+    if (Number(values?.humor) >= 3) return "balanced";
+    return "light";
   }
 
   async function refreshSchedules() {
@@ -266,8 +362,8 @@
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
     const detail = document.createElement("p");
-    const humor = schedulePrimaryGenres(schedule).includes("comedy") ? ` · 웃음 ${schedule.humorLabel || humorLabel(schedule.humorIntensity)}` : "";
-    detail.textContent = `${subgenreLabels(schedule).join(" · ")}${humor} · ${schedule.targetEpisodeCount || 1}화까지 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
+    const controls = schedule.creativeControls || {};
+    detail.textContent = `${subgenreLabels(schedule).join(" · ")} · 강도 ${creativeControlSummary(controls)} · ${schedule.targetEpisodeCount || 1}화까지 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 확인 ${formatDate(schedule.nextRunAt)}` : "서비스를 다시 시작할 때까지 생성과 공개가 멈춥니다.";
     copy.append(heading, detail, next);
@@ -313,6 +409,7 @@
       if (!cadenceMinutes) return;
       const targetEpisodeCount = readTargetEpisodeCount();
       if (!targetEpisodeCount) return;
+      const creativeControls = readCreativeControls();
       const created = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules", {
         method: "POST",
         body: {
@@ -323,7 +420,8 @@
           publicationMode: form.get("publicationMode"),
           cadenceMinutes,
           targetEpisodeCount,
-          humorIntensity: selectors.humorControl.hidden ? "light" : form.get("humorIntensity"),
+          creativeControls,
+          humorIntensity: humorIntensityFromControls(creativeControls),
           targetAge: "teen",
           status: "active",
           conceptPolicy: form.get("conceptPolicy")
@@ -357,6 +455,7 @@
           publicationMode: schedule.publicationMode,
           cadenceMinutes: schedule.cadenceMinutes,
           targetEpisodeCount: schedule.targetEpisodeCount || 1,
+          creativeControls: schedule.creativeControls || creativePresets.balanced,
           humorIntensity: schedule.humorIntensity || "light",
           targetAge: schedule.targetAge,
           status: schedule.status,
@@ -374,10 +473,18 @@
 
   function renderQueue(queue) {
     const items = Array.isArray(queue.items) ? queue.items : [];
-    renderQueueLive(items, queue.updatedAt, queue.lastFailed);
-    selectors.queueList.replaceChildren(...items.map(queueRow));
-    if (!items.length) selectors.queueList.append(message("대기 중인 제작이 없습니다."));
-    selectors.queueNote.textContent = queue.quotaNote || "실제 AI 작업 수와 소요 시간을 작업별로 기록합니다.";
+    const running = items.filter((item) => item.status === "running");
+    const waiting = items.filter((item) => item.status !== "running");
+    const attention = Array.isArray(queue.attention) ? queue.attention : (queue.lastFailed ? [queue.lastFailed] : []);
+    const completed = Array.isArray(queue.recentCompleted) ? queue.recentCompleted : (queue.lastCompleted ? [queue.lastCompleted] : []);
+    renderStatusCounts(queue.statusCounts || {}, running.length, waiting.length, completed.length, attention.length);
+    renderQueueLive(running, queue.updatedAt);
+    selectors.queueList.replaceChildren(...waiting.map(queueRow));
+    if (!waiting.length) selectors.queueList.append(message("대기 중인 제작이 없습니다."));
+    selectors.waitingCaption.textContent = `${waiting.length}건`;
+    renderAttention(attention);
+    renderCompleted(completed);
+    selectors.queueNote.textContent = "진행 상황은 6초마다 갱신됩니다. 이전 오류는 현재 작업과 분리해 기록으로만 보관합니다.";
     const last = queue.lastCompleted;
     selectors.queueLast.replaceChildren();
     const title = document.createElement("strong");
@@ -392,6 +499,61 @@
     selectors.queueLast.append(title, detail);
     renderTimingSummary();
     renderRunHistory(queue.history || []);
+  }
+
+  function renderStatusCounts(counts, running, waiting, completed, attention) {
+    selectors.statusRunning.textContent = String(Number(counts.running ?? running));
+    selectors.statusWaiting.textContent = String(Number(counts.waiting ?? waiting));
+    selectors.statusComplete.textContent = String(Number(counts.complete ?? completed));
+    selectors.statusAttention.textContent = String(Number(counts.attention ?? attention));
+  }
+
+  function renderAttention(items) {
+    selectors.attentionList.replaceChildren();
+    if (!items.length) {
+      const empty = message("지금 조치할 문제는 없습니다.");
+      empty.classList.add("is-success");
+      selectors.attentionList.append(empty);
+      return;
+    }
+    for (const item of items) {
+      const row = document.createElement("article");
+      row.className = "attention-row";
+      const copy = document.createElement("div");
+      const title = document.createElement("strong");
+      const detail = document.createElement("p");
+      title.textContent = item.title && item.title !== "새 작품 기획" ? item.title : item.workLabel;
+      detail.textContent = `${stageLabel(item.stage)}에서 멈춤 · ${formatDate(item.completedAt || item.requestedAt)} · ${failureLabel(item.failureCode)}`;
+      copy.append(title, detail);
+      const actions = document.createElement("div");
+      actions.className = "attention-actions";
+      actions.append(actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(item)));
+      if (item.scheduleId) actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(item.scheduleId)));
+      row.append(copy, actions);
+      selectors.attentionList.append(row);
+    }
+  }
+
+  function renderCompleted(items) {
+    selectors.completedList.replaceChildren();
+    selectors.completedCaption.textContent = `${items.length}건`;
+    if (!items.length) {
+      selectors.completedList.append(message("아직 완료된 제작이 없습니다."));
+      return;
+    }
+    for (const item of items) {
+      const row = document.createElement("article");
+      row.className = "completed-row";
+      const copy = document.createElement("div");
+      const title = document.createElement("strong");
+      const detail = document.createElement("p");
+      title.textContent = item.title && item.title !== "새 작품 기획" ? item.title : item.workLabel;
+      detail.textContent = `${formatDate(item.completedAt)} 완료 · ${formatDuration(item.elapsedSeconds)} · AI 작업 ${item.completedJobs}회`;
+      copy.append(title, detail);
+      row.append(copy);
+      if (item.latestRunId) row.append(actionButton("원고·검수 보기", "secondary", () => loadRun(item.latestRunId)));
+      selectors.completedList.append(row);
+    }
   }
 
   function renderTimingSummary() {
@@ -413,6 +575,9 @@
 
   function renderRunHistory(history) {
     selectors.runHistory.replaceChildren();
+    const completeCount = history.filter((item) => item.status === "complete").length;
+    const issueCount = history.filter((item) => item.status === "error").length;
+    selectors.historySummary.textContent = `이전 실행 기록 · 완료 ${completeCount} · 과거 중단 ${issueCount}`;
     if (!history.length) {
       selectors.runHistory.append(message("아직 기록된 자동 연재 실행이 없습니다."));
       return;
@@ -466,11 +631,11 @@
     })[String(status || "")] || String(status || "확인 중");
   }
 
-  function renderQueueLive(items, updatedAt, lastFailed) {
-    const active = items.find((item) => item.status === "running") || items[0] || null;
+  function renderQueueLive(items, updatedAt) {
+    const active = items.find((item) => item.status === "running") || null;
     selectors.queueLive.classList.toggle("is-idle", !active);
     selectors.queueLive.classList.remove("is-stale");
-    selectors.queueLive.classList.toggle("is-error", !active && Boolean(lastFailed));
+    selectors.queueLive.classList.remove("is-error");
     selectors.queueLive.replaceChildren();
     const copy = document.createElement("div");
     const label = document.createElement("span");
@@ -485,7 +650,7 @@
     if (active) {
       const progress = productionProgressState(active);
       const schedule = active.scheduleId ? scheduleById.get(active.scheduleId) : null;
-      label.textContent = active.status === "running" ? "현재 제작 중" : `대기 ${active.queuePosition}번`;
+      label.textContent = "현재 제작 중";
       title.textContent = `${active.workLabel || active.title} · ${progress.steps[progress.currentIndex]}`;
       context.textContent = schedule
         ? `‘${scheduleLabel(schedule)}’ 자동 연재 설정이 실행한 제작입니다.`
@@ -495,39 +660,17 @@
       meter.setAttribute("aria-valuemin", "0");
       meter.setAttribute("aria-valuemax", "100");
       meter.setAttribute("aria-valuenow", String(progress.percent));
-      detail.textContent = `${progress.percent}% · ${active.status === "running" ? `경과 ${formatDuration(active.elapsedSeconds)}` : "앞선 작업 완료 후 시작"} · ${formatRefreshTime(updatedAt)}`;
-    } else if (lastFailed) {
-      const progress = productionProgressState(lastFailed);
-      const schedule = lastFailed.scheduleId ? scheduleById.get(lastFailed.scheduleId) : null;
-      label.textContent = "최근 작업 중단";
-      title.textContent = `${lastFailed.workLabel || lastFailed.title} · ${failureLabel(lastFailed.failureCode)}`;
-      context.textContent = schedule
-        ? `‘${scheduleLabel(schedule)}’ 자동 연재 설정은 가동 중이며, 이 설정이 실행한 최근 제작 시도만 중단됐습니다.`
-        : "최근 제작 시도가 중단됐습니다. 연결된 작품 관리 화면에서 다시 요청할 수 있습니다.";
-      meter.style.setProperty("--progress", `${progress.percent}%`);
-      meter.setAttribute("role", "progressbar");
-      meter.setAttribute("aria-valuemin", "0");
-      meter.setAttribute("aria-valuemax", "100");
-      meter.setAttribute("aria-valuenow", String(progress.percent));
-      detail.textContent = `${stageLabel(lastFailed.stage)}에서 중단 · ${formatDate(lastFailed.completedAt)} · 다시 실행할 수 있습니다.`;
+      detail.textContent = `${progress.percent}% · 경과 ${formatDuration(active.elapsedSeconds)} · ${formatRefreshTime(updatedAt)}`;
     } else {
       label.textContent = "현재 작업";
-      title.textContent = "제작 중이거나 대기 중인 작품이 없습니다.";
-      context.textContent = "가동 중인 자동 연재 설정은 다음 확인 시각에 새 작업을 요청합니다.";
+      title.textContent = "현재 제작 중인 작품이 없습니다.";
+      context.textContent = "대기 작품은 아래에 따로 표시되며, 가동 중인 설정은 예약 시각에 새 작업을 요청합니다.";
       meter.style.setProperty("--progress", "0%");
       detail.textContent = `마지막 확인 ${formatRefreshTime(updatedAt)}`;
     }
     copy.append(label, title, context);
     selectors.queueLive.append(copy, meter, detail);
-    if (!active && lastFailed?.scheduleId && scheduleById.has(lastFailed.scheduleId)) {
-      const actions = document.createElement("div");
-      actions.className = "queue-live-actions";
-      actions.append(
-        actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(lastFailed)),
-        actionButton("연결된 설정 보기", "secondary", () => focusSchedule(lastFailed.scheduleId))
-      );
-      selectors.queueLive.append(actions);
-    }
+    if (active) selectors.queueLive.append(renderProductionProgress(active));
   }
 
   function markQueueRefreshFailure() {
@@ -689,7 +832,11 @@
     const initialBatch = item.initialBatch === true || /^새 작품 ·/u.test(String(item.workLabel || ""));
     const bootstrapPlan = item.bootstrapPlan === true;
     const targetEpisodeCount = Math.max(1, Math.min(10, Number(item.targetEpisodeCount || 1)));
-    const episodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => `${index + 1}화`);
+    const episodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => [
+      `${index + 1}화 구성`,
+      `${index + 1}화 원고`,
+      `${index + 1}화 검수`
+    ]).flat();
     const steps = initialBatch
       ? ["아이디어", "설정집", "장기 전개", ...episodeSteps, "공개 준비"]
       : bootstrapPlan
@@ -701,7 +848,13 @@
       if (stage === "build_bible") currentIndex = 1;
       else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
       else if (["build_episode_card", "write_draft", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
-        currentIndex = 2 + Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1)));
+        const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1))) - 1;
+        const stageOffset = stage === "build_episode_card"
+          ? 0
+          : ["write_draft", "rewrite_draft"].includes(stage)
+            ? 1
+            : 2;
+        currentIndex = 3 + (episodeIndex * 3) + stageOffset;
       } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
     } else if (bootstrapPlan) {
       if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
@@ -985,7 +1138,7 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 5,
+      version: 6,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
@@ -996,7 +1149,7 @@
       cadenceUnit: String(form.get("cadenceUnit") || "hours"),
       targetEpisodeCount: String(form.get("targetEpisodeCount") || "1"),
       publicationMode: String(form.get("publicationMode") || "test_private"),
-      humorIntensity: String(form.get("humorIntensity") || "balanced"),
+      creativeControls: readCreativeControls(),
       conceptPolicy: String(form.get("conceptPolicy") || "")
     };
     try {
@@ -1018,7 +1171,7 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");
@@ -1029,7 +1182,11 @@
     }
     setFormValue("targetEpisodeCount", draft.targetEpisodeCount || 1);
     setFormValue("publicationMode", draft.publicationMode);
-    setFormValue("humorIntensity", draft.humorIntensity);
+    applyCreativeControlsToForm(draft.creativeControls || {
+      ...creativePresets.balanced,
+      humor: draft.humorIntensity === "comedy-first" ? 5 : draft.humorIntensity === "balanced" ? 3 : 2,
+      preset: "balanced"
+    });
     setFormValue("conceptPolicy", draft.conceptPolicy);
     restoredDraftAt = draft.savedAt || "";
   }
@@ -1077,6 +1234,14 @@
     control.value = String(value);
   }
 
+  function applyCreativeControlsToForm(values = {}) {
+    for (const [key, fieldName] of Object.entries(creativeFields)) {
+      setFormValue(fieldName, values[key] ?? creativePresets.balanced[key]);
+    }
+    setCreativePreset(values.preset || "custom");
+    renderCreativeControls();
+  }
+
   function loadScheduleIntoForm(schedule) {
     applyGenreSelection(schedulePrimaryGenres(schedule), scheduleSubgenresByGenre(schedule));
     const cadence = cadenceFields(schedule.cadenceMinutes);
@@ -1084,12 +1249,13 @@
     setFormValue("cadenceUnit", cadence.unit);
     setFormValue("targetEpisodeCount", schedule.targetEpisodeCount || 1);
     setFormValue("publicationMode", schedule.publicationMode);
-    setFormValue("humorIntensity", schedule.humorIntensity || "balanced");
+    applyCreativeControlsToForm(schedule.creativeControls || { ...creativePresets.balanced, preset: "balanced" });
     setFormValue("conceptPolicy", schedule.conceptPolicy);
     renderPrimaryGenres();
     renderSubgenres();
     syncCadenceBounds();
     updateTargetButton();
+    renderCreativeControls();
     saveDraftNow();
     selectors.scheduleForm.scrollIntoView({ behavior: "smooth", block: "start" });
     selectors.primaryGenres.querySelector("input:checked")?.focus({ preventScroll: true });
@@ -1105,6 +1271,7 @@
     renderSubgenres();
     syncCadenceBounds();
     updateTargetButton();
+    applyCreativePreset("balanced");
     saveDraftNow();
     selectors.primaryGenres.querySelector("input:checked")?.focus();
     StoryHeavenCommon.toast("새 연재 기본값으로 돌아왔습니다.");
@@ -1117,7 +1284,13 @@
   function formatDraftTime(value) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "";
-    return new Intl.DateTimeFormat("ko-KR", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(date);
+    return new Intl.DateTimeFormat("ko-KR", {
+      timeZone: seoulTimeZone,
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
   }
 
   function subgenreLabels(schedule) {
@@ -1161,7 +1334,12 @@
   function formatRefreshTime(value) {
     const date = value ? new Date(value) : new Date();
     if (Number.isNaN(date.getTime())) return "방금 갱신";
-    return `${new Intl.DateTimeFormat("ko-KR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(date)} 기준`;
+    return `${new Intl.DateTimeFormat("ko-KR", {
+      timeZone: seoulTimeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    }).format(date)} (서울) 기준`;
   }
 
   function runStatus(run) {
@@ -1181,6 +1359,17 @@
 
   function formatDate(value) {
     if (!value) return "미정";
-    return new Intl.DateTimeFormat("ko-KR", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "미정";
+    const formatted = new Intl.DateTimeFormat("ko-KR", {
+      timeZone: seoulTimeZone,
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
+    return `${formatted} (서울)`;
   }
 })();

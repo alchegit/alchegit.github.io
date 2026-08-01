@@ -22,6 +22,8 @@ assert.match(prompt, /three clearly labeled reading lenses/u);
 assert.match(prompt, /Genre combinations are binding/u);
 assert.match(prompt, /distinct dramatic job/u);
 assert.match(prompt, /Episode 1 is a retention gate/u);
+assert.match(prompt, /pace, suspense, curiosity, surprise, emotion, romance, action, description, and humor/u);
+assert.match(prompt, /not permission to flatten every scene to one intensity/u);
 assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");

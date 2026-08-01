@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
+  STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
@@ -26,6 +27,10 @@ assert.match(
   /insert \(\s*story_id, bible_version, bible_status, concept_json, narrative_blueprint_json\s*\)/u,
   "new story bibles must seed the required narrative blueprint"
 );
+assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
+assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
+assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
+assert.match(serialServiceSource, /episode-\$\{index \+ 1\}-card/u, "initial production progress must track episode planning");
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 1,
@@ -99,6 +104,41 @@ assert.equal(comedySchedule.ok, true);
 assert.equal(comedySchedule.schedule.creativeControls.humorIntensity, "comedy-first");
 assert.equal(comedySchedule.schedule.creativeControls.humorShare, 65);
 assert.equal(validateStoryHeavenSerialSchedule({ ...comedySchedule.schedule, humorIntensity: "too-much" }).ok, false);
+assert.deepEqual(STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS, {
+  pace: 3,
+  suspense: 3,
+  curiosity: 4,
+  surprise: 3,
+  emotion: 3,
+  romance: 2,
+  action: 3,
+  description: 3,
+  humor: 2
+});
+const controlledSchedule = validateStoryHeavenSerialSchedule({
+  ...comedySchedule.schedule,
+  humorIntensity: "comedy-first",
+  creativeControls: {
+    preset: "custom",
+    pace: 5,
+    suspense: 4,
+    curiosity: 5,
+    surprise: 2,
+    emotion: 4,
+    romance: 1,
+    action: 3,
+    description: 4,
+    humor: 5
+  }
+});
+assert.equal(controlledSchedule.ok, true);
+assert.equal(controlledSchedule.schedule.creativeControls.pace, 5);
+assert.equal(controlledSchedule.schedule.creativeControls.preset, "custom");
+assert.match(controlledSchedule.schedule.creativeControls.guidance.curiosity, /5\/5/u);
+assert.equal(validateStoryHeavenSerialSchedule({
+  ...controlledSchedule.schedule,
+  creativeControls: { ...controlledSchedule.schedule.creativeControls, suspense: 6 }
+}).ok, false);
 
 const schedule = validateStoryHeavenSerialSchedule({
   primaryGenre: "fantasy",

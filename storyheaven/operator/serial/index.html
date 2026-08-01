@@ -9,11 +9,11 @@
   <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
   <title>소설 연재 관리 | StoryHeaven</title>
   <link rel="stylesheet" href="../../workspace.css?v=20260724-serial1">
-  <link rel="stylesheet" href="./serial.css?v=20260801-resume1">
+  <link rel="stylesheet" href="./serial.css?v=20260802-desk1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
   <script defer src="../../common.js?v=20260731-adminnav1"></script>
   <script defer src="./genre-catalog.js?v=20260731-genre2"></script>
-  <script defer src="./serial.js?v=20260801-resume1"></script>
+  <script defer src="./serial.js?v=20260802-desk1"></script>
 </head>
 <body>
   <header class="site-header">
@@ -41,11 +41,29 @@
             <fieldset class="genre-fieldset wide"><legend>기본 장르 <small>1~3개</small></legend><p class="field-help">로맨스 SF, 코믹 판타지처럼 결합할 수 있습니다. 랜덤은 다른 장르와 함께 선택할 수 없습니다.</p><div class="primary-genres" data-primary-genres></div></fieldset>
             <fieldset class="genre-fieldset wide"><legend>세부장르 <small data-subgenre-count>1 / 10</small></legend><p class="field-help" data-subgenre-help>선택한 기본 장르마다 한 개 이상 고르세요. 전체 합계는 최대 열 개입니다.</p><div class="subgenres" data-subgenres></div></fieldset>
 
-            <fieldset class="humor-fieldset wide" data-humor-control hidden><legend>웃음 강도</legend><p class="field-help">코미디의 목적과 본편 진행 비중을 정합니다.</p><div class="humor-options">
-              <label class="humor-option"><input type="radio" name="humorIntensity" value="light"><span><strong>미소 중심</strong><small>본편 80 · 웃음 20</small></span></label>
-              <label class="humor-option"><input type="radio" name="humorIntensity" value="balanced" checked><span><strong>균형</strong><small>본편 60 · 웃음 40</small></span></label>
-              <label class="humor-option"><input type="radio" name="humorIntensity" value="comedy-first"><span><strong>웃음 우선</strong><small>본편 35 · 웃음 65</small></span></label>
-            </div></fieldset>
+            <fieldset class="creative-fieldset wide" data-creative-controls><legend>창작 강도</legend>
+              <p class="field-help">먼저 작품의 호흡을 고르세요. 숫자가 높다고 항상 좋은 것은 아니며, 장면마다 고조와 휴식을 만들도록 적용됩니다.</p>
+              <div class="creative-presets" role="radiogroup" aria-label="창작 강도 프리셋">
+                <label><input type="radio" name="creativePreset" value="balanced" checked><span><strong>균형</strong><small>장르 기본값</small></span></label>
+                <label><input type="radio" name="creativePreset" value="fast"><span><strong>빠른 몰입</strong><small>속도·긴장 중심</small></span></label>
+                <label><input type="radio" name="creativePreset" value="emotional"><span><strong>감정 중심</strong><small>관계·여운 중심</small></span></label>
+                <label><input type="radio" name="creativePreset" value="custom"><span><strong>직접 조정</strong><small>항목별 설정</small></span></label>
+              </div>
+              <details class="creative-details"><summary>항목별 강도 조정 <span data-creative-summary>균형 설정</span></summary>
+                <div class="creative-grid">
+                  <label><span><strong>전개 속도</strong><small>느긋함 ↔ 빠른 사건 전환</small></span><input name="creativePace" type="range" min="1" max="5" value="3"><output>3</output></label>
+                  <label><span><strong>긴장</strong><small>안정 ↔ 지속적인 위험</small></span><input name="creativeSuspense" type="range" min="1" max="5" value="3"><output>3</output></label>
+                  <label><span><strong>호기심</strong><small>명확함 ↔ 질문과 단서</small></span><input name="creativeCuriosity" type="range" min="1" max="5" value="4"><output>4</output></label>
+                  <label><span><strong>반전</strong><small>직선적 ↔ 예상 전환</small></span><input name="creativeSurprise" type="range" min="1" max="5" value="3"><output>3</output></label>
+                  <label><span><strong>감정 진폭</strong><small>담담함 ↔ 큰 정서 변화</small></span><input name="creativeEmotion" type="range" min="1" max="5" value="3"><output>3</output></label>
+                  <label><span><strong>관계·로맨스</strong><small>사건 중심 ↔ 관계 변화 중심</small></span><input name="creativeRomance" type="range" min="1" max="5" value="2"><output>2</output></label>
+                  <label><span><strong>액션</strong><small>대화·추리 ↔ 물리적 충돌</small></span><input name="creativeAction" type="range" min="1" max="5" value="3"><output>3</output></label>
+                  <label><span><strong>묘사 밀도</strong><small>간결함 ↔ 구체적인 장면</small></span><input name="creativeDescription" type="range" min="1" max="5" value="3"><output>3</output></label>
+                  <label><span><strong>웃음</strong><small>진지함 ↔ 웃음 보상</small></span><input name="creativeHumor" type="range" min="1" max="5" value="2"><output>2</output></label>
+                </div>
+                <p class="creative-warning" data-creative-warning hidden>강도 5가 너무 많으면 작품의 고저가 사라질 수 있습니다. 핵심 세 항목만 높이는 편이 안정적입니다.</p>
+              </details>
+            </fieldset>
 
             <fieldset class="mode-fieldset wide"><legend>연재 방식</legend>
               <label class="mode-card"><input type="radio" name="publicationMode" value="test_private" checked><span><strong>테스트 비공개</strong><small>선택한 화까지 만들고 공개하지 않은 채 품질 기록에서 확인합니다.</small></span></label>
@@ -58,7 +76,13 @@
         </section>
 
         <section class="serial-band queue-band">
-          <header><div><p class="eyebrow">SINGLE WORK QUEUE</p><h2>제작 대기열</h2><p>한 번에 한 작품만 제작합니다. 다른 작품 요청은 순서대로 기다리며, 시작 전에는 취소할 수 있습니다.</p></div><span class="queue-rule">한 번에 1개씩</span></header>
+          <header><div><p class="eyebrow">PRODUCTION STATUS</p><h2>제작 현황</h2><p>한 작품씩 제작하며 현재 상태만 먼저 보여줍니다. 과거 기록은 아래에서 필요할 때 펼쳐볼 수 있습니다.</p></div><span class="queue-rule">6초마다 갱신</span></header>
+          <div class="work-status-grid" data-work-status-grid aria-label="제작 상태 요약">
+            <div class="is-running"><span>진행 중</span><strong data-status-running>0</strong></div>
+            <div class="is-waiting"><span>대기</span><strong data-status-waiting>0</strong></div>
+            <div class="is-complete"><span>완료</span><strong data-status-complete>0</strong></div>
+            <div class="is-attention"><span>확인 필요</span><strong data-status-attention>0</strong></div>
+          </div>
           <div class="queue-live" data-queue-live aria-live="polite">
             <div><span>현재 작업을 확인하고 있습니다.</span><strong>서버 연결 중</strong></div>
             <div class="queue-live-meter" aria-hidden="true"><span></span></div>
@@ -66,9 +90,11 @@
           </div>
           <div class="queue-last" data-queue-last><strong>직전 연재 작업 기록 없음</strong><span>첫 작업이 끝나면 실제 소요 시간과 AI 작업 수가 표시됩니다.</span></div>
           <div class="timing-summary" data-timing-summary aria-live="polite"><strong>평균 1화 작업 예상 시간</strong><span>측정할 완료 기록이 아직 없습니다.</span></div>
-          <div class="queue-list" data-queue-list></div>
+          <section class="work-group"><header><h3>대기 중</h3><span data-waiting-caption>0건</span></header><div class="queue-list" data-queue-list></div></section>
+          <section class="work-group attention-group"><header><h3>확인 필요</h3><span>재개가 필요한 최신 작업만 표시</span></header><div class="attention-list" data-attention-list></div></section>
+          <details class="work-group completed-group"><summary>최근 완료된 제작 <span data-completed-caption>0건</span></summary><div class="completed-list" data-completed-list></div></details>
           <p class="queue-note" data-queue-note>사용량과 작업 기록을 확인하는 중입니다.</p>
-          <details class="run-history" open><summary>자동 연재 실행 기록</summary><div class="run-history-list" data-run-history><p>실행 기록을 불러오는 중입니다.</p></div></details>
+          <details class="run-history"><summary data-history-summary>이전 실행 기록</summary><p class="history-help">오류 원인 확인이나 단계별 소요 시간 비교가 필요할 때만 펼쳐보세요. 과거 중단 기록은 현재 제작 상태에 영향을 주지 않습니다.</p><div class="run-history-list" data-run-history><p>실행 기록을 불러오는 중입니다.</p></div></details>
         </section>
 
         <section class="serial-band">
@@ -77,10 +103,9 @@
         </section>
 
         <section class="serial-band inspection-band">
-          <header><div><p class="eyebrow">QUALITY LOG</p><h2>원고 품질 기록</h2><p>재미 점수는 통과 여부만 보여주지 않고, 각 판단 근거와 예상 독자 반응을 함께 남깁니다.</p></div></header>
-          <form class="run-search" data-run-search><label class="field"><span>실행 ID</span><input name="runId" maxlength="36" autocomplete="off" required></label><button class="button secondary" type="submit">기록 불러오기</button></form>
-          <div class="run-state" data-run-state><p>연재 목록의 ‘최근 기록’을 누르면 생성 원고와 검수 근거가 표시됩니다.</p></div>
-          <details class="advanced maintenance"><summary>대기 작업 즉시 확인</summary><p>정기 확인을 기다리지 않고 지금 처리할 작업이 있는지 서버에 요청합니다.</p><button class="button secondary" type="button" data-process-due>지금 확인</button></details>
+          <header><div><p class="eyebrow">MANUSCRIPT REVIEW</p><h2>완료 원고 확인</h2><p>평소에는 조작할 필요가 없습니다. 위의 완료 목록에서 ‘원고·검수 보기’를 누르면 완성 원고와 점수 근거가 이곳에 표시됩니다.</p></div></header>
+          <div class="run-state" data-run-state><p>아직 선택한 완료 원고가 없습니다.</p></div>
+          <details class="advanced maintenance"><summary>운영 도구</summary><p>문제 추적용 실행 ID 조회와 정기 확인 전 즉시 실행 기능입니다.</p><form class="run-search" data-run-search><label class="field"><span>실행 ID로 직접 찾기</span><input name="runId" maxlength="36" autocomplete="off" required></label><button class="button secondary" type="submit">상세 불러오기</button></form><button class="button secondary" type="button" data-process-due>예약 작업 지금 확인</button></details>
         </section>
       </section>
     </div>
