@@ -2,11 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
+  STORYHEAVEN_DEFAULT_CONCEPT_POLICY,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
   calculateStoryHeavenReaderExperienceScore,
   decideStoryHeavenSerialReview,
+  normalizeStoryHeavenConceptPolicy,
   storyHeavenSerialQualityThresholds,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenEpisodeRun,
@@ -23,6 +25,11 @@ import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode } from "../
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
+const serialOperatorSource = await readFile(new URL("../../../storyheaven/operator/serial/serial.js", import.meta.url), "utf8");
+const serialOperatorHtml = await readFile(new URL("../../../storyheaven/operator/serial/index.html", import.meta.url), "utf8");
+const serialOperatorCss = await readFile(new URL("../../../storyheaven/operator/serial/serial.css", import.meta.url), "utf8");
+const managedStoriesSource = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.js", import.meta.url), "utf8");
+const managedStoriesHtml = await readFile(new URL("../../../storyheaven/operator/serial/stories/index.html", import.meta.url), "utf8");
 assert.match(
   serialServiceSource,
   /insert \(\s*story_id, bible_version, bible_status, concept_json, narrative_blueprint_json\s*\)/u,
@@ -46,6 +53,18 @@ assert.match(serverSource, /skip: isSerialEmergencyPauseRequest/u, "emergency pa
 assert.match(serverSource, /requireAdminAccount, serialSystemRateLimiter/u, "emergency pause must bypass the shared admin limiter after admin authentication");
 assert.match(serverSource, /if \(storyHeavenSerialEmergencyPaused\) throw httpError\("serial_system_paused", 409\)/u, "late worker results must be rejected during emergency pause");
 assert.match(serverSource, /scheduleSerialPausePersistenceRetry/u, "emergency pause must retry database persistence without reopening the queue");
+assert.match(serialServiceSource, /not exists \(\s*select 1 from storyheaven_serial_jobs running_job/u, "all automatic and operator work must share one running slot");
+assert.match(serialServiceSource, /join storyheaven_serial_runs queue_origin on queue_origin\.queue_group_id = candidate_run\.queue_group_id/u, "all stages in one work must keep their original queue position");
+assert.match(serialServiceSource, /order by min\(queue_origin\.created_at\), candidate_run\.queue_group_id/u, "queue groups must be claimed in stable request order");
+assert.match(serialServiceSource, /error_code = 'operator_story_hidden'/u, "hiding a story must revoke linked jobs");
+assert.match(serialServiceSource, /queue_status in \('ready', 'publishing'\)/u, "hiding a story must cancel linked publication work");
+assert.match(serialServiceSource, /and serial_run\.queue_canceled_at is null\) as active_run_count/u, "hidden runs must not block a restored story");
+assert.match(serialOperatorSource, /재개 요청 순서대로 제작/u, "incomplete prologues must explain shared queue ordering");
+assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
+assert.match(serialOperatorHtml, /문제 해결 도구/u, "operator recovery tools must use task-oriented language");
+assert.match(serialOperatorCss, /details\.advanced > summary[\s\S]*color: #f4f7fb/u, "dark advanced summaries must retain readable text");
+assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
+assert.match(managedStoriesSource, /목록에 복원/u, "hidden stories must be restorable");
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 1,
@@ -54,6 +73,11 @@ assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
 });
 assert.equal(continuationMinimumEpisode("reader_threshold"), 1);
 assert.equal(continuationMinimumEpisode("admin_request"), 1);
+assert.match(STORYHEAVEN_DEFAULT_CONCEPT_POLICY, /첫 2개 문단/u);
+assert.match(STORYHEAVEN_DEFAULT_CONCEPT_POLICY, /프롤로그/u);
+assert.equal(normalizeStoryHeavenConceptPolicy(""), STORYHEAVEN_DEFAULT_CONCEPT_POLICY);
+assert.equal(normalizeStoryHeavenConceptPolicy("중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다."), STORYHEAVEN_DEFAULT_CONCEPT_POLICY);
+assert.equal(normalizeStoryHeavenConceptPolicy("운영자가 직접 정한 별도의 작품 원칙은 그대로 보존한다."), "운영자가 직접 정한 별도의 작품 원칙은 그대로 보존한다.");
 assert.deepEqual(STORYHEAVEN_SERIAL_STORY_CONTROL.visibilities, ["public", "private", "archived"]);
 assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "public", continuationMode: "auto" }).ok, true);
 assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "private", continuationMode: "manual" }).ok, true);

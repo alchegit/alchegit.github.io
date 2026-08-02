@@ -24,8 +24,12 @@
     fast: Object.freeze({ pace: 5, suspense: 4, curiosity: 4, surprise: 3, emotion: 3, romance: 1, action: 4, description: 2, humor: 2 }),
     emotional: Object.freeze({ pace: 2, suspense: 2, curiosity: 3, surprise: 2, emotion: 5, romance: 4, action: 1, description: 4, humor: 2 })
   });
-  const draftStorageKey = "storyheaven.operator.serial-draft.v7";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const defaultConceptPolicy = "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다. 첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다. 첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다. 첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다. 설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다. 주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다.";
+  const legacyConceptPolicies = new Set([
+    "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다."
+  ]);
+  const draftStorageKey = "storyheaven.operator.serial-draft.v8";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   let draftReady = false;
   let draftSaveTimer = 0;
@@ -778,7 +782,7 @@
 
   function renderStalledFirstEpisodes(items) {
     selectors.stalledList.replaceChildren();
-    selectors.stalledCaption.textContent = `${items.length}건`;
+    selectors.stalledCaption.textContent = `${items.length}건 · 재개 요청 순서대로 제작`;
     if (!items.length) {
       const empty = message("프롤로그 제작 전 멈춘 작품은 없습니다.");
       empty.classList.add("is-success");
@@ -803,6 +807,7 @@
       actions.className = "stalled-actions";
       actions.append(actionButton("프롤로그 제작 재개", "queue-retry", () => resumeFirstEpisodeStory(story)));
       if (story.latestRunId) actions.append(actionButton("최근 로그 보기", "secondary", () => loadRun(story.latestRunId)));
+      actions.append(actionButton("목록에서 숨기기", "secondary", () => hideIncompleteStory(story)));
       row.append(copy, actions);
       selectors.stalledList.append(row);
     }
@@ -810,7 +815,6 @@
 
   async function resumeFirstEpisodeStory(story) {
     if (!story?.id) return;
-    if (!window.confirm(`‘${story.title || "이 작품"}’의 프롤로그 제작을 다시 시작할까요? 설정집과 장기 전개를 확인한 뒤 프롤로그를 대기열에 넣습니다.`)) return;
     try {
       const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/plan`, {
         method: "POST",
@@ -819,7 +823,25 @@
       await refreshSchedules();
       StoryHeavenCommon.toast(payload.run?.reused
         ? "이미 준비 중인 프롤로그 작업으로 연결했습니다."
-        : "프롤로그 제작을 다시 대기열에 넣었습니다.");
+        : "프롤로그 제작을 대기열에 넣었습니다. 다른 작품도 이어서 추가할 수 있습니다.");
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function hideIncompleteStory(story) {
+    if (!story?.id) return;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/control`, {
+        method: "PATCH",
+        body: {
+          visibility: "archived",
+          continuationMode: "ended",
+          operatorNote: "프롤로그 미완성 목록에서 운영자 숨김"
+        }
+      });
+      await refreshSchedules();
+      StoryHeavenCommon.toast("작품과 연결된 대기·로그를 숨겼습니다. 연재 작품 관리의 ‘숨긴 작품’에서 복원할 수 있습니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
@@ -1621,7 +1643,7 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 7,
+      version: 8,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
@@ -1657,7 +1679,7 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6, 7].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7, 8].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");
@@ -1676,8 +1698,13 @@
       humor: draft.humorIntensity === "comedy-first" ? 5 : draft.humorIntensity === "balanced" ? 3 : 2,
       preset: "balanced"
     });
-    setFormValue("conceptPolicy", draft.conceptPolicy);
+    setFormValue("conceptPolicy", normalizedConceptPolicy(draft.conceptPolicy));
     restoredDraftAt = draft.savedAt || "";
+  }
+
+  function normalizedConceptPolicy(value) {
+    const policy = String(value || "").trim();
+    return !policy || legacyConceptPolicies.has(policy) ? defaultConceptPolicy : policy;
   }
 
   function applyGenreSelection(primaryGenres, subgenresByGenre) {
@@ -1742,7 +1769,7 @@
     setFormValue("continuationBatchCount", schedule.continuationBatchCount || 1);
     setFormValue("publicationMode", schedule.publicationMode);
     applyCreativeControlsToForm(schedule.creativeControls || { ...creativePresets.balanced, preset: "balanced" });
-    setFormValue("conceptPolicy", schedule.conceptPolicy);
+    setFormValue("conceptPolicy", normalizedConceptPolicy(schedule.conceptPolicy));
     renderPrimaryGenres();
     renderSubgenres();
     syncCadenceBounds();

@@ -1,7 +1,7 @@
 (() => {
   const state = { stories: [], enabled: false, requestedStoryId: new URLSearchParams(location.search).get("story") || "", requestApplied: false };
   const elements = {};
-  const visibilityLabels = { public: "공개", private: "비공개", archived: "보관" };
+  const visibilityLabels = { public: "공개", private: "비공개", archived: "숨김" };
   const continuationLabels = { auto: "추천 11개 모이면 자동", manual: "운영자 요청", paused: "일시 정지", ended: "연재 종료" };
 
   document.addEventListener("DOMContentLoaded", async () => {
@@ -85,15 +85,18 @@
     const query = elements.search.value.trim().toLocaleLowerCase("ko-KR");
     const filtered = state.stories.filter((story) => {
       const searchText = [story.title, story.logline, ...(story.genres || [])].join(" ").toLocaleLowerCase("ko-KR");
+      const visibility = elements.visibility.value;
       return (!query || searchText.includes(query))
-        && (elements.visibility.value === "all" || story.visibility === elements.visibility.value)
+        && (visibility === "all" || (visibility === "managed" ? story.visibility !== "archived" : story.visibility === visibility))
         && (elements.continuation.value === "all" || story.continuationMode === elements.continuation.value);
     });
     elements.resultCount.textContent = `${filtered.length.toLocaleString("ko-KR")}편`;
     if (!filtered.length) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
-      empty.textContent = state.stories.length ? "조건에 맞는 작품이 없습니다." : "아직 관리할 자동 연재 작품이 없습니다.";
+      empty.textContent = state.stories.length
+        ? (elements.visibility.value === "managed" ? "현재 운영 중인 작품이 없습니다. 숨긴 작품은 공개 상태 필터에서 확인할 수 있습니다." : "조건에 맞는 작품이 없습니다.")
+        : "아직 관리할 자동 연재 작품이 없습니다.";
       elements.list.replaceChildren(empty);
       return;
     }
@@ -147,7 +150,7 @@
     const controls = document.createElement("section");
     controls.className = "story-controls";
     const visibility = selectField("공개 상태", [
-      ["public", "공개"], ["private", "비공개"], ["archived", "보관"]
+      ["public", "공개"], ["private", "비공개"], ["archived", "목록에서 숨김"]
     ], story.visibility);
     const continuation = selectField("다음 화 제작", [
       ["auto", "추천 11개가 모이면 자동"], ["manual", "운영자 요청으로만"], ["paused", "일시 정지"], ["ended", "연재 종료"]
@@ -190,6 +193,13 @@
     else actions.append(next);
     if (story.queue?.cancelable) actions.append(actionButton("대기 취소", "secondary", () => cancelQueuedWork(story)));
     actions.append(view);
+    if (story.visibility === "archived") {
+      const restore = actionButton("목록에 복원", "", () => restoreStory(story, restore));
+      actions.append(restore);
+    } else {
+      const hide = actionButton("목록에서 숨기기", "secondary", () => hideStory(story, hide));
+      actions.append(hide);
+    }
 
     const markDirty = () => {
       normalizeControlPair(visibility.select, continuation.select);
@@ -237,14 +247,11 @@
     if (!confirmControlChange(story, visibility.value, continuation.value)) return;
     button.disabled = true;
     try {
-      const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/control`, {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/control`, {
         method: "PATCH",
         body: { visibility: visibility.value, continuationMode: continuation.value, operatorNote: story.operatorNote || "" }
       });
-      const index = state.stories.findIndex((item) => item.id === story.id);
-      if (index >= 0) state.stories[index] = { ...payload.story, queue: story.queue || null };
-      renderSummary();
-      renderList();
+      await refresh();
       StoryHeavenCommon.toast("작품 운영 설정을 저장했습니다.");
     } catch (error) {
       button.disabled = false;
@@ -255,7 +262,7 @@
 
   function confirmControlChange(story, visibility, continuation) {
     if (visibility === "archived" && story.visibility !== "archived") {
-      return window.confirm("작품을 보관하면 공개 목록에서 사라지고 다음 화 제작이 종료됩니다. 기존 원고와 기록은 남습니다. 계속할까요?");
+      return window.confirm("작품을 숨기면 독자·운영 기본 목록과 미완성 목록에서 사라지고 진행 중인 제작도 종료됩니다. 기존 원고와 기록은 남습니다. 계속할까요?");
     }
     if (visibility === "private" && story.visibility === "public") {
       return window.confirm("작품을 비공개로 바꾸면 독자 목록에서 즉시 숨겨집니다. 기존 원고는 삭제되지 않습니다. 계속할까요?");
@@ -264,6 +271,44 @@
       return window.confirm("연재 종료로 저장하면 추천 수가 늘어도 다음 화를 자동 제작하지 않습니다. 계속할까요?");
     }
     return true;
+  }
+
+  async function hideStory(story, button) {
+    button.disabled = true;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/control`, {
+        method: "PATCH",
+        body: {
+          visibility: "archived",
+          continuationMode: "ended",
+          operatorNote: story.operatorNote || "연재 작품 목록에서 운영자 숨김"
+        }
+      });
+      await refresh();
+      StoryHeavenCommon.toast("작품과 연결된 대기·미완성·로그 목록을 숨겼습니다.");
+    } catch (error) {
+      button.disabled = false;
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function restoreStory(story, button) {
+    button.disabled = true;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/control`, {
+        method: "PATCH",
+        body: {
+          visibility: "private",
+          continuationMode: "manual",
+          operatorNote: story.operatorNote || "숨긴 작품 복원"
+        }
+      });
+      await refresh();
+      StoryHeavenCommon.toast("작품을 비공개 운영 목록에 복원했습니다.");
+    } catch (error) {
+      button.disabled = false;
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
   }
 
   async function requestNextEpisode(story, button, batchSelect) {
@@ -355,7 +400,7 @@
     if (!state.enabled) return "자동 연재 전체가 멈춰 있습니다.";
     if (story.queue) return story.queue.status === "running" ? "현재 1화 또는 다음 단계가 제작 중입니다." : `제작 대기 ${story.queue.queuePosition}번입니다.`;
     if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 공개 전인 회차가 있습니다.";
-    if (story.visibility === "archived" || story.continuationMode === "ended") return "보관 또는 연재 종료 상태입니다.";
+    if (story.visibility === "archived" || story.continuationMode === "ended") return "숨김 또는 연재 종료 상태입니다.";
     return "";
   }
 
@@ -477,7 +522,7 @@
     return ({
       "공개 상태": {
         title: "작품 공개 상태",
-        body: "공개는 독자가 볼 수 있는 상태입니다. 비공개는 목록에서 숨기지만 원고와 운영 기록은 남깁니다.\n\n보관은 운영 정리용으로, 작품을 목록에서 숨기고 다음 화 제작도 종료합니다."
+        body: "공개는 독자가 볼 수 있는 상태입니다. 비공개는 독자 목록에서만 숨기고 운영 목록에는 남깁니다.\n\n목록에서 숨김은 운영 기본 목록, 미완성 목록과 작업 로그에서도 함께 숨기고 다음 화 제작을 종료합니다. 원고와 감사 기록은 삭제하지 않습니다."
       },
       "다음 화 제작": {
         title: "다음 화 제작 방식",

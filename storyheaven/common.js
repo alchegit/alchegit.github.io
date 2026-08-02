@@ -333,6 +333,7 @@
       serial_episodes_per_volume_invalid: "1권당 본편 화수는 10화 이상 50화 이하로 설정해주세요.",
       serial_continuation_batch_count_invalid: "연속 제작 수는 1화, 3화, 5화 중에서 선택해주세요.",
       serial_story_not_system_owned: "운영 예시 작품만 자동 연재 엔진에 연결할 수 있습니다.",
+      serial_story_archived: "숨긴 작품은 제작을 시작할 수 없습니다. 연재 작품 관리에서 먼저 복원해주세요.",
       serial_plan_required: "설정집과 장기 흐름을 먼저 만들어주세요.",
       serial_episode_already_queued: "이 회차는 이미 제작 중입니다.",
       serial_episode_sequence_required: "이전 회차를 먼저 공개한 뒤 다음 회차를 만들어주세요.",

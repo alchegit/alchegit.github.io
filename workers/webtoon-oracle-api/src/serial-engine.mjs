@@ -45,6 +45,26 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   })
 });
 
+export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
+  "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다.",
+  "첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다.",
+  "첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다.",
+  "첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다.",
+  "설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다.",
+  "주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다."
+].join(" ");
+
+const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
+  "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다."
+]);
+
+export function normalizeStoryHeavenConceptPolicy(value) {
+  const policy = text(value, STORYHEAVEN_SERIAL_LIMITS.conceptPolicy);
+  return !policy || STORYHEAVEN_LEGACY_CONCEPT_POLICIES.includes(policy)
+    ? STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+    : policy;
+}
+
 const STORYHEAVEN_FIRST_EPISODE_QUALITY = Object.freeze({
   readerOrientation: 92,
   sceneVisualization: 88,
@@ -176,7 +196,7 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
   const publicationMode = ["test_private", "auto_public"].includes(input.publicationMode)
     ? input.publicationMode
     : "test_private";
-  const conceptPolicy = text(input.conceptPolicy, STORYHEAVEN_SERIAL_LIMITS.conceptPolicy);
+  const conceptPolicy = normalizeStoryHeavenConceptPolicy(input.conceptPolicy);
   if (!genre.ok) errors.push(fieldError("subgenres", genre.error));
   if (!Number.isInteger(rawTargetEpisodeCount)
     || rawTargetEpisodeCount < STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin

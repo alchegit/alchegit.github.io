@@ -9,10 +9,10 @@
   <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
   <title>연재 작품 관리 | StoryHeaven</title>
   <link rel="stylesheet" href="../../../workspace.css?v=20260801-help1">
-  <link rel="stylesheet" href="./stories.css?v=20260802-longform1">
+  <link rel="stylesheet" href="./stories.css?v=20260803-queuehide1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-  <script defer src="../../../common.js?v=20260803-emergency1"></script>
-  <script defer src="./stories.js?v=20260803-library1"></script>
+  <script defer src="../../../common.js?v=20260803-queuehide1"></script>
+  <script defer src="./stories.js?v=20260803-queuehide1"></script>
 </head>
 <body>
   <header class="site-header">
@@ -37,14 +37,14 @@
       <section class="works-dashboard" data-works-dashboard hidden>
         <section class="summary-strip" aria-label="연재 작품 요약">
           <div><span>전체</span><strong data-summary-total>0</strong></div>
-          <div><span class="help-topic"><span>공개</span><button class="help-button" type="button" data-help data-help-title="공개 작품" data-help-body="독자 목록과 작품 상세에서 볼 수 있는 작품 수입니다. 비공개나 보관으로 바꾸면 독자 목록에서 숨겨집니다.">?</button></span><strong data-summary-public>0</strong></div>
+          <div><span class="help-topic"><span>공개</span><button class="help-button" type="button" data-help data-help-title="공개 작품" data-help-body="독자 목록과 작품 상세에서 볼 수 있는 작품 수입니다. 비공개나 숨김으로 바꾸면 독자 목록에서 보이지 않습니다.">?</button></span><strong data-summary-public>0</strong></div>
           <div><span class="help-topic"><span>멈춤·종료</span><button class="help-button" type="button" data-help data-help-title="멈춤·종료" data-help-body="일시 정지는 다음 화 제작만 잠시 멈춘 상태입니다. 연재 종료는 추천이 늘어도 더 이상 자동으로 다음 화를 만들지 않는 상태입니다.&#10;&#10;둘 다 기존 원고와 기록을 삭제하지 않습니다.">?</button></span><strong data-summary-stopped>0</strong></div>
           <div><span class="help-topic"><span>공개 전 회차</span><button class="help-button" type="button" data-help data-help-title="공개 전 회차" data-help-body="원고 제작과 검수는 끝났지만 아직 독자에게 공개되지 않은 회차입니다.&#10;&#10;자동 공개 설정이면 순서와 조건에 맞춰 공개되고, 테스트 비공개나 수동 관리 중이면 운영자가 확인한 뒤 처리합니다.">?</button></span><strong data-summary-ready>0</strong></div>
         </section>
 
         <section class="work-tools" aria-label="작품 검색과 필터">
           <label class="search-field"><span>작품 검색</span><input type="search" maxlength="80" placeholder="제목이나 장르" data-story-search></label>
-          <label><span class="help-topic"><span>공개 상태</span><button class="help-button" type="button" data-help data-help-title="공개 상태" data-help-body="공개는 독자가 볼 수 있는 상태입니다. 비공개는 독자 목록에서 숨기지만 기록과 원고는 남깁니다. 보관은 운영 정리용 상태이며 다음 화 제작도 종료됩니다.">?</button></span><select data-visibility-filter><option value="all">전체</option><option value="public">공개</option><option value="private">비공개</option><option value="archived">보관</option></select></label>
+          <label><span class="help-topic"><span>공개 상태</span><button class="help-button" type="button" data-help data-help-title="공개 상태" data-help-body="운영 중은 공개와 비공개 작품만 보여줍니다. 숨긴 작품은 독자·운영 기본 목록과 연결된 미완성 목록에서 제외되지만 원고와 감사 기록은 남습니다.&#10;&#10;전체(숨김 포함) 또는 숨긴 작품을 선택하면 다시 찾아 복원할 수 있습니다.">?</button></span><select data-visibility-filter><option value="managed" selected>운영 중</option><option value="all">전체(숨김 포함)</option><option value="public">공개</option><option value="private">비공개</option><option value="archived">숨긴 작품</option></select></label>
           <label><span class="help-topic"><span>연재 방식</span><button class="help-button" type="button" data-help data-help-title="연재 방식" data-help-body="추천 자동은 최신 화 추천 11개가 모이면 다음 화 제작을 요청합니다. 운영자 요청은 버튼을 눌렀을 때만 다음 화를 만듭니다.&#10;&#10;일시 정지는 잠깐 멈춤, 연재 종료는 더 이상 이어 쓰지 않겠다는 운영 결정입니다.">?</button></span><select data-continuation-filter><option value="all">전체</option><option value="auto">추천 자동</option><option value="manual">운영자 요청</option><option value="paused">일시 정지</option><option value="ended">연재 종료</option></select></label>
           <button class="button secondary refresh-button" type="button" data-refresh>새로고침</button>
         </section>

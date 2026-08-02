@@ -4,6 +4,7 @@ import {
   STORYHEAVEN_SERIAL_LIMITS,
   analyzeStoryHeavenSerialDraft,
   decideStoryHeavenSerialReview,
+  normalizeStoryHeavenConceptPolicy,
   storyHeavenSerialQualityThresholds,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenSerialStoryControl,
@@ -521,7 +522,8 @@ export function createStoryHeavenSerialService({
                   where episode.story_id = story.id and vote.vote_type = 'recommend') as recommendation_count,
                 (select count(*) from storyheaven_serial_runs serial_run
                   where serial_run.story_id = story.id
-                    and serial_run.run_status in ('queued', 'running', 'rewrite', 'ready')) as active_run_count,
+                    and serial_run.run_status in ('queued', 'running', 'rewrite', 'ready')
+                    and serial_run.queue_canceled_at is null) as active_run_count,
                 (select max(serial_run.run_status) keep (dense_rank last order by serial_run.created_at)
                    from storyheaven_serial_runs serial_run
                   where serial_run.story_id = story.id) as latest_run_status,
@@ -580,7 +582,8 @@ export function createStoryHeavenSerialService({
                 where episode.story_id = story.id and vote.vote_type = 'recommend') as recommendation_count,
               (select count(*) from storyheaven_serial_runs serial_run
                 where serial_run.story_id = story.id
-                  and serial_run.run_status in ('queued', 'running', 'rewrite', 'ready')) as active_run_count,
+                  and serial_run.run_status in ('queued', 'running', 'rewrite', 'ready')
+                  and serial_run.queue_canceled_at is null) as active_run_count,
               (select max(serial_run.run_status) keep (dense_rank last order by serial_run.created_at)
                  from storyheaven_serial_runs serial_run
                 where serial_run.story_id = story.id) as latest_run_status,
@@ -662,7 +665,70 @@ export function createStoryHeavenSerialService({
         { story_id: storyId, story_status: storyStatus }
       );
 
-      return getManagedStory(connection, storyId);
+      let linkedHidden = null;
+      if (visibility === "archived") {
+        const jobs = await connection.execute(
+          `update storyheaven_serial_jobs
+              set job_status = 'canceled',
+                  lease_id = null,
+                  lease_expires_at = null,
+                  worker_id = null,
+                  error_code = 'operator_story_hidden',
+                  completed_at = systimestamp,
+                  updated_at = systimestamp
+            where story_id = :story_id
+              and job_status in ('queued', 'running', 'retry_wait')`,
+          { story_id: storyId }
+        );
+        const runs = await connection.execute(
+          `update storyheaven_serial_runs
+              set run_status = case
+                    when run_status in ('queued', 'running', 'rewrite', 'approved') then 'blocked'
+                    else run_status
+                  end,
+                  current_stage = case
+                    when run_status in ('queued', 'running', 'rewrite', 'approved') then 'story_hidden'
+                    else current_stage
+                  end,
+                  failure_code = case
+                    when run_status in ('queued', 'running', 'rewrite', 'approved') then 'operator_story_hidden'
+                    else failure_code
+                  end,
+                  queue_canceled_at = coalesce(queue_canceled_at, systimestamp),
+                  queue_canceled_by = coalesce(queue_canceled_by, :queue_canceled_by),
+                  completed_at = case
+                    when run_status in ('queued', 'running', 'rewrite', 'approved') then coalesce(completed_at, systimestamp)
+                    else completed_at
+                  end,
+                  updated_at = systimestamp
+            where story_id = :story_id
+              and queue_canceled_at is null`,
+          { story_id: storyId, queue_canceled_by: userId }
+        );
+        const publications = await connection.execute(
+          `update storyheaven_publication_queue
+              set queue_status = 'canceled',
+                  failure_code = 'operator_story_hidden',
+                  updated_at = systimestamp
+            where story_id = :story_id
+              and queue_status in ('ready', 'publishing')`,
+          { story_id: storyId }
+        );
+        const continuations = await connection.execute(
+          `delete from storyheaven_serial_continuations
+            where story_id = :story_id
+              and request_status in ('queued', 'requesting')`,
+          { story_id: storyId }
+        );
+        linkedHidden = {
+          jobs: Number(jobs.rowsAffected || 0),
+          runs: Number(runs.rowsAffected || 0),
+          publications: Number(publications.rowsAffected || 0),
+          continuations: Number(continuations.rowsAffected || 0)
+        };
+      }
+
+      return { ...await getManagedStory(connection, storyId), linkedHidden };
     });
   }
 
@@ -750,13 +816,14 @@ export function createStoryHeavenSerialService({
     return withTransaction(async (connection) => {
       const story = await selectOne(connection,
         `select id, title, logline, public_synopsis, genre, genres_json, tags_json,
-                content_rating, content_origin, author_user_id
+                content_rating, content_origin, author_user_id, story_status
            from storyheaven_stories where id = :story_id for update`,
         { story_id: storyId });
       if (!story) throw failure("story_not_found", 404);
       if (story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
         throw failure("serial_story_not_system_owned", 409);
       }
+      if (story.STORY_STATUS === "archived") throw failure("serial_story_archived", 409);
       return queueStoryPlanning(connection, story, userId, input);
     });
   }
@@ -1240,9 +1307,10 @@ export function createStoryHeavenSerialService({
               and serial_run.queue_group_id = (
                 select queue_group_id from (
                   select candidate_run.queue_group_id,
-                         min(candidate_job.created_at) as queued_at
+                         min(queue_origin.created_at) as queued_at
                    from storyheaven_serial_jobs candidate_job
                     join storyheaven_serial_runs candidate_run on candidate_run.id = candidate_job.run_id
+                    join storyheaven_serial_runs queue_origin on queue_origin.queue_group_id = candidate_run.queue_group_id
                    where candidate_job.job_status in ('queued', 'running', 'retry_wait')
                      and candidate_run.queue_canceled_at is null
                      and exists (
@@ -1258,9 +1326,9 @@ export function createStoryHeavenSerialService({
                           where candidate_schedule.id = candidate_run.schedule_id
                             and candidate_schedule.schedule_status = 'active'
                        )
-                     )
+                   )
                    group by candidate_run.queue_group_id
-                   order by min(candidate_job.created_at), candidate_run.queue_group_id
+                   order by min(queue_origin.created_at), candidate_run.queue_group_id
                 ) where rownum = 1
               )
             order by job.priority asc, job.created_at asc
@@ -1522,7 +1590,7 @@ export function createStoryHeavenSerialService({
           publicationMode: schedule.PUBLICATION_MODE,
           targetEpisodeCount: Number(schedule.TARGET_EPISODE_COUNT || STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount),
           targetAge: schedule.TARGET_AGE,
-          policy: parseJson(schedule.CONCEPT_POLICY_JSON, {})
+          policy: normalizeStoredConceptPolicy(parseJson(schedule.CONCEPT_POLICY_JSON, {}))
         },
         existingTitles: await existingSystemTitles(connection)
       }
@@ -2124,6 +2192,14 @@ export function createStoryHeavenSerialService({
          ) where rownum = 1`
       );
       if (!queue) return null;
+      const story = await selectOne(connection,
+        `select author_user_id, content_origin, current_revision_no, story_status
+           from storyheaven_stories where id = :story_id for update`,
+        { story_id: queue.STORY_ID });
+      if (!story || story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
+        throw failure("serial_publication_source_invalid", 409);
+      }
+      if (story.STORY_STATUS === "archived") return null;
       const locked = await connection.execute(
         `update storyheaven_publication_queue set queue_status = 'publishing',
                 attempt_count = attempt_count + 1, updated_at = systimestamp
@@ -2133,10 +2209,7 @@ export function createStoryHeavenSerialService({
         `select * from storyheaven_serial_drafts where id = :draft_id`, { draft_id: queue.DRAFT_ID });
       const run = await selectOne(connection,
         `select * from storyheaven_serial_runs where id = :run_id for update`, { run_id: queue.RUN_ID });
-      const story = await selectOne(connection,
-        `select author_user_id, content_origin, current_revision_no from storyheaven_stories where id = :story_id for update`,
-        { story_id: queue.STORY_ID });
-      if (!draft || !run || !story || story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
+      if (!draft || !run) {
         throw failure("serial_publication_source_invalid", 409);
       }
       const runInput = parseJson(run.INPUT_JSON, {});
@@ -2538,7 +2611,7 @@ function retryableAttentionGroupsSql() {
 }
 
 function mapSchedule(row) {
-  const policy = parseJson(row.CONCEPT_POLICY_JSON, {});
+  const policy = normalizeStoredConceptPolicy(parseJson(row.CONCEPT_POLICY_JSON, {}));
   const primaryGenres = parseJson(row.PRIMARY_GENRES_JSON, row.PRIMARY_GENRE ? [row.PRIMARY_GENRE] : []);
   const subgenres = parseJson(row.SUBGENRES_JSON, []);
   const subgenresByGenre = parseJson(row.SUBGENRES_BY_GENRE_JSON, row.PRIMARY_GENRE ? { [row.PRIMARY_GENRE]: subgenres } : {});
@@ -2596,6 +2669,11 @@ function mapSchedule(row) {
     lastRunId: row.LAST_RUN_ID || null,
     lastStoryId: row.LAST_STORY_ID || null
   };
+}
+
+function normalizeStoredConceptPolicy(policyValue) {
+  const policy = policyValue && typeof policyValue === "object" ? policyValue : {};
+  return { ...policy, instruction: normalizeStoryHeavenConceptPolicy(policy.instruction) };
 }
 
 function normalizeSeriesPlan(value = {}) {
