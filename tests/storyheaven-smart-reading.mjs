@@ -41,8 +41,8 @@ try {
     assert.match(await page.locator("[data-continue-episode]").textContent(), /42% 읽음/u, `${viewport.name} continue progress`);
     await page.locator("[data-story-search]").fill("막차");
     assert.equal(await page.locator("[data-discover-title]").textContent(), "검색 결과 1편", `${viewport.name} search result count`);
-    assert.equal(await page.locator("[data-human-feed] .story-card").count(), 1, `${viewport.name} search card count`);
-    assert.equal(await page.locator("[data-human-feed] h3").textContent(), "8초를 싣는 막차", `${viewport.name} search title`);
+    assert.equal(await page.locator("[data-seed-feed] .story-card").count(), 1, `${viewport.name} search card count`);
+    assert.equal(await page.locator("[data-seed-feed] h3").textContent(), "8초를 싣는 막차", `${viewport.name} search title`);
     const homeLayout = await page.evaluate(() => ({ viewport: innerWidth, documentWidth: document.documentElement.scrollWidth }));
     assert.equal(homeLayout.documentWidth, homeLayout.viewport, `${viewport.name} home horizontal overflow`);
     await page.evaluate(() => window.scrollTo({ top: document.querySelector("[data-continue-reading]").offsetTop - 90, behavior: "instant" }));

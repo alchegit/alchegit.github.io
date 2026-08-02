@@ -158,18 +158,29 @@
   function renderAdminNavigation() {
     const nav = document.querySelector(".main-nav");
     if (!nav) return;
-    const existing = nav.querySelector("[data-storyheaven-admin-nav]");
+    const serialLink = nav.querySelector("[data-storyheaven-admin-nav]");
+    const webtoonLink = nav.querySelector("[data-storyheaven-admin-webtoon-nav]");
     if (!state.profile?.isAdmin) {
-      existing?.remove();
+      serialLink?.remove();
+      webtoonLink?.remove();
       return;
     }
-    if (existing || nav.querySelector('a[href="/storyheaven/operator/serial/"]')) return;
-    const link = document.createElement("a");
-    link.href = "/storyheaven/operator/serial/";
-    link.dataset.storyheavenAdminNav = "";
-    link.textContent = "소설 연재 관리";
-    link.setAttribute("aria-label", "관리자 전용 소설 연재 관리");
-    nav.append(link);
+    if (!serialLink && !nav.querySelector('a[href="/storyheaven/operator/serial/"]')) {
+      const link = document.createElement("a");
+      link.href = "/storyheaven/operator/serial/";
+      link.dataset.storyheavenAdminNav = "";
+      link.textContent = "소설 연재 관리";
+      link.setAttribute("aria-label", "관리자 전용 소설 연재 관리");
+      nav.append(link);
+    }
+    if (!webtoonLink && !nav.querySelector('a[href^="/webtoon/"]')) {
+      const link = document.createElement("a");
+      link.href = "/webtoon/";
+      link.dataset.storyheavenAdminWebtoonNav = "";
+      link.textContent = "웹툰 스튜디오";
+      link.setAttribute("aria-label", "관리자 전용 웹툰 스튜디오 이동");
+      nav.append(link);
+    }
   }
 
   function notify() {

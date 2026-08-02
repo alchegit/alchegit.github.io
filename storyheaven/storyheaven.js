@@ -3,6 +3,20 @@
   const SUPABASE_KEY = "sb_publishable_k6DOGCJ3PVC1av1RVxDt5w_NvOZubsE";
   const API_BASE = (document.querySelector("meta[name='storyheaven-api-base']")?.content || "").replace(/\/+$/, "");
   const FALLBACK_STORIES = window.StoryHeavenSeeds?.stories || [];
+  const GENRE_LABELS = Object.freeze({
+    fantasy: "판타지",
+    comedy: "코미디",
+    isekai: "이세계",
+    "game-system": "게임·시스템",
+    "romantic-comedy": "로맨틱코미디",
+    romance: "로맨스",
+    mystery: "미스터리",
+    thriller: "스릴러",
+    horror: "공포",
+    action: "액션",
+    drama: "드라마",
+    sf: "SF"
+  });
 
   const state = {
     client: null,
@@ -13,6 +27,7 @@
     discovery: null,
     round: null,
     filter: "latest",
+    stageFilter: "all",
     genre: "",
     query: "",
     rankingPeriod: "daily",
@@ -41,6 +56,9 @@
     });
     document.querySelectorAll("[data-feed-filter]").forEach((button) => {
       button.addEventListener("click", () => setFilter(button.dataset.feedFilter));
+    });
+    document.querySelectorAll("[data-stage-filter]").forEach((button) => {
+      button.addEventListener("click", () => setStageFilter(button.dataset.stageFilter));
     });
     document.querySelectorAll("[data-ranking-period]").forEach((button) => {
       button.addEventListener("click", () => setRankingPeriod(button.dataset.rankingPeriod));
@@ -149,23 +167,34 @@
   function renderAdminNavigation() {
     const nav = document.querySelector(".main-nav");
     if (!nav) return;
-    const existing = nav.querySelector("[data-storyheaven-admin-nav]");
+    const serialLink = nav.querySelector("[data-storyheaven-admin-nav]");
+    const webtoonLink = nav.querySelector("[data-storyheaven-admin-webtoon-nav]");
     if (!state.profile?.isAdmin) {
-      existing?.remove();
+      serialLink?.remove();
+      webtoonLink?.remove();
       return;
     }
-    if (existing) return;
-    const link = document.createElement("a");
-    link.href = "/storyheaven/operator/serial/";
-    link.dataset.storyheavenAdminNav = "";
-    link.textContent = "소설 연재 관리";
-    link.setAttribute("aria-label", "관리자 전용 소설 연재 관리");
-    nav.append(link);
+    if (!serialLink && !nav.querySelector('a[href="/storyheaven/operator/serial/"]')) {
+      const link = document.createElement("a");
+      link.href = "/storyheaven/operator/serial/";
+      link.dataset.storyheavenAdminNav = "";
+      link.textContent = "소설 연재 관리";
+      link.setAttribute("aria-label", "관리자 전용 소설 연재 관리");
+      nav.append(link);
+    }
+    if (!webtoonLink && !nav.querySelector('a[href^="/webtoon/"]')) {
+      const link = document.createElement("a");
+      link.href = "/webtoon/";
+      link.dataset.storyheavenAdminWebtoonNav = "";
+      link.textContent = "웹툰 스튜디오";
+      link.setAttribute("aria-label", "관리자 전용 웹툰 스튜디오 이동");
+      nav.append(link);
+    }
   }
 
   async function loadFeed() {
     try {
-      const payload = await api("/api/storyheaven/feed?limit=30", { auth: Boolean(state.session) });
+      const payload = await api("/api/storyheaven/feed?limit=50", { auth: Boolean(state.session) });
       state.stories = mergeEditorialLibrary(Array.isArray(payload.stories) ? payload.stories : []);
     } catch {
       state.stories = FALLBACK_STORIES;
@@ -202,26 +231,22 @@
     renderStories();
   }
 
+  function setStageFilter(filter) {
+    state.stageFilter = ["all", "main", "prologue"].includes(filter) ? filter : "all";
+    document.querySelectorAll("[data-stage-filter]").forEach((button) => {
+      const active = button.dataset.stageFilter === state.stageFilter;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-selected", String(active));
+    });
+    renderStories();
+  }
+
   async function setGenre(genre) {
-    state.genre = String(genre || "");
-    const requestedGenre = state.genre;
-    state.genreStories = null;
+    state.genre = normalizeGenreName(genre);
     renderGenreFilters();
-    renderGenreSummary(true);
-    if (state.genre) {
-      try {
-        const params = new URLSearchParams({ limit: "40", genre: state.genre });
-        const payload = await api(`/api/storyheaven/feed?${params}`, { auth: Boolean(state.session) });
-        if (state.genre !== requestedGenre) return;
-        state.genreStories = mergeEditorialLibrary(Array.isArray(payload.stories) ? payload.stories : [], state.genre);
-      } catch {
-        if (state.genre !== requestedGenre) return;
-        state.genreStories = state.stories.filter((story) => storyHasGenre(story, state.genre));
-      }
-    }
     renderStories();
     renderGenreSummary(false);
-    document.querySelector("#discover")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelector("#editorial")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function setRankingPeriod(period) {
@@ -236,20 +261,43 @@
   }
 
   function renderStories() {
-    const humanStories = state.stories.filter((story) => !isEditorialStory(story));
-    const seedStories = state.stories.filter(isEditorialStory);
-    const sourceStories = state.genre ? (state.genreStories || []) : (state.query ? state.stories : humanStories);
-    const discoveryStories = state.query ? sourceStories.filter(matchesSearch) : sourceStories;
+    const library = state.stories.length ? state.stories : FALLBACK_STORIES;
+    const humanStories = library.filter((story) => !isEditorialStory(story));
+    const seedStories = library.filter(isEditorialStory).filter(matchesCatalogFilters);
+    const discoveryStories = humanStories.filter((story) => matchesSearch(story) && (!state.genre || storyHasGenre(story, state.genre)));
     const sortStories = (stories) => [...stories].sort((a, b) => (
       state.filter === "popular"
-        ? Number(b.likeCount || 0) - Number(a.likeCount || 0)
+        ? popularityScore(b) - popularityScore(a) || new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0)
         : new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0)
     ));
     renderStoryList(document.querySelector("[data-human-feed]"), sortStories(discoveryStories));
-    renderStoryList(document.querySelector("[data-seed-feed]"), sortStories(seedStories.length ? seedStories : FALLBACK_STORIES));
-    document.querySelector("[data-human-empty]").hidden = discoveryStories.length > 0;
-    renderSearchState(discoveryStories.length);
+    renderStoryList(document.querySelector("[data-seed-feed]"), sortStories(seedStories));
+    document.querySelector("[data-seed-empty]").hidden = seedStories.length > 0;
+    document.querySelector("[data-human-empty]").hidden = discoveryStories.length > 0 || (state.query && seedStories.length > 0);
+    renderCatalogSummary(seedStories.length);
+    renderSearchState(discoveryStories.length + seedStories.length);
     renderWeekly(humanStories);
+  }
+
+  function matchesCatalogFilters(story) {
+    const stageMatches = state.stageFilter === "all"
+      || (state.stageFilter === "main" && storyHasMainEpisode(story))
+      || (state.stageFilter === "prologue" && isPrologueOnlyStory(story));
+    return stageMatches
+      && (!state.genre || storyHasGenre(story, state.genre))
+      && matchesSearch(story);
+  }
+
+  function popularityScore(story) {
+    return Number(story.likeCount || 0) * 1000000 + Number(story.viewCount || 0);
+  }
+
+  function renderCatalogSummary(count) {
+    const summary = document.querySelector("[data-catalog-summary]");
+    if (!summary) return;
+    const stage = ({ main: "본편 연재", prologue: "프롤로그", all: "전체" })[state.stageFilter];
+    const conditions = [state.genre, state.query ? `‘${state.query}’ 검색` : "", stage].filter(Boolean);
+    summary.textContent = `${conditions.join(" · ")} 작품 ${count.toLocaleString("ko-KR")}편`;
   }
 
   function setSearch(value) {
@@ -259,7 +307,8 @@
 
   function matchesSearch(story) {
     if (!state.query) return true;
-    const genres = Array.isArray(story.genres) ? story.genres : [story.genre];
+    const genres = (Array.isArray(story.genres) ? story.genres : [story.genre])
+      .flatMap((genre) => [genre, normalizeGenreName(genre)]);
     const haystack = [
       story.title,
       story.logline,
@@ -296,8 +345,13 @@
     const link = section.querySelector("[data-continue-link]");
     link.href = `/storyheaven/story/?id=${encodeURIComponent(entry.storyId)}&episode=${entry.episodeNo}`;
     const image = section.querySelector("[data-continue-cover]");
-    image.src = normalizeCover(entry.coverPath);
-    image.alt = `${entry.title} 표지`;
+    if (entry.coverPath) {
+      image.src = normalizeCover(entry.coverPath);
+      image.alt = `${entry.title} 표지`;
+    } else {
+      image.hidden = true;
+      link.classList.add("has-no-cover");
+    }
     section.querySelector("[data-continue-genre]").textContent = entry.genre || "최근 읽은 연재";
     section.querySelector("[data-continue-title]").textContent = entry.title;
     section.querySelector("[data-continue-episode]").textContent = `${entry.episodeNo}화${entry.episodeTitle ? ` · ${entry.episodeTitle}` : ""} · ${Math.round(entry.progress * 100)}% 읽음`;
@@ -314,7 +368,17 @@
   function renderGenreFilters() {
     const container = document.querySelector("[data-genre-list]");
     if (!container) return;
-    const values = [{ name: "", storyCount: null }, ...(state.discovery?.genres || [])];
+    const counts = new Map();
+    const library = state.stories.length ? state.stories : FALLBACK_STORIES;
+    library.filter(isEditorialStory).forEach((story) => {
+      const genres = Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre];
+      new Set(genres.map(normalizeGenreName).filter(Boolean)).forEach((genre) => {
+        counts.set(genre, (counts.get(genre) || 0) + 1);
+      });
+    });
+    const values = [{ name: "", storyCount: library.filter(isEditorialStory).length }, ...[...counts.entries()]
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0], "ko-KR"))
+      .map(([name, storyCount]) => ({ name, storyCount }))];
     container.replaceChildren(...values.map((item) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -340,10 +404,13 @@
       return;
     }
     if (!state.genre) {
-      summary.textContent = `전체 공개 연재 ${state.stories.length || FALLBACK_STORIES.length}편을 보고 있습니다.`;
+      const count = (state.stories.length ? state.stories : FALLBACK_STORIES).filter(isEditorialStory).length;
+      summary.textContent = `전체 편집부 연재 ${count}편`;
       return;
     }
-    summary.textContent = `${state.genre} 연재 ${state.genreStories?.length || 0}편을 모았습니다.`;
+    const count = (state.stories.length ? state.stories : FALLBACK_STORIES)
+      .filter((story) => isEditorialStory(story) && storyHasGenre(story, state.genre)).length;
+    summary.textContent = `${state.genre} 연재 ${count}편`;
   }
 
   function renderRanking() {
@@ -364,7 +431,8 @@
       const title = document.createElement("strong");
       title.textContent = story.title;
       const meta = document.createElement("small");
-      meta.textContent = `${story.genre || "이야기"} · 공개 ${Number(story.episodeCount || 0)}화`;
+      const episodeCount = Number(story.episodeCount || 0);
+      meta.textContent = `${normalizeGenreName(story.genre) || "이야기"} · ${storyHasMainEpisode(story) ? `본편 ${mainEpisodeCount(story)}화` : episodeCount === 1 ? "프롤로그" : "공개 준비 중"}`;
       copy.append(title, meta);
       const score = document.createElement("span");
       score.className = "ranking-score";
@@ -389,7 +457,7 @@
     const genreCounts = new Map();
     FALLBACK_STORIES.forEach((story) => {
       const values = Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre];
-      [...new Set(values.filter(Boolean))].forEach((genre) => genreCounts.set(genre, (genreCounts.get(genre) || 0) + 1));
+      [...new Set(values.map(normalizeGenreName).filter(Boolean))].forEach((genre) => genreCounts.set(genre, (genreCounts.get(genre) || 0) + 1));
     });
     const items = [...FALLBACK_STORIES]
       .sort((a, b) => Number(b.viewCount || 0) - Number(a.viewCount || 0))
@@ -412,10 +480,25 @@
     const fragment = document.querySelector("#storyCardTemplate").content.cloneNode(true);
     const card = fragment.querySelector(".story-card");
     card.dataset.storyId = story.id;
+    const editorial = isEditorialStory(story);
+    const episodeCount = Number(story.episodeCount || 0);
+    const prologueOnly = isPrologueOnlyStory(story);
+    const hasDedicatedCover = !prologueOnly && Boolean(String(story.coverPath || "").trim());
+    card.classList.toggle("is-prologue-only", prologueOnly);
+    card.classList.toggle("has-no-cover", !hasDedicatedCover);
+    const cover = card.querySelector(".story-cover");
     const image = card.querySelector("img");
-    image.src = normalizeCover(story.coverPath);
-    image.alt = story.title + " 이야기 표지";
-    const storyGenres = Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre].filter(Boolean);
+    const noCoverState = card.querySelector(".no-cover-state");
+    if (hasDedicatedCover) {
+      image.src = normalizeCover(story.coverPath);
+      image.alt = story.title + " 이야기 표지";
+      image.addEventListener("error", () => showNoCoverState(card, cover, image, noCoverState, false), { once: true });
+    } else {
+      showNoCoverState(card, cover, image, noCoverState, prologueOnly);
+    }
+    const storyGenres = [...new Set((Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre])
+      .map(normalizeGenreName)
+      .filter(Boolean))];
     const visibleGenres = storyGenres.slice(0, 3).join(" · ");
     card.querySelector(".genre").textContent = `${visibleGenres}${storyGenres.length > 3 ? ` +${storyGenres.length - 3}` : ""}` || "이야기";
     card.querySelector(".author").textContent = story.author?.nickname || (isEditorialStory(story) ? "스토리천국 편집부" : "새 이야기꾼");
@@ -424,8 +507,10 @@
       link.href = "/storyheaven/story/?id=" + encodeURIComponent(story.id);
     });
     card.querySelector(".logline").textContent = story.logline;
-    card.querySelector("[data-episode-count]").textContent = story.episodeCount
-      ? `연재 ${Number(story.episodeCount)}화`
+    card.querySelector("[data-episode-count]").textContent = storyHasMainEpisode(story)
+      ? `본편 ${mainEpisodeCount(story)}화`
+      : prologueOnly
+        ? "프롤로그"
       : "첫 화 준비 중";
     card.querySelector("[data-latest-episode]").textContent = story.latestEpisodeAt
       ? `최근 ${formatShortDate(story.latestEpisodeAt)}`
@@ -433,7 +518,7 @@
     card.querySelector("[data-view-count]").textContent = `조회 ${Number(story.viewCount || 0).toLocaleString("ko-KR")}`;
 
     const originBadge = card.querySelector(".origin-badge");
-    if (isEditorialStory(story)) {
+    if (editorial) {
       originBadge.textContent = "편집부 연재";
     } else {
       originBadge.textContent = "독자 투고";
@@ -446,7 +531,7 @@
       editorBadge.title = story.endorsement.reason || "운영진이 주목한 이야기";
     }
     const tags = card.querySelector(".tag-list");
-    (story.tags || []).slice(0, 3).forEach((tag) => {
+    (story.tags || []).slice(0, 2).forEach((tag) => {
       const chip = document.createElement("span");
       chip.textContent = "#" + tag;
       tags.append(chip);
@@ -460,16 +545,29 @@
     const competitionNote = card.querySelector(".competition-note");
     competitionNote.textContent = story.weeklyRoundId
       ? `이번 주 ${Number(story.weeklyVoteCount || 0)}표`
-      : story.competitionEligible ? "다음 후보" : isEditorialStory(story) ? "샘플 연재" : "순위 제외";
+      : story.competitionEligible ? "다음 후보" : editorial ? (prologueOnly ? "프롤로그 공개" : "편집부 연재") : "순위 제외";
     competitionNote.classList.toggle("is-weekly", Boolean(story.weeklyRoundId));
 
     const endorseButton = card.querySelector(".endorse-button");
     if (state.profile?.isAdmin) {
+      const manageLink = card.querySelector(".manage-story-button");
+      manageLink.hidden = false;
+      manageLink.href = `/storyheaven/operator/serial/stories/?story=${encodeURIComponent(story.id)}`;
       endorseButton.hidden = false;
-      endorseButton.textContent = "추천 " + (story.endorsement?.level || 0) + " →";
+      endorseButton.textContent = "추천 " + (story.endorsement?.level || 0);
       endorseButton.addEventListener("click", () => cycleEndorsement(story, endorseButton));
     }
     return fragment;
+  }
+
+  function showNoCoverState(card, cover, image, noCoverState, prologueOnly) {
+    image.removeAttribute("src");
+    image.hidden = true;
+    card.classList.add("has-no-cover");
+    cover.classList.add("is-text-only");
+    noCoverState.hidden = false;
+    noCoverState.querySelector("b").textContent = prologueOnly ? "프롤로그 공개" : "표지 준비 중";
+    noCoverState.querySelector("small").textContent = prologueOnly ? "본편 연재 전" : "작품 전용 표지 제작 대기";
   }
 
   function renderWeekly(humanStories) {
@@ -665,14 +763,38 @@
   }
 
   function normalizeCover(path) {
-    if (!path) return "../webtoon/assets/guide/awakening-episode-01-last-train-v4.webp";
+    if (!path) return "";
     if (path.startsWith("/")) return ".." + path;
     return path;
+  }
+
+  function normalizeGenreName(value) {
+    const genre = String(value || "").trim();
+    if (!genre) return "";
+    return GENRE_LABELS[genre.toLocaleLowerCase("en-US")] || genre;
   }
 
   function isEditorialStory(story) {
     return ["admin_seed", "ai_seed"].includes(story?.contentOrigin)
       || FALLBACK_STORIES.some((item) => item.id === story?.id);
+  }
+
+  function isLegacyCuratedStory(story) {
+    return FALLBACK_STORIES.some((item) => item.id === story?.id);
+  }
+
+  function storyHasMainEpisode(story) {
+    const episodeCount = Number(story?.episodeCount || 0);
+    return episodeCount > 1 || (isLegacyCuratedStory(story) && episodeCount > 0);
+  }
+
+  function isPrologueOnlyStory(story) {
+    return isEditorialStory(story) && Number(story?.episodeCount || 0) === 1 && !isLegacyCuratedStory(story);
+  }
+
+  function mainEpisodeCount(story) {
+    const episodeCount = Number(story?.episodeCount || 0);
+    return Math.max(1, isLegacyCuratedStory(story) && episodeCount === 1 ? 1 : episodeCount - 1);
   }
 
   function mergeEditorialLibrary(remoteStories, genre = "") {
@@ -684,6 +806,11 @@
       if (!remote) return local;
       return {
         ...local,
+        episodeCount: Number(remote.episodeCount ?? local.episodeCount ?? 0),
+        latestEpisodeAt: remote.latestEpisodeAt || local.latestEpisodeAt,
+        publishedAt: remote.publishedAt || local.publishedAt,
+        coverPath: local.coverPath || remote.coverPath || "",
+        genres: Array.isArray(remote.genres) && remote.genres.length ? remote.genres : local.genres,
         likeCount: Number(remote.likeCount || 0),
         likedByMe: Boolean(remote.likedByMe),
         viewCount: Number(remote.viewCount || 0),
@@ -697,7 +824,8 @@
 
   function storyHasGenre(story, genre) {
     const values = Array.isArray(story?.genres) && story.genres.length ? story.genres : [story?.genre];
-    return values.includes(genre);
+    const target = normalizeGenreName(genre);
+    return values.some((value) => normalizeGenreName(value) === target);
   }
 
   function nicknameError(code) {

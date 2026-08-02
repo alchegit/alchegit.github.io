@@ -42,6 +42,9 @@
         state.editorial = local || null;
         state.story = local ? {
           ...local,
+          episodeCount: Number(story.episodeCount ?? local.episodeCount ?? 0),
+          latestEpisodeAt: story.latestEpisodeAt || local.latestEpisodeAt,
+          coverPath: local.coverPath || story.coverPath || "",
           likeCount: Number(story.likeCount || 0),
           likedByMe: Boolean(story.likedByMe),
           viewCount: Number(story.viewCount || 0)
@@ -78,8 +81,18 @@
     const story = state.story;
     document.title = `${story.title} | StoryHeaven`;
     const cover = document.querySelector("[data-cover]");
-    cover.src = normalizeCover(story.coverPath);
-    cover.alt = `${story.title} 표지`;
+    const showCover = Boolean(story.coverPath) && (!isPrologueOnlyStory(story) || Boolean(state.editorial));
+    const hero = cover.closest(".series-hero");
+    cover.hidden = !showCover;
+    hero.classList.toggle("has-no-cover", !showCover);
+    if (showCover) {
+      cover.src = normalizeCover(story.coverPath);
+      cover.alt = `${story.title} 표지`;
+      cover.addEventListener("error", () => {
+        cover.hidden = true;
+        hero.classList.add("has-no-cover");
+      }, { once: true });
+    }
     document.querySelector("[data-origin]").textContent = isEditorialStory(story) ? "EDITORIAL SERIAL" : "READER SERIAL";
     document.querySelector("[data-title]").textContent = story.title;
     document.querySelector("[data-author]").textContent = story.author?.nickname || (isEditorialStory(story) ? "스토리천국 편집부" : "새 이야기꾼");
@@ -748,8 +761,12 @@
   }
 
   function normalizeCover(value) {
-    if (!value) return "../../webtoon/assets/guide/awakening-episode-01-last-train-v4.webp";
+    if (!value) return "";
     return value.startsWith("/") ? `../..${value}` : value;
+  }
+
+  function isPrologueOnlyStory(story) {
+    return isEditorialStory(story) && Number(story?.episodeCount || 0) === 1;
   }
 
   function isEditorialStory(story) {

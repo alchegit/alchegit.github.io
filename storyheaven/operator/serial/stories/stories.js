@@ -1,5 +1,5 @@
 (() => {
-  const state = { stories: [], enabled: false };
+  const state = { stories: [], enabled: false, requestedStoryId: new URLSearchParams(location.search).get("story") || "", requestApplied: false };
   const elements = {};
   const visibilityLabels = { public: "공개", private: "비공개", archived: "보관" };
   const continuationLabels = { auto: "추천 11개 모이면 자동", manual: "운영자 요청", paused: "일시 정지", ended: "연재 종료" };
@@ -55,12 +55,23 @@
       const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/stories");
       state.stories = Array.isArray(payload.stories) ? payload.stories : [];
       state.enabled = payload.enabled === true;
+      applyRequestedStory();
       elements.engineState.textContent = state.enabled ? "자동 연재 가동 중" : "자동 연재 전체 멈춤";
       renderSummary();
       renderList();
     } finally {
       button.disabled = false;
     }
+  }
+
+  function applyRequestedStory() {
+    if (state.requestApplied || !state.requestedStoryId) return;
+    const requested = state.stories.find((story) => story.id === state.requestedStoryId);
+    if (!requested) return;
+    elements.search.value = requested.title;
+    elements.visibility.value = "all";
+    elements.continuation.value = "all";
+    state.requestApplied = true;
   }
 
   function renderSummary() {

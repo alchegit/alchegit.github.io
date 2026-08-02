@@ -6,8 +6,8 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   for (const viewport of [
-    { name: "desktop", width: 1440, height: 1000, expectedColumns: 3 },
-    { name: "mobile", width: 390, height: 844, expectedColumns: 1 }
+    { name: "desktop", width: 1440, height: 1000, expectedColumns: 6 },
+    { name: "mobile", width: 390, height: 844, expectedColumns: 2 }
   ]) {
     const page = await browser.newPage({ viewport });
     const pageErrors = [];
@@ -51,6 +51,10 @@ try {
     assert.deepEqual(metrics.brokenImages, [], viewport.name + " image loading");
     assert.equal(metrics.hasEditorialLabels, true, viewport.name + " editorial labels");
     assert.equal(metrics.hasAiDisclosure, false, viewport.name + " public AI disclosure");
+    assert.equal(await page.locator('.main-nav a[href^="/webtoon/"]').count(), 0, viewport.name + " guest webtoon navigation hidden");
+    assert.match(await page.locator("#introTitle").textContent(), /다음 화로/u, viewport.name + " continuation-first headline");
+    assert.match(await page.locator("#continuation").textContent(), /추천으로 알려주세요/u, viewport.name + " recommendation continuation copy");
+    assert.equal((await page.locator("main").textContent()).includes("웹툰"), false, viewport.name + " no unfinished webtoon promotion");
     assert.deepEqual(pageErrors, [], viewport.name + " page errors");
     await page.close();
   }
