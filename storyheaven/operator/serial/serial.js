@@ -24,19 +24,27 @@
     fast: Object.freeze({ pace: 5, suspense: 4, curiosity: 4, surprise: 3, emotion: 3, romance: 1, action: 4, description: 2, humor: 2 }),
     emotional: Object.freeze({ pace: 2, suspense: 2, curiosity: 3, surprise: 2, emotion: 5, romance: 4, action: 1, description: 4, humor: 2 })
   });
-  const draftStorageKey = "storyheaven.operator.serial-draft.v6";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const draftStorageKey = "storyheaven.operator.serial-draft.v7";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   let draftReady = false;
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
   let queueRefreshTimer = 0;
+  let clockTimer = 0;
+  let serverClockOffsetMs = 0;
+  let showHiddenHistory = false;
+  const locallyHiddenHistory = new Map();
+  let latestSerialSnapshot = { enabled: false, pollSeconds: 60, schedules: [], queue: {} };
 
   document.addEventListener("DOMContentLoaded", async () => {
     cache();
     restoreDraft();
+    restoreHiddenHistory();
     renderPrimaryGenres();
     renderSubgenres();
     bind();
+    startSeoulClock();
     syncCadenceBounds();
     updateTargetButton();
     draftReady = true;
@@ -48,12 +56,22 @@
     selectors.gate = document.querySelector("[data-access-gate]");
     selectors.dashboard = document.querySelector("[data-serial-dashboard]");
     selectors.engineState = document.querySelector("[data-engine-state]");
+    selectors.systemPanel = document.querySelector("[data-serial-control-panel]");
+    selectors.systemTitle = document.querySelector("[data-system-state-title]");
+    selectors.systemClock = document.querySelector("[data-seoul-clock]");
+    selectors.systemDetail = document.querySelector("[data-system-state-detail]");
+    selectors.systemCause = document.querySelector("[data-system-state-cause]");
+    selectors.systemResume = document.querySelector("[data-resume-system]");
+    selectors.systemPause = document.querySelector("[data-pause-system]");
+    selectors.systemStart = document.querySelector("[data-start-system]");
     selectors.scheduleForm = document.querySelector("[data-schedule-form]");
     selectors.scheduleList = document.querySelector("[data-schedule-list]");
     selectors.queueList = document.querySelector("[data-queue-list]");
     selectors.attentionList = document.querySelector("[data-attention-list]");
     selectors.completedList = document.querySelector("[data-completed-list]");
     selectors.completedCaption = document.querySelector("[data-completed-caption]");
+    selectors.stalledList = document.querySelector("[data-stalled-list]");
+    selectors.stalledCaption = document.querySelector("[data-stalled-caption]");
     selectors.waitingCaption = document.querySelector("[data-waiting-caption]");
     selectors.historySummary = document.querySelector("[data-history-summary]");
     selectors.statusRunning = document.querySelector("[data-status-running]");
@@ -65,6 +83,7 @@
     selectors.queueNote = document.querySelector("[data-queue-note]");
     selectors.timingSummary = document.querySelector("[data-timing-summary]");
     selectors.runHistory = document.querySelector("[data-run-history]");
+    selectors.historyHiddenToggle = document.querySelector("[data-history-hidden-toggle]");
     selectors.primaryGenres = document.querySelector("[data-primary-genres]");
     selectors.subgenres = document.querySelector("[data-subgenres]");
     selectors.subgenreCount = document.querySelector("[data-subgenre-count]");
@@ -82,10 +101,17 @@
     selectors.scheduleForm.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.addEventListener("change", queueDraftSave);
     selectors.runSearch.addEventListener("submit", loadRunFromForm);
+    selectors.systemResume.addEventListener("click", () => guardedSystemButton(selectors.systemResume, resumeSystemFromPanel));
+    selectors.systemPause.addEventListener("click", () => guardedSystemButton(selectors.systemPause, () => controlSerialSystem("pause")));
+    selectors.systemStart.addEventListener("click", () => guardedSystemButton(selectors.systemStart, () => controlSerialSystem("start")));
+    selectors.historyHiddenToggle.addEventListener("click", toggleHiddenHistory);
     document.querySelector("[data-process-due]").addEventListener("click", processDue);
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
     selectors.scheduleForm.elements.cadenceUnit.addEventListener("change", syncCadenceBounds);
     selectors.scheduleForm.elements.targetEpisodeCount.addEventListener("input", updateTargetButton);
+    selectors.scheduleForm.elements.totalVolumes.addEventListener("input", queueDraftSave);
+    selectors.scheduleForm.elements.episodesPerVolume.addEventListener("input", queueDraftSave);
+    selectors.scheduleForm.elements.continuationBatchCount.addEventListener("change", queueDraftSave);
     for (const input of selectors.scheduleForm.querySelectorAll("input[name='creativePreset']")) {
       input.addEventListener("change", () => {
         if (input.checked && input.value !== "custom") applyCreativePreset(input.value);
@@ -329,10 +355,14 @@
   async function refreshSchedules() {
     const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules");
     const pollSeconds = Math.max(1, Number(payload.pollSeconds) || 60);
-    selectors.engineState.textContent = payload.enabled
-      ? `자동 연재 연결됨 · ${pollSeconds}초마다 예약 확인`
-      : "자동 연재 서버 멈춤";
     const queue = payload.queue || {};
+    syncServerClock(queue.updatedAt);
+    latestSerialSnapshot = {
+      enabled: payload.enabled === true,
+      pollSeconds,
+      schedules: Array.isArray(payload.schedules) ? payload.schedules : [],
+      queue
+    };
     queueByScheduleId.clear();
     failedByScheduleId.clear();
     for (const item of queue.items || []) {
@@ -347,6 +377,7 @@
     selectors.scheduleList.replaceChildren(...(payload.schedules || []).map(scheduleRow));
     if (!payload.schedules?.length) selectors.scheduleList.append(message("아직 시작한 자동 연재가 없습니다."));
     renderQueue(queue);
+    renderSystemState(latestSerialSnapshot);
   }
 
   function scheduleRow(schedule) {
@@ -363,7 +394,7 @@
     heading.append(title, status, mode);
     const detail = document.createElement("p");
     const controls = schedule.creativeControls || {};
-    detail.textContent = `${subgenreLabels(schedule).join(" · ")} · 강도 ${creativeControlSummary(controls)} · ${schedule.targetEpisodeCount || 1}화까지 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
+    detail.textContent = `${subgenreLabels(schedule).join(" · ")} · ${seriesPlanLabel(schedule.seriesPlan)} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · 강도 ${creativeControlSummary(controls)} · ${initialBatchText(schedule.targetEpisodeCount || 1)} 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 확인 ${formatDate(schedule.nextRunAt)}` : "서비스를 다시 시작할 때까지 생성과 공개가 멈춥니다.";
     copy.append(heading, detail, next);
@@ -409,6 +440,8 @@
       if (!cadenceMinutes) return;
       const targetEpisodeCount = readTargetEpisodeCount();
       if (!targetEpisodeCount) return;
+      const seriesPlan = readSeriesPlan();
+      if (!seriesPlan) return;
       const creativeControls = readCreativeControls();
       const created = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/schedules", {
         method: "POST",
@@ -420,6 +453,9 @@
           publicationMode: form.get("publicationMode"),
           cadenceMinutes,
           targetEpisodeCount,
+          totalVolumes: seriesPlan.totalVolumes,
+          episodesPerVolume: seriesPlan.episodesPerVolume,
+          continuationBatchCount: readContinuationBatchCount(),
           creativeControls,
           humorIntensity: humorIntensityFromControls(creativeControls),
           targetAge: "teen",
@@ -434,8 +470,8 @@
       await refreshSchedules();
       saveDraftNow();
       StoryHeavenCommon.toast(selectedPrimaryGenres.has("random") || subgenres.includes("random")
-        ? `랜덤 장르의 ${targetEpisodeCount}화까지 제작을 대기열에 넣었습니다.`
-        : `${targetEpisodeCount}화까지 제작을 대기열에 넣었습니다.`);
+        ? `랜덤 장르의 ${initialBatchText(targetEpisodeCount)} 제작을 대기열에 넣었습니다.`
+        : `${initialBatchText(targetEpisodeCount)} 제작을 대기열에 넣었습니다.`);
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
@@ -455,6 +491,9 @@
           publicationMode: schedule.publicationMode,
           cadenceMinutes: schedule.cadenceMinutes,
           targetEpisodeCount: schedule.targetEpisodeCount || 1,
+          totalVolumes: schedule.seriesPlan?.totalVolumes || 10,
+          episodesPerVolume: schedule.seriesPlan?.episodesPerVolume || 25,
+          continuationBatchCount: schedule.continuationBatchCount || 1,
           creativeControls: schedule.creativeControls || creativePresets.balanced,
           humorIntensity: schedule.humorIntensity || "light",
           targetAge: schedule.targetAge,
@@ -483,8 +522,9 @@
     if (!waiting.length) selectors.queueList.append(message("대기 중인 제작이 없습니다."));
     selectors.waitingCaption.textContent = `${waiting.length}건`;
     renderAttention(attention);
+    renderStalledFirstEpisodes(Array.isArray(queue.stalledFirstEpisodeStories) ? queue.stalledFirstEpisodeStories : []);
     renderCompleted(completed);
-    selectors.queueNote.textContent = "진행 상황은 6초마다 갱신됩니다. 이전 오류는 현재 작업과 분리해 기록으로만 보관합니다.";
+    selectors.queueNote.textContent = "진행 상황은 6초마다 갱신됩니다. 이전 실패와 공개 보류는 현재 작업과 분리해 기록으로 보관합니다.";
     const last = queue.lastCompleted;
     selectors.queueLast.replaceChildren();
     const title = document.createElement("strong");
@@ -498,7 +538,12 @@
     }
     selectors.queueLast.append(title, detail);
     renderTimingSummary();
-    renderRunHistory(queue.history || []);
+    renderRunHistory(queue.history || [], queue.hiddenHistory || []);
+  }
+
+  function toggleHiddenHistory() {
+    showHiddenHistory = !showHiddenHistory;
+    renderRunHistory(latestSerialSnapshot.queue?.history || [], latestSerialSnapshot.queue?.hiddenHistory || []);
   }
 
   function renderStatusCounts(counts, running, waiting, completed, attention) {
@@ -506,6 +551,171 @@
     selectors.statusWaiting.textContent = String(Number(counts.waiting ?? waiting));
     selectors.statusComplete.textContent = String(Number(counts.complete ?? completed));
     selectors.statusAttention.textContent = String(Number(counts.attention ?? attention));
+  }
+
+  function renderSystemState(snapshot = latestSerialSnapshot) {
+    const queue = snapshot.queue || {};
+    const items = Array.isArray(queue.items) ? queue.items : [];
+    const running = items.filter((item) => item.status === "running");
+    const waiting = items.filter((item) => item.status !== "running");
+    const attention = Array.isArray(queue.attention) ? queue.attention : (queue.lastFailed ? [queue.lastFailed] : []);
+    const systemAttention = attention.filter((item) => item.attentionType !== "quality_hold");
+    const qualityHold = attention.find((item) => item.attentionType === "quality_hold");
+    const schedules = Array.isArray(snapshot.schedules) ? snapshot.schedules : [];
+    const activeSchedules = schedules.filter((schedule) => schedule.status === "active");
+    const pausedSchedules = schedules.filter((schedule) => schedule.status === "paused");
+    const resumeTarget = findSystemResumeTarget(snapshot);
+    const state = {
+      kind: "cooldown",
+      title: "쿨타임 대기",
+      chip: "쿨타임 대기",
+      detail: `${Math.max(1, Number(snapshot.pollSeconds) || 60)}초마다 예약 시간이 된 작업을 확인합니다.`,
+      cause: ""
+    };
+
+    if (!snapshot.enabled) {
+      state.kind = "disabled";
+      state.title = "서버 엔진 꺼짐";
+      state.chip = "서버 설정 꺼짐";
+      state.detail = "서버 설정에서 자동 연재 엔진이 꺼져 있어 제작과 예약 확인이 실행되지 않습니다.";
+      state.cause = "서버 환경 설정을 켠 뒤 다시 시작 버튼을 사용할 수 있습니다.";
+    } else if (schedules.length && !activeSchedules.length) {
+      state.kind = "paused";
+      state.title = "전체 중지됨";
+      state.chip = "전체 중지";
+      state.detail = "새 예약과 다음 단계 처리가 멈춰 있습니다. 다시 시작을 누르면 대기열을 먼저 깨운 뒤 예약을 확인합니다.";
+      state.cause = systemPauseCause({ running, waiting, systemAttention });
+    } else if (systemAttention.length) {
+      const issue = systemAttention[0];
+      state.kind = "attention";
+      state.title = "확인 필요";
+      state.chip = "확인 필요";
+      state.detail = "시스템 오류로 멈춘 작업이 있습니다. 중단 위치부터 재개하면 실패한 단계부터 다시 대기열에 넣습니다.";
+      state.cause = `${workDisplayTitle(issue)} · ${stageLabel(issue.stage)} · ${failureLabel(issue.failureCode)}`;
+    } else if (running.length) {
+      const active = running[0];
+      state.kind = "running";
+      state.title = "제작 중";
+      state.chip = "제작 중";
+      state.detail = `${workDisplayTitle(active)} 작업을 처리하고 있습니다.`;
+      state.cause = `${stageLabel(active.stage)} · 경과 ${formatDuration(active.elapsedSeconds)}${running.length > 1 ? ` · 추가 진행 ${running.length - 1}건` : ""}`;
+    } else if (waiting.length) {
+      const next = waiting[0];
+      state.kind = "waiting";
+      state.title = "대기열 준비됨";
+      state.chip = "대기 중";
+      state.detail = `${waiting.length}건이 순서를 기다립니다. 중단 위치부터 재개를 누르면 다음 작업을 바로 확인합니다.`;
+      state.cause = `${workDisplayTitle(next)} · ${stageLabel(next.stage)} · ${formatDate(next.requestedAt)} 요청`;
+    } else if (qualityHold) {
+      state.kind = "attention";
+      state.title = "검수 보류 확인 필요";
+      state.chip = "검수 보류";
+      state.detail = "원고 생성은 끝났지만 자동 편집 검수에서 바로 공개하기 어렵다고 판단한 작업이 있습니다.";
+      state.cause = `${workDisplayTitle(qualityHold)} · 검수 결과 보기를 열어 보류 사유를 확인하세요.`;
+    } else if (activeSchedules.length) {
+      const nextSchedule = nextActiveSchedule(activeSchedules);
+      if (nextSchedule) {
+        const due = serialTime(nextSchedule.nextRunAt) <= serialNow();
+        state.title = due ? "예약 확인 대기" : "쿨타임 대기";
+        state.chip = due ? "예약 확인 대기" : "쿨타임 대기";
+        state.detail = due
+          ? "예약 시간이 지난 설정이 있어 다음 자동 확인에서 새 작업을 요청합니다."
+          : `다음 예약까지 기다리는 중입니다. ${formatDate(nextSchedule.nextRunAt)}에 확인합니다.`;
+        state.cause = `${scheduleLabel(nextSchedule)} · ${formatCadence(nextSchedule.cadenceMinutes)} 간격`;
+      } else {
+        state.detail = "가동 중인 설정은 있지만 다음 예약 시간이 아직 정해지지 않았습니다.";
+        state.cause = "설정 카드에서 다음 확인 시간을 조정할 수 있습니다.";
+      }
+    } else {
+      state.kind = "setup";
+      state.title = "설정 없음";
+      state.chip = "설정 없음";
+      state.detail = "아직 자동 연재 설정이 없습니다. 장르를 고르고 첫 제작을 대기열에 넣어주세요.";
+      state.cause = "";
+    }
+
+    selectors.systemPanel.className = `serial-control-panel is-${state.kind}`;
+    selectors.systemTitle.textContent = state.title;
+    if (selectors.systemClock) selectors.systemClock.hidden = state.kind !== "cooldown";
+    updateSeoulClock();
+    selectors.systemDetail.textContent = state.detail;
+    selectors.systemCause.textContent = state.cause;
+    selectors.systemCause.hidden = !state.cause;
+    selectors.engineState.textContent = state.chip;
+
+    const globallyPaused = schedules.length > 0 && !activeSchedules.length;
+    selectors.systemResume.disabled = !snapshot.enabled || !resumeTarget || globallyPaused;
+    selectors.systemPause.disabled = !snapshot.enabled || !activeSchedules.length;
+    selectors.systemStart.disabled = !snapshot.enabled || !schedules.length || (!pausedSchedules.length && !waiting.length && !systemAttention.length);
+    selectors.systemResume.title = globallyPaused ? "전체 중지 상태에서는 다시 시작을 먼저 눌러주세요." : resumeTarget ? "" : "재개할 중단 또는 대기 작업이 없습니다.";
+    selectors.systemPause.title = activeSchedules.length ? "" : "이미 전체 중지 상태입니다.";
+    selectors.systemStart.title = selectors.systemStart.disabled ? "중지된 설정이나 깨울 대기열이 없습니다." : "";
+  }
+
+  function systemPauseCause({ running, waiting, systemAttention }) {
+    const parts = [];
+    if (running.length) parts.push(`현재 단계 ${running.length}건은 끝난 뒤 다음 단계가 멈춥니다`);
+    if (waiting.length) parts.push(`대기 ${waiting.length}건`);
+    if (systemAttention.length) parts.push(`중단 ${systemAttention.length}건`);
+    return parts.length ? `${parts.join(" · ")} · 다시 시작하면 이 작업부터 이어갑니다.` : "새 작업 요청과 자동 공개가 멈춰 있습니다.";
+  }
+
+  function nextActiveSchedule(schedules) {
+    return schedules
+      .filter((schedule) => schedule.nextRunAt && Number.isFinite(serialTime(schedule.nextRunAt)))
+      .sort((left, right) => serialTime(left.nextRunAt) - serialTime(right.nextRunAt))[0] || null;
+  }
+
+  function findSystemResumeTarget(snapshot = latestSerialSnapshot) {
+    const queue = snapshot.queue || {};
+    const items = Array.isArray(queue.items) ? queue.items : [];
+    const attention = Array.isArray(queue.attention) ? queue.attention : (queue.lastFailed ? [queue.lastFailed] : []);
+    const issue = attention.find((item) => item.attentionType !== "quality_hold" && (item.id || item.scheduleId));
+    if (issue) return { item: issue, force: false };
+    const waiting = items.find((item) => item.status !== "running" && (item.id || item.scheduleId));
+    if (waiting) return { item: waiting, force: false };
+    const running = items.find((item) => item.status === "running" && item.id);
+    if (running) return { item: running, force: true };
+    return null;
+  }
+
+  async function guardedSystemButton(button, handler) {
+    const controls = [selectors.systemResume, selectors.systemPause, selectors.systemStart].filter(Boolean);
+    controls.forEach((control) => { control.disabled = true; });
+    try {
+      await handler();
+    } finally {
+      renderSystemState(latestSerialSnapshot);
+    }
+  }
+
+  async function resumeSystemFromPanel() {
+    const target = findSystemResumeTarget();
+    if (target) {
+      await resumeQueue(target.item, { force: target.force });
+      return;
+    }
+    await controlSerialSystem("resume");
+  }
+
+  async function controlSerialSystem(action) {
+    try {
+      const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/system", {
+        method: "POST",
+        body: { action }
+      });
+      await refreshSchedules();
+      if (action === "pause") {
+        const held = Number(payload.system?.heldJobs || 0);
+        StoryHeavenCommon.toast(held ? `자동 연재를 전체 중지했습니다. 대기 단계 ${held}건도 함께 멈췄습니다.` : "자동 연재를 전체 중지했습니다.");
+      } else {
+        const resumed = payload.resumed || {};
+        const resumedCount = Number(resumed.waitingReleased || 0) + Number(resumed.errorJobsReleased || 0) + Number(resumed.expiredReleased || 0);
+        StoryHeavenCommon.toast(resumedCount ? `자동 연재를 다시 시작했습니다. 대기·중단 단계 ${resumedCount}건을 깨웠습니다.` : "자동 연재를 다시 시작했습니다.");
+      }
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
   }
 
   function renderAttention(items) {
@@ -522,9 +732,9 @@
       const copy = document.createElement("div");
       const title = document.createElement("strong");
       const detail = document.createElement("p");
-      title.textContent = item.title && item.title !== "새 작품 기획" ? item.title : item.workLabel;
+      title.textContent = workDisplayTitle(item);
       detail.textContent = item.attentionType === "quality_hold"
-        ? `제작은 끝났지만 편집 기준을 통과하지 못했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
+        ? `원고 생성은 끝났지만 자동 편집 검수에서 바로 공개하기 어렵다고 판단했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
         : `${stageLabel(item.stage)}에서 멈춤 · ${formatDate(item.completedAt || item.requestedAt)} · ${failureLabel(item.failureCode)}`;
       copy.append(title, detail);
       const actions = document.createElement("div");
@@ -537,6 +747,55 @@
       if (item.scheduleId) actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(item.scheduleId)));
       row.append(copy, actions);
       selectors.attentionList.append(row);
+    }
+  }
+
+  function renderStalledFirstEpisodes(items) {
+    selectors.stalledList.replaceChildren();
+    selectors.stalledCaption.textContent = `${items.length}건`;
+    if (!items.length) {
+      const empty = message("프롤로그 제작 전 멈춘 작품은 없습니다.");
+      empty.classList.add("is-success");
+      selectors.stalledList.append(empty);
+      return;
+    }
+    for (const story of items) {
+      const row = document.createElement("article");
+      row.className = "stalled-row";
+      const copy = document.createElement("div");
+      const title = document.createElement("strong");
+      title.textContent = story.title || "제목 없는 작품";
+      const detail = document.createElement("p");
+      const status = story.latestRunStatus ? historyStatusLabel(story.latestRunStatus) : "제작 기록 없음";
+      const stage = story.latestStage ? ` · ${stageLabel(story.latestStage)}` : "";
+      const time = story.latestCompletedAt || story.latestRunCreatedAt || story.updatedAt || story.createdAt;
+      detail.textContent = `${status}${stage} · 프롤로그 등록 없음 · ${formatDate(time)}`;
+      const logline = document.createElement("small");
+      logline.textContent = story.logline || "한 줄 소개가 비어 있습니다.";
+      copy.append(title, detail, logline);
+      const actions = document.createElement("div");
+      actions.className = "stalled-actions";
+      actions.append(actionButton("프롤로그 제작 재개", "queue-retry", () => resumeFirstEpisodeStory(story)));
+      if (story.latestRunId) actions.append(actionButton("최근 로그 보기", "secondary", () => loadRun(story.latestRunId)));
+      row.append(copy, actions);
+      selectors.stalledList.append(row);
+    }
+  }
+
+  async function resumeFirstEpisodeStory(story) {
+    if (!story?.id) return;
+    if (!window.confirm(`‘${story.title || "이 작품"}’의 프롤로그 제작을 다시 시작할까요? 설정집과 장기 전개를 확인한 뒤 프롤로그를 대기열에 넣습니다.`)) return;
+    try {
+      const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/plan`, {
+        method: "POST",
+        body: { autoEpisode: true }
+      });
+      await refreshSchedules();
+      StoryHeavenCommon.toast(payload.run?.reused
+        ? "이미 준비 중인 프롤로그 작업으로 연결했습니다."
+        : "프롤로그 제작을 다시 대기열에 넣었습니다.");
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
   }
 
@@ -553,7 +812,7 @@
       const copy = document.createElement("div");
       const title = document.createElement("strong");
       const detail = document.createElement("p");
-      title.textContent = item.title && item.title !== "새 작품 기획" ? item.title : item.workLabel;
+      title.textContent = workDisplayTitle(item);
       detail.textContent = `${formatDate(item.completedAt)} 완료 · ${formatDuration(item.elapsedSeconds)} · AI 작업 ${item.completedJobs}회`;
       copy.append(title, detail);
       row.append(copy);
@@ -579,49 +838,138 @@
     selectors.timingSummary.append(title, detail);
   }
 
-  function renderRunHistory(history) {
+  function renderRunHistory(history, hiddenHistory = []) {
+    const historyItems = Array.isArray(history) ? history : [];
+    const visible = historyItems.filter((item) => !locallyHiddenHistory.has(historyStorageId(item)));
+    const hiddenById = new Map((Array.isArray(hiddenHistory) ? hiddenHistory : [])
+      .map((item) => [historyStorageId(item), item])
+      .filter(([id]) => id));
+    for (const item of historyItems) {
+      const id = historyStorageId(item);
+      if (!id || !locallyHiddenHistory.has(id) || hiddenById.has(id)) continue;
+      hiddenById.set(id, {
+        ...item,
+        status: "hidden",
+        stage: "history_hidden",
+        canceledAt: locallyHiddenHistory.get(id) || item.completedAt || item.requestedAt
+      });
+    }
+    const hidden = [...hiddenById.values()];
+    if (!hidden.length) showHiddenHistory = false;
+    selectors.historyHiddenToggle.hidden = !hidden.length;
+    selectors.historyHiddenToggle.textContent = showHiddenHistory
+      ? `숨긴 로그 숨기기 (${hidden.length})`
+      : `숨긴 로그 보기 (${hidden.length})`;
+    selectors.historyHiddenToggle.setAttribute("aria-pressed", showHiddenHistory ? "true" : "false");
+
+    const visibleHistory = showHiddenHistory
+      ? [...visible, ...hidden].sort((left, right) => historySortTime(right) - historySortTime(left))
+      : visible;
     selectors.runHistory.replaceChildren();
-    const completeCount = history.filter((item) => item.status === "complete").length;
-    const issueCount = history.filter((item) => item.status === "error").length;
-    selectors.historySummary.textContent = `이전 실행 기록 · 완료 ${completeCount} · 과거 중단 ${issueCount}`;
-    if (!history.length) {
-      selectors.runHistory.append(message("아직 기록된 자동 연재 실행이 없습니다."));
+    const completeCount = visible.filter((item) => item.status === "complete").length;
+    const issueCount = visible.filter((item) => ["error", "blocked", "stopped"].includes(item.status)).length;
+    selectors.historySummary.textContent = `작품별 작업 로그 · 완료 ${completeCount} · 확인 필요 ${issueCount} · 숨김 ${hidden.length}`;
+    if (!visibleHistory.length) {
+      selectors.runHistory.append(message(hidden.length ? "기본 보기에는 표시할 작업 로그가 없습니다. 숨긴 로그 보기를 누르면 정리한 기록을 확인할 수 있습니다." : "아직 기록된 자동 연재 작업 로그가 없습니다."));
       return;
     }
-    for (const run of history) {
+    for (const run of visibleHistory) {
       const item = document.createElement("article");
       item.className = `run-history-item is-${run.status}`;
-      const header = document.createElement("div");
+      const header = document.createElement("header");
       const title = document.createElement("strong");
-      const meta = document.createElement("span");
-      title.textContent = run.workLabel || run.title;
-      meta.textContent = `${historyStatusLabel(run.status)} · ${formatDuration(run.elapsedSeconds)} · ${formatDate(run.completedAt || run.startedAt || run.requestedAt)}`;
+      const meta = document.createElement("p");
+      title.textContent = workDisplayTitle(run);
+      meta.textContent = run.status === "hidden"
+        ? `${historyStatusLabel(run.status)} · ${stageLabel(run.stage)} · 숨김 처리 ${formatDate(run.canceledAt || run.completedAt || run.requestedAt)}`
+        : `${historyStatusLabel(run.status)} · ${stageLabel(run.stage)} · 마지막 기록 ${formatDate(run.completedAt || run.startedAt || run.requestedAt)}`;
       header.append(title, meta);
-      item.append(header);
+      const summary = document.createElement("div");
+      summary.className = "run-history-summary";
+      summary.append(historyMetric("상태", historyStatusLabel(run.status)), historyMetric("소요 시간", formatDuration(run.elapsedSeconds)), historyMetric("AI 단계", `${run.completedJobs}/${Math.max(run.totalJobs, run.completedJobs)}회`));
+      if (isPendingWorkTitle(run)) summary.append(historyMetric("제목", "아직 생성 전"));
+      if (run.failureCode) summary.append(historyMetric("원인", failureLabel(run.failureCode)));
+      item.append(header, summary);
 
       const timings = Array.isArray(run.stageTimings) ? run.stageTimings : [];
       if (timings.length) {
-        const details = document.createElement("details");
-        const summary = document.createElement("summary");
-        summary.textContent = `단계별 시간 ${timings.length}건`;
         const list = document.createElement("ol");
         list.className = "stage-timing-list";
         for (const timing of timings) {
           const row = document.createElement("li");
+          row.className = `is-${timing.status || "unknown"}`;
           const label = document.createElement("span");
           const value = document.createElement("b");
           label.textContent = `${timing.episodeNo ? `${timing.episodeNo}화 · ` : ""}${stageLabel(timing.type)}`;
           value.textContent = timing.durationSeconds === null
             ? historyStatusLabel(timing.status)
             : formatDuration(timing.durationSeconds);
+          const time = document.createElement("small");
+          time.textContent = formatDate(timing.completedAt || timing.startedAt || timing.createdAt);
           row.append(label, value);
+          row.append(time);
           list.append(row);
         }
-        details.append(summary, list);
-        item.append(details);
+        item.append(list);
       }
+      const actions = document.createElement("div");
+      actions.className = "run-history-actions";
+      if (run.retryable) actions.append(actionButton("중단 단계 재개", "queue-retry", () => resumeQueue(run)));
+      if (run.status === "blocked" && run.latestRunId) actions.append(actionButton("검수 결과 보기", "secondary", () => loadRun(run.latestRunId)));
+      else if (run.latestRunId) actions.append(actionButton("상세 로그 보기", "secondary", () => loadRun(run.latestRunId)));
+      if (canCancelHistoryRun(run)) actions.append(actionButton("로그 숨김", "history-cancel queue-cancel", () => hideHistoryRun(run)));
+      if (actions.childElementCount) item.append(actions);
       selectors.runHistory.append(item);
     }
+  }
+
+  function historySortTime(item = {}) {
+    return Date.parse(item.canceledAt || item.completedAt || item.startedAt || item.requestedAt || "") || 0;
+  }
+
+  function historyMetric(label, value) {
+    const item = document.createElement("span");
+    const title = document.createElement("small");
+    const copy = document.createElement("b");
+    title.textContent = label;
+    copy.textContent = value;
+    item.append(title, copy);
+    return item;
+  }
+
+  function workDisplayTitle(item = {}) {
+    const title = String(item.title || "").trim();
+    const label = String(item.workLabel || "").trim();
+    if (title && title !== "새 작품 기획") return title;
+    if (label && !/^새 작품(?:\s*·|$)/u.test(label)) return label;
+    if (isPendingWorkTitle(item)) {
+      const genres = workGenreLabels(item).join(" × ") || "장르 미정";
+      const targetCount = Math.max(1, Number(item.targetEpisodeCount || scheduleById.get(item.scheduleId)?.targetEpisodeCount || 1));
+      return `제목 생성 전 · ${genres} · ${initialBatchText(targetCount)}`;
+    }
+    return label || title || "제목 확인 필요";
+  }
+
+  function isPendingWorkTitle(item = {}) {
+    const title = String(item.title || "").trim();
+    const label = String(item.workLabel || "").trim();
+    return item.titlePending === true
+      || title === "새 작품 기획"
+      || (!title && /^새 작품(?:\s*·|$)/u.test(label));
+  }
+
+  function workGenreLabels(item = {}) {
+    const schedule = item.scheduleId ? scheduleById.get(item.scheduleId) : null;
+    const genreIds = Array.isArray(item.primaryGenres) && item.primaryGenres.length
+      ? item.primaryGenres
+      : schedule
+        ? schedulePrimaryGenres(schedule)
+        : [item.primaryGenre].filter(Boolean);
+    return [...new Set(genreIds)].map(genreLabel).filter(Boolean);
+  }
+
+  function canCancelHistoryRun(run = {}) {
+    return Boolean(run.id) && ["error", "blocked", "stopped"].includes(String(run.status || ""));
   }
 
   function historyStatusLabel(status) {
@@ -629,12 +977,13 @@
       complete: "완료",
       running: "진행 중",
       waiting: "대기",
-      error: "중단",
-      blocked: "품질 보류",
+      error: "시스템 중단",
+      blocked: "검수 후 공개 보류",
       canceled: "취소",
       stopped: "종료",
+      hidden: "숨김",
       queued: "대기",
-      retry_wait: "재시도 대기"
+      retry_wait: "검수 재시도 대기"
     })[String(status || "")] || String(status || "확인 중");
   }
 
@@ -658,7 +1007,7 @@
       const progress = productionProgressState(active);
       const schedule = active.scheduleId ? scheduleById.get(active.scheduleId) : null;
       label.textContent = "현재 제작 중";
-      title.textContent = `${active.workLabel || active.title} · ${progress.steps[progress.currentIndex]}`;
+      title.textContent = `${workDisplayTitle(active)} · ${progress.steps[progress.currentIndex]}`;
       context.textContent = schedule
         ? `‘${scheduleLabel(schedule)}’ 자동 연재 설정이 실행한 제작입니다.`
         : "작품 제작 대기열에서 처리 중입니다.";
@@ -677,7 +1026,12 @@
     }
     copy.append(label, title, context);
     selectors.queueLive.append(copy, meter, detail);
-    if (active) selectors.queueLive.append(renderProductionProgress(active));
+    if (active) {
+      const actions = document.createElement("div");
+      actions.className = "queue-live-actions";
+      actions.append(actionButton("멈춘 단계 다시 시작", "secondary queue-retry", () => resumeQueue(active, { force: true })));
+      selectors.queueLive.append(actions, renderProductionProgress(active));
+    }
   }
 
   function markQueueRefreshFailure() {
@@ -690,11 +1044,12 @@
 
   function failureLabel(code) {
     return ({
-      codex_auth_required: "Codex 로그인이 필요합니다",
-      codex_model_unavailable: "Codex 모델 연결 실패",
-      codex_output_schema_invalid: "Codex 결과 형식 오류",
-      codex_rate_limited: "Codex 사용량 제한 대기",
-      serial_job_attempts_exhausted: "재시도 횟수 초과"
+      codex_auth_required: "AI 작성 서버 로그인이 필요합니다",
+      codex_model_unavailable: "AI 작성 모델 연결 실패",
+      codex_output_schema_invalid: "AI 작성 결과 형식 오류",
+      codex_rate_limited: "AI 작성 사용량 제한 대기",
+      serial_job_attempts_exhausted: "재시도 횟수 초과",
+      operator_hidden: "운영자 로그 숨김"
     })[String(code || "")] || "작업 오류";
   }
 
@@ -705,10 +1060,10 @@
     const title = document.createElement("strong");
     const detail = document.createElement("small");
     title.textContent = failedWork.attentionType === "quality_hold"
-      ? "설정은 가동 중 · 최근 원고는 품질 보류"
+      ? "설정은 가동 중 · 최근 원고는 검수 후 공개 보류"
       : "설정은 가동 중 · 최근 제작 시도는 중단";
     detail.textContent = failedWork.attentionType === "quality_hold"
-      ? `최종 편집 기준 미달 · ${formatDate(failedWork.completedAt)}`
+      ? `원고는 생성됐지만 바로 공개하기 어렵다는 자동 검수 결과입니다. · ${formatDate(failedWork.completedAt)}`
       : `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
     copy.append(title, detail);
     const action = failedWork.attentionType === "quality_hold" && failedWork.latestRunId
@@ -718,17 +1073,21 @@
     return wrapper;
   }
 
-  async function resumeQueue(failedWork) {
+  async function resumeQueue(failedWork, options = {}) {
     if (!failedWork?.id) return retrySchedule(failedWork?.scheduleId);
+    const force = options.force === true;
+    if (force && !window.confirm("현재 작업이 실제로 멈춘 것을 확인했나요? 진행 중인 AI 작업이 살아 있다면 같은 단계가 한 번 더 실행될 수 있습니다.")) return;
     try {
       const result = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(failedWork.id)}/retry`, {
         method: "POST",
-        body: {}
+        body: { force }
       });
       await refreshSchedules();
-      StoryHeavenCommon.toast(result.reused
-        ? "이미 재개된 작업을 계속 진행하고 있습니다."
-        : "실패한 단계부터 작업을 재개했습니다.");
+      StoryHeavenCommon.toast(result.forceReleased
+        ? "멈춘 단계의 잠금을 풀고 다시 대기열에 넣었습니다."
+        : result.reused
+          ? "대기 중인 단계를 지금 다시 확인하도록 요청했습니다."
+          : "실패한 단계부터 작업을 재개했습니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
@@ -770,14 +1129,20 @@
     const copy = document.createElement("div");
     copy.className = "queue-copy";
     const title = document.createElement("strong");
-    title.textContent = item.workLabel || item.title;
+    title.textContent = workDisplayTitle(item);
     const stage = document.createElement("p");
     stage.textContent = `${stageLabel(item.stage)} · AI 작업 ${item.completedJobs}/${Math.max(item.totalJobs, item.completedJobs)}회 · ${item.status === "running" ? `경과 ${formatDuration(item.elapsedSeconds)}` : `${formatDate(item.requestedAt)} 요청`}`;
     copy.append(title, stage);
     row.append(position, copy);
-    if (item.cancelable) {
-      row.append(actionButton("대기 취소", "secondary queue-cancel", () => cancelQueue(item)));
+    const actions = document.createElement("div");
+    actions.className = "queue-row-actions";
+    if (item.status !== "running") {
+      actions.append(actionButton("지금 재개", "queue-retry", () => resumeQueue(item)));
     }
+    if (item.cancelable) {
+      actions.append(actionButton("대기 취소", "secondary queue-cancel", () => cancelQueue(item)));
+    }
+    if (actions.childElementCount) row.append(actions);
     row.append(renderProductionProgress(item));
     return row;
   }
@@ -786,7 +1151,7 @@
     const state = productionProgressState(item);
     const section = document.createElement("section");
     section.className = "production-progress";
-    section.setAttribute("aria-label", `${item.workLabel || item.title} 제작 진행 상황`);
+    section.setAttribute("aria-label", `${workDisplayTitle(item)} 제작 진행 상황`);
 
     const heading = document.createElement("div");
     heading.className = "production-progress-heading";
@@ -831,7 +1196,7 @@
     meter.className = "production-progress-meter";
     meter.max = 100;
     meter.value = state.percent;
-    meter.setAttribute("aria-label", `${item.workLabel || item.title} ${state.percent}% 진행`);
+    meter.setAttribute("aria-label", `${workDisplayTitle(item)} ${state.percent}% 진행`);
     meter.textContent = `${state.percent}%`;
     section.append(heading, scroller, meter);
     window.requestAnimationFrame(() => {
@@ -843,13 +1208,13 @@
   }
 
   function productionProgressState(item) {
-    const initialBatch = item.initialBatch === true || /^새 작품 ·/u.test(String(item.workLabel || ""));
+    const initialBatch = item.initialBatch === true || isPendingWorkTitle(item) || /^새 작품 ·/u.test(String(item.workLabel || ""));
     const bootstrapPlan = item.bootstrapPlan === true;
     const targetEpisodeCount = Math.max(1, Math.min(10, Number(item.targetEpisodeCount || 1)));
     const episodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => [
-      `${index + 1}화 구성`,
-      `${index + 1}화 원고`,
-      `${index + 1}화 검수`
+      `${installmentLabel(index + 1)} 구성`,
+      `${installmentLabel(index + 1)} 원고`,
+      `${installmentLabel(index + 1)} 검수`
     ]).flat();
     const steps = initialBatch
       ? ["아이디어", "설정집", "장기 전개", ...episodeSteps, "공개 준비"]
@@ -887,6 +1252,11 @@
     return { steps, currentIndex, completedCount: currentIndex, percent };
   }
 
+  function installmentLabel(internalEpisodeNo) {
+    const number = Number(internalEpisodeNo);
+    return number === 1 ? "프롤로그" : `본편 ${number - 1}화`;
+  }
+
   function renderScheduleProgress(item) {
     const progress = productionProgressState(item);
     const wrapper = document.createElement("div");
@@ -908,17 +1278,63 @@
     return wrapper;
   }
 
-  async function cancelQueue(item) {
-    if (!window.confirm(`${item.workLabel || item.title} 작업을 대기열에서 취소할까요? 이미 완료된 기록은 지우지 않습니다.`)) return;
+  async function cancelQueue(item, options = {}) {
+    const name = workDisplayTitle(item);
+    if (!options.history && !window.confirm(`${name} 작업을 대기열에서 취소할까요? 이미 완료된 기록은 지우지 않습니다.`)) return;
     try {
-      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(item.id)}/cancel`, {
+      const result = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(item.id)}/cancel`, {
         method: "POST",
         body: {}
       });
       await refreshSchedules();
-      StoryHeavenCommon.toast("대기 작업을 취소했습니다.");
+      StoryHeavenCommon.toast(result.historical ? "작업 로그에서 숨겼습니다." : "대기 작업을 취소했습니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function hideHistoryRun(item) {
+    const id = historyStorageId(item);
+    if (!id) {
+      StoryHeavenCommon.toast("숨길 로그를 식별할 수 없습니다. 화면을 새로고침한 뒤 다시 확인해주세요.");
+      return;
+    }
+    locallyHiddenHistory.set(id, new Date().toISOString());
+    persistHiddenHistory();
+    showHiddenHistory = false;
+    renderRunHistory(latestSerialSnapshot.queue?.history || [], latestSerialSnapshot.queue?.hiddenHistory || []);
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(id)}/hide`, {
+        method: "POST",
+        body: {}
+      });
+      await refreshSchedules();
+    } catch {
+      // Browser-level hiding remains valid while an older API deployment lacks this route.
+    }
+  }
+
+  function historyStorageId(item = {}) {
+    return String(item.id || item.queueGroupId || "").trim();
+  }
+
+  function restoreHiddenHistory() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(hiddenHistoryStorageKey) || "{}");
+      if (!stored || typeof stored !== "object" || Array.isArray(stored)) return;
+      for (const [id, hiddenAt] of Object.entries(stored)) {
+        if (id) locallyHiddenHistory.set(id, String(hiddenAt || ""));
+      }
+    } catch {
+      localStorage.removeItem(hiddenHistoryStorageKey);
+    }
+  }
+
+  function persistHiddenHistory() {
+    try {
+      localStorage.setItem(hiddenHistoryStorageKey, JSON.stringify(Object.fromEntries(locallyHiddenHistory)));
+    } catch {
+      // In-memory hiding still works for the current page when browser storage is unavailable.
     }
   }
 
@@ -1086,6 +1502,12 @@
     return genreLabels(schedule).join(" × ") || "랜덤 장르";
   }
 
+  function seriesPlanLabel(plan = {}) {
+    const totalVolumes = Math.max(1, Math.round(Number(plan.totalVolumes || 10)));
+    const episodesPerVolume = Math.max(1, Math.round(Number(plan.episodesPerVolume || 25)));
+    return `${totalVolumes}권 × 권당 ${episodesPerVolume}화`;
+  }
+
   function scheduleSubgenresByGenre(schedule) {
     if (schedule.subgenresByGenre && typeof schedule.subgenresByGenre === "object") return schedule.subgenresByGenre;
     return schedule.primaryGenre ? { [schedule.primaryGenre]: schedule.subgenres || [] } : {};
@@ -1104,9 +1526,25 @@
   function readTargetEpisodeCount() {
     const input = selectors.scheduleForm.elements.targetEpisodeCount;
     const value = Math.round(Number(input.value));
-    input.setCustomValidity(value < 1 || value > 10 ? "1화 이상 10화 이하로 설정해주세요." : "");
+    input.setCustomValidity(value < 1 || value > 10 ? "1편 이상 10편 이하로 설정해주세요." : "");
     if (!input.reportValidity()) return null;
     return value;
+  }
+
+  function readSeriesPlan() {
+    const totalInput = selectors.scheduleForm.elements.totalVolumes;
+    const perVolumeInput = selectors.scheduleForm.elements.episodesPerVolume;
+    const totalVolumes = Math.round(Number(totalInput.value));
+    const episodesPerVolume = Math.round(Number(perVolumeInput.value));
+    totalInput.setCustomValidity(totalVolumes < 1 || totalVolumes > 30 ? "1권 이상 30권 이하로 설정해주세요." : "");
+    perVolumeInput.setCustomValidity(episodesPerVolume < 10 || episodesPerVolume > 50 ? "10화 이상 50화 이하로 설정해주세요." : "");
+    if (!totalInput.reportValidity() || !perVolumeInput.reportValidity()) return null;
+    return { totalVolumes, episodesPerVolume };
+  }
+
+  function readContinuationBatchCount() {
+    const value = Number(selectors.scheduleForm.elements.continuationBatchCount.value || 1);
+    return [1, 3, 5].includes(value) ? value : 1;
   }
 
   function updateTargetButton() {
@@ -1114,7 +1552,12 @@
     const button = selectors.scheduleForm?.querySelector("button[type='submit']");
     if (!input || !button) return;
     const value = Math.max(1, Math.min(10, Math.round(Number(input.value) || 1)));
-    button.textContent = `${value}화까지 제작을 대기열에 추가`;
+    button.textContent = `${initialBatchText(value)} 제작을 대기열에 추가`;
+  }
+
+  function initialBatchText(value) {
+    const count = Math.max(1, Math.min(10, Math.round(Number(value) || 1)));
+    return count === 1 ? "프롤로그" : `프롤로그 + 본편 ${count - 1}화까지`;
   }
 
   function syncCadenceBounds() {
@@ -1152,7 +1595,7 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 6,
+      version: 7,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
@@ -1162,6 +1605,9 @@
       cadenceValue: String(form.get("cadenceValue") || "2"),
       cadenceUnit: String(form.get("cadenceUnit") || "hours"),
       targetEpisodeCount: String(form.get("targetEpisodeCount") || "1"),
+      totalVolumes: String(form.get("totalVolumes") || "10"),
+      episodesPerVolume: String(form.get("episodesPerVolume") || "25"),
+      continuationBatchCount: String(form.get("continuationBatchCount") || "1"),
       publicationMode: String(form.get("publicationMode") || "test_private"),
       creativeControls: readCreativeControls(),
       conceptPolicy: String(form.get("conceptPolicy") || "")
@@ -1185,7 +1631,7 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");
@@ -1195,6 +1641,9 @@
       setFormValue("cadenceUnit", draft.cadenceUnit);
     }
     setFormValue("targetEpisodeCount", draft.targetEpisodeCount || 1);
+    setFormValue("totalVolumes", draft.totalVolumes || 10);
+    setFormValue("episodesPerVolume", draft.episodesPerVolume || 25);
+    setFormValue("continuationBatchCount", draft.continuationBatchCount || 1);
     setFormValue("publicationMode", draft.publicationMode);
     applyCreativeControlsToForm(draft.creativeControls || {
       ...creativePresets.balanced,
@@ -1262,6 +1711,9 @@
     setFormValue("cadenceValue", cadence.value);
     setFormValue("cadenceUnit", cadence.unit);
     setFormValue("targetEpisodeCount", schedule.targetEpisodeCount || 1);
+    setFormValue("totalVolumes", schedule.seriesPlan?.totalVolumes || 10);
+    setFormValue("episodesPerVolume", schedule.seriesPlan?.episodesPerVolume || 25);
+    setFormValue("continuationBatchCount", schedule.continuationBatchCount || 1);
     setFormValue("publicationMode", schedule.publicationMode);
     applyCreativeControlsToForm(schedule.creativeControls || { ...creativePresets.balanced, preset: "balanced" });
     setFormValue("conceptPolicy", schedule.conceptPolicy);
@@ -1295,9 +1747,56 @@
     if (selectors.draftStatus) selectors.draftStatus.textContent = value;
   }
 
+  function startSeoulClock() {
+    updateSeoulClock();
+    if (clockTimer) window.clearInterval(clockTimer);
+    clockTimer = window.setInterval(updateSeoulClock, 1000);
+  }
+
+  function syncServerClock(value) {
+    const serverTime = serialTime(value);
+    if (Number.isFinite(serverTime)) serverClockOffsetMs = serverTime - Date.now();
+  }
+
+  function serialNow() {
+    return Date.now() + serverClockOffsetMs;
+  }
+
+  function updateSeoulClock() {
+    if (!selectors.systemClock) return;
+    selectors.systemClock.textContent = `현재 ${formatSeoulClock(serialNow())}`;
+    selectors.systemClock.title = "서버 응답 시각을 기준으로 보정한 대한민국 서울 현재 시각입니다.";
+  }
+
+  function parseSerialDate(value) {
+    if (!value) return null;
+    if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+    let text = normalizeSerialDateText(value);
+    if (!text) return null;
+    const date = new Date(text);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function normalizeSerialDateText(value) {
+    let text = String(value || "").trim();
+    if (!text) return "";
+    text = text.replace(/\s+/gu, " ");
+    if (/^\d{4}-\d{2}-\d{2}$/u.test(text)) text = `${text}T00:00:00`;
+    text = text.replace(/^(\d{4}-\d{2}-\d{2})\s/u, "$1T");
+    text = text.replace(/\s+([+-]\d{2}:?\d{2}|Z)$/iu, "$1");
+    text = text.replace(/([+-]\d{2}):?(\d{2})$/u, "$1:$2");
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?$/u.test(text)) text = `${text}+09:00`;
+    return text;
+  }
+
+  function serialTime(value) {
+    const date = parseSerialDate(value);
+    return date ? date.getTime() : Number.NaN;
+  }
+
   function formatDraftTime(value) {
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "";
+    const date = parseSerialDate(value);
+    if (!date) return "";
     return new Intl.DateTimeFormat("ko-KR", {
       timeZone: seoulTimeZone,
       month: "numeric",
@@ -1327,8 +1826,9 @@
       build_episode_card: "회차 장면 구성",
       write_draft: "원고 작성",
       editorial_review: "편집 검수",
-      editorial_blocked: "품질 검수 보류",
+      editorial_blocked: "편집 검수에서 공개 보류",
       rewrite_draft: "원고 보완",
+      history_hidden: "로그 숨김",
       queued: "작업 준비"
     })[value] || "작업 준비";
   }
@@ -1347,8 +1847,8 @@
   }
 
   function formatRefreshTime(value) {
-    const date = value ? new Date(value) : new Date();
-    if (Number.isNaN(date.getTime())) return "방금 갱신";
+    const date = value ? parseSerialDate(value) : new Date();
+    if (!date) return "방금 갱신";
     return `${new Intl.DateTimeFormat("ko-KR", {
       timeZone: seoulTimeZone,
       hour: "2-digit",
@@ -1357,8 +1857,23 @@
     }).format(date)} (서울) 기준`;
   }
 
+  function formatSeoulClock(value) {
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return "서울 시각 확인 중";
+    return `${new Intl.DateTimeFormat("ko-KR", {
+      timeZone: seoulTimeZone,
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    }).format(date)} (서울)`;
+  }
+
   function runStatus(run) {
-    return ({ queued: "대기 중", running: "작성 중", rewrite: "다듬는 중", ready: "검수 통과", blocked: "품질 미달", published: "공개됨", error: "오류" })[run.status] || run.status;
+    return ({ queued: "대기 중", running: "작성 중", rewrite: "다듬는 중", ready: "검수 통과", blocked: "검수 후 공개 보류", published: "공개됨", error: "시스템 오류" })[run.status] || run.status;
   }
 
   function scoreLabel(key) {
@@ -1374,8 +1889,8 @@
 
   function formatDate(value) {
     if (!value) return "미정";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "미정";
+    const date = parseSerialDate(value);
+    if (!date) return "미정";
     const formatted = new Intl.DateTimeFormat("ko-KR", {
       timeZone: seoulTimeZone,
       year: "numeric",

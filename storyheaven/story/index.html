@@ -8,13 +8,13 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
     <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
     <title>연재 읽기 | StoryHeaven</title>
-    <link rel="stylesheet" href="../workspace.css?v=20260731-smartreader1">
+    <link rel="stylesheet" href="../workspace.css?v=20260801-help1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../common.js?v=20260731-adminnav1"></script>
+    <script defer src="../common.js?v=20260801-help1"></script>
     <script defer src="../seed-library.js?v=20260730-editorial1"></script>
     <script defer src="../editorial-episodes.js?v=20260730-continuations1"></script>
     <script defer src="../reading-history.js?v=20260731-smartreader1"></script>
-    <script defer src="./story.js?v=20260731-smartreader1"></script>
+    <script defer src="./story.js?v=20260802-longform1"></script>
   </head>
   <body>
     <header class="site-header">
@@ -39,14 +39,14 @@
         </section>
 
         <section class="episode-library" aria-labelledby="episodeListTitle">
-          <header><div><p class="eyebrow">EPISODES</p><h2 id="episodeListTitle">연재 회차</h2></div><p data-episode-summary></p></header>
+          <header><div><p class="eyebrow">EPISODES</p><h2 id="episodeListTitle"><span class="help-topic"><span>연재 회차</span><button class="help-button" type="button" data-help data-help-title="연재 회차" data-help-body="작품에 공개된 본문 목록입니다. 읽던 회차가 있으면 이 기기의 독서 기록을 바탕으로 이어 읽기 위치가 표시됩니다.&#10;&#10;회차는 공개된 순서대로만 읽을 수 있으며, 다음 화가 아직 없으면 추천 수나 운영자 요청에 따라 제작을 기다립니다.">?</button></span></h2></div><p data-episode-summary></p></header>
           <div class="episode-list" data-episode-list></div>
           <div class="operator-empty" data-episode-empty hidden>아직 공개된 회차가 없습니다.</div>
         </section>
 
         <section class="comment-section work-comments" aria-labelledby="workCommentsTitle" data-comment-section="story">
           <header class="comment-heading">
-            <div><p class="eyebrow">SERIES TALK</p><h2 id="workCommentsTitle">작품 댓글 <span data-comment-count="story">(0)</span></h2></div>
+            <div><p class="eyebrow">SERIES TALK</p><h2 id="workCommentsTitle"><span class="help-topic"><span>작품 댓글 <span data-comment-count="story">(0)</span></span><button class="help-button" type="button" data-help data-help-title="작품 댓글" data-help-body="작품 전체에 대한 감상, 설정 이야기, 앞으로 기대하는 방향을 남기는 공간입니다.&#10;&#10;방금 읽은 특정 회차의 장면이나 반응은 회차 아래의 회차 댓글에 남기면 더 찾기 쉽습니다.">?</button></span></h2></div>
             <p>작품 전체에 관한 이야기를 남겨주세요.</p>
           </header>
           <div class="comment-list" data-comment-list="story" aria-live="polite"></div>
@@ -73,7 +73,7 @@
           <section class="reader-finish" data-reader-finish hidden>
             <p class="eyebrow">AFTER READING</p>
             <div class="episode-recommendation" data-episode-recommendation>
-              <h3>이 회차, 다음 화도 읽고 싶나요?</h3>
+              <h3><span class="help-topic"><span>이 회차, 다음 화도 읽고 싶나요?</span><button class="help-button" type="button" data-help data-help-title="회차 추천" data-help-body="추천은 이 회차를 읽은 뒤 다음 화를 더 보고 싶은지 남기는 신호입니다. 한 계정은 회차마다 추천 또는 비추천 중 하나만 선택할 수 있습니다.&#10;&#10;자동 연재 작품은 최신 화 추천이 일정 수에 도달하면 다음 화 제작 후보가 됩니다. 운영자 평가는 독자 추천 수에 포함되지 않습니다.">?</button></span></h3>
               <p class="recommendation-guide" data-recommendation-guide>추천과 비추천 중 하나만 선택할 수 있습니다.</p>
               <div class="recommendation-buttons" data-recommendation-buttons>
                 <button type="button" data-episode-vote="recommend" aria-pressed="false"><span aria-hidden="true">👍</span><span>추천</span><b>0</b></button>
@@ -86,7 +86,7 @@
               <p class="continuation-status" data-continuation-status role="status" aria-live="polite"></p>
             </div>
             <div class="reader-reaction-prompt">
-              <h3>어떤 점이 다음 화를 기다리게 했나요?</h3>
+              <h3><span class="help-topic"><span>어떤 점이 다음 화를 기다리게 했나요?</span><button class="help-button" type="button" data-help data-help-title="독자 반응" data-help-body="추천 수만으로는 왜 좋았는지 알기 어렵기 때문에, 어떤 재미가 컸는지 가볍게 표시하는 항목입니다.&#10;&#10;이 정보는 작품별 강점 파악과 다음 회차 제작 방향을 정하는 데 참고됩니다. 여러 항목을 선택해도 됩니다.">?</button></span></h3>
               <p>여러 항목을 선택해도 됩니다.</p>
             </div>
             <div class="reaction-buttons">
@@ -97,7 +97,7 @@
             </div>
             <section class="comment-section episode-comments" aria-labelledby="episodeCommentsTitle" data-comment-section="episode">
               <header class="comment-heading">
-                <div><p class="eyebrow">EPISODE TALK</p><h3 id="episodeCommentsTitle">회차 댓글 <span data-comment-count="episode">(0)</span></h3></div>
+                <div><p class="eyebrow">EPISODE TALK</p><h3 id="episodeCommentsTitle"><span class="help-topic"><span>회차 댓글 <span data-comment-count="episode">(0)</span></span><button class="help-button" type="button" data-help data-help-title="회차 댓글" data-help-body="현재 읽고 있는 회차에 대한 감상을 남기는 공간입니다. 특정 장면, 대사, 다음 장면 추측처럼 회차 단위로 이어지는 이야기에 맞습니다.&#10;&#10;작품 전체 설정이나 장기적인 기대는 작품 댓글에 남기면 좋습니다.">?</button></span></h3></div>
                 <p>방금 읽은 회차에 관한 이야기를 나눠보세요.</p>
               </header>
               <div class="comment-list" data-comment-list="episode" aria-live="polite"></div>
@@ -114,7 +114,7 @@
         </section>
 
         <details class="report-box" data-report-box>
-          <summary>이 작품 신고</summary>
+          <summary><span class="help-topic"><span>이 작품 신고</span><button class="help-button" type="button" data-help data-help-title="작품 신고" data-help-body="표절, 권리 침해, 개인정보 노출, 혐오·안전 문제처럼 운영자가 확인해야 하는 경우에만 사용합니다.&#10;&#10;단순한 취향 차이나 낮은 별점 표현은 신고 대상이 아닙니다. 가능한 한 어떤 부분을 확인해야 하는지 구체적으로 적어주세요.">?</button></span></summary>
           <p>표절, 권리 침해, 개인정보 노출처럼 운영 확인이 필요한 경우에만 사용해주세요.</p>
           <form data-report-form>
             <label class="field"><span class="field-label">신고 유형</span><select name="category" required><option value="">선택</option><option value="plagiarism">표절 의심</option><option value="rights">저작권·권리 침해</option><option value="impersonation">사칭</option><option value="personal_info">개인정보 노출</option><option value="hate_safety">혐오·안전 문제</option><option value="spam">스팸·도배</option><option value="other">기타</option></select></label>

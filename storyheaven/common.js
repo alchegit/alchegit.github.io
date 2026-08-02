@@ -11,8 +11,14 @@
     login,
     logout,
     toast,
-    readableError
+    readableError,
+    createHelpButton
   };
+
+  let helpDialog = null;
+  let helpReturnFocus = null;
+
+  document.addEventListener("DOMContentLoaded", bindHelp);
 
   async function init(listener) {
     if (typeof listener === "function") state.listeners.push(listener);
@@ -48,6 +54,83 @@
   function bindAccountButtons() {
     document.querySelectorAll("[data-common-login]").forEach((button) => button.addEventListener("click", login));
     document.querySelectorAll("[data-common-logout]").forEach((button) => button.addEventListener("click", logout));
+  }
+
+  function bindHelp() {
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-help]");
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openHelp(button);
+    });
+  }
+
+  function createHelpButton(title, body) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "help-button";
+    button.dataset.help = "";
+    button.dataset.helpTitle = title;
+    button.dataset.helpBody = body;
+    button.setAttribute("aria-label", `도움말: ${title}`);
+    button.textContent = "?";
+    return button;
+  }
+
+  function openHelp(button) {
+    helpReturnFocus = button;
+    const dialog = ensureHelpDialog();
+    dialog.querySelector("[data-help-dialog-title]").textContent = button.dataset.helpTitle || "도움말";
+    const body = dialog.querySelector("[data-help-dialog-body]");
+    body.replaceChildren(...String(button.dataset.helpBody || "추가 설명이 없습니다.")
+      .split(/\n{2,}/u)
+      .map((paragraph) => {
+        const element = document.createElement("p");
+        element.textContent = paragraph.trim();
+        return element;
+      }));
+    if (dialog.showModal) {
+      dialog.showModal();
+    } else {
+      dialog.hidden = false;
+      dialog.setAttribute("open", "");
+    }
+    dialog.querySelector("[data-help-close]")?.focus();
+  }
+
+  function ensureHelpDialog() {
+    if (helpDialog) return helpDialog;
+    helpDialog = document.createElement("dialog");
+    helpDialog.className = "help-dialog";
+    helpDialog.setAttribute("aria-labelledby", "storyheavenHelpTitle");
+    helpDialog.innerHTML = `
+      <form method="dialog">
+        <button class="dialog-close" type="button" data-help-close aria-label="도움말 닫기">×</button>
+        <p class="eyebrow">HELP</p>
+        <h2 id="storyheavenHelpTitle" data-help-dialog-title>도움말</h2>
+        <div class="help-dialog-body" data-help-dialog-body></div>
+      </form>
+    `;
+    helpDialog.addEventListener("click", (event) => {
+      if (event.target === helpDialog) closeHelpDialog();
+    });
+    helpDialog.querySelector("[data-help-close]").addEventListener("click", closeHelpDialog);
+    helpDialog.addEventListener("close", () => {
+      if (helpReturnFocus?.isConnected) helpReturnFocus.focus();
+      helpReturnFocus = null;
+    });
+    document.body.append(helpDialog);
+    return helpDialog;
+  }
+
+  function closeHelpDialog() {
+    if (!helpDialog) return;
+    if (helpDialog.open) helpDialog.close();
+    else {
+      helpDialog.hidden = true;
+      helpDialog.removeAttribute("open");
+    }
   }
 
   async function loadProfile() {
@@ -208,8 +291,21 @@
       appeal_resolution_too_short: "이의제기 판정 근거를 20자 이상 적어주세요.",
       admin_account_required: "관리자만 접근할 수 있습니다.",
       serial_engine_disabled: "연재 엔진이 아직 서버에서 시작되지 않았습니다.",
+      serial_system_action_invalid: "자동 연재 시스템 동작을 다시 선택해주세요.",
       serial_schedule_invalid: "연재 이름, 기본 장르 1~3개, 세부장르 전체 1~10개와 기획 원칙을 확인해주세요.",
       serial_schedule_not_found: "제작 일정을 찾을 수 없습니다.",
+      serial_queue_not_found: "재개할 자동 연재 작업을 찾을 수 없습니다.",
+      serial_queue_not_retryable: "지금 다시 시작할 수 있는 중단 단계가 없습니다.",
+      serial_queue_not_waiting: "취소할 수 있는 대기 작업이 없습니다.",
+      serial_queue_completed_cannot_cancel: "이미 완료된 작품 기록은 로그 숨김으로 숨길 수 없습니다.",
+      serial_queue_running_cannot_cancel: "진행 중인 작업은 취소할 수 없습니다. 멈춘 경우에는 단계 다시 시작을 사용해주세요.",
+      serial_history_not_found: "숨길 작업 로그를 찾을 수 없습니다. 화면을 새로고침한 뒤 다시 확인해주세요.",
+      serial_history_running_cannot_hide: "실제로 실행 중인 AI 작업은 로그 숨김 처리할 수 없습니다. 멈춘 경우 중단 위치부터 재개를 먼저 사용해주세요.",
+      serial_history_waiting_cannot_hide: "아직 대기 중인 작업은 로그 숨김이 아니라 대기 취소로 처리해주세요.",
+      serial_history_completed_cannot_hide: "이미 완료된 작품 기록은 로그 숨김으로 숨길 수 없습니다.",
+      serial_series_volume_count_invalid: "전체 권수는 1권 이상 30권 이하로 설정해주세요.",
+      serial_episodes_per_volume_invalid: "1권당 본편 화수는 10화 이상 50화 이하로 설정해주세요.",
+      serial_continuation_batch_count_invalid: "연속 제작 수는 1화, 3화, 5화 중에서 선택해주세요.",
       serial_story_not_system_owned: "운영 예시 작품만 자동 연재 엔진에 연결할 수 있습니다.",
       serial_plan_required: "설정집과 장기 흐름을 먼저 만들어주세요.",
       serial_episode_already_queued: "이 회차는 이미 제작 중입니다.",

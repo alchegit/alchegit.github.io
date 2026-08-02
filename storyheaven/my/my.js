@@ -186,10 +186,10 @@
   function statusInfo(story) {
     if (story.status === "moderation") {
       const labels = {
-        provider_pending: "AI 연결 대기",
-        retry_wait: "자동 재시도 대기",
-        ai_running: "AI 검수 중",
-        ai_queued: "AI 검수 대기"
+        provider_pending: "검수 서버 연결 대기",
+        retry_wait: "검수 재시도 대기",
+        ai_running: "AI가 원고 읽는 중",
+        ai_queued: "검수 순서 기다리는 중"
       };
       return { label: labels[story.review?.stage] || "자동 검수 중" };
     }
@@ -200,7 +200,14 @@
   }
 
   function formatDate(value) {
-    return value ? new Intl.DateTimeFormat("ko", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value)) : "-";
+    return value ? `${new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(new Date(value))} (서울)` : "-";
   }
 
   function escapeHtml(value) {

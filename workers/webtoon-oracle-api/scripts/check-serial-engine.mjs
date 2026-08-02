@@ -29,7 +29,11 @@ assert.match(
 );
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
+assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidden historical logs for full-view audits");
+assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");
+assert.match(serialServiceSource, /serial_run\.queue_group_id = :queue_group_id or serial_run\.id = :queue_group_id/u, "history operations must support legacy run ids without queue groups");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
+assert.match(serialServiceSource, /run_status in \('error', 'blocked', 'queued', 'running', 'rewrite', 'approved'\)/u, "stalled running groups without active jobs must be hideable from history");
 assert.match(serialServiceSource, /attentionType: group\.hasBlocked \? "quality_hold"/u, "quality holds must be separate from system failures");
 assert.match(serialServiceSource, /episode-\$\{index \+ 1\}-card/u, "initial production progress must track episode planning");
 

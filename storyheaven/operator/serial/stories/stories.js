@@ -2,7 +2,7 @@
   const state = { stories: [], enabled: false };
   const elements = {};
   const visibilityLabels = { public: "공개", private: "비공개", archived: "보관" };
-  const continuationLabels = { auto: "추천 11개 자동", manual: "운영자 요청", paused: "일시 정지", ended: "연재 종료" };
+  const continuationLabels = { auto: "추천 11개 모이면 자동", manual: "운영자 요청", paused: "일시 정지", ended: "연재 종료" };
 
   document.addEventListener("DOMContentLoaded", async () => {
     cache();
@@ -123,7 +123,7 @@
       metric("공개 / 전체", `${story.publishedEpisodeCount} / ${story.episodeCount}`, "published"),
       metric("누적 조회", number(story.viewCount), "views"),
       metric("누적 추천", number(story.recommendationCount), "recommendations"),
-      metric("공개 대기", `${number(story.readyPublicationCount)}화`, "ready"),
+      metric("공개 전", `${number(story.readyPublicationCount)}화`, "ready"),
       metric("최근 제작", runLabel(story.latestRunStatus), "run")
     );
     const schedule = document.createElement("p");
@@ -141,6 +141,10 @@
     const continuation = selectField("다음 화 제작", [
       ["auto", "추천 11개가 모이면 자동"], ["manual", "운영자 요청으로만"], ["paused", "일시 정지"], ["ended", "연재 종료"]
     ], story.continuationMode);
+    const batch = selectField("연속 제작 수", [
+      ["1", "1화씩"], ["3", "3화 연속"], ["5", "5화 연속"]
+    ], String(story.schedule?.continuationBatchCount || 1));
+    const rewrite = rewriteField(story);
     const saveState = document.createElement("div");
     saveState.className = "story-save-state";
     saveState.textContent = story.controlUpdatedAt ? `마지막 설정 ${formatDate(story.controlUpdatedAt)}` : "기본 정책 적용 중";
@@ -148,12 +152,17 @@
     actions.className = "story-actions";
     const save = actionButton("설정 저장", "", () => saveControl(story, row, visibility.select, continuation.select, save));
     save.disabled = true;
-    const next = actionButton("다음 화 작성", "warning", () => requestNextEpisode(story, next));
+    const restartFirst = actionButton("프롤로그 제작 재개", "warning", () => requestFirstEpisode(story, restartFirst));
+    const restartReason = firstEpisodeRestartBlockReason(story);
+    restartFirst.disabled = Boolean(restartReason);
+    const next = actionButton(nextEpisodeButtonLabel(story), "warning", () => requestNextEpisode(story, next, batch.select));
     const nextReason = nextEpisodeBlockReason(story);
     next.disabled = Boolean(nextReason);
     const nextHelp = document.createElement("p");
     nextHelp.className = "next-episode-help";
-    if (nextReason) {
+    if (!restartReason && !story.latestEpisodeNo) {
+      nextHelp.textContent = "아직 프롤로그가 없으므로 프롤로그 제작 재개를 누르면 설정집과 장기 전개부터 다시 준비합니다.";
+    } else if (nextReason) {
       next.title = nextReason;
       nextHelp.id = `next-episode-help-${story.id}`;
       nextHelp.textContent = `다음 화를 만들 수 없는 이유 · ${nextReason}`;
@@ -165,7 +174,9 @@
     view.className = "button secondary";
     view.href = `/storyheaven/story/?id=${encodeURIComponent(story.id)}`;
     view.textContent = "작품 확인";
-    actions.append(save, next);
+    actions.append(save);
+    if (!story.latestEpisodeNo) actions.append(restartFirst);
+    else actions.append(next);
     if (story.queue?.cancelable) actions.append(actionButton("대기 취소", "secondary", () => cancelQueuedWork(story)));
     actions.append(view);
 
@@ -182,7 +193,7 @@
     continuation.select.addEventListener("change", markDirty);
     updateAutoOption(visibility.select, continuation.select);
 
-    controls.append(visibility.label, continuation.label, saveState, nextHelp, actions);
+    controls.append(visibility.label, continuation.label, batch.label, rewrite.label, saveState, nextHelp, actions);
 
     const management = document.createElement("details");
     management.className = "story-management";
@@ -244,16 +255,59 @@
     return true;
   }
 
-  async function requestNextEpisode(story, button) {
+  async function requestNextEpisode(story, button, batchSelect) {
+    const batchCount = readBatchCount(batchSelect);
+    const targetLabel = nextEpisodeTargetLabel(story);
+    const batchText = batchCount === 1 ? targetLabel : `${targetLabel}부터 ${batchCount}화 연속`;
     const preparation = story.schedule ? "" : "\n\n작품 설정이 없으면 설정집과 장기 전개부터 자동으로 준비합니다.";
-    if (!window.confirm(`${story.title} ${story.latestEpisodeNo + 1}화를 제작 대기열에 넣을까요?${preparation}`)) return;
+    if (!window.confirm(`${story.title} ${batchText} 제작을 대기열에 넣을까요?${preparation}`)) return;
     button.disabled = true;
     try {
       await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/episodes/${story.latestEpisodeNo}/continue`, {
         method: "POST",
-        body: {}
+        body: { batchCount }
       });
-      StoryHeavenCommon.toast(`${story.latestEpisodeNo + 1}화를 제작 대기열에 넣었습니다.`);
+      StoryHeavenCommon.toast(`${batchText} 제작을 대기열에 넣었습니다.`);
+      await refresh();
+    } catch (error) {
+      button.disabled = false;
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function requestRewriteEpisode(story, input, button) {
+    const episodeNo = Math.round(Number(input.value));
+    input.setCustomValidity(!Number.isInteger(episodeNo) || episodeNo < 1 || episodeNo > Number(story.latestEpisodeNo || 0)
+      ? "재작성할 공개 회차 번호를 입력해주세요."
+      : "");
+    if (!input.reportValidity()) return;
+    const label = episodeDisplayLabel(episodeNo);
+    if (!window.confirm(`${story.title} ${label}를 새 원고로 다시 작성할까요?\n\n검수를 통과하면 교체용 공개 대기 원고로 준비됩니다.`)) return;
+    button.disabled = true;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/episodes/${episodeNo}/rewrite`, {
+        method: "POST",
+        body: { notes: `${label} 운영자 요청 재작성` }
+      });
+      StoryHeavenCommon.toast(`${label} 재작성 작업을 대기열에 넣었습니다.`);
+      await refresh();
+    } catch (error) {
+      button.disabled = false;
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function requestFirstEpisode(story, button) {
+    if (!window.confirm(`${story.title}의 프롤로그 제작을 다시 시작할까요?\n\n설정집과 장기 전개를 확인한 뒤 프롤로그 원고 제작까지 이어갑니다.`)) return;
+    button.disabled = true;
+    try {
+      const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/plan`, {
+        method: "POST",
+        body: { autoEpisode: true }
+      });
+      StoryHeavenCommon.toast(payload.run?.reused
+        ? "이미 준비 중인 프롤로그 작업으로 연결했습니다."
+        : "프롤로그 제작을 다시 대기열에 넣었습니다.");
       await refresh();
     } catch (error) {
       button.disabled = false;
@@ -277,12 +331,21 @@
   }
 
   function nextEpisodeBlockReason(story) {
-    if (!state.enabled) return "자동 연재 엔진 전체 설정이 멈춰 있습니다.";
+    if (!state.enabled) return "자동 연재 전체가 멈춰 있어 다음 화를 만들 수 없습니다.";
     if (story.queue) return story.queue.status === "running" ? "현재 다음 화를 제작하고 있습니다." : `제작 대기 ${story.queue.queuePosition}번입니다.`;
-    if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 공개를 기다리는 회차가 있습니다.";
+    if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 아직 공개 전인 회차가 있습니다.";
     const reasons = [];
     if (!story.latestEpisodeNo) reasons.push("먼저 공개된 회차가 한 편 이상 있어야 합니다.");
     return reasons.join(" ");
+  }
+
+  function firstEpisodeRestartBlockReason(story) {
+    if (story.latestEpisodeNo || Number(story.episodeCount || 0) > 0) return "이미 등록된 회차가 있습니다.";
+    if (!state.enabled) return "자동 연재 전체가 멈춰 있습니다.";
+    if (story.queue) return story.queue.status === "running" ? "현재 1화 또는 다음 단계가 제작 중입니다." : `제작 대기 ${story.queue.queuePosition}번입니다.`;
+    if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 공개 전인 회차가 있습니다.";
+    if (story.visibility === "archived" || story.continuationMode === "ended") return "보관 또는 연재 종료 상태입니다.";
+    return "";
   }
 
   function selectField(text, options, selected) {
@@ -290,6 +353,14 @@
     label.className = "control-field";
     const title = document.createElement("span");
     title.textContent = text;
+    const help = controlHelp(text);
+    if (help && window.StoryHeavenCommon?.createHelpButton) {
+      title.className = "help-topic";
+      const titleText = document.createElement("span");
+      titleText.textContent = text;
+      title.textContent = "";
+      title.append(titleText, window.StoryHeavenCommon.createHelpButton(help.title, help.body));
+    }
     const select = document.createElement("select");
     for (const [value, copy] of options) {
       const option = document.createElement("option");
@@ -300,6 +371,56 @@
     }
     label.append(title, select);
     return { label, select };
+  }
+
+  function rewriteField(story) {
+    const label = document.createElement("label");
+    label.className = "control-field rewrite-field";
+    const title = document.createElement("span");
+    title.className = "help-topic";
+    const titleText = document.createElement("span");
+    titleText.textContent = "특정 회차 재작성";
+    title.append(titleText);
+    if (window.StoryHeavenCommon?.createHelpButton) {
+      title.append(window.StoryHeavenCommon.createHelpButton(
+        "특정 회차 재작성",
+        "번호를 입력한 공개 회차를 새 원고로 다시 제작합니다. 프롤로그는 1번, 본편 1화는 2번으로 입력합니다.\n\n기존 공개 원고를 즉시 지우지 않고, 새 원고가 검수를 통과하면 교체용 공개 대기 원고로 준비합니다."
+      ));
+    }
+    const controls = document.createElement("span");
+    controls.className = "rewrite-controls";
+    const input = document.createElement("input");
+    input.type = "number";
+    input.inputMode = "numeric";
+    input.min = "1";
+    input.max = String(Math.max(1, Number(story.latestEpisodeNo || 1)));
+    input.value = story.latestEpisodeNo ? String(story.latestEpisodeNo) : "";
+    input.placeholder = story.latestEpisodeNo > 1 ? "예: 2" : "예: 1";
+    const button = actionButton("재작성", "secondary", () => requestRewriteEpisode(story, input, button));
+    button.disabled = !story.latestEpisodeNo || !state.enabled || Boolean(story.queue) || Number(story.activeRunCount || 0) > 0;
+    const hint = document.createElement("small");
+    hint.textContent = "프롤로그 1번 · 본편 1화 2번";
+    controls.append(input, button);
+    label.append(title, controls, hint);
+    return { label, input, button };
+  }
+
+  function readBatchCount(select) {
+    const count = Number(select?.value || 1);
+    return [1, 3, 5].includes(count) ? count : 1;
+  }
+
+  function nextEpisodeButtonLabel(story) {
+    return Number(story.latestEpisodeNo || 0) === 1 ? "본편 1화 작성" : "다음 화 작성";
+  }
+
+  function nextEpisodeTargetLabel(story) {
+    return episodeDisplayLabel(Number(story.latestEpisodeNo || 0) + 1);
+  }
+
+  function episodeDisplayLabel(internalEpisodeNo) {
+    const number = Number(internalEpisodeNo || 1);
+    return number === 1 ? "프롤로그" : `본편 ${number - 1}화`;
   }
 
   function badge(text, kind) {
@@ -338,18 +459,47 @@
   }
 
   function runLabel(status) {
-    return ({ queued: "대기", running: "제작 중", rewrite: "수정 중", ready: "공개 대기", published: "공개 완료", blocked: "검수 중단", error: "오류" })[status] || "기록 없음";
+    return ({ queued: "대기", running: "제작 중", rewrite: "수정 중", ready: "공개 전", published: "공개 완료", blocked: "검수 후 공개 보류", error: "시스템 오류" })[status] || "기록 없음";
+  }
+
+  function controlHelp(text) {
+    return ({
+      "공개 상태": {
+        title: "작품 공개 상태",
+        body: "공개는 독자가 볼 수 있는 상태입니다. 비공개는 목록에서 숨기지만 원고와 운영 기록은 남깁니다.\n\n보관은 운영 정리용으로, 작품을 목록에서 숨기고 다음 화 제작도 종료합니다."
+      },
+      "다음 화 제작": {
+        title: "다음 화 제작 방식",
+        body: "추천 자동은 최신 공개 회차의 추천이 11개가 되면 다음 화를 자동으로 요청합니다. 운영자 요청은 버튼을 눌렀을 때만 다음 화를 만듭니다.\n\n일시 정지는 잠깐 멈춤, 연재 종료는 더 이어 쓰지 않겠다는 결정입니다."
+      }
+    })[text] || null;
   }
 
   function number(value) {
     return Number(value || 0).toLocaleString("ko-KR");
   }
 
+  function parseSerialDate(value) {
+    if (!value) return null;
+    let text = String(value).trim().replace(" ", "T");
+    if (/^\d{4}-\d{2}-\d{2}$/u.test(text)) text = `${text}T00:00:00`;
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?$/u.test(text)) text = `${text}+09:00`;
+    const date = new Date(text);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
   function formatDate(value) {
     if (!value) return "-";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "-";
-    return new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeStyle: "short" }).format(date);
+    const date = parseSerialDate(value);
+    if (!date) return "-";
+    return `${new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date)} (서울)`;
   }
 
   function setText(selector, value) {

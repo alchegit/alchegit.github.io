@@ -79,6 +79,30 @@ const stories = [
     createdAt: "2026-07-10T03:00:00.000Z",
     updatedAt: "2026-07-18T03:00:00.000Z",
     controlUpdatedAt: "2026-07-19T03:00:00.000Z"
+  },
+  {
+    id: "serial-zero",
+    title: "마왕의 박수 충전소",
+    logline: "스킬을 쓰려면 관객의 박수가 필요한 마왕이 첫 무대 전에 멈춰 섰다.",
+    genres: ["코미디", "현대판타지"],
+    storyStatus: "draft",
+    visibility: "private",
+    continuationMode: "manual",
+    operatorNote: "",
+    viewCount: 0,
+    episodeCount: 0,
+    publishedEpisodeCount: 0,
+    latestEpisodeNo: null,
+    latestEpisodeTitle: "",
+    latestEpisodeAt: null,
+    recommendationCount: 0,
+    activeRunCount: 0,
+    latestRunStatus: "error",
+    readyPublicationCount: 0,
+    schedule: null,
+    createdAt: "2026-07-31T03:00:00.000Z",
+    updatedAt: "2026-07-31T04:10:00.000Z",
+    controlUpdatedAt: null
   }
 ];
 
@@ -92,6 +116,8 @@ try {
     const patchRequests = [];
     const canceled = [];
     const continuationRequests = [];
+    const rewriteRequests = [];
+    const firstEpisodeRequests = [];
     let queued = true;
     page.on("pageerror", (error) => errors.push(error.message));
     await page.addInitScript(() => {
@@ -126,15 +152,23 @@ try {
         return json({ story: { ...stories[0], ...body, controlUpdatedAt: "2026-07-31T05:00:00.000Z" } });
       }
       if (path.endsWith("/continue") && request.method() === "POST") {
-        continuationRequests.push(path);
+        continuationRequests.push({ path, body: request.postDataJSON() });
         return json({ continuation: { status: "queued" } }, 202);
+      }
+      if (path.endsWith("/rewrite") && request.method() === "POST") {
+        rewriteRequests.push({ path, body: request.postDataJSON() });
+        return json({ run: { id: "rewrite-run", queueGroupId: "rewrite-run" } }, 202);
+      }
+      if (path === "/api/storyheaven/operator/serial-engine/stories/serial-zero/plan" && request.method() === "POST") {
+        firstEpisodeRequests.push(request.postDataJSON());
+        return json({ run: { id: "serial-zero-plan", queueGroupId: "serial-zero-plan" } }, 202);
       }
       return json({ error: "not_found" }, 404);
     });
 
     await page.goto(`${root}/storyheaven/operator/serial/stories/`, { waitUntil: "networkidle" });
     await page.locator("[data-works-dashboard]").waitFor({ state: "visible" });
-    assert.equal(await page.locator(".managed-story").count(), 3, `${viewport.name} managed story count`);
+    assert.equal(await page.locator(".managed-story").count(), 4, `${viewport.name} managed story count`);
     assert.equal(await page.locator("[data-summary-public]").textContent(), "1", `${viewport.name} public summary`);
     assert.equal(await page.locator("[data-summary-stopped]").textContent(), "1", `${viewport.name} stopped summary`);
     const layout = await page.evaluate(() => ({
@@ -170,6 +204,14 @@ try {
       await page.screenshot({ path: "test-results/storyheaven-serial-operations-mobile-expanded.png", fullPage: true });
     }
     assert.equal(await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).count(), 1, `${viewport.name} queue cancellation control`);
+    const zeroStory = page.locator(".managed-story").filter({ hasText: "마왕의 박수 충전소" });
+    assert.equal(await zeroStory.getByRole("button", { name: "프롤로그 제작 재개", includeHidden: true }).isEnabled(), true, `${viewport.name} zero-episode story can restart`);
+    if (viewport.name === "desktop") {
+      page.once("dialog", (dialog) => dialog.accept());
+      await zeroStory.getByRole("button", { name: "프롤로그 제작 재개" }).click();
+      await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("프롤로그 제작"));
+      assert.deepEqual(firstEpisodeRequests.at(-1), { autoEpisode: true }, "zero-episode story restarts first episode planning");
+    }
 
     page.once("dialog", (dialog) => dialog.accept());
     await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).click();
@@ -177,14 +219,23 @@ try {
     assert.equal(canceled.length, 1, `${viewport.name} cancels queued continuation`);
 
     if (viewport.name === "desktop") {
+      await legacyStory.locator(".control-field").filter({ hasText: "연속 제작 수" }).locator("select").selectOption("3");
       page.once("dialog", (dialog) => dialog.accept());
       await legacyStory.getByRole("button", { name: "다음 화 작성" }).click();
       await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("대기열에 넣었습니다"));
-      assert.match(continuationRequests[0], /\/episodes\/2\/continue$/u, "legacy story requests episode 3 directly");
+      assert.match(continuationRequests[0].path, /\/episodes\/2\/continue$/u, "legacy story requests episode 3 directly");
+      assert.deepEqual(continuationRequests[0].body, { batchCount: 3 }, "legacy story requests three consecutive episodes");
+
+      await legacyStory.locator(".rewrite-field input").fill("1");
+      page.once("dialog", (dialog) => dialog.accept());
+      await legacyStory.locator(".rewrite-field").getByRole("button", { name: "재작성", exact: true }).click();
+      await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("재작성 작업"));
+      assert.match(rewriteRequests[0].path, /\/episodes\/1\/rewrite$/u, "operator can request a specific episode rewrite");
+      assert.match(rewriteRequests[0].body.notes, /프롤로그|본편/u, "rewrite request carries an operator note");
     }
 
     await page.locator("[data-visibility-filter]").selectOption("private");
-    assert.equal(await page.locator(".managed-story").count(), 1, `${viewport.name} visibility filter`);
+    assert.equal(await page.locator(".managed-story").count(), 2, `${viewport.name} visibility filter`);
     await page.locator("[data-visibility-filter]").selectOption("all");
     await page.locator("[data-story-search]").fill("우주");
     assert.equal(await page.locator(".managed-story").count(), 1, `${viewport.name} search filter`);

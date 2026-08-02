@@ -173,8 +173,15 @@ if (!config.allowedOrigins.length) {
   throw new Error("ALLOWED_ORIGINS must contain at least one trusted origin");
 }
 
-oracledb.fetchAsString = [oracledb.CLOB];
+oracledb.fetchAsString = [
+  oracledb.CLOB,
+  oracledb.DB_TYPE_DATE,
+  oracledb.DB_TYPE_TIMESTAMP,
+  oracledb.DB_TYPE_TIMESTAMP_TZ,
+  oracledb.DB_TYPE_TIMESTAMP_LTZ
+];
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+const oracleSessionConfigured = new WeakSet();
 
 await mkdir(config.assetDir, { recursive: true });
 await mkdir(config.tmpDir, { recursive: true });
@@ -803,6 +810,25 @@ app.get("/api/storyheaven/operator/serial-engine/schedules", requireUser, requir
   }
 });
 
+app.post("/api/storyheaven/operator/serial-engine/system", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    const action = String(req.body?.action || "").trim();
+    if (!["pause", "start", "resume"].includes(action)) throw httpError("serial_system_action_invalid", 400);
+    if (action !== "pause" && !config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    const system = action === "pause"
+      ? await storyHeavenSerialService.setSystemPaused(true)
+      : action === "start"
+        ? await storyHeavenSerialService.setSystemPaused(false)
+        : null;
+    const resumed = action === "pause" ? null : await storyHeavenSerialService.resumeInterruptedQueues();
+    const processed = action === "pause" ? null : await storyHeavenSerialService.processDue();
+    res.status(202).json({ action, system, resumed, processed });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/storyheaven/operator/serial-engine/schedules", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     await ensureUserProfile(req.user, req);
@@ -837,7 +863,9 @@ app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry", requireUser,
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
     await ensureUserProfile(req.user, req);
-    res.status(202).json(await storyHeavenSerialService.retryQueueGroup(req.params.id));
+    res.status(202).json(await storyHeavenSerialService.retryQueueGroup(req.params.id, {
+      force: req.body?.force === true
+    }));
   } catch (error) {
     next(error);
   }
@@ -886,9 +914,25 @@ app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes/:episodeN
     const continuation = await storyHeavenSerialService.requestContinuation(
       req.params.id,
       req.params.episodeNo,
-      { requestedBy: req.user.id, triggerType: "admin_request" }
+      {
+        requestedBy: req.user.id,
+        triggerType: "admin_request",
+        batchCount: req.body?.batchCount,
+        notes: req.body?.notes
+      }
     );
     res.status(202).json({ continuation });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes/:episodeNo/rewrite", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    const run = await storyHeavenSerialService.rewriteEpisode(req.params.id, req.params.episodeNo, req.user.id, req.body || {});
+    res.status(202).json({ run });
   } catch (error) {
     next(error);
   }
@@ -924,9 +968,21 @@ app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes", require
 
 app.post("/api/storyheaven/operator/serial-engine/queue/:id/cancel", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
     await ensureUserProfile(req.user, req);
     const result = await storyHeavenSerialService.cancelQueueGroup(req.params.id, req.user.id);
-    res.json(result);
+    res.status(202).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/queue/:id/hide", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    await ensureUserProfile(req.user, req);
+    const result = await storyHeavenSerialService.hideQueueHistory(req.params.id, req.user.id);
+    res.status(202).json(result);
   } catch (error) {
     next(error);
   }
@@ -7077,10 +7133,20 @@ function classifyUserAgent(value) {
 async function withConnection(callback) {
   const connection = await pool.getConnection();
   try {
+    await ensureOracleSession(connection);
     return await callback(connection);
   } finally {
     await connection.close();
   }
+}
+
+async function ensureOracleSession(connection) {
+  if (oracleSessionConfigured.has(connection)) return;
+  await connection.execute("alter session set time_zone = '+09:00'");
+  await connection.execute(`alter session set nls_date_format = 'YYYY-MM-DD"T"HH24:MI:SS'`);
+  await connection.execute(`alter session set nls_timestamp_format = 'YYYY-MM-DD"T"HH24:MI:SS.FF3'`);
+  await connection.execute(`alter session set nls_timestamp_tz_format = 'YYYY-MM-DD"T"HH24:MI:SS.FF3TZH:TZM'`);
+  oracleSessionConfigured.add(connection);
 }
 
 async function withTransaction(callback) {

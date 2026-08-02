@@ -44,14 +44,14 @@
 
   async function renderRound(round) {
     currentRound = round;
-    const labels = { open: "투표 중", auditing: "감사 대기", tie_pending: "결선 필요", confirmed: "확정" };
+    const labels = { open: "투표 중", auditing: "마감 후 확인 중", tie_pending: "결선 필요", confirmed: "결과 확정" };
     document.querySelector("[data-round-title]").textContent = round?.type === "runoff" ? "공동 1위 결선" : `주간 ${round?.key || ""}`;
     document.querySelector("[data-round-chip]").textContent = labels[round?.status] || "예정";
     const copy = document.querySelector("[data-round-copy]");
     copy.textContent = round?.status === "open"
       ? `후보 ${round.entries?.length || 0}편 · ${formatDate(round.votingEndsAt)} 마감`
       : round?.status === "auditing"
-        ? "투표가 끝났습니다. 근거를 확인한 뒤 결과를 확정하세요."
+        ? "투표가 끝났습니다. 후보와 표의 근거를 확인한 뒤 결과를 확정하세요."
         : round?.status === "tie_pending"
           ? "공동 1위 결선 라운드가 생성되었습니다."
           : "확정된 라운드입니다.";
@@ -69,14 +69,14 @@
 
   async function loadAudit(roundId) {
     const audit = await StoryHeavenCommon.api(`/api/storyheaven/operator/rounds/${encodeURIComponent(roundId)}/audit`);
-    document.querySelector("[data-round-copy]").textContent += ` 유효표 ${audit.activeVotes}개, 취소·무효 ${audit.canceledVotes}개, 공동 네트워크 신호 ${audit.riskClusters.length}건입니다. 네트워크 신호만으로 제재하지 않습니다.`;
+    document.querySelector("[data-round-copy]").textContent += ` 유효표 ${audit.activeVotes}개, 취소·무효 ${audit.canceledVotes}개, 같은 네트워크에서 나온 참고 신호 ${audit.riskClusters.length}건입니다. 이 참고 신호만으로 제재하지 않습니다.`;
     renderAudit(audit);
   }
 
   function renderAudit(audit) {
     const tools = document.querySelector("[data-audit-tools]");
     tools.hidden = false;
-    document.querySelector("[data-audit-summary]").textContent = `후보 ${audit.entries?.filter((entry) => entry.status === "candidate").length || 0}편 · 익명 투표자 ${audit.voterCount || 0}명 · 신호 보관 ${audit.signalRetentionDays || 30}일`;
+    document.querySelector("[data-audit-summary]").textContent = `확인 대상 후보 ${audit.entries?.filter((entry) => entry.status === "candidate").length || 0}편 · 익명 투표자 ${audit.voterCount || 0}명 · 참고 신호 보관 ${audit.signalRetentionDays || 30}일`;
 
     const entries = document.querySelector("[data-audit-entries]");
     entries.replaceChildren(...(audit.entries || []).map(entryCard));
@@ -90,7 +90,7 @@
   function entryCard(entry) {
     const row = document.createElement("article");
     row.className = "audit-row";
-    row.innerHTML = `<div><strong>${escapeHtml(entry.title)}</strong><p>${escapeHtml(entry.author)} · 유효 ${Number(entry.voteCount || 0)}표 · 적격성 ${Number(entry.eligibilityScore || 0)}점</p></div>`;
+    row.innerHTML = `<div><strong>${escapeHtml(entry.title)}</strong><p>${escapeHtml(entry.author)} · 유효 ${Number(entry.voteCount || 0)}표 · 공개 적합 ${Number(entry.eligibilityScore || 0)}점</p></div>`;
     if (entry.status !== "candidate") {
       const state = document.createElement("span");
       state.className = "status-chip audit-state";
@@ -345,11 +345,11 @@
     const controls = document.createElement("div");
     controls.className = "review-controls";
     const noteLabel = document.createElement("label");
-    noteLabel.textContent = "회차 검수 메모";
+    noteLabel.textContent = "작가에게 보낼 회차 검수 메모";
     const note = document.createElement("textarea");
     note.maxLength = 1000;
     note.dataset.episodeNote = "";
-    note.placeholder = "공개, 보강 또는 반려 근거";
+    note.placeholder = "공개, 보강 또는 반려 이유를 작가가 이해할 수 있게 적어주세요.";
     noteLabel.append(note);
     const buttons = document.createElement("div");
     buttons.className = "review-buttons";
@@ -400,7 +400,7 @@
     article.className = "review-card";
     const packet = story.packet || story;
     const originLabel = story.contentOrigin === "human_ai_assisted" ? "AI 보조 작성" : "직접 작성";
-    article.innerHTML = `<header><div><p class="eyebrow">${escapeHtml(story.author?.nickname || "")} · ${escapeHtml(story.genre || "")} · ${originLabel}</p><h3>${escapeHtml(story.title)}</h3></div><span class="status-chip">대기 ${formatDate(story.submittedAt)}</span></header><div class="review-grid"><div><p><strong>한 줄</strong><br>${escapeHtml(story.logline)}</p><p><strong>줄거리</strong><br>${escapeHtml(packet.synopsis || story.synopsis || "")}</p></div><div class="review-controls"><label>적격성 점수<input type="number" min="0" max="100" value="65" data-score></label><label>검수 메모<textarea maxlength="1000" data-note placeholder="보강 또는 반려 사유"></textarea></label><div class="review-buttons"><button class="button" type="button" data-decision="approved">공개 승인</button><button class="button warning" type="button" data-decision="changes_requested">보강 요청</button><button class="button danger" type="button" data-decision="rejected">반려</button></div></div></div>`;
+    article.innerHTML = `<header><div><p class="eyebrow">${escapeHtml(story.author?.nickname || "")} · ${escapeHtml(story.genre || "")} · ${originLabel}</p><h3>${escapeHtml(story.title)}</h3></div><span class="status-chip">대기 ${formatDate(story.submittedAt)}</span></header><div class="review-grid"><div><p><strong>한 줄 소개</strong><br>${escapeHtml(story.logline)}</p><p><strong>공개 줄거리</strong><br>${escapeHtml(packet.synopsis || story.synopsis || "")}</p></div><div class="review-controls"><label>공개 적합 점수<input type="number" min="0" max="100" value="65" data-score></label><label>작가에게 보낼 검수 메모<textarea maxlength="1000" data-note placeholder="보강 또는 반려 이유를 작가가 이해할 수 있게 적어주세요."></textarea></label><div class="review-buttons"><button class="button" type="button" data-decision="approved">공개 승인</button><button class="button warning" type="button" data-decision="changes_requested">보강 요청</button><button class="button danger" type="button" data-decision="rejected">반려</button></div></div></div>`;
     article.querySelectorAll("[data-decision]").forEach((button) => button.addEventListener("click", () => review(story.id, button.dataset.decision, article)));
     return article;
   }
@@ -423,7 +423,14 @@
   }
 
   function formatDate(value) {
-    return value ? new Intl.DateTimeFormat("ko", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value)) : "-";
+    return value ? `${new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(new Date(value))} (서울)` : "-";
   }
 
   function escapeHtml(value) {

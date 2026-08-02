@@ -16,6 +16,11 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   cadenceMinutesMax: 10_080,
   targetEpisodeCountMin: 1,
   targetEpisodeCountMax: 10,
+  seriesVolumeCountMin: 1,
+  seriesVolumeCountMax: 30,
+  episodesPerVolumeMin: 10,
+  episodesPerVolumeMax: 50,
+  continuationBatchCounts: Object.freeze([1, 3, 5]),
   episodesPerArcMin: 6,
   episodesPerArcMax: 30,
   scenesMin: 3,
@@ -131,9 +136,36 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMax,
     1
   );
+  const totalVolumes = integer(
+    input.totalVolumes ?? input.volumeCount,
+    STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMin,
+    STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMax,
+    10
+  );
+  const episodesPerVolume = integer(
+    input.episodesPerVolume,
+    STORYHEAVEN_SERIAL_LIMITS.episodesPerVolumeMin,
+    STORYHEAVEN_SERIAL_LIMITS.episodesPerVolumeMax,
+    25
+  );
+  const continuationBatchCount = integer(
+    input.continuationBatchCount,
+    STORYHEAVEN_SERIAL_LIMITS.continuationBatchCounts[0],
+    STORYHEAVEN_SERIAL_LIMITS.continuationBatchCounts.at(-1),
+    1
+  );
   const rawTargetEpisodeCount = input.targetEpisodeCount === undefined || input.targetEpisodeCount === null
     ? 1
     : Number(input.targetEpisodeCount);
+  const rawTotalVolumes = input.totalVolumes === undefined && input.volumeCount === undefined
+    ? 10
+    : Number(input.totalVolumes ?? input.volumeCount);
+  const rawEpisodesPerVolume = input.episodesPerVolume === undefined || input.episodesPerVolume === null
+    ? 25
+    : Number(input.episodesPerVolume);
+  const rawContinuationBatchCount = input.continuationBatchCount === undefined || input.continuationBatchCount === null
+    ? 1
+    : Number(input.continuationBatchCount);
   const humorIntensity = String(input.humorIntensity || "light").trim();
   const creativeControls = normalizeCreativeControls(input.creativeControls, humorIntensity);
   const normalizedHumorIntensity = humorIntensityForLevel(creativeControls.values.humor);
@@ -148,6 +180,19 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     || rawTargetEpisodeCount < STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin
     || rawTargetEpisodeCount > STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMax) {
     errors.push(fieldError("targetEpisodeCount", "serial_target_episode_count_invalid"));
+  }
+  if (!Number.isInteger(rawTotalVolumes)
+    || rawTotalVolumes < STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMin
+    || rawTotalVolumes > STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMax) {
+    errors.push(fieldError("totalVolumes", "serial_series_volume_count_invalid"));
+  }
+  if (!Number.isInteger(rawEpisodesPerVolume)
+    || rawEpisodesPerVolume < STORYHEAVEN_SERIAL_LIMITS.episodesPerVolumeMin
+    || rawEpisodesPerVolume > STORYHEAVEN_SERIAL_LIMITS.episodesPerVolumeMax) {
+    errors.push(fieldError("episodesPerVolume", "serial_episodes_per_volume_invalid"));
+  }
+  if (!STORYHEAVEN_SERIAL_LIMITS.continuationBatchCounts.includes(rawContinuationBatchCount)) {
+    errors.push(fieldError("continuationBatchCount", "serial_continuation_batch_count_invalid"));
   }
   if (input.humorIntensity !== undefined && !STORYHEAVEN_HUMOR_PROFILES[humorIntensity]) {
     errors.push(fieldError("humorIntensity", "serial_humor_intensity_invalid"));
@@ -171,6 +216,8 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
       cadenceMinutes,
       cadenceDays: Math.max(1, Math.ceil(cadenceMinutes / 1_440)),
       targetEpisodeCount,
+      seriesPlan: seriesPlan(totalVolumes, episodesPerVolume),
+      continuationBatchCount,
       maxActiveSerials: 1,
       targetAge,
       publicationMode,
@@ -236,6 +283,27 @@ function creativeControlGuidance(values) {
   };
 }
 
+function seriesPlan(totalVolumes, episodesPerVolume) {
+  const volumeCount = Math.max(
+    STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMin,
+    Math.min(STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMax, Number(totalVolumes || 10))
+  );
+  const volumeEpisodeCount = Math.max(
+    STORYHEAVEN_SERIAL_LIMITS.episodesPerVolumeMin,
+    Math.min(STORYHEAVEN_SERIAL_LIMITS.episodesPerVolumeMax, Number(episodesPerVolume || 25))
+  );
+  return {
+    totalVolumes: volumeCount,
+    episodesPerVolume: volumeEpisodeCount,
+    totalMainEpisodes: volumeCount * volumeEpisodeCount,
+    prologueRequired: true,
+    prologueEpisodeNo: 1,
+    firstMainEpisodeNo: 2,
+    firstMainEpisodeLabel: "본편 1화",
+    planningRule: `프롤로그 1편 뒤에 본편 ${volumeCount}권, 권당 ${volumeEpisodeCount}화, 총 본편 ${volumeCount * volumeEpisodeCount}화를 버틸 장편 구조로 설계한다.`
+  };
+}
+
 export function validateStoryHeavenEpisodeRun(input = {}) {
   const errors = [];
   const episodeNo = integer(input.episodeNo, 1, 300, null);
@@ -247,6 +315,28 @@ export function validateStoryHeavenEpisodeRun(input = {}) {
     ok: errors.length === 0,
     errors,
     request: { episodeNo, releaseAt: releaseAt?.toISOString() || null, notes }
+  };
+}
+
+export function validateStoryHeavenContinuationRequest(input = {}) {
+  const rawBatchCount = input.batchCount === undefined || input.batchCount === null
+    ? 1
+    : Number(input.batchCount);
+  const batchCount = integer(
+    input.batchCount,
+    STORYHEAVEN_SERIAL_LIMITS.continuationBatchCounts[0],
+    STORYHEAVEN_SERIAL_LIMITS.continuationBatchCounts.at(-1),
+    1
+  );
+  const notes = text(input.notes, 1_000);
+  const errors = [];
+  if (!STORYHEAVEN_SERIAL_LIMITS.continuationBatchCounts.includes(rawBatchCount)) {
+    errors.push(fieldError("batchCount", "serial_continuation_batch_count_invalid"));
+  }
+  return {
+    ok: errors.length === 0,
+    errors,
+    request: { batchCount, notes }
   };
 }
 

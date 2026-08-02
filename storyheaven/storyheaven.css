@@ -49,6 +49,9 @@ button { color: inherit; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
 .section-heading h2, .winner-band h2 { margin: 0; font-size: clamp(34px, 4vw, 70px); line-height: 1.04; }
 .section-heading > p { max-width: 480px; margin: 0 0 4px; color: var(--muted); font-weight: 700; line-height: 1.6; }
+.help-topic { display: inline-flex; align-items: center; gap: 8px; }
+.help-button { width: 26px; height: 26px; flex: 0 0 auto; display: inline-grid; place-items: center; padding: 0; color: var(--ink); background: var(--yellow); border: 2px solid var(--ink); border-radius: 50%; cursor: pointer; font: 950 14px/1 Consolas, monospace; }
+.help-button:hover, .help-button:focus-visible { background: var(--mint); transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
 .weekly-section { background: var(--yellow); border-bottom: 3px solid var(--ink); }
 .weekly-list { min-height: 124px; }
 .empty-state { display: flex; align-items: center; justify-content: space-between; gap: 22px; min-height: 112px; padding: 24px 28px; background: rgba(255,255,255,.5); border: 2px dashed var(--ink); }
@@ -146,12 +149,14 @@ button { color: inherit; }
 footer { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 30px; padding: 30px clamp(16px, 3vw, 52px); background: #f9f6ef; border-top: 2px solid var(--ink); font-size: 13px; }
 footer p { color: var(--muted); }
 footer > a:last-child { font-weight: 850; text-decoration: underline; }
-.nickname-dialog { width: min(520px, calc(100% - 28px)); padding: 0; color: var(--ink); background: var(--paper); border: 3px solid var(--ink); border-radius: 6px; box-shadow: 8px 8px 0 var(--ink); }
-.nickname-dialog::backdrop { background: rgba(10, 12, 18, .74); backdrop-filter: blur(4px); }
-.nickname-dialog form { position: relative; padding: 34px; }
-.nickname-dialog h2 { margin: 0; font-size: 34px; }
+.nickname-dialog, .help-dialog { width: min(520px, calc(100% - 28px)); padding: 0; color: var(--ink); background: var(--paper); border: 3px solid var(--ink); border-radius: 6px; box-shadow: 8px 8px 0 var(--ink); }
+.nickname-dialog::backdrop, .help-dialog::backdrop { background: rgba(10, 12, 18, .74); backdrop-filter: blur(4px); }
+.nickname-dialog form, .help-dialog form { position: relative; padding: 34px; }
+.nickname-dialog h2, .help-dialog h2 { margin: 0; font-size: 34px; }
 .nickname-dialog form > p:not(.eyebrow) { color: var(--muted); line-height: 1.5; }
 .dialog-close { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; background: transparent; border: 0; cursor: pointer; font-size: 28px; }
+.help-dialog-body { display: grid; gap: 12px; margin-top: 18px; }
+.help-dialog-body p { margin: 0; color: #3d4450; line-height: 1.75; font-weight: 750; }
 .nickname-dialog label { display: block; margin: 28px 0 8px; font-size: 13px; font-weight: 900; }
 .nickname-field { position: relative; }
 .nickname-field input { width: 100%; min-height: 58px; padding: 0 68px 0 14px; background: var(--white); border: 2px solid var(--ink); border-radius: 4px; outline: none; font-size: 20px; font-weight: 800; }
@@ -191,6 +196,7 @@ footer > a:last-child { font-weight: 850; text-decoration: underline; }
   .story-ticket > p { margin: 34px 0; font-size: 24px; }
   .section-shell { padding: 58px 14px; }
   .section-heading { align-items: flex-start; flex-direction: column; margin-bottom: 24px; }
+  .help-topic { align-items: flex-start; }
   .section-heading > p { font-size: 13px; }
   .browse-subheading,.ranking-heading { align-items:flex-start; flex-direction:column; }
   .continue-heading { align-items:flex-start; flex-direction:column; }
@@ -226,7 +232,7 @@ footer > a:last-child { font-weight: 850; text-decoration: underline; }
   .winner-band h2 { font-size: 53px; }
   footer { grid-template-columns: 1fr; gap: 12px; }
   footer p { margin: 8px 0; }
-  .nickname-dialog form { padding: 28px 20px; }
+  .nickname-dialog form, .help-dialog form { padding: 28px 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

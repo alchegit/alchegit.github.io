@@ -625,7 +625,7 @@
     operator.hidden = !(isAdmin && recommendation.operatorAvailable);
     const requestButton = document.querySelector("[data-request-next-episode]");
     requestButton.disabled = !recommendation.canRequestNext;
-    requestButton.textContent = recommendation.continuation ? "다음 화 준비 중" : "다음 화 작성";
+    requestButton.textContent = recommendation.continuation ? "다음 화 준비 중" : nextInstallmentButtonLabel(recommendation.targetEpisodeNo);
 
     const guide = document.querySelector("[data-recommendation-guide]");
     guide.textContent = isAdmin
@@ -637,16 +637,16 @@
     const status = document.querySelector("[data-continuation-status]");
     const continuation = recommendation.continuation;
     if (continuation?.status === "fulfilled") {
-      status.textContent = `${continuation.targetEpisodeNo}화가 공개되었습니다.`;
+      status.textContent = `${installmentLabel(continuation.targetEpisodeNo)}가 공개되었습니다.`;
     } else if (continuation) {
-      status.textContent = `${continuation.targetEpisodeNo}화 집필 요청이 접수되었습니다. 완성 후 순서대로 공개됩니다.`;
+      status.textContent = `${installmentLabel(continuation.targetEpisodeNo)} 집필 요청이 접수되었습니다. 완성 후 순서대로 공개됩니다.`;
     } else if (recommendation.continuationRetryPending) {
       status.textContent = "추천 기준을 넘었습니다. 다음 화 요청을 다시 연결하고 있습니다.";
     } else if (recommendation.autoContinuationEligible && recommendation.isLatestPublished) {
       const remaining = Math.max(0, Number(recommendation.threshold || 11) - Number(recommendation.recommend?.count || 0));
       status.textContent = remaining
-        ? `추천 ${recommendation.threshold}개가 모이면 ${recommendation.targetEpisodeNo}화를 준비합니다. 앞으로 ${remaining}개 남았습니다.`
-        : `${recommendation.targetEpisodeNo}화 집필을 준비하고 있습니다.`;
+        ? `추천 ${recommendation.threshold}개가 모이면 ${installmentLabel(recommendation.targetEpisodeNo)}를 준비합니다. 앞으로 ${remaining}개 남았습니다.`
+        : `${installmentLabel(recommendation.targetEpisodeNo)} 집필을 준비하고 있습니다.`;
     } else if (Number(state.current?.episodeNo || 0) < Number(recommendation.initialEpisodeCount || 3)) {
       status.textContent = `첫 ${recommendation.initialEpisodeCount || 3}화는 기본으로 준비됩니다.`;
     } else {
@@ -701,11 +701,20 @@
         canRequestNext: false
       };
       renderRecommendation(state.current.recommendation);
-      StoryHeavenCommon.toast(`${continuation.targetEpisodeNo}화 집필을 요청했습니다.`);
+      StoryHeavenCommon.toast(`${installmentLabel(continuation.targetEpisodeNo)} 집필을 요청했습니다.`);
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
       renderRecommendation(state.current.recommendation || emptyRecommendation());
     }
+  }
+
+  function nextInstallmentButtonLabel(targetEpisodeNo) {
+    return Number(targetEpisodeNo || 0) === 2 ? "본편 1화 작성" : "다음 화 작성";
+  }
+
+  function installmentLabel(internalEpisodeNo) {
+    const number = Number(internalEpisodeNo || 1);
+    return number === 1 ? "프롤로그" : `본편 ${number - 1}화`;
   }
 
   async function submitReport(event) {
