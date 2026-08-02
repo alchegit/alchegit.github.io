@@ -40,6 +40,7 @@ try {
     let cooldownMode = false;
     let failureMode = false;
     let systemPaused = false;
+    let pauseRequestCount = 0;
     let stalledVisible = true;
     let titlelessLogVisible = true;
     const titlelessHistoryLog = { id: "titleless-stopped", title: "새 작품 기획", titlePending: true, status: "stopped", initialBatch: true, targetEpisodeCount: 1, primaryGenres: ["fantasy"], workLabel: "새 작품 · 1화까지", stage: "concept_gate", elapsedSeconds: null, completedJobs: 0, totalJobs: 1, requestedAt: "2026-07-31T03:00:00.000Z", stageTimings: [{ type: "concept_gate", status: "error", durationSeconds: null, attemptCount: 1, createdAt: "2026-07-31T03:00:00.000Z" }] };
@@ -61,11 +62,11 @@ try {
       if (path === "/api/storyheaven/profile") return json({ profile: { nickname: "운영자", isAdmin: true } });
       if (path === "/api/storyheaven/operator/serial-engine/schedules" && request.method() === "GET") {
         const nextRunAt = cooldownMode ? new Date(Date.now() + 30 * 60_000).toISOString() : runningSchedule.nextRunAt;
-        return json({ enabled: true, schedules: [{ ...runningSchedule, nextRunAt, status: systemPaused ? "paused" : "active" }], queue: {
+        return json({ enabled: true, emergencyPaused: systemPaused, schedules: [{ ...runningSchedule, nextRunAt, status: systemPaused ? "paused" : "active" }], queue: {
           concurrency: 1,
           updatedAt: cooldownMode ? new Date().toISOString() : "2026-07-31T05:01:00.000Z",
           items: cooldownMode || failureMode ? [] : [
-            { id: "queue-running", scheduleId: "schedule-running", status: "running", queuePosition: 0, cancelable: false, initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "write_draft", episodeNo: 2, completedJobs: 8, totalJobs: 9, elapsedSeconds: 246, requestedAt: "2026-07-31T04:56:00.000Z" },
+            { id: "queue-running", scheduleId: "schedule-running", status: systemPaused ? "waiting" : "running", queuePosition: 0, cancelable: false, initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "write_draft", episodeNo: 2, completedJobs: 8, totalJobs: 9, elapsedSeconds: 246, requestedAt: "2026-07-31T04:56:00.000Z" },
             ...(waitingQueueVisible ? [{ id: "queue-a", status: "waiting", queuePosition: 1, cancelable: true, workLabel: "미스터리 · 4화", stage: "write_draft", episodeNo: 4, completedJobs: 1, totalJobs: 3, requestedAt: "2026-08-02T00:04:00" }] : [])
           ],
           lastFailed: !cooldownMode && failureMode ? { id: "failed-run", scheduleId: "schedule-running", status: "error", initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "concept_gate", failureCode: "codex_model_unavailable", completedAt: "2026-07-31T04:51:00.000Z", completedJobs: 0, totalJobs: 1 } : null,
@@ -84,12 +85,16 @@ try {
       }
       if (path === "/api/storyheaven/operator/serial-engine/system" && request.method() === "POST") {
         const body = request.postDataJSON();
+        if (body.action === "pause") {
+          pauseRequestCount += 1;
+          if (pauseRequestCount === 1) return json({ error: "rate_limited" }, 429);
+        }
         systemRequests.push(body);
         if (body.action === "pause") systemPaused = true;
         if (body.action === "start") systemPaused = false;
         return json({
           action: body.action,
-          system: { paused: systemPaused, heldJobs: body.action === "pause" ? 1 : 0 },
+          system: { paused: systemPaused, persisted: true, heldJobs: body.action === "pause" ? 2 : 0, interruptedRunningJobs: body.action === "pause" ? 1 : 0 },
           resumed: body.action === "start" ? { waitingReleased: 1, errorJobsReleased: 0, expiredReleased: 0 } : null,
           processed: { scheduled: [], published: [], continuations: [] }
         }, 202);
@@ -195,8 +200,10 @@ try {
     assert.match(await page.locator("[data-system-state-title]").textContent(), /제작 중/u, `${viewport.name} system panel shows live state`);
     await page.locator("[data-pause-system]").click();
     await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("전체 중지됨"));
+    assert.match(await page.locator("[data-common-toast]").textContent(), /즉시 전체 중지.*작성 중 1건/u, `${viewport.name} emergency pause confirms running work interruption`);
     await page.locator("[data-start-system]").click();
     await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("제작 중"));
+    assert.equal(pauseRequestCount, 2, `${viewport.name} emergency pause retries a rejected rate-limited request`);
     assert.deepEqual(systemRequests.map((item) => item.action), ["pause", "start"], `${viewport.name} system controls call backend`);
     assert.match(await page.locator("[data-queue-last]").textContent(), /12분 34초/u, `${viewport.name} last duration is visible`);
     assert.match(await page.locator("[data-timing-summary]").textContent(), /10분 15초.*2건/u, `${viewport.name} persisted episode-one estimate is visible`);

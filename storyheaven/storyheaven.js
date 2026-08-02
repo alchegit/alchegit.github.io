@@ -169,9 +169,11 @@
     if (!nav) return;
     const serialLink = nav.querySelector("[data-storyheaven-admin-nav]");
     const webtoonLink = nav.querySelector("[data-storyheaven-admin-webtoon-nav]");
+    const membersLink = nav.querySelector("[data-storyheaven-admin-members-nav]");
     if (!state.profile?.isAdmin) {
       serialLink?.remove();
       webtoonLink?.remove();
+      membersLink?.remove();
       return;
     }
     if (!serialLink && !nav.querySelector('a[href="/storyheaven/operator/serial/"]')) {
@@ -188,6 +190,14 @@
       link.dataset.storyheavenAdminWebtoonNav = "";
       link.textContent = "웹툰 스튜디오";
       link.setAttribute("aria-label", "관리자 전용 웹툰 스튜디오 이동");
+      nav.append(link);
+    }
+    if (!membersLink && !nav.querySelector('a[href="/operator/members/"]')) {
+      const link = document.createElement("a");
+      link.href = "/operator/members/";
+      link.dataset.storyheavenAdminMembersNav = "";
+      link.textContent = "회원 관리";
+      link.setAttribute("aria-label", "관리자 전용 회원 관리 이동");
       nav.append(link);
     }
   }

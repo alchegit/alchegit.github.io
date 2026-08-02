@@ -35,7 +35,7 @@
   let serverClockOffsetMs = 0;
   let showHiddenHistory = false;
   const locallyHiddenHistory = new Map();
-  let latestSerialSnapshot = { enabled: false, pollSeconds: 60, schedules: [], queue: {} };
+  let latestSerialSnapshot = { enabled: false, emergencyPaused: false, pollSeconds: 60, schedules: [], queue: {} };
 
   document.addEventListener("DOMContentLoaded", async () => {
     cache();
@@ -134,7 +134,7 @@
       clearInterval(queueRefreshTimer);
       queueRefreshTimer = window.setInterval(() => {
         if (!document.hidden) refreshSchedules().catch(markQueueRefreshFailure);
-      }, 6_000);
+      }, 10_000);
     } catch (error) {
       showAccess();
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -359,6 +359,7 @@
     syncServerClock(queue.updatedAt);
     latestSerialSnapshot = {
       enabled: payload.enabled === true,
+      emergencyPaused: payload.emergencyPaused === true,
       pollSeconds,
       schedules: Array.isArray(payload.schedules) ? payload.schedules : [],
       queue
@@ -579,7 +580,7 @@
       state.chip = "서버 설정 꺼짐";
       state.detail = "서버 설정에서 자동 연재 엔진이 꺼져 있어 제작과 예약 확인이 실행되지 않습니다.";
       state.cause = "서버 환경 설정을 켠 뒤 다시 시작 버튼을 사용할 수 있습니다.";
-    } else if (schedules.length && !activeSchedules.length) {
+    } else if (snapshot.emergencyPaused || (schedules.length && !activeSchedules.length)) {
       state.kind = "paused";
       state.title = "전체 중지됨";
       state.chip = "전체 중지";
@@ -643,10 +644,10 @@
     selectors.systemCause.hidden = !state.cause;
     selectors.engineState.textContent = state.chip;
 
-    const globallyPaused = schedules.length > 0 && !activeSchedules.length;
+    const globallyPaused = snapshot.emergencyPaused || (schedules.length > 0 && !activeSchedules.length);
     selectors.systemResume.disabled = !snapshot.enabled || !resumeTarget || globallyPaused;
-    selectors.systemPause.disabled = !snapshot.enabled || !activeSchedules.length;
-    selectors.systemStart.disabled = !snapshot.enabled || !schedules.length || (!pausedSchedules.length && !waiting.length && !systemAttention.length);
+    selectors.systemPause.disabled = !snapshot.enabled || globallyPaused;
+    selectors.systemStart.disabled = !snapshot.enabled || (!snapshot.emergencyPaused && (!schedules.length || (!pausedSchedules.length && !waiting.length && !systemAttention.length)));
     selectors.systemResume.title = globallyPaused ? "전체 중지 상태에서는 다시 시작을 먼저 눌러주세요." : resumeTarget ? "" : "재개할 중단 또는 대기 작업이 없습니다.";
     selectors.systemPause.title = activeSchedules.length ? "" : "이미 전체 중지 상태입니다.";
     selectors.systemStart.title = selectors.systemStart.disabled ? "중지된 설정이나 깨울 대기열이 없습니다." : "";
@@ -654,7 +655,7 @@
 
   function systemPauseCause({ running, waiting, systemAttention }) {
     const parts = [];
-    if (running.length) parts.push(`현재 단계 ${running.length}건은 끝난 뒤 다음 단계가 멈춥니다`);
+    if (running.length) parts.push(`실행 중 ${running.length}건의 저장 권한 회수`);
     if (waiting.length) parts.push(`대기 ${waiting.length}건`);
     if (systemAttention.length) parts.push(`중단 ${systemAttention.length}건`);
     return parts.length ? `${parts.join(" · ")} · 다시 시작하면 이 작업부터 이어갑니다.` : "새 작업 요청과 자동 공개가 멈춰 있습니다.";
@@ -700,22 +701,47 @@
 
   async function controlSerialSystem(action) {
     try {
-      const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/system", {
-        method: "POST",
-        body: { action }
-      });
+      const payload = action === "pause"
+        ? await requestEmergencyPause()
+        : await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/system", {
+          method: "POST",
+          body: { action }
+        });
       await refreshSchedules();
       if (action === "pause") {
         const held = Number(payload.system?.heldJobs || 0);
-        StoryHeavenCommon.toast(held ? `자동 연재를 전체 중지했습니다. 대기 단계 ${held}건도 함께 멈췄습니다.` : "자동 연재를 전체 중지했습니다.");
+        const interrupted = Number(payload.system?.interruptedRunningJobs || 0);
+        const detail = [interrupted ? `작성 중 ${interrupted}건` : "", held ? `전체 대기 ${held}건` : ""].filter(Boolean).join(" · ");
+        const persistence = payload.system?.persisted === false ? " 서버 차단은 적용했으며 중지 상태 저장을 재시도하고 있습니다." : "";
+        StoryHeavenCommon.toast(`자동 연재를 즉시 전체 중지했습니다.${detail ? ` ${detail}을 멈췄습니다.` : ""}${persistence}`);
       } else {
         const resumed = payload.resumed || {};
         const resumedCount = Number(resumed.waitingReleased || 0) + Number(resumed.errorJobsReleased || 0) + Number(resumed.expiredReleased || 0);
         StoryHeavenCommon.toast(resumedCount ? `자동 연재를 다시 시작했습니다. 대기·중단 단계 ${resumedCount}건을 깨웠습니다.` : "자동 연재를 다시 시작했습니다.");
       }
     } catch (error) {
-      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+      const message = action === "pause" && ["request_failed", "api_unavailable"].includes(error?.message)
+        ? "긴급 중지 요청이 서버에 닿지 않았습니다. 네트워크 연결을 확인한 뒤 다시 눌러주세요."
+        : StoryHeavenCommon.readableError(error);
+      StoryHeavenCommon.toast(message);
     }
+  }
+
+  async function requestEmergencyPause() {
+    let lastError;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        return await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/system", {
+          method: "POST",
+          body: { action: "pause" }
+        });
+      } catch (error) {
+        lastError = error;
+        if (["google_login_required", "admin_account_required"].includes(error?.message)) throw error;
+        if (attempt < 2) await new Promise((resolve) => window.setTimeout(resolve, 400 * (attempt + 1)));
+      }
+    }
+    throw lastError;
   }
 
   function renderAttention(items) {

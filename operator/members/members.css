@@ -1,0 +1,89 @@
+.member-admin-page {
+  background: #eef2f1;
+  color: #15191e;
+}
+
+.member-topbar {
+  border-bottom-color: #47d7b0;
+  background: #101319;
+}
+
+.member-brand span {
+  color: #101319;
+  background: #47d7b0;
+}
+
+.member-platform-nav {
+  align-items: center;
+}
+
+.member-back-button {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  color: #d8dee8;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.member-back-button:hover,
+.member-back-button:focus-visible {
+  color: #47d7b0;
+}
+
+.member-admin-shell {
+  min-height: calc(100vh - 76px);
+}
+
+.member-admin-page .member-admin-shell .page-head {
+  min-height: auto;
+  padding: 28px 0;
+  border-bottom: 2px solid #15191e;
+  border-radius: 0;
+  color: #15191e;
+  background: transparent;
+  box-shadow: none;
+}
+
+.member-admin-page .member-admin-shell .page-head::before,
+.member-admin-page .member-admin-shell .page-head::after {
+  content: none;
+}
+
+.member-admin-page .member-admin-shell .page-head h1 {
+  color: #15191e;
+}
+
+.member-admin-shell .admin-section,
+.member-admin-shell .admin-metrics > div {
+  border-color: #c4cbc9;
+  background: #fff;
+}
+
+.member-admin-shell .admin-section h2,
+.member-admin-shell .page-head h1,
+.member-admin-shell .admin-metrics dd {
+  color: #15191e;
+}
+
+.member-admin-shell .admin-section p,
+.member-admin-shell .page-head p,
+.member-admin-shell .admin-metrics dt {
+  color: #59636b;
+}
+
+@media (max-width: 760px) {
+  .member-topbar {
+    align-items: flex-start;
+  }
+
+  .member-platform-nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .member-platform-nav > * {
+    flex: 0 0 auto;
+  }
+}

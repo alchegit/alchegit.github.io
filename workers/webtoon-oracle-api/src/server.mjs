@@ -175,10 +175,7 @@ if (!config.allowedOrigins.length) {
 
 oracledb.fetchAsString = [
   oracledb.CLOB,
-  oracledb.DB_TYPE_DATE,
-  oracledb.DB_TYPE_TIMESTAMP,
-  oracledb.DB_TYPE_TIMESTAMP_TZ,
-  oracledb.DB_TYPE_TIMESTAMP_LTZ
+  oracledb.DATE
 ];
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 const oracleSessionConfigured = new WeakSet();
@@ -204,6 +201,8 @@ const storyHeavenSerialService = createStoryHeavenSerialService({
   retryMinutes: config.storyHeavenSerialRetryMinutes,
   maxAttempts: config.storyHeavenSerialMaxAttempts
 });
+let storyHeavenSerialEmergencyPaused = false;
+let storyHeavenSerialPauseRetryTimer = null;
 
 const upload = multer({
   dest: config.tmpDir,
@@ -255,9 +254,20 @@ app.use("/api/storyheaven", createRateLimiter({
   name: "storyheaven_ip",
   limit: config.rateLimitPerWindow,
   windowMs: config.rateLimitWindowMs,
-  keyResolver: (req) => `storyheaven:${clientIp(req)}`
+  keyResolver: (req) => `storyheaven:${clientIp(req)}`,
+  skip: isSerialEmergencyPauseRequest
 }));
 app.use("/api/storyheaven", (_req, res, next) => {
+  res.set("Cache-Control", "no-store, max-age=0");
+  next();
+});
+app.use("/api/admin", createRateLimiter({
+  name: "admin_ip",
+  limit: config.rateLimitPerWindow,
+  windowMs: config.rateLimitWindowMs,
+  keyResolver: (req) => `admin:${clientIp(req)}`
+}));
+app.use("/api/admin", (_req, res, next) => {
   res.set("Cache-Control", "no-store, max-age=0");
   next();
 });
@@ -801,6 +811,7 @@ app.get("/api/storyheaven/operator/serial-engine/schedules", requireUser, requir
     ]);
     res.json({
       enabled: config.storyHeavenSerialEngineEnabled,
+      emergencyPaused: storyHeavenSerialEmergencyPaused,
       pollSeconds: Math.max(1, Math.round(config.storyHeavenSerialPollMs / 1_000)),
       schedules,
       queue
@@ -810,17 +821,43 @@ app.get("/api/storyheaven/operator/serial-engine/schedules", requireUser, requir
   }
 });
 
-app.post("/api/storyheaven/operator/serial-engine/system", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+app.post("/api/storyheaven/operator/serial-engine/system", requireUser, requireAdminAccount, serialSystemRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     const action = String(req.body?.action || "").trim();
     if (!["pause", "start", "resume"].includes(action)) throw httpError("serial_system_action_invalid", 400);
     if (action !== "pause" && !config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    if (action === "pause") {
+      storyHeavenSerialEmergencyPaused = true;
+      await ensureUserProfile(req.user, req).catch((error) => {
+        console.warn("[storyheaven] emergency pause audit profile failed", error?.message || error);
+      });
+      let system;
+      try {
+        system = await storyHeavenSerialService.setSystemPaused(true);
+        clearSerialPausePersistenceRetry();
+      } catch (error) {
+        console.error("[storyheaven] emergency pause persistence failed", error);
+        system = {
+          paused: true,
+          persisted: false,
+          heldJobs: 0,
+          interruptedRunningJobs: 0,
+          persistenceWarning: "serial_pause_persistence_retrying"
+        };
+        scheduleSerialPausePersistenceRetry();
+      }
+      res.status(202).json({ action, system, resumed: null, processed: null });
+      return;
+    }
+    if (storyHeavenSerialEmergencyPaused && action === "resume") throw httpError("serial_system_paused", 409);
     await ensureUserProfile(req.user, req);
-    const system = action === "pause"
-      ? await storyHeavenSerialService.setSystemPaused(true)
-      : action === "start"
-        ? await storyHeavenSerialService.setSystemPaused(false)
-        : null;
+    const system = action === "start"
+      ? await storyHeavenSerialService.setSystemPaused(false)
+      : null;
+    if (action === "start") {
+      storyHeavenSerialEmergencyPaused = false;
+      clearSerialPausePersistenceRetry();
+    }
     const resumed = action === "pause" ? null : await storyHeavenSerialService.resumeInterruptedQueues();
     const processed = action === "pause" ? null : await storyHeavenSerialService.processDue();
     res.status(202).json({ action, system, resumed, processed });
@@ -1084,7 +1121,7 @@ app.post("/api/webtoon/jobs", requireUser, creationRateLimiter, requireCreatorAc
   }
 });
 
-app.get("/api/webtoon/admin/users", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
+app.get(["/api/admin/users", "/api/webtoon/admin/users"], requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
   try {
     const users = await listUsers({
       search: req.query.search,
@@ -1096,7 +1133,7 @@ app.get("/api/webtoon/admin/users", requireUser, requireAdminAccount, adminRateL
   }
 });
 
-app.patch("/api/webtoon/admin/users/:id/acorns", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+app.patch(["/api/admin/users/:id/acorns", "/api/webtoon/admin/users/:id/acorns"], requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     const profile = await setUserAcorns(req.params.id, req.body || {}, req.user, req);
     res.json({ profile });
@@ -1105,7 +1142,7 @@ app.patch("/api/webtoon/admin/users/:id/acorns", requireUser, requireAdminAccoun
   }
 });
 
-app.patch("/api/webtoon/admin/users/:id/status", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+app.patch(["/api/admin/users/:id/status", "/api/webtoon/admin/users/:id/status"], requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     const result = await setUserStatus(req.params.id, req.body || {}, req.user, req);
     res.json(result);
@@ -1114,7 +1151,7 @@ app.patch("/api/webtoon/admin/users/:id/status", requireUser, requireAdminAccoun
   }
 });
 
-app.get("/api/webtoon/admin/security/events", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
+app.get(["/api/admin/security/events", "/api/webtoon/admin/security/events"], requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
   try {
     const events = await listSecurityEvents(clampInt(req.query.limit, 1, 100, 40));
     res.json({ events, retentionDays: config.securityRetentionDays, rawIpStored: false });
@@ -1212,6 +1249,10 @@ app.post("/api/storyheaven/worker/serial-engine/claim", requireWorker, requireJs
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
     const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
+    if (storyHeavenSerialEmergencyPaused) {
+      res.json({ leaseId: null, job: null, paused: true });
+      return;
+    }
     res.json(await storyHeavenSerialService.claimJob({ workerId }));
   } catch (error) {
     next(error);
@@ -1221,6 +1262,7 @@ app.post("/api/storyheaven/worker/serial-engine/claim", requireWorker, requireJs
 app.post("/api/storyheaven/worker/serial-engine/complete", requireWorker, requireJsonBody, async (req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    if (storyHeavenSerialEmergencyPaused) throw httpError("serial_system_paused", 409);
     const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
     const leaseId = boundedString(req.body?.leaseId, "leaseId", 36, { required: true });
     const jobId = boundedString(req.body?.jobId, "jobId", 36, { required: true });
@@ -1241,6 +1283,7 @@ app.post("/api/storyheaven/worker/serial-engine/complete", requireWorker, requir
 app.post("/api/storyheaven/worker/serial-engine/fail", requireWorker, requireJsonBody, async (req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    if (storyHeavenSerialEmergencyPaused) throw httpError("serial_system_paused", 409);
     const workerId = boundedString(req.body?.workerId, "workerId", 80, { required: true });
     const leaseId = boundedString(req.body?.leaseId, "leaseId", 36, { required: true });
     const jobId = boundedString(req.body?.jobId, "jobId", 36, { required: true });
@@ -1317,6 +1360,7 @@ setTimeout(() => processNextStoryHeavenAiReview().catch(() => {}), 1_000).unref(
 
 const storyHeavenSerialTimer = config.storyHeavenSerialEngineEnabled
   ? setInterval(() => {
+    if (storyHeavenSerialEmergencyPaused) return;
     storyHeavenSerialService.processDue().catch((error) => {
       console.error("[storyheaven] serial scheduler failed", error?.message || error);
     });
@@ -1324,11 +1368,14 @@ const storyHeavenSerialTimer = config.storyHeavenSerialEngineEnabled
   : null;
 storyHeavenSerialTimer?.unref();
 if (storyHeavenSerialTimer) {
-  setTimeout(() => storyHeavenSerialService.processDue().catch(() => {}), 2_000).unref();
+  setTimeout(() => {
+    if (!storyHeavenSerialEmergencyPaused) storyHeavenSerialService.processDue().catch(() => {});
+  }, 2_000).unref();
 }
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, async () => {
+    clearSerialPausePersistenceRetry();
     clearInterval(storyHeavenReviewTimer);
     if (storyHeavenSerialTimer) clearInterval(storyHeavenSerialTimer);
     server.close();
@@ -7362,10 +7409,14 @@ function constantTokenEquals(actual, expected) {
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
-function createRateLimiter({ name, limit, windowMs, keyResolver }) {
+function createRateLimiter({ name, limit, windowMs, keyResolver, skip = null }) {
   const buckets = new Map();
 
   return (req, res, next) => {
+    if (typeof skip === "function" && skip(req)) {
+      next();
+      return;
+    }
     const now = Date.now();
     const windowNumber = Math.floor(now / windowMs);
     const key = `${String(keyResolver(req)).slice(0, 200)}|${windowNumber}`;
@@ -7398,6 +7449,42 @@ function createRateLimiter({ name, limit, windowMs, keyResolver }) {
 
     next();
   };
+}
+
+function isSerialEmergencyPauseRequest(req) {
+  const path = String(req.originalUrl || "").split("?", 1)[0];
+  return req.method === "POST"
+    && path === "/api/storyheaven/operator/serial-engine/system"
+    && String(req.body?.action || "").trim() === "pause";
+}
+
+function serialSystemRateLimiter(req, res, next) {
+  if (String(req.body?.action || "").trim() === "pause") {
+    next();
+    return;
+  }
+  adminRateLimiter(req, res, next);
+}
+
+function clearSerialPausePersistenceRetry() {
+  if (storyHeavenSerialPauseRetryTimer) clearTimeout(storyHeavenSerialPauseRetryTimer);
+  storyHeavenSerialPauseRetryTimer = null;
+}
+
+function scheduleSerialPausePersistenceRetry(attempt = 1) {
+  if (storyHeavenSerialPauseRetryTimer || !storyHeavenSerialEmergencyPaused) return;
+  storyHeavenSerialPauseRetryTimer = setTimeout(async () => {
+    storyHeavenSerialPauseRetryTimer = null;
+    if (!storyHeavenSerialEmergencyPaused) return;
+    try {
+      await storyHeavenSerialService.setSystemPaused(true);
+      console.log(`[storyheaven] emergency pause persisted after retry ${attempt}`);
+    } catch (error) {
+      console.error(`[storyheaven] emergency pause persistence retry ${attempt} failed`, error?.message || error);
+      scheduleSerialPausePersistenceRetry(Math.min(attempt + 1, 12));
+    }
+  }, Math.min(5_000 * attempt, 60_000));
+  storyHeavenSerialPauseRetryTimer.unref?.();
 }
 
 function pruneRateBuckets(buckets, now, windowMs) {

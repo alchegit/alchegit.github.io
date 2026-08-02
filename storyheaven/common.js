@@ -146,12 +146,14 @@
 
   function renderAccount() {
     const signedIn = Boolean(state.session);
+    const isAdmin = Boolean(state.profile?.isAdmin);
     document.querySelectorAll("[data-common-login]").forEach((element) => { element.hidden = signedIn; });
     document.querySelectorAll("[data-common-logout]").forEach((element) => { element.hidden = !signedIn; });
     document.querySelectorAll("[data-common-user]").forEach((element) => {
       element.hidden = !signedIn;
       element.textContent = state.profile?.nickname || "로그인 중";
     });
+    document.querySelectorAll("[data-storyheaven-admin-menu]").forEach((element) => { element.hidden = !isAdmin; });
     renderAdminNavigation();
   }
 
@@ -160,9 +162,11 @@
     if (!nav) return;
     const serialLink = nav.querySelector("[data-storyheaven-admin-nav]");
     const webtoonLink = nav.querySelector("[data-storyheaven-admin-webtoon-nav]");
+    const membersLink = nav.querySelector("[data-storyheaven-admin-members-nav]");
     if (!state.profile?.isAdmin) {
       serialLink?.remove();
       webtoonLink?.remove();
+      membersLink?.remove();
       return;
     }
     if (!serialLink && !nav.querySelector('a[href="/storyheaven/operator/serial/"]')) {
@@ -179,6 +183,14 @@
       link.dataset.storyheavenAdminWebtoonNav = "";
       link.textContent = "웹툰 스튜디오";
       link.setAttribute("aria-label", "관리자 전용 웹툰 스튜디오 이동");
+      nav.append(link);
+    }
+    if (!membersLink && !nav.querySelector('a[href="/operator/members/"]')) {
+      const link = document.createElement("a");
+      link.href = "/operator/members/";
+      link.dataset.storyheavenAdminMembersNav = "";
+      link.textContent = "회원 관리";
+      link.setAttribute("aria-label", "관리자 전용 회원 관리 이동");
       nav.append(link);
     }
   }
@@ -236,6 +248,7 @@
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
       const error = new Error(payload.error || "request_failed");
+      error.status = response.status;
       error.details = payload.details || [];
       throw error;
     }
@@ -302,6 +315,8 @@
       appeal_resolution_too_short: "이의제기 판정 근거를 20자 이상 적어주세요.",
       admin_account_required: "관리자만 접근할 수 있습니다.",
       serial_engine_disabled: "연재 엔진이 아직 서버에서 시작되지 않았습니다.",
+      serial_system_paused: "자동 연재가 전체 중지 상태입니다. 다시 시작한 뒤 이용해주세요.",
+      rate_limited: "요청이 많아 잠시 제한되었습니다. 잠시 후 다시 시도해주세요.",
       serial_system_action_invalid: "자동 연재 시스템 동작을 다시 선택해주세요.",
       serial_schedule_invalid: "연재 이름, 기본 장르 1~3개, 세부장르 전체 1~10개와 기획 원칙을 확인해주세요.",
       serial_schedule_not_found: "제작 일정을 찾을 수 없습니다.",

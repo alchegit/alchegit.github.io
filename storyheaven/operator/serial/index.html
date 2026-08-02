@@ -11,14 +11,14 @@
   <link rel="stylesheet" href="../../workspace.css?v=20260801-help1">
   <link rel="stylesheet" href="./serial.css?v=20260803-hide2">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-  <script defer src="../../common.js?v=20260803-hide2"></script>
+  <script defer src="../../common.js?v=20260803-emergency1"></script>
   <script defer src="./genre-catalog.js?v=20260731-genre2"></script>
-  <script defer src="./serial.js?v=20260803-hide2"></script>
+  <script defer src="./serial.js?v=20260803-emergency1"></script>
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="/storyheaven/"><span class="brand-mark">S</span><span><strong>StoryHeaven</strong><small>소설 연재 관리</small></span></a>
-    <nav class="main-nav"><a href="/storyheaven/operator/">검수</a><a href="/storyheaven/operator/serial/" aria-current="page">자동 연재 설정</a><a href="/storyheaven/operator/serial/stories/">연재 작품 관리</a><a href="/webtoon/operator/">회원 관리</a></nav>
+    <nav class="main-nav" data-storyheaven-admin-menu hidden><a href="/storyheaven/operator/">검수</a><a href="/storyheaven/operator/serial/" aria-current="page">자동 연재 설정</a><a href="/storyheaven/operator/serial/stories/">연재 작품 관리</a><a href="/operator/members/">회원 관리</a></nav>
     <div class="account-actions"><span class="user-chip" data-common-user hidden></span><button class="button" type="button" data-common-login>관리자 로그인</button><button class="icon-button" type="button" data-common-logout hidden aria-label="로그아웃">×</button></div>
   </header>
   <main>
@@ -32,7 +32,7 @@
         <section class="serial-control-panel is-loading" data-serial-control-panel aria-live="polite">
           <div class="serial-control-copy">
             <p class="eyebrow">SERIAL CONTROL</p>
-            <h2 class="system-heading"><span data-system-state-title>운영 상태 확인 중</span><span class="system-clock" data-seoul-clock hidden>현재 시각 확인 중</span><button class="help-button" type="button" data-help data-help-title="자동 연재 운영 상태" data-help-body="자동 연재 엔진이 지금 제작 중인지, 대기열을 처리할 차례인지, 예약 쿨타임을 기다리는지, 전체 중지 상태인지 한눈에 보여줍니다.&#10;&#10;중단 위치부터 재개는 멈춘 작업이나 대기 작업을 먼저 깨웁니다. 전체 중지는 새 예약과 다음 단계 처리를 멈추고, 다시 시작은 멈춘 설정과 대기 작업을 함께 다시 켭니다.">?</button></h2>
+            <h2 class="system-heading"><span data-system-state-title>운영 상태 확인 중</span><span class="system-clock" data-seoul-clock hidden>현재 시각 확인 중</span><button class="help-button" type="button" data-help data-help-title="자동 연재 운영 상태" data-help-body="자동 연재 엔진이 지금 제작 중인지, 대기열을 처리할 차례인지, 예약 쿨타임을 기다리는지, 전체 중지 상태인지 한눈에 보여줍니다.&#10;&#10;전체 중지는 실행 중인 AI 작업의 저장 권한까지 즉시 회수하고, 대기 작업과 새 예약도 함께 멈춥니다. 이미 외부 AI에 전달된 요청이 잠시 계산을 계속하더라도 결과는 작품에 반영되지 않습니다. 다시 시작하면 멈춘 단계부터 이어갑니다.">?</button></h2>
             <p data-system-state-detail>서버와 대기열 상태를 불러오는 중입니다.</p>
             <small class="system-cause" data-system-state-cause hidden></small>
           </div>

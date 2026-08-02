@@ -343,6 +343,18 @@ export function createStoryHeavenSerialService({
                 sum(case when schedule_status = 'paused' then 1 else 0 end) as paused_count
            from storyheaven_serial_schedules
           where schedule_status <> 'archived'`);
+      const jobState = paused ? await selectOne(connection,
+        `select count(*) as active_count,
+                sum(case when job_status = 'running' then 1 else 0 end) as running_count,
+                sum(case when job_status in ('queued', 'retry_wait') then 1 else 0 end) as waiting_count
+           from storyheaven_serial_jobs job
+          where job.job_status in ('queued', 'running', 'retry_wait')
+            and exists (
+              select 1
+                from storyheaven_serial_runs serial_run
+               where serial_run.id = job.run_id
+                 and serial_run.queue_canceled_at is null
+            )`) : null;
       const schedules = await connection.execute(
         `update storyheaven_serial_schedules
             set schedule_status = :target_status,
@@ -352,6 +364,7 @@ export function createStoryHeavenSerialService({
         { target_status: targetStatus }
       );
       let heldJobs = 0;
+      let interruptedRuns = 0;
       if (paused) {
         const held = await connection.execute(
           `update storyheaven_serial_jobs job
@@ -361,8 +374,9 @@ export function createStoryHeavenSerialService({
                   lease_expires_at = null,
                   worker_id = null,
                   error_code = 'operator_system_paused',
+                  completed_at = null,
                   updated_at = systimestamp
-            where job.job_status in ('queued', 'retry_wait')
+            where job.job_status in ('queued', 'running', 'retry_wait')
               and exists (
                 select 1
                   from storyheaven_serial_runs serial_run
@@ -371,14 +385,35 @@ export function createStoryHeavenSerialService({
               )`
         );
         heldJobs = Number(held.rowsAffected || 0);
+        const runs = await connection.execute(
+          `update storyheaven_serial_runs
+              set run_status = 'queued',
+                  failure_code = null,
+                  completed_at = null,
+                  updated_at = systimestamp
+            where run_status = 'running'
+              and queue_canceled_at is null
+              and exists (
+                select 1
+                  from storyheaven_serial_jobs paused_job
+                 where paused_job.run_id = storyheaven_serial_runs.id
+                   and paused_job.job_status = 'retry_wait'
+                   and paused_job.error_code = 'operator_system_paused'
+              )`
+        );
+        interruptedRuns = Number(runs.rowsAffected || 0);
       }
       return {
         paused,
+        persisted: true,
         schedulesAffected: Number(schedules.rowsAffected || 0),
         schedulesTotal: Number(state?.TOTAL_COUNT || 0),
         activeBefore: Number(state?.ACTIVE_COUNT || 0),
         pausedBefore: Number(state?.PAUSED_COUNT || 0),
-        heldJobs
+        heldJobs,
+        interruptedRunningJobs: Number(jobState?.RUNNING_COUNT || 0),
+        waitingJobs: Number(jobState?.WAITING_COUNT || 0),
+        interruptedRuns
       };
     });
   }

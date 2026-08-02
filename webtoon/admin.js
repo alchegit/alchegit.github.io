@@ -47,8 +47,8 @@
       try {
         const query = search?.value.trim() || "";
         const [userData, securityData] = await Promise.all([
-          api.request(`/api/webtoon/admin/users?limit=100&search=${encodeURIComponent(query)}`),
-          api.request("/api/webtoon/admin/security/events?limit=40")
+          api.request(`/api/admin/users?limit=100&search=${encodeURIComponent(query)}`),
+          api.request("/api/admin/security/events?limit=40")
         ]);
         users = Array.isArray(userData?.users) ? userData.users : [];
         renderUsers();
@@ -138,7 +138,7 @@
       const button = event.currentTarget;
       button.disabled = true;
       try {
-        await api.request(`/api/webtoon/admin/users/${encodeURIComponent(selected.userId)}/acorns`, {
+        await api.request(`/api/admin/users/${encodeURIComponent(selected.userId)}/acorns`, {
           method: "PATCH",
           body: JSON.stringify({
             balance: Number(byId("adminAcornBalance").value),
@@ -170,7 +170,7 @@
       const button = event.currentTarget;
       button.disabled = true;
       try {
-        const result = await api.request(`/api/webtoon/admin/users/${encodeURIComponent(selected.userId)}/status`, {
+        const result = await api.request(`/api/admin/users/${encodeURIComponent(selected.userId)}/status`, {
           method: "PATCH",
           body: JSON.stringify({ status: banning ? "banned" : "active", reason })
         });

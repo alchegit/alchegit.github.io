@@ -134,6 +134,8 @@ assert.equal(round.status, "open");
 assert.equal(storyHeavenRoundSchedule("2026-07-24T10:00:00.000Z", { nextAfterCutoff: true }).roundKey, "2026-07-27");
 
 const server = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
+assert.match(server, /oracledb\.fetchAsString = \[[\s\S]*oracledb\.CLOB,[\s\S]*oracledb\.DATE[\s\S]*\]/u, "Oracle date values must use the driver-supported DATE fetch conversion");
+assert.doesNotMatch(server, /fetchAsString = \[[\s\S]*oracledb\.DB_TYPE_(?:DATE|TIMESTAMP)/u, "fetchAsString must not use unsupported DB_TYPE date constants");
 for (const route of [
   "/api/storyheaven/feed",
   "/api/storyheaven/discovery",

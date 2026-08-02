@@ -22,6 +22,7 @@ import {
 import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode } from "../src/serial-service.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
+const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
 assert.match(
   serialServiceSource,
   /insert \(\s*story_id, bible_version, bible_status, concept_json, narrative_blueprint_json\s*\)/u,
@@ -36,6 +37,13 @@ assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must dedupl
 assert.match(serialServiceSource, /run_status in \('error', 'blocked', 'queued', 'running', 'rewrite', 'approved'\)/u, "stalled running groups without active jobs must be hideable from history");
 assert.match(serialServiceSource, /attentionType: group\.hasBlocked \? "quality_hold"/u, "quality holds must be separate from system failures");
 assert.match(serialServiceSource, /episode-\$\{index \+ 1\}-card/u, "initial production progress must track episode planning");
+assert.match(serialServiceSource, /job\.job_status in \('queued', 'running', 'retry_wait'\)/u, "system pause must include an already running AI job");
+assert.match(serialServiceSource, /error_code = 'operator_system_paused'/u, "system pause must persist a resumable pause reason");
+assert.match(serialServiceSource, /lease_id = null,[\s\S]*worker_id = null/u, "system pause must revoke worker leases before a late result can be stored");
+assert.match(serverSource, /skip: isSerialEmergencyPauseRequest/u, "emergency pause must bypass the shared IP request limiter");
+assert.match(serverSource, /requireAdminAccount, serialSystemRateLimiter/u, "emergency pause must bypass the shared admin limiter after admin authentication");
+assert.match(serverSource, /if \(storyHeavenSerialEmergencyPaused\) throw httpError\("serial_system_paused", 409\)/u, "late worker results must be rejected during emergency pause");
+assert.match(serverSource, /scheduleSerialPausePersistenceRetry/u, "emergency pause must retry database persistence without reopening the queue");
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 1,
