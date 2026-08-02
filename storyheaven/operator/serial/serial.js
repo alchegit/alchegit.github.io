@@ -1903,7 +1903,7 @@
   }
 
   function scoreLabel(key) {
-    return ({ koreanReadability: "한국어 문장", canonConsistency: "설정 일관성", causality: "인과관계", sceneVisualization: "장면 가시성", openingGrip: "초반 흡입력", narrativeMomentum: "전개 추진력", emotionalPayoff: "감정 보상", genrePromise: "장르 만족", curiosityAndHook: "다음 화 궁금증", characterAgency: "주인공의 능동성", novelty: "참신성" })[key] || key;
+    return ({ koreanReadability: "한국어 문장", canonConsistency: "설정 일관성", causality: "인과관계", readerOrientation: "독자 안내", sceneVisualization: "장면 가시성", openingGrip: "초반 흡입력", narrativeMomentum: "전개 추진력", emotionalPayoff: "감정 보상", genrePromise: "장르 만족", curiosityAndHook: "다음 화 궁금증", characterAgency: "주인공의 능동성", novelty: "참신성" })[key] || key;
   }
 
   function message(text) {

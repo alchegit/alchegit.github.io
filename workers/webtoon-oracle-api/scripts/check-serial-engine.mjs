@@ -32,6 +32,8 @@ assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate r
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
 assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidden historical logs for full-view audits");
 assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");
+assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry the first-scene term budget");
+assert.match(serialServiceSource, /readerOrientation/u, "draft payloads must carry reader-orientation constraints");
 assert.match(serialServiceSource, /serial_run\.queue_group_id = :queue_group_id or serial_run\.id = :queue_group_id/u, "history operations must support legacy run ids without queue groups");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
 assert.match(serialServiceSource, /run_status in \('error', 'blocked', 'queued', 'running', 'rewrite', 'approved'\)/u, "stalled running groups without active jobs must be hideable from history");
@@ -222,6 +224,12 @@ const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
       "대화 중 손과 시선 또는 도구의 움직임을 하나 이상 이어 붙인다.",
       "장면마다 2~4개의 구체물만 기억에 남기고 같은 비 냄새를 반복하지 않는다."
     ],
+    readerOnboardingRules: [
+      "첫 2개 문단 안에 시점 인물과 장소, 평소 상태, 당장 목표를 밝힌다.",
+      "3번째 문단까지 처음 달라지는 현상과 실패할 때의 손실을 밝힌다.",
+      "첫 문단에는 낯선 고유 용어를 최대 1개만 쓴다.",
+      "신규 용어는 쉬운 뜻이나 눈에 보이는 효과를 같은 문단에서 행동으로 증명한다."
+    ],
     forbiddenHabits: ["번역투", "같은 문장 종결 반복"]
   },
   narrativeBlueprint: {
@@ -234,6 +242,7 @@ const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
   }
 });
 assert.equal(bible.narrativeBlueprint.openingModes.length, 3);
+assert.equal(bible.voiceProfile.readerOnboardingRules.length, 4);
 
 const arc = normalizeStoryHeavenSerialWorkerResult("build_arc", {
   arcTitle: "사라진 노선",
@@ -289,10 +298,23 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
     primaryTechnique: "제한된 정보",
     tensionMethod: "기억이 사라지는 즉각적 대가를 카운트다운처럼 쌓는다.",
     hookType: "정체 위협",
-    reason: "첫 화에는 세계관 설명보다 도윤이 규칙의 대가를 직접 겪는 장면이 더 빠른 흡입력을 만든다."
+    reason: "첫 화에는 세계관 설명보다 도윤이 규칙의 대가를 직접 겪는 장면이 더 빠른 흡입력을 만든다.",
+    readerOrientation: {
+      viewpoint: "도윤",
+      ordinaryBaseline: "신입 기사 도윤이 자정 첫 운행을 앞두고 차고지의 빈 버스를 점검한다.",
+      immediateGoal: "버스 상태를 확인하고 정시에 첫 운행을 시작한다.",
+      knownContext: "도윤은 누나의 실종 뒤 생계를 위해 오늘 처음 심야 노선 기사로 출근했다.",
+      firstChange: "출발 전인데 버스 스피커에서 도윤 자신의 안내 방송이 흘러나온다.",
+      stakes: "원인을 찾지 못하고 출발하면 첫 승객과 자신의 일자리를 위험에 빠뜨린다.",
+      firstSceneQuestion: "누가 출발 전 버스에서 도윤의 목소리를 재생했는가?",
+      newTerms: [
+        { term: "0번 노선", plainMeaning: "자정에만 출발하는 심야버스 노선", demonstration: "노선도 불이 켜지고 잠긴 차고지 문이 저절로 열린다." }
+      ]
+    }
   }
 });
 assert.equal(card.techniquePlan.openingMode, "사건 한가운데");
+assert.equal(card.techniquePlan.readerOrientation.newTerms.length, 1);
 
 const paragraph = "도윤은 버스 문을 열고 빈 좌석 사이를 천천히 확인했다. 창문에는 차고지 불빛 대신 오래전 폐역의 시계가 비쳤다. 그는 승객의 낡은 표를 받아 운행 기록과 대조했고, 자신이 기억하지 못하는 누나의 목소리가 안내 방송에서 흘러나오는 이유를 찾기로 했다.";
 const body = Array.from({ length: 36 }, (_, index) => `${index + 1}번째 움직임. ${paragraph} ${paragraph}`).join("\n\n");
@@ -319,7 +341,8 @@ const review = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);
-assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 93.9);
+assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 94.4);
+assert.equal(storyHeavenSerialQualityThresholds(1).readerOrientation, 92);
 assert.equal(storyHeavenSerialQualityThresholds(1).openingGrip, 90);
 assert.equal(storyHeavenSerialQualityThresholds(1).curiosityAndHook, 92);
 assert.equal(storyHeavenSerialQualityThresholds(2).openingGrip, 75);
@@ -331,6 +354,15 @@ const weakFirstEpisode = decideStoryHeavenSerialReview({
 });
 assert.equal(weakFirstEpisode.state, "rewrite_required");
 assert.equal(weakFirstEpisode.failedMetrics[0].name, "openingGrip");
+
+const disorientingFirstEpisode = decideStoryHeavenSerialReview({
+  qa,
+  review: { ...review, scores: { ...scores, readerOrientation: 88 } },
+  rewriteCount: 0,
+  episodeNo: 1
+});
+assert.equal(disorientingFirstEpisode.state, "rewrite_required");
+assert.equal(disorientingFirstEpisode.failedMetrics[0].name, "readerOrientation");
 
 const visuallyWeakReview = { ...review, decision: "rewrite_required", scores: { ...scores, sceneVisualization: 70 } };
 const visualRewrite = decideStoryHeavenSerialReview({ qa, review: visuallyWeakReview, rewriteCount: 0 });

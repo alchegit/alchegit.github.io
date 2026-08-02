@@ -2469,6 +2469,8 @@ export function createStoryHeavenSerialService({
         minimumParagraphs: 8,
         numeralStyle: "시간과 수치 정보는 11년, 8초처럼 아라비아 숫자로 적는다.",
         language: "번역투가 아닌 자연스럽고 빠르게 읽히는 한국어",
+        readerOrientation: "첫 2개 문단 안에 시점 인물, 장소, 평소 상태, 당장 목표를 자연스럽게 밝히고 3번째 문단까지 첫 변화와 실패 시 손실을 이해시킨다.",
+        newTermBudget: "첫 문단의 낯선 고유 용어는 최대 1개, 첫 장면 전체는 최대 3개다. 쉬운 뜻이나 눈에 보이는 효과를 먼저 또는 함께 보여주고 같은 문단의 행동에 연결한다.",
         sceneClarity: "각 장면의 첫 2개 문단 안에 시점 인물의 위치, 가까운 장애물이나 물체, 움직이거나 달라지는 대상을 독자가 파악할 수 있게 한다.",
         concreteDetailBudget: "장면당 기억할 구체물은 2~4개만 선택하고 시점 인물이 실제 감지할 수 있는 감각만 쓴다.",
         spatialContinuity: "인물의 상대 위치, 이동 방향, 손에 든 물건과 행동 결과가 문단 사이에서 순간이동하거나 모순되지 않게 한다."

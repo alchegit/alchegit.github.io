@@ -33,6 +33,7 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
     koreanReadability: 85,
     canonConsistency: 95,
     causality: 90,
+    readerOrientation: 85,
     sceneVisualization: 85,
     openingGrip: 75,
     narrativeMomentum: 80,
@@ -45,6 +46,7 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
 });
 
 const STORYHEAVEN_FIRST_EPISODE_QUALITY = Object.freeze({
+  readerOrientation: 92,
   sceneVisualization: 88,
   openingGrip: 90,
   narrativeMomentum: 86,
@@ -451,14 +453,15 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
 
 export function calculateStoryHeavenReaderExperienceScore(scores = {}) {
   const weights = {
-    openingGrip: 0.13,
-    sceneVisualization: 0.15,
-    narrativeMomentum: 0.17,
-    emotionalPayoff: 0.13,
-    genrePromise: 0.13,
-    curiosityAndHook: 0.16,
-    characterAgency: 0.08,
-    novelty: 0.05
+    readerOrientation: 0.16,
+    openingGrip: 0.10,
+    sceneVisualization: 0.13,
+    narrativeMomentum: 0.15,
+    emotionalPayoff: 0.12,
+    genrePromise: 0.12,
+    curiosityAndHook: 0.14,
+    characterAgency: 0.05,
+    novelty: 0.03
   };
   const score = Object.entries(weights).reduce((sum, [name, weight]) => {
     return sum + Math.max(0, Math.min(100, Number(scores[name]) || 0)) * weight;
@@ -515,6 +518,7 @@ function normalizeBible(source) {
       emotionStyle: requiredText(voice.emotionStyle, 200, 2, "serial_voice_emotion_invalid"),
       sensoryPalette: requiredText(voice.sensoryPalette, 240, 10, "serial_voice_sensory_palette_invalid"),
       visualizationRules: requiredList(voice.visualizationRules, { min: 3, max: 8, itemMax: 240 }, "serial_voice_visualization_rules_invalid"),
+      readerOnboardingRules: requiredList(voice.readerOnboardingRules, { min: 4, max: 8, itemMax: 300 }, "serial_voice_reader_onboarding_rules_invalid"),
       forbiddenHabits: stringList(voice.forbiddenHabits, { max: 20, itemMax: 160 })
     },
     narrativeBlueprint: {
@@ -731,7 +735,30 @@ function normalizeTechniquePlan(value) {
     primaryTechnique: requiredText(source.primaryTechnique, 160, 2, "serial_technique_primary_invalid"),
     tensionMethod: requiredText(source.tensionMethod, 200, 5, "serial_technique_tension_invalid"),
     hookType: requiredText(source.hookType, 120, 2, "serial_technique_hook_invalid"),
-    reason: requiredText(source.reason, 400, 10, "serial_technique_reason_invalid")
+    reason: requiredText(source.reason, 400, 10, "serial_technique_reason_invalid"),
+    readerOrientation: normalizeReaderOrientation(source.readerOrientation)
+  };
+}
+
+function normalizeReaderOrientation(value) {
+  const source = object(value);
+  const newTerms = array(source.newTerms).slice(0, 3).map((item) => {
+    const term = object(item);
+    return {
+      term: requiredText(term.term, 80, 1, "serial_reader_orientation_term_invalid"),
+      plainMeaning: requiredText(term.plainMeaning, 240, 3, "serial_reader_orientation_term_meaning_invalid"),
+      demonstration: requiredText(term.demonstration, 300, 5, "serial_reader_orientation_term_demonstration_invalid")
+    };
+  });
+  return {
+    viewpoint: requiredText(source.viewpoint, 100, 1, "serial_reader_orientation_viewpoint_invalid"),
+    ordinaryBaseline: requiredText(source.ordinaryBaseline, 400, 10, "serial_reader_orientation_baseline_invalid"),
+    immediateGoal: requiredText(source.immediateGoal, 300, 5, "serial_reader_orientation_goal_invalid"),
+    knownContext: requiredText(source.knownContext, 500, 10, "serial_reader_orientation_context_invalid"),
+    firstChange: requiredText(source.firstChange, 400, 10, "serial_reader_orientation_change_invalid"),
+    stakes: requiredText(source.stakes, 400, 10, "serial_reader_orientation_stakes_invalid"),
+    firstSceneQuestion: requiredText(source.firstSceneQuestion, 300, 5, "serial_reader_orientation_question_invalid"),
+    newTerms
   };
 }
 
