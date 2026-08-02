@@ -917,10 +917,13 @@ app.post("/api/storyheaven/operator/serial-engine/process", requireUser, require
   }
 });
 
-app.get("/api/storyheaven/operator/serial-engine/stories", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
+app.get("/api/storyheaven/operator/serial-engine/stories", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
   try {
     const [stories, queue] = await Promise.all([
-      storyHeavenSerialService.listManagedStories(),
+      storyHeavenSerialService.listManagedStories({
+        createdFrom: req.query.createdFrom,
+        createdTo: req.query.createdTo
+      }),
       storyHeavenSerialService.getQueueState()
     ]);
     const queueByStory = new Map((queue.items || []).filter((item) => item.storyId).map((item) => [item.storyId, item]));
@@ -929,6 +932,16 @@ app.get("/api/storyheaven/operator/serial-engine/stories", requireUser, requireA
       stories: stories.map((story) => ({ ...story, queue: queueByStory.get(story.id) || null })),
       queue
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.patch("/api/storyheaven/operator/serial-engine/stories/bulk-control", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const result = await storyHeavenSerialService.updateStoryControls(req.body || {}, req.user.id);
+    res.json(result);
   } catch (error) {
     next(error);
   }

@@ -1,7 +1,17 @@
 (() => {
-  const state = { stories: [], enabled: false, requestedStoryId: new URLSearchParams(location.search).get("story") || "", requestApplied: false };
+  const state = {
+    stories: [],
+    enabled: false,
+    requestedStoryId: new URLSearchParams(location.search).get("story") || "",
+    requestApplied: false,
+    selectedStoryIds: new Set(),
+    visibleStoryIds: [],
+    bulkProcessing: false,
+    refreshRequestId: 0
+  };
   const elements = {};
   const visibilityLabels = { public: "공개", private: "비공개", archived: "숨김" };
+  const bulkVisibilityLabels = { public: "공개", private: "비공개", archived: "목록 숨김" };
   const continuationLabels = { auto: "추천 11개 모이면 자동", manual: "운영자 요청", paused: "일시 정지", ended: "연재 종료" };
 
   document.addEventListener("DOMContentLoaded", async () => {
@@ -18,16 +28,33 @@
     elements.search = document.querySelector("[data-story-search]");
     elements.visibility = document.querySelector("[data-visibility-filter]");
     elements.continuation = document.querySelector("[data-continuation-filter]");
+    elements.createdFrom = document.querySelector("[data-created-from]");
+    elements.createdTo = document.querySelector("[data-created-to]");
+    elements.periodStatus = document.querySelector("[data-period-status]");
+    elements.periodClear = document.querySelector("[data-period-clear]");
     elements.resultCount = document.querySelector("[data-result-count]");
+    elements.selectAll = document.querySelector("[data-select-all]");
+    elements.selectedCount = document.querySelector("[data-selected-count]");
+    elements.bulkVisibility = document.querySelector("[data-bulk-visibility]");
+    elements.bulkApply = document.querySelector("[data-bulk-apply]");
+    elements.bulkStatus = document.querySelector("[data-bulk-status]");
   }
 
   function bind() {
     elements.search.addEventListener("input", renderList);
     elements.visibility.addEventListener("change", renderList);
     elements.continuation.addEventListener("change", renderList);
+    elements.createdFrom.addEventListener("change", applyPeriodFilter);
+    elements.createdTo.addEventListener("change", applyPeriodFilter);
+    elements.periodClear.addEventListener("click", clearPeriodFilter);
+    elements.selectAll.addEventListener("change", toggleAllVisibleStories);
+    elements.bulkApply.addEventListener("click", () => {
+      applyBulkVisibility().catch((error) => StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error)));
+    });
     document.querySelector("[data-refresh]").addEventListener("click", () => {
       refresh().catch((error) => StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error)));
     });
+    periodQuery(false);
   }
 
   async function onAuth(auth) {
@@ -49,10 +76,15 @@
   }
 
   async function refresh() {
+    const query = periodQuery(true);
+    if (query === null) return;
+    const requestId = ++state.refreshRequestId;
     const button = document.querySelector("[data-refresh]");
     button.disabled = true;
     try {
-      const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/stories");
+      const suffix = query.toString();
+      const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories${suffix ? `?${suffix}` : ""}`);
+      if (requestId !== state.refreshRequestId) return;
       state.stories = Array.isArray(payload.stories) ? payload.stories : [];
       state.enabled = payload.enabled === true;
       applyRequestedStory();
@@ -60,7 +92,7 @@
       renderSummary();
       renderList();
     } finally {
-      button.disabled = false;
+      if (requestId === state.refreshRequestId) button.disabled = false;
     }
   }
 
@@ -90,17 +122,154 @@
         && (visibility === "all" || (visibility === "managed" ? story.visibility !== "archived" : story.visibility === visibility))
         && (elements.continuation.value === "all" || story.continuationMode === elements.continuation.value);
     });
+    const visibleIds = new Set(filtered.map((story) => story.id));
+    for (const storyId of state.selectedStoryIds) {
+      if (!visibleIds.has(storyId)) state.selectedStoryIds.delete(storyId);
+    }
+    state.visibleStoryIds = [...visibleIds];
     elements.resultCount.textContent = `${filtered.length.toLocaleString("ko-KR")}편`;
     if (!filtered.length) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
       empty.textContent = state.stories.length
         ? (elements.visibility.value === "managed" ? "현재 운영 중인 작품이 없습니다. 숨긴 작품은 공개 상태 필터에서 확인할 수 있습니다." : "조건에 맞는 작품이 없습니다.")
-        : "아직 관리할 자동 연재 작품이 없습니다.";
+        : (elements.createdFrom.value || elements.createdTo.value ? "선택한 제작 기간에 만든 작품이 없습니다." : "아직 관리할 자동 연재 작품이 없습니다.");
       elements.list.replaceChildren(empty);
+      updateBulkControls();
       return;
     }
     elements.list.replaceChildren(...filtered.map(storyRow));
+    updateBulkControls();
+  }
+
+  function applyPeriodFilter() {
+    if (periodQuery(true) === null) return;
+    clearVisibleSelection();
+    elements.bulkStatus.textContent = "체크한 작품만 변경됩니다.";
+    refresh().catch((error) => StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error)));
+  }
+
+  function clearPeriodFilter() {
+    elements.createdFrom.value = "";
+    elements.createdTo.value = "";
+    clearVisibleSelection();
+    periodQuery(false);
+    elements.bulkStatus.textContent = "체크한 작품만 변경됩니다.";
+    refresh().catch((error) => StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error)));
+  }
+
+  function periodQuery(reportInvalid) {
+    const createdFrom = elements.createdFrom.value;
+    const createdTo = elements.createdTo.value;
+    elements.createdFrom.setCustomValidity("");
+    elements.createdTo.setCustomValidity("");
+    elements.periodClear.disabled = !createdFrom && !createdTo;
+    if (createdFrom && createdTo && createdFrom > createdTo) {
+      elements.createdTo.setCustomValidity("종료일은 시작일과 같거나 그 이후여야 합니다.");
+      elements.periodStatus.textContent = "제작 기간을 다시 확인해주세요.";
+      if (reportInvalid) elements.createdTo.reportValidity();
+      return null;
+    }
+    const query = new URLSearchParams();
+    if (createdFrom) query.set("createdFrom", createdFrom);
+    if (createdTo) query.set("createdTo", createdTo);
+    elements.periodStatus.textContent = periodLabel(createdFrom, createdTo);
+    return query;
+  }
+
+  function periodLabel(createdFrom, createdTo) {
+    if (!createdFrom && !createdTo) return "전체 제작일";
+    if (createdFrom && createdFrom === createdTo) return `${filterDateLabel(createdFrom)} 제작 · 서울 기준`;
+    if (createdFrom && createdTo) return `${filterDateLabel(createdFrom)} ~ ${filterDateLabel(createdTo)} · 서울 기준`;
+    if (createdFrom) return `${filterDateLabel(createdFrom)} 이후 · 서울 기준`;
+    return `${filterDateLabel(createdTo)} 이전 · 서울 기준`;
+  }
+
+  function filterDateLabel(value) {
+    const [year, month, day] = String(value).split("-").map(Number);
+    return `${year}. ${month}. ${day}.`;
+  }
+
+  function toggleAllVisibleStories() {
+    if (elements.selectAll.checked) {
+      for (const storyId of state.visibleStoryIds) state.selectedStoryIds.add(storyId);
+    } else {
+      for (const storyId of state.visibleStoryIds) state.selectedStoryIds.delete(storyId);
+    }
+    for (const checkbox of elements.list.querySelectorAll("[data-story-select]")) {
+      checkbox.checked = state.selectedStoryIds.has(checkbox.dataset.storySelect);
+    }
+    updateBulkControls();
+  }
+
+  function clearVisibleSelection() {
+    state.selectedStoryIds.clear();
+    for (const checkbox of elements.list.querySelectorAll("[data-story-select]")) checkbox.checked = false;
+    updateBulkControls();
+  }
+
+  function updateBulkControls() {
+    const selectedCount = state.visibleStoryIds.filter((storyId) => state.selectedStoryIds.has(storyId)).length;
+    const visibleCount = state.visibleStoryIds.length;
+    elements.selectAll.checked = visibleCount > 0 && selectedCount === visibleCount;
+    elements.selectAll.indeterminate = selectedCount > 0 && selectedCount < visibleCount;
+    elements.selectAll.disabled = !visibleCount || state.bulkProcessing;
+    elements.selectedCount.textContent = `${selectedCount.toLocaleString("ko-KR")}편 선택`;
+    elements.bulkVisibility.disabled = state.bulkProcessing;
+    elements.bulkApply.disabled = !selectedCount || state.bulkProcessing;
+  }
+
+  async function applyBulkVisibility() {
+    const storyIds = state.visibleStoryIds.filter((storyId) => state.selectedStoryIds.has(storyId));
+    if (!storyIds.length || state.bulkProcessing) return;
+    const visibility = elements.bulkVisibility.value;
+    const label = bulkVisibilityLabels[visibility] || visibility;
+    state.bulkProcessing = true;
+    updateBulkControls();
+    elements.bulkStatus.textContent = `${storyIds.length.toLocaleString("ko-KR")}편을 ${label} 상태로 변경하고 있습니다.`;
+
+    let updatedCount = 0;
+    let haltedError = null;
+    const failures = [];
+    try {
+      for (let offset = 0; offset < storyIds.length; offset += 100) {
+        const storyIdChunk = storyIds.slice(offset, offset + 100);
+        elements.bulkStatus.textContent = `${Math.min(offset + storyIdChunk.length, storyIds.length).toLocaleString("ko-KR")} / ${storyIds.length.toLocaleString("ko-KR")}편 처리 중`;
+        try {
+          const result = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/stories/bulk-control", {
+            method: "PATCH",
+            body: { storyIds: storyIdChunk, visibility }
+          });
+          updatedCount += Number(result.updatedCount || 0);
+          if (Array.isArray(result.failures)) failures.push(...result.failures);
+        } catch (error) {
+          haltedError = error;
+          failures.push(...storyIds.slice(offset).map((storyId) => ({ storyId, code: error?.message || "serial_bulk_story_update_failed" })));
+          break;
+        }
+      }
+
+      state.selectedStoryIds = new Set(failures.map((failure) => failure.storyId));
+      try {
+        await refresh();
+      } catch (error) {
+        elements.bulkStatus.textContent = `${updatedCount.toLocaleString("ko-KR")}편 변경 후 목록을 새로 불러오지 못했습니다.`;
+        StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+        return;
+      }
+
+      if (failures.length) {
+        const reason = StoryHeavenCommon.readableError(haltedError || { message: failures[0].code });
+        elements.bulkStatus.textContent = `${updatedCount.toLocaleString("ko-KR")}편 변경 · ${failures.length.toLocaleString("ko-KR")}편 실패 · ${reason}`;
+        StoryHeavenCommon.toast(`${updatedCount.toLocaleString("ko-KR")}편을 변경했습니다. 실패한 ${failures.length.toLocaleString("ko-KR")}편은 선택 상태로 남겼습니다.`);
+      } else {
+        elements.bulkStatus.textContent = `${updatedCount.toLocaleString("ko-KR")}편의 공개 상태를 ${label} 상태로 변경했습니다.`;
+        StoryHeavenCommon.toast(`${updatedCount.toLocaleString("ko-KR")}편을 ${label} 상태로 변경했습니다.`);
+      }
+    } finally {
+      state.bulkProcessing = false;
+      updateBulkControls();
+    }
   }
 
   function storyRow(story) {
@@ -112,6 +281,22 @@
     summary.className = "story-summary";
     const stateLine = document.createElement("div");
     stateLine.className = "story-state-line";
+    const selection = document.createElement("label");
+    selection.className = "story-select";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.dataset.storySelect = story.id;
+    checkbox.checked = state.selectedStoryIds.has(story.id);
+    checkbox.setAttribute("aria-label", `${story.title} 선택`);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) state.selectedStoryIds.add(story.id);
+      else state.selectedStoryIds.delete(story.id);
+      updateBulkControls();
+    });
+    const selectionText = document.createElement("span");
+    selectionText.textContent = "선택";
+    selection.append(checkbox, selectionText);
+    stateLine.append(selection);
     stateLine.append(badge(visibilityLabels[story.visibility] || story.visibility, story.visibility));
     stateLine.append(badge(continuationLabels[story.continuationMode] || story.continuationMode, story.continuationMode));
     if (story.queue) {
@@ -126,7 +311,10 @@
     const tags = document.createElement("div");
     tags.className = "story-tags";
     tags.append(...(story.genres || []).slice(0, 5).map(tag));
-    summary.append(stateLine, title, logline, tags);
+    const createdAt = document.createElement("p");
+    createdAt.className = "story-created-at";
+    createdAt.textContent = `최초 제작 ${formatDateOnly(story.createdAt)}`;
+    summary.append(stateLine, title, logline, tags, createdAt);
 
     const metrics = document.createElement("section");
     metrics.className = "story-metrics";
@@ -555,6 +743,18 @@
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit"
+    }).format(date)} (서울)`;
+  }
+
+  function formatDateOnly(value) {
+    if (!value) return "날짜 없음";
+    const date = parseSerialDate(value);
+    if (!date) return "날짜 없음";
+    return `${new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     }).format(date)} (서울)`;
   }
 

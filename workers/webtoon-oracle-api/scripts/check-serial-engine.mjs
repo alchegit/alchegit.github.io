@@ -21,7 +21,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode, createStoryHeavenSerialService } from "../src/serial-service.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
@@ -30,6 +30,7 @@ const serialOperatorHtml = await readFile(new URL("../../../storyheaven/operator
 const serialOperatorCss = await readFile(new URL("../../../storyheaven/operator/serial/serial.css", import.meta.url), "utf8");
 const managedStoriesSource = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.js", import.meta.url), "utf8");
 const managedStoriesHtml = await readFile(new URL("../../../storyheaven/operator/serial/stories/index.html", import.meta.url), "utf8");
+const managedStoriesCss = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.css", import.meta.url), "utf8");
 assert.match(
   serialServiceSource,
   /insert \(\s*story_id, bible_version, bible_status, concept_json, narrative_blueprint_json\s*\)/u,
@@ -59,12 +60,53 @@ assert.match(serialServiceSource, /order by min\(queue_origin\.created_at\), can
 assert.match(serialServiceSource, /error_code = 'operator_story_hidden'/u, "hiding a story must revoke linked jobs");
 assert.match(serialServiceSource, /queue_status in \('ready', 'publishing'\)/u, "hiding a story must cancel linked publication work");
 assert.match(serialServiceSource, /and serial_run\.queue_canceled_at is null\) as active_run_count/u, "hidden runs must not block a restored story");
+assert.match(serialServiceSource, /to_timestamp_tz\(:created_from[\s\S]*\+09:00/u, "managed story periods must start on a Seoul calendar boundary");
+assert.match(serialServiceSource, /to_timestamp_tz\(:created_to[\s\S]*numtodsinterval\(1, 'DAY'\)/u, "managed story period end dates must be inclusive in Seoul");
+assert.match(serialServiceSource, /async function updateStoryControls/u, "managed stories must expose one bulk control operation");
+assert.match(serialServiceSource, /rawStoryIds\.length > 100/u, "bulk story controls must use bounded batches");
+assert.match(serialServiceSource, /current\.visibility === "archived"/u, "bulk private restore must return hidden stories to operator control");
+assert.match(serverSource, /createdFrom: req\.query\.createdFrom/u, "managed story dates must reach the database query");
+assert.match(serverSource, /stories\/bulk-control/u, "managed stories must expose the bulk control route");
 assert.match(serialOperatorSource, /재개 요청 순서대로 제작/u, "incomplete prologues must explain shared queue ordering");
 assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
 assert.match(serialOperatorHtml, /문제 해결 도구/u, "operator recovery tools must use task-oriented language");
 assert.match(serialOperatorCss, /details\.advanced > summary[\s\S]*color: #f4f7fb/u, "dark advanced summaries must retain readable text");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
+assert.match(managedStoriesHtml, /data-created-from/u, "managed stories must provide a creation start date filter");
+assert.match(managedStoriesHtml, /data-created-to/u, "managed stories must provide a creation end date filter");
+assert.match(managedStoriesHtml, /data-select-all/u, "managed stories must provide select-all for the current result");
+assert.match(managedStoriesHtml, /data-bulk-visibility/u, "managed stories must provide a bulk visibility control");
+assert.match(managedStoriesSource, /selectedStoryIds: new Set\(\)/u, "managed story selection must use stable story ids");
+assert.match(managedStoriesSource, /offset \+= 100/u, "large bulk changes must be split into safe API batches");
 assert.match(managedStoriesSource, /목록에 복원/u, "hidden stories must be restorable");
+assert.match(managedStoriesCss, /\.bulk-apply:disabled[\s\S]*opacity: 1/u, "disabled bulk actions must keep readable contrast");
+
+let managedStoryQuery = null;
+let managedStoryBinds = null;
+const managedStoryService = createStoryHeavenSerialService({
+  withConnection: async (callback) => callback({
+    execute: async (sql, binds) => {
+      managedStoryQuery = sql;
+      managedStoryBinds = binds;
+      return { rows: [] };
+    }
+  }),
+  withTransaction: async () => { throw new Error("unexpected_transaction"); },
+  clob: (value) => value,
+  clobJson: (value) => value
+});
+assert.deepEqual(await managedStoryService.listManagedStories({ createdFrom: "2026-08-01", createdTo: "2026-08-02" }), []);
+assert.match(managedStoryQuery, /story\.created_at >= to_timestamp_tz/u);
+assert.match(managedStoryQuery, /story\.created_at < to_timestamp_tz/u);
+assert.equal(managedStoryBinds.created_from, "2026-08-01");
+assert.equal(managedStoryBinds.created_to, "2026-08-02");
+await assert.rejects(() => managedStoryService.listManagedStories({ createdFrom: "2026-08-03", createdTo: "2026-08-02" }), /serial_story_date_range_invalid/u);
+await assert.rejects(() => managedStoryService.listManagedStories({ createdFrom: "2026-02-30" }), /serial_story_date_filter_invalid/u);
+await assert.rejects(() => managedStoryService.updateStoryControls({ storyIds: [] }, "admin"), /serial_bulk_story_selection_required/u);
+await assert.rejects(() => managedStoryService.updateStoryControls({
+  storyIds: Array.from({ length: 101 }, (_, index) => `story-${String(index).padStart(3, "0")}`),
+  visibility: "private"
+}, "admin"), /serial_bulk_story_limit/u);
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 1,

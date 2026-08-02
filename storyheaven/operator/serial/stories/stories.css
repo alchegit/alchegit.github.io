@@ -63,6 +63,7 @@
 
 .summary-strip .help-topic,
 .work-tools .help-topic,
+.bulk-tools .help-topic,
 .list-heading .help-topic,
 .control-field .help-topic {
   display: inline-flex;
@@ -72,6 +73,7 @@
 
 .summary-strip .help-topic > span,
 .work-tools .help-topic > span,
+.bulk-tools .help-topic > span,
 .list-heading .help-topic > span,
 .control-field .help-topic > span {
   display: inline;
@@ -79,6 +81,7 @@
 
 .summary-strip .help-button,
 .work-tools .help-button,
+.bulk-tools .help-button,
 .control-field .help-button {
   width: 22px;
   height: 22px;
@@ -124,6 +127,52 @@
   white-space: nowrap;
 }
 
+.period-filter {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(190px, 1fr) minmax(155px, 210px) auto minmax(155px, 210px) auto;
+  align-items: end;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid #5b6270;
+}
+
+.period-intro {
+  align-self: center;
+  min-width: 0;
+}
+
+.period-intro strong,
+.period-intro small {
+  display: block;
+}
+
+.period-intro strong {
+  font-size: 13px;
+}
+
+.period-intro small {
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  color: #d4d9e2;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.period-separator {
+  min-height: 46px;
+  display: grid;
+  place-items: center;
+  color: #f4f7fb;
+  font-weight: 900;
+}
+
+.period-clear {
+  min-height: 46px;
+  white-space: nowrap;
+}
+
 .list-heading {
   display: flex;
   align-items: end;
@@ -142,6 +191,89 @@
   margin: 0 0 18px;
   color: #656b77;
   font-weight: 850;
+}
+
+.bulk-tools {
+  display: grid;
+  grid-template-columns: minmax(210px, .7fr) minmax(280px, 1.25fr) auto;
+  align-items: end;
+  gap: 12px 16px;
+  padding: 16px 18px;
+  color: #f7f9fc;
+  background: #20242f;
+  border: 2px solid #11131a;
+}
+
+.select-all-control {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+}
+
+.select-all-control input,
+.story-select input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: #087c5d;
+}
+
+.select-all-control strong,
+.select-all-control small {
+  display: block;
+}
+
+.select-all-control strong {
+  font-size: 13px;
+}
+
+.select-all-control small {
+  margin-top: 3px;
+  color: #cbd1dc;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bulk-visibility-field {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.bulk-visibility-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  color: #11131a;
+  background: #fff;
+  border: 2px solid #11131a;
+}
+
+.bulk-apply {
+  min-height: 46px;
+  white-space: nowrap;
+}
+
+.bulk-apply:disabled {
+  color: #2f3540;
+  background: #b8bec8;
+  box-shadow: none;
+  opacity: 1;
+}
+
+.bulk-status {
+  grid-column: 1 / -1;
+  min-height: 18px;
+  margin: 0;
+  color: #d4d9e2;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.45;
 }
 
 .managed-list {
@@ -199,6 +331,23 @@
   gap: 8px;
 }
 
+.story-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 9px;
+  border-right: 1px solid #aeb3bc;
+  color: #343a45;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.story-select input {
+  width: 18px;
+  height: 18px;
+}
+
 .story-summary h3 {
   margin: 10px 0 6px;
   font-size: 21px;
@@ -219,6 +368,15 @@
 
 .story-tags {
   margin-top: 10px;
+}
+
+.story-summary > .story-created-at {
+  display: block;
+  margin-top: 9px;
+  color: #656d7a;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.4;
 }
 
 .tag,
@@ -426,6 +584,22 @@
     grid-template-columns: 1fr 1fr;
   }
 
+  .period-filter {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  }
+
+  .period-intro {
+    grid-column: 1 / -1;
+  }
+
+  .bulk-tools {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .select-all-control {
+    grid-column: 1 / -1;
+  }
+
   .search-field,
   .refresh-button {
     grid-column: 1 / -1;
@@ -531,6 +705,30 @@
   .search-field,
   .refresh-button {
     grid-column: 1 / -1;
+  }
+
+  .period-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .period-filter > *,
+  .period-clear {
+    grid-column: 1;
+  }
+
+  .period-separator {
+    display: none;
+  }
+
+  .bulk-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .select-all-control,
+  .bulk-visibility-field,
+  .bulk-apply,
+  .bulk-status {
+    grid-column: 1;
   }
 
   .list-heading {

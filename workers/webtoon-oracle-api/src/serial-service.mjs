@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_SERIAL_LIMITS,
+  STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
   decideStoryHeavenSerialReview,
   normalizeStoryHeavenConceptPolicy,
@@ -49,6 +50,7 @@ export function createStoryHeavenSerialService({
     resumeInterruptedQueues,
     listManagedStories,
     updateStoryControl,
+    updateStoryControls,
     saveSchedule,
     runSchedule,
     planStory,
@@ -489,7 +491,18 @@ export function createStoryHeavenSerialService({
     });
   }
 
-  async function listManagedStories() {
+  async function listManagedStories(filters = {}) {
+    const { createdFrom, createdTo } = managedStoryDateRange(filters);
+    const dateClauses = [];
+    const binds = { author_user_id: SYSTEM_AUTHOR_ID };
+    if (createdFrom) {
+      dateClauses.push("and story.created_at >= to_timestamp_tz(:created_from || ' 00:00:00 +09:00', 'YYYY-MM-DD HH24:MI:SS TZH:TZM')");
+      binds.created_from = createdFrom;
+    }
+    if (createdTo) {
+      dateClauses.push("and story.created_at < to_timestamp_tz(:created_to || ' 00:00:00 +09:00', 'YYYY-MM-DD HH24:MI:SS TZH:TZM') + numtodsinterval(1, 'DAY')");
+      binds.created_to = createdTo;
+    }
     return withConnection(async (connection) => {
       const result = await connection.execute(
         `select story.id, story.title, story.logline, story.genres_json,
@@ -541,10 +554,11 @@ export function createStoryHeavenSerialService({
            left join storyheaven_serial_schedules schedule on schedule.id = source.schedule_id
           where story.author_user_id = :author_user_id
             and story.content_origin = 'admin_seed'
+            ${dateClauses.join("\n            ")}
           order by nvl((select max(episode.published_at) from storyheaven_episodes episode
                          where episode.story_id = story.id), story.updated_at) desc
-          fetch first 200 rows only`,
-        { author_user_id: SYSTEM_AUTHOR_ID }
+          fetch first 500 rows only`,
+        binds
       );
       return result.rows.map(mapManagedStory);
     });
@@ -730,6 +744,62 @@ export function createStoryHeavenSerialService({
 
       return { ...await getManagedStory(connection, storyId), linkedHidden };
     });
+  }
+
+  async function updateStoryControls(input = {}, userId) {
+    const rawStoryIds = Array.isArray(input.storyIds) ? input.storyIds : [];
+    if (!rawStoryIds.length) throw failure("serial_bulk_story_selection_required", 400);
+    if (rawStoryIds.length > 100) throw failure("serial_bulk_story_limit", 400);
+    const storyIds = [...new Set(rawStoryIds.map((storyId) => requireId(storyId, "story_id")))];
+    const visibility = String(input.visibility || "").trim();
+    if (!STORYHEAVEN_SERIAL_STORY_CONTROL.visibilities.includes(visibility)) {
+      throw failure("serial_story_visibility_invalid", 400, [{ field: "visibility", code: "serial_story_visibility_invalid" }]);
+    }
+
+    const updatedStoryIds = [];
+    const failures = [];
+    for (let index = 0; index < storyIds.length; index += 1) {
+      const storyId = storyIds[index];
+      let current = null;
+      try {
+        current = await withConnection((connection) => getManagedStory(connection, storyId));
+        const continuationMode = visibility === "archived"
+          ? "ended"
+          : visibility === "private" && (current.visibility === "archived" || current.continuationMode === "auto")
+            ? "manual"
+            : current.continuationMode;
+        await updateStoryControl(storyId, {
+          visibility,
+          continuationMode,
+          operatorNote: current.operatorNote || ""
+        }, userId);
+        updatedStoryIds.push(storyId);
+      } catch (error) {
+        const code = Number.isInteger(error?.status)
+          ? cleanCode(error.message)
+          : "serial_bulk_story_update_failed";
+        failures.push({
+          storyId,
+          title: current?.title || "",
+          code
+        });
+        if (!Number.isInteger(error?.status)) {
+          failures.push(...storyIds.slice(index + 1).map((pendingStoryId) => ({
+            storyId: pendingStoryId,
+            title: "",
+            code
+          })));
+          break;
+        }
+      }
+    }
+    return {
+      visibility,
+      requestedCount: storyIds.length,
+      updatedCount: updatedStoryIds.length,
+      updatedStoryIds,
+      failures
+    };
   }
 
   async function saveSchedule(input, userId, scheduleIdValue = null) {
@@ -3305,6 +3375,30 @@ function requireId(value, code) {
   const id = String(value || "").trim();
   if (!/^[a-zA-Z0-9-]{3,36}$/u.test(id)) throw failure(code, 400);
   return id;
+}
+
+function managedStoryDateRange(input = {}) {
+  const createdFrom = managedStoryDate(input.createdFrom, "createdFrom");
+  const createdTo = managedStoryDate(input.createdTo, "createdTo");
+  if (createdFrom && createdTo && createdFrom > createdTo) {
+    throw failure("serial_story_date_range_invalid", 400, [{ field: "createdTo", code: "serial_story_date_range_invalid" }]);
+  }
+  return { createdFrom, createdTo };
+}
+
+function managedStoryDate(value, field) {
+  const text = String(value || "").trim();
+  if (!text) return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(text);
+  if (!match) throw failure("serial_story_date_filter_invalid", 400, [{ field, code: "serial_story_date_filter_invalid" }]);
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
+    throw failure("serial_story_date_filter_invalid", 400, [{ field, code: "serial_story_date_filter_invalid" }]);
+  }
+  return text;
 }
 
 function dateOrNull(value, code = "invalid_date") {
