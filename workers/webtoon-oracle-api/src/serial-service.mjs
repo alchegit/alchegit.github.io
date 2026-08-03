@@ -2612,7 +2612,7 @@ export function createStoryHeavenSerialService({
                 updated_at = systimestamp
           where id = :schedule_id
             and (last_cycle_completed_at is null or last_cycle_completed_at < :cycle_started_at)`,
-        { schedule_id: run.SCHEDULE_ID, cycle_started_at: run.CREATED_AT }
+        { schedule_id: run.SCHEDULE_ID, cycle_started_at: dateOrNull(run.CREATED_AT) }
       );
       return;
     }

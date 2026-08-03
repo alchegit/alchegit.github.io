@@ -78,6 +78,7 @@ assert.match(serialServiceSource, /queue_status = 'canceled'/u, "schedule deleti
 assert.match(serialServiceSource, /delete from storyheaven_serial_continuations continuation/u, "schedule deletion must cancel linked continuation requests");
 assert.match(serialServiceSource, /async function resolveQualityHold/u, "quality holds must have a dedicated resolution operation");
 assert.match(serialServiceSource, /serial_quality_hold_safety_failed/u, "unsafe drafts must not be operator-approved");
+assert.match(serialServiceSource, /cycle_started_at: dateOrNull\(run\.CREATED_AT\)/u, "localized Oracle timestamps must be normalized before cycle comparisons");
 assert.match(serverSource, /app\.delete\("\/api\/storyheaven\/operator\/serial-engine\/schedules\/:id"/u, "schedule deletion must have an admin API route");
 assert.match(serverSource, /resolve-quality-hold/u, "quality-hold resolution must have an admin API route");
 assert.match(serialOperatorSource, /latestRunStatus === "error"[\s\S]{0,200}latestRunStatus === "blocked"/u, "system errors must take precedence over stale quality reviews");
