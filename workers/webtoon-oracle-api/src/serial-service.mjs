@@ -1762,7 +1762,14 @@ export function createStoryHeavenSerialService({
       if (job.INPUT_HASH !== inputHash) throw failure("serial_job_revision_mismatch", 409);
       const type = job.JOB_TYPE;
       const payload = parseJson(job.INPUT_JSON, {});
-      const safeResult = normalizeStoryHeavenSerialWorkerResult(type, result?.result ?? result, { payload });
+      let safeResult;
+      try {
+        safeResult = normalizeStoryHeavenSerialWorkerResult(type, result?.result ?? result, { payload });
+      } catch (error) {
+        const validationCode = cleanCode(error?.message || "serial_worker_result_invalid");
+        if (validationCode.startsWith("serial_")) throw failure(validationCode, 422);
+        throw error;
+      }
       await connection.execute(
         `update storyheaven_serial_jobs
             set job_status = 'complete', output_json = :output_json, completed_at = systimestamp,

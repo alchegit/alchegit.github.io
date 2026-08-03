@@ -939,15 +939,17 @@ function normalizeSeriesArchitecture(value, plan, characters) {
     const seedVolume = integer(reveal.seedVolume, 0, plan.totalVolumes, null);
     const payoffVolume = integer(reveal.payoffVolume, 1, plan.totalVolumes, null);
     const seedEpisodeWithinVolume = seedVolume === 0
-      ? integer(reveal.seedEpisodeWithinVolume, 0, 0, 0)
+      ? 0
       : integer(reveal.seedEpisodeWithinVolume, 1, plan.episodesPerVolume, null);
     const payoffEpisodeWithinVolume = integer(reveal.payoffEpisodeWithinVolume, 1, plan.episodesPerVolume, null);
     const deepenVolumes = [...new Set(array(reveal.deepenVolumes)
       .map((entry) => integer(entry, 1, plan.totalVolumes, null))
-      .filter((entry) => entry !== null))].sort((a, b) => a - b);
+      .filter((entry) => entry !== null
+        && entry >= Math.max(1, seedVolume ?? 1)
+        && (payoffVolume === null || entry < payoffVolume)))].sort((a, b) => a - b);
     if (seedVolume === null || payoffVolume === null || seedEpisodeWithinVolume === null
       || payoffEpisodeWithinVolume === null || seedVolume > payoffVolume
-      || deepenVolumes.some((volumeNo) => volumeNo < Math.max(1, seedVolume) || volumeNo >= payoffVolume)) {
+    ) {
       throw new Error("serial_architecture_long_reveal_schedule_invalid");
     }
     const introduceEpisode = seedVolume === 0

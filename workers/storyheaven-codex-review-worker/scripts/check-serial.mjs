@@ -92,6 +92,8 @@ assert.match(biblePrompt, /volumePlan must contain exactly 10 sequential entries
 assert.match(biblePrompt, /Every characterArc must contain at least 3 milestones/u);
 assert.match(biblePrompt, /Every characterArc id and every milestone id must be globally unique/u);
 assert.match(biblePrompt, /cover every volume from 1 through 10/u);
+assert.match(biblePrompt, /strictly less than payoffVolume/u);
+assert.match(biblePrompt, /never include payoffVolume itself/u);
 assert.match(biblePrompt, /renewableConflictSources/u);
 assert.match(biblePrompt, /mustNotAnswerRevealKeys/u);
 

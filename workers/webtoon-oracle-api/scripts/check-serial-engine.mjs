@@ -48,6 +48,7 @@ assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry t
 assert.match(serialServiceSource, /syncSeriesArchitectureReveals/u, "long-form bible reveals must be stored in the reveal ledger");
 assert.match(serialServiceSource, /architecture_complete/u, "architecture-only backfills must complete without replacing existing arcs");
 assert.match(serialServiceSource, /preserveExistingBible/u, "architecture backfills must preserve existing bible fields");
+assert.match(serialServiceSource, /validationCode\.startsWith\("serial_"\)[\s\S]*failure\(validationCode, 422\)/u, "worker contract failures must return their actionable validation code");
 assert.match(serverSource, /architecture\/strengthen/u, "operators must be able to queue a non-destructive architecture backfill");
 assert.match(managedStoriesSource, /장편 설계 보강/u, "managed stories must expose the architecture strengthening action");
 assert.match(serialServiceSource, /readerOrientation/u, "draft payloads must carry reader-orientation constraints");
@@ -492,6 +493,13 @@ assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan.length, 10);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan[9].internalEpisodeEnd, 251);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.longReveals.at(-1).payoffEpisode, 251);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.renewableConflictCount, 5);
+
+const boundaryBibleInput = structuredClone(bible);
+boundaryBibleInput.narrativeBlueprint.seriesArchitecture.longReveals[0].seedEpisodeWithinVolume = 7;
+boundaryBibleInput.narrativeBlueprint.seriesArchitecture.longReveals[0].deepenVolumes = [1, 2, 3];
+const boundaryBible = normalizeStoryHeavenSerialWorkerResult("build_bible", boundaryBibleInput, { seriesPlan: testSeriesPlan });
+assert.equal(boundaryBible.narrativeBlueprint.seriesArchitecture.longReveals[0].seedEpisodeWithinVolume, 0);
+assert.deepEqual(boundaryBible.narrativeBlueprint.seriesArchitecture.longReveals[0].deepenVolumes, [1, 2]);
 
 const firstArcScope = buildStoryHeavenArcScope(1, testSeriesPlan, bible.narrativeBlueprint.seriesArchitecture);
 assert.deepEqual(storyHeavenSeriesPosition(251, testSeriesPlan), {
