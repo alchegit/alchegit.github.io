@@ -14,7 +14,7 @@ const completeArchitecture = {
   lateRevealCount: 3
 };
 const weakArchitecture = {
-  status: "needs_strengthening",
+  status: "legacy",
   schemaVersion: null,
   plannedVolumeCount: 0,
   plannedMainEpisodeCount: 0,
@@ -70,7 +70,7 @@ const stories = [
     activeRunCount: 0,
     latestRunStatus: "published",
     readyPublicationCount: 0,
-    architecture: completeArchitecture,
+    architecture: weakArchitecture,
     schedule: null,
     createdAt: "2026-07-24T03:00:00.000Z",
     updatedAt: "2026-07-29T03:00:00.000Z",
@@ -216,6 +216,8 @@ try {
       false,
       `${viewport.name} operator can continue a two-episode story without a schedule`
     );
+    assert.equal(await legacyStory.getByRole("button", { name: /장편 설계/u }).count(), 0, `${viewport.name} legacy story has no strengthening action`);
+    assert.equal(await legacyStory.locator('[data-metric="architecture"] strong').textContent(), "기존 설정 유지", `${viewport.name} legacy architecture stays unchanged`);
     assert.match(await legacyStory.locator(".schedule-note").textContent(), /작품 설정부터 자동 준비/u, `${viewport.name} explains automatic bootstrap`);
     assert.match(await page.locator(".managed-story").first().locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
     const firstManagement = page.locator(".managed-story").first().locator(".story-management");

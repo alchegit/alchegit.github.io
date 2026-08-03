@@ -32,8 +32,8 @@ assert.match(prompt, /distinct dramatic job/u);
 assert.match(prompt, /Series length policy is binding/u);
 assert.match(prompt, /first generated installment is always a prologue/u);
 assert.match(prompt, /prologue is a retention gate/u);
-assert.match(prompt, /numeric seriesPlan is not a long-form plan by itself/u);
-assert.match(prompt, /private writer bible/u);
+assert.match(prompt, /legacy story created without the new private seriesArchitecture/u);
+assert.doesNotMatch(prompt, /Every newly generated story must build a complete seriesArchitecture/u);
 assert.match(prompt, /pace, suspense, curiosity, surprise, emotion, romance, action, description, humor, and novelty/u);
 assert.match(prompt, /not permission to flatten every scene to one intensity/u);
 assert.match(prompt, /payload\.schedule\.policy\.creativeControls or payload\.creativeControls/u);
@@ -85,6 +85,9 @@ assert.match(conceptPrompt, /add only one restrained differentiator/u);
 assert.match(conceptPrompt, /not merely advertise a quirky rule/u);
 
 const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible" });
+assert.match(biblePrompt, /numeric seriesPlan is not a long-form plan by itself/u);
+assert.match(biblePrompt, /Every newly generated story must build a complete seriesArchitecture before its prologue is planned/u);
+assert.match(biblePrompt, /private writer bible/u);
 assert.match(biblePrompt, /narrativeBlueprint\.noveltyPolicy/u);
 assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
 assert.match(biblePrompt, /참신성 목표와 새 요소 추가 제한/u);
@@ -97,28 +100,35 @@ assert.match(biblePrompt, /never include payoffVolume itself/u);
 assert.match(biblePrompt, /renewableConflictSources/u);
 assert.match(biblePrompt, /mustNotAnswerRevealKeys/u);
 
-const preservedBiblePrompt = buildSerialPrompt({
-  ...job,
-  type: "build_bible",
-  payload: {
-    preserveExistingWork: true,
-    existingBible: {
-      characters: [{ id: "hero-stable" }, { id: "rival-stable" }, { id: "mentor-stable" }]
-    }
-  }
-});
-assert.match(preservedBiblePrompt, /The only permitted characterArcs\.characterId values are these exact existing stable ids/u);
-assert.match(preservedBiblePrompt, /\["hero-stable","rival-stable","mentor-stable"\]/u);
-assert.match(preservedBiblePrompt, /Create exactly one characterArc for each listed id/u);
-assert.match(preservedBiblePrompt, /Create 3 characterArcs/u);
-
 const scopedArcPrompt = buildSerialPrompt({
   ...job,
   type: "build_arc",
-  payload: { arcScope: { firstEpisodeNo: 1, lastEpisodeNo: 26, volumeNo: 1 } }
+  payload: {
+    arcScope: { firstEpisodeNo: 1, lastEpisodeNo: 26, volumeNo: 1 },
+    bible: {
+      narrativeBlueprint: {
+        seriesArchitecture: { schemaVersion: "2026-08-03-v1", volumePlan: [{ volumeNo: 1 }] }
+      }
+    }
+  }
 });
 assert.match(scopedArcPrompt, /exactly payload\.arcScope\.firstEpisodeNo through payload\.arcScope\.lastEpisodeNo/u);
 assert.match(scopedArcPrompt, /do not redefine or reschedule/u);
+
+const legacyArcPrompt = buildSerialPrompt({
+  ...job,
+  type: "build_arc",
+  payload: {
+    arcScope: { firstEpisodeNo: 27, lastEpisodeNo: 50, volumeNo: 2 },
+    bible: { narrativeBlueprint: {} },
+    priorArcs: [{ arcNo: 1 }],
+    canon: [{ canonKey: "legacy-rule" }]
+  }
+});
+assert.match(legacyArcPrompt, /legacy story created without the new private seriesArchitecture/u);
+assert.match(legacyArcPrompt, /do not retrofit, infer, or generate a replacement full-series architecture/u);
+assert.match(legacyArcPrompt, /may be empty when no stable architecture keys exist/u);
+assert.doesNotMatch(legacyArcPrompt, /seriesArchitecture as binding: advance/u);
 
 const parsed = parseSerialOutput({
   jobId: job.id,

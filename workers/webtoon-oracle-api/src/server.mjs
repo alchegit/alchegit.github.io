@@ -1015,21 +1015,6 @@ app.post("/api/storyheaven/operator/serial-engine/stories/:id/plan", requireUser
   }
 });
 
-app.post("/api/storyheaven/operator/serial-engine/stories/:id/architecture/strengthen", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
-  try {
-    if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
-    await ensureUserProfile(req.user, req);
-    const run = await storyHeavenSerialService.strengthenStoryArchitecture(
-      req.params.id,
-      req.user.id,
-      req.body || {}
-    );
-    res.status(202).json({ run });
-  } catch (error) {
-    next(error);
-  }
-});
-
 app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);

@@ -595,16 +595,10 @@ function normalizeBible(source, options = {}) {
   const voice = object(source.voiceProfile);
   const narrative = object(source.narrativeBlueprint);
   const expectedPlan = expectedSeriesPlan(options);
-  const preservedCharacters = array(options?.payload?.existingBible?.characters).map((item, index) => ({
-    id: text(item?.id, 50) || `character-${index + 1}`
-  }));
-  const architectureCharacters = options?.payload?.preserveExistingWork === true && preservedCharacters.length >= 2
-    ? preservedCharacters
-    : characters;
   const seriesArchitecture = normalizeSeriesArchitecture(
     narrative.seriesArchitecture,
     expectedPlan,
-    architectureCharacters
+    characters
   );
   return {
     worldRules,
@@ -1082,9 +1076,11 @@ function normalizeSeriesArchitecture(value, plan, characters) {
 
 function normalizeArchitectureReferences(value, arcScope, architecture) {
   const source = object(value);
-  if (!arcScope.volumeNo) {
+  const hasArchitecture = Boolean(architecture.schemaVersion)
+    && array(architecture.volumePlan).length > 0;
+  if (!arcScope.volumeNo || !hasArchitecture) {
     return {
-      volumeNo: integer(source.volumeNo, 1, 30, null),
+      volumeNo: Number(arcScope.volumeNo) || integer(source.volumeNo, 1, 30, null),
       conflictSourceKeys: stringList(source.conflictSourceKeys, { max: 6, itemMax: 80 }),
       characterMilestoneIds: stringList(source.characterMilestoneIds, { max: 12, itemMax: 80 }),
       longRevealKeys: stringList(source.longRevealKeys, { max: 12, itemMax: 80 })

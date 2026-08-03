@@ -46,12 +46,13 @@ assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidde
 assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");
 assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry the first-scene term budget");
 assert.match(serialServiceSource, /syncSeriesArchitectureReveals/u, "long-form bible reveals must be stored in the reveal ledger");
-assert.match(serialServiceSource, /architecture_complete/u, "architecture-only backfills must complete without replacing existing arcs");
-assert.match(serialServiceSource, /preserveExistingBible/u, "architecture backfills must preserve existing bible fields");
-assert.match(serialServiceSource, /maxAttempts: ARCHITECTURE_MAX_ATTEMPTS/u, "manual architecture strengthening must have a durable retry budget");
 assert.match(serialServiceSource, /validationCode\.startsWith\("serial_"\)[\s\S]*failure\(validationCode, 422\)/u, "worker contract failures must return their actionable validation code");
-assert.match(serverSource, /architecture\/strengthen/u, "operators must be able to queue a non-destructive architecture backfill");
-assert.match(managedStoriesSource, /장편 설계 보강/u, "managed stories must expose the architecture strengthening action");
+assert.doesNotMatch(serialServiceSource, /strengthenStoryArchitecture/u, "existing stories must not expose architecture backfills");
+assert.doesNotMatch(serialServiceSource, /throw failure\("serial_architecture_required"/u, "legacy stories must not be blocked from continuing");
+assert.doesNotMatch(serverSource, /architecture\/strengthen/u, "existing-story architecture backfill API must stay removed");
+assert.doesNotMatch(managedStoriesSource, /requestArchitectureStrengthening/u, "managed stories must not offer existing-work strengthening");
+assert.match(managedStoriesSource, /기존 설정 유지/u, "legacy stories must be described as unchanged");
+assert.match(serialServiceSource, /status: architectureComplete \? "complete" : "legacy"/u, "managed story data must identify legacy architecture without demanding a backfill");
 assert.match(serialServiceSource, /readerOrientation/u, "draft payloads must carry reader-orientation constraints");
 assert.match(serialServiceSource, /serial_run\.queue_group_id = :queue_group_id or serial_run\.id = :queue_group_id/u, "history operations must support legacy run ids without queue groups");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
@@ -568,6 +569,22 @@ const arc = normalizeStoryHeavenSerialWorkerResult("build_arc", {
 });
 assert.equal(arc.episodePlan.length, 26);
 assert.equal(arc.architectureReferences.volumeNo, 1);
+
+const legacyArcInput = structuredClone(arc);
+legacyArcInput.architectureReferences = {
+  volumeNo: 1,
+  conflictSourceKeys: [],
+  characterMilestoneIds: [],
+  longRevealKeys: []
+};
+const legacyArc = normalizeStoryHeavenSerialWorkerResult("build_arc", legacyArcInput, {
+  payload: {
+    arcScope: firstArcScope,
+    bible: { narrativeBlueprint: {} }
+  }
+});
+assert.equal(legacyArc.architectureReferences.volumeNo, 1);
+assert.deepEqual(legacyArc.architectureReferences.conflictSourceKeys, []);
 
 const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
   episodeNo: 1,
