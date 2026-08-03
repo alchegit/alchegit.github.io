@@ -52,6 +52,7 @@ export function createStoryHeavenSerialService({
     updateStoryControl,
     updateStoryControls,
     saveSchedule,
+    archiveSchedule,
     runSchedule,
     planStory,
     queueEpisode,
@@ -59,6 +60,7 @@ export function createStoryHeavenSerialService({
     rewriteEpisode,
     getStoryState,
     getRun,
+    resolveQualityHold,
     claimJob,
     completeJob,
     failJob,
@@ -876,6 +878,95 @@ export function createStoryHeavenSerialService({
     });
   }
 
+  async function archiveSchedule(scheduleIdValue, userId) {
+    const scheduleId = requireId(scheduleIdValue, "schedule_id");
+    return withTransaction(async (connection) => {
+      const schedule = await selectOne(connection,
+        `select id, schedule_status
+           from storyheaven_serial_schedules
+          where id = :schedule_id for update`,
+        { schedule_id: scheduleId });
+      if (!schedule) throw failure("serial_schedule_not_found", 404);
+
+      const jobs = await connection.execute(
+        `update storyheaven_serial_jobs job
+            set job_status = 'canceled',
+                lease_id = null,
+                lease_expires_at = null,
+                worker_id = null,
+                error_code = 'operator_schedule_deleted',
+                completed_at = systimestamp,
+                updated_at = systimestamp
+          where job.job_status in ('queued', 'running', 'retry_wait')
+            and exists (
+              select 1
+                from storyheaven_serial_runs serial_run
+               where serial_run.id = job.run_id
+                 and serial_run.schedule_id = :schedule_id
+            )`,
+        { schedule_id: scheduleId }
+      );
+      const publications = await connection.execute(
+        `update storyheaven_publication_queue publication
+            set queue_status = 'canceled',
+                failure_code = 'operator_schedule_deleted',
+                updated_at = systimestamp
+          where publication.queue_status in ('ready', 'publishing')
+            and exists (
+              select 1
+                from storyheaven_serial_runs serial_run
+               where serial_run.id = publication.run_id
+                 and serial_run.schedule_id = :schedule_id
+            )`,
+        { schedule_id: scheduleId }
+      );
+      const continuations = await connection.execute(
+        `delete from storyheaven_serial_continuations continuation
+          where continuation.request_status in ('queued', 'requesting')
+            and exists (
+              select 1
+                from storyheaven_serial_runs serial_run
+               where serial_run.id = continuation.run_id
+                 and serial_run.schedule_id = :schedule_id
+            )`,
+        { schedule_id: scheduleId }
+      );
+      const runs = await connection.execute(
+        `update storyheaven_serial_runs
+            set run_status = 'blocked',
+                current_stage = 'schedule_deleted',
+                failure_code = 'operator_schedule_deleted',
+                queue_canceled_at = coalesce(queue_canceled_at, systimestamp),
+                queue_canceled_by = coalesce(queue_canceled_by, :queue_canceled_by),
+                completed_at = coalesce(completed_at, systimestamp),
+                updated_at = systimestamp
+          where schedule_id = :schedule_id
+            and run_status <> 'published'
+            and queue_canceled_at is null`,
+        { schedule_id: scheduleId, queue_canceled_by: userId }
+      );
+      await connection.execute(
+        `update storyheaven_serial_schedules
+            set schedule_status = 'archived',
+                next_run_at = null,
+                updated_at = systimestamp
+          where id = :schedule_id`,
+        { schedule_id: scheduleId }
+      );
+      return {
+        deleted: true,
+        scheduleId,
+        alreadyDeleted: schedule.SCHEDULE_STATUS === "archived",
+        canceled: {
+          jobs: Number(jobs.rowsAffected || 0),
+          runs: Number(runs.rowsAffected || 0),
+          publications: Number(publications.rowsAffected || 0),
+          continuations: Number(continuations.rowsAffected || 0)
+        }
+      };
+    });
+  }
+
   async function runSchedule(scheduleIdValue, userId) {
     const scheduleId = requireId(scheduleIdValue, "schedule_id");
     return withTransaction((connection) => queueConceptRun(connection, scheduleId, userId, { manual: true }));
@@ -1333,6 +1424,116 @@ export function createStoryHeavenSerialService({
         reviews: reviews.rows.map((row) => ({ id: row.ID, draftId: row.DRAFT_ID, version: Number(row.REVIEW_VERSION), decision: row.DECISION, scores: parseJson(row.SCORES_JSON, {}), scoreEvidence: parseJson(row.SCORE_EVIDENCE_JSON, {}), audienceLenses: parseJson(row.AUDIENCE_LENSES_JSON, []), safetyPassed: row.SAFETY_PASSED === "Y", summary: row.SUMMARY_TEXT, issues: parseJson(row.ISSUES_JSON, []), rewriteScenes: parseJson(row.REWRITE_SCENES_JSON, []), createdAt: isoTime(row.CREATED_AT) })),
         metrics: metrics.rows.map((row) => ({ draftId: row.DRAFT_ID, name: row.METRIC_NAME, score: Number(row.METRIC_SCORE), threshold: Number(row.THRESHOLD_SCORE), passed: row.PASSED === "Y", evidence: parseJson(row.EVIDENCE_JSON, []) }))
       };
+    });
+  }
+
+  async function resolveQualityHold(runIdValue, userId, input = {}) {
+    const runId = requireId(runIdValue, "run_id");
+    const action = String(input.action || "").trim();
+    if (!new Set(["rewrite", "approve"]).has(action)) {
+      throw failure("serial_quality_hold_action_invalid", 400);
+    }
+    return withTransaction(async (connection) => {
+      const run = await selectOne(connection,
+        `select * from storyheaven_serial_runs where id = :run_id for update`,
+        { run_id: runId });
+      if (!run) throw failure("serial_run_not_found", 404);
+      if (run.RUN_STATUS !== "blocked" || run.CURRENT_STAGE !== "editorial_blocked" || run.QUEUE_CANCELED_AT) {
+        throw failure("serial_quality_hold_not_active", 409);
+      }
+      const active = await selectOne(connection,
+        `select count(*) as active_count
+           from storyheaven_serial_jobs
+          where run_id = :run_id
+            and job_status in ('queued', 'running', 'retry_wait')`,
+        { run_id: runId });
+      if (Number(active?.ACTIVE_COUNT || 0) > 0) throw failure("serial_quality_hold_work_active", 409);
+
+      const draft = await selectOne(connection,
+        `select * from storyheaven_serial_drafts
+          where run_id = :run_id
+          order by version_no desc fetch first 1 row only`,
+        { run_id: runId });
+      const review = await selectOne(connection,
+        `select * from storyheaven_editorial_reviews
+          where run_id = :run_id
+          order by review_version desc fetch first 1 row only`,
+        { run_id: runId });
+      if (!draft || !review) throw failure("serial_quality_hold_evidence_missing", 409);
+
+      const quality = parseJson(run.QUALITY_JSON, {});
+      const operatorResolution = {
+        action,
+        userId,
+        requestedAt: new Date().toISOString(),
+        previousDecision: review.DECISION,
+        previousRewriteCount: Number(run.REWRITE_COUNT || 0)
+      };
+      await connection.execute(
+        `update storyheaven_serial_runs
+            set quality_json = :quality_json,
+                updated_at = systimestamp
+          where id = :run_id`,
+        {
+          run_id: runId,
+          quality_json: clobJson({ ...quality, operatorResolution })
+        }
+      );
+
+      if (action === "approve") {
+        if (review.SAFETY_PASSED !== "Y") throw failure("serial_quality_hold_safety_failed", 409);
+        await approveDraft(connection, run, draft);
+      } else {
+        const editor = {
+          scores: parseJson(review.SCORES_JSON, {}),
+          safetyPassed: review.SAFETY_PASSED === "Y",
+          summary: review.SUMMARY_TEXT,
+          issues: parseJson(review.ISSUES_JSON, []),
+          rewriteScenes: parseJson(review.REWRITE_SCENES_JSON, []),
+          scoreEvidence: parseJson(review.SCORE_EVIDENCE_JSON, {}),
+          audienceLenses: parseJson(review.AUDIENCE_LENSES_JSON, [])
+        };
+        const qa = parseJson(draft.DETERMINISTIC_JSON, {});
+        const rewriteNumber = Number(run.REWRITE_COUNT || 0) + 1;
+        await connection.execute(
+          `update storyheaven_serial_runs
+              set run_status = 'rewrite', current_stage = 'rewrite_draft',
+                  rewrite_count = :rewrite_count, failure_code = null,
+                  completed_at = null, updated_at = systimestamp
+            where id = :run_id`,
+          { run_id: runId, rewrite_count: rewriteNumber }
+        );
+        const context = await loadSerialContext(connection, run.STORY_ID);
+        await queueJob(connection, {
+          runId,
+          storyId: run.STORY_ID,
+          type: "rewrite_draft",
+          priority: 75,
+          input: {
+            story: context.story,
+            bible: context.bible,
+            arc: context.arc,
+            canon: context.canon,
+            reveals: context.reveals,
+            episodeCard: context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO)),
+            draft: {
+              id: draft.ID,
+              title: draft.TITLE,
+              summary: draft.PUBLIC_SUMMARY,
+              body: draft.BODY_TEXT,
+              sceneRanges: parseJson(draft.SCENE_RANGES_JSON, [])
+            },
+            deterministicQa: qa,
+            editor,
+            rewriteNumber,
+            instruction: "운영자가 검수 보류 사유를 확인하고 추가 보완을 요청했다. 지적된 장면과 문장만 우선 고치고, 이미 잘 작동하는 사건 구조와 문체는 유지한다."
+          }
+        });
+      }
+      const updated = await selectOne(connection,
+        `select * from storyheaven_serial_runs where id = :run_id`,
+        { run_id: runId });
+      return { action, run: mapRun(updated) };
     });
   }
 
@@ -3174,25 +3375,53 @@ async function listStalledFirstEpisodeStories(connection) {
               story.story_status, story.created_at, story.updated_at,
               latest.id as latest_run_id,
               latest.queue_group_id as latest_queue_group_id,
+              latest.schedule_id,
               latest.run_status as latest_run_status,
               latest.current_stage as latest_stage,
+              latest.rewrite_count,
               latest.failure_code as latest_failure_code,
               latest.completed_at as latest_completed_at,
-              latest.created_at as latest_run_created_at
+              latest.created_at as latest_run_created_at,
+              schedule.schedule_name, schedule.schedule_status, schedule.publication_mode,
+              control.visibility,
+              draft.id as latest_draft_id, draft.title as latest_draft_title,
+              dbms_lob.getlength(draft.body_text) as latest_draft_characters,
+              review.decision as latest_review_decision,
+              review.safety_passed as latest_review_safety_passed,
+              review.summary_text as latest_review_summary,
+              review.scores_json as latest_review_scores_json,
+              review.issues_json as latest_review_issues_json,
+              publication.queue_status as publication_status,
+              publication.release_at as publication_release_at
          from storyheaven_stories story
          left join (
            select * from (
              select serial_run.id, serial_run.queue_group_id, serial_run.story_id,
-                    serial_run.run_status, serial_run.current_stage, serial_run.failure_code,
-                    serial_run.completed_at, serial_run.created_at,
+                    serial_run.schedule_id, serial_run.run_status, serial_run.current_stage,
+                    serial_run.rewrite_count, serial_run.failure_code,
+                    serial_run.queue_canceled_at, serial_run.completed_at, serial_run.created_at,
                     row_number() over (partition by serial_run.story_id order by serial_run.created_at desc) as rank_no
                from storyheaven_serial_runs serial_run
               where serial_run.story_id is not null
            ) where rank_no = 1
          ) latest on latest.story_id = story.id
+         left join storyheaven_serial_schedules schedule on schedule.id = latest.schedule_id
+         left join storyheaven_serial_story_controls control on control.story_id = story.id
+         left join storyheaven_serial_drafts draft on draft.id = (
+           select max(serial_draft.id) keep (dense_rank last order by serial_draft.version_no)
+             from storyheaven_serial_drafts serial_draft
+            where serial_draft.run_id = latest.id
+         )
+         left join storyheaven_editorial_reviews review on review.id = (
+           select max(editorial_review.id) keep (dense_rank last order by editorial_review.review_version)
+             from storyheaven_editorial_reviews editorial_review
+            where editorial_review.run_id = latest.id
+         )
+         left join storyheaven_publication_queue publication on publication.run_id = latest.id
         where story.author_user_id = :author_user_id
           and story.content_origin = 'admin_seed'
           and story.story_status <> 'archived'
+          and latest.queue_canceled_at is null
           and not exists (
             select 1 from storyheaven_episodes episode where episode.story_id = story.id
           )
@@ -3220,9 +3449,33 @@ function mapStalledFirstEpisodeStory(row) {
     status: row.STORY_STATUS,
     latestRunId: row.LATEST_RUN_ID || null,
     queueGroupId: row.LATEST_QUEUE_GROUP_ID || null,
+    schedule: row.SCHEDULE_ID ? {
+      id: row.SCHEDULE_ID,
+      name: row.SCHEDULE_NAME || "",
+      status: row.SCHEDULE_STATUS || "archived",
+      publicationMode: row.PUBLICATION_MODE || "test_private"
+    } : null,
+    visibility: row.VISIBILITY || null,
     latestRunStatus: row.LATEST_RUN_STATUS || null,
     latestStage: row.LATEST_STAGE || null,
+    rewriteCount: Number(row.REWRITE_COUNT || 0),
     latestFailureCode: row.LATEST_FAILURE_CODE || null,
+    draft: row.LATEST_DRAFT_ID ? {
+      id: row.LATEST_DRAFT_ID,
+      title: row.LATEST_DRAFT_TITLE || "",
+      characterCount: Number(row.LATEST_DRAFT_CHARACTERS || 0)
+    } : null,
+    review: row.LATEST_REVIEW_DECISION ? {
+      decision: row.LATEST_REVIEW_DECISION,
+      safetyPassed: row.LATEST_REVIEW_SAFETY_PASSED === "Y",
+      summary: row.LATEST_REVIEW_SUMMARY || "",
+      scores: parseJson(row.LATEST_REVIEW_SCORES_JSON, {}),
+      issues: parseJson(row.LATEST_REVIEW_ISSUES_JSON, [])
+    } : null,
+    publication: row.PUBLICATION_STATUS ? {
+      status: row.PUBLICATION_STATUS,
+      releaseAt: isoTime(row.PUBLICATION_RELEASE_AT)
+    } : null,
     latestCompletedAt: isoTime(row.LATEST_COMPLETED_AT),
     latestRunCreatedAt: isoTime(row.LATEST_RUN_CREATED_AT),
     createdAt: isoTime(row.CREATED_AT),

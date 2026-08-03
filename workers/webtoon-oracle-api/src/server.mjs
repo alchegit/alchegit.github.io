@@ -886,6 +886,15 @@ app.patch("/api/storyheaven/operator/serial-engine/schedules/:id", requireUser, 
   }
 });
 
+app.delete("/api/storyheaven/operator/serial-engine/schedules/:id", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    res.json(await storyHeavenSerialService.archiveSchedule(req.params.id, req.user.id));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/storyheaven/operator/serial-engine/schedules/:id/run", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
@@ -1041,6 +1050,18 @@ app.post("/api/storyheaven/operator/serial-engine/queue/:id/hide", requireUser, 
 app.get("/api/storyheaven/operator/serial-engine/runs/:id", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
   try {
     res.json(await storyHeavenSerialService.getRun(req.params.id));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/api/storyheaven/operator/serial-engine/runs/:id/resolve-quality-hold", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (req.body?.action === "rewrite" && !config.storyHeavenSerialEngineEnabled) {
+      throw httpError("serial_engine_disabled", 409);
+    }
+    await ensureUserProfile(req.user, req);
+    res.status(202).json(await storyHeavenSerialService.resolveQualityHold(req.params.id, req.user.id, req.body || {}));
   } catch (error) {
     next(error);
   }

@@ -414,6 +414,7 @@
     actions.append(power, switchMode);
     actions.append(actionButton("설정 불러오기", "secondary", () => loadScheduleIntoForm(schedule)));
     if (schedule.lastRunId) actions.append(actionButton("최근 기록", "", () => loadRun(schedule.lastRunId)));
+    actions.append(actionButton(schedule.status === "active" ? "중지 후 삭제" : "삭제", "danger", () => deleteSchedule(schedule)));
     row.append(copy, actions);
     const activeWork = queueByScheduleId.get(schedule.id);
     if (activeWork) row.append(renderScheduleProgress(activeWork));
@@ -510,6 +511,24 @@
       });
       await refreshSchedules();
       StoryHeavenCommon.toast(changes.status === "paused" ? "자동 연재를 멈췄습니다." : "연재 설정을 반영했습니다.");
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
+  async function deleteSchedule(schedule) {
+    const warning = `‘${scheduleLabel(schedule)}’ 자동 연재 설정을 목록에서 삭제할까요?\n\n현재 진행·대기 중인 제작과 공개 예약은 취소됩니다. 이미 만든 작품과 작업 기록은 지워지지 않습니다.`;
+    if (!window.confirm(warning)) return;
+    try {
+      const result = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/schedules/${encodeURIComponent(schedule.id)}`, {
+        method: "DELETE"
+      });
+      await refreshSchedules();
+      const canceled = result.canceled || {};
+      const count = Number(canceled.jobs || 0) + Number(canceled.publications || 0) + Number(canceled.continuations || 0);
+      StoryHeavenCommon.toast(count
+        ? `자동 연재 설정을 삭제하고 연결된 대기 작업 ${count}건을 취소했습니다.`
+        : "자동 연재 설정을 목록에서 삭제했습니다. 기존 작품과 기록은 보존됩니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
@@ -764,7 +783,7 @@
       const detail = document.createElement("p");
       title.textContent = workDisplayTitle(item);
       detail.textContent = item.attentionType === "quality_hold"
-        ? `원고 생성은 끝났지만 자동 편집 검수에서 바로 공개하기 어렵다고 판단했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
+        ? `원고 작성은 완료됐으며 일부 품질 기준이 남아 회차 등록만 보류했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
         : `${stageLabel(item.stage)}에서 멈춤 · ${formatDate(item.completedAt || item.requestedAt)} · ${failureLabel(item.failureCode)}`;
       copy.append(title, detail);
       const actions = document.createElement("div");
@@ -782,9 +801,11 @@
 
   function renderStalledFirstEpisodes(items) {
     selectors.stalledList.replaceChildren();
-    selectors.stalledCaption.textContent = `${items.length}건 · 재개 요청 순서대로 제작`;
+    const qualityCount = items.filter((story) => stalledPrologueState(story) === "quality").length;
+    const errorCount = items.filter((story) => stalledPrologueState(story) === "error").length;
+    selectors.stalledCaption.textContent = `${items.length}건 · 보완 ${qualityCount} · 오류 ${errorCount}`;
     if (!items.length) {
-      const empty = message("프롤로그 제작 전 멈춘 작품은 없습니다.");
+      const empty = message("프롤로그 등록 전에 확인할 작품은 없습니다.");
       empty.classList.add("is-success");
       selectors.stalledList.append(empty);
       return;
@@ -793,23 +814,122 @@
       const row = document.createElement("article");
       row.className = "stalled-row";
       const copy = document.createElement("div");
+      copy.className = "stalled-copy";
+      const heading = document.createElement("div");
+      heading.className = "stalled-heading";
       const title = document.createElement("strong");
       title.textContent = story.title || "제목 없는 작품";
+      const state = stalledPrologueState(story);
+      const stateBadge = document.createElement("span");
+      stateBadge.className = `stalled-state is-${state}`;
+      stateBadge.textContent = stalledPrologueStateLabel(state);
+      heading.append(title, stateBadge);
       const detail = document.createElement("p");
-      const status = story.latestRunStatus ? historyStatusLabel(story.latestRunStatus) : "제작 기록 없음";
-      const stage = story.latestStage ? ` · ${stageLabel(story.latestStage)}` : "";
       const time = story.latestCompletedAt || story.latestRunCreatedAt || story.updatedAt || story.createdAt;
-      detail.textContent = `${status}${stage} · 프롤로그 등록 없음 · ${formatDate(time)}`;
-      const logline = document.createElement("small");
-      logline.textContent = story.logline || "한 줄 소개가 비어 있습니다.";
-      copy.append(title, detail, logline);
+      detail.textContent = stalledPrologueDetail(story, state, time);
+      const reason = document.createElement("small");
+      reason.className = "stalled-reason";
+      reason.textContent = stalledPrologueReason(story, state);
+      const resolution = document.createElement("small");
+      resolution.className = "stalled-resolution";
+      resolution.textContent = stalledPrologueResolution(story, state);
+      copy.append(heading, detail, reason, resolution);
       const actions = document.createElement("div");
       actions.className = "stalled-actions";
-      actions.append(actionButton("프롤로그 제작 재개", "queue-retry", () => resumeFirstEpisodeStory(story)));
-      if (story.latestRunId) actions.append(actionButton("최근 로그 보기", "secondary", () => loadRun(story.latestRunId)));
+      if (story.latestRunId) actions.append(actionButton(state === "quality" ? "원고·검수 사유 보기" : "원고·로그 보기", "secondary", () => loadRun(story.latestRunId)));
+      if (state === "quality") {
+        actions.append(actionButton("지적 부분 다시 보완", "queue-retry", () => resolveQualityHold(story, "rewrite")));
+        if (story.review?.safetyPassed !== false) {
+          actions.append(actionButton("현재 원고 승인", "warning", () => resolveQualityHold(story, "approve")));
+        }
+      } else if (state === "error" && story.queueGroupId) {
+        actions.append(actionButton("오류 단계 재개", "queue-retry", () => resumeQueue({ ...story, id: story.queueGroupId })));
+      } else if (["draft", "missing"].includes(state)) {
+        actions.append(actionButton(state === "draft" ? "프롤로그 제작 다시 요청" : "프롤로그 제작 시작", "queue-retry", () => resumeFirstEpisodeStory(story)));
+      }
+      if (story.schedule?.id) actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(story.schedule.id)));
       actions.append(actionButton("목록에서 숨기기", "secondary", () => hideIncompleteStory(story)));
       row.append(copy, actions);
       selectors.stalledList.append(row);
+    }
+  }
+
+  function stalledPrologueState(story) {
+    if (story.latestRunStatus === "error") return "error";
+    if (story.latestRunStatus === "ready" || story.publication?.status === "ready") return "ready";
+    if (story.latestRunStatus === "blocked" && (story.latestStage === "editorial_blocked" || story.review?.decision === "blocked")) return "quality";
+    return story.draft ? "draft" : "missing";
+  }
+
+  function stalledPrologueStateLabel(state) {
+    return ({
+      quality: "원고 완성 · 보완 필요",
+      error: "원고 완성 · 시스템 오류",
+      ready: "검수 통과 · 공개 대기",
+      draft: "원고 완성 · 등록 대기",
+      missing: "원고 미작성"
+    })[state];
+  }
+
+  function stalledPrologueDetail(story, state, time) {
+    const characters = Number(story.draft?.characterCount || 0);
+    const manuscript = characters ? `원고 ${characters.toLocaleString("ko-KR")}자 작성 완료` : "프롤로그 회차 미등록";
+    if (state === "quality") return `${manuscript} · 자동 보완 ${Number(story.rewriteCount || 0)}회 · ${formatDate(time)}`;
+    if (state === "error") return `${manuscript} · ${failureLabel(story.latestFailureCode)} · ${formatDate(time)}`;
+    if (state === "ready") return `${manuscript} · 자동 검수 통과 · ${formatDate(time)}`;
+    if (state === "draft") return `${manuscript} · 회차 등록 전 확인 필요 · ${formatDate(time)}`;
+    return `프롤로그 원고가 아직 만들어지지 않았습니다. · ${formatDate(time)}`;
+  }
+
+  function stalledPrologueReason(story, state) {
+    if (state === "quality") return story.review?.summary || "자동 편집 검수의 공개 기준을 충족하지 못해 원고를 보존한 채 회차 등록을 멈췄습니다.";
+    if (state === "error") return `원고는 보존돼 있습니다. ${failureLabel(story.latestFailureCode)} 때문에 검수 또는 등록 단계가 끝나지 않았습니다.`;
+    if (state === "ready") return readyPublicationReason(story);
+    if (state === "draft") return "원고는 있지만 검수 통과 또는 회차 등록 기록이 없어 운영자 확인이 필요합니다.";
+    return story.logline || "설정과 제목까지만 만들어졌으며 프롤로그 원고는 아직 없습니다.";
+  }
+
+  function stalledPrologueResolution(story, state) {
+    if (state === "quality") {
+      const issue = (story.review?.issues || []).find((item) => ["critical", "warning"].includes(item.severity)) || story.review?.issues?.[0];
+      return `해결 방법 · ${issue?.suggestion || "검수 결과를 열어 지적 부분만 다시 보완하거나, 안전성 문제가 없다면 현재 원고를 운영자 승인합니다."}`;
+    }
+    if (state === "error") return "해결 방법 · 오류 단계 재개를 누르면 완성 원고를 유지하고 멈춘 검수부터 다시 시작합니다.";
+    if (state === "ready") return "해결 방법 · 연결된 자동연재 설정의 상태와 공개 방식을 확인하세요. 조건이 충족되면 다음 자동 처리에서 회차로 등록됩니다.";
+    if (state === "draft") return "해결 방법 · 원고·로그에서 마지막 상태를 확인한 뒤 필요하면 프롤로그 제작을 다시 요청하세요.";
+    return "해결 방법 · 프롤로그 제작 시작을 누르면 기존 설정집을 이용해 같은 대기열에 추가합니다.";
+  }
+
+  function readyPublicationReason(story) {
+    if (latestSerialSnapshot.emergencyPaused) return "전체 자동 연재가 중지되어 공개 처리가 멈춰 있습니다.";
+    if (story.schedule?.status === "paused") return "연결된 자동연재 설정이 멈춤 상태라 공개 처리를 기다리고 있습니다.";
+    if (story.schedule?.status === "archived") return "연결된 자동연재 설정이 삭제되어 자동 공개되지 않습니다.";
+    if (story.schedule?.publicationMode === "test_private") return "테스트 비공개 설정이라 검수 통과 원고를 공개하지 않고 보관 중입니다.";
+    if (story.visibility === "private") return "작품이 비공개로 지정되어 자동 공개되지 않습니다.";
+    if (story.publication?.releaseAt && Date.parse(story.publication.releaseAt) > Date.now()) return `${formatDate(story.publication.releaseAt)} 공개 예약입니다.`;
+    return "검수는 통과했으며 공개 처리 순서를 기다리고 있습니다.";
+  }
+
+  async function resolveQualityHold(story, action) {
+    if (!story?.latestRunId) return;
+    if (action === "approve") {
+      const autoPublic = story.schedule?.publicationMode === "auto_public";
+      const warning = autoPublic
+        ? "현재 원고를 운영자 승인할까요? 연결 설정이 자동 공개 상태이면 프롤로그가 공개 처리 대기열로 넘어갑니다."
+        : "현재 원고를 운영자 승인할까요? 테스트 비공개 설정이면 원고는 공개되지 않고 승인 상태로 보관됩니다.";
+      if (!window.confirm(warning)) return;
+    }
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/runs/${encodeURIComponent(story.latestRunId)}/resolve-quality-hold`, {
+        method: "POST",
+        body: { action }
+      });
+      await refreshSchedules();
+      StoryHeavenCommon.toast(action === "rewrite"
+        ? "검수 지적 부분만 다시 보완하도록 대기열에 넣었습니다."
+        : "현재 원고를 승인했습니다. 연결 설정의 공개 방식에 따라 처리됩니다.");
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
   }
 
@@ -837,7 +957,7 @@
         body: {
           visibility: "archived",
           continuationMode: "ended",
-          operatorNote: "프롤로그 미완성 목록에서 운영자 숨김"
+          operatorNote: "프롤로그 등록 전 확인 목록에서 운영자 숨김"
         }
       });
       await refreshSchedules();
@@ -1026,7 +1146,7 @@
       running: "진행 중",
       waiting: "대기",
       error: "시스템 중단",
-      blocked: "검수 후 공개 보류",
+      blocked: "원고 완성 · 품질 보완 필요",
       canceled: "취소",
       stopped: "종료",
       hidden: "숨김",
@@ -1097,6 +1217,9 @@
       codex_output_schema_invalid: "AI 작성 결과 형식 오류",
       codex_rate_limited: "AI 작성 사용량 제한 대기",
       serial_job_attempts_exhausted: "재시도 횟수 초과",
+      quality_threshold_not_met: "원고는 완성됐지만 일부 품질 기준이 남았습니다",
+      review_api_500_server_error: "자동 검수 서버 오류",
+      operator_schedule_deleted: "자동연재 설정 삭제",
       operator_hidden: "운영자 로그 숨김"
     })[String(code || "")] || "작업 오류";
   }
@@ -1108,10 +1231,10 @@
     const title = document.createElement("strong");
     const detail = document.createElement("small");
     title.textContent = failedWork.attentionType === "quality_hold"
-      ? "설정은 가동 중 · 최근 원고는 검수 후 공개 보류"
+      ? "설정은 가동 중 · 최근 원고는 완성 후 품질 보완 필요"
       : "설정은 가동 중 · 최근 제작 시도는 중단";
     detail.textContent = failedWork.attentionType === "quality_hold"
-      ? `원고는 생성됐지만 바로 공개하기 어렵다는 자동 검수 결과입니다. · ${formatDate(failedWork.completedAt)}`
+      ? `원고는 보존돼 있으며 검수 사유를 확인한 뒤 추가 보완하거나 운영자 승인할 수 있습니다. · ${formatDate(failedWork.completedAt)}`
       : `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
     copy.append(title, detail);
     const action = failedWork.attentionType === "quality_hold" && failedWork.latestRunId
@@ -1428,7 +1551,7 @@
     wrapper.append(header);
 
     const latestReview = payload.reviews?.at(-1);
-    if (latestReview) wrapper.append(renderScoreBoard(latestReview, payload.run.quality?.decision?.readerExperienceScore));
+    if (latestReview) wrapper.append(renderScoreBoard(latestReview, payload.run.quality?.decision?.readerExperienceScore, payload.metrics || []));
 
     const latestDraft = payload.drafts?.at(-1);
     if (latestDraft) {
@@ -1450,6 +1573,10 @@
       wrapper.append(draft);
     }
 
+    if (payload.run.status === "blocked" && payload.run.stage === "editorial_blocked" && latestReview && latestDraft) {
+      wrapper.append(renderQualityHoldActions(payload.run, latestReview));
+    }
+
     const jobs = document.createElement("details");
     jobs.className = "advanced";
     const jobSummary = document.createElement("summary");
@@ -1465,7 +1592,7 @@
     return wrapper;
   }
 
-  function renderScoreBoard(review, weightedScore) {
+  function renderScoreBoard(review, weightedScore, metrics = []) {
     const section = document.createElement("section");
     section.className = "score-board";
     const heading = document.createElement("div");
@@ -1476,15 +1603,22 @@
     total.textContent = weightedScore === undefined ? review.decision : `${weightedScore}점`;
     heading.append(title, total);
     section.append(heading);
+    const summary = document.createElement("p");
+    summary.className = "review-summary";
+    summary.textContent = review.summary || "자동 편집 검수의 상세 설명이 없습니다.";
+    section.append(summary);
+    const metricByName = new Map(metrics.map((metric) => [metric.name, metric]));
     const grid = document.createElement("div");
     grid.className = "score-grid";
     for (const [key, score] of Object.entries(review.scores || {})) {
       const card = document.createElement("details");
+      const metric = metricByName.get(key);
+      card.classList.toggle("is-failed", metric?.passed === false);
       const summary = document.createElement("summary");
       const name = document.createElement("span");
       name.textContent = scoreLabel(key);
       const value = document.createElement("strong");
-      value.textContent = score;
+      value.textContent = metric ? `${score} / 기준 ${metric.threshold}` : String(score);
       summary.append(name, value);
       for (const evidence of review.scoreEvidence?.[key] || []) {
         const line = document.createElement("p");
@@ -1495,6 +1629,27 @@
       grid.append(card);
     }
     section.append(grid);
+
+    if (Array.isArray(review.issues) && review.issues.length) {
+      const issueSection = document.createElement("div");
+      issueSection.className = "review-issues";
+      const issueTitle = document.createElement("h5");
+      issueTitle.textContent = review.decision === "blocked" ? "공개 보류 사유와 해결 방법" : "검수 메모";
+      issueSection.append(issueTitle);
+      for (const issue of review.issues) {
+        const item = document.createElement("article");
+        item.className = `review-issue is-${issue.severity || "info"}`;
+        const name = document.createElement("strong");
+        name.textContent = `${issueSeverityLabel(issue.severity)}${issue.sceneNo ? ` · 장면 ${issue.sceneNo}` : ""}`;
+        const evidence = document.createElement("p");
+        evidence.textContent = issue.evidence || issue.code || "검수 지적 사항";
+        const suggestion = document.createElement("small");
+        suggestion.textContent = `수정 제안 · ${issue.suggestion || "검수 요약에 맞춰 해당 부분을 보완합니다."}`;
+        item.append(name, evidence, suggestion);
+        issueSection.append(item);
+      }
+      section.append(issueSection);
+    }
 
     const readers = document.createElement("div");
     readers.className = "audience-lenses";
@@ -1511,6 +1666,28 @@
     }
     if (readers.childElementCount) section.append(readers);
     return section;
+  }
+
+  function renderQualityHoldActions(run, review) {
+    const section = document.createElement("section");
+    section.className = "quality-hold-actions";
+    const copy = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = "원고 작성은 끝났고, 회차 등록만 보류된 상태입니다.";
+    const detail = document.createElement("p");
+    detail.textContent = `자동 보완을 ${Number(run.rewriteCount || 0)}회 거쳤지만 위 기준이 남았습니다. 지적 부분만 한 번 더 보완하거나 현재 원고를 운영자 판단으로 승인할 수 있습니다.`;
+    copy.append(title, detail);
+    const actions = document.createElement("div");
+    actions.append(actionButton("지적 부분 다시 보완", "queue-retry", () => resolveQualityHold({ latestRunId: run.id, schedule: scheduleById.get(run.scheduleId) }, "rewrite")));
+    if (review.safetyPassed !== false) {
+      actions.append(actionButton("현재 원고 승인", "warning", () => resolveQualityHold({ latestRunId: run.id, schedule: scheduleById.get(run.scheduleId), review }, "approve")));
+    }
+    section.append(copy, actions);
+    return section;
+  }
+
+  function issueSeverityLabel(value) {
+    return ({ critical: "반드시 수정", warning: "수정 권장", info: "후속 참고" })[value] || "검수 메모";
   }
 
   function badge(text, type) {
@@ -1879,8 +2056,9 @@
       build_episode_card: "회차 장면 구성",
       write_draft: "원고 작성",
       editorial_review: "편집 검수",
-      editorial_blocked: "편집 검수에서 공개 보류",
+      editorial_blocked: "원고 완성 · 품질 보완 필요",
       rewrite_draft: "원고 보완",
+      schedule_deleted: "자동연재 설정 삭제",
       history_hidden: "로그 숨김",
       queued: "작업 준비"
     })[value] || "작업 준비";
@@ -1926,7 +2104,7 @@
   }
 
   function runStatus(run) {
-    return ({ queued: "대기 중", running: "작성 중", rewrite: "다듬는 중", ready: "검수 통과", blocked: "검수 후 공개 보류", published: "공개됨", error: "시스템 오류" })[run.status] || run.status;
+    return ({ queued: "대기 중", running: "작성 중", rewrite: "다듬는 중", ready: "검수 통과", blocked: "원고 완성 · 품질 보완 필요", published: "공개됨", error: "시스템 오류" })[run.status] || run.status;
   }
 
   function scoreLabel(key) {

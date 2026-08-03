@@ -905,6 +905,36 @@
   border-left-color: #ffd45c;
 }
 
+.stalled-copy {
+  min-width: 0;
+}
+
+.stalled-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stalled-state {
+  border: 1px solid #788398;
+  padding: 3px 7px;
+  color: #f4f7fb;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.stalled-state.is-quality,
+.stalled-state.is-ready {
+  border-color: #ffd45c;
+  color: #ffd45c;
+}
+
+.stalled-state.is-error {
+  border-color: #ff7a8f;
+  color: #ff9aa7;
+}
+
 .attention-row strong,
 .stalled-row strong,
 .completed-row strong {
@@ -925,6 +955,10 @@
   color: #d6dbe5;
   font-size: 0.78rem;
   line-height: 1.5;
+}
+
+.stalled-row .stalled-resolution {
+  color: #ffd45c;
 }
 
 .attention-actions {
@@ -1387,6 +1421,73 @@
   background: #fff;
 }
 
+.score-grid details.is-failed {
+  border: 2px solid #ce3548;
+  background: #fff3f4;
+}
+
+.review-summary {
+  margin: 0;
+  border-left: 4px solid #ffd45c;
+  padding: 11px 13px;
+  background: #fff;
+  line-height: 1.65;
+}
+
+.review-issues {
+  display: grid;
+  gap: 8px;
+}
+
+.review-issues h5 {
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+}
+
+.review-issue {
+  border-left: 4px solid #768196;
+  padding: 11px 13px;
+  background: #fff;
+}
+
+.review-issue.is-critical { border-left-color: #ce3548; }
+.review-issue.is-warning { border-left-color: #c58b00; }
+.review-issue.is-info { border-left-color: #26755f; }
+
+.review-issue p {
+  margin: 5px 0;
+  line-height: 1.55;
+}
+
+.review-issue small {
+  display: block;
+  color: #3e4859;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.quality-hold-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 2px solid #c58b00;
+  padding: 15px;
+  background: #fff8dd;
+}
+
+.quality-hold-actions p {
+  margin: 5px 0 0;
+  color: #4f596b;
+  line-height: 1.55;
+}
+
+.quality-hold-actions > div:last-child {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
 .schedule-progress {
   grid-column: 1 / -1;
   display: grid;
@@ -1640,6 +1741,7 @@
   .queue-live-actions,
   .queue-row-actions,
   .schedule-failure,
+  .quality-hold-actions,
   .attention-row,
   .stalled-row,
   .completed-row,
@@ -1647,6 +1749,11 @@
   .stalled-actions,
   .run-history-actions {
     align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quality-hold-actions > div:last-child {
+    width: 100%;
     flex-direction: column;
   }
 
@@ -1665,6 +1772,7 @@
   .queue-row-actions .button,
   .serial-control-actions .button,
   .schedule-failure .button,
+  .quality-hold-actions .button,
   .attention-actions .button,
   .stalled-actions .button,
   .run-history-actions .button,

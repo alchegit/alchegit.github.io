@@ -67,8 +67,20 @@ assert.match(serialServiceSource, /rawStoryIds\.length > 100/u, "bulk story cont
 assert.match(serialServiceSource, /current\.visibility === "archived"/u, "bulk private restore must return hidden stories to operator control");
 assert.match(serverSource, /createdFrom: req\.query\.createdFrom/u, "managed story dates must reach the database query");
 assert.match(serverSource, /stories\/bulk-control/u, "managed stories must expose the bulk control route");
-assert.match(serialOperatorSource, /재개 요청 순서대로 제작/u, "incomplete prologues must explain shared queue ordering");
+assert.match(serialOperatorHtml, /프롤로그 등록 전 확인/u, "pre-publication prologues must use an accurate operator label");
 assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
+assert.match(serialOperatorSource, /지적 부분 다시 보완/u, "quality-held prologues must expose targeted rewrite recovery");
+assert.match(serialOperatorSource, /현재 원고 승인/u, "quality-held prologues must expose an operator approval path");
+assert.match(serialOperatorSource, /중지 후 삭제/u, "active schedules must expose stop-and-delete");
+assert.match(serialServiceSource, /async function archiveSchedule/u, "schedule deletion must archive durable settings");
+assert.match(serialServiceSource, /error_code = 'operator_schedule_deleted'/u, "schedule deletion must revoke active jobs");
+assert.match(serialServiceSource, /queue_status = 'canceled'/u, "schedule deletion must cancel publication reservations");
+assert.match(serialServiceSource, /delete from storyheaven_serial_continuations continuation/u, "schedule deletion must cancel linked continuation requests");
+assert.match(serialServiceSource, /async function resolveQualityHold/u, "quality holds must have a dedicated resolution operation");
+assert.match(serialServiceSource, /serial_quality_hold_safety_failed/u, "unsafe drafts must not be operator-approved");
+assert.match(serverSource, /app\.delete\("\/api\/storyheaven\/operator\/serial-engine\/schedules\/:id"/u, "schedule deletion must have an admin API route");
+assert.match(serverSource, /resolve-quality-hold/u, "quality-hold resolution must have an admin API route");
+assert.match(serialOperatorSource, /latestRunStatus === "error"[\s\S]{0,200}latestRunStatus === "blocked"/u, "system errors must take precedence over stale quality reviews");
 assert.match(serialOperatorHtml, /문제 해결 도구/u, "operator recovery tools must use task-oriented language");
 assert.match(serialOperatorCss, /details\.advanced > summary[\s\S]*color: #f4f7fb/u, "dark advanced summaries must retain readable text");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
@@ -107,6 +119,29 @@ await assert.rejects(() => managedStoryService.updateStoryControls({
   storyIds: Array.from({ length: 101 }, (_, index) => `story-${String(index).padStart(3, "0")}`),
   visibility: "private"
 }, "admin"), /serial_bulk_story_limit/u);
+
+const archiveStatements = [];
+const archiveService = createStoryHeavenSerialService({
+  withConnection: async () => { throw new Error("unexpected_connection"); },
+  withTransaction: async (callback) => callback({
+    execute: async (sql) => {
+      archiveStatements.push(sql);
+      if (/select id, schedule_status/u.test(sql)) {
+        return { rows: [{ ID: "schedule-test", SCHEDULE_STATUS: "active" }] };
+      }
+      return { rows: [], rowsAffected: 2 };
+    }
+  }),
+  clob: (value) => value,
+  clobJson: (value) => value
+});
+const archivedSchedule = await archiveService.archiveSchedule("schedule-test", "admin-test");
+assert.equal(archivedSchedule.deleted, true);
+assert.equal(archivedSchedule.canceled.jobs, 2);
+assert.equal(archivedSchedule.canceled.runs, 2);
+assert.equal(archivedSchedule.canceled.publications, 2);
+assert.equal(archivedSchedule.canceled.continuations, 2);
+assert.ok(archiveStatements.some((sql) => /schedule_status = 'archived'/u.test(sql)));
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 1,
