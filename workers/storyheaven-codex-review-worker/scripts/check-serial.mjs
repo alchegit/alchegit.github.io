@@ -89,6 +89,9 @@ assert.match(biblePrompt, /narrativeBlueprint\.noveltyPolicy/u);
 assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
 assert.match(biblePrompt, /참신성 목표와 새 요소 추가 제한/u);
 assert.match(biblePrompt, /volumePlan must contain exactly 10 sequential entries/u);
+assert.match(biblePrompt, /Every characterArc must contain at least 3 milestones/u);
+assert.match(biblePrompt, /globally unique across all characters/u);
+assert.match(biblePrompt, /cover every volume from 1 through 10/u);
 assert.match(biblePrompt, /renewableConflictSources/u);
 assert.match(biblePrompt, /mustNotAnswerRevealKeys/u);
 
