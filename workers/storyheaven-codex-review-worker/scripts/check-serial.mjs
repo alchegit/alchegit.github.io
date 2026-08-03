@@ -90,10 +90,25 @@ assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
 assert.match(biblePrompt, /참신성 목표와 새 요소 추가 제한/u);
 assert.match(biblePrompt, /volumePlan must contain exactly 10 sequential entries/u);
 assert.match(biblePrompt, /Every characterArc must contain at least 3 milestones/u);
-assert.match(biblePrompt, /globally unique across all characters/u);
+assert.match(biblePrompt, /Every characterArc id and every milestone id must be globally unique/u);
 assert.match(biblePrompt, /cover every volume from 1 through 10/u);
 assert.match(biblePrompt, /renewableConflictSources/u);
 assert.match(biblePrompt, /mustNotAnswerRevealKeys/u);
+
+const preservedBiblePrompt = buildSerialPrompt({
+  ...job,
+  type: "build_bible",
+  payload: {
+    preserveExistingWork: true,
+    existingBible: {
+      characters: [{ id: "hero-stable" }, { id: "rival-stable" }, { id: "mentor-stable" }]
+    }
+  }
+});
+assert.match(preservedBiblePrompt, /The only permitted characterArcs\.characterId values are these exact existing stable ids/u);
+assert.match(preservedBiblePrompt, /\["hero-stable","rival-stable","mentor-stable"\]/u);
+assert.match(preservedBiblePrompt, /Create exactly one characterArc for each listed id/u);
+assert.match(preservedBiblePrompt, /Create 3 characterArcs/u);
 
 const scopedArcPrompt = buildSerialPrompt({
   ...job,

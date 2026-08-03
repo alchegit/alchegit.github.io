@@ -10,7 +10,7 @@ const JOB_TYPES = new Set([
   "rewrite_draft"
 ]);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-03-long-form-architecture-v7";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-03-long-form-architecture-v8";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -81,10 +81,16 @@ function stageInstruction(type, payload = {}) {
   }
   if (type === "build_bible") {
     const plan = normalizePromptSeriesPlan(payload);
+    const preservedCharacterIds = Array.isArray(payload?.existingBible?.characters)
+      ? payload.existingBible.characters.map((item) => String(item?.id || "").trim()).filter(Boolean).slice(0, 12)
+      : [];
     const preservation = payload?.preserveExistingWork
-      ? " existingBible, priorArcs, canon, reveals, and recentEpisodes are binding history. Expand the future architecture around them without retconning, deleting, or rewriting any existing or published material. Reuse existingBible.characters stable ids exactly in characterArcs and treat existing first-volume reveals as local established plans rather than renaming them as new longReveals."
+      ? ` existingBible, priorArcs, canon, reveals, and recentEpisodes are binding history. Expand the future architecture around them without retconning, deleting, or rewriting any existing or published material. The only permitted characterArcs.characterId values are these exact existing stable ids: ${JSON.stringify(preservedCharacterIds)}. Create exactly one characterArc for each listed id, use every listed id once, and do not invent, translate, normalize, or copy a character name into characterId. Treat existing first-volume reveals as local established plans rather than renaming them as new longReveals.`
       : "";
-    return `Build a compact source of truth, not prose. Give each major character a desire, fear, secret, bounded knowledge, decision pattern, and relationship that can create conflict without coincidence. World rules must be testable, costs and loopholes must be concrete, the timeline must not contradict itself, and forbidden contradictions must name mistakes future episodes may never make. Provide multiple places, institutions, factions, resources, and unresolved past events so the series has deep roots beyond its opening gimmick. Create a complete private seriesArchitecture for exactly ${plan.totalVolumes} volumes and ${plan.episodesPerVolume} main episodes per volume (${plan.totalMainEpisodes} main episodes after the prologue). volumePlan must contain exactly ${plan.totalVolumes} sequential entries. Give every volume a distinct role, goal, opposition pressure, midpoint turn, climax, irreversible consequence, and bridge. protectedRevealKeys may contain only long-reveal keys whose payoffVolume is later than that volume. Every characterArc must contain at least ${Math.min(3, plan.totalVolumes)} milestones. Within one characterArc, each milestone must use a different volumeNo and a different id. Every milestone id must also be globally unique across all characters. Across all characterArcs, the union of milestone volumeNo values must cover every volume from 1 through ${plan.totalVolumes}. Link every milestone id exactly to its matching volumePlan.characterMilestoneIds entry; never reuse a sample id or place an id under a different volume. Define at least five renewableConflictSources with variation and exhaustion guards, and use every conflict key in at least one volumePlan.conflictSourceKeys. Schedule longReveals with stable keys beginning 'series-' across early, middle, late, and final volumes; no more than 25 percent may pay off in volume 1, at least one prologue-seeded reveal must use seedVolume 0 and seedEpisodeWithinVolume 0, and at least one must pay off in the final volume. deepenVolumes must fall after the seed and before the payoff. Keep the full answers in the private architecture. Define prologueDisclosure separately with concrete mustShow and resolvedNow items, one to three openQuestions, optional hint keys, and every later secret in mustNotAnswerRevealKeys. mayHintRevealKeys must also remain in mustNotAnswerRevealKeys because a hint is not an answer. The prologue must prove the premise but must not summarize the series, identify the final opponent, explain the final truth, complete the protagonist's growth, or consume the volume-level turns.${preservation} Create a voice profile that differs through information order and rhythm, not difficult vocabulary, and translate the creative controls into concrete pacing, tension, reveal, emotion, relationship, action, description, humor, and novelty rules with recovery beats and anti-repetition rules. Define narrativeBlueprint.noveltyPolicy from the requested level: state the familiar genre foundation, the permitted differentiator, and what kinds of new gimmicks may not be added later. A low novelty target must remain deliberately familiar and coherent rather than accumulating a new strange rule each episode. Define readerOnboardingRules that keep baseline, goal, change, stakes, and new-term explanations clear throughout the series without making every opening identical. Define a restrained sensory palette and visualization rules that make this series recognizable without repeating the same weather, light, smell, or body reaction in every episode. Also design how information is withheld fairly, at least three compatible opening modes, signature techniques, escalation and reveal cadence, and anti-repetition rules. Every selected primary genre and its subgenres are foundational constraints. Preserve their distinct jobs and prevent one genre from disappearing after the premise.`;
+    const characterArcRule = preservedCharacterIds.length >= 2
+      ? `Create ${preservedCharacterIds.length} characterArcs because ${preservedCharacterIds.length} binding existing character ids were supplied.`
+      : "Create at least two characterArcs, and make each characterId exactly match a stable id in the characters array you return.";
+    return `Build a compact source of truth, not prose. Give each major character a desire, fear, secret, bounded knowledge, decision pattern, and relationship that can create conflict without coincidence. World rules must be testable, costs and loopholes must be concrete, the timeline must not contradict itself, and forbidden contradictions must name mistakes future episodes may never make. Provide multiple places, institutions, factions, resources, and unresolved past events so the series has deep roots beyond its opening gimmick. Create a complete private seriesArchitecture for exactly ${plan.totalVolumes} volumes and ${plan.episodesPerVolume} main episodes per volume (${plan.totalMainEpisodes} main episodes after the prologue). volumePlan must contain exactly ${plan.totalVolumes} sequential entries. Give every volume a distinct role, goal, opposition pressure, midpoint turn, climax, irreversible consequence, and bridge. protectedRevealKeys may contain only long-reveal keys whose payoffVolume is later than that volume. ${characterArcRule} Every characterArc must contain at least ${Math.min(3, plan.totalVolumes)} milestones. Within one characterArc, each milestone must use a different volumeNo and a different id. Every characterArc id and every milestone id must be globally unique. Across all characterArcs, the union of milestone volumeNo values must cover every volume from 1 through ${plan.totalVolumes}. Link every milestone id exactly to its matching volumePlan.characterMilestoneIds entry; never reuse a sample id or place an id under a different volume. Define at least five renewableConflictSources with variation and exhaustion guards, and use every conflict key in at least one volumePlan.conflictSourceKeys. Schedule longReveals with stable keys beginning 'series-' across early, middle, late, and final volumes; no more than 25 percent may pay off in volume 1, at least one prologue-seeded reveal must use seedVolume 0 and seedEpisodeWithinVolume 0, and at least one must pay off in the final volume. deepenVolumes must fall after the seed and before the payoff. Keep the full answers in the private architecture. Define prologueDisclosure separately with concrete mustShow and resolvedNow items, one to three openQuestions, optional hint keys, and every later secret in mustNotAnswerRevealKeys. mayHintRevealKeys must also remain in mustNotAnswerRevealKeys because a hint is not an answer. The prologue must prove the premise but must not summarize the series, identify the final opponent, explain the final truth, complete the protagonist's growth, or consume the volume-level turns.${preservation} Before returning, mechanically check the counts and references: exact volume count, sequential volumeNo values, exact binding character ids, unique arc and milestone ids, every volume covered by milestones, every conflict key used, every milestone linked under the same volume, long reveals distributed through the final volume, and every later reveal protected by prologueDisclosure.mustNotAnswerRevealKeys. Create a voice profile that differs through information order and rhythm, not difficult vocabulary, and translate the creative controls into concrete pacing, tension, reveal, emotion, relationship, action, description, humor, and novelty rules with recovery beats and anti-repetition rules. Define narrativeBlueprint.noveltyPolicy from the requested level: state the familiar genre foundation, the permitted differentiator, and what kinds of new gimmicks may not be added later. A low novelty target must remain deliberately familiar and coherent rather than accumulating a new strange rule each episode. Define readerOnboardingRules that keep baseline, goal, change, stakes, and new-term explanations clear throughout the series without making every opening identical. Define a restrained sensory palette and visualization rules that make this series recognizable without repeating the same weather, light, smell, or body reaction in every episode. Also design how information is withheld fairly, at least three compatible opening modes, signature techniques, escalation and reveal cadence, and anti-repetition rules. Every selected primary genre and its subgenres are foundational constraints. Preserve their distinct jobs and prevent one genre from disappearing after the premise.`;
   }
   if (type === "build_arc") {
     return "Plan one continuous arc for exactly payload.arcScope.firstEpisodeNo through payload.arcScope.lastEpisodeNo, inclusive. Episode numbers must be sequential and must not cross the supplied volume boundary. Treat payload.bible.narrativeBlueprint.seriesArchitecture as binding: advance the active volume's role, character milestones, conflict sources, and irreversible change without moving a later-volume payoff forward. architectureReferences must name the supplied volume and the exact conflict, character-milestone, and long-reveal keys this arc advances. Arc reveals are local questions that introduce and pay off inside this arc; reference private longReveals by key but do not redefine or reschedule them. If payload.arcScope.allowShortBoundaryTail is true, this is a compatibility bridge for a legacy volume boundary: use the exact short range and at least one local setup/payoff instead of padding or crossing into the next volume. If firstEpisodeNo is 1, episode 1 is the prologue: its promise must open the premise and its hook must invite 본편 1화, not resolve the story as a short piece. If firstEpisodeNo is 2, treat it as 본편 1화. Every episode needs its own payoff and turn while advancing the central question. Otherwise plant at least three local reveals before their payoff. The midpoint must alter the protagonist's understanding or method, and the ending truth must change the next arc's available choices. Build an arc narrative plan that rotates openings and techniques without repeating the same opening, twist, or hook mechanically in adjacent episodes.";
@@ -110,7 +116,10 @@ function resultContract(type, payload = {}) {
   };
   if (type === "build_bible") return {
     worldRules: ["5-24개"],
-    characters: [{ id: "stable-id", name: "이름", role: "역할", desire: "욕망", fear: "두려움", secret: "비밀", knowledge: ["현재 아는 사실"] }],
+    characters: [
+      { id: "character-1", name: "이름", role: "역할", desire: "욕망", fear: "두려움", secret: "비밀", knowledge: ["현재 아는 사실"] },
+      { id: "character-2", name: "이름", role: "역할", desire: "욕망", fear: "두려움", secret: "비밀", knowledge: ["현재 아는 사실"] }
+    ],
     timeline: ["3-40개"], glossary: ["용어"], forbiddenContradictions: ["3-20개"],
     voiceProfile: { narratorDistance: "서술 거리", sentenceRhythm: "문장 호흡", dialogueRatio: 35, humorStyle: "유머 방식", descriptionDensity: 50, emotionStyle: "감정 표현", sensoryPalette: "작품 고유 감각의 선택 원칙", visualizationRules: ["3-8개 장면 가시화 규칙"], readerOnboardingRules: ["4-8개 독자 안내와 신규 용어 규칙"], forbiddenHabits: ["피할 습관"] },
     narrativeBlueprint: {
@@ -168,24 +177,30 @@ function normalizePromptSeriesPlan(payload = {}) {
 
 function seriesArchitectureContract(payload = {}) {
   const plan = normalizePromptSeriesPlan(payload);
+  const preservedCharacterIds = Array.isArray(payload?.existingBible?.characters)
+    ? payload.existingBible.characters.map((item) => String(item?.id || "").trim()).filter(Boolean).slice(0, 12)
+    : [];
+  const contractCharacterIds = preservedCharacterIds.length >= 2
+    ? preservedCharacterIds
+    : ["character-1", "character-2"];
   return {
     centralTheme: "장편 전체가 끝까지 탐구할 인간적 주제",
     seriesQuestion: "마지막 권까지 이어질 중심 질문",
     endingBoundary: "마지막 권에서 반드시 도달하되 프롤로그에는 밝히지 않을 결말 상태",
     endingCost: "최종 선택에서 주인공이 치를 대가",
     renewableConflictSources: [{ key: "conflict-stable-key", source: "반복 가능한 갈등 원천", pressure: "주인공에게 주는 압력", variationRule: "회차와 권마다 다르게 변주하는 법", exhaustionGuard: "갈등을 소모품처럼 반복하지 않는 제한" }],
-    characterArcs: [{
-      id: "character-arc-id",
-      characterId: "characters의 stable-id",
+    characterArcs: contractCharacterIds.map((characterId, characterIndex) => ({
+      id: `character-arc-${characterIndex + 1}`,
+      characterId,
       startState: "시작 상태",
       falseBelief: "초반의 잘못된 믿음",
       endState: "최종 변화",
       milestones: Array.from({ length: Math.min(3, plan.totalVolumes) }, (_, index) => ({
-        id: `character-arc-id-volume-${index + 1}`,
+        id: `character-${characterIndex + 1}-volume-${index + 1}`,
         volumeNo: index + 1,
         turn: "이 권에서 선택으로 생기는 변화"
       }))
-    }],
+    })),
     volumePlan: Array.from({ length: plan.totalVolumes }, (_, index) => ({
       volumeNo: index + 1,
       role: "전체 장편에서 이 권이 맡는 고유 역할",
