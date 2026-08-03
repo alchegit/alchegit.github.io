@@ -497,11 +497,19 @@ assert.equal(bible.narrativeBlueprint.seriesArchitecture.renewableConflictCount,
 const boundaryBibleInput = structuredClone(bible);
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.longReveals[0].seedEpisodeWithinVolume = 7;
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.longReveals[0].deepenVolumes = [1, 2, 3];
+boundaryBibleInput.narrativeBlueprint.seriesArchitecture.renewableConflictSources[0] = {
+  ...boundaryBibleInput.narrativeBlueprint.seriesArchitecture.renewableConflictSources[0],
+  source: "guild",
+  pressure: "taxes",
+  variationRule: "rotates",
+  exhaustionGuard: "no-repeat"
+};
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.volumePlan[0].characterMilestoneIds = ["mistyped-milestone"];
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.volumePlan[2].protectedRevealKeys = ["series-return-ticket"];
 const boundaryBible = normalizeStoryHeavenSerialWorkerResult("build_bible", boundaryBibleInput, { seriesPlan: testSeriesPlan });
 assert.equal(boundaryBible.narrativeBlueprint.seriesArchitecture.longReveals[0].seedEpisodeWithinVolume, 0);
 assert.deepEqual(boundaryBible.narrativeBlueprint.seriesArchitecture.longReveals[0].deepenVolumes, [1, 2]);
+assert.equal(boundaryBible.narrativeBlueprint.seriesArchitecture.renewableConflictSources[0].source, "guild");
 assert.deepEqual(boundaryBible.narrativeBlueprint.seriesArchitecture.volumePlan[0].characterMilestoneIds, ["doyoon-volume-1", "haejin-volume-1"]);
 assert.equal(boundaryBible.narrativeBlueprint.seriesArchitecture.volumePlan[2].protectedRevealKeys.includes("series-return-ticket"), false);
 

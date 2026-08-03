@@ -880,10 +880,10 @@ function normalizeSeriesArchitecture(value, plan, characters) {
     const conflict = object(item);
     return {
       key: text(conflict.key, 80) || `conflict-${index + 1}`,
-      source: requiredText(conflict.source, 400, 10, "serial_architecture_conflict_source_invalid"),
-      pressure: requiredText(conflict.pressure, 400, 10, "serial_architecture_conflict_pressure_invalid"),
-      variationRule: requiredText(conflict.variationRule, 400, 10, "serial_architecture_conflict_variation_invalid"),
-      exhaustionGuard: requiredText(conflict.exhaustionGuard, 400, 10, "serial_architecture_conflict_guard_invalid")
+      source: requiredText(conflict.source, 400, 2, "serial_architecture_conflict_source_invalid"),
+      pressure: requiredText(conflict.pressure, 400, 5, "serial_architecture_conflict_pressure_invalid"),
+      variationRule: requiredText(conflict.variationRule, 400, 5, "serial_architecture_conflict_variation_invalid"),
+      exhaustionGuard: requiredText(conflict.exhaustionGuard, 400, 5, "serial_architecture_conflict_guard_invalid")
     };
   });
   if (conflictSources.length < 5 || hasDuplicateKeys(conflictSources)) {
