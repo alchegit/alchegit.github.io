@@ -131,15 +131,27 @@
     if (!filtered.length) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
-      empty.textContent = state.stories.length
-        ? (elements.visibility.value === "managed" ? "현재 운영 중인 작품이 없습니다. 숨긴 작품은 공개 상태 필터에서 확인할 수 있습니다." : "조건에 맞는 작품이 없습니다.")
-        : (elements.createdFrom.value || elements.createdTo.value ? "선택한 제작 기간에 만든 작품이 없습니다." : "아직 관리할 자동 연재 작품이 없습니다.");
+      empty.textContent = emptyListMessage(query);
       elements.list.replaceChildren(empty);
       updateBulkControls();
       return;
     }
     elements.list.replaceChildren(...filtered.map(storyRow));
     updateBulkControls();
+  }
+
+  function emptyListMessage(query) {
+    if (query || elements.continuation.value !== "all") return "조건에 맞는 작품이 없습니다.";
+    const visibility = elements.visibility.value;
+    if (visibility === "public") {
+      const privateCount = state.stories.filter((story) => story.visibility === "private").length;
+      return privateCount
+        ? `현재 공개 중인 작품이 없습니다. 비공개 ${privateCount.toLocaleString("ko-KR")}편은 공개 상태를 변경하면 작품관에 표시됩니다.`
+        : "현재 공개 중인 작품이 없습니다.";
+    }
+    if (visibility === "managed") return "현재 운영 중인 작품이 없습니다. 숨긴 작품은 공개 상태 필터에서 확인할 수 있습니다.";
+    if (elements.createdFrom.value || elements.createdTo.value) return "선택한 제작 기간에 만든 작품이 없습니다.";
+    return state.stories.length ? "조건에 맞는 작품이 없습니다." : "아직 관리할 자동 연재 작품이 없습니다.";
   }
 
   function applyPeriodFilter() {

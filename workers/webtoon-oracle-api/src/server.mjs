@@ -1875,6 +1875,12 @@ async function listStoryHeavenFeed({ userId = null, limit = 24, genre = "" } = {
            join webtoon_profiles p on p.user_id = s.author_user_id
            left join storyheaven_endorsements e on e.story_id = s.id
           where s.story_status = 'published'
+            and not exists (
+              select 1
+                from storyheaven_serial_story_controls reader_control
+               where reader_control.story_id = s.id
+                 and reader_control.visibility <> 'public'
+            )
             and (
               :genre_filter is null
               or s.genre = :genre_filter
@@ -1901,7 +1907,13 @@ async function getStoryHeavenDiscovery() {
     const genreRows = await connection.execute(
       `select s.genre, s.secondary_genre, s.genres_json
          from storyheaven_stories s
-        where s.story_status = 'published'`
+        where s.story_status = 'published'
+          and not exists (
+            select 1
+              from storyheaven_serial_story_controls reader_control
+             where reader_control.story_id = s.id
+               and reader_control.visibility <> 'public'
+          )`
     );
     const rankingRows = await connection.execute(
       `select s.id, s.title, s.genre, s.cover_path, s.view_count, s.published_at,
@@ -1916,9 +1928,15 @@ async function getStoryHeavenDiscovery() {
            join webtoon_profiles p on p.user_id = s.author_user_id
            left join storyheaven_episodes e
              on e.story_id = s.id and e.episode_status = 'published'
-           left join storyheaven_episode_votes v
+          left join storyheaven_episode_votes v
              on v.episode_id = e.id and v.vote_type = 'recommend'
           where s.story_status = 'published'
+            and not exists (
+              select 1
+                from storyheaven_serial_story_controls reader_control
+               where reader_control.story_id = s.id
+                 and reader_control.visibility <> 'public'
+            )
           group by s.id, s.title, s.genre, s.cover_path, s.view_count, s.published_at,
                    p.nickname, p.display_name`
     );
@@ -2917,12 +2935,13 @@ async function getStoryHeavenStory(storyIdValue, user) {
     );
     if (!result.rows.length) throw httpError("story_not_found", 404);
     const row = result.rows[0];
-    const mayReadPrivate = row.STORY_STATUS === "published"
+    const isPublic = isStoryHeavenPublicRow(row);
+    const mayReadPrivate = isPublic
       || row.AUTHOR_USER_ID === user?.id
       || isAdminIdentity(user);
     if (!mayReadPrivate) throw httpError("story_not_found", 404);
     const story = mapStoryHeavenOwnerStory(row);
-    if (row.STORY_STATUS === "published" && row.AUTHOR_USER_ID !== user?.id && !isAdminIdentity(user)) {
+    if (isPublic && row.AUTHOR_USER_ID !== user?.id && !isAdminIdentity(user)) {
       delete story.packet;
       delete story.reviewNote;
     }
@@ -2934,13 +2953,17 @@ async function listStoryHeavenEpisodes(storyIdValue, user) {
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
   return withConnection(async (connection) => {
     const story = await connection.execute(
-      `select id, author_user_id, story_status from storyheaven_stories where id = :story_id`,
+      `select s.id, s.author_user_id, s.story_status,
+              (select max(serial_control.visibility)
+                 from storyheaven_serial_story_controls serial_control
+                where serial_control.story_id = s.id) as serial_visibility
+         from storyheaven_stories s where s.id = :story_id`,
       { story_id: storyId }
     );
     if (!story.rows.length) throw httpError("story_not_found", 404);
     const isOwner = story.rows[0].AUTHOR_USER_ID === user?.id;
     const mayReadPrivate = isOwner || isAdminIdentity(user);
-    if (story.rows[0].STORY_STATUS !== "published" && !mayReadPrivate) throw httpError("story_not_found", 404);
+    if (!isStoryHeavenPublicRow(story.rows[0]) && !mayReadPrivate) throw httpError("story_not_found", 404);
 
     const result = await connection.execute(
       `select e.id, e.episode_no, e.title, e.public_summary, e.character_count,
@@ -2980,6 +3003,9 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
               e.preview_character_count, e.episode_status, e.current_revision_no,
               e.view_count, e.published_at, e.updated_at, s.title as story_title,
                s.author_user_id, s.story_status, s.content_origin, p.nickname, p.display_name,
+               (select max(serial_control.visibility)
+                  from storyheaven_serial_story_controls serial_control
+                 where serial_control.story_id = s.id) as serial_visibility,
                (select max(latest.episode_no) from storyheaven_episodes latest
                  where latest.story_id = e.story_id
                    and latest.episode_status = 'published') as latest_published_episode_no,
@@ -2997,7 +3023,7 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
     const row = result.rows[0];
     const isOwner = row.AUTHOR_USER_ID === user?.id;
     const mayReadPrivate = isOwner || isAdminIdentity(user);
-    const isPublic = row.STORY_STATUS === "published" && row.EPISODE_STATUS === "published";
+    const isPublic = isStoryHeavenPublicRow(row) && row.EPISODE_STATUS === "published";
     if (!isPublic && !mayReadPrivate) throw httpError("episode_not_found", 404);
 
     const body = String(row.BODY_TEXT || "");
@@ -5396,6 +5422,9 @@ function storyHeavenOwnerSelect() {
                  s.story_status, s.current_revision_no, s.submitted_revision_no,
                  s.submitted_at, s.reviewed_at, s.review_decision, s.review_note,
                  s.eligibility_score, s.view_count, s.published_at, s.created_at, s.updated_at,
+                 (select max(serial_control.visibility)
+                    from storyheaven_serial_story_controls serial_control
+                   where serial_control.story_id = s.id) as serial_visibility,
                  p.nickname, p.display_name, p.account_type,
                  r.packet_json,
                  (select count(*) from storyheaven_episodes episode_count
@@ -5418,6 +5447,11 @@ function storyHeavenOwnerSelect() {
             left join storyheaven_revisions r
               on r.story_id = s.id and r.revision_no = s.current_revision_no
             left join storyheaven_endorsements e on e.story_id = s.id`;
+}
+
+function isStoryHeavenPublicRow(row) {
+  return row?.STORY_STATUS === "published"
+    && (!row.SERIAL_VISIBILITY || row.SERIAL_VISIBILITY === "public");
 }
 
 async function selectStoryHeavenOwnerStory(connection, storyId, viewerUserId) {

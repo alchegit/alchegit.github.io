@@ -33,35 +33,25 @@
   async function load() {
     if (!id) return fail();
     try {
-      try {
-        const [{ story }, { episodes }] = await Promise.all([
-          StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(id)}`, { auth: Boolean(StoryHeavenCommon.state.session) }),
-          StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(id)}/episodes`, { auth: Boolean(StoryHeavenCommon.state.session) })
-        ]);
-        const local = window.StoryHeavenSeeds?.byId?.[id];
-        state.editorial = local || null;
-        state.story = local ? {
-          ...local,
-          episodeCount: Number(story.episodeCount ?? local.episodeCount ?? 0),
-          latestEpisodeAt: story.latestEpisodeAt || local.latestEpisodeAt,
-          coverPath: local.coverPath || story.coverPath || "",
-          likeCount: Number(story.likeCount || 0),
-          likedByMe: Boolean(story.likedByMe),
-          viewCount: Number(story.viewCount || 0)
-        } : story;
-        state.remoteEpisodeNumbers = new Set((episodes || []).map((episode) => Number(episode.episodeNo)));
-        state.episodes = local ? mergeEditorialEpisodes(local.episodes || [], episodes || []) : (episodes || []);
-        state.local = Boolean(local && !episodes?.length);
-        state.serverBacked = true;
-      } catch (error) {
-        const local = window.StoryHeavenSeeds?.byId?.[id];
-        if (!local) throw error;
-        state.editorial = local;
-        state.story = local;
-        state.episodes = local.episodes || [];
-        state.remoteEpisodeNumbers = new Set();
-        state.local = true;
-      }
+      const [{ story }, { episodes }] = await Promise.all([
+        StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(id)}`, { auth: Boolean(StoryHeavenCommon.state.session) }),
+        StoryHeavenCommon.api(`/api/storyheaven/stories/${encodeURIComponent(id)}/episodes`, { auth: Boolean(StoryHeavenCommon.state.session) })
+      ]);
+      const local = window.StoryHeavenSeeds?.byId?.[id];
+      state.editorial = local || null;
+      state.story = local ? {
+        ...local,
+        episodeCount: Number(story.episodeCount ?? local.episodeCount ?? 0),
+        latestEpisodeAt: story.latestEpisodeAt || local.latestEpisodeAt,
+        coverPath: local.coverPath || story.coverPath || "",
+        likeCount: Number(story.likeCount || 0),
+        likedByMe: Boolean(story.likedByMe),
+        viewCount: Number(story.viewCount || 0)
+      } : story;
+      state.remoteEpisodeNumbers = new Set((episodes || []).map((episode) => Number(episode.episodeNo)));
+      state.episodes = local ? mergeEditorialEpisodes(local.episodes || [], episodes || []) : (episodes || []);
+      state.local = false;
+      state.serverBacked = true;
       renderSeries();
       renderEpisodeList();
       document.querySelector("[data-loading]").hidden = true;
@@ -222,18 +212,18 @@
   }
 
   function mergeEditorialEpisodes(localEpisodes, remoteEpisodes) {
-    const remoteByNumber = new Map(remoteEpisodes.map((episode) => [Number(episode.episodeNo), episode]));
-    return localEpisodes.map((episode) => {
-      const remote = remoteByNumber.get(Number(episode.episodeNo));
-      return remote ? {
-        ...episode,
+    const localByNumber = new Map(localEpisodes.map((episode) => [Number(episode.episodeNo), episode]));
+    return remoteEpisodes.map((remote) => {
+      const local = localByNumber.get(Number(remote.episodeNo));
+      return local ? {
+        ...local,
         viewCount: Number(remote.viewCount || 0),
         recommendationCount: Number(remote.recommendationCount || 0),
         commentCount: Number(remote.commentCount || 0),
         progress: remote.progress || null,
         reactions: remote.reactions || undefined
-      } : episode;
-    });
+      } : remote;
+    }).sort((left, right) => Number(left.episodeNo) - Number(right.episodeNo));
   }
 
   function mergeEditorialEpisodeForReader(localEpisode, remoteEpisode) {

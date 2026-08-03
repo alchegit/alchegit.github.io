@@ -23,6 +23,7 @@
     session: null,
     profile: null,
     stories: [],
+    feedStatus: "loading",
     genreStories: null,
     discovery: null,
     round: null,
@@ -206,8 +207,10 @@
     try {
       const payload = await api("/api/storyheaven/feed?limit=50", { auth: Boolean(state.session) });
       state.stories = mergeEditorialLibrary(Array.isArray(payload.stories) ? payload.stories : []);
+      state.feedStatus = "ready";
     } catch {
-      state.stories = FALLBACK_STORIES;
+      state.stories = [];
+      state.feedStatus = "error";
     }
     renderStories();
   }
@@ -271,7 +274,7 @@
   }
 
   function renderStories() {
-    const library = state.stories.length ? state.stories : FALLBACK_STORIES;
+    const library = state.stories;
     const humanStories = library.filter((story) => !isEditorialStory(story));
     const seedStories = library.filter(isEditorialStory).filter(matchesCatalogFilters);
     const discoveryStories = humanStories.filter((story) => matchesSearch(story) && (!state.genre || storyHasGenre(story, state.genre)));
@@ -282,11 +285,31 @@
     ));
     renderStoryList(document.querySelector("[data-human-feed]"), sortStories(discoveryStories));
     renderStoryList(document.querySelector("[data-seed-feed]"), sortStories(seedStories));
-    document.querySelector("[data-seed-empty]").hidden = seedStories.length > 0;
+    const catalogEmpty = document.querySelector("[data-seed-empty]");
+    catalogEmpty.hidden = seedStories.length > 0;
+    renderCatalogEmpty(catalogEmpty);
     document.querySelector("[data-human-empty]").hidden = discoveryStories.length > 0 || (state.query && seedStories.length > 0);
     renderCatalogSummary(seedStories.length);
     renderSearchState(discoveryStories.length + seedStories.length);
     renderWeekly(humanStories);
+  }
+
+  function renderCatalogEmpty(element) {
+    if (!element) return;
+    const title = element.querySelector("[data-empty-title]");
+    const body = element.querySelector("[data-empty-body]");
+    if (state.feedStatus === "error") {
+      title.textContent = "연재 목록을 불러오지 못했습니다.";
+      body.textContent = "잠시 후 새로고침해주세요.";
+      return;
+    }
+    if (!state.query && !state.genre && state.stageFilter === "all") {
+      title.textContent = "현재 공개된 연재 작품이 없습니다.";
+      body.textContent = "새 연재가 공개되면 이곳에 표시됩니다.";
+      return;
+    }
+    title.textContent = "조건에 맞는 작품이 없습니다.";
+    body.textContent = "검색어를 줄이거나 전체 장르를 선택해보세요.";
   }
 
   function matchesCatalogFilters(story) {
@@ -379,7 +402,7 @@
     const container = document.querySelector("[data-genre-list]");
     if (!container) return;
     const counts = new Map();
-    const library = state.stories.length ? state.stories : FALLBACK_STORIES;
+    const library = state.stories;
     library.filter(isEditorialStory).forEach((story) => {
       const genres = Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre];
       new Set(genres.map(normalizeGenreName).filter(Boolean)).forEach((genre) => {
@@ -414,11 +437,11 @@
       return;
     }
     if (!state.genre) {
-      const count = (state.stories.length ? state.stories : FALLBACK_STORIES).filter(isEditorialStory).length;
+      const count = state.stories.filter(isEditorialStory).length;
       summary.textContent = `전체 편집부 연재 ${count}편`;
       return;
     }
-    const count = (state.stories.length ? state.stories : FALLBACK_STORIES)
+    const count = state.stories
       .filter((story) => isEditorialStory(story) && storyHasGenre(story, state.genre)).length;
     summary.textContent = `${state.genre} 연재 ${count}편`;
   }
@@ -465,11 +488,11 @@
 
   function fallbackDiscovery() {
     const genreCounts = new Map();
-    FALLBACK_STORIES.forEach((story) => {
+    state.stories.forEach((story) => {
       const values = Array.isArray(story.genres) && story.genres.length ? story.genres : [story.genre];
       [...new Set(values.map(normalizeGenreName).filter(Boolean))].forEach((genre) => genreCounts.set(genre, (genreCounts.get(genre) || 0) + 1));
     });
-    const items = [...FALLBACK_STORIES]
+    const items = [...state.stories]
       .sort((a, b) => Number(b.viewCount || 0) - Number(a.viewCount || 0))
       .slice(0, 5)
       .map((story) => ({ ...story, recommendationCount: 0 }));
@@ -766,6 +789,7 @@
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
       const error = new Error(payload.error || "request_failed_" + response.status);
+      error.status = response.status;
       error.details = payload.details;
       throw error;
     }
@@ -811,9 +835,11 @@
     const editorialIds = new Set(FALLBACK_STORIES.map((story) => story.id));
     const remoteById = new Map(remoteStories.map((story) => [story.id, story]));
     const readerStories = remoteStories.filter((story) => !isEditorialStory(story));
-    const editorialStories = FALLBACK_STORIES.filter((story) => !genre || storyHasGenre(story, genre)).map((local) => {
+    const editorialStories = FALLBACK_STORIES
+      .filter((local) => remoteById.has(local.id))
+      .filter((story) => !genre || storyHasGenre(story, genre))
+      .map((local) => {
       const remote = remoteById.get(local.id);
-      if (!remote) return local;
       return {
         ...local,
         episodeCount: Number(remote.episodeCount ?? local.episodeCount ?? 0),
@@ -826,8 +852,8 @@
         viewCount: Number(remote.viewCount || 0),
         weeklyVoteCount: Number(remote.weeklyVoteCount || 0),
         endorsement: remote.endorsement || null
-      };
-    });
+        };
+      });
     const extraEditorial = remoteStories.filter((story) => isEditorialStory(story) && !editorialIds.has(story.id));
     return [...readerStories, ...editorialStories, ...extraEditorial];
   }
