@@ -157,6 +157,24 @@ assert.equal(archivedSchedule.canceled.publications, 2);
 assert.equal(archivedSchedule.canceled.continuations, 2);
 assert.ok(archiveStatements.some((sql) => /schedule_status = 'archived'/u.test(sql)));
 
+const claimStatements = [];
+const claimService = createStoryHeavenSerialService({
+  withConnection: async () => { throw new Error("unexpected_connection"); },
+  withTransaction: async (callback) => callback({
+    execute: async (sql) => {
+      claimStatements.push(sql);
+      return { rows: [], rowsAffected: 0 };
+    }
+  }),
+  clob: (value) => value,
+  clobJson: (value) => value
+});
+assert.deepEqual(await claimService.claimJob({ workerId: "worker-test" }), { leaseId: null, job: null });
+const claimQuery = claimStatements.find((sql) => /from storyheaven_serial_jobs job\s+join storyheaven_serial_runs serial_run/u.test(sql));
+assert.ok(claimQuery, "claim query must be exercised");
+assert.match(claimQuery, /serial_run\.schedule_id is null\s+or exists/u, "manual work must remain claimable without an automatic schedule");
+assert.doesNotMatch(claimQuery, /storyheaven_serial_schedules active_schedule/u, "manual work must not require an unrelated active schedule");
+
 const localizedTimestamp = "Mon Aug 03 2026 17:36:54 GMT+0900 (한국 표준시)";
 const timestampService = createStoryHeavenSerialService({
   withConnection: async (callback) => callback({

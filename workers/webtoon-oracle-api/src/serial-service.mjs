@@ -1674,11 +1674,6 @@ export function createStoryHeavenSerialService({
             where job.job_status in ('queued', 'retry_wait')
               and job.next_attempt_at <= systimestamp
               and serial_run.queue_canceled_at is null
-              and exists (
-                select 1
-                  from storyheaven_serial_schedules active_schedule
-                 where active_schedule.schedule_status = 'active'
-              )
               and (
                 serial_run.schedule_id is null
                 or exists (
@@ -1703,11 +1698,6 @@ export function createStoryHeavenSerialService({
                     join storyheaven_serial_runs queue_origin on queue_origin.queue_group_id = candidate_run.queue_group_id
                    where candidate_job.job_status in ('queued', 'running', 'retry_wait')
                      and candidate_run.queue_canceled_at is null
-                     and exists (
-                       select 1
-                         from storyheaven_serial_schedules active_schedule
-                        where active_schedule.schedule_status = 'active'
-                     )
                      and (
                        candidate_run.schedule_id is null
                        or exists (
