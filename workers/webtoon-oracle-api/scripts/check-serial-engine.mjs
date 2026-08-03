@@ -35,6 +35,11 @@ const serialOperatorCss = await readFile(new URL("../../../storyheaven/operator/
 const managedStoriesSource = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.js", import.meta.url), "utf8");
 const managedStoriesHtml = await readFile(new URL("../../../storyheaven/operator/serial/stories/index.html", import.meta.url), "utf8");
 const managedStoriesCss = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.css", import.meta.url), "utf8");
+const createEpisodeRunSource = serialServiceSource.slice(
+  serialServiceSource.indexOf("async function createEpisodeRun"),
+  serialServiceSource.indexOf("async function advanceJob")
+);
+assert.match(createEpisodeRunSource, /const seriesPlan = context\.bible\.narrativeBlueprint\?\.seriesPlan[\s\S]*storyHeavenSeriesPosition\(targetEpisodeNo, seriesPlan\)/u, "episode creation after long-form planning must resolve the saved series plan before validating its position");
 assert.match(
   serialServiceSource,
   /insert \(\s*story_id, bible_version, bible_status, concept_json, narrative_blueprint_json\s*\)/u,

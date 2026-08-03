@@ -1908,6 +1908,9 @@ export function createStoryHeavenSerialService({
   async function createEpisodeRun(connection, { storyId, userId, episodeNo, releaseAt, notes, scheduleId, queueGroupId = null, batchEndEpisodeNo = null }) {
     const context = await loadSerialContext(connection, storyId);
     if (!context.bible || !context.arc) throw failure("serial_plan_required", 409);
+    const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan
+      || context.bible.concept?.seriesPlan
+      || normalizeSeriesPlan();
     const sequence = await selectOne(connection,
       `select greatest(
          nvl((
