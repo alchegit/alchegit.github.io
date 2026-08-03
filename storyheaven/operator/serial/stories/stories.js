@@ -338,7 +338,8 @@
       metric("누적 조회", number(story.viewCount), "views"),
       metric("누적 추천", number(story.recommendationCount), "recommendations"),
       metric("공개 전", `${number(story.readyPublicationCount)}화`, "ready"),
-      metric("최근 제작", runLabel(story.latestRunStatus), "run")
+      metric("최근 제작", runLabel(story.latestRunStatus), "run"),
+      metric("장편 설계", architectureLabel(story), "architecture")
     );
     const schedule = document.createElement("p");
     schedule.className = "schedule-note";
@@ -366,6 +367,18 @@
     actions.className = "story-actions";
     const save = actionButton("설정 저장", "", () => saveControl(story, row, visibility.select, continuation.select, save));
     save.disabled = true;
+    const strengthen = actionButton(
+      story.architecture?.status === "complete" ? "장편 설계 다시 보강" : "장편 설계 보강",
+      "secondary",
+      () => requestArchitectureStrengthening(story, strengthen)
+    );
+    strengthen.disabled = !state.enabled
+      || story.visibility === "archived"
+      || Boolean(story.queue)
+      || Number(story.activeRunCount || 0) > 0;
+    strengthen.title = story.architecture?.status === "complete"
+      ? "기존 원고를 유지하면서 권별 전개와 장기 복선을 다시 점검합니다."
+      : "기존 원고를 유지하면서 전체 권별 전개와 장기 복선을 채웁니다.";
     const restartFirst = actionButton("프롤로그 제작 재개", "warning", () => requestFirstEpisode(story, restartFirst));
     const restartReason = firstEpisodeRestartBlockReason(story);
     restartFirst.disabled = Boolean(restartReason);
@@ -388,7 +401,7 @@
     view.className = "button secondary";
     view.href = `/storyheaven/story/?id=${encodeURIComponent(story.id)}`;
     view.textContent = "작품 확인";
-    actions.append(save);
+    actions.append(save, strengthen);
     if (!story.latestEpisodeNo) actions.append(restartFirst);
     else actions.append(next);
     if (story.queue?.cancelable) actions.append(actionButton("대기 취소", "secondary", () => cancelQueuedWork(story)));
@@ -571,6 +584,27 @@
     }
   }
 
+  async function requestArchitectureStrengthening(story, button) {
+    const current = story.architecture?.status === "complete"
+      ? `현재 ${story.architecture.plannedVolumeCount}권 설계가 있습니다. 이를 다시 점검하고 보강합니다.`
+      : "현재 설정집에는 전체 권별 뼈대가 충분하지 않습니다.";
+    if (!window.confirm(`${story.title}의 장편 설계를 보강할까요?\n\n${current}\n기존 프롤로그와 공개·작성 원고는 바꾸거나 삭제하지 않습니다.`)) return;
+    button.disabled = true;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/architecture/strengthen`, {
+        method: "POST",
+        body: {
+          seriesPlan: story.schedule?.seriesPlan || undefined
+        }
+      });
+      StoryHeavenCommon.toast("장편 설계 보강 작업을 대기열에 넣었습니다. 기존 원고는 그대로 유지됩니다.");
+      await refresh();
+    } catch (error) {
+      button.disabled = false;
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    }
+  }
+
   async function cancelQueuedWork(story) {
     if (!story.queue?.cancelable) return;
     if (!window.confirm(`${story.title}의 대기 중인 다음 화 제작을 취소할까요?`)) return;
@@ -590,6 +624,7 @@
     if (!state.enabled) return "자동 연재 전체가 멈춰 있어 다음 화를 만들 수 없습니다.";
     if (story.queue) return story.queue.status === "running" ? "현재 다음 화를 제작하고 있습니다." : `제작 대기 ${story.queue.queuePosition}번입니다.`;
     if (story.activeRunCount > 0 || story.readyPublicationCount > 0) return "이미 제작 중이거나 아직 공개 전인 회차가 있습니다.";
+    if (story.architecture?.status !== "complete") return "먼저 장편 설계 보강을 눌러 전체 권별 전개와 장기 복선을 준비해주세요.";
     const reasons = [];
     if (!story.latestEpisodeNo) reasons.push("먼저 공개된 회차가 한 편 이상 있어야 합니다.");
     return reasons.join(" ");
@@ -715,7 +750,14 @@
   }
 
   function runLabel(status) {
-    return ({ queued: "대기", running: "제작 중", rewrite: "수정 중", ready: "공개 전", published: "공개 완료", blocked: "검수 후 공개 보류", error: "시스템 오류" })[status] || "기록 없음";
+    return ({ queued: "대기", running: "제작 중", rewrite: "수정 중", approved: "설계 완료", ready: "공개 전", published: "공개 완료", blocked: "검수 후 공개 보류", error: "시스템 오류" })[status] || "기록 없음";
+  }
+
+  function architectureLabel(story) {
+    const architecture = story.architecture || {};
+    if (architecture.status !== "complete") return "보강 필요";
+    const targetVolumes = Number(story.schedule?.seriesPlan?.totalVolumes || architecture.plannedVolumeCount || 0);
+    return `${number(architecture.plannedVolumeCount)} / ${number(targetVolumes)}권 · 장기 복선 ${number(architecture.longRevealCount)}개`;
   }
 
   function controlHelp(text) {

@@ -2065,6 +2065,7 @@
     return ({
       concept_gate: "작품 아이디어 검토",
       build_bible: "세계관과 인물 설정",
+      architecture_complete: "장편 설계 보강 완료",
       build_arc: "장기 전개 설계",
       build_episode_card: "회차 장면 구성",
       write_draft: "원고 작성",

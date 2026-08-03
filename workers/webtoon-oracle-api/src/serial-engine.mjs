@@ -20,6 +20,7 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   seriesVolumeCountMax: 30,
   episodesPerVolumeMin: 10,
   episodesPerVolumeMax: 50,
+  internalEpisodeNoMax: 1_501,
   continuationBatchCounts: Object.freeze([1, 3, 5]),
   episodesPerArcMin: 6,
   episodesPerArcMax: 30,
@@ -345,9 +346,60 @@ function seriesPlan(totalVolumes, episodesPerVolume) {
   };
 }
 
+export function storyHeavenSeriesPosition(episodeNoValue, planValue = {}) {
+  const plan = seriesPlan(planValue.totalVolumes, planValue.episodesPerVolume);
+  const episodeNo = integer(episodeNoValue, 1, plan.totalMainEpisodes + 1, null);
+  if (episodeNo === null) throw new Error("serial_series_episode_out_of_range");
+  if (episodeNo === 1) {
+    return { episodeNo, isPrologue: true, mainEpisodeNo: null, volumeNo: 1, episodeWithinVolume: 0, plan };
+  }
+  const mainEpisodeNo = episodeNo - 1;
+  return {
+    episodeNo,
+    isPrologue: false,
+    mainEpisodeNo,
+    volumeNo: Math.ceil(mainEpisodeNo / plan.episodesPerVolume),
+    episodeWithinVolume: ((mainEpisodeNo - 1) % plan.episodesPerVolume) + 1,
+    plan
+  };
+}
+
+export function buildStoryHeavenArcScope(firstEpisodeNoValue, planValue = {}, architectureValue = {}) {
+  const position = storyHeavenSeriesPosition(firstEpisodeNoValue, planValue);
+  const { plan, volumeNo } = position;
+  const volumeStartInternalEpisode = ((volumeNo - 1) * plan.episodesPerVolume) + 2;
+  const volumeEndInternalEpisode = (volumeNo * plan.episodesPerVolume) + 1;
+  const remaining = volumeEndInternalEpisode - position.episodeNo + 1;
+  let episodeCount = Math.min(STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMax, remaining);
+  const tail = remaining - episodeCount;
+  if (tail > 0 && tail < STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMin) {
+    episodeCount -= STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMin - tail;
+  }
+  const allowShortBoundaryTail = episodeCount < STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMin;
+  const architecture = object(architectureValue);
+  const volume = array(architecture.volumePlan).find((item) => Number(item?.volumeNo) === volumeNo) || null;
+  const relevantLongReveals = array(architecture.longReveals).filter((item) => (
+    Number(item?.seedVolume) === 0 && position.episodeNo === 1
+  ) || Number(item?.seedVolume) === volumeNo
+    || Number(item?.payoffVolume) === volumeNo
+    || array(item?.deepenVolumes).map(Number).includes(volumeNo));
+  return {
+    firstEpisodeNo: position.episodeNo,
+    lastEpisodeNo: position.episodeNo + episodeCount - 1,
+    episodeCount,
+    volumeNo,
+    volumeStartInternalEpisode,
+    volumeEndInternalEpisode,
+    includesPrologue: position.isPrologue,
+    allowShortBoundaryTail,
+    volume,
+    relevantLongReveals
+  };
+}
+
 export function validateStoryHeavenEpisodeRun(input = {}) {
   const errors = [];
-  const episodeNo = integer(input.episodeNo, 1, 300, null);
+  const episodeNo = integer(input.episodeNo, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null);
   const releaseAt = input.releaseAt ? new Date(input.releaseAt) : null;
   const notes = text(input.notes, 1_000);
   if (input.episodeNo !== undefined && episodeNo === null) errors.push(fieldError("episodeNo", "invalid_episode_number"));
@@ -381,16 +433,16 @@ export function validateStoryHeavenContinuationRequest(input = {}) {
   };
 }
 
-export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value) {
+export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, options = {}) {
   const jobType = String(jobTypeValue || "").trim();
   if (!JOB_TYPES.has(jobType)) throw new Error("serial_unknown_job_type");
   const source = object(value);
   if (jobType === "concept_gate") return normalizeConcept(source);
-  if (jobType === "build_bible") return normalizeBible(source);
-  if (jobType === "build_arc") return normalizeArc(source);
-  if (jobType === "build_episode_card") return normalizeEpisodeCard(source);
-  if (jobType === "write_draft") return normalizeDraft(source, false);
-  if (jobType === "rewrite_draft") return normalizeDraft(source, true);
+  if (jobType === "build_bible") return normalizeBible(source, options);
+  if (jobType === "build_arc") return normalizeArc(source, options);
+  if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
+  if (jobType === "write_draft") return normalizeDraft(source, false, options);
+  if (jobType === "rewrite_draft") return normalizeDraft(source, true, options);
   return normalizeEditorialReview(source);
 }
 
@@ -524,7 +576,7 @@ function normalizeConcept(source) {
   return concept;
 }
 
-function normalizeBible(source) {
+function normalizeBible(source, options = {}) {
   const characters = array(source.characters).slice(0, 12).map((item, index) => {
     const value = object(item);
     return {
@@ -542,6 +594,18 @@ function normalizeBible(source) {
   const forbiddenContradictions = requiredList(source.forbiddenContradictions, { min: 3, max: 20, itemMax: 500 }, "serial_forbidden_rules_invalid");
   const voice = object(source.voiceProfile);
   const narrative = object(source.narrativeBlueprint);
+  const expectedPlan = expectedSeriesPlan(options);
+  const preservedCharacters = array(options?.payload?.existingBible?.characters).map((item, index) => ({
+    id: text(item?.id, 50) || `character-${index + 1}`
+  }));
+  const architectureCharacters = options?.payload?.preserveExistingWork === true && preservedCharacters.length >= 2
+    ? preservedCharacters
+    : characters;
+  const seriesArchitecture = normalizeSeriesArchitecture(
+    narrative.seriesArchitecture,
+    expectedPlan,
+    architectureCharacters
+  );
   return {
     worldRules,
     characters,
@@ -567,22 +631,27 @@ function normalizeBible(source) {
       escalationPattern: requiredText(narrative.escalationPattern, 500, 20, "serial_narrative_escalation_invalid"),
       revealCadence: requiredText(narrative.revealCadence, 500, 20, "serial_narrative_reveal_invalid"),
       noveltyPolicy: requiredText(narrative.noveltyPolicy, 500, 20, "serial_narrative_novelty_invalid"),
-      antiRepetitionRules: requiredList(narrative.antiRepetitionRules, { min: 3, max: 10, itemMax: 240 }, "serial_narrative_repetition_invalid")
+      antiRepetitionRules: requiredList(narrative.antiRepetitionRules, { min: 3, max: 10, itemMax: 240 }, "serial_narrative_repetition_invalid"),
+      seriesArchitecture
     }
   };
 }
 
-function normalizeArc(source) {
+function normalizeArc(source, options = {}) {
+  const payload = object(options.payload);
+  const arcScope = object(payload.arcScope);
+  const seriesArchitecture = object(payload.bible?.narrativeBlueprint?.seriesArchitecture);
   const episodePlan = array(source.episodePlan).slice(0, STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMax).map((item) => {
     const value = object(item);
     return {
-      episodeNo: integer(value.episodeNo, 1, 300, null),
+      episodeNo: integer(value.episodeNo, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null),
       promise: requiredText(value.promise, 300, 10, "serial_arc_episode_promise_invalid"),
       turn: requiredText(value.turn, 300, 10, "serial_arc_episode_turn_invalid"),
       hook: requiredText(value.hook, 300, 10, "serial_arc_episode_hook_invalid")
     };
   });
-  if (episodePlan.length < STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMin || episodePlan.some((item) => item.episodeNo === null)) {
+  const minimumArcEpisodes = arcScope.allowShortBoundaryTail === true ? 1 : STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMin;
+  if (episodePlan.length < minimumArcEpisodes || episodePlan.some((item) => item.episodeNo === null)) {
     throw new Error("serial_arc_episode_plan_invalid");
   }
   const episodeNumbers = episodePlan.map((item) => item.episodeNo);
@@ -590,20 +659,37 @@ function normalizeArc(source) {
     || episodeNumbers.some((episodeNo, index) => index > 0 && episodeNo !== episodeNumbers[index - 1] + 1)) {
     throw new Error("serial_arc_episode_plan_not_sequential");
   }
+  if (arcScope.firstEpisodeNo && (
+    episodeNumbers[0] !== Number(arcScope.firstEpisodeNo)
+    || episodeNumbers.at(-1) !== Number(arcScope.lastEpisodeNo)
+  )) {
+    throw new Error("serial_arc_scope_mismatch");
+  }
   const reveals = array(source.reveals).slice(0, 30).map((item, index) => {
     const value = object(item);
     return {
       key: text(value.key, 80) || `reveal-${index + 1}`,
       secret: requiredText(value.secret, 500, 10, "serial_reveal_secret_invalid"),
-      introduceEpisode: integer(value.introduceEpisode, 1, 300, null),
-      payoffEpisode: integer(value.payoffEpisode, 1, 300, null)
+      introduceEpisode: integer(value.introduceEpisode, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null),
+      payoffEpisode: integer(value.payoffEpisode, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null)
     };
   });
-  if (reveals.length < 3 || reveals.some((item) => item.introduceEpisode === null || item.payoffEpisode === null)) {
+  const minimumArcReveals = arcScope.allowShortBoundaryTail === true ? 1 : 3;
+  if (reveals.length < minimumArcReveals || reveals.some((item) => item.introduceEpisode === null || item.payoffEpisode === null)) {
     throw new Error("serial_arc_reveals_invalid");
   }
   if (reveals.some((item) => item.payoffEpisode < item.introduceEpisode)) {
     throw new Error("serial_reveal_payoff_order_invalid");
+  }
+  if (arcScope.firstEpisodeNo && reveals.some((item) => (
+    item.introduceEpisode < Number(arcScope.firstEpisodeNo)
+    || item.payoffEpisode > Number(arcScope.lastEpisodeNo)
+  ))) {
+    throw new Error("serial_arc_local_reveal_scope_invalid");
+  }
+  const longRevealKeys = new Set(array(seriesArchitecture.longReveals).map((item) => String(item?.key || "")).filter(Boolean));
+  if (reveals.some((item) => longRevealKeys.has(item.key))) {
+    throw new Error("serial_arc_long_reveal_redefinition");
   }
   return {
     arcTitle: requiredText(source.arcTitle, 120, 2, "serial_arc_title_invalid"),
@@ -612,11 +698,12 @@ function normalizeArc(source) {
     endingTruth: requiredText(source.endingTruth, 800, 20, "serial_arc_ending_invalid"),
     episodePlan,
     reveals,
+    architectureReferences: normalizeArchitectureReferences(source.architectureReferences, arcScope, seriesArchitecture),
     narrativePlan: normalizeNarrativePlan(source.narrativePlan)
   };
 }
 
-function normalizeEpisodeCard(source) {
+function normalizeEpisodeCard(source, options = {}) {
   const scenes = array(source.scenes).slice(0, STORYHEAVEN_SERIAL_LIMITS.scenesMax).map((item, index) => {
     const value = object(item);
     return {
@@ -639,8 +726,13 @@ function normalizeEpisodeCard(source) {
     || sceneNumbers.some((sceneNo, index) => sceneNo !== index + 1)) {
     throw new Error("serial_episode_scenes_not_sequential");
   }
+  const episodeNo = integer(source.episodeNo, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null);
+  const payload = object(options.payload);
+  if (payload.episodeNo && episodeNo !== Number(payload.episodeNo)) {
+    throw new Error("serial_episode_card_number_mismatch");
+  }
   return {
-    episodeNo: integer(source.episodeNo, 1, 300, null),
+    episodeNo,
     promise: requiredText(source.promise, 300, 10, "serial_episode_promise_invalid"),
     openingDisturbance: requiredText(source.openingDisturbance, 500, 10, "serial_episode_opening_invalid"),
     scenes,
@@ -648,11 +740,16 @@ function normalizeEpisodeCard(source) {
     hook: requiredText(source.hook, 500, 10, "serial_episode_hook_invalid"),
     knowledgeBefore: stringList(source.knowledgeBefore, { max: 30, itemMax: 300 }),
     canonReferences: stringList(source.canonReferences, { max: 40, itemMax: 80 }),
-    techniquePlan: normalizeTechniquePlan(source.techniquePlan)
+    techniquePlan: normalizeTechniquePlan(source.techniquePlan),
+    prologueDisclosurePlan: normalizePrologueDisclosurePlan(
+      source.prologueDisclosurePlan,
+      episodeNo,
+      payload.bible?.narrativeBlueprint?.seriesArchitecture
+    )
   };
 }
 
-function normalizeDraft(source, rewritten) {
+function normalizeDraft(source, rewritten, options = {}) {
   const draft = {
     title: requiredText(source.title, 120, 1, "serial_draft_title_invalid"),
     summary: requiredText(source.summary, 1_000, 20, "serial_draft_summary_invalid"),
@@ -689,6 +786,16 @@ function normalizeDraft(source, rewritten) {
       || item.endParagraph < item.startParagraph)
     || new Set(sceneRangeNumbers).size !== sceneRangeNumbers.length) {
     throw new Error("serial_scene_ranges_invalid");
+  }
+  const payload = object(options.payload);
+  if (Number(payload.episodeNo) === 1) {
+    const protectedKeys = new Set(array(
+      payload.episodeCard?.prologueDisclosurePlan?.mustNotAnswerRevealKeys
+      || payload.bible?.narrativeBlueprint?.seriesArchitecture?.prologueDisclosure?.mustNotAnswerRevealKeys
+    ).map((key) => String(key || "")).filter(Boolean));
+    if (draft.revealUpdates.some((item) => item.status === "revealed" && protectedKeys.has(item.key))) {
+      throw new Error("serial_prologue_protected_reveal_exposed");
+    }
   }
   if (rewritten) {
     draft.changes = array(source.changes).slice(0, 20).map((item) => {
@@ -753,6 +860,281 @@ function normalizeEditorialReview(source) {
     scoreEvidence,
     audienceLenses
   };
+}
+
+function expectedSeriesPlan(options = {}) {
+  const payload = object(options.payload);
+  const source = object(
+    options.seriesPlan
+    || payload.seriesPlan
+    || payload.schedule?.policy?.seriesPlan
+    || payload.concept?.seriesPlan
+    || payload.bible?.narrativeBlueprint?.seriesPlan
+  );
+  return seriesPlan(source.totalVolumes, source.episodesPerVolume);
+}
+
+function normalizeSeriesArchitecture(value, plan, characters) {
+  const source = object(value);
+  const conflictSources = array(source.renewableConflictSources).slice(0, 12).map((item, index) => {
+    const conflict = object(item);
+    return {
+      key: text(conflict.key, 80) || `conflict-${index + 1}`,
+      source: requiredText(conflict.source, 400, 10, "serial_architecture_conflict_source_invalid"),
+      pressure: requiredText(conflict.pressure, 400, 10, "serial_architecture_conflict_pressure_invalid"),
+      variationRule: requiredText(conflict.variationRule, 400, 10, "serial_architecture_conflict_variation_invalid"),
+      exhaustionGuard: requiredText(conflict.exhaustionGuard, 400, 10, "serial_architecture_conflict_guard_invalid")
+    };
+  });
+  if (conflictSources.length < 5 || hasDuplicateKeys(conflictSources)) {
+    throw new Error("serial_architecture_conflicts_invalid");
+  }
+
+  const characterIds = new Set(characters.map((item) => item.id));
+  const characterArcs = array(source.characterArcs).slice(0, 12).map((item, index) => {
+    const arc = object(item);
+    const milestones = array(arc.milestones).slice(0, plan.totalVolumes).map((entry, milestoneIndex) => {
+      const milestone = object(entry);
+      return {
+        id: text(milestone.id, 80) || `character-arc-${index + 1}-volume-${milestoneIndex + 1}`,
+        volumeNo: integer(milestone.volumeNo, 1, plan.totalVolumes, null),
+        turn: requiredText(milestone.turn, 400, 10, "serial_architecture_character_milestone_invalid")
+      };
+    });
+    const minimumMilestones = Math.min(3, plan.totalVolumes);
+    if (milestones.length < minimumMilestones
+      || milestones.some((entry) => entry.volumeNo === null)
+      || hasDuplicateKeys(milestones)
+      || new Set(milestones.map((entry) => entry.volumeNo)).size !== milestones.length) {
+      throw new Error("serial_architecture_character_milestones_invalid");
+    }
+    return {
+      id: text(arc.id, 80) || `character-arc-${index + 1}`,
+      characterId: requiredText(arc.characterId, 50, 1, "serial_architecture_character_id_invalid"),
+      startState: requiredText(arc.startState, 400, 10, "serial_architecture_character_start_invalid"),
+      falseBelief: requiredText(arc.falseBelief, 400, 10, "serial_architecture_character_belief_invalid"),
+      endState: requiredText(arc.endState, 400, 10, "serial_architecture_character_end_invalid"),
+      milestones
+    };
+  });
+  if (characterArcs.length < Math.min(2, characters.length)
+    || hasDuplicateKeys(characterArcs)
+    || new Set(characterArcs.map((item) => item.characterId)).size !== characterArcs.length
+    || characterArcs.some((item) => !characterIds.has(item.characterId))) {
+    throw new Error("serial_architecture_character_arcs_invalid");
+  }
+  const milestoneIds = new Set(characterArcs.flatMap((item) => item.milestones.map((entry) => entry.id)));
+  const milestoneVolumes = new Map(characterArcs.flatMap((item) => item.milestones.map((entry) => [entry.id, entry.volumeNo])));
+  if (milestoneIds.size !== characterArcs.reduce((sum, item) => sum + item.milestones.length, 0)) {
+    throw new Error("serial_architecture_character_milestone_ids_invalid");
+  }
+  const coveredVolumes = new Set(characterArcs.flatMap((item) => item.milestones.map((entry) => entry.volumeNo)));
+  if (coveredVolumes.size !== plan.totalVolumes) {
+    throw new Error("serial_architecture_character_volume_coverage_invalid");
+  }
+
+  const minimumLongReveals = plan.totalVolumes === 1 ? 2 : Math.min(6, Math.max(4, Math.ceil(plan.totalVolumes / 3)));
+  const longReveals = array(source.longReveals).slice(0, 24).map((item, index) => {
+    const reveal = object(item);
+    const seedVolume = integer(reveal.seedVolume, 0, plan.totalVolumes, null);
+    const payoffVolume = integer(reveal.payoffVolume, 1, plan.totalVolumes, null);
+    const seedEpisodeWithinVolume = seedVolume === 0
+      ? integer(reveal.seedEpisodeWithinVolume, 0, 0, 0)
+      : integer(reveal.seedEpisodeWithinVolume, 1, plan.episodesPerVolume, null);
+    const payoffEpisodeWithinVolume = integer(reveal.payoffEpisodeWithinVolume, 1, plan.episodesPerVolume, null);
+    const deepenVolumes = [...new Set(array(reveal.deepenVolumes)
+      .map((entry) => integer(entry, 1, plan.totalVolumes, null))
+      .filter((entry) => entry !== null))].sort((a, b) => a - b);
+    if (seedVolume === null || payoffVolume === null || seedEpisodeWithinVolume === null
+      || payoffEpisodeWithinVolume === null || seedVolume > payoffVolume
+      || deepenVolumes.some((volumeNo) => volumeNo < Math.max(1, seedVolume) || volumeNo >= payoffVolume)) {
+      throw new Error("serial_architecture_long_reveal_schedule_invalid");
+    }
+    const introduceEpisode = seedVolume === 0
+      ? 1
+      : ((seedVolume - 1) * plan.episodesPerVolume) + seedEpisodeWithinVolume + 1;
+    const payoffEpisode = ((payoffVolume - 1) * plan.episodesPerVolume) + payoffEpisodeWithinVolume + 1;
+    return {
+      key: text(reveal.key, 80) || `series-reveal-${index + 1}`,
+      secret: requiredText(reveal.secret, 700, 10, "serial_architecture_long_reveal_secret_invalid"),
+      seedVolume,
+      seedEpisodeWithinVolume,
+      deepenVolumes,
+      payoffVolume,
+      payoffEpisodeWithinVolume,
+      introduceEpisode,
+      payoffEpisode,
+      payoffConsequence: requiredText(reveal.payoffConsequence, 500, 10, "serial_architecture_long_reveal_consequence_invalid")
+    };
+  });
+  if (longReveals.length < minimumLongReveals
+    || hasDuplicateKeys(longReveals)
+    || longReveals.some((item) => !item.key.startsWith("series-"))) {
+    throw new Error("serial_architecture_long_reveals_invalid");
+  }
+  if (plan.totalVolumes > 1) {
+    const firstVolumePayoffs = longReveals.filter((item) => item.payoffVolume === 1).length;
+    if (firstVolumePayoffs / longReveals.length > 0.25
+      || !longReveals.some((item) => item.payoffVolume > Math.ceil(plan.totalVolumes / 2))
+      || !longReveals.some((item) => item.payoffVolume === plan.totalVolumes)
+      || !longReveals.some((item) => item.seedVolume === 0)) {
+      throw new Error("serial_architecture_long_reveal_distribution_invalid");
+    }
+  }
+
+  const conflictKeys = new Set(conflictSources.map((item) => item.key));
+  const longRevealKeys = new Set(longReveals.map((item) => item.key));
+  const volumePlan = array(source.volumePlan).map((item) => object(item));
+  if (volumePlan.length !== plan.totalVolumes) throw new Error("serial_architecture_volume_count_invalid");
+  const normalizedVolumes = volumePlan.map((volume, index) => {
+    const volumeNo = integer(volume.volumeNo, 1, plan.totalVolumes, null);
+    const volumeConflictKeys = requiredList(volume.conflictSourceKeys, { min: 1, max: 6, itemMax: 80 }, "serial_architecture_volume_conflicts_invalid");
+    const volumeMilestoneIds = requiredList(volume.characterMilestoneIds, { min: 1, max: 12, itemMax: 80 }, "serial_architecture_volume_milestones_invalid");
+    const protectedRevealKeys = stringList(volume.protectedRevealKeys, { max: 24, itemMax: 80 });
+    if (volumeNo !== index + 1
+      || volumeConflictKeys.some((key) => !conflictKeys.has(key))
+      || volumeMilestoneIds.some((key) => !milestoneIds.has(key) || milestoneVolumes.get(key) !== volumeNo)
+      || protectedRevealKeys.some((key) => {
+        const reveal = longReveals.find((entry) => entry.key === key);
+        return !reveal || reveal.payoffVolume <= volumeNo;
+      })) {
+      throw new Error("serial_architecture_volume_references_invalid");
+    }
+    const mainEpisodeStart = ((volumeNo - 1) * plan.episodesPerVolume) + 1;
+    const mainEpisodeEnd = volumeNo * plan.episodesPerVolume;
+    return {
+      volumeNo,
+      mainEpisodeStart,
+      mainEpisodeEnd,
+      internalEpisodeStart: mainEpisodeStart + 1,
+      internalEpisodeEnd: mainEpisodeEnd + 1,
+      role: requiredText(volume.role, 500, 10, "serial_architecture_volume_role_invalid"),
+      openingState: requiredText(volume.openingState, 500, 10, "serial_architecture_volume_opening_invalid"),
+      mainGoal: requiredText(volume.mainGoal, 500, 10, "serial_architecture_volume_goal_invalid"),
+      antagonistPressure: requiredText(volume.antagonistPressure, 500, 10, "serial_architecture_volume_pressure_invalid"),
+      midpointTurn: requiredText(volume.midpointTurn, 500, 10, "serial_architecture_volume_midpoint_invalid"),
+      climax: requiredText(volume.climax, 500, 10, "serial_architecture_volume_climax_invalid"),
+      irreversibleChange: requiredText(volume.irreversibleChange, 500, 10, "serial_architecture_volume_change_invalid"),
+      nextVolumeBridge: requiredText(volume.nextVolumeBridge, 500, 10, "serial_architecture_volume_bridge_invalid"),
+      conflictSourceKeys: volumeConflictKeys,
+      characterMilestoneIds: volumeMilestoneIds,
+      protectedRevealKeys
+    };
+  });
+  if ([...conflictKeys].some((key) => !normalizedVolumes.some((volume) => volume.conflictSourceKeys.includes(key)))) {
+    throw new Error("serial_architecture_conflict_unused");
+  }
+  for (const arc of characterArcs) {
+    for (const milestone of arc.milestones) {
+      if (!normalizedVolumes[milestone.volumeNo - 1].characterMilestoneIds.includes(milestone.id)) {
+        throw new Error("serial_architecture_milestone_unlinked");
+      }
+    }
+  }
+
+  const disclosureSource = object(source.prologueDisclosure);
+  const mustShow = requiredList(disclosureSource.mustShow, { min: 3, max: 8, itemMax: 400 }, "serial_architecture_prologue_must_show_invalid");
+  const resolvedNow = requiredList(disclosureSource.resolvedNow, { min: 1, max: 3, itemMax: 400 }, "serial_architecture_prologue_resolved_invalid");
+  const openQuestions = requiredList(disclosureSource.openQuestions, { min: 1, max: 3, itemMax: 400 }, "serial_architecture_prologue_questions_invalid");
+  const mayHintRevealKeys = stringList(disclosureSource.mayHintRevealKeys, { max: 6, itemMax: 80 });
+  const mustNotAnswerRevealKeys = stringList(disclosureSource.mustNotAnswerRevealKeys, { max: 24, itemMax: 80 });
+  const laterRevealKeys = longReveals.filter((item) => item.payoffVolume > 1).map((item) => item.key);
+  if ((plan.totalVolumes > 1 && !mayHintRevealKeys.length)
+    || mayHintRevealKeys.some((key) => !longRevealKeys.has(key))
+    || mayHintRevealKeys.some((key) => longReveals.find((item) => item.key === key)?.seedVolume !== 0)
+    || mustNotAnswerRevealKeys.some((key) => !longRevealKeys.has(key))
+    || laterRevealKeys.some((key) => !mustNotAnswerRevealKeys.includes(key))
+    || mayHintRevealKeys.some((key) => !mustNotAnswerRevealKeys.includes(key))) {
+    throw new Error("serial_architecture_prologue_reveal_boundary_invalid");
+  }
+  const coreRevealBudgetPercent = integer(disclosureSource.coreRevealBudgetPercent, 5, 25, null);
+  if (coreRevealBudgetPercent === null) throw new Error("serial_architecture_prologue_budget_invalid");
+
+  return {
+    schemaVersion: "2026-08-03-v1",
+    plannedVolumeCount: plan.totalVolumes,
+    plannedMainEpisodeCount: plan.totalMainEpisodes,
+    centralTheme: requiredText(source.centralTheme, 600, 20, "serial_architecture_theme_invalid"),
+    seriesQuestion: requiredText(source.seriesQuestion, 600, 20, "serial_architecture_question_invalid"),
+    endingBoundary: requiredText(source.endingBoundary, 1_000, 30, "serial_architecture_ending_invalid"),
+    endingCost: requiredText(source.endingCost, 600, 20, "serial_architecture_ending_cost_invalid"),
+    renewableConflictSources: conflictSources,
+    renewableConflictCount: conflictSources.length,
+    characterArcs,
+    characterArcCount: characterArcs.length,
+    volumePlan: normalizedVolumes,
+    longReveals,
+    longRevealCount: longReveals.length,
+    lateRevealCount: longReveals.filter((item) => item.payoffVolume > Math.ceil(plan.totalVolumes / 2)).length,
+    prologueDisclosure: {
+      dramaticFunction: requiredText(disclosureSource.dramaticFunction, 500, 20, "serial_architecture_prologue_function_invalid"),
+      mustShow,
+      mayHintRevealKeys,
+      mustNotAnswerRevealKeys,
+      resolvedNow,
+      openQuestions,
+      coreRevealBudgetPercent
+    },
+    expansionRules: requiredList(source.expansionRules, { min: 4, max: 10, itemMax: 400 }, "serial_architecture_expansion_rules_invalid")
+  };
+}
+
+function normalizeArchitectureReferences(value, arcScope, architecture) {
+  const source = object(value);
+  if (!arcScope.volumeNo) {
+    return {
+      volumeNo: integer(source.volumeNo, 1, 30, null),
+      conflictSourceKeys: stringList(source.conflictSourceKeys, { max: 6, itemMax: 80 }),
+      characterMilestoneIds: stringList(source.characterMilestoneIds, { max: 12, itemMax: 80 }),
+      longRevealKeys: stringList(source.longRevealKeys, { max: 12, itemMax: 80 })
+    };
+  }
+  const volumeNo = integer(source.volumeNo, 1, Number(architecture.plannedVolumeCount || 30), null);
+  const volume = array(architecture.volumePlan).find((item) => Number(item.volumeNo) === Number(arcScope.volumeNo));
+  if (!volume || volumeNo !== Number(arcScope.volumeNo)) throw new Error("serial_arc_architecture_volume_invalid");
+  const conflictSourceKeys = requiredList(source.conflictSourceKeys, { min: 1, max: 6, itemMax: 80 }, "serial_arc_architecture_conflicts_invalid");
+  const characterMilestoneIds = requiredList(source.characterMilestoneIds, { min: 1, max: 12, itemMax: 80 }, "serial_arc_architecture_milestones_invalid");
+  const longRevealKeys = stringList(source.longRevealKeys, { max: 12, itemMax: 80 });
+  const validLongRevealKeys = new Set(array(architecture.longReveals).map((item) => item.key));
+  if (conflictSourceKeys.some((key) => !array(volume.conflictSourceKeys).includes(key))
+    || characterMilestoneIds.some((key) => !array(volume.characterMilestoneIds).includes(key))
+    || longRevealKeys.some((key) => !validLongRevealKeys.has(key))) {
+    throw new Error("serial_arc_architecture_references_invalid");
+  }
+  return { volumeNo, conflictSourceKeys, characterMilestoneIds, longRevealKeys };
+}
+
+function normalizePrologueDisclosurePlan(value, episodeNo, architectureValue) {
+  const emptyPlan = { mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: [] };
+  if (Number(episodeNo) !== 1) return emptyPlan;
+  const architecture = object(architectureValue);
+  const expected = object(architecture.prologueDisclosure);
+  if (!array(expected.mustShow).length) return emptyPlan;
+  const source = object(value);
+  const submittedMustShow = stringList(source.mustShow, { max: 8, itemMax: 400 });
+  const submittedHints = stringList(source.mayHintRevealKeys, { max: 6, itemMax: 80 });
+  const submittedProtected = stringList(source.mustNotAnswerRevealKeys, { max: 24, itemMax: 80 });
+  const submittedResolved = stringList(source.resolvedNow, { max: 3, itemMax: 400 });
+  const submittedQuestions = stringList(source.openQuestions, { max: 3, itemMax: 400 });
+  if (submittedMustShow.length < array(expected.mustShow).length
+    || submittedResolved.length < array(expected.resolvedNow).length
+    || submittedQuestions.length < array(expected.openQuestions).length
+    || array(expected.mayHintRevealKeys).some((key) => !submittedHints.includes(key))
+    || array(expected.mustNotAnswerRevealKeys).some((key) => !submittedProtected.includes(key))) {
+    throw new Error("serial_prologue_disclosure_plan_incomplete");
+  }
+  return {
+    mustShow: array(expected.mustShow),
+    mayHintRevealKeys: array(expected.mayHintRevealKeys),
+    mustNotAnswerRevealKeys: array(expected.mustNotAnswerRevealKeys),
+    resolvedNow: array(expected.resolvedNow),
+    openQuestions: array(expected.openQuestions)
+  };
+}
+
+function hasDuplicateKeys(items) {
+  const keys = items.map((item) => item.key || item.id);
+  return new Set(keys).size !== keys.length;
 }
 
 function normalizeNarrativePlan(value) {

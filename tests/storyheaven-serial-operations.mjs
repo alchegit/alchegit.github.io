@@ -4,6 +4,24 @@ import { chromium } from "playwright";
 const root = process.env.STORYHEAVEN_TEST_ROOT || "http://127.0.0.1:4178";
 const apiPattern = "https://harvard-museum-nails-mission.trycloudflare.com/**";
 const browser = await chromium.launch({ headless: true });
+const completeArchitecture = {
+  status: "complete",
+  schemaVersion: "2026-08-03-v1",
+  plannedVolumeCount: 10,
+  plannedMainEpisodeCount: 250,
+  renewableConflictCount: 5,
+  longRevealCount: 6,
+  lateRevealCount: 3
+};
+const weakArchitecture = {
+  status: "needs_strengthening",
+  schemaVersion: null,
+  plannedVolumeCount: 0,
+  plannedMainEpisodeCount: 0,
+  renewableConflictCount: 0,
+  longRevealCount: 0,
+  lateRevealCount: 0
+};
 
 const stories = [
   {
@@ -26,6 +44,7 @@ const stories = [
     queue: { id: "queue-next-4", status: "waiting", queuePosition: 2, cancelable: true },
     latestRunStatus: "published",
     readyPublicationCount: 0,
+    architecture: completeArchitecture,
     schedule: { id: "schedule-a", name: "주간 판타지", status: "active", publicationMode: "auto_public" },
     publishedAt: "2026-07-20T03:00:00.000Z",
     createdAt: "2026-07-20T03:00:00.000Z",
@@ -51,6 +70,7 @@ const stories = [
     activeRunCount: 0,
     latestRunStatus: "published",
     readyPublicationCount: 0,
+    architecture: completeArchitecture,
     schedule: null,
     createdAt: "2026-07-24T03:00:00.000Z",
     updatedAt: "2026-07-29T03:00:00.000Z",
@@ -75,6 +95,7 @@ const stories = [
     activeRunCount: 0,
     latestRunStatus: "published",
     readyPublicationCount: 0,
+    architecture: completeArchitecture,
     schedule: { id: "schedule-c", name: "SF 단편", status: "paused", publicationMode: "auto_public" },
     createdAt: "2026-07-10T03:00:00.000Z",
     updatedAt: "2026-07-18T03:00:00.000Z",
@@ -99,6 +120,7 @@ const stories = [
     activeRunCount: 0,
     latestRunStatus: "error",
     readyPublicationCount: 0,
+    architecture: weakArchitecture,
     schedule: null,
     createdAt: "2026-07-31T03:00:00.000Z",
     updatedAt: "2026-07-31T04:10:00.000Z",
@@ -168,7 +190,7 @@ try {
 
     await page.goto(`${root}/storyheaven/operator/serial/stories/`, { waitUntil: "networkidle" });
     await page.locator("[data-works-dashboard]").waitFor({ state: "visible" });
-    assert.equal(await page.locator(".managed-story").count(), 4, `${viewport.name} managed story count`);
+    assert.equal(await page.locator(".managed-story").count(), 3, `${viewport.name} managed story count excludes hidden stories by default`);
     assert.equal(await page.locator("[data-summary-public]").textContent(), "1", `${viewport.name} public summary`);
     assert.equal(await page.locator("[data-summary-stopped]").textContent(), "1", `${viewport.name} stopped summary`);
     const layout = await page.evaluate(() => ({
@@ -181,12 +203,14 @@ try {
     assert.equal(layout.title, "0번 버스의 마지막 승객", `${viewport.name} title`);
     assert.equal(layout.hasExecutableImage, false, `${viewport.name} text-only rendering`);
     assert.equal(await page.locator(".operator-note").count(), 0, `${viewport.name} operator notes are not exposed`);
+    await page.locator("[data-visibility-filter]").selectOption("all");
+    assert.equal(await page.locator(".managed-story").count(), 4, `${viewport.name} full view includes hidden stories`);
     assert.equal(
       await page.locator(".managed-story").nth(2).getByRole("button", { name: "다음 화 작성", includeHidden: true }).evaluate((button) => button.disabled),
       false,
       `${viewport.name} explicit operator request overrides paused continuation mode`
     );
-    const legacyStory = page.locator(".managed-story").nth(1);
+    const legacyStory = page.locator(".managed-story").filter({ hasText: "잠들지 않는 세탁소" });
     assert.equal(
       await legacyStory.getByRole("button", { name: "다음 화 작성", includeHidden: true }).evaluate((button) => button.disabled),
       false,
@@ -223,15 +247,17 @@ try {
       page.once("dialog", (dialog) => dialog.accept());
       await legacyStory.getByRole("button", { name: "다음 화 작성" }).click();
       await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("대기열에 넣었습니다"));
+      await page.waitForFunction(() => !document.querySelector("[data-refresh]")?.disabled);
       assert.match(continuationRequests[0].path, /\/episodes\/2\/continue$/u, "legacy story requests episode 3 directly");
       assert.deepEqual(continuationRequests[0].body, { batchCount: 3 }, "legacy story requests three consecutive episodes");
 
       await legacyStory.locator(".rewrite-field input").fill("1");
+      assert.equal(await legacyStory.locator(".rewrite-field input").inputValue(), "1", "rewrite target input accepts a specific episode number");
       page.once("dialog", (dialog) => dialog.accept());
       await legacyStory.locator(".rewrite-field").getByRole("button", { name: "재작성", exact: true }).click();
       await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("재작성 작업"));
-      assert.match(rewriteRequests[0].path, /\/episodes\/1\/rewrite$/u, "operator can request a specific episode rewrite");
-      assert.match(rewriteRequests[0].body.notes, /프롤로그|본편/u, "rewrite request carries an operator note");
+      assert.match(rewriteRequests.at(-1).path, /\/episodes\/1\/rewrite$/u, "operator can request a specific episode rewrite");
+      assert.match(rewriteRequests.at(-1).body.notes, /프롤로그|본편/u, "rewrite request carries an operator note");
     }
 
     await page.locator("[data-visibility-filter]").selectOption("private");

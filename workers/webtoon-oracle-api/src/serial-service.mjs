@@ -4,10 +4,12 @@ import {
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
+  buildStoryHeavenArcScope,
   decideStoryHeavenSerialReview,
   normalizeStoryHeavenConceptPolicy,
   normalizeStoryHeavenCreativeControls,
   storyHeavenCreativeControlGuidance,
+  storyHeavenSeriesPosition,
   storyHeavenSerialQualityThresholds,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenSerialStoryControl,
@@ -57,6 +59,7 @@ export function createStoryHeavenSerialService({
     archiveSchedule,
     runSchedule,
     planStory,
+    strengthenStoryArchitecture,
     queueEpisode,
     requestContinuation,
     rewriteEpisode,
@@ -523,6 +526,18 @@ export function createStoryHeavenSerialService({
                 control.operator_note, control.updated_at as control_updated_at,
                 source.schedule_id, schedule.schedule_name, schedule.schedule_status,
                 schedule.publication_mode, schedule.concept_policy_json,
+                json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.schemaVersion'
+                  returning varchar2(40) null on error) as architecture_version,
+                json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.plannedVolumeCount'
+                  returning number null on error) as architecture_volume_count,
+                json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.plannedMainEpisodeCount'
+                  returning number null on error) as architecture_episode_count,
+                json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.renewableConflictCount'
+                  returning number null on error) as architecture_conflict_count,
+                json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.longRevealCount'
+                  returning number null on error) as architecture_reveal_count,
+                json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.lateRevealCount'
+                  returning number null on error) as architecture_late_reveal_count,
                 (select count(*) from storyheaven_episodes episode
                   where episode.story_id = story.id) as episode_count,
                 (select count(*) from storyheaven_episodes episode
@@ -556,6 +571,7 @@ export function createStoryHeavenSerialService({
               group by serial_run.story_id
            ) source on source.story_id = story.id
            left join storyheaven_serial_schedules schedule on schedule.id = source.schedule_id
+           left join storyheaven_serial_bibles bible on bible.story_id = story.id
           where story.author_user_id = :author_user_id
             and story.content_origin = 'admin_seed'
             ${dateClauses.join("\n            ")}
@@ -584,6 +600,18 @@ export function createStoryHeavenSerialService({
               control.operator_note, control.updated_at as control_updated_at,
               source.schedule_id, schedule.schedule_name, schedule.schedule_status,
               schedule.publication_mode, schedule.concept_policy_json,
+              json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.schemaVersion'
+                returning varchar2(40) null on error) as architecture_version,
+              json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.plannedVolumeCount'
+                returning number null on error) as architecture_volume_count,
+              json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.plannedMainEpisodeCount'
+                returning number null on error) as architecture_episode_count,
+              json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.renewableConflictCount'
+                returning number null on error) as architecture_conflict_count,
+              json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.longRevealCount'
+                returning number null on error) as architecture_reveal_count,
+              json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.lateRevealCount'
+                returning number null on error) as architecture_late_reveal_count,
               (select count(*) from storyheaven_episodes episode
                 where episode.story_id = story.id) as episode_count,
               (select count(*) from storyheaven_episodes episode
@@ -617,6 +645,7 @@ export function createStoryHeavenSerialService({
             group by serial_run.story_id
          ) source on source.story_id = story.id
          left join storyheaven_serial_schedules schedule on schedule.id = source.schedule_id
+         left join storyheaven_serial_bibles bible on bible.story_id = story.id
         where story.id = :story_id
           and story.author_user_id = :author_user_id
           and story.content_origin = 'admin_seed'`,
@@ -991,6 +1020,91 @@ export function createStoryHeavenSerialService({
     });
   }
 
+  async function strengthenStoryArchitecture(storyIdValue, userId, input = {}) {
+    const storyId = requireId(storyIdValue, "story_id");
+    return withTransaction(async (connection) => {
+      const story = await selectOne(connection,
+        `select id, title, logline, public_synopsis, genre, genres_json, tags_json,
+                content_rating, content_origin, author_user_id, story_status
+           from storyheaven_stories where id = :story_id for update`,
+        { story_id: storyId });
+      if (!story) throw failure("story_not_found", 404);
+      if (story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
+        throw failure("serial_story_not_system_owned", 409);
+      }
+      if (story.STORY_STATUS === "archived") throw failure("serial_story_archived", 409);
+      const active = await selectOne(connection,
+        `select count(*) as active_count
+           from storyheaven_serial_runs
+          where story_id = :story_id
+            and run_status in ('queued', 'running', 'rewrite', 'ready')
+            and queue_canceled_at is null`,
+        { story_id: storyId });
+      if (Number(active.ACTIVE_COUNT || 0) > 0) throw failure("serial_story_work_active", 409);
+
+      const bibleRow = await selectOne(connection,
+        `select * from storyheaven_serial_bibles where story_id = :story_id`,
+        { story_id: storyId });
+      const existingContext = bibleRow
+        ? await loadSerialContext(connection, storyId, { requireArc: false })
+        : null;
+      const existingConcept = existingContext?.bible?.concept || {};
+      const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+        title: input.concept?.title || existingConcept.title || story.TITLE,
+        logline: input.concept?.logline || existingConcept.logline || story.LOGLINE,
+        synopsis: input.concept?.synopsis || existingConcept.synopsis || story.PUBLIC_SYNOPSIS,
+        genres: input.concept?.genres || existingConcept.genres || parseJson(story.GENRES_JSON, [story.GENRE]),
+        tags: input.concept?.tags || existingConcept.tags || parseJson(story.TAGS_JSON, []),
+        rating: existingConcept.rating || (story.CONTENT_RATING === "all" ? "all" : "teen"),
+        readerPromise: input.concept?.readerPromise || existingConcept.readerPromise || `${story.TITLE}의 중심 갈등이 매 권 새로운 선택과 결과로 이어진다.`,
+        familiarPleasure: input.concept?.familiarPleasure || existingConcept.familiarPleasure || "장르 독자가 기대하는 사건 해결과 인물 성장의 즐거움",
+        novelTwist: input.concept?.novelTwist || existingConcept.novelTwist || "기존 설정의 한 가지 차별점이 인물의 선택마다 다른 대가를 만든다.",
+        targetAge: existingConcept.targetAge || (story.CONTENT_RATING === "all" ? "all" : "teen")
+      });
+      const seriesPlan = normalizeSeriesPlan(
+        input.seriesPlan
+        || existingContext?.bible?.narrativeBlueprint?.seriesPlan
+        || existingConcept.seriesPlan
+      );
+      const conceptWithPlan = { ...concept, seriesPlan };
+      if (bibleRow) {
+        await connection.execute(
+          `update storyheaven_serial_bibles
+              set concept_json = :concept_json, updated_at = systimestamp
+            where story_id = :story_id`,
+          { story_id: storyId, concept_json: clobJson(conceptWithPlan) }
+        );
+      } else {
+        await upsertBibleConcept(connection, storyId, conceptWithPlan);
+      }
+      const run = await createRun(connection, {
+        storyId,
+        runType: "planning",
+        stage: "build_bible",
+        userId,
+        input: { architectureOnly: true, preserveExistingWork: true }
+      });
+      await queueJob(connection, {
+        runId: run.id,
+        storyId,
+        type: "build_bible",
+        input: {
+          story: publicStory(story),
+          concept: conceptWithPlan,
+          seriesPlan,
+          architectureOnly: true,
+          preserveExistingWork: true,
+          existingBible: existingContext?.bible || null,
+          priorArcs: existingContext?.priorArcs || [],
+          canon: existingContext?.canon || [],
+          reveals: existingContext?.reveals || [],
+          recentEpisodes: existingContext?.recentEpisodes || []
+        }
+      });
+      return run;
+    });
+  }
+
   async function queueStoryPlanning(connection, story, userId, input = {}) {
     const existing = await selectOne(connection,
       `select * from (
@@ -1070,6 +1184,8 @@ export function createStoryHeavenSerialService({
     }
 
     const nextArcNo = Math.max(0, ...context.priorArcs.map((arc) => Number(arc.arcNo || 0))) + 1;
+    const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
+    const arcScope = safeArcScope(targetEpisodeNo, seriesPlan, context.bible.narrativeBlueprint?.seriesArchitecture);
     const planning = await createRun(connection, {
       storyId: story.ID,
       runType: "planning",
@@ -1087,7 +1203,8 @@ export function createStoryHeavenSerialService({
         bible: context.bible,
         arcNo: nextArcNo,
         firstEpisodeNo: targetEpisodeNo,
-        seriesPlan: context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan(),
+        seriesPlan,
+        arcScope,
         priorArcs: context.priorArcs,
         canon: context.canon,
         autoEpisode: true
@@ -1113,7 +1230,7 @@ export function createStoryHeavenSerialService({
   async function rewriteEpisode(storyIdValue, episodeNoValue, userId, input = {}) {
     const storyId = requireId(storyIdValue, "story_id");
     const episodeNo = Number(episodeNoValue);
-    if (!Number.isInteger(episodeNo) || episodeNo < 1 || episodeNo > 300) throw failure("invalid_episode_number", 400);
+    if (!Number.isInteger(episodeNo) || episodeNo < 1 || episodeNo > STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax) throw failure("invalid_episode_number", 400);
     return withTransaction(async (connection) => {
       const story = await selectOne(connection,
         `select id, author_user_id, content_origin
@@ -1192,11 +1309,11 @@ export function createStoryHeavenSerialService({
     if (!new Set(["reader_threshold", "admin_request"]).has(triggerType)) {
       throw failure("serial_continuation_trigger_invalid", 400);
     }
-    if (!Number.isInteger(sourceEpisodeNo) || sourceEpisodeNo < continuationMinimumEpisode(triggerType) || sourceEpisodeNo >= 300) {
+    if (!Number.isInteger(sourceEpisodeNo) || sourceEpisodeNo < continuationMinimumEpisode(triggerType) || sourceEpisodeNo >= STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax) {
       throw failure("serial_continuation_episode_invalid", 400);
     }
     const targetEpisodeNo = sourceEpisodeNo + 1;
-    const batchEndEpisodeNo = Math.min(300, sourceEpisodeNo + checked.request.batchCount);
+    const batchEndEpisodeNo = Math.min(STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, sourceEpisodeNo + checked.request.batchCount);
     return withTransaction(async (connection) => {
       const source = await selectOne(connection,
         `select episode.id as episode_id, episode.story_id, episode.episode_no,
@@ -1654,7 +1771,8 @@ export function createStoryHeavenSerialService({
       if (!job) throw failure("serial_job_lease_mismatch", 409);
       if (job.INPUT_HASH !== inputHash) throw failure("serial_job_revision_mismatch", 409);
       const type = job.JOB_TYPE;
-      const safeResult = normalizeStoryHeavenSerialWorkerResult(type, result?.result ?? result);
+      const payload = parseJson(job.INPUT_JSON, {});
+      const safeResult = normalizeStoryHeavenSerialWorkerResult(type, result?.result ?? result, { payload });
       await connection.execute(
         `update storyheaven_serial_jobs
             set job_status = 'complete', output_json = :output_json, completed_at = systimestamp,
@@ -1662,7 +1780,6 @@ export function createStoryHeavenSerialService({
           where id = :id`,
         { id: job.ID, output_json: clobJson({ model: cleanText(model, 160), result: safeResult }) }
       );
-      const payload = parseJson(job.INPUT_JSON, {});
       await advanceJob(connection, { job, payload, result: safeResult });
       return { accepted: true, jobId: job.ID, runId: job.RUN_ID };
     });
@@ -1874,6 +1991,11 @@ export function createStoryHeavenSerialService({
   async function createEpisodeRun(connection, { storyId, userId, episodeNo, releaseAt, notes, scheduleId, queueGroupId = null, batchEndEpisodeNo = null }) {
     const context = await loadSerialContext(connection, storyId);
     if (!context.bible || !context.arc) throw failure("serial_plan_required", 409);
+    const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
+    const seriesArchitecture = context.bible.narrativeBlueprint?.seriesArchitecture;
+    if (!isCompleteSeriesArchitecture(seriesArchitecture, seriesPlan)) {
+      throw failure("serial_architecture_required", 409);
+    }
     const sequence = await selectOne(connection,
       `select greatest(
          nvl((
@@ -1888,6 +2010,12 @@ export function createStoryHeavenSerialService({
        ) + 1 as next_episode_no from dual`, { story_id: storyId });
     const nextEpisodeNo = Number(sequence.NEXT_EPISODE_NO || 1);
     const targetEpisodeNo = episodeNo || nextEpisodeNo;
+    try {
+      storyHeavenSeriesPosition(targetEpisodeNo, seriesPlan);
+    } catch (error) {
+      if (error?.message === "serial_series_episode_out_of_range") throw failure("serial_series_complete", 409);
+      throw error;
+    }
     if (targetEpisodeNo !== nextEpisodeNo) {
       throw failure("serial_episode_sequence_required", 409, [{ nextEpisodeNo }]);
     }
@@ -2011,23 +2139,69 @@ export function createStoryHeavenSerialService({
   async function acceptBible(connection, job, payload, bible) {
     const storyId = job.STORY_ID;
     if (!storyId) throw failure("serial_story_missing", 409);
-    await connection.execute(
-      `update storyheaven_serial_bibles set
-          bible_status = 'active', world_rules_json = :world_rules_json,
-          characters_json = :characters_json, timeline_json = :timeline_json,
-          glossary_json = :glossary_json, forbidden_json = :forbidden_json,
-          voice_profile_json = :voice_profile_json,
-          narrative_blueprint_json = :narrative_blueprint_json,
-          source_job_id = :source_job_id,
-          updated_at = systimestamp where story_id = :story_id`,
-      {
-        story_id: storyId, world_rules_json: clobJson(bible.worldRules),
-        characters_json: clobJson(bible.characters), timeline_json: clobJson(bible.timeline),
-        glossary_json: clobJson(bible.glossary), forbidden_json: clobJson(bible.forbiddenContradictions),
-        voice_profile_json: clobJson(bible.voiceProfile),
-        narrative_blueprint_json: clobJson({ ...bible.narrativeBlueprint, seriesPlan: normalizeSeriesPlan(payload.seriesPlan || payload.concept?.seriesPlan) }), source_job_id: job.ID
-      }
+    const previousBible = await selectOne(connection,
+      `select * from storyheaven_serial_bibles where story_id = :story_id for update`,
+      { story_id: storyId });
+    const previousNarrativeBlueprint = parseJson(previousBible?.NARRATIVE_BLUEPRINT_JSON, {});
+    const previousArchitecture = previousNarrativeBlueprint.seriesArchitecture || null;
+    const seriesPlan = normalizeSeriesPlan(payload.seriesPlan || payload.concept?.seriesPlan);
+    const preserveExistingBible = payload.architectureOnly === true
+      && parseJson(previousBible?.WORLD_RULES_JSON, []).length >= 5
+      && parseJson(previousBible?.CHARACTERS_JSON, []).length >= 2;
+    const narrativeBlueprint = preserveExistingBible
+      ? {
+          ...previousNarrativeBlueprint,
+          seriesArchitecture: bible.narrativeBlueprint.seriesArchitecture,
+          seriesPlan
+        }
+      : { ...bible.narrativeBlueprint, seriesPlan };
+    if (preserveExistingBible) {
+      await connection.execute(
+        `update storyheaven_serial_bibles set
+            bible_status = 'active', narrative_blueprint_json = :narrative_blueprint_json,
+            source_job_id = :source_job_id, updated_at = systimestamp
+          where story_id = :story_id`,
+        {
+          story_id: storyId,
+          narrative_blueprint_json: clobJson(narrativeBlueprint),
+          source_job_id: job.ID
+        }
+      );
+    } else {
+      await connection.execute(
+        `update storyheaven_serial_bibles set
+            bible_status = 'active', world_rules_json = :world_rules_json,
+            characters_json = :characters_json, timeline_json = :timeline_json,
+            glossary_json = :glossary_json, forbidden_json = :forbidden_json,
+            voice_profile_json = :voice_profile_json,
+            narrative_blueprint_json = :narrative_blueprint_json,
+            source_job_id = :source_job_id,
+            updated_at = systimestamp where story_id = :story_id`,
+        {
+          story_id: storyId, world_rules_json: clobJson(bible.worldRules),
+          characters_json: clobJson(bible.characters), timeline_json: clobJson(bible.timeline),
+          glossary_json: clobJson(bible.glossary), forbidden_json: clobJson(bible.forbiddenContradictions),
+          voice_profile_json: clobJson(bible.voiceProfile),
+          narrative_blueprint_json: clobJson(narrativeBlueprint), source_job_id: job.ID
+        }
+      );
+    }
+    await syncSeriesArchitectureReveals(
+      connection,
+      storyId,
+      previousArchitecture,
+      narrativeBlueprint.seriesArchitecture
     );
+    if (payload.architectureOnly === true) {
+      await connection.execute(
+        `update storyheaven_serial_runs
+            set run_status = 'approved', current_stage = 'architecture_complete',
+                completed_at = systimestamp, updated_at = systimestamp
+          where id = :run_id`,
+        { run_id: job.RUN_ID }
+      );
+      return;
+    }
     const arcNoRow = await selectOne(connection,
       `select nvl((
                 select max(arc_no) from storyheaven_serial_arcs where story_id = :story_id
@@ -2038,6 +2212,12 @@ export function createStoryHeavenSerialService({
               ) + 1 as first_episode_no
          from dual`, { story_id: storyId });
     const context = await loadSerialContext(connection, storyId, { requireArc: false });
+    const firstEpisodeNo = Number(arcNoRow.FIRST_EPISODE_NO || 1);
+    const arcScope = buildStoryHeavenArcScope(
+      firstEpisodeNo,
+      seriesPlan,
+      narrativeBlueprint.seriesArchitecture
+    );
     await connection.execute(
       `update storyheaven_serial_runs set current_stage = 'build_arc', updated_at = systimestamp where id = :run_id`,
       { run_id: job.RUN_ID }
@@ -2049,10 +2229,11 @@ export function createStoryHeavenSerialService({
       input: {
         story: context.story,
         concept: payload.concept || context.bible.concept,
-        bible,
-        seriesPlan: normalizeSeriesPlan(payload.seriesPlan || payload.concept?.seriesPlan),
+        bible: { ...bible, narrativeBlueprint },
+        seriesPlan,
         arcNo: Number(arcNoRow.NEXT_ARC_NO || 1),
-        firstEpisodeNo: Number(arcNoRow.FIRST_EPISODE_NO || 1),
+        firstEpisodeNo,
+        arcScope,
         priorArcs: context.priorArcs,
         canon: context.canon,
         autoEpisode: payload.autoEpisode === true
@@ -2060,11 +2241,62 @@ export function createStoryHeavenSerialService({
     });
   }
 
+  async function syncSeriesArchitectureReveals(connection, storyId, previousArchitecture, nextArchitecture) {
+    const previousKeys = new Set((previousArchitecture?.longReveals || []).map((item) => String(item?.key || "")).filter(Boolean));
+    const nextReveals = Array.isArray(nextArchitecture?.longReveals) ? nextArchitecture.longReveals : [];
+    const nextKeys = new Set(nextReveals.map((item) => String(item?.key || "")).filter(Boolean));
+    for (const oldKey of previousKeys) {
+      if (nextKeys.has(oldKey)) continue;
+      await connection.execute(
+        `update storyheaven_reveal_ledger
+            set reveal_status = 'retired', updated_at = systimestamp
+          where story_id = :story_id and reveal_key = :reveal_key
+            and reveal_status in ('planned', 'seeded')`,
+        { story_id: storyId, reveal_key: oldKey }
+      );
+    }
+    for (const reveal of nextReveals) {
+      await connection.execute(
+        `merge into storyheaven_reveal_ledger target
+         using (select :story_id story_id, :reveal_key reveal_key from dual) source
+            on (target.story_id = source.story_id and target.reveal_key = source.reveal_key)
+         when matched then update set
+           target.secret_text = :secret_text,
+           target.introduce_episode_no = :introduce_episode_no,
+           target.payoff_episode_no = :payoff_episode_no,
+           target.reveal_status = case
+             when target.reveal_status in ('seeded', 'revealed') then target.reveal_status
+             else 'planned'
+           end,
+           target.updated_at = systimestamp
+         when not matched then insert (
+           id, story_id, reveal_key, secret_text, introduce_episode_no,
+           payoff_episode_no, reveal_status, source_arc_id
+         ) values (
+           :id, :story_id, :reveal_key, :secret_text, :introduce_episode_no,
+           :payoff_episode_no, 'planned', null
+         )`,
+        {
+          id: randomId(),
+          story_id: storyId,
+          reveal_key: reveal.key,
+          secret_text: reveal.secret,
+          introduce_episode_no: reveal.introduceEpisode,
+          payoff_episode_no: reveal.payoffEpisode
+        }
+      );
+    }
+  }
+
   async function acceptArc(connection, job, payload, arc) {
     const storyId = job.STORY_ID;
     const arcNo = Number(payload.arcNo || 1);
     const expectedFirst = Number(payload.firstEpisodeNo || 1);
-    if (Number(arc.episodePlan[0]?.episodeNo) !== expectedFirst) throw failure("serial_arc_first_episode_mismatch", 409);
+    const expectedLast = Number(payload.arcScope?.lastEpisodeNo || arc.episodePlan.at(-1)?.episodeNo);
+    if (Number(arc.episodePlan[0]?.episodeNo) !== expectedFirst
+      || Number(arc.episodePlan.at(-1)?.episodeNo) !== expectedLast) {
+      throw failure("serial_arc_scope_mismatch", 409);
+    }
     await connection.execute(
       `update storyheaven_serial_arcs set arc_status = 'complete', updated_at = systimestamp
         where story_id = :story_id and arc_status = 'active'`, { story_id: storyId });
@@ -2083,7 +2315,11 @@ export function createStoryHeavenSerialService({
         id: arcId, story_id: storyId, arc_no: arcNo, arc_title: arc.arcTitle,
         central_question: arc.centralQuestion, midpoint_reversal: arc.midpointReversal,
         ending_truth: arc.endingTruth, episode_plan_json: clobJson(arc.episodePlan),
-        narrative_plan_json: clobJson(arc.narrativePlan), source_job_id: job.ID
+        narrative_plan_json: clobJson({
+          ...arc.narrativePlan,
+          architectureReferences: arc.architectureReferences,
+          arcScope: payload.arcScope || null
+        }), source_job_id: job.ID
       }
     );
     for (const reveal of arc.reveals) {
@@ -2160,7 +2396,10 @@ export function createStoryHeavenSerialService({
         episode_promise: card.promise, opening_disturbance: card.openingDisturbance,
         scenes_json: clobJson(card.scenes), payoff: card.payoff, hook: card.hook,
         knowledge_json: clobJson(card.knowledgeBefore), canon_refs_json: clobJson(card.canonReferences),
-        technique_plan_json: clobJson(card.techniquePlan),
+        technique_plan_json: clobJson({
+          ...card.techniquePlan,
+          prologueDisclosurePlan: card.prologueDisclosurePlan
+        }),
         source_job_id: job.ID
       }
     );
@@ -2675,6 +2914,8 @@ export function createStoryHeavenSerialService({
       releaseAt: existingPlanning.RELEASE_AT
     };
     const context = await loadSerialContext(connection, run.STORY_ID);
+    const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
+    const arcScope = safeArcScope(nextEpisodeNo, seriesPlan, context.bible.narrativeBlueprint?.seriesArchitecture);
     const planning = await createRun(connection, {
       scheduleId: run.SCHEDULE_ID, storyId: run.STORY_ID, runType: "planning",
       stage: "build_arc", userId: schedule.CREATED_BY,
@@ -2686,7 +2927,8 @@ export function createStoryHeavenSerialService({
       input: {
         story: context.story, concept: context.bible.concept, bible: context.bible,
         arcNo: Number(context.arc.arcNo) + 1, firstEpisodeNo: nextEpisodeNo,
-        seriesPlan: context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan(),
+        seriesPlan,
+        arcScope,
         priorArcs: context.priorArcs, canon: context.canon, autoEpisode: true
       }
     });
@@ -2785,13 +3027,19 @@ export function createStoryHeavenSerialService({
   }
 
   function episodePlanningPayload(context, episodeNo, planItem, notes) {
+    const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
+    const seriesArchitecture = context.bible.narrativeBlueprint?.seriesArchitecture || {};
+    const seriesPosition = storyHeavenSeriesPosition(episodeNo, seriesPlan);
     return {
       story: context.story,
       bible: context.bible,
       arc: context.arc,
       episodeNo,
       installment: installmentMeta(episodeNo),
-      seriesPlan: context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan(),
+      seriesPlan,
+      seriesPosition,
+      volumeContext: (seriesArchitecture.volumePlan || []).find((item) => Number(item.volumeNo) === seriesPosition.volumeNo) || null,
+      prologueDisclosure: seriesPosition.isPrologue ? seriesArchitecture.prologueDisclosure || null : null,
       arcPlan: planItem,
       canon: context.canon,
       reveals: context.reveals,
@@ -2805,13 +3053,16 @@ export function createStoryHeavenSerialService({
   }
 
   function writingPayload(context, card, episodeNo) {
+    const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
+    const seriesPosition = storyHeavenSeriesPosition(episodeNo, seriesPlan);
     return {
       story: context.story,
       bible: context.bible,
       arc: context.arc,
       episodeNo,
       installment: installmentMeta(episodeNo),
-      seriesPlan: context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan(),
+      seriesPlan,
+      seriesPosition,
       episodeCard: card,
       canon: context.canon,
       reveals: context.reveals,
@@ -2996,6 +3247,33 @@ function normalizeSeriesPlan(value = {}) {
     firstMainEpisodeLabel: "본편 1화",
     planningRule: `프롤로그 1편 뒤에 본편 ${totalVolumes}권, 권당 ${episodesPerVolume}화, 총 본편 ${totalVolumes * episodesPerVolume}화를 버틸 장편 구조로 설계한다.`
   };
+}
+
+function safeArcScope(firstEpisodeNo, plan, architecture) {
+  try {
+    return buildStoryHeavenArcScope(firstEpisodeNo, plan, architecture);
+  } catch (error) {
+    if (error?.message === "serial_series_episode_out_of_range") {
+      throw failure("serial_series_complete", 409);
+    }
+    throw error;
+  }
+}
+
+function isCompleteSeriesArchitecture(architectureValue, planValue) {
+  const architecture = architectureValue && typeof architectureValue === "object" && !Array.isArray(architectureValue)
+    ? architectureValue
+    : {};
+  const plan = normalizeSeriesPlan(planValue);
+  return Boolean(architecture.schemaVersion)
+    && Number(architecture.plannedVolumeCount) === plan.totalVolumes
+    && Number(architecture.plannedMainEpisodeCount) === plan.totalMainEpisodes
+    && Array.isArray(architecture.volumePlan)
+    && architecture.volumePlan.length === plan.totalVolumes
+    && Array.isArray(architecture.renewableConflictSources)
+    && architecture.renewableConflictSources.length >= 5
+    && Array.isArray(architecture.longReveals)
+    && architecture.longReveals.some((item) => Number(item?.payoffVolume) === plan.totalVolumes);
 }
 
 function normalizeContinuationBatchCount(value) {
@@ -3360,6 +3638,21 @@ function isoTime(value) {
 
 function mapManagedStory(row) {
   const schedulePolicy = parseJson(row.CONCEPT_POLICY_JSON, {});
+  const scheduleSeriesPlan = row.SCHEDULE_ID ? normalizeSeriesPlan(schedulePolicy.seriesPlan) : null;
+  const architectureVolumeCount = Number(row.ARCHITECTURE_VOLUME_COUNT || 0);
+  const architectureEpisodeCount = Number(row.ARCHITECTURE_EPISODE_COUNT || 0);
+  const architectureConflictCount = Number(row.ARCHITECTURE_CONFLICT_COUNT || 0);
+  const architectureRevealCount = Number(row.ARCHITECTURE_REVEAL_COUNT || 0);
+  const architectureLateRevealCount = Number(row.ARCHITECTURE_LATE_REVEAL_COUNT || 0);
+  const architectureComplete = Boolean(row.ARCHITECTURE_VERSION)
+    && architectureVolumeCount > 0
+    && architectureEpisodeCount > 0
+    && architectureConflictCount >= 5
+    && architectureRevealCount >= 2
+    && (architectureVolumeCount === 1 || architectureLateRevealCount >= 1)
+    && (!scheduleSeriesPlan
+      || (architectureVolumeCount === scheduleSeriesPlan.totalVolumes
+        && architectureEpisodeCount === scheduleSeriesPlan.totalMainEpisodes));
   return {
     id: row.ID,
     title: row.TITLE,
@@ -3379,12 +3672,21 @@ function mapManagedStory(row) {
     activeRunCount: Number(row.ACTIVE_RUN_COUNT || 0),
     latestRunStatus: row.LATEST_RUN_STATUS || null,
     readyPublicationCount: Number(row.READY_PUBLICATION_COUNT || 0),
+    architecture: {
+      status: architectureComplete ? "complete" : "needs_strengthening",
+      schemaVersion: row.ARCHITECTURE_VERSION || null,
+      plannedVolumeCount: architectureVolumeCount,
+      plannedMainEpisodeCount: architectureEpisodeCount,
+      renewableConflictCount: architectureConflictCount,
+      longRevealCount: architectureRevealCount,
+      lateRevealCount: architectureLateRevealCount
+    },
     schedule: row.SCHEDULE_ID ? {
       id: row.SCHEDULE_ID,
       name: row.SCHEDULE_NAME || "",
       status: row.SCHEDULE_STATUS || "archived",
       publicationMode: row.PUBLICATION_MODE || "test_private",
-      seriesPlan: normalizeSeriesPlan(schedulePolicy.seriesPlan),
+      seriesPlan: scheduleSeriesPlan,
       continuationBatchCount: normalizeContinuationBatchCount(schedulePolicy.continuationBatchCount)
     } : null,
     publishedAt: isoTime(row.PUBLISHED_AT),
@@ -3564,6 +3866,7 @@ function mapReveal(row) {
 }
 
 function mapCard(row) {
+  const techniquePlan = parseJson(row.TECHNIQUE_PLAN_JSON, {});
   return {
     id: row.ID,
     episodeNo: Number(row.EPISODE_NO),
@@ -3574,7 +3877,10 @@ function mapCard(row) {
     hook: row.HOOK,
     knowledgeBefore: parseJson(row.KNOWLEDGE_JSON, []),
     canonReferences: parseJson(row.CANON_REFS_JSON, []),
-    techniquePlan: parseJson(row.TECHNIQUE_PLAN_JSON, {})
+    techniquePlan,
+    prologueDisclosurePlan: techniquePlan.prologueDisclosurePlan || {
+      mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: []
+    }
   };
 }
 

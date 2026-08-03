@@ -13,7 +13,7 @@
     "resultJson": {
       "type": "string",
       "minLength": 2,
-      "maxLength": 100000,
+      "maxLength": 220000,
       "description": "A JSON-encoded object that follows the job-specific result contract in the prompt."
     }
   }

@@ -32,6 +32,8 @@ assert.match(prompt, /distinct dramatic job/u);
 assert.match(prompt, /Series length policy is binding/u);
 assert.match(prompt, /first generated installment is always a prologue/u);
 assert.match(prompt, /prologue is a retention gate/u);
+assert.match(prompt, /numeric seriesPlan is not a long-form plan by itself/u);
+assert.match(prompt, /private writer bible/u);
 assert.match(prompt, /pace, suspense, curiosity, surprise, emotion, romance, action, description, humor, and novelty/u);
 assert.match(prompt, /not permission to flatten every scene to one intensity/u);
 assert.match(prompt, /payload\.schedule\.policy\.creativeControls or payload\.creativeControls/u);
@@ -65,11 +67,13 @@ assert.match(writingPrompt, /spatialAnchor, characterBlocking, sensoryAnchor, an
 assert.match(writingPrompt, /two to four memorable concrete details per scene/u);
 assert.match(writingPrompt, /techniquePlan\.readerOrientation/u);
 assert.match(writingPrompt, /Do not confuse speed with omission/u);
+assert.match(writingPrompt, /prologueDisclosurePlan is a hard information boundary/u);
 
 const planningPrompt = buildSerialPrompt({ ...job, type: "build_episode_card" });
 assert.match(planningPrompt, /lock a spatial anchor, character blocking/u);
 assert.match(planningPrompt, /force the protagonist into a costly or irreversible choice/u);
 assert.match(planningPrompt, /ordinaryBaseline, immediateGoal, knownContext, firstChange, stakes/u);
+assert.match(planningPrompt, /copy the binding disclosure boundary/u);
 
 const conceptPrompt = buildSerialPrompt({
   ...job,
@@ -84,6 +88,17 @@ const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible" });
 assert.match(biblePrompt, /narrativeBlueprint\.noveltyPolicy/u);
 assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
 assert.match(biblePrompt, /참신성 목표와 새 요소 추가 제한/u);
+assert.match(biblePrompt, /volumePlan must contain exactly 10 sequential entries/u);
+assert.match(biblePrompt, /renewableConflictSources/u);
+assert.match(biblePrompt, /mustNotAnswerRevealKeys/u);
+
+const scopedArcPrompt = buildSerialPrompt({
+  ...job,
+  type: "build_arc",
+  payload: { arcScope: { firstEpisodeNo: 1, lastEpisodeNo: 26, volumeNo: 1 } }
+});
+assert.match(scopedArcPrompt, /exactly payload\.arcScope\.firstEpisodeNo through payload\.arcScope\.lastEpisodeNo/u);
+assert.match(scopedArcPrompt, /do not redefine or reschedule/u);
 
 const parsed = parseSerialOutput({
   jobId: job.id,

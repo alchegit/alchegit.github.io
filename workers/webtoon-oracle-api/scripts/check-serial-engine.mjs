@@ -6,12 +6,14 @@ import {
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
+  buildStoryHeavenArcScope,
   calculateStoryHeavenReaderExperienceScore,
   decideStoryHeavenSerialReview,
   normalizeStoryHeavenConceptPolicy,
   normalizeStoryHeavenCreativeControls,
   storyHeavenCreativeControlGuidance,
   storyHeavenSerialQualityThresholds,
+  storyHeavenSeriesPosition,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenEpisodeRun,
   validateStoryHeavenSerialSchedule,
@@ -43,6 +45,11 @@ assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status
 assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidden historical logs for full-view audits");
 assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");
 assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry the first-scene term budget");
+assert.match(serialServiceSource, /syncSeriesArchitectureReveals/u, "long-form bible reveals must be stored in the reveal ledger");
+assert.match(serialServiceSource, /architecture_complete/u, "architecture-only backfills must complete without replacing existing arcs");
+assert.match(serialServiceSource, /preserveExistingBible/u, "architecture backfills must preserve existing bible fields");
+assert.match(serverSource, /architecture\/strengthen/u, "operators must be able to queue a non-destructive architecture backfill");
+assert.match(managedStoriesSource, /장편 설계 보강/u, "managed stories must expose the architecture strengthening action");
 assert.match(serialServiceSource, /readerOrientation/u, "draft payloads must carry reader-orientation constraints");
 assert.match(serialServiceSource, /serial_run\.queue_group_id = :queue_group_id or serial_run\.id = :queue_group_id/u, "history operations must support legacy run ids without queue groups");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
@@ -348,6 +355,77 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
 });
 assert.equal(concept.genres.length, 3);
 
+const testSeriesPlan = { totalVolumes: 10, episodesPerVolume: 25, totalMainEpisodes: 250 };
+const conflictSources = Array.from({ length: 5 }, (_, index) => ({
+  key: `conflict-${index + 1}`,
+  source: `${index + 1}번째 세력의 이해관계가 주인공의 운행 목표와 계속 충돌한다.`,
+  pressure: `${index + 1}번째 세력이 시간과 기억 중 하나를 포기하도록 압박한다.`,
+  variationRule: `승객과 정류장과 선택의 대가를 바꾸어 ${index + 1}번째 갈등을 다르게 전개한다.`,
+  exhaustionGuard: `같은 해결법을 두 번 허용하지 않고 ${index + 1}번째 세력도 선택의 결과로 변하게 한다.`
+}));
+const doyoonMilestones = Array.from({ length: 10 }, (_, index) => ({
+  id: `doyoon-volume-${index + 1}`,
+  volumeNo: index + 1,
+  turn: `${index + 1}권의 선택을 거치며 도윤이 기억과 책임을 대하는 태도를 한 단계 바꾼다.`
+}));
+const haejinMilestones = [1, 5, 10].map((volumeNo) => ({
+  id: `haejin-volume-${volumeNo}`,
+  volumeNo,
+  turn: `${volumeNo}권에서 해진이 숨겨 온 사고의 책임을 받아들이는 방식이 달라진다.`
+}));
+const longReveals = [
+  { key: "series-return-ticket", secret: "누나의 왕복 승차권은 노선을 닫기 위한 계약이다.", seedVolume: 0, seedEpisodeWithinVolume: 0, deepenVolumes: [1, 2], payoffVolume: 3, payoffEpisodeWithinVolume: 20, payoffConsequence: "도윤이 누나를 구하는 목표와 노선을 닫는 목표 중 우선순위를 다시 정한다." },
+  { key: "series-stored-memory", secret: "차고지에는 기사들이 낸 기억이 도시 지도 형태로 쌓여 있다.", seedVolume: 1, seedEpisodeWithinVolume: 5, deepenVolumes: [2, 4], payoffVolume: 5, payoffEpisodeWithinVolume: 13, payoffConsequence: "잃은 기억을 되찾는 일이 도시 전체의 안전을 흔드는 선택으로 바뀐다." },
+  { key: "series-first-driver", secret: "도윤은 과거 첫 번째 0번 노선 기사였고 스스로 기억을 지웠다.", seedVolume: 2, seedEpisodeWithinVolume: 10, deepenVolumes: [4, 6], payoffVolume: 8, payoffEpisodeWithinVolume: 18, payoffConsequence: "도윤이 피해자라는 믿음을 버리고 과거 선택의 책임을 직접 떠안는다." },
+  { key: "series-terminal-truth", secret: "종점은 죽은 자의 장소가 아니라 도시가 버린 책임을 되돌리는 장치다.", seedVolume: 0, seedEpisodeWithinVolume: 0, deepenVolumes: [3, 6, 9], payoffVolume: 10, payoffEpisodeWithinVolume: 25, payoffConsequence: "도윤이 노선을 없애는 대신 모두의 책임을 되돌릴 마지막 운행을 선택한다." }
+];
+const seriesArchitecture = {
+  centralTheme: "기억을 잃어 고통을 피하는 일과 책임을 기억하며 살아가는 일 중 무엇이 사람을 지키는지 탐구한다.",
+  seriesQuestion: "도윤은 누나를 되찾으면서도 도시가 외면한 책임을 누구에게도 떠넘기지 않는 운행을 완성할 수 있는가?",
+  endingBoundary: "마지막 권에서 도윤은 0번 노선의 최종 운행을 마치고 기억을 모두 되찾되 노선의 힘을 개인이 독점하지 않는 상태에 도달한다.",
+  endingCost: "도윤은 누나와 함께 평범하게 살 수 있다는 가능성을 포기하고 도시 전체가 기억을 나누어 지게 만든다.",
+  renewableConflictSources: conflictSources,
+  characterArcs: [
+    { id: "doyoon-arc", characterId: "character-1", startState: "누나를 찾는 일만이 자신의 책임이라고 믿는다.", falseBelief: "기억만 되찾으면 과거의 잘못도 저절로 바로잡힌다고 믿는다.", endState: "기억의 고통과 공동 책임을 스스로 선택해 나누는 기사가 된다.", milestones: doyoonMilestones },
+    { id: "haejin-arc", characterId: "character-2", startState: "사고 기록을 감추는 것이 남은 사람들을 보호한다고 믿는다.", falseBelief: "진실을 늦게 밝힐수록 피해를 줄일 수 있다고 믿는다.", endState: "자신의 책임을 공개하고 도윤의 마지막 운행을 돕는 관리자가 된다.", milestones: haejinMilestones }
+  ],
+  volumePlan: Array.from({ length: 10 }, (_, index) => {
+    const volumeNo = index + 1;
+    const characterMilestoneIds = [`doyoon-volume-${volumeNo}`];
+    if ([1, 5, 10].includes(volumeNo)) characterMilestoneIds.push(`haejin-volume-${volumeNo}`);
+    return {
+      volumeNo,
+      role: `${volumeNo}권은 승객 사건을 해결하며 노선의 책임 구조를 한 단계 확장하는 역할을 맡는다.`,
+      openingState: `${volumeNo}권 시작에서 도윤은 이전 권의 대가를 안고 새로운 운행 구역에 들어간다.`,
+      mainGoal: `${volumeNo}권의 실종 승객 기록을 찾아 현재 구역의 운행 중단을 막는다.`,
+      antagonistPressure: `${volumeNo}권의 반대 세력이 기억과 생존 중 하나만 선택하도록 도윤을 압박한다.`,
+      midpointTurn: `${volumeNo}권 중반에 도윤이 믿었던 승차 기록의 의미가 인물의 선택으로 뒤집힌다.`,
+      climax: `${volumeNo}권 절정에서 도윤이 자신의 기억을 지킬지 승객의 책임을 돌려줄지 선택한다.`,
+      irreversibleChange: `${volumeNo}권의 선택으로 노선과 동료 관계가 이전 상태로 돌아갈 수 없게 바뀐다.`,
+      nextVolumeBridge: volumeNo === 10 ? "마지막 운행의 결과가 인물들의 새로운 일상과 책임 분담으로 이어진다." : `${volumeNo + 1}권에서 해결해야 할 새 운행 구역과 인물의 빚이 열린다.`,
+      conflictSourceKeys: [`conflict-${((volumeNo - 1) % 5) + 1}`],
+      characterMilestoneIds,
+      protectedRevealKeys: longReveals.filter((reveal) => reveal.payoffVolume > volumeNo).map((reveal) => reveal.key)
+    };
+  }),
+  longReveals,
+  prologueDisclosure: {
+    dramaticFunction: "도윤이 첫 승객을 직접 태우고 기억을 요금으로 내는 선택을 하게 해 장편의 규칙과 감정적 대가를 행동으로 증명한다.",
+    mustShow: ["도윤이 오늘 처음 심야버스를 운전한다.", "기억을 요금으로 내면 실제로 한 기억을 잃는다.", "도윤은 누나의 실종 기록을 찾고 싶어 한다."],
+    mayHintRevealKeys: ["series-return-ticket", "series-terminal-truth"],
+    mustNotAnswerRevealKeys: longReveals.map((reveal) => reveal.key),
+    resolvedNow: ["첫 승객이 생전 마지막 목적지에 내리지 못한 즉시 문제를 해결한다."],
+    openQuestions: ["누나의 왕복 승차권은 왜 운행 기록에서 지워졌는가?", "도윤은 다음 운행에서 어떤 기억을 잃게 되는가?"],
+    coreRevealBudgetPercent: 20
+  },
+  expansionRules: [
+    "새 승객 사건은 기존 다섯 갈등 원천 중 하나에서 발생하게 한다.",
+    "새 마법 규칙을 추가하기 전에 기존 기억 요금 규칙의 결과를 변주한다.",
+    "각 권의 되돌릴 수 없는 변화는 이후 권의 시작 상태에 반드시 반영한다.",
+    "장기 복선의 답은 지정된 회수 권보다 먼저 설명하지 않는다."
+  ]
+};
+
 const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
   worldRules: ["0번 버스는 자정 이후 운행한다.", "승객은 생전 마지막 목적지만 말한다.", "기사는 기억으로 요금을 낸다.", "운행 기록은 거짓말을 하지 않는다.", "종점에서 내리지 못하면 노선에 묶인다."],
   characters: [
@@ -385,29 +463,56 @@ const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
     escalationPattern: "개인 승객의 문제에서 차고지 전체와 도시 교통망의 위기로 범위를 넓힌다.",
     revealCadence: "매 화 작은 답 하나와 더 큰 질문 하나를 남기고 3화마다 기존 단서의 의미를 뒤집는다.",
     noveltyPolicy: "익숙한 심야 버스 미스터리를 중심에 두고 기억이 요금이라는 차별점 하나만 유지하며 새 마법 규칙을 추가하지 않는다.",
-    antiRepetitionRules: ["같은 도입법을 연속 사용하지 않는다.", "항상 새 승객 등장으로 시작하지 않는다.", "모든 회차를 정체 공개로 끝내지 않는다."]
+    antiRepetitionRules: ["같은 도입법을 연속 사용하지 않는다.", "항상 새 승객 등장으로 시작하지 않는다.", "모든 회차를 정체 공개로 끝내지 않는다."],
+    seriesArchitecture
   }
-});
+}, { seriesPlan: testSeriesPlan });
 assert.equal(bible.narrativeBlueprint.openingModes.length, 3);
 assert.match(bible.narrativeBlueprint.noveltyPolicy, /차별점 하나/u);
 assert.equal(bible.voiceProfile.readerOnboardingRules.length, 4);
+assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan.length, 10);
+assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan[9].internalEpisodeEnd, 251);
+assert.equal(bible.narrativeBlueprint.seriesArchitecture.longReveals.at(-1).payoffEpisode, 251);
+assert.equal(bible.narrativeBlueprint.seriesArchitecture.renewableConflictCount, 5);
+
+const firstArcScope = buildStoryHeavenArcScope(1, testSeriesPlan, bible.narrativeBlueprint.seriesArchitecture);
+assert.deepEqual(storyHeavenSeriesPosition(251, testSeriesPlan), {
+  episodeNo: 251,
+  isPrologue: false,
+  mainEpisodeNo: 250,
+  volumeNo: 10,
+  episodeWithinVolume: 25,
+  plan: storyHeavenSeriesPosition(1, testSeriesPlan).plan
+});
+assert.equal(firstArcScope.firstEpisodeNo, 1);
+assert.equal(firstArcScope.lastEpisodeNo, 26);
+assert.equal(firstArcScope.episodeCount, 26);
+const legacyTailScope = buildStoryHeavenArcScope(26, testSeriesPlan, bible.narrativeBlueprint.seriesArchitecture);
+assert.equal(legacyTailScope.episodeCount, 1);
+assert.equal(legacyTailScope.allowShortBoundaryTail, true);
 
 const arc = normalizeStoryHeavenSerialWorkerResult("build_arc", {
   arcTitle: "사라진 노선",
   centralQuestion: "누가 0번 노선에서 누나의 마지막 승차 기록을 지웠는가?",
   midpointReversal: "도윤이 찾던 승객은 누나가 아니라 도윤 자신이 버린 기억의 형상으로 드러난다.",
   endingTruth: "누나는 사고 피해자가 아니라 더 큰 참사를 막기 위해 스스로 노선 관리자가 되었다.",
-  episodePlan: Array.from({ length: 6 }, (_, index) => ({
+  episodePlan: Array.from({ length: 26 }, (_, index) => ({
     episodeNo: index + 1,
     promise: `${index + 1}번째 승객의 미련과 누나의 단서를 함께 해결한다.`,
     turn: `${index + 1}번째 정류장에서 알고 있던 노선 규칙의 빈틈이 드러난다.`,
     hook: `다음 정류장의 단서가 도윤이 잃어버린 기억과 연결된다.`
   })),
   reveals: [
-    { key: "ticket", secret: "누나의 승차권은 왕복표다.", introduceEpisode: 1, payoffEpisode: 5 },
+    { key: "ticket", secret: "누나의 승차권 겉면에 두 번 접힌 흔적이 있다.", introduceEpisode: 1, payoffEpisode: 5 },
     { key: "fare", secret: "지워진 기억은 차고지에 보관된다.", introduceEpisode: 2, payoffEpisode: 4 },
-    { key: "driver", secret: "도윤은 과거에도 0번 버스를 몰았다.", introduceEpisode: 3, payoffEpisode: 6 }
+    { key: "driver-local", secret: "도윤의 사원증 번호가 첫 운행 기록과 같다.", introduceEpisode: 3, payoffEpisode: 6 }
   ],
+  architectureReferences: {
+    volumeNo: 1,
+    conflictSourceKeys: ["conflict-1"],
+    characterMilestoneIds: ["doyoon-volume-1", "haejin-volume-1"],
+    longRevealKeys: ["series-return-ticket", "series-terminal-truth"]
+  },
   narrativePlan: {
     arcShape: "각 승객의 완결형 사건이 누나의 장기 미스터리를 한 단계씩 전진시키는 상승 나선형 구조",
     tensionEngine: "도윤이 단서를 얻을수록 누나를 기억하지 못하게 되는 시간 압박",
@@ -416,8 +521,14 @@ const arc = normalizeStoryHeavenSerialWorkerResult("build_arc", {
     climaxMethod: "도윤이 누나의 기억과 승객 전원의 생존 중 하나를 선택하게 한다.",
     avoidPatterns: ["설명 독백으로 규칙 공개", "우연한 구조", "매화 새 괴물 등장"]
   }
+}, {
+  payload: {
+    arcScope: firstArcScope,
+    bible: { narrativeBlueprint: bible.narrativeBlueprint }
+  }
 });
-assert.equal(arc.episodePlan.length, 6);
+assert.equal(arc.episodePlan.length, 26);
+assert.equal(arc.architectureReferences.volumeNo, 1);
 
 const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
   episodeNo: 1,
@@ -459,13 +570,44 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
         { term: "0번 노선", plainMeaning: "자정에만 출발하는 심야버스 노선", demonstration: "노선도 불이 켜지고 잠긴 차고지 문이 저절로 열린다." }
       ]
     }
+  },
+  prologueDisclosurePlan: {
+    mustShow: seriesArchitecture.prologueDisclosure.mustShow,
+    mayHintRevealKeys: seriesArchitecture.prologueDisclosure.mayHintRevealKeys,
+    mustNotAnswerRevealKeys: seriesArchitecture.prologueDisclosure.mustNotAnswerRevealKeys,
+    resolvedNow: seriesArchitecture.prologueDisclosure.resolvedNow,
+    openQuestions: seriesArchitecture.prologueDisclosure.openQuestions
+  }
+}, {
+  payload: {
+    episodeNo: 1,
+    bible: { narrativeBlueprint: bible.narrativeBlueprint }
   }
 });
 assert.equal(card.techniquePlan.openingMode, "사건 한가운데");
 assert.equal(card.techniquePlan.readerOrientation.newTerms.length, 1);
+assert.equal(card.prologueDisclosurePlan.mustNotAnswerRevealKeys.length, 4);
 
 const paragraph = "도윤은 버스 문을 열고 빈 좌석 사이를 천천히 확인했다. 창문에는 차고지 불빛 대신 오래전 폐역의 시계가 비쳤다. 그는 승객의 낡은 표를 받아 운행 기록과 대조했고, 자신이 기억하지 못하는 누나의 목소리가 안내 방송에서 흘러나오는 이유를 찾기로 했다.";
 const body = Array.from({ length: 36 }, (_, index) => `${index + 1}번째 움직임. ${paragraph} ${paragraph}`).join("\n\n");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("write_draft", {
+  title: "프롤로그 - 돌아오지 않는 종점",
+  summary: "도윤이 첫 승객을 내려주며 기억을 요금으로 내는 규칙과 누나의 지워진 기록을 발견한다.",
+  body,
+  sceneRanges: [
+    { sceneNo: 1, startParagraph: 1, endParagraph: 12 },
+    { sceneNo: 2, startParagraph: 13, endParagraph: 24 },
+    { sceneNo: 3, startParagraph: 25, endParagraph: 36 }
+  ],
+  newCanonFacts: [],
+  revealUpdates: [{ key: "series-terminal-truth", status: "revealed" }]
+}, {
+  payload: {
+    episodeNo: 1,
+    episodeCard: card,
+    bible: { narrativeBlueprint: bible.narrativeBlueprint }
+  }
+}), /protected_reveal_exposed/u);
 const qa = analyzeStoryHeavenSerialDraft({ title: "돌아오지 않는 종점", summary: "도윤이 첫 승객의 목적지를 찾다가 누나의 왕복 승차권과 기억을 요금으로 내는 규칙을 발견한다.", body });
 assert.equal(qa.passed, true);
 assert.ok(qa.characterCount >= STORYHEAVEN_SERIAL_LIMITS.draftCharactersMin);
