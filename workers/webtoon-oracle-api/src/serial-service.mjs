@@ -19,6 +19,7 @@ import {
 } from "./serial-engine.mjs";
 
 const SYSTEM_AUTHOR_ID = "storyheaven-system-ai";
+const ARCHITECTURE_MAX_ATTEMPTS = 10;
 const RUN_STATES_DONE = new Set(["approved", "blocked", "published", "error"]);
 const SEOUL_OFFSET = "+09:00";
 const OFFSET_TIME_RE = /(?:z|[+-]\d{2}:?\d{2})$/iu;
@@ -1088,6 +1089,7 @@ export function createStoryHeavenSerialService({
         runId: run.id,
         storyId,
         type: "build_bible",
+        maxAttempts: ARCHITECTURE_MAX_ATTEMPTS,
         input: {
           story: publicStory(story),
           concept: conceptWithPlan,
@@ -3003,7 +3005,7 @@ export function createStoryHeavenSerialService({
     return { id, queueGroupId: effectiveQueueGroupId, scheduleId, storyId, arcId, episodeNo, type: runType, status: "queued", stage, releaseAt };
   }
 
-  async function queueJob(connection, { runId, storyId = null, type, input, priority = 100 }) {
+  async function queueJob(connection, { runId, storyId = null, type, input, priority = 100, maxAttempts: jobMaxAttempts = maxAttempts }) {
     const json = JSON.stringify(input ?? {});
     if (Buffer.byteLength(json, "utf8") > STORYHEAVEN_SERIAL_LIMITS.jobPayloadBytes) {
       throw failure("serial_job_payload_too_large", 413);
@@ -3018,7 +3020,7 @@ export function createStoryHeavenSerialService({
       )`,
       {
         id: randomId(), run_id: runId, story_id: storyId, job_type: type,
-        priority, input_hash: sha256(json), input_json: clob(json), max_attempts: maxAttempts
+        priority, input_hash: sha256(json), input_json: clob(json), max_attempts: jobMaxAttempts
       }
     );
   }

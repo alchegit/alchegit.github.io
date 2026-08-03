@@ -96,7 +96,7 @@ try {
           input_hash, input_json, max_attempts, next_attempt_at
         ) values (
           :id, :run_id, :story_id, 'build_bible', 'queued', 100,
-          :input_hash, :input_json, 3, systimestamp
+          :input_hash, :input_json, 10, systimestamp
         )`,
         {
           id: crypto.randomUUID(),

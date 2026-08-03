@@ -48,6 +48,7 @@ assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry t
 assert.match(serialServiceSource, /syncSeriesArchitectureReveals/u, "long-form bible reveals must be stored in the reveal ledger");
 assert.match(serialServiceSource, /architecture_complete/u, "architecture-only backfills must complete without replacing existing arcs");
 assert.match(serialServiceSource, /preserveExistingBible/u, "architecture backfills must preserve existing bible fields");
+assert.match(serialServiceSource, /maxAttempts: ARCHITECTURE_MAX_ATTEMPTS/u, "manual architecture strengthening must have a durable retry budget");
 assert.match(serialServiceSource, /validationCode\.startsWith\("serial_"\)[\s\S]*failure\(validationCode, 422\)/u, "worker contract failures must return their actionable validation code");
 assert.match(serverSource, /architecture\/strengthen/u, "operators must be able to queue a non-destructive architecture backfill");
 assert.match(managedStoriesSource, /장편 설계 보강/u, "managed stories must expose the architecture strengthening action");
