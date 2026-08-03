@@ -68,6 +68,11 @@ export function buildSerialGenreEditorialGuidance(payload = {}) {
   return [
     "CONTROLLED_AGGREGATE_GENRE_GUIDANCE_START",
     "These are aggregate, high-level craft principles distilled from multiple works. Never name, quote, paraphrase, or imitate any benchmark work or author. Create wholly original characters, events, wording, and scene sequences.",
+    "Universal transferable craft rules:",
+    "- Establish a familiar genre pleasure and a personal human need before asking the reader to learn the differentiating rule.",
+    "- Treat powers, systems, lore, and mysteries as tools that force revealing choices; they may not replace personality, desire, vulnerability, or consequence.",
+    "- Every installment must deliver at least two concrete payoffs and move one important relationship through mutual action, not exposition alone.",
+    "- The current human conflict and episode question must remain clear in one plain sentence after invented nouns and rules are removed.",
     ...(lines.length ? lines : ["No specific genre profile was resolved. Apply the universal reader-orientation rules without inventing a benchmark style."]),
     "When several genres are selected, give each a distinct dramatic job and resolve conflicts in favor of reader comprehension and causal continuity.",
     "CONTROLLED_AGGREGATE_GENRE_GUIDANCE_END"

@@ -58,6 +58,10 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
     genrePromise: 80,
     curiosityAndHook: 80,
     characterAgency: 75,
+    characterAttachment: 78,
+    relationshipMomentum: 78,
+    readerReward: 82,
+    premiseAccessibility: 88,
     novelty: 65
   })
 });
@@ -71,12 +75,24 @@ const STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE = Object.freeze([
   "주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다."
 ]);
 
-export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
-  ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
+const STORYHEAVEN_PREMISE_COHERENCE_POLICY = Object.freeze([
   "참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다.",
   "현실에서 하던 작업과 같은 일을 이세계에서 곧바로 맡기는 도입을 반복하지 않는다. 이전 삶의 경험은 선택에 간접적으로만 영향을 주고, 새 세계의 직업·능력·도구와 일대일로 대응시키지 않는다.",
   "낯선 세계나 집단에 들어온 주인공은 경계·오해·검증·보호자·거래처럼 받아들여지는 과정을 거친다. 이름·출신·능력을 알게 되는 정보 출처와 언어가 통하는 이유를 설정집과 장면에서 일관되게 지킨다.",
   "특별 능력은 익숙한 장르 기반 위에 핵심 효과 하나, 발동 조건 하나, 대가나 한계 하나로 설명한다. 서로 무관한 행동이나 사물을 여러 단계로 이어 붙인 발동 장치는 사용하지 않는다."
+]);
+
+const STORYHEAVEN_READER_APPEAL_POLICY = Object.freeze([
+  "작품의 고유 용어와 능력 규칙을 빼고도 주인공이 무엇을 원하고 왜 실패가 아픈지 한 문장으로 설명할 수 있어야 한다. 선량함만으로 성격을 대신하지 말고 결핍, 약점, 피하고 싶은 일, 지키고 싶은 관계 중 적어도 두 가지를 행동으로 보여준다.",
+  "최근 작품과 주인공 유형, 도입 방식, 사건 해결 방식, 주요 무대, 대립 구조, 장기 비밀이 비슷한지 비교한다. 이 가운데 세 가지 이상이 겹치면 소품과 제목만 바꾸지 말고 기획의 뼈대부터 다시 만든다.",
+  "프롤로그는 설정 소개 외에 익숙한 장르의 즐거움, 주인공 개인의 작은 성취나 손실, 다른 인물과의 관계 변화라는 세 보상 중 적어도 두 가지를 실제 장면으로 제공한다.",
+  "본편 1화와 2화까지 각각 구체적인 목표, 장르 보상, 관계 변화, 개인적 결과를 미리 계획한다. 거대한 왕국의 음모나 오래된 비밀만으로 다음 화를 유도하지 말고 주인공이 당장 해야 할 개인적인 선택을 남긴다."
+]);
+
+export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
+  ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
+  ...STORYHEAVEN_PREMISE_COHERENCE_POLICY,
+  ...STORYHEAVEN_READER_APPEAL_POLICY
 ].join(" ");
 
 const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
@@ -85,6 +101,10 @@ const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
   [
     ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
     "참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다."
+  ].join(" "),
+  [
+    ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
+    ...STORYHEAVEN_PREMISE_COHERENCE_POLICY
   ].join(" ")
 ]);
 
@@ -104,6 +124,10 @@ const STORYHEAVEN_FIRST_EPISODE_QUALITY = Object.freeze({
   genrePromise: 88,
   curiosityAndHook: 92,
   characterAgency: 82,
+  characterAttachment: 86,
+  relationshipMomentum: 84,
+  readerReward: 88,
+  premiseAccessibility: 92,
   novelty: 70
 });
 
@@ -567,15 +591,19 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
 
 export function calculateStoryHeavenReaderExperienceScore(scores = {}) {
   const weights = {
-    readerOrientation: 0.16,
-    openingGrip: 0.10,
-    sceneVisualization: 0.13,
-    narrativeMomentum: 0.15,
-    emotionalPayoff: 0.12,
-    genrePromise: 0.12,
-    curiosityAndHook: 0.14,
+    readerOrientation: 0.10,
+    openingGrip: 0.08,
+    sceneVisualization: 0.08,
+    narrativeMomentum: 0.10,
+    emotionalPayoff: 0.08,
+    genrePromise: 0.08,
+    curiosityAndHook: 0.08,
     characterAgency: 0.05,
-    novelty: 0.03
+    characterAttachment: 0.12,
+    relationshipMomentum: 0.08,
+    readerReward: 0.08,
+    premiseAccessibility: 0.05,
+    novelty: 0.02
   };
   const score = Object.entries(weights).reduce((sum, [name, weight]) => {
     return sum + Math.max(0, Math.min(100, Number(scores[name]) || 0)) * weight;
@@ -607,6 +635,9 @@ function normalizeConcept(source, options = {}) {
   };
   if (!legacyConceptCopy || Object.keys(object(source.premiseAudit)).length > 0) {
     concept.premiseAudit = normalizePremiseAudit(source.premiseAudit);
+  }
+  if (!legacyConceptCopy || Object.keys(object(source.readerAppealPlan)).length > 0) {
+    concept.readerAppealPlan = normalizeReaderAppealPlan(source.readerAppealPlan, options);
   }
   return concept;
 }
@@ -678,6 +709,110 @@ function normalizePremiseAudit(value) {
       hasMultiStepTrigger,
       readerExplanation: requiredText(abilitySource.readerExplanation, 180, 10, "serial_ability_explanation_invalid")
     }
+  };
+}
+
+function normalizeReaderAppealPlan(value, options = {}) {
+  const source = object(value);
+  const dominantPleasures = new Set([
+    "growth", "problem_solving", "relationship", "mystery", "survival",
+    "wonder", "humor", "healing", "revenge", "adventure", "other"
+  ]);
+  const dominantPleasure = dominantPleasures.has(source.dominantPleasure)
+    ? source.dominantPleasure
+    : null;
+  if (!dominantPleasure) throw new Error("serial_reader_appeal_dominant_pleasure_invalid");
+
+  const earlyEpisodePlan = array(source.earlyEpisodePlan).slice(0, 3).map((item) => {
+    const entry = object(item);
+    return {
+      installment: ["prologue", "main-1", "main-2"].includes(entry.installment) ? entry.installment : "",
+      concreteGoal: requiredText(entry.concreteGoal, 240, 10, "serial_reader_appeal_early_goal_invalid"),
+      genreReward: requiredText(entry.genreReward, 240, 10, "serial_reader_appeal_early_reward_invalid"),
+      relationshipChange: requiredText(entry.relationshipChange, 300, 10, "serial_reader_appeal_early_relationship_invalid"),
+      personalConsequence: requiredText(entry.personalConsequence, 300, 10, "serial_reader_appeal_early_consequence_invalid")
+    };
+  });
+  const expectedInstallments = ["prologue", "main-1", "main-2"];
+  if (earlyEpisodePlan.length !== expectedInstallments.length
+    || earlyEpisodePlan.some((item, index) => item.installment !== expectedInstallments[index])) {
+    throw new Error("serial_reader_appeal_early_plan_invalid");
+  }
+
+  return {
+    humanPremise: requiredText(source.humanPremise, 240, 20, "serial_reader_appeal_human_premise_invalid"),
+    relatableLack: requiredText(source.relatableLack, 300, 20, "serial_reader_appeal_lack_invalid"),
+    immediateWant: requiredText(source.immediateWant, 240, 20, "serial_reader_appeal_want_invalid"),
+    personalStake: requiredText(source.personalStake, 300, 20, "serial_reader_appeal_stake_invalid"),
+    flawedChoicePattern: requiredText(source.flawedChoicePattern, 300, 20, "serial_reader_appeal_choice_pattern_invalid"),
+    firstRelationshipFriction: requiredText(source.firstRelationshipFriction, 400, 30, "serial_reader_appeal_relationship_invalid"),
+    dominantPleasure,
+    familiarGenreRewards: requiredList(source.familiarGenreRewards, { min: 2, max: 4, itemMax: 180 }, "serial_reader_appeal_genre_rewards_invalid"),
+    prologueRewards: requiredList(source.prologueRewards, { min: 2, max: 3, itemMax: 220 }, "serial_reader_appeal_prologue_rewards_invalid"),
+    earlyEpisodePlan,
+    recentConceptComparison: normalizeRecentConceptComparison(source.recentConceptComparison, options)
+  };
+}
+
+function normalizeRecentConceptComparison(value, options = {}) {
+  const source = object(value);
+  const recentConcepts = array(object(options.payload).recentConcepts);
+  const recentTitles = [...new Set(recentConcepts.map((item) => text(object(item).title, 80)).filter(Boolean))];
+  const titleSet = new Set(recentTitles);
+  const minimumCompared = Math.min(5, recentTitles.length);
+  const comparedTitles = requiredList(
+    source.comparedTitles,
+    { min: minimumCompared, max: 10, itemMax: 80 },
+    "serial_recent_concept_comparison_invalid"
+  );
+  if (comparedTitles.some((title) => !titleSet.has(title))) {
+    throw new Error("serial_recent_concept_comparison_invalid");
+  }
+  const nearestTitle = requiredText(source.nearestTitle, 80, 2, "serial_recent_concept_nearest_invalid");
+  if (recentTitles.length && (nearestTitle === "none" || !titleSet.has(nearestTitle) || !comparedTitles.includes(nearestTitle))) {
+    throw new Error("serial_recent_concept_nearest_invalid");
+  }
+  if (!recentTitles.length && nearestTitle !== "none") {
+    throw new Error("serial_recent_concept_nearest_invalid");
+  }
+  const overlapAxisCount = integer(source.overlapAxisCount, 0, 2, null);
+  if (overlapAxisCount === null) throw new Error("serial_recent_comparison_overlap_invalid");
+  const usesRecentTemplate = requiredBoolean(source.usesRecentTemplate, "serial_recent_template_flag_invalid");
+  if (usesRecentTemplate) throw new Error("serial_recent_template_forbidden");
+
+  const fingerprint = normalizeStoryFingerprint(source.fingerprint);
+  const axes = ["protagonistFrame", "openingMode", "episodeEngine", "storyArena", "powerSource", "oppositionType"];
+  for (const recent of recentConcepts) {
+    const recentFingerprint = object(object(recent).fingerprint);
+    const matchingAxes = axes.filter((axis) => (
+      fingerprint[axis] !== "other"
+      && recentFingerprint[axis]
+      && recentFingerprint[axis] !== "other"
+      && fingerprint[axis] === recentFingerprint[axis]
+    ));
+    if (matchingAxes.length >= 5) throw new Error("serial_recent_structure_too_similar");
+  }
+
+  return {
+    comparedTitles,
+    nearestTitle,
+    overlapAxisCount,
+    usesRecentTemplate,
+    repeatedPatternsToAvoid: requiredList(source.repeatedPatternsToAvoid, { min: 2, max: 6, itemMax: 240 }, "serial_recent_patterns_invalid"),
+    structuralDifferences: requiredList(source.structuralDifferences, { min: recentTitles.length ? 3 : 1, max: 6, itemMax: 240 }, "serial_recent_differences_invalid"),
+    fingerprint
+  };
+}
+
+function normalizeStoryFingerprint(value) {
+  const source = object(value);
+  return {
+    protagonistFrame: requiredEnum(source.protagonistFrame, ["student", "worker", "caregiver", "outcast", "authority", "ensemble", "nonhuman", "other"], "serial_story_fingerprint_protagonist_invalid"),
+    openingMode: requiredEnum(source.openingMode, ["quiet_anomaly", "social_conflict", "deadline", "investigation", "chase", "accident", "combat", "arrival", "aftermath", "other"], "serial_story_fingerprint_opening_invalid"),
+    episodeEngine: requiredEnum(source.episodeEngine, ["growth_combat", "quest_adventure", "case_solving", "survival", "relationship", "craft_work", "political", "mystery_investigation", "healing_community", "comedy_escalation", "other"], "serial_story_fingerprint_engine_invalid"),
+    storyArena: requiredEnum(source.storyArena, ["school", "workplace", "household", "journey", "court", "frontier", "city", "village", "institution", "wilderness", "multiple", "other"], "serial_story_fingerprint_arena_invalid"),
+    powerSource: requiredEnum(source.powerSource, ["none", "body_skill", "magic", "system", "artifact", "knowledge", "social_bond", "craft", "transformation", "other"], "serial_story_fingerprint_power_invalid"),
+    oppositionType: requiredEnum(source.oppositionType, ["rival", "monster", "institution", "environment", "inner_conflict", "relationship", "mystery", "mixed", "other"], "serial_story_fingerprint_opposition_invalid")
   };
 }
 
@@ -1271,7 +1406,8 @@ function normalizeTechniquePlan(value) {
     tensionMethod: requiredText(source.tensionMethod, 200, 5, "serial_technique_tension_invalid"),
     hookType: requiredText(source.hookType, 120, 2, "serial_technique_hook_invalid"),
     reason: requiredText(source.reason, 400, 10, "serial_technique_reason_invalid"),
-    readerOrientation: normalizeReaderOrientation(source.readerOrientation)
+    readerOrientation: normalizeReaderOrientation(source.readerOrientation),
+    readerRewardPlan: normalizeReaderRewardPlan(source.readerRewardPlan)
   };
 }
 
@@ -1294,6 +1430,22 @@ function normalizeReaderOrientation(value) {
     stakes: requiredText(source.stakes, 400, 10, "serial_reader_orientation_stakes_invalid"),
     firstSceneQuestion: requiredText(source.firstSceneQuestion, 300, 5, "serial_reader_orientation_question_invalid"),
     newTerms
+  };
+}
+
+function normalizeReaderRewardPlan(value) {
+  const source = object(value);
+  const relationshipBefore = requiredText(source.relationshipBefore, 300, 10, "serial_episode_reward_relationship_before_invalid");
+  const relationshipAfter = requiredText(source.relationshipAfter, 300, 10, "serial_episode_reward_relationship_after_invalid");
+  if (relationshipBefore === relationshipAfter) throw new Error("serial_episode_reward_relationship_unchanged");
+  return {
+    personalWant: requiredText(source.personalWant, 240, 10, "serial_episode_reward_want_invalid"),
+    personalStake: requiredText(source.personalStake, 300, 10, "serial_episode_reward_stake_invalid"),
+    familiarGenreReward: requiredText(source.familiarGenreReward, 240, 10, "serial_episode_reward_genre_invalid"),
+    concretePayoffs: requiredList(source.concretePayoffs, { min: 2, max: 3, itemMax: 240 }, "serial_episode_reward_payoffs_invalid"),
+    relationshipBefore,
+    relationshipAfter,
+    ruleFreeEpisodeQuestion: requiredText(source.ruleFreeEpisodeQuestion, 240, 10, "serial_episode_reward_question_invalid")
   };
 }
 
@@ -1336,6 +1488,11 @@ function integer(value, min, max, fallback) {
 
 function requiredBoolean(value, error) {
   if (typeof value !== "boolean") throw new Error(error);
+  return value;
+}
+
+function requiredEnum(value, allowed, error) {
+  if (!allowed.includes(value)) throw new Error(error);
   return value;
 }
 

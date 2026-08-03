@@ -54,6 +54,9 @@ assert.doesNotMatch(managedStoriesSource, /requestArchitectureStrengthening/u, "
 assert.match(managedStoriesSource, /기존 설정 유지/u, "legacy stories must be described as unchanged");
 assert.match(serialServiceSource, /status: architectureComplete \? "complete" : "legacy"/u, "managed story data must identify legacy architecture without demanding a backfill");
 assert.match(serialServiceSource, /readerOrientation/u, "draft payloads must carry reader-orientation constraints");
+assert.match(serialServiceSource, /recentConcepts/u, "new concepts must receive recent structural references");
+assert.match(serialServiceSource, /bible\.concept_json/u, "recent concept comparisons must include stored private concept data");
+assert.match(serialServiceSource, /fingerprint: comparison\.fingerprint/u, "recent concept comparisons must carry normalized structural fingerprints");
 assert.match(serialServiceSource, /serial_run\.queue_group_id = :queue_group_id or serial_run\.id = :queue_group_id/u, "history operations must support legacy run ids without queue groups");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
 assert.match(serialServiceSource, /run_status in \('error', 'blocked', 'queued', 'running', 'rewrite', 'approved'\)/u, "stalled running groups without active jobs must be hideable from history");
@@ -102,7 +105,11 @@ assert.match(serialOperatorHtml, /name="creativeNovelty"[\s\S]{0,100}value="2"/u
 assert.match(serialOperatorSource, /참신성 \$\{novelty\} · \$\{noveltyLevelLabel\(novelty\)\}/u, "schedule summaries must explain the novelty level");
 assert.match(serialOperatorHtml, /현실에서 하던 작업과 같은 일을 이세계에서 곧바로 맡기는 도입을 반복하지 않는다/u, "operator defaults must prevent mirrored task transfers");
 assert.match(serialOperatorHtml, /이름·출신·능력을 알게 되는 정보 출처와 언어가 통하는 이유/u, "operator defaults must expose identity and language causality");
+assert.match(serialOperatorHtml, /주인공이 무엇을 원하고 왜 실패가 아픈지/u, "operator defaults must require a human premise");
+assert.match(serialOperatorHtml, /프롤로그는 설정 소개 외에 익숙한 장르의 즐거움/u, "operator defaults must require early reader rewards");
 assert.match(serialOperatorSource, /능력 발동 방식이 지나치게 복잡해 기획 재작성 필요/u, "premise-gate failures must be readable to operators");
+assert.match(serialOperatorSource, /characterAttachment: "인물 애착"/u, "operator reviews must label character attachment clearly");
+assert.match(serialOperatorSource, /readerReward: "회차 보상"/u, "operator reviews must label concrete reader rewards clearly");
 assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v9/u, "draft persistence must include the novelty control");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
 assert.match(managedStoriesHtml, /data-created-from/u, "managed stories must provide a creation start date filter");
@@ -406,11 +413,45 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
       hasMultiStepTrigger: false,
       readerExplanation: "0번 버스를 운전하면 죽은 승객의 목적지가 보이지만, 운행할수록 자신의 기억을 잃는다."
     }
+  },
+  readerAppealPlan: {
+    humanPremise: "사라진 누나를 포기하지 못한 신입 기사가 자신의 기억을 잃어 가면서도 누나가 남긴 길을 추적하는 이야기다.",
+    relatableLack: "도윤은 누나를 지키지 못했다는 죄책감 때문에 혼자 모든 책임을 떠안고 다른 사람에게 도움을 청하지 못한다.",
+    immediateWant: "첫 운행을 무사히 마치고 누나가 마지막으로 탔던 버스의 운행 기록을 확인하고 싶다.",
+    personalStake: "운행에 실패하면 일자리를 잃을 뿐 아니라 누나의 흔적에 접근할 유일한 기회와 소중한 기억까지 잃는다.",
+    flawedChoicePattern: "도윤은 누군가 다칠 것 같으면 상의하지 않고 자신이 대가를 전부 치르는 선택부터 한다.",
+    firstRelationshipFriction: "선배 기사 해진은 노선을 지키기 위해 기록을 숨기고, 도윤은 누나를 찾기 위해 그 기록을 요구하면서 서로를 불신한다.",
+    dominantPleasure: "mystery",
+    familiarGenreRewards: ["도시괴담의 금지 규칙을 시험하는 긴장", "승객의 사연을 해결하며 단서를 얻는 추리"],
+    prologueRewards: ["첫 승객의 목적지를 찾아 실제로 내려준다.", "해진이 도윤을 방해하던 태도에서 제한적으로 돕는 태도로 바뀐다."],
+    earlyEpisodePlan: [
+      { installment: "prologue", concreteGoal: "첫 승객의 목적지를 찾아 운행을 끝낸다.", genreReward: "금지 규칙을 어기지 않고 심야 노선을 완주한다.", relationshipChange: "해진이 도윤을 무모한 신입에서 감시할 가치가 있는 기사로 본다.", personalConsequence: "도윤은 누나의 목소리에 관한 기억 한 조각을 잃는다." },
+      { installment: "main-1", concreteGoal: "누나가 남긴 분실 승차권의 주인을 찾는다.", genreReward: "승차권에 숨은 정류장 단서를 공정하게 추리한다.", relationshipChange: "도윤과 해진이 서로 하나씩 정보를 교환하는 불편한 협력자가 된다.", personalConsequence: "도윤은 누나를 찾으려면 타인의 도움을 받아야 한다는 사실을 인정한다." },
+      { installment: "main-2", concreteGoal: "산 사람이 잘못 탄 버스를 원래 노선으로 돌려보낸다.", genreReward: "노선 규칙의 빈틈을 이용해 승객을 구한다.", relationshipChange: "해진이 처음으로 도윤의 판단을 믿고 운전대를 맡긴다.", personalConsequence: "도윤의 선택 때문에 평범한 노선 동료가 비밀을 눈치챈다." }
+    ],
+    recentConceptComparison: {
+      comparedTitles: [],
+      nearestTitle: "none",
+      overlapAxisCount: 0,
+      usesRecentTemplate: false,
+      repeatedPatternsToAvoid: ["학생이 현실 업무와 같은 이세계 일을 맡는 도입", "왕국의 오래된 전쟁 은폐만 남기는 결말"],
+      structuralDifferences: ["현대 서울의 심야 노선에서 가족 실종을 추적하는 관계 중심 미스터리다."],
+      fingerprint: {
+        protagonistFrame: "worker",
+        openingMode: "quiet_anomaly",
+        episodeEngine: "mystery_investigation",
+        storyArena: "journey",
+        powerSource: "artifact",
+        oppositionType: "mystery"
+      }
+    }
   }
 });
 assert.equal(concept.genres.length, 3);
 assert.match(concept.internalPlanningSummary, /장기 갈등/u);
 assert.equal(concept.premiseAudit.abilityPlan.extraRuleCount, 0);
+assert.equal(concept.readerAppealPlan.earlyEpisodePlan[1].installment, "main-1");
+assert.equal(concept.readerAppealPlan.recentConceptComparison.fingerprint.episodeEngine, "mystery_investigation");
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
   premiseAudit: { ...concept.premiseAudit, usesMatchingTaskTransfer: true }
@@ -430,6 +471,65 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
     abilityPlan: { ...concept.premiseAudit.abilityPlan, hasMultiStepTrigger: true }
   }
 }), /serial_ability_trigger_too_complex/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  readerAppealPlan: {
+    ...concept.readerAppealPlan,
+    recentConceptComparison: { ...concept.readerAppealPlan.recentConceptComparison, usesRecentTemplate: true }
+  }
+}), /serial_recent_template_forbidden/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  readerAppealPlan: {
+    ...concept.readerAppealPlan,
+    recentConceptComparison: { ...concept.readerAppealPlan.recentConceptComparison, overlapAxisCount: 3 }
+  }
+}), /serial_recent_comparison_overlap_invalid/u);
+const recentConcepts = Array.from({ length: 5 }, (_, index) => ({
+  title: `최근 판타지 ${index + 1}`,
+  fingerprint: {
+    protagonistFrame: "student",
+    openingMode: "accident",
+    episodeEngine: "case_solving",
+    storyArena: "court",
+    powerSource: "magic",
+    oppositionType: "institution"
+  }
+}));
+const comparedConcept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  readerAppealPlan: {
+    ...concept.readerAppealPlan,
+    recentConceptComparison: {
+      ...concept.readerAppealPlan.recentConceptComparison,
+      comparedTitles: recentConcepts.map((item) => item.title),
+      nearestTitle: recentConcepts[0].title,
+      overlapAxisCount: 0,
+      structuralDifferences: [
+        "학생이 아니라 생계를 책임지는 성인 기사가 주인공이다.",
+        "왕궁이 아니라 움직이는 심야버스와 도시 정류장이 주요 무대다.",
+        "행정 사건 해결보다 가족 실종의 단서를 공정하게 추리한다."
+      ]
+    }
+  }
+}, { payload: { recentConcepts } });
+assert.equal(comparedConcept.readerAppealPlan.recentConceptComparison.comparedTitles.length, 5);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  readerAppealPlan: {
+    ...concept.readerAppealPlan,
+    recentConceptComparison: {
+      ...comparedConcept.readerAppealPlan.recentConceptComparison,
+      overlapAxisCount: 2
+    }
+  }
+}, {
+  payload: {
+    recentConcepts: recentConcepts.map((item, index) => index === 0
+      ? { ...item, fingerprint: concept.readerAppealPlan.recentConceptComparison.fingerprint }
+      : item)
+  }
+}), /serial_recent_structure_too_similar/u);
 const metaExposedSynopsis = "주인공은 왕국의 재난 훈련장에서 사람들을 구하며 낯선 규칙을 배운다. 매 화 새로운 사고를 수습하는 것이 판타지의 반복 엔진이며, 10권 동안 왕국의 비밀을 밝힌다. 장기 전개에서는 동료와 적의 관계가 단계별로 달라지고 마지막에는 전쟁의 진실을 모두 공개한다.";
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
@@ -437,6 +537,7 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
 }), /serial_public_synopsis_meta_exposed/u);
 const legacyConceptWithoutAudit = { ...concept };
 delete legacyConceptWithoutAudit.premiseAudit;
+delete legacyConceptWithoutAudit.readerAppealPlan;
 assert.throws(
   () => normalizeStoryHeavenSerialWorkerResult("concept_gate", legacyConceptWithoutAudit),
   /serial_premise_entry_type_invalid/u
@@ -448,6 +549,7 @@ const resumedLegacyConcept = normalizeStoryHeavenSerialWorkerResult("concept_gat
 }, { allowLegacyConceptCopy: true });
 assert.match(resumedLegacyConcept.internalPlanningSummary, /10권 동안/u);
 assert.equal("premiseAudit" in resumedLegacyConcept, false);
+assert.equal("readerAppealPlan" in resumedLegacyConcept, false);
 
 const testSeriesPlan = { totalVolumes: 10, episodesPerVolume: 25, totalMainEpisodes: 250 };
 const conflictSources = Array.from({ length: 5 }, (_, index) => ({
@@ -698,6 +800,15 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
       newTerms: [
         { term: "0번 노선", plainMeaning: "자정에만 출발하는 심야버스 노선", demonstration: "노선도 불이 켜지고 잠긴 차고지 문이 저절로 열린다." }
       ]
+    },
+    readerRewardPlan: {
+      personalWant: "도윤은 첫 운행을 끝내고 누나의 마지막 승차 기록을 확인하고 싶다.",
+      personalStake: "실패하면 비밀 노선 일자리와 누나를 찾을 유일한 기회를 함께 잃는다.",
+      familiarGenreReward: "금지 규칙을 지키며 정체불명의 첫 승객을 목적지까지 데려가는 도시괴담의 긴장이다.",
+      concretePayoffs: ["도윤이 첫 승객의 진짜 목적지를 찾아 내려준다.", "누나가 남긴 왕복 승차권의 절반을 손에 넣는다."],
+      relationshipBefore: "해진은 도윤을 규칙도 모르는 위험한 신입으로 여기고 운행을 막으려 한다.",
+      relationshipAfter: "도윤이 대가를 치르고 승객을 구한 뒤 해진은 한 번의 공동 운행을 허락한다.",
+      ruleFreeEpisodeQuestion: "누나를 찾으려는 도윤은 소중한 기억을 잃는 대가를 어디까지 감수할 것인가?"
     }
   },
   prologueDisclosurePlan: {
@@ -715,7 +826,23 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
 });
 assert.equal(card.techniquePlan.openingMode, "사건 한가운데");
 assert.equal(card.techniquePlan.readerOrientation.newTerms.length, 1);
+assert.equal(card.techniquePlan.readerRewardPlan.concretePayoffs.length, 2);
 assert.equal(card.prologueDisclosurePlan.mustNotAnswerRevealKeys.length, 4);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
+  ...card,
+  techniquePlan: {
+    ...card.techniquePlan,
+    readerRewardPlan: {
+      ...card.techniquePlan.readerRewardPlan,
+      relationshipAfter: card.techniquePlan.readerRewardPlan.relationshipBefore
+    }
+  }
+}, {
+  payload: {
+    episodeNo: 1,
+    bible: { narrativeBlueprint: bible.narrativeBlueprint }
+  }
+}), /serial_episode_reward_relationship_unchanged/u);
 
 const paragraph = "도윤은 버스 문을 열고 빈 좌석 사이를 천천히 확인했다. 창문에는 차고지 불빛 대신 오래전 폐역의 시계가 비쳤다. 그는 승객의 낡은 표를 받아 운행 기록과 대조했고, 자신이 기억하지 못하는 누나의 목소리가 안내 방송에서 흘러나오는 이유를 찾기로 했다.";
 const body = Array.from({ length: 36 }, (_, index) => `${index + 1}번째 움직임. ${paragraph} ${paragraph}`).join("\n\n");
@@ -760,10 +887,14 @@ const review = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);
-assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 94.4);
+assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 94.7);
 assert.equal(storyHeavenSerialQualityThresholds(1).readerOrientation, 92);
 assert.equal(storyHeavenSerialQualityThresholds(1).openingGrip, 90);
 assert.equal(storyHeavenSerialQualityThresholds(1).curiosityAndHook, 92);
+assert.equal(storyHeavenSerialQualityThresholds(1).characterAttachment, 86);
+assert.equal(storyHeavenSerialQualityThresholds(1).relationshipMomentum, 84);
+assert.equal(storyHeavenSerialQualityThresholds(1).readerReward, 88);
+assert.equal(storyHeavenSerialQualityThresholds(1).premiseAccessibility, 92);
 assert.equal(storyHeavenSerialQualityThresholds(1).novelty, 70);
 assert.equal(storyHeavenSerialQualityThresholds(2).openingGrip, 75);
 assert.equal(storyHeavenSerialQualityThresholds(2).novelty, 65);
@@ -784,6 +915,15 @@ const disorientingFirstEpisode = decideStoryHeavenSerialReview({
 });
 assert.equal(disorientingFirstEpisode.state, "rewrite_required");
 assert.equal(disorientingFirstEpisode.failedMetrics[0].name, "readerOrientation");
+
+const unrewardingFirstEpisode = decideStoryHeavenSerialReview({
+  qa,
+  review: { ...review, scores: { ...scores, readerReward: 80 } },
+  rewriteCount: 0,
+  episodeNo: 1
+});
+assert.equal(unrewardingFirstEpisode.state, "rewrite_required");
+assert.equal(unrewardingFirstEpisode.failedMetrics[0].name, "readerReward");
 
 const visuallyWeakReview = { ...review, decision: "rewrite_required", scores: { ...scores, sceneVisualization: 70 } };
 const visualRewrite = decideStoryHeavenSerialReview({ qa, review: visuallyWeakReview, rewriteCount: 0 });

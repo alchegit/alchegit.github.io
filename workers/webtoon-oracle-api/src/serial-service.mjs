@@ -1878,6 +1878,8 @@ export function createStoryHeavenSerialService({
         source
       }
     });
+    const existingTitles = await existingSystemTitles(connection);
+    const recentConcepts = await existingSystemConcepts(connection);
     await queueJob(connection, {
       runId: run.id,
       type: "concept_gate",
@@ -1896,7 +1898,8 @@ export function createStoryHeavenSerialService({
           targetAge: schedule.TARGET_AGE,
           policy: normalizeStoredConceptPolicy(parseJson(schedule.CONCEPT_POLICY_JSON, {}))
         },
-        existingTitles: await existingSystemTitles(connection)
+        existingTitles,
+        recentConcepts
       }
     });
     return run;
@@ -2978,6 +2981,33 @@ export function createStoryHeavenSerialService({
     };
   }
 
+  async function existingSystemConcepts(connection) {
+    const result = await connection.execute(
+      `select story.title, story.logline, story.public_synopsis, story.genres_json,
+              bible.concept_json
+         from storyheaven_stories story
+         left join storyheaven_serial_bibles bible on bible.story_id = story.id
+        where story.author_user_id = :author_user_id and story.story_status <> 'archived'
+        order by story.created_at desc fetch first 20 rows only`,
+      { author_user_id: SYSTEM_AUTHOR_ID }
+    );
+    return result.rows.map((row) => {
+      const concept = parseJson(row.CONCEPT_JSON, {});
+      const appeal = concept.readerAppealPlan || {};
+      const comparison = appeal.recentConceptComparison || {};
+      return {
+        title: cleanText(row.TITLE, 80),
+        logline: cleanText(row.LOGLINE, 220),
+        synopsis: cleanText(row.PUBLIC_SYNOPSIS, 500),
+        genres: parseJson(row.GENRES_JSON, []),
+        familiarPleasure: cleanText(concept.familiarPleasure, 300),
+        novelTwist: cleanText(concept.novelTwist, 300),
+        humanPremise: cleanText(appeal.humanPremise, 240),
+        fingerprint: comparison.fingerprint || null
+      };
+    });
+  }
+
   async function existingSystemTitles(connection) {
     const result = await connection.execute(
       `select title, logline from storyheaven_stories
@@ -2985,7 +3015,10 @@ export function createStoryHeavenSerialService({
         order by created_at desc fetch first 50 rows only`,
       { author_user_id: SYSTEM_AUTHOR_ID }
     );
-    return result.rows.map((row) => ({ title: row.TITLE, logline: row.LOGLINE }));
+    return result.rows.map((row) => ({
+      title: cleanText(row.TITLE, 80),
+      logline: cleanText(row.LOGLINE, 220)
+    }));
   }
 }
 
