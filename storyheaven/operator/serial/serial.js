@@ -17,19 +17,22 @@
     romance: "creativeRomance",
     action: "creativeAction",
     description: "creativeDescription",
-    humor: "creativeHumor"
+    humor: "creativeHumor",
+    novelty: "creativeNovelty"
   });
   const creativePresets = Object.freeze({
-    balanced: Object.freeze({ pace: 3, suspense: 3, curiosity: 4, surprise: 3, emotion: 3, romance: 2, action: 3, description: 3, humor: 2 }),
-    fast: Object.freeze({ pace: 5, suspense: 4, curiosity: 4, surprise: 3, emotion: 3, romance: 1, action: 4, description: 2, humor: 2 }),
-    emotional: Object.freeze({ pace: 2, suspense: 2, curiosity: 3, surprise: 2, emotion: 5, romance: 4, action: 1, description: 4, humor: 2 })
+    balanced: Object.freeze({ pace: 3, suspense: 3, curiosity: 4, surprise: 3, emotion: 3, romance: 2, action: 3, description: 3, humor: 2, novelty: 2 }),
+    fast: Object.freeze({ pace: 5, suspense: 4, curiosity: 4, surprise: 3, emotion: 3, romance: 1, action: 4, description: 2, humor: 2, novelty: 2 }),
+    emotional: Object.freeze({ pace: 2, suspense: 2, curiosity: 3, surprise: 2, emotion: 5, romance: 4, action: 1, description: 4, humor: 2, novelty: 2 })
   });
-  const defaultConceptPolicy = "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다. 첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다. 첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다. 첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다. 설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다. 주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다.";
+  const previousDefaultConceptPolicy = "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다. 첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다. 첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다. 첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다. 설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다. 주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다.";
+  const defaultConceptPolicy = `${previousDefaultConceptPolicy} 참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다.`;
   const legacyConceptPolicies = new Set([
-    "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다."
+    "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다.",
+    previousDefaultConceptPolicy
   ]);
-  const draftStorageKey = "storyheaven.operator.serial-draft.v8";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const draftStorageKey = "storyheaven.operator.serial-draft.v9";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   let draftReady = false;
   let draftSaveTimer = 0;
@@ -332,6 +335,11 @@
       const input = selectors.scheduleForm.elements[fieldName];
       const output = input.closest("label")?.querySelector("output");
       if (output) output.value = String(values[key]);
+      if (key === "novelty") {
+        const label = noveltyLevelLabel(values[key]);
+        input.setAttribute("aria-valuetext", `${values[key]} · ${label}`);
+        if (output) output.title = label;
+      }
       input.style.setProperty("--range-value", `${(values[key] - 1) * 25}%`);
     }
     const presetLabels = { balanced: "균형 설정", fast: "빠른 몰입 설정", emotional: "감정 중심 설정", custom: "직접 조정" };
@@ -347,7 +355,12 @@
       ["호기심", values.curiosity],
       ["감정", values.emotion]
     ].filter(([, value]) => Number(value) >= 4);
-    return entries.length ? entries.map(([label, value]) => `${label} ${value}`).join(" · ") : "균형";
+    const novelty = Math.max(1, Math.min(5, Number(values.novelty || creativePresets.balanced.novelty)));
+    return [...entries.map(([label, value]) => `${label} ${value}`), `참신성 ${novelty} · ${noveltyLevelLabel(novelty)}`].join(" · ");
+  }
+
+  function noveltyLevelLabel(value) {
+    return ({ 1: "익숙함 우선", 2: "절제된 차별화", 3: "균형", 4: "독창적", 5: "실험적" })[Number(value)] || "절제된 차별화";
   }
 
   function humorIntensityFromControls(values) {
@@ -1820,7 +1833,7 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 8,
+      version: 9,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
@@ -1856,7 +1869,7 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6, 7, 8].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");

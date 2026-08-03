@@ -6,6 +6,8 @@ import {
   analyzeStoryHeavenSerialDraft,
   decideStoryHeavenSerialReview,
   normalizeStoryHeavenConceptPolicy,
+  normalizeStoryHeavenCreativeControls,
+  storyHeavenCreativeControlGuidance,
   storyHeavenSerialQualityThresholds,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenSerialStoryControl,
@@ -2951,7 +2953,23 @@ function mapSchedule(row) {
 
 function normalizeStoredConceptPolicy(policyValue) {
   const policy = policyValue && typeof policyValue === "object" ? policyValue : {};
-  return { ...policy, instruction: normalizeStoryHeavenConceptPolicy(policy.instruction) };
+  const storedControls = policy.creativeControls && typeof policy.creativeControls === "object"
+    ? policy.creativeControls
+    : {};
+  const normalizedControls = normalizeStoryHeavenCreativeControls(
+    storedControls,
+    storedControls.humorIntensity
+  );
+  return {
+    ...policy,
+    instruction: normalizeStoryHeavenConceptPolicy(policy.instruction),
+    creativeControls: {
+      ...storedControls,
+      ...normalizedControls.values,
+      preset: normalizedControls.preset,
+      guidance: storyHeavenCreativeControlGuidance(normalizedControls.values)
+    }
+  };
 }
 
 function normalizeSeriesPlan(value = {}) {

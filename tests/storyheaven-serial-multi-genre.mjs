@@ -28,7 +28,7 @@ try {
       subgenres: ["modern-fantasy"],
       subgenresByGenre: { fantasy: ["modern-fantasy"] },
       humorIntensity: "light",
-      creativeControls: { preset: "balanced", pace: 3, suspense: 3, curiosity: 4, surprise: 3, emotion: 3, romance: 2, action: 3, description: 3, humor: 2 },
+      creativeControls: { preset: "balanced", pace: 3, suspense: 3, curiosity: 4, surprise: 3, emotion: 3, romance: 2, action: 3, description: 3, humor: 2, novelty: 2 },
       targetAge: "teen",
       cadenceMinutes: 360,
       targetEpisodeCount: 3,
@@ -79,7 +79,7 @@ try {
             ...(titlelessLogVisible ? [titlelessHistoryLog] : [])
           ],
           hiddenHistory: titlelessLogVisible ? [] : [{ ...titlelessHistoryLog, status: "hidden", canceledAt: "2026-08-02T00:10:00.000Z" }],
-          stalledFirstEpisodeStories: stalledVisible ? [{ id: "stalled-story", title: "0화에서 멈춘 마법사", logline: "프롤로그 제작 전에 서버가 멈춘 작품", latestRunStatus: "error", latestStage: "build_bible", latestFailureCode: "codex_model_unavailable", latestCompletedAt: "2026-07-31T04:30:00.000Z" }] : [],
+          stalledFirstEpisodeStories: stalledVisible ? [{ id: "stalled-story", title: "0화에서 멈춘 마법사", logline: "프롤로그 회차 등록 전에 멈춘 작품", latestRunStatus: "draft", latestStage: "editorial_review", draft: { characterCount: 0 }, latestCompletedAt: "2026-07-31T04:30:00.000Z" }] : [],
           quotaNote: "실제 AI 작업 수와 소요 시간을 기록합니다."
         } });
       }
@@ -131,6 +131,12 @@ try {
 
     await page.goto(`${root}/storyheaven/operator/serial/`, { waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    await page.locator(".creative-details").evaluate((node) => { node.open = true; });
+    const noveltyControl = page.locator('[data-schedule-form] input[name="creativeNovelty"]');
+    assert.equal(await noveltyControl.isVisible(), true, `${viewport.name} shows novelty under item controls`);
+    assert.equal(await noveltyControl.inputValue(), "2", `${viewport.name} starts with restrained novelty`);
+    assert.match(await noveltyControl.locator("xpath=ancestor::label").textContent(), /참신성.*익숙한 장르 문법.*실험적 조합/u, `${viewport.name} explains the novelty range`);
+    assert.equal(await noveltyControl.locator("xpath=ancestor::label").locator("output").getAttribute("title"), "절제된 차별화", `${viewport.name} names the default novelty level`);
     await page.locator('[data-schedule-form] select[name="cadenceUnit"]').selectOption("minutes");
     await page.locator('[data-schedule-form] input[name="cadenceValue"]').fill("90");
     await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').fill("4");
@@ -150,12 +156,13 @@ try {
 
     await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').check();
     await page.locator('.subgenre-group:has(h3:text("SF")) input[value="near-future"]').check();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v7") || "null")?.primaryGenres?.length === 3);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v9") || "null")?.primaryGenres?.length === 3);
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
     assert.equal(await page.locator('[data-schedule-form] input[name="cadenceValue"]').inputValue(), "90", `${viewport.name} restores cadence value`);
     assert.equal(await page.locator('[data-schedule-form] select[name="cadenceUnit"]').inputValue(), "minutes", `${viewport.name} restores cadence unit`);
     assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "4", `${viewport.name} restores target episode count`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="creativeNovelty"]').inputValue(), "2", `${viewport.name} restores novelty`);
     assert.equal(await page.locator('[data-primary-genres] input:checked').count(), 3, `${viewport.name} restores primary genres`);
     assert.equal(await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').isChecked(), true, `${viewport.name} restores romance detail`);
     assert.equal(await page.locator('.subgenre-group:has(h3:text("SF")) input[value="near-future"]').isChecked(), true, `${viewport.name} restores sf detail`);
@@ -170,6 +177,7 @@ try {
     assert.ok(submitted.subgenresByGenre.sf.includes("near-future"), `${viewport.name} sf subgenre payload`);
     assert.equal(submitted.humorIntensity, "light", `${viewport.name} derives legacy humor compatibility`);
     assert.equal(submitted.creativeControls.curiosity, 4, `${viewport.name} creative control payload`);
+    assert.equal(submitted.creativeControls.novelty, 2, `${viewport.name} novelty payload`);
     assert.equal(submitted.cadenceMinutes, 90, `${viewport.name} minute cadence payload`);
     assert.equal(submitted.targetEpisodeCount, 4, `${viewport.name} initial episode target payload`);
     assert.equal(submitted.totalVolumes, 10, `${viewport.name} default volume count payload`);
@@ -236,10 +244,9 @@ try {
     await page.locator(".run-history").evaluate((node) => { node.open = true; });
     assert.doesNotMatch(await page.locator("[data-run-history]").textContent(), /제목 생성 전 · 판타지 · 프롤로그/u, `${viewport.name} browser-level history hide survives reload`);
     assert.match(await page.locator("[data-history-hidden-toggle]").textContent(), /숨긴 로그 보기 \(1\)/u, `${viewport.name} persisted hidden history remains available after reload`);
-    assert.match(await page.locator("[data-stalled-list]").textContent(), /0화에서 멈춘 마법사.*프롤로그 등록 없음/u, `${viewport.name} stalled first episode is visible`);
-    page.once("dialog", (dialog) => dialog.accept());
-    await page.locator("[data-stalled-list]").getByRole("button", { name: "프롤로그 제작 재개" }).click();
-    await page.waitForFunction(() => document.querySelector("[data-stalled-list]")?.textContent.includes("프롤로그 제작 전 멈춘 작품은 없습니다."));
+    assert.match(await page.locator("[data-stalled-list]").textContent(), /0화에서 멈춘 마법사.*프롤로그 회차 미등록/u, `${viewport.name} stalled first episode is visible`);
+    await page.locator("[data-stalled-list]").getByRole("button", { name: "프롤로그 제작 다시 요청" }).click();
+    await page.waitForFunction(() => document.querySelector("[data-stalled-list]")?.textContent.includes("프롤로그 등록 전에 확인할 작품은 없습니다."));
     assert.deepEqual(firstEpisodeResumes.at(-1), { autoEpisode: true }, `${viewport.name} stalled first episode resumes from planning`);
     page.once("dialog", (dialog) => dialog.accept());
     await page.locator(".queue-row.waiting").getByRole("button", { name: "대기 취소" }).click();
@@ -250,6 +257,7 @@ try {
     assert.equal(layout.documentWidth, layout.viewport, `${viewport.name} horizontal overflow`);
     assert.deepEqual(errors, [], `${viewport.name} page errors`);
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await page.locator(".creative-details").evaluate((node) => { node.open = true; });
     await page.screenshot({ path: `test-results/storyheaven-serial-multi-genre-${viewport.name}.png`, fullPage: true });
 
     cooldownMode = true;

@@ -32,8 +32,13 @@ assert.match(prompt, /distinct dramatic job/u);
 assert.match(prompt, /Series length policy is binding/u);
 assert.match(prompt, /first generated installment is always a prologue/u);
 assert.match(prompt, /prologue is a retention gate/u);
-assert.match(prompt, /pace, suspense, curiosity, surprise, emotion, romance, action, description, and humor/u);
+assert.match(prompt, /pace, suspense, curiosity, surprise, emotion, romance, action, description, humor, and novelty/u);
 assert.match(prompt, /not permission to flatten every scene to one intensity/u);
+assert.match(prompt, /payload\.schedule\.policy\.creativeControls or payload\.creativeControls/u);
+assert.match(prompt, /If novelty is absent, use 2/u);
+assert.match(prompt, /not a command to maximize strangeness/u);
+assert.match(prompt, /arbitrary mashup of an occupation, household object, and magic rule/u);
+assert.match(prompt, /novelty score measures fit to the requested novelty level/u);
 assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
@@ -65,6 +70,20 @@ const planningPrompt = buildSerialPrompt({ ...job, type: "build_episode_card" })
 assert.match(planningPrompt, /lock a spatial anchor, character blocking/u);
 assert.match(planningPrompt, /force the protagonist into a costly or irreversible choice/u);
 assert.match(planningPrompt, /ordinaryBaseline, immediateGoal, knownContext, firstChange, stakes/u);
+
+const conceptPrompt = buildSerialPrompt({
+  ...job,
+  type: "concept_gate",
+  payload: { schedule: { policy: { creativeControls: { novelty: 2 } } } }
+});
+assert.match(conceptPrompt, /defaulting to 2 when absent/u);
+assert.match(conceptPrompt, /add only one restrained differentiator/u);
+assert.match(conceptPrompt, /not merely advertise a quirky rule/u);
+
+const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible" });
+assert.match(biblePrompt, /narrativeBlueprint\.noveltyPolicy/u);
+assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
+assert.match(biblePrompt, /참신성 목표와 새 요소 추가 제한/u);
 
 const parsed = parseSerialOutput({
   jobId: job.id,

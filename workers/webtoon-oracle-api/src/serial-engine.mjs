@@ -41,21 +41,27 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
     genrePromise: 80,
     curiosityAndHook: 80,
     characterAgency: 75,
-    novelty: 75
+    novelty: 65
   })
 });
 
-export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
+const STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE = Object.freeze([
   "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다.",
   "첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다.",
   "첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다.",
   "첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다.",
   "설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다.",
   "주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다."
+]);
+
+export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
+  ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
+  "참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다."
 ].join(" ");
 
 const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
-  "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다."
+  "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다.",
+  STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE.join(" ")
 ]);
 
 export function normalizeStoryHeavenConceptPolicy(value) {
@@ -74,7 +80,7 @@ const STORYHEAVEN_FIRST_EPISODE_QUALITY = Object.freeze({
   genrePromise: 88,
   curiosityAndHook: 92,
   characterAgency: 82,
-  novelty: 86
+  novelty: 70
 });
 
 export const STORYHEAVEN_HUMOR_PROFILES = Object.freeze({
@@ -107,7 +113,8 @@ export const STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS = Object.freeze({
   romance: 2,
   action: 3,
   description: 3,
-  humor: 2
+  humor: 2,
+  novelty: 2
 });
 
 const STORYHEAVEN_CREATIVE_CONTROL_KEYS = Object.freeze(Object.keys(STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS));
@@ -189,7 +196,7 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     ? 1
     : Number(input.continuationBatchCount);
   const humorIntensity = String(input.humorIntensity || "light").trim();
-  const creativeControls = normalizeCreativeControls(input.creativeControls, humorIntensity);
+  const creativeControls = normalizeStoryHeavenCreativeControls(input.creativeControls, humorIntensity);
   const normalizedHumorIntensity = humorIntensityForLevel(creativeControls.values.humor);
   const humorProfile = STORYHEAVEN_HUMOR_PROFILES[normalizedHumorIntensity];
   const targetAge = ["all", "teen"].includes(input.targetAge) ? input.targetAge : "teen";
@@ -252,14 +259,14 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
         humorGuidance: humorProfile?.guidance || STORYHEAVEN_HUMOR_PROFILES.light.guidance,
         storyShare: humorProfile?.storyShare || STORYHEAVEN_HUMOR_PROFILES.light.storyShare,
         humorShare: humorProfile?.humorShare || STORYHEAVEN_HUMOR_PROFILES.light.humorShare,
-        guidance: creativeControlGuidance(creativeControls.values)
+        guidance: storyHeavenCreativeControlGuidance(creativeControls.values)
       },
       randomized: genre.randomized || { primaryGenre: false, subgenres: false }
     }
   };
 }
 
-function normalizeCreativeControls(input, legacyHumorIntensity) {
+export function normalizeStoryHeavenCreativeControls(input, legacyHumorIntensity) {
   const source = input && typeof input === "object" && !Array.isArray(input) ? input : {};
   const values = {};
   let valid = true;
@@ -291,7 +298,7 @@ function humorIntensityForLevel(value) {
   return "light";
 }
 
-function creativeControlGuidance(values) {
+export function storyHeavenCreativeControlGuidance(values) {
   return {
     pace: `전개 속도 ${values.pace}/5: 낮을수록 여운과 탐색을 허용하고, 높을수록 사건과 선택의 간격을 줄이되 인과를 생략하지 않는다.`,
     suspense: `긴장 ${values.suspense}/5: 위험과 불확실성의 압력을 조절하고 매 장면을 같은 고조 상태로 만들지 않는다.`,
@@ -301,8 +308,20 @@ function creativeControlGuidance(values) {
     romance: `관계·로맨스 ${values.romance}/5: 관계 변화가 차지하는 장면 비중을 조절하며 선택 장르의 약속을 침범하지 않는다.`,
     action: `액션 ${values.action}/5: 물리적 충돌과 즉각적 행동 보상의 빈도를 조절하고 공간 인과를 유지한다.`,
     description: `묘사 밀도 ${values.description}/5: 독자가 장면을 그릴 구체물과 감각의 양을 조절하되 장식적 나열을 피한다.`,
-    humor: `웃음 ${values.humor}/5: 인물과 상황에서 나오는 웃음의 빈도와 보상 크기를 조절한다.`
+    humor: `웃음 ${values.humor}/5: 인물과 상황에서 나오는 웃음의 빈도와 보상 크기를 조절한다.`,
+    novelty: noveltyGuidance(values.novelty)
   };
+}
+
+function noveltyGuidance(value) {
+  const level = Math.max(1, Math.min(5, Number(value) || STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS.novelty));
+  return ({
+    1: "참신성 1/5 · 익숙함 우선: 검증된 장르 문법, 친숙한 역할과 갈등을 중심으로 쓰고 차별점은 인물 관계나 선택의 결과 한 가지에만 둔다. 낯선 소재 결합과 새 규칙 증식을 피한다.",
+    2: "참신성 2/5 · 절제된 차별화: 독자가 바로 알아볼 장르 구조를 약 80% 유지하고, 작품을 구분할 한 가지 규칙·관계·대가만 선명하게 더한다. 서로 무관한 직업·사물·마법을 제목용으로 억지 결합하지 않는다.",
+    3: "참신성 3/5 · 균형: 익숙한 장르 엔진 위에 중심 규칙 하나와 그로 인한 예상 밖의 결과를 더하되, 인물의 현실적인 욕망과 이해하기 쉬운 갈등을 기준점으로 유지한다.",
+    4: "참신성 4/5 · 독창적: 드문 소재나 규칙 조합을 허용하지만 독자가 붙잡을 친숙한 목표, 감정, 장르 보상을 먼저 제시하고 모든 낯선 요소에 인과적 필요를 부여한다.",
+    5: "참신성 5/5 · 실험적: 형식과 소재의 과감한 조합을 허용하되 무작위 기괴함은 금지한다. 실험은 인물의 선택과 반복 가능한 연재 갈등을 더 강하게 만들 때만 사용한다."
+  })[level];
 }
 
 function seriesPlan(totalVolumes, episodesPerVolume) {
@@ -547,6 +566,7 @@ function normalizeBible(source) {
       signatureTechniques: requiredList(narrative.signatureTechniques, { min: 3, max: 7, itemMax: 160 }, "serial_narrative_techniques_invalid"),
       escalationPattern: requiredText(narrative.escalationPattern, 500, 20, "serial_narrative_escalation_invalid"),
       revealCadence: requiredText(narrative.revealCadence, 500, 20, "serial_narrative_reveal_invalid"),
+      noveltyPolicy: requiredText(narrative.noveltyPolicy, 500, 20, "serial_narrative_novelty_invalid"),
       antiRepetitionRules: requiredList(narrative.antiRepetitionRules, { min: 3, max: 10, itemMax: 240 }, "serial_narrative_repetition_invalid")
     }
   };

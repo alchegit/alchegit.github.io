@@ -9,6 +9,8 @@ import {
   calculateStoryHeavenReaderExperienceScore,
   decideStoryHeavenSerialReview,
   normalizeStoryHeavenConceptPolicy,
+  normalizeStoryHeavenCreativeControls,
+  storyHeavenCreativeControlGuidance,
   storyHeavenSerialQualityThresholds,
   normalizeStoryHeavenSerialWorkerResult,
   validateStoryHeavenEpisodeRun,
@@ -77,6 +79,7 @@ assert.match(serialServiceSource, /error_code = 'operator_schedule_deleted'/u, "
 assert.match(serialServiceSource, /queue_status = 'canceled'/u, "schedule deletion must cancel publication reservations");
 assert.match(serialServiceSource, /delete from storyheaven_serial_continuations continuation/u, "schedule deletion must cancel linked continuation requests");
 assert.match(serialServiceSource, /async function resolveQualityHold/u, "quality holds must have a dedicated resolution operation");
+assert.match(serialServiceSource, /normalizeStoryHeavenCreativeControls\([\s\S]*storyHeavenCreativeControlGuidance/u, "stored schedules must backfill novelty and regenerate guidance");
 assert.match(serialServiceSource, /serial_quality_hold_safety_failed/u, "unsafe drafts must not be operator-approved");
 assert.match(serialServiceSource, /last_cycle_completed_at < \([\s\S]*select serial_run\.created_at[\s\S]*where serial_run\.id = :run_id/u, "cycle comparisons must stay in Oracle timestamp types");
 assert.match(serverSource, /app\.delete\("\/api\/storyheaven\/operator\/serial-engine\/schedules\/:id"/u, "schedule deletion must have an admin API route");
@@ -84,6 +87,9 @@ assert.match(serverSource, /resolve-quality-hold/u, "quality-hold resolution mus
 assert.match(serialOperatorSource, /latestRunStatus === "error"[\s\S]{0,200}latestRunStatus === "blocked"/u, "system errors must take precedence over stale quality reviews");
 assert.match(serialOperatorHtml, /문제 해결 도구/u, "operator recovery tools must use task-oriented language");
 assert.match(serialOperatorCss, /details\.advanced > summary[\s\S]*color: #f4f7fb/u, "dark advanced summaries must retain readable text");
+assert.match(serialOperatorHtml, /name="creativeNovelty"[\s\S]{0,100}value="2"/u, "novelty must be visible with the restrained default");
+assert.match(serialOperatorSource, /참신성 \$\{novelty\} · \$\{noveltyLevelLabel\(novelty\)\}/u, "schedule summaries must explain the novelty level");
+assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v9/u, "draft persistence must include the novelty control");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
 assert.match(managedStoriesHtml, /data-created-from/u, "managed stories must provide a creation start date filter");
 assert.match(managedStoriesHtml, /data-created-to/u, "managed stories must provide a creation end date filter");
@@ -246,6 +252,8 @@ const comedySchedule = validateStoryHeavenSerialSchedule({
 assert.equal(comedySchedule.ok, true);
 assert.equal(comedySchedule.schedule.creativeControls.humorIntensity, "comedy-first");
 assert.equal(comedySchedule.schedule.creativeControls.humorShare, 65);
+assert.equal(comedySchedule.schedule.creativeControls.novelty, 2);
+assert.match(comedySchedule.schedule.creativeControls.guidance.novelty, /2\/5/u);
 assert.equal(validateStoryHeavenSerialSchedule({ ...comedySchedule.schedule, humorIntensity: "too-much" }).ok, false);
 assert.deepEqual(STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS, {
   pace: 3,
@@ -256,8 +264,11 @@ assert.deepEqual(STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS, {
   romance: 2,
   action: 3,
   description: 3,
-  humor: 2
+  humor: 2,
+  novelty: 2
 });
+assert.equal(normalizeStoryHeavenCreativeControls({}, "light").values.novelty, 2);
+assert.match(storyHeavenCreativeControlGuidance({ ...STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS }).novelty, /한 가지/u);
 const controlledSchedule = validateStoryHeavenSerialSchedule({
   ...comedySchedule.schedule,
   humorIntensity: "comedy-first",
@@ -271,16 +282,23 @@ const controlledSchedule = validateStoryHeavenSerialSchedule({
     romance: 1,
     action: 3,
     description: 4,
-    humor: 5
+    humor: 5,
+    novelty: 4
   }
 });
 assert.equal(controlledSchedule.ok, true);
 assert.equal(controlledSchedule.schedule.creativeControls.pace, 5);
+assert.equal(controlledSchedule.schedule.creativeControls.novelty, 4);
 assert.equal(controlledSchedule.schedule.creativeControls.preset, "custom");
 assert.match(controlledSchedule.schedule.creativeControls.guidance.curiosity, /5\/5/u);
+assert.match(controlledSchedule.schedule.creativeControls.guidance.novelty, /4\/5/u);
 assert.equal(validateStoryHeavenSerialSchedule({
   ...controlledSchedule.schedule,
   creativeControls: { ...controlledSchedule.schedule.creativeControls, suspense: 6 }
+}).ok, false);
+assert.equal(validateStoryHeavenSerialSchedule({
+  ...controlledSchedule.schedule,
+  creativeControls: { ...controlledSchedule.schedule.creativeControls, novelty: 6 }
 }).ok, false);
 
 const schedule = validateStoryHeavenSerialSchedule({
@@ -366,10 +384,12 @@ const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
     signatureTechniques: ["제한된 정보", "극적 아이러니", "설정과 회수"],
     escalationPattern: "개인 승객의 문제에서 차고지 전체와 도시 교통망의 위기로 범위를 넓힌다.",
     revealCadence: "매 화 작은 답 하나와 더 큰 질문 하나를 남기고 3화마다 기존 단서의 의미를 뒤집는다.",
+    noveltyPolicy: "익숙한 심야 버스 미스터리를 중심에 두고 기억이 요금이라는 차별점 하나만 유지하며 새 마법 규칙을 추가하지 않는다.",
     antiRepetitionRules: ["같은 도입법을 연속 사용하지 않는다.", "항상 새 승객 등장으로 시작하지 않는다.", "모든 회차를 정체 공개로 끝내지 않는다."]
   }
 });
 assert.equal(bible.narrativeBlueprint.openingModes.length, 3);
+assert.match(bible.narrativeBlueprint.noveltyPolicy, /차별점 하나/u);
 assert.equal(bible.voiceProfile.readerOnboardingRules.length, 4);
 
 const arc = normalizeStoryHeavenSerialWorkerResult("build_arc", {
@@ -473,7 +493,9 @@ assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip:
 assert.equal(storyHeavenSerialQualityThresholds(1).readerOrientation, 92);
 assert.equal(storyHeavenSerialQualityThresholds(1).openingGrip, 90);
 assert.equal(storyHeavenSerialQualityThresholds(1).curiosityAndHook, 92);
+assert.equal(storyHeavenSerialQualityThresholds(1).novelty, 70);
 assert.equal(storyHeavenSerialQualityThresholds(2).openingGrip, 75);
+assert.equal(storyHeavenSerialQualityThresholds(2).novelty, 65);
 const weakFirstEpisode = decideStoryHeavenSerialReview({
   qa,
   review: { ...review, scores: { ...scores, openingGrip: 85 } },
