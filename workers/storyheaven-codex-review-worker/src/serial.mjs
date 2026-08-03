@@ -11,7 +11,7 @@ const JOB_TYPES = new Set([
   "rewrite_draft"
 ]);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-04-reader-appeal-v15";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-04-semantic-korean-v16";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -38,6 +38,7 @@ export function buildSerialPrompt(job) {
     architecturePolicyInstruction(type, job.payload),
     premiseCoherenceInstruction(type, job.payload),
     readerAppealInstruction(type, job.payload),
+    naturalKoreanInstruction(type),
     "The first generated installment is always a prologue. Internal episodeNo 1 is the prologue and must be titled or clearly labeled 프롤로그. The first main chapter starts after that as 본편 1화, even though the storage number may be the next internal episode number.",
     "The prologue is a retention gate. It must demonstrate the premise through an irreversible event or choice, not explain it from a distance. Each scene must answer one immediate question while opening a sharper causal question, and the prologue must deliver at least one concrete genre payoff before its final hook.",
     "For every newly generated story, a long-running foundation is mandatory even when the schedule requests only a prologue. Its new bible and arc must contain enough independent conflict sources, character agendas, world constraints, volume-level turns, and delayed consequences to sustain later episodes without inventing a new premise each week. Legacy continuation stages must preserve the supplied foundation instead of rebuilding it.",
@@ -185,6 +186,20 @@ function readerAppealInstruction(type, payload = {}) {
     return `${binding} Compare the manuscript to techniquePlan.readerRewardPlan. High characterAttachment requires a specific personal want, vulnerability, or flawed choice; generic kindness or competence is insufficient. High relationshipMomentum requires a relationship state to change through mutual action; a cooperative exposition helper is insufficient. High readerReward requires at least two concrete on-page payoffs, not setup plus a final hook. High premiseAccessibility requires that the current human conflict and episode question remain understandable in one plain sentence without invented terms. Penalize an ending whose only continuation reason is an ancient conspiracy.`;
   }
   return binding;
+}
+
+function naturalKoreanInstruction(type) {
+  const rule = "Korean semantic agreement is a publication gate. For every sentence, identify the explicit or omitted grammatical subject, the actual actor, the affected object, and the predicate. Use a predicate that the subject can naturally perform or undergo. Living beings may be hurt, wounded, bleed, or feel bodily pain. Houses, buildings, walls, roads, rooms, tools, and other objects are damaged, cracked, broken, blocked, burned, or collapsed; never say that a house '상처를 입었다' unless the story has already established a literally living body, and even then name the damaged body part or structure clearly. Keep cause, actor, target, and result in the same natural Korean logic rather than translating an English metaphor literally.";
+  if (type === "write_draft") {
+    return `${rule} Before returning the manuscript, perform a silent sentence-by-sentence subject-predicate pass. Replace every semantically impossible or ambiguous combination with the shortest ordinary Korean expression, while preserving the event. For example, keep '괴물은 막혔다' for the stopped creature and write '집은 부서졌다' or '집 벽이 무너졌다' for damage to the building.`;
+  }
+  if (type === "rewrite_draft") {
+    return `${rule} Treat deterministicQa error semantic_predicate_mismatch and every editor-cited subject-predicate mismatch as mandatory repairs. Re-read neighboring sentences to restore the intended actor and target, then run the same silent sentence-level pass over the complete revised manuscript.`;
+  }
+  if (type === "editorial_review") {
+    return `${rule} Independently inspect every sentence even when deterministicQa is otherwise clean. An impossible subject-predicate pairing, confused actor or target, or literal translation metaphor is a concrete koreanReadability and causality failure. Cite the exact sentence, require a rewrite, and do not approve the draft while any such sentence remains.`;
+  }
+  return `${rule} Use the same distinctions in all Korean planning fields so later prose inherits natural actors, targets, and consequences.`;
 }
 
 function stageInstruction(type, payload = {}) {

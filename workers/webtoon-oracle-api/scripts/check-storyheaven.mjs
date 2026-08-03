@@ -400,6 +400,10 @@ for (const column of ["target_episode_count", "episode1_sample_count", "episode1
 const twoHourCadenceMigration = await readFile(new URL("../../../oracle/20260801-storyheaven-two-hour-cadence.sql", import.meta.url), "utf8");
 assert.ok(twoHourCadenceMigration.includes("cadence_minutes default 120"));
 assert.ok(twoHourCadenceMigration.includes("numtodsinterval(120, 'MINUTE')"));
+const historyVisibilityMigration = await readFile(new URL("../../../oracle/20260804-storyheaven-history-visibility.sql", import.meta.url), "utf8");
+for (const column of ["history_hidden_at", "history_hidden_by"]) {
+  assert.ok(historyVisibilityMigration.includes(column), "missing history visibility column: " + column);
+}
 assert.ok(serialService.includes("candidate_run.queue_group_id"));
 assert.match(serialService, /inFlight[\s\S]+reused:\s*true/u, "duplicate schedule starts must reuse active work");
 assert.ok(serialService.includes("running_job.job_status = 'running'"));

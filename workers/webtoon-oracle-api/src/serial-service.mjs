@@ -100,12 +100,12 @@ export function createStoryHeavenSerialService({
   async function getQueueState() {
     return withConnection(async (connection) => {
       const result = await connection.execute(
-        `select * from (
+        `select queue_run.* from (
            select serial_run.id, serial_run.queue_group_id, serial_run.schedule_id,
                   serial_run.story_id, serial_run.episode_no, serial_run.run_type,
                   serial_run.run_status, serial_run.current_stage,
                   serial_run.started_at, serial_run.completed_at, serial_run.created_at,
-                  serial_run.queue_canceled_at, serial_run.failure_code,
+                  serial_run.queue_canceled_at, serial_run.history_hidden_at, serial_run.failure_code,
                   json_value(serial_run.input_json, '$.targetEpisodeCount' returning number null on error) as run_target_episode_count,
                   story.title as story_title,
                   schedule.primary_genre, schedule.primary_genres_json,
@@ -119,19 +119,34 @@ export function createStoryHeavenSerialService({
                     where job.run_id = serial_run.id
                       and job.job_status in ('queued', 'running', 'retry_wait')) as active_job_count,
                   (select count(*) from storyheaven_serial_jobs job
-                    where job.run_id = serial_run.id and job.job_status = 'running') as running_job_count
+                    where job.run_id = serial_run.id and job.job_status = 'running') as running_job_count,
+                  row_number() over (order by serial_run.created_at desc) as recency_rank
              from storyheaven_serial_runs serial_run
              left join storyheaven_stories story on story.id = serial_run.story_id
              left join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
             where serial_run.created_at >= systimestamp - numtodsinterval(30, 'DAY')
                or serial_run.queue_canceled_at >= systimestamp - numtodsinterval(90, 'DAY')
+               or serial_run.history_hidden_at >= systimestamp - numtodsinterval(90, 'DAY')
+               or serial_run.queue_group_id in (
+                 select recent_completed.queue_group_id
+                   from storyheaven_serial_runs recent_completed
+                  where recent_completed.completed_at >= systimestamp - numtodsinterval(24, 'HOUR')
+                    and recent_completed.queue_canceled_at is null
+               )
                or exists (
                  select 1 from storyheaven_serial_jobs active_job
                   where active_job.run_id = serial_run.id
                     and active_job.job_status in ('queued', 'running', 'retry_wait')
                )
-            order by serial_run.created_at desc
-         ) where rownum <= 500`
+         ) queue_run
+         where queue_run.recency_rank <= 500
+            or queue_run.queue_group_id in (
+              select recent_completed.queue_group_id
+                from storyheaven_serial_runs recent_completed
+               where recent_completed.completed_at >= systimestamp - numtodsinterval(24, 'HOUR')
+                 and recent_completed.queue_canceled_at is null
+            )
+         order by queue_run.created_at desc`
       );
       const timing = await connection.execute(
         `select serial_run.queue_group_id, serial_run.id as run_id,
@@ -141,6 +156,13 @@ export function createStoryHeavenSerialService({
           join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
           where serial_run.created_at >= systimestamp - numtodsinterval(30, 'DAY')
              or serial_run.queue_canceled_at >= systimestamp - numtodsinterval(90, 'DAY')
+             or serial_run.history_hidden_at >= systimestamp - numtodsinterval(90, 'DAY')
+             or serial_run.queue_group_id in (
+               select recent_completed.queue_group_id
+                 from storyheaven_serial_runs recent_completed
+                where recent_completed.completed_at >= systimestamp - numtodsinterval(24, 'HOUR')
+                  and recent_completed.queue_canceled_at is null
+             )
           order by job.created_at`
       );
       const queue = summarizeQueue(result.rows, timing.rows);
@@ -203,48 +225,26 @@ export function createStoryHeavenSerialService({
   }
 
   async function hideQueueHistory(queueGroupIdValue, userId) {
-    const queueGroupId = requireId(queueGroupIdValue, "queue_group_id");
+    const requestedId = requireId(queueGroupIdValue, "queue_group_id");
     return withTransaction(async (connection) => {
-      const state = await selectOne(connection,
-        `select
-            count(distinct serial_run.id) as run_count,
-            count(job.id) as total_job_count,
-            sum(case when job.job_status = 'complete' then 1 else 0 end) as completed_job_count,
-            sum(case when job.job_status = 'running' then 1 else 0 end) as running_job_count,
-            sum(case when job.job_status in ('queued', 'retry_wait') then 1 else 0 end) as waiting_job_count,
-            sum(case when serial_run.run_status in ('ready', 'published') then 1 else 0 end) as completed_run_count,
-            sum(case when serial_run.run_status in ('error', 'blocked', 'queued', 'running', 'rewrite', 'approved') then 1 else 0 end) as hideable_run_count
-           from storyheaven_serial_runs serial_run
-           left join storyheaven_serial_jobs job on job.run_id = serial_run.id
-          where (serial_run.queue_group_id = :queue_group_id or serial_run.id = :queue_group_id)
-            and serial_run.queue_canceled_at is null`,
-        { queue_group_id: queueGroupId });
-      const runCount = Number(state?.RUN_COUNT || 0);
-      if (runCount < 1) throw failure("serial_history_not_found", 404);
-      if (Number(state.RUNNING_JOB_COUNT || 0) > 0) throw failure("serial_history_running_cannot_hide", 409);
-      if (Number(state.WAITING_JOB_COUNT || 0) > 0) throw failure("serial_history_waiting_cannot_hide", 409);
-      const totalJobs = Number(state.TOTAL_JOB_COUNT || 0);
-      const completedJobs = Number(state.COMPLETED_JOB_COUNT || 0);
-      const hideableRuns = Number(state.HIDEABLE_RUN_COUNT || 0);
-      const completedRuns = Number(state.COMPLETED_RUN_COUNT || 0);
-      const looksComplete = totalJobs > 0 && completedJobs >= totalJobs && completedRuns >= runCount;
-      if (looksComplete || hideableRuns < 1) throw failure("serial_history_completed_cannot_hide", 409);
+      const matched = await selectOne(connection,
+        `select id, queue_group_id
+           from storyheaven_serial_runs
+          where queue_group_id = :requested_id or id = :requested_id
+          order by created_at desc fetch first 1 row only`,
+        { requested_id: requestedId });
+      if (!matched) throw failure("serial_history_not_found", 404);
+      const queueGroupId = matched.QUEUE_GROUP_ID || matched.ID;
 
-      await connection.execute(
+      const updated = await connection.execute(
         `update storyheaven_serial_runs
-            set run_status = 'blocked',
-                current_stage = 'history_hidden',
-                failure_code = coalesce(failure_code, 'operator_hidden'),
-                queue_canceled_at = systimestamp,
-                queue_canceled_by = :queue_canceled_by,
-                completed_at = coalesce(completed_at, systimestamp),
-                updated_at = systimestamp
+            set history_hidden_at = coalesce(history_hidden_at, systimestamp),
+                history_hidden_by = :history_hidden_by
           where (queue_group_id = :queue_group_id or id = :queue_group_id)
-            and queue_canceled_at is null
-            and run_status not in ('ready', 'published')`,
-        { queue_group_id: queueGroupId, queue_canceled_by: userId }
+            and history_hidden_at is null`,
+        { queue_group_id: queueGroupId, history_hidden_by: userId }
       );
-      return { hidden: true, queueGroupId, historical: true };
+      return { hidden: true, queueGroupId, historical: true, affectedRuns: Number(updated.rowsAffected || 0) };
     });
   }
 
@@ -3188,7 +3188,7 @@ function positiveInteger(value) {
   return Number.isInteger(number) && number > 0 ? number : null;
 }
 
-function summarizeQueue(rows = [], timingRows = []) {
+export function summarizeQueue(rows = [], timingRows = []) {
   const groups = new Map();
   for (const row of rows) {
     const id = row.QUEUE_GROUP_ID || row.ID;
@@ -3206,6 +3206,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       startedAt: null,
       completedAt: null,
       canceledAt: null,
+      hiddenAt: null,
       latestRunId: null,
       totalJobs: 0,
       completedJobs: 0,
@@ -3232,6 +3233,7 @@ function summarizeQueue(rows = [], timingRows = []) {
     group.startedAt = earlierTime(group.startedAt, startedAt);
     group.completedAt = laterTime(group.completedAt, completedAt);
     group.canceledAt = laterTime(group.canceledAt, timeValue(row.QUEUE_CANCELED_AT));
+    group.hiddenAt = laterTime(group.hiddenAt, timeValue(row.HISTORY_HIDDEN_AT));
     group.totalJobs += Number(row.TOTAL_JOB_COUNT || 0);
     group.completedJobs += Number(row.COMPLETED_JOB_COUNT || 0);
     group.activeJobs += Number(row.ACTIVE_JOB_COUNT || 0);
@@ -3284,8 +3286,10 @@ function summarizeQueue(rows = [], timingRows = []) {
     });
   });
   const completed = all
-    .filter((group) => !group.canceledAt && !group.hasBlocked && group.activeJobs === 0 && group.totalJobs > 0 && group.completedJobs === group.totalJobs)
+    .filter((group) => !group.canceledAt && !group.hiddenAt && !group.hasBlocked && group.activeJobs === 0 && group.totalJobs > 0 && group.completedJobs === group.totalJobs)
     .sort((left, right) => (right.completedAt || 0) - (left.completedAt || 0));
+  const recentCompletedCutoff = Date.now() - 24 * 60 * 60 * 1_000;
+  const recentCompleted = completed.filter((group) => Number(group.completedAt || 0) >= recentCompletedCutoff);
   const lastCompleted = completed[0]
     ? queueGroupView(completed[0], {
         status: "complete",
@@ -3295,7 +3299,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       })
     : null;
   const failed = all
-    .filter((group) => !group.canceledAt && (group.hasError || group.hasBlocked))
+    .filter((group) => !group.canceledAt && !group.hiddenAt && (group.hasError || group.hasBlocked))
     .sort((left, right) => (right.completedAt || right.requestedAt || 0) - (left.completedAt || left.requestedAt || 0));
   const latestHealthyTimeBySchedule = new Map();
   for (const group of [...active, ...completed]) {
@@ -3331,7 +3335,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       })
     : null;
   const history = all
-    .filter((group) => !group.canceledAt && group.totalJobs > 0)
+    .filter((group) => !group.canceledAt && !group.hiddenAt && group.totalJobs > 0)
     .sort((left, right) => (right.requestedAt || 0) - (left.requestedAt || 0))
     .slice(0, 30)
     .map((group) => {
@@ -3357,8 +3361,8 @@ function summarizeQueue(rows = [], timingRows = []) {
       });
     });
   const hiddenHistory = all
-    .filter((group) => group.canceledAt && group.totalJobs > 0)
-    .sort((left, right) => (right.canceledAt || right.requestedAt || 0) - (left.canceledAt || left.requestedAt || 0))
+    .filter((group) => (group.hiddenAt || group.canceledAt) && group.totalJobs > 0)
+    .sort((left, right) => (right.hiddenAt || right.canceledAt || right.requestedAt || 0) - (left.hiddenAt || left.canceledAt || left.requestedAt || 0))
     .slice(0, 50)
     .map((group) => queueGroupView(group, {
       status: "hidden",
@@ -3366,7 +3370,7 @@ function summarizeQueue(rows = [], timingRows = []) {
       cancelable: false,
       elapsedSeconds: elapsedSeconds(
         group.startedAt || group.requestedAt,
-        group.completedAt || group.canceledAt || null
+        group.completedAt || group.hiddenAt || group.canceledAt || null
       )
     }));
   return {
@@ -3376,7 +3380,7 @@ function summarizeQueue(rows = [], timingRows = []) {
     lastCompleted,
     lastFailed,
     attention,
-    recentCompleted: completed.slice(0, 5).map((group) => queueGroupView(group, {
+    recentCompleted: recentCompleted.map((group) => queueGroupView(group, {
       status: "complete",
       queuePosition: null,
       cancelable: false,
@@ -3423,6 +3427,7 @@ function queueGroupView(group, overrides) {
     startedAt: isoTime(group.startedAt),
     completedAt: isoTime(group.completedAt),
     canceledAt: isoTime(group.canceledAt),
+    hiddenAt: isoTime(group.hiddenAt),
     totalJobs: group.totalJobs,
     completedJobs: group.completedJobs,
     failureCode: group.failureCode,

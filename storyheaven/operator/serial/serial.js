@@ -28,12 +28,14 @@
   const previousDefaultConceptPolicy = "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다. 첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다. 첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다. 첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다. 설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다. 주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다.";
   const noveltyDefaultConceptPolicy = `${previousDefaultConceptPolicy} 참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다.`;
   const premiseCoherenceDefaultConceptPolicy = `${noveltyDefaultConceptPolicy} 현실에서 하던 작업과 같은 일을 이세계에서 곧바로 맡기는 도입을 반복하지 않는다. 이전 삶의 경험은 선택에 간접적으로만 영향을 주고, 새 세계의 직업·능력·도구와 일대일로 대응시키지 않는다. 낯선 세계나 집단에 들어온 주인공은 경계·오해·검증·보호자·거래처럼 받아들여지는 과정을 거친다. 이름·출신·능력을 알게 되는 정보 출처와 언어가 통하는 이유를 설정집과 장면에서 일관되게 지킨다. 특별 능력은 익숙한 장르 기반 위에 핵심 효과 하나, 발동 조건 하나, 대가나 한계 하나로 설명한다. 서로 무관한 행동이나 사물을 여러 단계로 이어 붙인 발동 장치는 사용하지 않는다.`;
-  const defaultConceptPolicy = `${premiseCoherenceDefaultConceptPolicy} 작품의 고유 용어와 능력 규칙을 빼고도 주인공이 무엇을 원하고 왜 실패가 아픈지 한 문장으로 설명할 수 있어야 한다. 선량함만으로 성격을 대신하지 말고 결핍, 약점, 피하고 싶은 일, 지키고 싶은 관계 중 적어도 두 가지를 행동으로 보여준다. 최근 작품과 주인공 유형, 도입 방식, 사건 해결 방식, 주요 무대, 대립 구조, 장기 비밀이 비슷한지 비교한다. 이 가운데 세 가지 이상이 겹치면 소품과 제목만 바꾸지 말고 기획의 뼈대부터 다시 만든다. 프롤로그는 설정 소개 외에 익숙한 장르의 즐거움, 주인공 개인의 작은 성취나 손실, 다른 인물과의 관계 변화라는 세 보상 중 적어도 두 가지를 실제 장면으로 제공한다. 본편 1화와 2화까지 각각 구체적인 목표, 장르 보상, 관계 변화, 개인적 결과를 미리 계획한다. 거대한 왕국의 음모나 오래된 비밀만으로 다음 화를 유도하지 말고 주인공이 당장 해야 할 개인적인 선택을 남긴다.`;
+  const readerAppealDefaultConceptPolicy = `${premiseCoherenceDefaultConceptPolicy} 작품의 고유 용어와 능력 규칙을 빼고도 주인공이 무엇을 원하고 왜 실패가 아픈지 한 문장으로 설명할 수 있어야 한다. 선량함만으로 성격을 대신하지 말고 결핍, 약점, 피하고 싶은 일, 지키고 싶은 관계 중 적어도 두 가지를 행동으로 보여준다. 최근 작품과 주인공 유형, 도입 방식, 사건 해결 방식, 주요 무대, 대립 구조, 장기 비밀이 비슷한지 비교한다. 이 가운데 세 가지 이상이 겹치면 소품과 제목만 바꾸지 말고 기획의 뼈대부터 다시 만든다. 프롤로그는 설정 소개 외에 익숙한 장르의 즐거움, 주인공 개인의 작은 성취나 손실, 다른 인물과의 관계 변화라는 세 보상 중 적어도 두 가지를 실제 장면으로 제공한다. 본편 1화와 2화까지 각각 구체적인 목표, 장르 보상, 관계 변화, 개인적 결과를 미리 계획한다. 거대한 왕국의 음모나 오래된 비밀만으로 다음 화를 유도하지 말고 주인공이 당장 해야 할 개인적인 선택을 남긴다.`;
+  const defaultConceptPolicy = `${readerAppealDefaultConceptPolicy} 문장마다 드러난 주어와 생략된 주어가 서술어의 실제 행위 주체로 자연스러운지 확인한다. 사람과 생물은 다치거나 상처를 입을 수 있지만 집·건물·벽·도로·도구 같은 사물은 파손되거나 금이 가거나 무너진다고 쓴다. 원인, 행위자, 대상, 결과가 뒤섞인 번역투 문장은 쉬운 한국어로 다시 쓴다.`;
   const legacyConceptPolicies = new Set([
     "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다.",
     previousDefaultConceptPolicy,
     noveltyDefaultConceptPolicy,
-    premiseCoherenceDefaultConceptPolicy
+    premiseCoherenceDefaultConceptPolicy,
+    readerAppealDefaultConceptPolicy
   ]);
   const draftStorageKey = "storyheaven.operator.serial-draft.v9";
   const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
@@ -986,9 +988,9 @@
 
   function renderCompleted(items) {
     selectors.completedList.replaceChildren();
-    selectors.completedCaption.textContent = `${items.length}건`;
+    selectors.completedCaption.textContent = `최근 24시간 · ${items.length}건`;
     if (!items.length) {
-      selectors.completedList.append(message("아직 완료된 제작이 없습니다."));
+      selectors.completedList.append(message("최근 24시간 안에 완료된 제작이 없습니다."));
       return;
     }
     for (const item of items) {
@@ -1036,7 +1038,7 @@
         ...item,
         status: "hidden",
         stage: "history_hidden",
-        canceledAt: locallyHiddenHistory.get(id) || item.completedAt || item.requestedAt
+        hiddenAt: locallyHiddenHistory.get(id) || item.completedAt || item.requestedAt
       });
     }
     const hidden = [...hiddenById.values()];
@@ -1066,7 +1068,7 @@
       const meta = document.createElement("p");
       title.textContent = workDisplayTitle(run);
       meta.textContent = run.status === "hidden"
-        ? `${historyStatusLabel(run.status)} · ${stageLabel(run.stage)} · 숨김 처리 ${formatDate(run.canceledAt || run.completedAt || run.requestedAt)}`
+        ? `${historyStatusLabel(run.status)} · ${stageLabel(run.stage)} · 숨김 처리 ${formatDate(run.hiddenAt || run.canceledAt || run.completedAt || run.requestedAt)}`
         : `${historyStatusLabel(run.status)} · ${stageLabel(run.stage)} · 마지막 기록 ${formatDate(run.completedAt || run.startedAt || run.requestedAt)}`;
       header.append(title, meta);
       const summary = document.createElement("div");
@@ -1154,7 +1156,7 @@
   }
 
   function canCancelHistoryRun(run = {}) {
-    return Boolean(run.id) && ["error", "blocked", "stopped"].includes(String(run.status || ""));
+    return Boolean(historyStorageId(run)) && String(run.status || "") !== "hidden";
   }
 
   function historyStatusLabel(status) {

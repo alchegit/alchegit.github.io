@@ -131,6 +131,8 @@ try {
 
     await page.goto(`${root}/storyheaven/operator/serial/`, { waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    assert.equal(await page.locator(".completed-group").evaluate((node) => node.open), false, `${viewport.name} recent completed production is collapsed by default`);
+    assert.match(await page.locator("[data-completed-caption]").textContent(), /최근 24시간 · 1건/u, `${viewport.name} recent completed caption explains the rolling window`);
     await page.locator(".creative-details").evaluate((node) => { node.open = true; });
     const noveltyControl = page.locator('[data-schedule-form] input[name="creativeNovelty"]');
     assert.equal(await noveltyControl.isVisible(), true, `${viewport.name} shows novelty under item controls`);
@@ -217,6 +219,8 @@ try {
     assert.match(await page.locator("[data-timing-summary]").textContent(), /10분 15초.*2건/u, `${viewport.name} persisted episode-one estimate is visible`);
     assert.match(await page.locator("[data-run-history]").textContent(), /작품 아이디어 검토.*42초/u, `${viewport.name} per-stage history is visible`);
     await page.locator(".run-history").evaluate((node) => { node.open = true; });
+    const completedLog = page.locator(".run-history-item").filter({ hasText: "완성된 판타지" });
+    assert.equal(await completedLog.getByRole("button", { name: "로그 숨김" }).count(), 1, `${viewport.name} completed work log can also be hidden`);
     const titlelessLog = page.locator(".run-history-item").filter({ hasText: "제목 생성 전 · 판타지 · 프롤로그" });
     assert.equal(await titlelessLog.count(), 1, `${viewport.name} titleless stopped work is labeled by genre and batch`);
     assert.match(await titlelessLog.textContent(), /로그 숨김/u, `${viewport.name} titleless stopped work can be hidden from history`);

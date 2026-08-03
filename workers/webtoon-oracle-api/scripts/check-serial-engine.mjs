@@ -25,7 +25,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode, createStoryHeavenSerialService } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
@@ -38,6 +38,10 @@ const managedStoriesCss = await readFile(new URL("../../../storyheaven/operator/
 const createEpisodeRunSource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function createEpisodeRun"),
   serialServiceSource.indexOf("async function advanceJob")
+);
+const hideQueueHistorySource = serialServiceSource.slice(
+  serialServiceSource.indexOf("async function hideQueueHistory"),
+  serialServiceSource.indexOf("async function retryQueueGroup")
 );
 assert.match(createEpisodeRunSource, /const seriesPlan = context\.bible\.narrativeBlueprint\?\.seriesPlan[\s\S]*storyHeavenSeriesPosition\(targetEpisodeNo, seriesPlan\)/u, "episode creation after long-form planning must resolve the saved series plan before validating its position");
 assert.match(
@@ -62,9 +66,12 @@ assert.match(serialServiceSource, /readerOrientation/u, "draft payloads must car
 assert.match(serialServiceSource, /recentConcepts/u, "new concepts must receive recent structural references");
 assert.match(serialServiceSource, /bible\.concept_json/u, "recent concept comparisons must include stored private concept data");
 assert.match(serialServiceSource, /fingerprint: comparison\.fingerprint/u, "recent concept comparisons must carry normalized structural fingerprints");
-assert.match(serialServiceSource, /serial_run\.queue_group_id = :queue_group_id or serial_run\.id = :queue_group_id/u, "history operations must support legacy run ids without queue groups");
+assert.match(hideQueueHistorySource, /queue_group_id = :requested_id or id = :requested_id/u, "history operations must resolve both queue groups and legacy run ids");
 assert.match(serialServiceSource, /seenFailedSchedules/u, "queue API must deduplicate actionable failures by schedule");
-assert.match(serialServiceSource, /run_status in \('error', 'blocked', 'queued', 'running', 'rewrite', 'approved'\)/u, "stalled running groups without active jobs must be hideable from history");
+assert.match(hideQueueHistorySource, /history_hidden_at = coalesce\(history_hidden_at, systimestamp\)/u, "history hiding must persist separate display state");
+assert.doesNotMatch(hideQueueHistorySource, /run_status\s*=|queue_canceled_at\s*=/u, "history hiding must never change production or cancellation state");
+assert.match(serialServiceSource, /Date\.now\(\) - 24 \* 60 \* 60 \* 1_000/u, "recent completed work must use a rolling 24-hour boundary");
+assert.doesNotMatch(serialServiceSource, /recentCompleted:\s*completed\.slice/u, "recent completed work must not be arbitrarily truncated");
 assert.match(serialServiceSource, /attentionType: group\.hasBlocked \? "quality_hold"/u, "quality holds must be separate from system failures");
 assert.match(serialServiceSource, /episode-\$\{index \+ 1\}-card/u, "initial production progress must track episode planning");
 assert.match(serialServiceSource, /job\.job_status in \('queued', 'running', 'retry_wait'\)/u, "system pause must include an already running AI job");
@@ -872,6 +879,61 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("write_draft", {
 const qa = analyzeStoryHeavenSerialDraft({ title: "돌아오지 않는 종점", summary: "도윤이 첫 승객의 목적지를 찾다가 누나의 왕복 승차권과 기억을 요금으로 내는 규칙을 발견한다.", body });
 assert.equal(qa.passed, true);
 assert.ok(qa.characterCount >= STORYHEAVEN_SERIAL_LIMITS.draftCharactersMin);
+const unnaturalKoreanQa = analyzeStoryHeavenSerialDraft({
+  title: "무너진 집",
+  summary: "도윤이 괴물의 공격을 막아 내고 마을의 피해를 확인한다.",
+  body: `괴물은 막혔는데 집이 상처를 입었다.\n\n${body}`
+});
+assert.equal(unnaturalKoreanQa.passed, false);
+assert.ok(unnaturalKoreanQa.errors.some((entry) => entry.code === "semantic_predicate_mismatch"));
+const naturalKoreanQa = analyzeStoryHeavenSerialDraft({
+  title: "무너진 집",
+  summary: "도윤이 괴물의 공격을 막아 내고 마을의 피해를 확인한다.",
+  body: `괴물은 막혔고 집 벽은 무너졌다. 집 안의 도윤이 상처를 입었다.\n\n${body}`
+});
+assert.equal(naturalKoreanQa.errors.some((entry) => entry.code === "semantic_predicate_mismatch"), false);
+
+const now = Date.now();
+const queueSummary = summarizeQueue([
+  queueSummaryRow("recent-a", now - 60 * 60 * 1_000),
+  queueSummaryRow("recent-b", now - 23 * 60 * 60 * 1_000),
+  queueSummaryRow("old-complete", now - 25 * 60 * 60 * 1_000),
+  queueSummaryRow("hidden-complete", now - 30 * 60 * 1_000, { HISTORY_HIDDEN_AT: new Date(now - 20 * 60 * 1_000) }),
+  queueSummaryRow("hidden-running", null, {
+    RUN_STATUS: "running",
+    ACTIVE_JOB_COUNT: 1,
+    RUNNING_JOB_COUNT: 1,
+    COMPLETED_JOB_COUNT: 0,
+    HISTORY_HIDDEN_AT: new Date(now - 10 * 60 * 1_000)
+  })
+]);
+assert.deepEqual(queueSummary.recentCompleted.map((item) => item.id), ["recent-a", "recent-b"]);
+assert.ok(queueSummary.history.some((item) => item.id === "old-complete"));
+assert.ok(queueSummary.hiddenHistory.some((item) => item.id === "hidden-complete"));
+assert.ok(queueSummary.hiddenHistory.some((item) => item.id === "hidden-running"));
+assert.ok(queueSummary.items.some((item) => item.id === "hidden-running"), "hiding a running log must leave production visible and active");
+
+function queueSummaryRow(id, completedAt, overrides = {}) {
+  const completedTime = completedAt === null ? null : new Date(completedAt);
+  return {
+    ID: id,
+    QUEUE_GROUP_ID: id,
+    SCHEDULE_ID: "schedule-test",
+    STORY_ID: `story-${id}`,
+    STORY_TITLE: id,
+    RUN_TYPE: "draft",
+    RUN_STATUS: "ready",
+    CURRENT_STAGE: "complete",
+    CREATED_AT: new Date((completedAt || now) - 10 * 60 * 1_000),
+    STARTED_AT: new Date((completedAt || now) - 5 * 60 * 1_000),
+    COMPLETED_AT: completedTime,
+    TOTAL_JOB_COUNT: 1,
+    COMPLETED_JOB_COUNT: completedAt === null ? 0 : 1,
+    ACTIVE_JOB_COUNT: 0,
+    RUNNING_JOB_COUNT: 0,
+    ...overrides
+  };
+}
 
 const scores = Object.fromEntries(Object.keys(STORYHEAVEN_SERIAL_LIMITS.quality).map((key) => [key, 96]));
 const evidence = Object.fromEntries(Object.keys(scores).map((key) => [key, [`${key} 판단을 뒷받침하는 장면 근거입니다.`]]));

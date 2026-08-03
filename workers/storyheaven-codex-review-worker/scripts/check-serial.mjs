@@ -46,9 +46,18 @@ assert.match(prompt, /competence and generic kindness alone do not qualify/u);
 assert.match(prompt, /exposition helper who simply cooperates does not qualify/u);
 assert.match(prompt, /at least two concrete on-page payoffs/u);
 assert.match(prompt, /after all invented terms are removed/u);
+assert.match(prompt, /Korean semantic agreement is a publication gate/u);
+assert.match(prompt, /An impossible subject-predicate pairing/u);
+assert.match(prompt, /do not approve the draft while any such sentence remains/u);
 assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
+
+const draftPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
+assert.match(draftPrompt, /silent sentence-by-sentence subject-predicate pass/u);
+assert.match(draftPrompt, /집은 부서졌다/u);
+const rewritePrompt = buildSerialPrompt({ ...job, type: "rewrite_draft" });
+assert.match(rewritePrompt, /semantic_predicate_mismatch/u);
 
 const genreProfileSignals = {
   fantasy: /ordinary lack, duty, or vulnerability/u,

@@ -89,10 +89,15 @@ const STORYHEAVEN_READER_APPEAL_POLICY = Object.freeze([
   "본편 1화와 2화까지 각각 구체적인 목표, 장르 보상, 관계 변화, 개인적 결과를 미리 계획한다. 거대한 왕국의 음모나 오래된 비밀만으로 다음 화를 유도하지 말고 주인공이 당장 해야 할 개인적인 선택을 남긴다."
 ]);
 
+const STORYHEAVEN_NATURAL_KOREAN_POLICY = Object.freeze([
+  "문장마다 드러난 주어와 생략된 주어가 서술어의 실제 행위 주체로 자연스러운지 확인한다. 사람과 생물은 다치거나 상처를 입을 수 있지만 집·건물·벽·도로·도구 같은 사물은 파손되거나 금이 가거나 무너진다고 쓴다. 원인, 행위자, 대상, 결과가 뒤섞인 번역투 문장은 쉬운 한국어로 다시 쓴다."
+]);
+
 export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
   ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
   ...STORYHEAVEN_PREMISE_COHERENCE_POLICY,
-  ...STORYHEAVEN_READER_APPEAL_POLICY
+  ...STORYHEAVEN_READER_APPEAL_POLICY,
+  ...STORYHEAVEN_NATURAL_KOREAN_POLICY
 ].join(" ");
 
 const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
@@ -105,6 +110,11 @@ const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
   [
     ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
     ...STORYHEAVEN_PREMISE_COHERENCE_POLICY
+  ].join(" "),
+  [
+    ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
+    ...STORYHEAVEN_PREMISE_COHERENCE_POLICY,
+    ...STORYHEAVEN_READER_APPEAL_POLICY
   ].join(" ")
 ]);
 
@@ -542,6 +552,15 @@ export function analyzeStoryHeavenSerialDraft(input = {}) {
   const numberStyleCount = oldNumberPatterns.reduce((sum, pattern) => sum + [...body.matchAll(pattern)].length, 0);
   if (numberStyleCount) errors.push(issue("number_style", `시간·기간·층수 ${numberStyleCount}곳을 11년, 8초 같은 숫자 표기로 고쳐야 합니다.`));
 
+  const semanticPredicateMismatches = findSemanticPredicateMismatches(sentences);
+  if (semanticPredicateMismatches.length) {
+    errors.push(issue(
+      "semantic_predicate_mismatch",
+      "사물이나 장소에 생물의 부상 서술어를 사용한 문장이 있습니다. 행위 주체와 서술어를 자연스러운 한국어로 다시 써야 합니다.",
+      semanticPredicateMismatches.slice(0, 5)
+    ));
+  }
+
   const endingCounts = new Map();
   for (const sentence of sentences) {
     const ending = sentence.replace(/[.!?。！？’”]+$/gu, "").slice(-2);
@@ -566,6 +585,29 @@ export function analyzeStoryHeavenSerialDraft(input = {}) {
     errors,
     warnings
   };
+}
+
+function findSemanticPredicateMismatches(sentences = []) {
+  const inanimateSubject = /(?:집|건물|주택|오두막|궁전|성벽|벽|문|창문|지붕|바닥|방|마을|도시|도로|거리|탑|마차|차량|기계|검|칼|방패|갑옷|가구)(?:은|는|이|가|도|만)/gu;
+  const livingInjuryPredicate = /(?:상처(?:를)?\s*입|부상(?:을)?\s*(?:입|당하)|다치|피(?:를)?\s*흘리)/u;
+  const laterExplicitSubject = /[가-힣][가-힣0-9·\s]{0,12}(?:은|는|이|가)\s/u;
+  const mismatches = [];
+  sentences.forEach((sentence, sentenceIndex) => {
+    const clauses = sentence.split(/[,;]|(?:는데|지만|으나|더니)\s*/u).map((item) => item.trim()).filter(Boolean);
+    for (const clause of clauses) {
+      for (const match of clause.matchAll(inanimateSubject)) {
+        const tail = clause.slice((match.index || 0) + match[0].length, (match.index || 0) + match[0].length + 56);
+        const predicateIndex = tail.search(livingInjuryPredicate);
+        if (predicateIndex < 0) continue;
+        const between = tail.slice(0, predicateIndex);
+        if (laterExplicitSubject.test(between)) continue;
+        mismatches.push({ index: sentenceIndex + 1, subject: match[0], sentence });
+        break;
+      }
+      if (mismatches.at(-1)?.index === sentenceIndex + 1) break;
+    }
+  });
+  return mismatches;
 }
 
 export function storyHeavenSerialQualityThresholds(episodeNo = null) {
