@@ -2611,8 +2611,15 @@ export function createStoryHeavenSerialService({
                 next_run_at = systimestamp + numtodsinterval(cadence_minutes, 'MINUTE'),
                 updated_at = systimestamp
           where id = :schedule_id
-            and (last_cycle_completed_at is null or last_cycle_completed_at < :cycle_started_at)`,
-        { schedule_id: run.SCHEDULE_ID, cycle_started_at: dateOrNull(run.CREATED_AT) }
+            and (
+              last_cycle_completed_at is null
+              or last_cycle_completed_at < (
+                select serial_run.created_at
+                  from storyheaven_serial_runs serial_run
+                 where serial_run.id = :run_id
+              )
+            )`,
+        { schedule_id: run.SCHEDULE_ID, run_id: run.ID }
       );
       return;
     }
@@ -3304,7 +3311,8 @@ function timeValue(value) {
 function normalizeDbTimeString(value) {
   let text = String(value || "").trim();
   if (!text) return "";
-  text = text.replace(" ", "T");
+  text = text.replace(/\s+\([^()]*\)\s*$/u, "");
+  if (/^\d{4}-\d{2}-\d{2}\s/u.test(text)) text = text.replace(" ", "T");
   if (OFFSETLESS_TIME_RE.test(text) && !OFFSET_TIME_RE.test(text)) {
     if (/^\d{4}-\d{2}-\d{2}$/u.test(text)) text = `${text}T00:00:00`;
     return `${text}${SEOUL_OFFSET}`;

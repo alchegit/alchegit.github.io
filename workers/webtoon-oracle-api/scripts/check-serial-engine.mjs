@@ -78,7 +78,7 @@ assert.match(serialServiceSource, /queue_status = 'canceled'/u, "schedule deleti
 assert.match(serialServiceSource, /delete from storyheaven_serial_continuations continuation/u, "schedule deletion must cancel linked continuation requests");
 assert.match(serialServiceSource, /async function resolveQualityHold/u, "quality holds must have a dedicated resolution operation");
 assert.match(serialServiceSource, /serial_quality_hold_safety_failed/u, "unsafe drafts must not be operator-approved");
-assert.match(serialServiceSource, /cycle_started_at: dateOrNull\(run\.CREATED_AT\)/u, "localized Oracle timestamps must be normalized before cycle comparisons");
+assert.match(serialServiceSource, /last_cycle_completed_at < \([\s\S]*select serial_run\.created_at[\s\S]*where serial_run\.id = :run_id/u, "cycle comparisons must stay in Oracle timestamp types");
 assert.match(serverSource, /app\.delete\("\/api\/storyheaven\/operator\/serial-engine\/schedules\/:id"/u, "schedule deletion must have an admin API route");
 assert.match(serverSource, /resolve-quality-hold/u, "quality-hold resolution must have an admin API route");
 assert.match(serialOperatorSource, /latestRunStatus === "error"[\s\S]{0,200}latestRunStatus === "blocked"/u, "system errors must take precedence over stale quality reviews");
@@ -143,6 +143,32 @@ assert.equal(archivedSchedule.canceled.runs, 2);
 assert.equal(archivedSchedule.canceled.publications, 2);
 assert.equal(archivedSchedule.canceled.continuations, 2);
 assert.ok(archiveStatements.some((sql) => /schedule_status = 'archived'/u.test(sql)));
+
+const localizedTimestamp = "Mon Aug 03 2026 17:36:54 GMT+0900 (한국 표준시)";
+const timestampService = createStoryHeavenSerialService({
+  withConnection: async (callback) => callback({
+    execute: async (sql) => {
+      if (/select \* from storyheaven_serial_runs where id = :run_id/u.test(sql)) {
+        return { rows: [{
+          ID: "run-time-test",
+          RUN_TYPE: "episode",
+          RUN_STATUS: "ready",
+          CURRENT_STAGE: "publication_ready",
+          EPISODE_NO: 1,
+          REWRITE_COUNT: 0,
+          CREATED_AT: localizedTimestamp,
+          UPDATED_AT: localizedTimestamp
+        }] };
+      }
+      return { rows: [] };
+    }
+  }),
+  withTransaction: async () => { throw new Error("unexpected_transaction"); },
+  clob: (value) => value,
+  clobJson: (value) => value
+});
+const localizedRun = await timestampService.getRun("run-time-test");
+assert.equal(localizedRun.run.createdAt, "2026-08-03T08:36:54.000Z");
 
 assert.deepEqual(STORYHEAVEN_CONTINUATION_POLICY, {
   initialEpisodeCount: 1,
