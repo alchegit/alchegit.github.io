@@ -14,6 +14,7 @@ import {
   toApiResult
 } from "./moderation.mjs";
 import {
+  buildSerialJsonRepairPrompt,
   buildSerialPrompt,
   modelRoleForSerialJob,
   parseSerialOutput
@@ -236,7 +237,43 @@ async function runCodexSerial(job, model) {
   try {
     await runProcess(config.codexBinary, childArgs, prompt, config.serialTimeoutMs);
     const output = await readFile(outputPath, "utf8");
-    return parseSerialOutput(output, job, { model });
+    try {
+      return parseSerialOutput(output, job, { model });
+    } catch (error) {
+      if (!(error instanceof SyntaxError)) throw error;
+      console.warn(`[storyheaven-review-worker] repairing malformed serial JSON job=${job.id}`);
+      return repairSerialOutput(output, job, model);
+    }
+  } finally {
+    await unlink(outputPath).catch(() => {});
+  }
+}
+
+async function repairSerialOutput(output, job, model) {
+  const outputPath = path.join(config.stateDir, `serial-repair-${crypto.randomUUID()}.json`);
+  const childArgs = [
+    "exec",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--model",
+    model,
+    "--config",
+    `model_reasoning_effort=\"${config.serialReasoningEffort}\"`,
+    "--output-schema",
+    config.serialSchemaPath,
+    "--output-last-message",
+    outputPath,
+    "-"
+  ];
+  try {
+    await runProcess(
+      config.codexBinary,
+      childArgs,
+      buildSerialJsonRepairPrompt(output, job),
+      config.serialTimeoutMs
+    );
+    const repaired = await readFile(outputPath, "utf8");
+    return parseSerialOutput(repaired, job, { model });
   } finally {
     await unlink(outputPath).catch(() => {});
   }

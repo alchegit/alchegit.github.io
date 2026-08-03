@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { SERIAL_EDITORIAL_POLICY_VERSION, buildSerialPrompt, modelRoleForSerialJob, parseSerialOutput } from "../src/serial.mjs";
+import { SERIAL_EDITORIAL_POLICY_VERSION, buildSerialJsonRepairPrompt, buildSerialPrompt, modelRoleForSerialJob, parseSerialOutput } from "../src/serial.mjs";
 import { buildSerialGenreEditorialGuidance } from "../src/serial-editorial-guidance.mjs";
 
 const job = {
@@ -137,6 +137,17 @@ const parsedEncoded = parseSerialOutput({
 }, job, { model: "gpt-test" });
 assert.equal(parsedEncoded.result.decision, "approved");
 assert.match(writingPrompt, /resultJson/u);
+
+assert.throws(() => parseSerialOutput({
+  jobId: job.id,
+  inputHash: job.inputHash,
+  jobType: job.type,
+  resultJson: '{"decision":"approved" "scores":{}}'
+}, job, { model: "gpt-test" }), SyntaxError);
+const repairPrompt = buildSerialJsonRepairPrompt("malformed-output", job);
+assert.match(repairPrompt, /Repair only JSON punctuation and escaping/u);
+assert.match(repairPrompt, /JSON\.parse\(resultJson\) also succeeds/u);
+assert.match(repairPrompt, new RegExp(job.id, "u"));
 
 assert.throws(() => parseSerialOutput({
   jobId: job.id,
