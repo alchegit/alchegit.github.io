@@ -2,7 +2,8 @@ const GENRE_PROFILES = Object.freeze({
   fantasy: Object.freeze([
     "Begin with an ordinary lack, duty, or vulnerability before the impossible rule appears.",
     "Show a power or world rule changing a physical result before naming it; then reveal its cost, limit, or forced choice.",
-    "Turn future knowledge, reincarnation, or system access into today's concrete task, deadline, or object rather than a lore summary."
+    "Use future knowledge, reincarnation, or system access to change a concrete choice rather than mirroring the protagonist's former chore as a matching fantasy job, title, tool, or spell.",
+    "When a protagonist enters an unfamiliar world or group, make suspicion, misunderstanding, verification, language, and the source of every known name part of the causal scene."
   ]),
   romance: Object.freeze([
     "Establish the relationship's current state, each person's immediate want, and any power imbalance before the first major emotional reversal.",

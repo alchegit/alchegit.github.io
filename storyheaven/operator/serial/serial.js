@@ -26,10 +26,12 @@
     emotional: Object.freeze({ pace: 2, suspense: 2, curiosity: 3, surprise: 2, emotion: 5, romance: 4, action: 1, description: 4, humor: 2, novelty: 2 })
   });
   const previousDefaultConceptPolicy = "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다. 첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다. 첫 문단의 낯선 고유 용어는 1개 이하, 첫 장면 전체는 3개 이하로 제한하며 처음 나온 문단에서 쉬운 뜻과 눈에 보이는 작동 결과를 함께 설명한다. 첫 회차는 장편의 주인공과 고유 규칙을 행동으로 이해시키고 본편 1화를 기대하게 만드는 프롤로그로 쓰며, 단편처럼 모든 갈등을 끝내지 않는다. 설정한 전체 권수와 권당 화수에 맞춰 장기 갈등과 성장 단계를 배분하고, 선택한 장르의 익숙한 보상을 매 화 제공한다. 주인공의 선택이 결과를 만들고 그 결과가 다음 갈등으로 이어지게 하며, 같은 도입 방식과 반전과 끝맺음을 연속해서 반복하지 않는다.";
-  const defaultConceptPolicy = `${previousDefaultConceptPolicy} 참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다.`;
+  const noveltyDefaultConceptPolicy = `${previousDefaultConceptPolicy} 참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다.`;
+  const defaultConceptPolicy = `${noveltyDefaultConceptPolicy} 현실에서 하던 작업과 같은 일을 이세계에서 곧바로 맡기는 도입을 반복하지 않는다. 이전 삶의 경험은 선택에 간접적으로만 영향을 주고, 새 세계의 직업·능력·도구와 일대일로 대응시키지 않는다. 낯선 세계나 집단에 들어온 주인공은 경계·오해·검증·보호자·거래처럼 받아들여지는 과정을 거친다. 이름·출신·능력을 알게 되는 정보 출처와 언어가 통하는 이유를 설정집과 장면에서 일관되게 지킨다. 특별 능력은 익숙한 장르 기반 위에 핵심 효과 하나, 발동 조건 하나, 대가나 한계 하나로 설명한다. 서로 무관한 행동이나 사물을 여러 단계로 이어 붙인 발동 장치는 사용하지 않는다.`;
   const legacyConceptPolicies = new Set([
     "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다.",
-    previousDefaultConceptPolicy
+    previousDefaultConceptPolicy,
+    noveltyDefaultConceptPolicy
   ]);
   const draftStorageKey = "storyheaven.operator.serial-draft.v9";
   const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
@@ -1233,6 +1235,10 @@
       review_api_422_serial_public_synopsis_sentence_count_invalid: "독자용 작품 소개의 문장 구성이 기준에 맞지 않음",
       review_api_422_serial_concept_synopsis_invalid: "독자용 작품 소개의 길이가 기준에 맞지 않음",
       review_api_422_serial_internal_planning_summary_invalid: "비공개 장기 기획 요약이 누락되거나 너무 짧음",
+      review_api_422_serial_premise_matching_task_transfer_forbidden: "현실 작업과 이세계 역할이 그대로 겹치는 기획이라 재작성 필요",
+      review_api_422_serial_premise_immediate_acceptance_forbidden: "낯선 주인공을 받아들이는 과정이 없어 기획 재작성 필요",
+      review_api_422_serial_premise_name_leak_forbidden: "현지인이 이름을 알게 된 근거가 없어 기획 재작성 필요",
+      review_api_422_serial_ability_trigger_too_complex: "능력 발동 방식이 지나치게 복잡해 기획 재작성 필요",
       serial_job_attempts_exhausted: "재시도 횟수 초과",
       quality_threshold_not_met: "원고는 완성됐지만 일부 품질 기준이 남았습니다",
       review_api_500_server_error: "자동 검수 서버 오류",

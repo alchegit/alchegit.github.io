@@ -73,12 +73,19 @@ const STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE = Object.freeze([
 
 export const STORYHEAVEN_DEFAULT_CONCEPT_POLICY = [
   ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
-  "참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다."
+  "참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다.",
+  "현실에서 하던 작업과 같은 일을 이세계에서 곧바로 맡기는 도입을 반복하지 않는다. 이전 삶의 경험은 선택에 간접적으로만 영향을 주고, 새 세계의 직업·능력·도구와 일대일로 대응시키지 않는다.",
+  "낯선 세계나 집단에 들어온 주인공은 경계·오해·검증·보호자·거래처럼 받아들여지는 과정을 거친다. 이름·출신·능력을 알게 되는 정보 출처와 언어가 통하는 이유를 설정집과 장면에서 일관되게 지킨다.",
+  "특별 능력은 익숙한 장르 기반 위에 핵심 효과 하나, 발동 조건 하나, 대가나 한계 하나로 설명한다. 서로 무관한 행동이나 사물을 여러 단계로 이어 붙인 발동 장치는 사용하지 않는다."
 ].join(" ");
 
 const STORYHEAVEN_LEGACY_CONCEPT_POLICIES = Object.freeze([
   "중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다.",
-  STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE.join(" ")
+  STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE.join(" "),
+  [
+    ...STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE,
+    "참신성은 설정값을 따르며, 기본 2에서는 익숙한 장르 문법과 인간적인 갈등을 중심에 두고 한 가지 분명한 차별점만 더한다. 서로 무관한 직업·사물·마법 규칙을 억지로 결합해 낯설게 만드는 방식은 피한다."
+  ].join(" ")
 ]);
 
 export function normalizeStoryHeavenConceptPolicy(value) {
@@ -598,7 +605,80 @@ function normalizeConcept(source, options = {}) {
     novelTwist: requiredText(source.novelTwist, 300, 10, "serial_novel_twist_invalid"),
     targetAge: ["all", "teen"].includes(source.targetAge) ? source.targetAge : "teen"
   };
+  if (!legacyConceptCopy || Object.keys(object(source.premiseAudit)).length > 0) {
+    concept.premiseAudit = normalizePremiseAudit(source.premiseAudit);
+  }
   return concept;
+}
+
+function normalizePremiseAudit(value) {
+  const source = object(value);
+  const entryTypes = new Set(["native", "summoned", "transported", "reincarnated", "possessed", "regressed", "other"]);
+  const entryType = entryTypes.has(source.entryType) ? source.entryType : null;
+  if (!entryType) throw new Error("serial_premise_entry_type_invalid");
+
+  const priorLifeSkillRelation = ["none", "indirect"].includes(source.priorLifeSkillRelation)
+    ? source.priorLifeSkillRelation
+    : null;
+  if (!priorLifeSkillRelation) throw new Error("serial_premise_prior_skill_relation_invalid");
+
+  const usesMatchingTaskTransfer = requiredBoolean(
+    source.usesMatchingTaskTransfer,
+    "serial_premise_matching_task_transfer_invalid"
+  );
+  if (usesMatchingTaskTransfer) throw new Error("serial_premise_matching_task_transfer_forbidden");
+
+  const immediateAcceptance = requiredBoolean(
+    source.immediateAcceptance,
+    "serial_premise_immediate_acceptance_invalid"
+  );
+  const nameKnownBeforeIntroduction = requiredBoolean(
+    source.nameKnownBeforeIntroduction,
+    "serial_premise_name_knowledge_invalid"
+  );
+  if (entryType !== "native" && immediateAcceptance) {
+    throw new Error("serial_premise_immediate_acceptance_forbidden");
+  }
+  if (entryType !== "native" && nameKnownBeforeIntroduction) {
+    throw new Error("serial_premise_name_leak_forbidden");
+  }
+
+  const abilitySource = object(source.abilityPlan);
+  const abilityMode = ["none", "familiar", "single_twist"].includes(abilitySource.mode)
+    ? abilitySource.mode
+    : null;
+  if (!abilityMode) throw new Error("serial_ability_mode_invalid");
+  const extraRuleCount = integer(abilitySource.extraRuleCount, 0, 1, null);
+  if (extraRuleCount === null) throw new Error("serial_ability_extra_rule_count_invalid");
+  const hasMultiStepTrigger = requiredBoolean(
+    abilitySource.hasMultiStepTrigger,
+    "serial_ability_trigger_shape_invalid"
+  );
+  if (hasMultiStepTrigger) throw new Error("serial_ability_trigger_too_complex");
+
+  return {
+    entryType,
+    usesMatchingTaskTransfer,
+    priorLifeSkillRelation,
+    transitionCause: requiredText(source.transitionCause, 400, 20, "serial_premise_transition_cause_invalid"),
+    localReception: requiredText(source.localReception, 500, 30, "serial_premise_local_reception_invalid"),
+    immediateAcceptance,
+    nameKnowledgeRule: requiredText(source.nameKnowledgeRule, 400, 20, "serial_premise_name_rule_invalid"),
+    nameKnownBeforeIntroduction,
+    languageRule: requiredText(source.languageRule, 400, 20, "serial_premise_language_rule_invalid"),
+    firstAcceptanceCondition: requiredText(source.firstAcceptanceCondition, 400, 20, "serial_premise_acceptance_condition_invalid"),
+    familiarGenreFoundation: requiredText(source.familiarGenreFoundation, 300, 20, "serial_premise_familiar_foundation_invalid"),
+    differentiator: requiredText(source.differentiator, 240, 10, "serial_premise_differentiator_invalid"),
+    abilityPlan: {
+      mode: abilityMode,
+      coreAbility: requiredText(abilitySource.coreAbility, 180, 5, "serial_ability_core_invalid"),
+      activation: requiredText(abilitySource.activation, 140, 5, "serial_ability_activation_invalid"),
+      costOrLimit: requiredText(abilitySource.costOrLimit, 180, 5, "serial_ability_limit_invalid"),
+      extraRuleCount,
+      hasMultiStepTrigger,
+      readerExplanation: requiredText(abilitySource.readerExplanation, 180, 10, "serial_ability_explanation_invalid")
+    }
+  };
 }
 
 function normalizePublicSynopsis(value) {
@@ -1252,6 +1332,11 @@ function requiredList(value, limits, error) {
 function integer(value, min, max, fallback) {
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed >= min && parsed <= max ? parsed : fallback;
+}
+
+function requiredBoolean(value, error) {
+  if (typeof value !== "boolean") throw new Error(error);
+  return value;
 }
 
 function fieldError(field, code) {

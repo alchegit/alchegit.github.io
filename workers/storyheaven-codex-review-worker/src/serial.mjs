@@ -11,7 +11,7 @@ const JOB_TYPES = new Set([
   "rewrite_draft"
 ]);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-04-new-series-architecture-v13";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-04-premise-coherence-v14";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -36,6 +36,7 @@ export function buildSerialPrompt(job) {
     "Creative controls are binding 1-to-5 targets, not permission to flatten every scene to one intensity. Read them from payload.schedule.policy.creativeControls or payload.creativeControls, whichever this stage receives, and apply their guidance to pace, suspense, curiosity, surprise, emotion, romance, action, description, humor, and novelty. Build peaks and recovery beats around the requested average. If novelty is absent, use 2. Novelty is a calibration target, not a command to maximize strangeness: levels 1-2 keep a familiar genre engine and add at most one restrained, easy-to-explain differentiator; level 3 balances familiarity with one central original rule; levels 4-5 may experiment but must remain anchored in a familiar human goal, causal stakes, and sustainable conflict. An arbitrary mashup of an occupation, household object, and magic rule, a pun title, or random weirdness is not meaningful novelty. High pace may shorten the distance between meaningful choices but may not skip causality. High surprise still requires fair setup. High description means selective concrete staging, never ornamental inventory. Romance and action remain subordinate when their genres were not selected. Never repeat the same joke mechanically. Social satire should target systems, incentives, hypocrisy, or powerful institutions rather than protected identities or vulnerable people.",
     "Series length policy is binding. When payload.schedule.policy.seriesPlan or payload.seriesPlan exists, design the concept, bible, arcs, reveals, and episode promises for that number of volumes and episodes per volume. Do not collapse the premise into a short story just because the current queue asks for one installment.",
     architecturePolicyInstruction(type, job.payload),
+    premiseCoherenceInstruction(type, job.payload),
     "The first generated installment is always a prologue. Internal episodeNo 1 is the prologue and must be titled or clearly labeled 프롤로그. The first main chapter starts after that as 본편 1화, even though the storage number may be the next internal episode number.",
     "The prologue is a retention gate. It must demonstrate the premise through an irreversible event or choice, not explain it from a distance. Each scene must answer one immediate question while opening a sharper causal question, and the prologue must deliver at least one concrete genre payoff before its final hook.",
     "For every newly generated story, a long-running foundation is mandatory even when the schedule requests only a prologue. Its new bible and arc must contain enough independent conflict sources, character agendas, world constraints, volume-level turns, and delayed consequences to sustain later episodes without inventing a new premise each week. Legacy continuation stages must preserve the supplied foundation instead of rebuilding it.",
@@ -119,6 +120,36 @@ function architecturePolicyInstruction(type, payload = {}) {
   return "This is a legacy story created without the new private seriesArchitecture. Preserve its supplied bible, prior arcs, canon, reveal ledger, and published events exactly. Continue only the requested episode or arc scope; do not retrofit, infer, or generate a replacement full-series architecture, and do not block continuation because that newer field is absent.";
 }
 
+function premiseCoherenceInstruction(type, payload = {}) {
+  if (type === "concept_gate") {
+    return "A premiseAudit is mandatory for every new concept and is a server-enforced coherence gate. Choose one entryType and explain the transition cause, outsider reception, name-information source, language rule, first acceptance condition, familiar genre foundation, one differentiator, and the complete ability plan. Do not transfer a protagonist from a real-world task directly into the matching fantasy job, title, tool, or magic. Prior-life experience may affect a later choice only indirectly. For summoned, transported, reincarnated, possessed, or regressed protagonists, immediateAcceptance and nameKnownBeforeIntroduction must both be false: locals must react to an unknown outsider with understandable caution, confusion, verification, pressure, sponsorship, or exchange, and no one may use the protagonist's true name before hearing or discovering it through an established rule. Keep a power easy to repeat in one sentence: one core effect, one activation condition, one cost or limit, and at most one extra rule. hasMultiStepTrigger must be false; never chain unrelated chores, gestures, household objects, words, or coincidences into an activation ritual.";
+  }
+  const audit = payload?.premiseAudit
+    || payload?.concept?.premiseAudit
+    || payload?.bible?.concept?.premiseAudit
+    || null;
+  if (!audit || typeof audit !== "object") {
+    return "This legacy story has no premiseAudit. Preserve established canon and published events; do not retrofit the new audit, and do not block continuation solely because it is absent.";
+  }
+  const binding = "The supplied concept.premiseAudit is binding canon. Preserve its entryType, transition cause, local reception process, nameKnowledgeRule, languageRule, firstAcceptanceCondition, familiar genre foundation, differentiator, and abilityPlan. A prior real-world skill may influence judgment only as priorLifeSkillRelation permits; never turn the same mundane task into the protagonist's matching fantasy assignment, title, tool, or power. Treat a newcomer as unknown until the stated acceptance condition is earned. No character may know or speak the protagonist's true name, origin, or ability before learning it through dialogue, observation, investigation, or the exact established rule. Keep the ability to its one core effect, one activation, one cost or limit, and permitted extraRuleCount; do not add chained triggers or new exceptions for convenience.";
+  if (type === "build_bible") {
+    return `${binding} Convert the audit into enforceable canon: worldRules must record transition and language logic, each character knowledge list must state whether and how that character knows the protagonist's name, origin, and ability, and forbiddenContradictions must forbid unearned acceptance, unexplained name use, direct mundane-task-to-fantasy-job mirroring, and any extra ability trigger or exception. Make early trust arise from firstAcceptanceCondition through visible action, not narration.`;
+  }
+  if (type === "build_episode_card") {
+    return `${binding} In knowledgeBefore, record by character who currently knows the protagonist's name and exactly how it was learned. If acceptance is not yet earned, at least one planned scene must dramatize the relevant caution, misunderstanding, verification, pressure, sponsorship, or exchange and move visibly toward firstAcceptanceCondition.`;
+  }
+  if (type === "write_draft") {
+    return `${binding} Before writing every line of dialogue, check whether its speaker has learned the protagonist's name and facts. Use an ordinary label, question, or omission when they have not. Dramatize social friction and earned trust in action; never erase it with an explanatory sentence or genre convenience.`;
+  }
+  if (type === "rewrite_draft") {
+    return `${binding} Repair unexplained acceptance and information leaks in-scene: remove unknown-name dialogue, restore the shortest plausible reaction and verification chain, and simplify any ability explanation to its established core effect, activation, and cost without adding lore.`;
+  }
+  if (type === "editorial_review") {
+    return `${binding} Treat any unexplained use of the protagonist's name, origin, or ability, unearned immediate acceptance of an outsider, direct mundane-task-to-matching-fantasy-job transfer, or multi-step unrelated ability trigger as concrete causality and reader-orientation failures. Cite the exact manuscript evidence and do not approve until repaired.`;
+  }
+  return binding;
+}
+
 function stageInstruction(type, payload = {}) {
   if (type === "concept_gate") {
     return [
@@ -128,6 +159,8 @@ function stageInstruction(type, payload = {}) {
       "Put the recurring engine, genre jobs, long-form structure, volume turns, renewable conflicts, planned revelations, and ending boundaries only in internalPlanningSummary. internalPlanningSummary is a private writer-planning field and must never be copied into or paraphrased as operational language in synopsis.",
       "Combine the selected primary genres into one causal premise, not separate decorations: explicitly decide which genre drives the recurring episode engine and what concrete reader reward each supporting genre adds.",
       "Read schedule.policy.creativeControls.novelty as the requested novelty level, defaulting to 2 when absent. At levels 1-2, start from a proven genre engine and add only one restrained differentiator that a middle-school reader can explain in one sentence; do not force an occupation, everyday object, or magic mechanic together merely to sound new. At level 3, use one central differentiating rule with familiar emotional stakes. At levels 4-5, unusual structures are allowed only when a clear human goal, causal cost, and renewable conflict keep them readable.",
+      "Reject the repeated shortcut in which a student or worker performs a specific mundane task and is abruptly dropped into an otherworldly job that is merely the magical equivalent of that same task. If another-world entry is used, make the crossing cause and first social encounter independently plausible: the protagonist begins as an unidentified outsider, locals do not know an unintroduced name, shared language has an explicit rule, and practical trust is earned through the stated firstAcceptanceCondition rather than granted by genre convenience.",
+      "Complete premiseAudit before finalizing the title or hook. usesMatchingTaskTransfer must be false, priorLifeSkillRelation must be none or indirect, and any non-native entry must set immediateAcceptance and nameKnownBeforeIntroduction to false. The abilityPlan must be understandable without rereading: use no ability when the story needs none, or use a familiar power with at most one controlled twist, one activation, one cost or limit, no more than one extra rule, and no multi-step trigger.",
       "A title and logline must promise a story and character conflict, not merely advertise a quirky rule. The protagonist, recurring opposition, episode engine, long mystery, volume-level turns, and at least five renewable conflict sources must generate the requested full series length.",
       "Define privately what a reader sees, fears, laughs at, or celebrates in the prologue and what unanswered causal question compels 본편 1화. Translate every schedule.policy.creativeControls target into a sustainable episode engine rather than merely naming a tone.",
       "Familiar devices are acceptable when their consequences and character choices are specific; novelty must come from meaningful consequence, not renamed terminology or random combination."
@@ -163,7 +196,30 @@ function resultContract(type, payload = {}) {
     internalPlanningSummary: "비공개 작가용 장기 기획 100-4000자",
     genres: ["1-5개"], tags: ["0-5개"], rating: "all|teen",
     readerPromise: "20-300자", familiarPleasure: "10-300자",
-    novelTwist: "10-300자", targetAge: "all|teen"
+    novelTwist: "10-300자", targetAge: "all|teen",
+    premiseAudit: {
+      entryType: "native|summoned|transported|reincarnated|possessed|regressed|other",
+      usesMatchingTaskTransfer: false,
+      priorLifeSkillRelation: "none|indirect",
+      transitionCause: "진입 또는 사건 전환의 인과 20-400자",
+      localReception: "낯선 주인공을 대하는 현지 반응과 검증 과정 30-500자",
+      immediateAcceptance: false,
+      nameKnowledgeRule: "현지인이 이름을 알게 되는 출처와 시점 20-400자",
+      nameKnownBeforeIntroduction: false,
+      languageRule: "언어가 통하거나 통하지 않는 이유 20-400자",
+      firstAcceptanceCondition: "처음 신뢰나 실용적 협력을 얻는 조건 20-400자",
+      familiarGenreFoundation: "독자가 바로 알아볼 장르 기반 20-300자",
+      differentiator: "한 가지 절제된 차별점 10-240자",
+      abilityPlan: {
+        mode: "none|familiar|single_twist",
+        coreAbility: "핵심 효과 하나 5-180자",
+        activation: "발동 조건 하나 5-140자",
+        costOrLimit: "대가나 한계 하나 5-180자",
+        extraRuleCount: 0,
+        hasMultiStepTrigger: false,
+        readerExplanation: "중학생도 한 번에 이해할 한 문장 10-180자"
+      }
+    }
   };
   if (type === "build_bible") return {
     worldRules: ["5-24개"],

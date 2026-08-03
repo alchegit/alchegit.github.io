@@ -100,6 +100,9 @@ assert.match(serialOperatorHtml, /문제 해결 도구/u, "operator recovery too
 assert.match(serialOperatorCss, /details\.advanced > summary[\s\S]*color: #f4f7fb/u, "dark advanced summaries must retain readable text");
 assert.match(serialOperatorHtml, /name="creativeNovelty"[\s\S]{0,100}value="2"/u, "novelty must be visible with the restrained default");
 assert.match(serialOperatorSource, /참신성 \$\{novelty\} · \$\{noveltyLevelLabel\(novelty\)\}/u, "schedule summaries must explain the novelty level");
+assert.match(serialOperatorHtml, /현실에서 하던 작업과 같은 일을 이세계에서 곧바로 맡기는 도입을 반복하지 않는다/u, "operator defaults must prevent mirrored task transfers");
+assert.match(serialOperatorHtml, /이름·출신·능력을 알게 되는 정보 출처와 언어가 통하는 이유/u, "operator defaults must expose identity and language causality");
+assert.match(serialOperatorSource, /능력 발동 방식이 지나치게 복잡해 기획 재작성 필요/u, "premise-gate failures must be readable to operators");
 assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v9/u, "draft persistence must include the novelty control");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
 assert.match(managedStoriesHtml, /data-created-from/u, "managed stories must provide a creation start date filter");
@@ -214,7 +217,13 @@ assert.equal(continuationMinimumEpisode("reader_threshold"), 1);
 assert.equal(continuationMinimumEpisode("admin_request"), 1);
 assert.match(STORYHEAVEN_DEFAULT_CONCEPT_POLICY, /첫 2개 문단/u);
 assert.match(STORYHEAVEN_DEFAULT_CONCEPT_POLICY, /프롤로그/u);
+assert.match(STORYHEAVEN_DEFAULT_CONCEPT_POLICY, /새 세계의 직업·능력·도구와 일대일로 대응시키지 않는다/u);
+assert.match(STORYHEAVEN_DEFAULT_CONCEPT_POLICY, /핵심 효과 하나, 발동 조건 하나, 대가나 한계 하나/u);
 assert.equal(normalizeStoryHeavenConceptPolicy(""), STORYHEAVEN_DEFAULT_CONCEPT_POLICY);
+assert.equal(
+  normalizeStoryHeavenConceptPolicy(STORYHEAVEN_DEFAULT_CONCEPT_POLICY.split(" 현실에서 하던 작업과 같은 일을")[0]),
+  STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+);
 assert.equal(normalizeStoryHeavenConceptPolicy("중학생부터 성인까지 자연스럽게 읽히는 한국어로 쓴다. 선택한 장르의 익숙한 즐거움과 한 문장으로 설명할 수 있는 새 규칙을 결합한다. 주인공이 매 화 선택하고 그 선택의 결과가 다음 화 갈등으로 이어지게 한다. 같은 도입법과 같은 종류의 끝맺음을 연속해서 반복하지 않는다."), STORYHEAVEN_DEFAULT_CONCEPT_POLICY);
 assert.equal(normalizeStoryHeavenConceptPolicy("운영자가 직접 정한 별도의 작품 원칙은 그대로 보존한다."), "운영자가 직접 정한 별도의 작품 원칙은 그대로 보존한다.");
 assert.deepEqual(STORYHEAVEN_SERIAL_STORY_CONTROL.visibilities, ["public", "private", "archived"]);
@@ -374,21 +383,71 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   readerPromise: "매 회차 새로운 승객의 사연을 해결하면서 누나와 0번 노선의 비밀에 가까워진다.",
   familiarPleasure: "도시괴담과 직업물의 친숙한 재미",
   novelTwist: "요금은 돈이 아니라 기사의 기억이다.",
-  targetAge: "teen"
+  targetAge: "teen",
+  premiseAudit: {
+    entryType: "native",
+    usesMatchingTaskTransfer: false,
+    priorLifeSkillRelation: "none",
+    transitionCause: "도윤이 정식 입사 첫날 배정표에 없는 0번 버스의 열쇠를 건네받으며 사건이 시작된다.",
+    localReception: "동료들은 신입인 도윤을 이미 채용 명단에서 확인했지만, 비밀 노선에 들어갈 자격은 첫 운행의 선택으로 따로 검증한다.",
+    immediateAcceptance: false,
+    nameKnowledgeRule: "운수 회사 동료들은 채용 명단과 사원증을 본 뒤 도윤의 이름을 사용하며, 낯선 승객은 도윤이 직접 밝히기 전에는 이름을 모른다.",
+    nameKnownBeforeIntroduction: false,
+    languageRule: "같은 시대의 서울을 배경으로 하므로 인물들은 한국어로 대화하고, 외국인 승객은 통역 여부를 장면에서 별도로 밝힌다.",
+    firstAcceptanceCondition: "도윤이 첫 승객을 규칙대로 내려주고 기억 요금의 대가를 실제로 치른 뒤 비밀 노선 기사로 인정받는다.",
+    familiarGenreFoundation: "도시괴담의 금지 규칙과 심야 운행 직업물이라는 익숙한 기반을 사용한다.",
+    differentiator: "버스 요금을 기사 자신의 기억으로 치른다는 한 가지 차별점만 둔다.",
+    abilityPlan: {
+      mode: "single_twist",
+      coreAbility: "죽은 승객의 마지막 목적지를 노선표에서 볼 수 있다.",
+      activation: "0번 버스 운전석에 앉아 시동을 건다.",
+      costOrLimit: "승객 한 명을 내려줄 때마다 도윤의 기억 하나가 흐려진다.",
+      extraRuleCount: 0,
+      hasMultiStepTrigger: false,
+      readerExplanation: "0번 버스를 운전하면 죽은 승객의 목적지가 보이지만, 운행할수록 자신의 기억을 잃는다."
+    }
+  }
 });
 assert.equal(concept.genres.length, 3);
 assert.match(concept.internalPlanningSummary, /장기 갈등/u);
+assert.equal(concept.premiseAudit.abilityPlan.extraRuleCount, 0);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  premiseAudit: { ...concept.premiseAudit, usesMatchingTaskTransfer: true }
+}), /serial_premise_matching_task_transfer_forbidden/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  premiseAudit: { ...concept.premiseAudit, entryType: "transported", immediateAcceptance: true }
+}), /serial_premise_immediate_acceptance_forbidden/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  premiseAudit: { ...concept.premiseAudit, entryType: "summoned", nameKnownBeforeIntroduction: true }
+}), /serial_premise_name_leak_forbidden/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  premiseAudit: {
+    ...concept.premiseAudit,
+    abilityPlan: { ...concept.premiseAudit.abilityPlan, hasMultiStepTrigger: true }
+  }
+}), /serial_ability_trigger_too_complex/u);
 const metaExposedSynopsis = "주인공은 왕국의 재난 훈련장에서 사람들을 구하며 낯선 규칙을 배운다. 매 화 새로운 사고를 수습하는 것이 판타지의 반복 엔진이며, 10권 동안 왕국의 비밀을 밝힌다. 장기 전개에서는 동료와 적의 관계가 단계별로 달라지고 마지막에는 전쟁의 진실을 모두 공개한다.";
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
   synopsis: metaExposedSynopsis
 }), /serial_public_synopsis_meta_exposed/u);
+const legacyConceptWithoutAudit = { ...concept };
+delete legacyConceptWithoutAudit.premiseAudit;
+assert.throws(
+  () => normalizeStoryHeavenSerialWorkerResult("concept_gate", legacyConceptWithoutAudit),
+  /serial_premise_entry_type_invalid/u
+);
 const resumedLegacyConcept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
-  ...concept,
+  ...legacyConceptWithoutAudit,
   synopsis: metaExposedSynopsis,
   internalPlanningSummary: ""
 }, { allowLegacyConceptCopy: true });
 assert.match(resumedLegacyConcept.internalPlanningSummary, /10권 동안/u);
+assert.equal("premiseAudit" in resumedLegacyConcept, false);
 
 const testSeriesPlan = { totalVolumes: 10, episodesPerVolume: 25, totalMainEpisodes: 250 };
 const conflictSources = Array.from({ length: 5 }, (_, index) => ({

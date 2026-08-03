@@ -61,6 +61,10 @@ for (const [genre, signal] of Object.entries(genreProfileSignals)) {
   assert.match(guidance, signal);
   assert.match(guidance, /Never name, quote, paraphrase, or imitate/u);
 }
+assert.match(
+  buildSerialGenreEditorialGuidance({ schedule: { primaryGenres: ["fantasy"] } }),
+  /rather than mirroring the protagonist's former chore as a matching fantasy job/u
+);
 
 const writingPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
 assert.match(writingPrompt, /spatialAnchor, characterBlocking, sensoryAnchor, and visualTurn/u);
@@ -89,8 +93,38 @@ assert.match(conceptPrompt, /Never mention total volumes or episodes/u);
 assert.match(conceptPrompt, /only in internalPlanningSummary/u);
 assert.match(conceptPrompt, /상세 페이지용 초반 줄거리 요약 100-700자/u);
 assert.match(conceptPrompt, /비공개 작가용 장기 기획 100-4000자/u);
+assert.match(conceptPrompt, /A premiseAudit is mandatory/u);
+assert.match(conceptPrompt, /real-world task directly into the matching fantasy job/u);
+assert.match(conceptPrompt, /usesMatchingTaskTransfer must be false/u);
+assert.match(conceptPrompt, /nameKnownBeforeIntroduction/u);
+assert.match(conceptPrompt, /hasMultiStepTrigger must be false/u);
+assert.match(conceptPrompt, /현지인이 이름을 알게 되는 출처와 시점/u);
 
-const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible" });
+const premiseAudit = {
+  entryType: "transported",
+  usesMatchingTaskTransfer: false,
+  priorLifeSkillRelation: "indirect",
+  transitionCause: "검증용 전환 원인",
+  localReception: "검증용 현지 반응",
+  immediateAcceptance: false,
+  nameKnowledgeRule: "직접 소개한 뒤 이름을 안다",
+  nameKnownBeforeIntroduction: false,
+  languageRule: "초기에는 통역이 필요하다",
+  firstAcceptanceCondition: "눈앞의 위험을 함께 막는다",
+  familiarGenreFoundation: "정통 이세계 모험",
+  differentiator: "선택의 대가",
+  abilityPlan: {
+    mode: "familiar",
+    coreAbility: "방어 마법",
+    activation: "짧은 주문",
+    costOrLimit: "체력 소모",
+    extraRuleCount: 0,
+    hasMultiStepTrigger: false,
+    readerExplanation: "주문하면 방어막이 생기고 체력이 줄어든다."
+  }
+};
+
+const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible", payload: { concept: { premiseAudit } } });
 assert.match(biblePrompt, /numeric seriesPlan is not a long-form plan by itself/u);
 assert.match(biblePrompt, /Every newly generated story must build a complete seriesArchitecture before its prologue is planned/u);
 assert.match(biblePrompt, /private writer bible/u);
@@ -105,6 +139,32 @@ assert.match(biblePrompt, /strictly less than payoffVolume/u);
 assert.match(biblePrompt, /never include payoffVolume itself/u);
 assert.match(biblePrompt, /renewableConflictSources/u);
 assert.match(biblePrompt, /mustNotAnswerRevealKeys/u);
+assert.match(biblePrompt, /each character knowledge list must state whether and how/u);
+assert.match(biblePrompt, /unearned acceptance, unexplained name use/u);
+
+const auditedPlanningPrompt = buildSerialPrompt({
+  ...job,
+  type: "build_episode_card",
+  payload: { bible: { concept: { premiseAudit } } }
+});
+assert.match(auditedPlanningPrompt, /In knowledgeBefore, record by character/u);
+assert.match(auditedPlanningPrompt, /move visibly toward firstAcceptanceCondition/u);
+
+const auditedWritingPrompt = buildSerialPrompt({
+  ...job,
+  type: "write_draft",
+  payload: { bible: { concept: { premiseAudit } } }
+});
+assert.match(auditedWritingPrompt, /check whether its speaker has learned the protagonist's name/u);
+assert.match(auditedWritingPrompt, /ordinary label, question, or omission/u);
+
+const auditedReviewPrompt = buildSerialPrompt({
+  ...job,
+  type: "editorial_review",
+  payload: { bible: { concept: { premiseAudit } } }
+});
+assert.match(auditedReviewPrompt, /unearned immediate acceptance of an outsider/u);
+assert.match(auditedReviewPrompt, /multi-step unrelated ability trigger/u);
 
 const scopedArcPrompt = buildSerialPrompt({
   ...job,
