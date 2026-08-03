@@ -924,7 +924,6 @@ function normalizeSeriesArchitecture(value, plan, characters) {
     throw new Error("serial_architecture_character_arcs_invalid");
   }
   const milestoneIds = new Set(characterArcs.flatMap((item) => item.milestones.map((entry) => entry.id)));
-  const milestoneVolumes = new Map(characterArcs.flatMap((item) => item.milestones.map((entry) => [entry.id, entry.volumeNo])));
   if (milestoneIds.size !== characterArcs.reduce((sum, item) => sum + item.milestones.length, 0)) {
     throw new Error("serial_architecture_character_milestone_ids_invalid");
   }
@@ -991,15 +990,15 @@ function normalizeSeriesArchitecture(value, plan, characters) {
   const normalizedVolumes = volumePlan.map((volume, index) => {
     const volumeNo = integer(volume.volumeNo, 1, plan.totalVolumes, null);
     const volumeConflictKeys = requiredList(volume.conflictSourceKeys, { min: 1, max: 6, itemMax: 80 }, "serial_architecture_volume_conflicts_invalid");
-    const volumeMilestoneIds = requiredList(volume.characterMilestoneIds, { min: 1, max: 12, itemMax: 80 }, "serial_architecture_volume_milestones_invalid");
-    const protectedRevealKeys = stringList(volume.protectedRevealKeys, { max: 24, itemMax: 80 });
+    const volumeMilestoneIds = characterArcs.flatMap((arc) => arc.milestones
+      .filter((milestone) => milestone.volumeNo === volumeNo)
+      .map((milestone) => milestone.id));
+    const protectedRevealKeys = longReveals
+      .filter((reveal) => reveal.payoffVolume > volumeNo)
+      .map((reveal) => reveal.key);
     if (volumeNo !== index + 1
       || volumeConflictKeys.some((key) => !conflictKeys.has(key))
-      || volumeMilestoneIds.some((key) => !milestoneIds.has(key) || milestoneVolumes.get(key) !== volumeNo)
-      || protectedRevealKeys.some((key) => {
-        const reveal = longReveals.find((entry) => entry.key === key);
-        return !reveal || reveal.payoffVolume <= volumeNo;
-      })) {
+      || volumeMilestoneIds.length < 1) {
       throw new Error("serial_architecture_volume_references_invalid");
     }
     const mainEpisodeStart = ((volumeNo - 1) * plan.episodesPerVolume) + 1;
