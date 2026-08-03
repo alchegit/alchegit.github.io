@@ -138,12 +138,14 @@ const parsedEncoded = parseSerialOutput({
 assert.equal(parsedEncoded.result.decision, "approved");
 assert.match(writingPrompt, /resultJson/u);
 
-assert.throws(() => parseSerialOutput({
+const repairedEncoded = parseSerialOutput({
   jobId: job.id,
   inputHash: job.inputHash,
   jobType: job.type,
   resultJson: '{"decision":"approved" "scores":{}}'
-}, job, { model: "gpt-test" }), SyntaxError);
+}, job, { model: "gpt-test" });
+assert.equal(repairedEncoded.result.decision, "approved");
+assert.deepEqual(repairedEncoded.result.scores, {});
 const repairPrompt = buildSerialJsonRepairPrompt("malformed-output", job);
 assert.match(repairPrompt, /Repair only JSON punctuation and escaping/u);
 assert.match(repairPrompt, /JSON\.parse\(resultJson\) also succeeds/u);

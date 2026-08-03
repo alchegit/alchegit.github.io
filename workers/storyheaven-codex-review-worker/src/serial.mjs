@@ -1,4 +1,5 @@
 import { buildSerialGenreEditorialGuidance } from "./serial-editorial-guidance.mjs";
+import { jsonrepair } from "jsonrepair";
 
 const JOB_TYPES = new Set([
   "concept_gate",
@@ -10,7 +11,7 @@ const JOB_TYPES = new Set([
   "rewrite_draft"
 ]);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-04-long-form-architecture-v11";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-04-long-form-architecture-v12";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -53,7 +54,7 @@ export function buildSerialPrompt(job) {
 export function parseSerialOutput(value, job, { model }) {
   let source = value;
   if (typeof source === "string") {
-    source = JSON.parse(source.trim().replace(/^```(?:json)?\s*/iu, "").replace(/\s*```$/u, ""));
+    source = parseRepairableJson(source.trim().replace(/^```(?:json)?\s*/iu, "").replace(/\s*```$/u, ""));
   }
   if (!source || typeof source !== "object" || Array.isArray(source)) throw new Error("serial_invalid_output");
   if (String(source.jobId || "") !== String(job.id || "")
@@ -63,12 +64,21 @@ export function parseSerialOutput(value, job, { model }) {
   }
   let result = source.result;
   if ((!result || typeof result !== "object" || Array.isArray(result)) && typeof source.resultJson === "string") {
-    result = JSON.parse(source.resultJson);
+    result = parseRepairableJson(source.resultJson);
   }
   if (!result || typeof result !== "object" || Array.isArray(result)) {
     throw new Error("serial_result_missing");
   }
   return { result, model };
+}
+
+function parseRepairableJson(value) {
+  const source = String(value || "");
+  try {
+    return JSON.parse(source);
+  } catch {
+    return JSON.parse(jsonrepair(source));
+  }
 }
 
 export function buildSerialJsonRepairPrompt(value, job) {
