@@ -123,7 +123,7 @@ function stageInstruction(type, payload = {}) {
   if (type === "concept_gate") {
     return [
       "Create one commercially readable, long-running series concept.",
-      "The synopsis field is public Korean storefront copy shown directly to readers. Write it as 2 to 6 natural sentences and 100 to 700 characters, using only the protagonist, starting situation, central rule or ability, immediate conflict and stakes, and one unresolved hook.",
+      "The synopsis field is the single narrative description shown on the public story-detail page. Write it in Korean as an opening-plot summary of 2 to 6 natural sentences and 100 to 700 characters, using only the protagonist, starting situation, central rule or ability, immediate conflict and stakes, and one unresolved hook.",
       "Never mention total volumes or episodes, chapter cadence, a recurring or episode engine, genre functions or rewards, prologue or episode labels, future volume turns, the ending or final truth, readers, operators, writers, or production and planning terminology in synopsis.",
       "Put the recurring engine, genre jobs, long-form structure, volume turns, renewable conflicts, planned revelations, and ending boundaries only in internalPlanningSummary. internalPlanningSummary is a private writer-planning field and must never be copied into or paraphrased as operational language in synopsis.",
       "Combine the selected primary genres into one causal premise, not separate decorations: explicitly decide which genre drives the recurring episode engine and what concrete reader reward each supporting genre adds.",
@@ -159,7 +159,7 @@ function stageInstruction(type, payload = {}) {
 
 function resultContract(type, payload = {}) {
   if (type === "concept_gate") return {
-    title: "2-80자", logline: "20-220자", synopsis: "독자 공개용 한국어 100-700자, 2-6문장",
+    title: "2-80자", logline: "20-220자", synopsis: "상세 페이지용 초반 줄거리 요약 100-700자, 2-6문장",
     internalPlanningSummary: "비공개 작가용 장기 기획 100-4000자",
     genres: ["1-5개"], tags: ["0-5개"], rating: "all|teen",
     readerPromise: "20-300자", familiarPleasure: "10-300자",

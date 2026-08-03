@@ -91,8 +91,9 @@
     document.querySelector("[data-likes]").textContent = `좋아요 ${story.likeCount || 0}`;
     document.querySelector("[data-views]").textContent = `조회 ${Number(story.viewCount || 0).toLocaleString("ko-KR")}`;
     document.querySelector("[data-comment-count='story']").textContent = `(${Number(story.commentCount || 0).toLocaleString("ko-KR")})`;
-    document.querySelector("[data-logline]").textContent = story.logline;
-    document.querySelector("[data-synopsis]").textContent = story.synopsis || "아직 공개된 작품 소개가 없습니다.";
+    document.querySelector("[data-synopsis]").textContent = story.synopsis
+      || story.logline
+      || "아직 공개된 작품 소개가 없습니다.";
     const disclosure = document.querySelector("[data-disclosure]");
     disclosure.hidden = true;
     disclosure.textContent = "";

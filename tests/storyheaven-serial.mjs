@@ -4,14 +4,39 @@ import { chromium } from "playwright";
 const root = process.env.STORYHEAVEN_TEST_ROOT || "http://127.0.0.1:4173";
 const apiPattern = "https://harvard-museum-nails-mission.trycloudflare.com/**";
 const browser = await chromium.launch({ headless: true });
+const serialStory = {
+  id: "seed-last-platform",
+  episodeCount: 1,
+  latestEpisodeAt: "2026-07-24T09:00:00+09:00",
+  coverPath: "/storyheaven/assets/covers/last-platform.webp",
+  likeCount: 0,
+  likedByMe: false,
+  viewCount: 0
+};
+const serialEpisodes = [{
+  id: "seed-last-platform-episode-1",
+  episodeNo: 1,
+  title: "반납되지 않은 8초",
+  summary: "봉쇄된 승강장에 존재하지 않는 막차가 들어온다.",
+  estimatedReadMinutes: 10,
+  viewCount: 0,
+  recommendationCount: 0,
+  commentCount: 0
+}];
 
 async function blockRemote(page) {
   await page.route("https://cdn.jsdelivr.net/**", (route) => route.abort());
-  await page.route(apiPattern, (route) => route.fulfill({
-    status: 503,
-    contentType: "application/json",
-    body: JSON.stringify({ error: "test_offline" })
-  }));
+  await page.route(apiPattern, (route) => {
+    const request = route.request();
+    const path = new URL(request.url()).pathname;
+    const json = (body) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+    if (path === "/api/storyheaven/stories/seed-last-platform") return json({ story: serialStory });
+    if (path === "/api/storyheaven/stories/seed-last-platform/episodes") return json({ episodes: serialEpisodes });
+    if (path === "/api/storyheaven/profile") return json({ profile: { nickname: "연재독자", nicknameStatus: "active" } });
+    if (path.endsWith("/comments")) return json({ comments: [] });
+    if (request.method() === "POST" && path.endsWith("/view")) return json({ viewCount: 1 });
+    return route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "test_offline" }) });
+  });
 }
 
 try {
@@ -28,6 +53,8 @@ try {
     await guest.locator("[data-reader-body] p").first().waitFor({ state: "visible" });
     const guestState = await guest.evaluate(() => ({
       title: document.querySelector("[data-title]")?.textContent,
+      loglineBlocks: document.querySelectorAll("[data-logline]").length,
+      synopsisBlocks: document.querySelectorAll("[data-synopsis]").length,
       paragraphs: document.querySelectorAll("[data-reader-body] p").length,
       previewCharacters: document.querySelector("[data-reader-body]")?.textContent.length,
       loginWallCount: document.querySelectorAll("[data-reader-login-wall]").length,
@@ -35,6 +62,8 @@ try {
       overflow: document.documentElement.scrollWidth > innerWidth
     }));
     assert.equal(guestState.title, "8초를 싣는 막차", `${viewport.name} serial title`);
+    assert.equal(guestState.loglineBlocks, 0, `${viewport.name} hides the duplicate logline`);
+    assert.equal(guestState.synopsisBlocks, 1, `${viewport.name} shows one opening plot summary`);
     assert.ok(guestState.paragraphs >= 20, `${viewport.name} full manuscript paragraphs`);
     assert.ok(guestState.previewCharacters >= 4000, `${viewport.name} full manuscript length`);
     assert.equal(guestState.loginWallCount, 0, `${viewport.name} has no login reading wall`);

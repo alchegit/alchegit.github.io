@@ -9,6 +9,7 @@ const stories = [{
   id: "prologue-shared-cover",
   title: "짐이 직업을 정합니다",
   logline: "해 뜰 때 들고 있던 짐이 직업을 정하는 왕국 이야기.",
+  synopsis: "이삿짐을 나르다 낯선 왕국에 떨어진 주인공은 해가 뜰 때 손에 든 짐이 그날의 직업을 정한다는 규칙을 알게 된다. 첫날부터 아무도 맡으려 하지 않는 짐을 집어 든 그는 왕궁에 숨겨진 빈자리를 마주한다.",
   genre: "fantasy",
   genres: ["fantasy", "comedy", "isekai"],
   tags: ["짐", "직업"],
@@ -143,6 +144,9 @@ try {
     await page.locator("[data-detail]").waitFor({ state: "visible" });
     assert.equal(await page.locator("[data-cover]").isHidden(), true, `${viewport.name} prologue detail hides shared cover`);
     assert.equal(await page.locator(".series-hero").evaluate((node) => node.classList.contains("has-no-cover")), true, `${viewport.name} prologue detail uses text-first layout`);
+    assert.equal(await page.locator("[data-logline]").count(), 0, `${viewport.name} detail hides the duplicate logline`);
+    assert.equal(await page.locator("[data-synopsis]").count(), 1, `${viewport.name} detail shows one opening summary`);
+    assert.equal(await page.locator("[data-synopsis]").textContent(), stories[0].synopsis, `${viewport.name} detail prefers the opening plot summary`);
     await context.close();
   }
   console.log("StoryHeaven compact library checks passed");
