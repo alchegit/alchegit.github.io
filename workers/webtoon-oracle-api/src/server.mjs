@@ -29,6 +29,7 @@ import {
   STORYHEAVEN_CONTINUATION_POLICY,
   createStoryHeavenSerialService
 } from "./serial-service.mjs";
+import { createStoryHeavenCoverService } from "./story-cover.mjs";
 
 await loadDotEnv();
 
@@ -192,6 +193,11 @@ const pool = await oracledb.createPool({
   poolIncrement: 1
 });
 
+const storyHeavenCoverService = createStoryHeavenCoverService({
+  withConnection,
+  withTransaction,
+  assetDir: config.assetDir
+});
 const storyHeavenSerialService = createStoryHeavenSerialService({
   withConnection,
   withTransaction,
@@ -203,6 +209,17 @@ const storyHeavenSerialService = createStoryHeavenSerialService({
 });
 let storyHeavenSerialEmergencyPaused = false;
 let storyHeavenSerialPauseRetryTimer = null;
+
+async function processStoryHeavenSerialDue() {
+  const processed = await storyHeavenSerialService.processDue();
+  try {
+    const covers = await storyHeavenCoverService.ensureEligibleCovers();
+    return { ...processed, covers };
+  } catch (error) {
+    console.error("[storyheaven] cover sweep failed", error?.message || error);
+    return { ...processed, covers: { generated: [], failed: [], sweepError: "story_cover_sweep_failed" } };
+  }
+}
 
 const upload = multer({
   dest: config.tmpDir,
@@ -859,7 +876,7 @@ app.post("/api/storyheaven/operator/serial-engine/system", requireUser, requireA
       clearSerialPausePersistenceRetry();
     }
     const resumed = action === "pause" ? null : await storyHeavenSerialService.resumeInterruptedQueues();
-    const processed = action === "pause" ? null : await storyHeavenSerialService.processDue();
+    const processed = action === "pause" ? null : await processStoryHeavenSerialDue();
     res.status(202).json({ action, system, resumed, processed });
   } catch (error) {
     next(error);
@@ -920,7 +937,7 @@ app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry", requireUser,
 app.post("/api/storyheaven/operator/serial-engine/process", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (_req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
-    res.json(await storyHeavenSerialService.processDue());
+    res.json(await processStoryHeavenSerialDue());
   } catch (error) {
     next(error);
   }
@@ -1395,7 +1412,7 @@ setTimeout(() => processNextStoryHeavenAiReview().catch(() => {}), 1_000).unref(
 const storyHeavenSerialTimer = config.storyHeavenSerialEngineEnabled
   ? setInterval(() => {
     if (storyHeavenSerialEmergencyPaused) return;
-    storyHeavenSerialService.processDue().catch((error) => {
+    processStoryHeavenSerialDue().catch((error) => {
       console.error("[storyheaven] serial scheduler failed", error?.message || error);
     });
   }, config.storyHeavenSerialPollMs)
@@ -1403,7 +1420,7 @@ const storyHeavenSerialTimer = config.storyHeavenSerialEngineEnabled
 storyHeavenSerialTimer?.unref();
 if (storyHeavenSerialTimer) {
   setTimeout(() => {
-    if (!storyHeavenSerialEmergencyPaused) storyHeavenSerialService.processDue().catch(() => {});
+    if (!storyHeavenSerialEmergencyPaused) processStoryHeavenSerialDue().catch(() => {});
   }, 2_000).unref();
 }
 
@@ -1857,7 +1874,7 @@ async function listStoryHeavenFeed({ userId = null, limit = 24, genre = "" } = {
     const result = await connection.execute(
       `select * from (
          select s.id, s.slug, s.title, s.logline, s.public_synopsis, s.genre,
-                s.secondary_genre, s.genres_json, s.tags_json, s.content_rating, s.content_origin,
+                s.secondary_genre, s.genres_json, s.tags_json, s.content_rating, s.rating_detail, s.content_origin,
                 s.competition_eligible, s.ai_disclosure_version, s.cover_path,
                 s.published_at, s.view_count, p.nickname, p.display_name, p.account_type,
                 (select count(*) from storyheaven_episodes episode_count
@@ -5700,6 +5717,7 @@ function mapStoryHeavenStory(row) {
     genres,
     tags: parseJson(row.TAGS_JSON, []),
     contentRating: row.CONTENT_RATING,
+    ratingDetail: row.RATING_DETAIL || (row.CONTENT_RATING === "all" ? "all" : "15"),
     contentOrigin: row.CONTENT_ORIGIN,
     competitionEligible: row.COMPETITION_ELIGIBLE === "Y",
     aiDisclosureVersion: row.AI_DISCLOSURE_VERSION || null,

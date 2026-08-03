@@ -14,6 +14,8 @@ const stories = [{
   genres: ["fantasy", "comedy", "isekai"],
   tags: ["짐", "직업"],
   contentOrigin: "admin_seed",
+  contentRating: "teen",
+  ratingDetail: "15",
   coverPath: "/storyheaven/assets/covers/last-platform.webp",
   episodeCount: 1,
   publishedAt: "2026-08-03T10:00:00+09:00",
@@ -29,6 +31,8 @@ const stories = [{
   genres: ["판타지", "코미디"],
   tags: ["배송", "마왕성"],
   contentOrigin: "admin_seed",
+  contentRating: "teen",
+  ratingDetail: "15",
   coverPath: "",
   episodeCount: 1,
   publishedAt: "2026-08-03T09:00:00+09:00",
@@ -44,6 +48,8 @@ const stories = [{
   genres: ["감성판타지"],
   tags: ["비", "기억"],
   contentOrigin: "admin_seed",
+  contentRating: "teen",
+  ratingDetail: "15",
   coverPath: "/storyheaven/assets/covers/rain-memory-shop.webp",
   episodeCount: 2,
   publishedAt: "2026-08-02T09:00:00+09:00",
@@ -59,6 +65,8 @@ const stories = [{
   genres: ["SF", "스릴러"],
   tags: ["우주", "생존"],
   contentOrigin: "admin_seed",
+  contentRating: "teen",
+  ratingDetail: "15",
   coverPath: "/storyheaven/assets/covers/airlock-choice.webp",
   episodeCount: 4,
   publishedAt: "2026-08-01T09:00:00+09:00",
@@ -79,6 +87,25 @@ try {
     page.on("pageerror", (error) => errors.push(error.message));
     await page.addInitScript(() => {
       const session = { access_token: "library-admin-token", user: { id: "library-admin" } };
+      localStorage.setItem("storyheaven.reading-history.v1", JSON.stringify([{
+        storyId: "prologue-empty-cover",
+        title: "마왕성 공동구매의 배송사고",
+        coverPath: "",
+        genre: "fantasy · comedy",
+        episodeNo: 1,
+        episodeTitle: "프롤로그",
+        progress: 0.56,
+        updatedAt: "2026-08-04T01:00:00.000Z"
+      }, {
+        storyId: "main-space-cover",
+        title: "한 자리뿐인 우주선",
+        coverPath: "/storyheaven/assets/covers/airlock-choice.webp",
+        genre: "SF · thriller",
+        episodeNo: 4,
+        episodeTitle: "여섯 번째 표",
+        progress: 0.32,
+        updatedAt: "2026-08-04T00:00:00.000Z"
+      }]));
       window.supabase = { createClient: () => ({ auth: {
         getSession: async () => ({ data: { session } }),
         onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
@@ -95,12 +122,24 @@ try {
       if (path === "/api/storyheaven/rounds/current") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ round: null }) });
       if (path === "/api/storyheaven/stories/prologue-shared-cover/episodes") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ episodes: [{ id: "prologue-episode", episodeNo: 1, title: "프롤로그", summary: "첫 만남", estimatedReadMinutes: 3 }] }) });
       if (path === "/api/storyheaven/stories/prologue-shared-cover") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ story: stories[0] }) });
+      if (path === "/api/storyheaven/stories/main-space-cover/episodes") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ episodes: Array.from({ length: 4 }, (_, index) => ({ id: `space-${index + 1}`, episodeNo: index + 1, title: index === 0 ? "프롤로그" : `${index}화`, summary: "우주 기지의 선택", estimatedReadMinutes: 3 })) }) });
+      if (path === "/api/storyheaven/stories/main-space-cover") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ story: stories[3] }) });
       return route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ error: "not_found" }) });
     });
 
     await page.goto(`${root}/storyheaven/`, { waitUntil: "networkidle" });
     const grid = page.locator("[data-seed-feed]");
     await grid.locator(".story-card").first().waitFor({ state: "visible" });
+
+    const history = page.locator("[data-continue-reading]");
+    assert.ok(await history.isVisible(), `${viewport.name} reading history visible`);
+    assert.equal(await history.locator("h2").textContent(), "읽었던 작품 내역", `${viewport.name} reading history title`);
+    assert.equal(await history.locator(".continue-story").count(), 2, `${viewport.name} reading history entries`);
+    const historyWithoutCover = history.locator('.continue-story[href*="prologue-empty-cover"]');
+    assert.equal(await historyWithoutCover.evaluate((node) => node.classList.contains("has-no-cover")), true, `${viewport.name} no-cover history state`);
+    assert.equal(await historyWithoutCover.evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(" ").filter(Boolean).length), 1, `${viewport.name} no-cover history uses the full width`);
+    assert.equal(await historyWithoutCover.locator("[data-continue-title]").textContent(), "마왕성 공동구매의 배송사고", `${viewport.name} reading history keeps title readable`);
+    assert.match(await historyWithoutCover.locator("[data-continue-genre]").textContent(), /판타지 · 코미디/u, `${viewport.name} reading history localizes genres`);
 
     for (const id of ["prologue-shared-cover", "prologue-empty-cover"]) {
       const card = grid.locator(`.story-card[data-story-id="${id}"]`);
@@ -115,6 +154,11 @@ try {
     assert.notEqual(rainCover, spaceCover, `${viewport.name} main serials keep distinct covers`);
     assert.match(rainCover, /rain-memory-shop\.webp$/u, `${viewport.name} rain serial uses its cover`);
     assert.match(spaceCover, /airlock-choice\.webp$/u, `${viewport.name} sf serial uses its cover`);
+    const squareCover = await grid.locator('[data-story-id="main-space-cover"] .story-cover').evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    });
+    assert.ok(Math.abs(squareCover.width - squareCover.height) < 2, `${viewport.name} library cover is square`);
 
     const columns = await grid.evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(" ").filter(Boolean).length);
     assert.ok(columns >= viewport.minimumColumns, `${viewport.name} compact catalog columns`);
@@ -147,6 +191,19 @@ try {
     assert.equal(await page.locator("[data-logline]").count(), 0, `${viewport.name} detail hides the duplicate logline`);
     assert.equal(await page.locator("[data-synopsis]").count(), 1, `${viewport.name} detail shows one opening summary`);
     assert.equal(await page.locator("[data-synopsis]").textContent(), stories[0].synopsis, `${viewport.name} detail prefers the opening plot summary`);
+
+    await page.goto(`${root}/storyheaven/story/?id=main-space-cover`, { waitUntil: "networkidle" });
+    await page.locator("[data-detail]").waitFor({ state: "visible" });
+    assert.equal(await page.locator("[data-rating]").textContent(), "15세 이상", `${viewport.name} internal teen rating is a concrete age`);
+    assert.ok(await page.locator("[data-cover]").isVisible(), `${viewport.name} mature serial detail shows its cover`);
+    const detailCoverLayout = await page.evaluate(() => {
+      const cover = document.querySelector("[data-cover]").getBoundingClientRect();
+      const title = document.querySelector("[data-title]").getBoundingClientRect();
+      return { coverWidth: cover.width, coverHeight: cover.height, coverBottom: cover.bottom, titleTop: title.top };
+    });
+    assert.ok(Math.abs(detailCoverLayout.coverWidth / detailCoverLayout.coverHeight - (16 / 9)) < 0.03, `${viewport.name} detail cover keeps landscape ratio`);
+    assert.ok(detailCoverLayout.coverBottom <= detailCoverLayout.titleTop, `${viewport.name} detail cover is above the title`);
+    await page.screenshot({ path: `test-results/storyheaven-story-cover-${viewport.name}.png`, fullPage: true });
     await context.close();
   }
   console.log("StoryHeaven compact library checks passed");

@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#11131a">
     <meta name="description" content="연재를 읽고 다음 이야기가 궁금한 회차에 추천을 남기는 StoryHeaven 소설 연재 플랫폼입니다.">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://anjbgbqkeukllsdxgckv.supabase.co wss://anjbgbqkeukllsdxgckv.supabase.co https://harvard-museum-nails-mission.trycloudflare.com; img-src 'self' data: blob: https://harvard-museum-nails-mission.trycloudflare.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none';">
     <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
     <link rel="canonical" href="https://alchegit.github.io/storyheaven/">
     <title>StoryHeaven | 추천으로 이어지는 연재</title>
-    <link rel="stylesheet" href="./storyheaven.css?v=20260803-continuation1">
+    <link rel="stylesheet" href="./storyheaven.css?v=20260804-covers1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
     <script defer src="./common.js?v=20260803-emergency1"></script>
     <script defer src="./seed-library.js?v=20260730-editorial1"></script>
     <script defer src="./editorial-episodes.js?v=20260730-continuations1"></script>
     <script defer src="./reading-history.js?v=20260731-smartreader1"></script>
-    <script defer src="./storyheaven.js?v=20260803-visibility1"></script>
+    <script defer src="./storyheaven.js?v=20260804-covers1"></script>
   </head>
   <body>
     <a class="skip-link" href="#mainContent">본문으로 이동</a>
@@ -63,22 +63,13 @@
       </section>
 
       <section class="continue-section section-shell" aria-labelledby="continueTitle" data-continue-reading hidden>
-        <div class="continue-heading"><div><p class="eyebrow">CONTINUE READING</p><h2 id="continueTitle">읽던 곳에서 계속</h2></div><p>이 기기에 저장된 최근 독서 기록입니다.</p></div>
-        <a class="continue-story" href="#" data-continue-link>
-          <img alt="" data-continue-cover>
-          <div class="continue-copy">
-            <small data-continue-genre></small>
-            <h3 data-continue-title></h3>
-            <p data-continue-episode></p>
-            <div class="continue-progress" aria-hidden="true"><span data-continue-progress></span></div>
-            <strong>이어 읽기 <span aria-hidden="true">→</span></strong>
-          </div>
-        </a>
+        <div class="continue-heading"><div><p class="eyebrow">READING HISTORY</p><h2 id="continueTitle">읽었던 작품 내역</h2></div><p>이 기기에 저장된 최근 독서 기록입니다.</p></div>
+        <div class="reading-history-list" data-reading-history-list></div>
       </section>
 
       <section id="editorial" class="seed-section section-shell" aria-labelledby="seedTitle">
         <div class="section-heading seed-heading">
-          <div><p class="eyebrow">SERIAL LIBRARY</p><h2 id="seedTitle"><span class="help-topic"><span>연재 작품관</span><button class="help-button" type="button" data-help data-help-title="연재 작품관" data-help-body="프롤로그 공개 작품과 본편 연재 작품을 함께 찾는 서가입니다. 프롤로그만 공개된 작품에는 아직 표지를 붙이지 않습니다.&#10;&#10;본편 1화 이상이 공개되고 작품 전용 표지가 준비된 뒤부터 표지가 표시됩니다. 편집부 연재는 독자 주간 순위와 별도로 운영합니다.">?</button></span></h2></div>
+          <div><p class="eyebrow">SERIAL LIBRARY</p><h2 id="seedTitle"><span class="help-topic"><span>연재 작품관</span><button class="help-button" type="button" data-help data-help-title="연재 작품관" data-help-body="프롤로그 공개 작품과 본편 연재 작품을 함께 찾는 서가입니다. 프롤로그만 공개된 작품에는 아직 표지를 붙이지 않습니다.&#10;&#10;본편 3화까지 공개되면 작품 장르와 내용을 반영한 전용 표지가 자동으로 준비됩니다. 편집부 연재는 독자 주간 순위와 별도로 운영합니다.">?</button></span></h2></div>
           <p>검색과 장르, 연재 단계로 작품을 좁혀보고 최신순이나 인기순으로 골라 읽어보세요.</p>
         </div>
         <div class="serial-catalog-controls">
@@ -203,6 +194,18 @@
           </div>
         </div>
       </article>
+    </template>
+    <template id="readingHistoryTemplate">
+      <a class="continue-story" href="#" data-continue-link>
+        <img alt="" loading="lazy" data-continue-cover>
+        <div class="continue-copy">
+          <small data-continue-genre></small>
+          <h3 data-continue-title></h3>
+          <p data-continue-episode></p>
+          <div class="continue-progress" aria-hidden="true"><span data-continue-progress></span></div>
+          <strong>이어 읽기 <span aria-hidden="true">→</span></strong>
+        </div>
+      </a>
     </template>
   </body>
 </html>

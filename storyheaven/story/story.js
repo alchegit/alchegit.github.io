@@ -1,6 +1,7 @@
 (() => {
   "use strict";
 
+  const API_BASE = (document.querySelector("meta[name='storyheaven-api-base']")?.content || "").replace(/\/+$/u, "");
   const id = new URLSearchParams(location.search).get("id");
   const state = { story: null, episodes: [], current: null, editorial: null, remoteEpisodeNumbers: new Set(), local: false, serverBacked: false, progressTimer: 0, localProgressTimer: 0, storyViewRecorded: false, lastProgressAt: 0, lastProgressRatio: 0, commentParents: { story: null, episode: null } };
 
@@ -87,7 +88,7 @@
     document.querySelector("[data-title]").textContent = story.title;
     document.querySelector("[data-author]").textContent = story.author?.nickname || (isEditorialStory(story) ? "스토리천국 편집부" : "새 이야기꾼");
     document.querySelector("[data-genre]").textContent = story.genre;
-    document.querySelector("[data-rating]").textContent = story.contentRating === "all" ? "전체 이용" : `${story.contentRating || 12}세 이상`;
+    document.querySelector("[data-rating]").textContent = contentRatingLabel(story);
     document.querySelector("[data-likes]").textContent = `좋아요 ${story.likeCount || 0}`;
     document.querySelector("[data-views]").textContent = `조회 ${Number(story.viewCount || 0).toLocaleString("ko-KR")}`;
     document.querySelector("[data-comment-count='story']").textContent = `(${Number(story.commentCount || 0).toLocaleString("ko-KR")})`;
@@ -753,7 +754,17 @@
 
   function normalizeCover(value) {
     if (!value) return "";
+    if (value.startsWith("/assets/")) return API_BASE + value;
     return value.startsWith("/") ? `../..${value}` : value;
+  }
+
+  function contentRatingLabel(story) {
+    const rating = String(story?.contentRating || "").trim().toLowerCase();
+    const detail = String(story?.ratingDetail || story?.rating || "").trim().toLowerCase();
+    if (rating === "all" || detail === "all") return "전체 이용가";
+    if (["12", "15"].includes(detail)) return `${detail}세 이상`;
+    if (["12", "15"].includes(rating)) return `${rating}세 이상`;
+    return "15세 이상";
   }
 
   function isPrologueOnlyStory(story) {

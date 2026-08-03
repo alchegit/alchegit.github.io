@@ -6,7 +6,7 @@
   "description": "Oracle-backed API server for NeoKIM Webtoon Studio.",
   "scripts": {
     "start": "node src/server.mjs",
-    "check": "node --check src/server.mjs && node --check src/storyheaven.mjs && node --check src/serial-genres.mjs && node --check src/serial-engine.mjs && node --check src/serial-service.mjs && node --check scripts/run-oracle-migration.mjs && node scripts/check-storyheaven.mjs && node scripts/check-serial-engine.mjs",
+    "check": "node --check src/server.mjs && node --check src/storyheaven.mjs && node --check src/serial-genres.mjs && node --check src/serial-engine.mjs && node --check src/serial-service.mjs && node --check src/story-cover.mjs && node --check scripts/run-oracle-migration.mjs && node scripts/check-storyheaven.mjs && node scripts/check-serial-engine.mjs && node scripts/check-story-cover.mjs",
     "migrate": "node scripts/run-oracle-migration.mjs",
     "serial:resume-latest": "node scripts/resume-latest-failed-serial.mjs"
   },
@@ -18,6 +18,7 @@
     "express": "^4.22.2",
     "helmet": "^7.2.0",
     "multer": "^2.2.0",
-    "oracledb": "^6.10.0"
+    "oracledb": "^6.10.0",
+    "sharp": "^0.35.3"
   }
 }

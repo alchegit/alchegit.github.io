@@ -213,6 +213,7 @@
       state.feedStatus = "error";
     }
     renderStories();
+    renderContinueReading();
   }
 
   async function loadDiscovery() {
@@ -372,24 +373,45 @@
   }
 
   function renderContinueReading() {
-    const entry = window.StoryHeavenReading?.list()?.[0];
     const section = document.querySelector("[data-continue-reading]");
-    if (!section || !entry) return;
-    const link = section.querySelector("[data-continue-link]");
+    const list = section?.querySelector("[data-reading-history-list]");
+    const entries = window.StoryHeavenReading?.list()?.slice(0, 6) || [];
+    if (!section || !list) return;
+    list.replaceChildren(...entries.map(createReadingHistoryItem));
+    section.hidden = entries.length === 0;
+  }
+
+  function createReadingHistoryItem(entry) {
+    const fragment = document.querySelector("#readingHistoryTemplate").content.cloneNode(true);
+    const link = fragment.querySelector("[data-continue-link]");
+    const currentStory = state.stories.find((story) => String(story.id) === String(entry.storyId));
+    const coverPath = currentStory?.coverPath || entry.coverPath;
+    const progress = Math.round(Number(entry.progress || 0) * 100);
     link.href = `/storyheaven/story/?id=${encodeURIComponent(entry.storyId)}&episode=${entry.episodeNo}`;
-    const image = section.querySelector("[data-continue-cover]");
-    if (entry.coverPath) {
-      image.src = normalizeCover(entry.coverPath);
+    link.setAttribute("aria-label", `${entry.title} 이어 읽기`);
+    const image = fragment.querySelector("[data-continue-cover]");
+    if (coverPath) {
+      image.src = normalizeCover(coverPath);
       image.alt = `${entry.title} 표지`;
+      image.addEventListener("error", () => {
+        image.hidden = true;
+        link.classList.add("has-no-cover");
+      }, { once: true });
     } else {
       image.hidden = true;
       link.classList.add("has-no-cover");
     }
-    section.querySelector("[data-continue-genre]").textContent = entry.genre || "최근 읽은 연재";
-    section.querySelector("[data-continue-title]").textContent = entry.title;
-    section.querySelector("[data-continue-episode]").textContent = `${entry.episodeNo}화${entry.episodeTitle ? ` · ${entry.episodeTitle}` : ""} · ${Math.round(entry.progress * 100)}% 읽음`;
-    section.querySelector("[data-continue-progress]").style.width = `${Math.round(entry.progress * 100)}%`;
-    section.hidden = false;
+    const genres = String(entry.genre || "")
+      .split("·")
+      .map((value) => normalizeGenreName(value.trim()))
+      .filter(Boolean)
+      .join(" · ");
+    const prologue = /프롤로그/u.test(String(entry.episodeTitle || ""));
+    fragment.querySelector("[data-continue-genre]").textContent = genres || "최근 읽은 연재";
+    fragment.querySelector("[data-continue-title]").textContent = entry.title;
+    fragment.querySelector("[data-continue-episode]").textContent = `${prologue ? "프롤로그" : `${entry.episodeNo}화`}${entry.episodeTitle && !prologue ? ` · ${entry.episodeTitle}` : ""} · ${progress}% 읽음`;
+    fragment.querySelector("[data-continue-progress]").style.width = `${progress}%`;
+    return fragment;
   }
 
   function renderDiscovery() {
@@ -798,6 +820,7 @@
 
   function normalizeCover(path) {
     if (!path) return "";
+    if (path.startsWith("/assets/")) return API_BASE + path;
     if (path.startsWith("/")) return ".." + path;
     return path;
   }
