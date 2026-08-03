@@ -121,7 +121,17 @@ function architecturePolicyInstruction(type, payload = {}) {
 
 function stageInstruction(type, payload = {}) {
   if (type === "concept_gate") {
-    return "Create one commercially readable, long-running series concept. Combine the selected primary genres into one causal premise, not separate decorations: explicitly decide which genre drives the recurring episode engine and what concrete reader reward each supporting genre adds. Read schedule.policy.creativeControls.novelty as the requested novelty level, defaulting to 2 when absent. At levels 1-2, start from a proven genre engine and add only one restrained differentiator that a middle-school reader can explain in one sentence; do not force an occupation, everyday object, or magic mechanic together merely to sound new. At level 3, use one central differentiating rule with familiar emotional stakes. At levels 4-5, unusual structures are allowed only when a clear human goal, causal cost, and renewable conflict keep them readable. A title and logline must promise a story and character conflict, not merely advertise a quirky rule. The protagonist, recurring opposition, episode engine, long mystery, volume-level turns, and at least five renewable conflict sources must generate the requested full series length. Define what a reader sees, fears, laughs at, or celebrates in the prologue and what unanswered causal question compels 본편 1화. Translate every schedule.policy.creativeControls target into a sustainable episode engine rather than merely naming a tone. Familiar devices are acceptable when their consequences and character choices are specific; novelty must come from meaningful consequence, not renamed terminology or random combination.";
+    return [
+      "Create one commercially readable, long-running series concept.",
+      "The synopsis field is public Korean storefront copy shown directly to readers. Write it as 2 to 6 natural sentences and 100 to 700 characters, using only the protagonist, starting situation, central rule or ability, immediate conflict and stakes, and one unresolved hook.",
+      "Never mention total volumes or episodes, chapter cadence, a recurring or episode engine, genre functions or rewards, prologue or episode labels, future volume turns, the ending or final truth, readers, operators, writers, or production and planning terminology in synopsis.",
+      "Put the recurring engine, genre jobs, long-form structure, volume turns, renewable conflicts, planned revelations, and ending boundaries only in internalPlanningSummary. internalPlanningSummary is a private writer-planning field and must never be copied into or paraphrased as operational language in synopsis.",
+      "Combine the selected primary genres into one causal premise, not separate decorations: explicitly decide which genre drives the recurring episode engine and what concrete reader reward each supporting genre adds.",
+      "Read schedule.policy.creativeControls.novelty as the requested novelty level, defaulting to 2 when absent. At levels 1-2, start from a proven genre engine and add only one restrained differentiator that a middle-school reader can explain in one sentence; do not force an occupation, everyday object, or magic mechanic together merely to sound new. At level 3, use one central differentiating rule with familiar emotional stakes. At levels 4-5, unusual structures are allowed only when a clear human goal, causal cost, and renewable conflict keep them readable.",
+      "A title and logline must promise a story and character conflict, not merely advertise a quirky rule. The protagonist, recurring opposition, episode engine, long mystery, volume-level turns, and at least five renewable conflict sources must generate the requested full series length.",
+      "Define privately what a reader sees, fears, laughs at, or celebrates in the prologue and what unanswered causal question compels 본편 1화. Translate every schedule.policy.creativeControls target into a sustainable episode engine rather than merely naming a tone.",
+      "Familiar devices are acceptable when their consequences and character choices are specific; novelty must come from meaningful consequence, not renamed terminology or random combination."
+    ].join(" ");
   }
   if (type === "build_bible") {
     const plan = normalizePromptSeriesPlan(payload);
@@ -149,7 +159,8 @@ function stageInstruction(type, payload = {}) {
 
 function resultContract(type, payload = {}) {
   if (type === "concept_gate") return {
-    title: "2-80자", logline: "20-220자", synopsis: "100-2000자",
+    title: "2-80자", logline: "20-220자", synopsis: "독자 공개용 한국어 100-700자, 2-6문장",
+    internalPlanningSummary: "비공개 작가용 장기 기획 100-4000자",
     genres: ["1-5개"], tags: ["0-5개"], rating: "all|teen",
     readerPromise: "20-300자", familiarPleasure: "10-300자",
     novelTwist: "10-300자", targetAge: "all|teen"

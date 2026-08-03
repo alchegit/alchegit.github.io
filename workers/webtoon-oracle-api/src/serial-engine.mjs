@@ -10,6 +10,22 @@ const JOB_TYPES = new Set([
   "rewrite_draft"
 ]);
 
+const STORYHEAVEN_PUBLIC_SYNOPSIS_META_PATTERNS = Object.freeze([
+  /\d+\s*(?:권|화|회차)/iu,
+  /(?:한|두|세|네|다섯|여섯|일곱|여덟|아홉|열)\s*권\s*(?:동안|짜리|분량|구성|규모|에\s*걸쳐)/iu,
+  /(?:전체|총)\s*(?:권수|화수|회차)/iu,
+  /권당\s*\d+\s*(?:화|회차)/iu,
+  /(?:매\s*(?:화|회|회차)|회차마다)/iu,
+  /(?:반복|서사|사건|에피소드|연재)\s*엔진/iu,
+  /(?:프롤로그|본편\s*\d*\s*화|첫\s*(?:화|회차)|다음\s*(?:화|회차)|회차\s*(?:구성|전개|약속))/iu,
+  /(?:초반|중반|후반|마지막)\s*(?:권|부)(?:\s*(?:에는|에서|까지|부터))?/iu,
+  /(?:장기\s*(?:연재|전개|구조|설계)|권별\s*(?:전개|구성|갈등)|향후\s*(?:전개|계획))/iu,
+  /(?:독자|운영자|작가)\s*(?:는|가|에게|를)/iu,
+  /(?:결말에서|마지막에는|최종적으로)/iu,
+  /(?:판타지|코미디|로맨스|액션|미스터리|스릴러|공포|에스에프|sf|무협|드라마)(?:는|가|의)\s*.{0,40}(?:담당|보상|엔진|역할|작동)/iu,
+  /(?:작품|소설|이야기)(?:의|은|는)\s*(?:반복|장기|회차|권별|전체)\s*(?:구조|전개|엔진|설계)/iu
+]);
+
 export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   conceptPolicy: 4_000,
   cadenceMinutesMin: 15,
@@ -437,7 +453,7 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   const jobType = String(jobTypeValue || "").trim();
   if (!JOB_TYPES.has(jobType)) throw new Error("serial_unknown_job_type");
   const source = object(value);
-  if (jobType === "concept_gate") return normalizeConcept(source);
+  if (jobType === "concept_gate") return normalizeConcept(source, options);
   if (jobType === "build_bible") return normalizeBible(source, options);
   if (jobType === "build_arc") return normalizeArc(source, options);
   if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
@@ -560,11 +576,20 @@ export function calculateStoryHeavenReaderExperienceScore(scores = {}) {
   return Number(score.toFixed(1));
 }
 
-function normalizeConcept(source) {
+function normalizeConcept(source, options = {}) {
+  const legacyConceptCopy = options.allowLegacyConceptCopy === true;
   const concept = {
     title: requiredText(source.title, 80, 2, "serial_concept_title_invalid"),
     logline: requiredText(source.logline, 220, 20, "serial_concept_logline_invalid"),
-    synopsis: requiredText(source.synopsis, 2_000, 100, "serial_concept_synopsis_invalid"),
+    synopsis: legacyConceptCopy
+      ? requiredText(source.synopsis, 2_000, 100, "serial_concept_synopsis_invalid")
+      : normalizePublicSynopsis(source.synopsis),
+    internalPlanningSummary: requiredText(
+      source.internalPlanningSummary || (legacyConceptCopy ? source.synopsis : ""),
+      4_000,
+      100,
+      "serial_internal_planning_summary_invalid"
+    ),
     genres: requiredList(source.genres, { min: 1, max: 5, itemMax: 40 }, "serial_concept_genres_invalid"),
     tags: stringList(source.tags, { max: 5, itemMax: 30 }),
     rating: ["all", "teen"].includes(source.rating) ? source.rating : "teen",
@@ -574,6 +599,17 @@ function normalizeConcept(source) {
     targetAge: ["all", "teen"].includes(source.targetAge) ? source.targetAge : "teen"
   };
   return concept;
+}
+
+function normalizePublicSynopsis(value) {
+  const synopsis = requiredText(value, 2_000, 100, "serial_concept_synopsis_invalid");
+  if ([...synopsis].length > 700) throw new Error("serial_concept_synopsis_invalid");
+  const sentenceCount = synopsis.match(/[.!?]+/gu)?.length || 1;
+  if (sentenceCount < 2 || sentenceCount > 6) throw new Error("serial_public_synopsis_sentence_count_invalid");
+  if (STORYHEAVEN_PUBLIC_SYNOPSIS_META_PATTERNS.some((pattern) => pattern.test(synopsis))) {
+    throw new Error("serial_public_synopsis_meta_exposed");
+  }
+  return synopsis;
 }
 
 function normalizeBible(source, options = {}) {

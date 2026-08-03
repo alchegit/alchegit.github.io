@@ -83,6 +83,7 @@ assert.match(serialOperatorHtml, /프롤로그 등록 전 확인/u, "pre-publica
 assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
 assert.match(serialOperatorSource, /지적 부분 다시 보완/u, "quality-held prologues must expose targeted rewrite recovery");
 assert.match(serialOperatorSource, /현재 원고 승인/u, "quality-held prologues must expose an operator approval path");
+assert.match(serialOperatorSource, /독자용 작품 소개에 내부 기획 표현이 포함됨/u, "public synopsis validation failures must be readable to operators");
 assert.match(serialOperatorSource, /중지 후 삭제/u, "active schedules must expose stop-and-delete");
 assert.match(serialServiceSource, /async function archiveSchedule/u, "schedule deletion must archive durable settings");
 assert.match(serialServiceSource, /error_code = 'operator_schedule_deleted'/u, "schedule deletion must revoke active jobs");
@@ -366,6 +367,7 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   title: "마지막 시간버스",
   logline: "죽은 사람의 마지막 목적지를 지나는 심야버스에서 신입 기사가 사라진 누나의 승차 기록을 발견한다.",
   synopsis: "심야 막차 이후에만 운행하는 0번 버스는 죽은 사람의 미련을 목적지까지 데려다준다. 신입 기사 도윤은 승객을 내려주며 누나의 실종을 추적하고, 정류장마다 자신의 기억 하나를 요금으로 내야 한다는 규칙을 알아낸다.",
+  internalPlanningSummary: "도윤은 승객의 사연을 해결할 때마다 누나의 실종과 0번 노선의 기원을 잇는 단서를 얻는다. 승객의 미련, 기억 요금의 부작용, 노선을 숨기려는 운수 회사, 산 사람의 불법 승차, 도윤의 사라지는 정체성을 장기 갈등으로 교차시키며 최종 진실은 비공개 설정집에서만 관리한다.",
   genres: ["판타지", "현대판타지", "헌터·던전"],
   tags: ["시간버스", "기억"],
   rating: "teen",
@@ -375,6 +377,18 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   targetAge: "teen"
 });
 assert.equal(concept.genres.length, 3);
+assert.match(concept.internalPlanningSummary, /장기 갈등/u);
+const metaExposedSynopsis = "주인공은 왕국의 재난 훈련장에서 사람들을 구하며 낯선 규칙을 배운다. 매 화 새로운 사고를 수습하는 것이 판타지의 반복 엔진이며, 10권 동안 왕국의 비밀을 밝힌다. 장기 전개에서는 동료와 적의 관계가 단계별로 달라지고 마지막에는 전쟁의 진실을 모두 공개한다.";
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  synopsis: metaExposedSynopsis
+}), /serial_public_synopsis_meta_exposed/u);
+const resumedLegacyConcept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  synopsis: metaExposedSynopsis,
+  internalPlanningSummary: ""
+}, { allowLegacyConceptCopy: true });
+assert.match(resumedLegacyConcept.internalPlanningSummary, /10권 동안/u);
 
 const testSeriesPlan = { totalVolumes: 10, episodesPerVolume: 25, totalMainEpisodes: 250 };
 const conflictSources = Array.from({ length: 5 }, (_, index) => ({

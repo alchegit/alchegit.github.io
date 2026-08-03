@@ -83,6 +83,10 @@ const conceptPrompt = buildSerialPrompt({
 assert.match(conceptPrompt, /defaulting to 2 when absent/u);
 assert.match(conceptPrompt, /add only one restrained differentiator/u);
 assert.match(conceptPrompt, /not merely advertise a quirky rule/u);
+assert.match(conceptPrompt, /public Korean storefront copy shown directly to readers/u);
+assert.match(conceptPrompt, /Never mention total volumes or episodes/u);
+assert.match(conceptPrompt, /only in internalPlanningSummary/u);
+assert.match(conceptPrompt, /비공개 작가용 장기 기획 100-4000자/u);
 
 const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible" });
 assert.match(biblePrompt, /numeric seriesPlan is not a long-form plan by itself/u);

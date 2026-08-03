@@ -1035,6 +1035,9 @@ export function createStoryHeavenSerialService({
       title: input.concept?.title || story.TITLE,
       logline: input.concept?.logline || story.LOGLINE,
       synopsis: input.concept?.synopsis || story.PUBLIC_SYNOPSIS,
+      internalPlanningSummary: input.concept?.internalPlanningSummary
+        || input.concept?.synopsis
+        || story.PUBLIC_SYNOPSIS,
       genres: input.concept?.genres || parseJson(story.GENRES_JSON, [story.GENRE]),
       tags: input.concept?.tags || parseJson(story.TAGS_JSON, []),
       rating: story.CONTENT_RATING === "all" ? "all" : "teen",
@@ -1042,7 +1045,7 @@ export function createStoryHeavenSerialService({
       familiarPleasure: input.concept?.familiarPleasure || "장르 독자가 기대하는 사건 해결과 성장의 즐거움",
       novelTwist: input.concept?.novelTwist || "작품 고유의 세계 규칙이 인물의 선택마다 다른 대가를 만든다.",
       targetAge: story.CONTENT_RATING === "all" ? "all" : "teen"
-    });
+    }, { allowLegacyConceptCopy: true });
     const conceptWithPlan = { ...concept, seriesPlan: normalizeSeriesPlan(input.seriesPlan) };
     await upsertBibleConcept(connection, story.ID, conceptWithPlan);
     const run = await createRun(connection, {
