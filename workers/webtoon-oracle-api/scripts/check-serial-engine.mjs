@@ -57,6 +57,7 @@ assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate r
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
 assert.match(serialServiceSource, /schedule\.schedule_status/u, "queue API must expose the schedule state that can block a waiting job");
 assert.match(serialServiceSource, /set schedule_status = 'active', updated_at = systimestamp/u, "queue retry must reactivate its paused schedule");
+assert.match(serialServiceSource, /const releaseAt = dateOrNull\(run\.RELEASE_AT\) \|\| new Date\(\)/u, "draft approval must convert fetched Oracle date strings before rebinding release_at");
 assert.match(retryQueueRouteSource, /storyHeavenSerialEmergencyPaused/u, "queue retry must reject a globally paused system explicitly");
 assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidden historical logs for full-view audits");
 assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");

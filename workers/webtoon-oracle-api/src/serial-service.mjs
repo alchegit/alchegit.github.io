@@ -2531,7 +2531,7 @@ export function createStoryHeavenSerialService({
         { story_id: run.STORY_ID, reveal_key: reveal.key, reveal_status: reveal.status, source_episode_no: run.EPISODE_NO }
       );
     }
-    const releaseAt = run.RELEASE_AT || new Date();
+    const releaseAt = dateOrNull(run.RELEASE_AT) || new Date();
     await connection.execute(
       `insert into storyheaven_publication_queue (
         id, run_id, story_id, draft_id, episode_no, queue_status, release_at
