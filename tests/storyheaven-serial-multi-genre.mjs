@@ -17,6 +17,7 @@ try {
     const canceled = [];
     const logCanceled = [];
     const retries = [];
+    const queueRetries = [];
     const systemRequests = [];
     const firstEpisodeResumes = [];
     const runningSchedule = {
@@ -37,6 +38,7 @@ try {
       conceptPolicy: "test"
     };
     let waitingQueueVisible = true;
+    let waitingQueueScheduleStatus = "paused";
     let cooldownMode = false;
     let failureMode = false;
     let systemPaused = false;
@@ -67,7 +69,7 @@ try {
           updatedAt: cooldownMode ? new Date().toISOString() : "2026-07-31T05:01:00.000Z",
           items: cooldownMode || failureMode ? [] : [
             { id: "queue-running", scheduleId: "schedule-running", status: systemPaused ? "waiting" : "running", queuePosition: 0, cancelable: false, initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "write_draft", episodeNo: 2, completedJobs: 8, totalJobs: 9, elapsedSeconds: 246, requestedAt: "2026-07-31T04:56:00.000Z" },
-            ...(waitingQueueVisible ? [{ id: "queue-a", status: "waiting", queuePosition: 1, cancelable: true, workLabel: "미스터리 · 4화", stage: "write_draft", episodeNo: 4, completedJobs: 1, totalJobs: 3, requestedAt: "2026-08-02T00:04:00" }] : [])
+            ...(waitingQueueVisible ? [{ id: "queue-a", scheduleId: "schedule-paused", scheduleStatus: systemPaused ? "paused" : waitingQueueScheduleStatus, status: "waiting", queuePosition: 1, cancelable: true, workLabel: "미스터리 · 4화", stage: "write_draft", episodeNo: 4, completedJobs: 1, totalJobs: 3, requestedAt: "2026-08-02T00:04:00" }] : [])
           ],
           lastFailed: !cooldownMode && failureMode ? { id: "failed-run", scheduleId: "schedule-running", status: "error", initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "concept_gate", failureCode: "codex_model_unavailable", completedAt: "2026-07-31T04:51:00.000Z", completedJobs: 0, totalJobs: 1 } : null,
           attention: !cooldownMode && failureMode ? [{ id: "failed-run", scheduleId: "schedule-running", status: "error", initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "concept_gate", failureCode: "codex_model_unavailable", completedAt: "2026-07-31T04:51:00.000Z", completedJobs: 0, totalJobs: 1 }] : [],
@@ -103,6 +105,12 @@ try {
         canceled.push(path);
         waitingQueueVisible = false;
         return json({ canceled: true, queueGroupId: "queue-a" });
+      }
+      if (path === "/api/storyheaven/operator/serial-engine/queue/queue-a/retry" && request.method() === "POST") {
+        queueRetries.push(request.postDataJSON());
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        waitingQueueScheduleStatus = "active";
+        return json({ resumed: true, reused: true, scheduleActivated: true, waitingCount: 1, nextCheckSeconds: 10, queueGroupId: "queue-a" }, 202);
       }
       if (path === "/api/storyheaven/operator/serial-engine/queue/titleless-stopped/hide" && request.method() === "POST") {
         logCanceled.push(path);
@@ -208,6 +216,17 @@ try {
     assert.equal(await page.locator("[data-status-waiting]").textContent(), "1", `${viewport.name} waiting count is explicit`);
     assert.equal(await page.locator("[data-status-complete]").textContent(), "1", `${viewport.name} completed count is explicit`);
     assert.match(await page.locator("[data-system-state-title]").textContent(), /제작 중/u, `${viewport.name} system panel shows live state`);
+    const waitingRow = page.locator(".queue-row.waiting");
+    assert.match(await waitingRow.textContent(), /연결된 자동 연재 설정이 중지/u, `${viewport.name} explains why paused work cannot start`);
+    const queueResume = waitingRow.locator(".queue-retry");
+    assert.equal(await queueResume.textContent(), "설정을 시작하고 재개", `${viewport.name} paused retry names schedule activation`);
+    await queueResume.click();
+    assert.equal(await queueResume.getAttribute("aria-busy"), "true", `${viewport.name} resume button reacts immediately`);
+    assert.match(await queueResume.textContent(), /재개 요청 중/u, `${viewport.name} resume button names the in-flight request`);
+    assert.match(await waitingRow.locator("[data-queue-feedback]").textContent(), /서버에 재개 요청/u, `${viewport.name} resume request is visible inside the work row`);
+    await page.waitForFunction(() => document.querySelector(".queue-row.waiting [data-queue-feedback]")?.textContent.includes("재개 요청이 접수됐습니다"));
+    assert.deepEqual(queueRetries.at(-1), { force: false }, `${viewport.name} queue retry reaches the backend`);
+    assert.match(await page.locator(".queue-row.waiting [data-queue-feedback]").textContent(), /연결 설정을 다시 시작했고/u, `${viewport.name} confirms schedule activation and worker wait`);
     await page.locator("[data-pause-system]").click();
     await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("전체 중지됨"));
     assert.match(await page.locator("[data-common-toast]").textContent(), /즉시 전체 중지.*작성 중 1건/u, `${viewport.name} emergency pause confirms running work interruption`);

@@ -1156,6 +1156,35 @@
   font-size: 0.86rem;
 }
 
+.queue-row .queue-action-feedback {
+  margin-top: 9px;
+  padding: 8px 10px;
+  border-left: 4px solid #3b73d9;
+  color: #24354d;
+  background: #edf4ff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.queue-row .queue-action-feedback.is-success {
+  border-color: #087c5d;
+  color: #075c46;
+  background: #dcf9ef;
+}
+
+.queue-row .queue-action-feedback.is-warning {
+  border-color: #bc7d00;
+  color: #664300;
+  background: #fff2c7;
+}
+
+.queue-row .queue-action-feedback.is-error {
+  border-color: #c7374b;
+  color: #7d1425;
+  background: #ffe5e9;
+}
+
 .queue-row-actions {
   display: flex;
   align-items: center;
@@ -1311,6 +1340,28 @@
 .queue-cancel,
 .queue-row .queue-retry {
   white-space: nowrap;
+}
+
+.button.is-busy {
+  cursor: progress;
+  opacity: 0.82;
+}
+
+.button.is-busy::before {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 7px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  content: "";
+  vertical-align: -0.08em;
+  animation: serial-button-spin 0.7s linear infinite;
+}
+
+@keyframes serial-button-spin {
+  to { transform: rotate(360deg); }
 }
 
 .schedule-row {

@@ -109,6 +109,7 @@ export function createStoryHeavenSerialService({
                   json_value(serial_run.input_json, '$.targetEpisodeCount' returning number null on error) as run_target_episode_count,
                   story.title as story_title,
                   schedule.primary_genre, schedule.primary_genres_json,
+                  schedule.schedule_status,
                   schedule.target_episode_count,
                   schedule.subgenres_by_genre_json,
                   (select count(*) from storyheaven_serial_jobs job
@@ -254,17 +255,42 @@ export function createStoryHeavenSerialService({
     return withTransaction(async (connection) => {
       const state = await selectOne(connection,
         `select
+            count(distinct serial_run.id) as run_count,
             sum(case when job.job_status in ('queued', 'running', 'retry_wait') then 1 else 0 end) as active_count,
             sum(case when job.job_status in ('queued', 'retry_wait') then 1 else 0 end) as waiting_count,
             sum(case when job.job_status = 'running' then 1 else 0 end) as running_count,
-            sum(case when job.job_status = 'error' then 1 else 0 end) as error_count
+            sum(case when job.job_status = 'error' then 1 else 0 end) as error_count,
+            max(serial_run.schedule_id) as schedule_id,
+            max(schedule.schedule_status) as schedule_status
            from storyheaven_serial_runs serial_run
            left join storyheaven_serial_jobs job on job.run_id = serial_run.id
+           left join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
           where serial_run.queue_group_id = :queue_group_id
             and serial_run.queue_canceled_at is null`,
         { queue_group_id: queueGroupId });
-      if (!state) throw failure("serial_queue_not_found", 404);
-      if (Number(state.ACTIVE_COUNT || 0) > 0) {
+      if (!state || Number(state.RUN_COUNT || 0) < 1) throw failure("serial_queue_not_found", 404);
+      const activeCount = Number(state.ACTIVE_COUNT || 0);
+      const errorCount = Number(state.ERROR_COUNT || 0);
+      if (activeCount < 1 && errorCount < 1) throw failure("serial_queue_not_retryable", 409);
+
+      const scheduleId = state.SCHEDULE_ID || null;
+      const scheduleStatus = state.SCHEDULE_STATUS || null;
+      if (scheduleId && !scheduleStatus) throw failure("serial_queue_schedule_unavailable", 409);
+      if (scheduleStatus === "archived") throw failure("serial_queue_schedule_archived", 409);
+
+      let scheduleActivated = false;
+      if (scheduleId && scheduleStatus === "paused") {
+        const activated = await connection.execute(
+          `update storyheaven_serial_schedules
+              set schedule_status = 'active', updated_at = systimestamp
+            where id = :schedule_id
+              and schedule_status = 'paused'`,
+          { schedule_id: scheduleId }
+        );
+        scheduleActivated = Number(activated.rowsAffected || 0) > 0;
+        if (!scheduleActivated) throw failure("serial_queue_schedule_unavailable", 409);
+      }
+      if (activeCount > 0) {
         let forceReleased = 0;
         if (force && Number(state.RUNNING_COUNT || 0) > 0) {
           const released = await connection.execute(
@@ -314,10 +340,13 @@ export function createStoryHeavenSerialService({
           resumed: true,
           reused: true,
           forceReleased: forceReleased > 0,
+          scheduleActivated,
+          scheduleId,
+          waitingCount: Number(state.WAITING_COUNT || 0),
+          nextCheckSeconds: 10,
           queueGroupId
         };
       }
-      if (Number(state.ERROR_COUNT || 0) < 1) throw failure("serial_queue_not_retryable", 409);
 
       await connection.execute(
         `update storyheaven_serial_jobs
@@ -339,7 +368,15 @@ export function createStoryHeavenSerialService({
             and run_status = 'error'`,
         { queue_group_id: queueGroupId }
       );
-      return { resumed: true, reused: false, queueGroupId };
+      return {
+        resumed: true,
+        reused: false,
+        scheduleActivated,
+        scheduleId,
+        waitingCount: errorCount,
+        nextCheckSeconds: 10,
+        queueGroupId
+      };
     });
   }
 
@@ -3198,6 +3235,7 @@ export function summarizeQueue(rows = [], timingRows = []) {
     const group = groups.get(id) || {
       id,
       scheduleId: row.SCHEDULE_ID || null,
+      scheduleStatus: row.SCHEDULE_STATUS || null,
       storyId: null,
       title: "새 작품 기획",
       primaryGenres: [],
@@ -3223,6 +3261,7 @@ export function summarizeQueue(rows = [], timingRows = []) {
       hasBlocked: false
     };
     group.latestRunId ||= row.ID || null;
+    group.scheduleStatus ||= row.SCHEDULE_STATUS || null;
     group.storyId ||= row.STORY_ID || null;
     if (row.STORY_TITLE) group.title = row.STORY_TITLE;
     if (!group.primaryGenres.length) {
@@ -3407,6 +3446,7 @@ function queueGroupView(group, overrides) {
     id: group.id,
     latestRunId: group.latestRunId,
     scheduleId: group.scheduleId,
+    scheduleStatus: group.scheduleStatus,
     storyId: group.storyId,
     title: group.title,
     titlePending,

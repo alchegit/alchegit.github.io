@@ -40,6 +40,7 @@
   const draftStorageKey = "storyheaven.operator.serial-draft.v9";
   const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
+  const queueActionFeedback = new Map();
   let draftReady = false;
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
@@ -147,7 +148,7 @@
       clearInterval(queueRefreshTimer);
       queueRefreshTimer = window.setInterval(() => {
         if (!document.hidden) refreshSchedules().catch(markQueueRefreshFailure);
-      }, 10_000);
+      }, 6_000);
     } catch (error) {
       showAccess();
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -452,7 +453,7 @@
       return StoryHeavenCommon.toast("선택한 장르마다 세부장르를 한 개 이상 골라주세요.");
     }
     const button = selectors.scheduleForm.querySelector("button[type='submit']");
-    button.disabled = true;
+    setButtonBusy(button, true, "연재 등록 중...");
     try {
       const form = new FormData(selectors.scheduleForm);
       const primaryGenres = [...selectedPrimaryGenres];
@@ -500,7 +501,7 @@
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
-      button.disabled = false;
+      setButtonBusy(button, false);
     }
   }
 
@@ -724,18 +725,22 @@
 
   async function guardedSystemButton(button, handler) {
     const controls = [selectors.systemResume, selectors.systemPause, selectors.systemStart].filter(Boolean);
+    setButtonBusy(button, true, busyButtonLabel(button.textContent));
     controls.forEach((control) => { control.disabled = true; });
     try {
-      await handler();
+      await handler(button);
+    } catch (error) {
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
+      setButtonBusy(button, false);
       renderSystemState(latestSerialSnapshot);
     }
   }
 
-  async function resumeSystemFromPanel() {
+  async function resumeSystemFromPanel(control) {
     const target = findSystemResumeTarget();
     if (target) {
-      await resumeQueue(target.item, { force: target.force });
+      await resumeQueue(target.item, { force: target.force, control });
       return;
     }
     await controlSerialSystem("resume");
@@ -810,7 +815,7 @@
       if (item.attentionType === "quality_hold" && item.latestRunId) {
         actions.append(actionButton("검수 결과 보기", "queue-retry", () => loadRun(item.latestRunId)));
       } else {
-        actions.append(actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(item)));
+        actions.append(actionButton("중단 지점부터 재개", "queue-retry", (button) => resumeQueue(item, { control: button })));
       }
       if (item.scheduleId) actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(item.scheduleId)));
       row.append(copy, actions);
@@ -862,7 +867,7 @@
           actions.append(actionButton("현재 원고 승인", "warning", () => resolveQualityHold(story, "approve")));
         }
       } else if (state === "error" && story.queueGroupId) {
-        actions.append(actionButton("오류 단계 재개", "queue-retry", () => resumeQueue({ ...story, id: story.queueGroupId })));
+        actions.append(actionButton("오류 단계 재개", "queue-retry", (button) => resumeQueue({ ...story, id: story.queueGroupId }, { control: button })));
       } else if (["draft", "missing"].includes(state)) {
         actions.append(actionButton(state === "draft" ? "프롤로그 제작 다시 요청" : "프롤로그 제작 시작", "queue-retry", () => resumeFirstEpisodeStory(story)));
       }
@@ -1101,7 +1106,7 @@
       }
       const actions = document.createElement("div");
       actions.className = "run-history-actions";
-      if (run.retryable) actions.append(actionButton("중단 단계 재개", "queue-retry", () => resumeQueue(run)));
+      if (run.retryable) actions.append(actionButton("중단 단계 재개", "queue-retry", (button) => resumeQueue(run, { control: button })));
       if (run.status === "blocked" && run.latestRunId) actions.append(actionButton("검수 결과 보기", "secondary", () => loadRun(run.latestRunId)));
       else if (run.latestRunId) actions.append(actionButton("상세 로그 보기", "secondary", () => loadRun(run.latestRunId)));
       if (canCancelHistoryRun(run)) actions.append(actionButton("로그 숨김", "history-cancel queue-cancel", () => hideHistoryRun(run)));
@@ -1216,7 +1221,7 @@
     if (active) {
       const actions = document.createElement("div");
       actions.className = "queue-live-actions";
-      actions.append(actionButton("멈춘 단계 다시 시작", "secondary queue-retry", () => resumeQueue(active, { force: true })));
+      actions.append(actionButton("멈춘 단계 다시 시작", "secondary queue-retry", (button) => resumeQueue(active, { force: true, control: button })));
       selectors.queueLive.append(actions, renderProductionProgress(active));
     }
   }
@@ -1275,7 +1280,7 @@
     copy.append(title, detail);
     const action = failedWork.attentionType === "quality_hold" && failedWork.latestRunId
       ? actionButton("검수 결과 보기", "queue-retry", () => loadRun(failedWork.latestRunId))
-      : actionButton("중단 지점부터 재개", "queue-retry", () => resumeQueue(failedWork));
+      : actionButton("중단 지점부터 재개", "queue-retry", (button) => resumeQueue(failedWork, { control: button }));
     wrapper.append(copy, action);
     return wrapper;
   }
@@ -1284,20 +1289,100 @@
     if (!failedWork?.id) return retrySchedule(failedWork?.scheduleId);
     const force = options.force === true;
     if (force && !window.confirm("현재 작업이 실제로 멈춘 것을 확인했나요? 진행 중인 AI 작업이 살아 있다면 같은 단계가 한 번 더 실행될 수 있습니다.")) return;
+    const requestedAt = Date.now();
+    if (latestSerialSnapshot.emergencyPaused) {
+      const message = "자동 연재가 전체 중지 상태입니다. 상단의 ‘다시 시작’을 누른 뒤 이 작업을 재개해주세요.";
+      setQueueFeedback(failedWork.id, message, "error", requestedAt);
+      StoryHeavenCommon.toast(message);
+      return;
+    }
+    setQueueFeedback(failedWork.id, "서버에 재개 요청을 보내는 중입니다.", "working", requestedAt);
     try {
       const result = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/queue/${encodeURIComponent(failedWork.id)}/retry`, {
         method: "POST",
         body: { force }
       });
+      setQueueFeedback(
+        failedWork.id,
+        result.scheduleActivated
+          ? "중지된 연결 설정을 다시 시작했습니다. 작업 시작 여부를 확인하는 중입니다."
+          : "서버가 재개 요청을 접수했습니다. 작업 시작 여부를 확인하는 중입니다.",
+        "working",
+        requestedAt
+      );
       await refreshSchedules();
+      const current = (latestSerialSnapshot.queue?.items || []).find((item) => item.id === failedWork.id);
+      if (current?.status === "running") {
+        setQueueFeedback(failedWork.id, "작업자가 요청을 받아 현재 단계를 시작했습니다.", "success", requestedAt);
+      } else if (current) {
+        setQueueFeedback(
+          failedWork.id,
+          `${result.scheduleActivated ? "연결 설정을 다시 시작했고, " : ""}재개 요청이 접수됐습니다. 작업자가 가져가기를 기다리는 중이며 보통 ${Number(result.nextCheckSeconds || 10)}초 안에 갱신됩니다.`,
+          "success",
+          requestedAt
+        );
+      }
       StoryHeavenCommon.toast(result.forceReleased
         ? "멈춘 단계의 잠금을 풀고 다시 대기열에 넣었습니다."
+        : result.scheduleActivated
+          ? "중지된 연결 설정을 다시 시작하고 현재 단계를 대기열에 넣었습니다."
         : result.reused
           ? "대기 중인 단계를 지금 다시 확인하도록 요청했습니다."
           : "실패한 단계부터 작업을 재개했습니다.");
     } catch (error) {
-      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+      const message = StoryHeavenCommon.readableError(error);
+      setQueueFeedback(failedWork.id, `재개하지 못했습니다. ${message}`, "error", requestedAt);
+      StoryHeavenCommon.toast(message);
     }
+  }
+
+  function setQueueFeedback(queueId, message, tone, requestedAt = Date.now()) {
+    if (!queueId) return;
+    queueActionFeedback.set(queueId, { message, tone, requestedAt });
+    const row = [...(selectors.queueList?.querySelectorAll("[data-queue-id]") || [])]
+      .find((item) => item.dataset.queueId === queueId);
+    const feedback = row?.querySelector("[data-queue-feedback]");
+    if (!feedback) return;
+    feedback.className = `queue-action-feedback is-${tone}`;
+    feedback.textContent = message;
+    feedback.hidden = false;
+  }
+
+  function queueFeedbackState(item) {
+    const stored = queueActionFeedback.get(item.id);
+    if (stored) {
+      if (item.status === "running") {
+        return { message: "작업자가 요청을 받아 현재 단계를 시작했습니다.", tone: "success" };
+      }
+      const precedingWork = (latestSerialSnapshot.queue?.items || [])
+        .find((candidate) => candidate.id !== item.id && candidate.status === "running");
+      if (stored.tone !== "error" && precedingWork) {
+        return {
+          message: `재개 요청이 접수됐습니다. 앞 작업 ‘${workDisplayTitle(precedingWork)}’이 끝나면 순서대로 시작합니다.`,
+          tone: "success"
+        };
+      }
+      if (stored.tone !== "error" && Date.now() - stored.requestedAt > 20_000) {
+        return {
+          message: "서버는 재개 요청을 접수했지만 작업자가 아직 시작하지 않았습니다. 연결 설정과 작업 서버 상태를 확인해주세요.",
+          tone: "warning"
+        };
+      }
+      return stored;
+    }
+    if (latestSerialSnapshot.emergencyPaused) {
+      return {
+        message: "전체 자동 연재가 중지되어 이 작업도 시작할 수 없습니다. 상단의 ‘다시 시작’을 먼저 눌러주세요.",
+        tone: "warning"
+      };
+    }
+    if (item.scheduleStatus === "paused") {
+      return {
+        message: "연결된 자동 연재 설정이 중지되어 작업자가 가져갈 수 없습니다. 아래 버튼을 누르면 설정을 다시 시작하고 현재 단계부터 이어갑니다.",
+        tone: "warning"
+      };
+    }
+    return null;
   }
 
   async function retrySchedule(scheduleId) {
@@ -1330,6 +1415,7 @@
   function queueRow(item) {
     const row = document.createElement("article");
     row.className = `queue-row ${item.status}`;
+    row.dataset.queueId = item.id;
     const position = document.createElement("span");
     position.className = "queue-position";
     position.textContent = item.status === "running" ? "제작 중" : `대기 ${item.queuePosition}번`;
@@ -1339,12 +1425,25 @@
     title.textContent = workDisplayTitle(item);
     const stage = document.createElement("p");
     stage.textContent = `${stageLabel(item.stage)} · AI 작업 ${item.completedJobs}/${Math.max(item.totalJobs, item.completedJobs)}회 · ${item.status === "running" ? `경과 ${formatDuration(item.elapsedSeconds)}` : `${formatDate(item.requestedAt)} 요청`}`;
-    copy.append(title, stage);
+    const feedbackState = queueFeedbackState(item);
+    const feedback = document.createElement("p");
+    feedback.dataset.queueFeedback = "";
+    feedback.className = `queue-action-feedback${feedbackState ? ` is-${feedbackState.tone}` : ""}`;
+    feedback.textContent = feedbackState?.message || "";
+    feedback.hidden = !feedbackState;
+    feedback.setAttribute("role", "status");
+    feedback.setAttribute("aria-live", "polite");
+    copy.append(title, stage, feedback);
     row.append(position, copy);
     const actions = document.createElement("div");
     actions.className = "queue-row-actions";
     if (item.status !== "running") {
-      actions.append(actionButton("지금 재개", "queue-retry", () => resumeQueue(item)));
+      const label = latestSerialSnapshot.emergencyPaused
+        ? "전체 시작 후 재개"
+        : item.scheduleStatus === "paused"
+          ? "설정을 시작하고 재개"
+          : "지금 재개";
+      actions.append(actionButton(label, "queue-retry", (button) => resumeQueue(item, { control: button })));
     }
     if (item.cancelable) {
       actions.append(actionButton("대기 취소", "secondary queue-cancel", () => cancelQueue(item)));
@@ -1546,7 +1645,7 @@
   }
 
   async function processDue(event) {
-    event.currentTarget.disabled = true;
+    setButtonBusy(event.currentTarget, true, "확인 중...");
     try {
       const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/process", { method: "POST", body: {} });
       StoryHeavenCommon.toast(`새 기획 ${payload.scheduled?.length || 0}건, 공개 ${payload.published?.length || 0}건을 처리했습니다.`);
@@ -1554,7 +1653,7 @@
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
-      event.currentTarget.disabled = false;
+      setButtonBusy(event.currentTarget, false);
     }
   }
 
@@ -1739,10 +1838,47 @@
     button.className = `button ${className}`.trim();
     button.textContent = text;
     button.addEventListener("click", async () => {
-      button.disabled = true;
-      try { await handler(); } finally { button.disabled = false; }
+      setButtonBusy(button, true, busyButtonLabel(text));
+      try {
+        await handler(button);
+      } catch (error) {
+        StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+      } finally {
+        setButtonBusy(button, false);
+      }
     });
     return button;
+  }
+
+  function busyButtonLabel(text) {
+    const label = String(text || "");
+    if (label.includes("재개") || label.includes("다시 시작")) return "재개 요청 중...";
+    if (label.includes("시작")) return "시작 요청 중...";
+    if (label.includes("중지") || label.includes("멈춤")) return "중지 요청 중...";
+    if (label.includes("삭제")) return "삭제 중...";
+    if (label.includes("숨기")) return "숨김 처리 중...";
+    if (label.includes("취소")) return "취소 중...";
+    if (label.includes("저장") || label.includes("등록")) return "저장 중...";
+    return "처리 중...";
+  }
+
+  function setButtonBusy(button, busy, label = "처리 중...") {
+    if (!button) return;
+    if (busy) {
+      button.dataset.originalText = button.textContent;
+      button.dataset.originalDisabled = button.disabled ? "true" : "false";
+      button.textContent = label;
+      button.disabled = true;
+      button.classList.add("is-busy");
+      button.setAttribute("aria-busy", "true");
+      return;
+    }
+    if (button.dataset.originalText !== undefined) button.textContent = button.dataset.originalText;
+    button.disabled = button.dataset.originalDisabled === "true";
+    button.classList.remove("is-busy");
+    button.removeAttribute("aria-busy");
+    delete button.dataset.originalText;
+    delete button.dataset.originalDisabled;
   }
 
   function genreLabel(id) {

@@ -327,6 +327,8 @@
       serial_quality_hold_safety_failed: "안전성 검수를 통과하지 못한 원고는 운영자 승인할 수 없습니다. 지적 부분 다시 보완을 이용해주세요.",
       serial_queue_not_found: "재개할 자동 연재 작업을 찾을 수 없습니다.",
       serial_queue_not_retryable: "지금 다시 시작할 수 있는 중단 단계가 없습니다.",
+      serial_queue_schedule_unavailable: "연결된 자동 연재 설정을 찾을 수 없어 재개하지 못했습니다. 설정과 작업 로그를 확인해주세요.",
+      serial_queue_schedule_archived: "연결된 자동 연재 설정이 삭제되어 이 작업을 재개할 수 없습니다. 새 설정으로 다시 등록해주세요.",
       serial_queue_not_waiting: "취소할 수 있는 대기 작업이 없습니다.",
       serial_queue_completed_cannot_cancel: "이미 완료된 작품 기록은 로그 숨김으로 숨길 수 없습니다.",
       serial_queue_running_cannot_cancel: "진행 중인 작업은 취소할 수 없습니다. 멈춘 경우에는 단계 다시 시작을 사용해주세요.",

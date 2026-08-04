@@ -915,6 +915,7 @@ app.delete("/api/storyheaven/operator/serial-engine/schedules/:id", requireUser,
 app.post("/api/storyheaven/operator/serial-engine/schedules/:id/run", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    if (storyHeavenSerialEmergencyPaused) throw httpError("serial_system_paused", 409);
     await ensureUserProfile(req.user, req);
     res.status(202).json({ run: await storyHeavenSerialService.runSchedule(req.params.id, req.user.id) });
   } catch (error) {
@@ -925,6 +926,7 @@ app.post("/api/storyheaven/operator/serial-engine/schedules/:id/run", requireUse
 app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
   try {
     if (!config.storyHeavenSerialEngineEnabled) throw httpError("serial_engine_disabled", 409);
+    if (storyHeavenSerialEmergencyPaused) throw httpError("serial_system_paused", 409);
     await ensureUserProfile(req.user, req);
     res.status(202).json(await storyHeavenSerialService.retryQueueGroup(req.params.id, {
       force: req.body?.force === true

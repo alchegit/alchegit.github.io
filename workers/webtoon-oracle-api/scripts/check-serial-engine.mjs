@@ -43,6 +43,10 @@ const hideQueueHistorySource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function hideQueueHistory"),
   serialServiceSource.indexOf("async function retryQueueGroup")
 );
+const retryQueueRouteSource = serverSource.slice(
+  serverSource.indexOf('app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry"'),
+  serverSource.indexOf('app.post("/api/storyheaven/operator/serial-engine/process"')
+);
 assert.match(createEpisodeRunSource, /const seriesPlan = context\.bible\.narrativeBlueprint\?\.seriesPlan[\s\S]*storyHeavenSeriesPosition\(targetEpisodeNo, seriesPlan\)/u, "episode creation after long-form planning must resolve the saved series plan before validating its position");
 assert.match(
   serialServiceSource,
@@ -51,6 +55,9 @@ assert.match(
 );
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
+assert.match(serialServiceSource, /schedule\.schedule_status/u, "queue API must expose the schedule state that can block a waiting job");
+assert.match(serialServiceSource, /set schedule_status = 'active', updated_at = systimestamp/u, "queue retry must reactivate its paused schedule");
+assert.match(retryQueueRouteSource, /storyHeavenSerialEmergencyPaused/u, "queue retry must reject a globally paused system explicitly");
 assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidden historical logs for full-view audits");
 assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");
 assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry the first-scene term budget");
@@ -96,6 +103,9 @@ assert.match(serverSource, /createdFrom: req\.query\.createdFrom/u, "managed sto
 assert.match(serverSource, /stories\/bulk-control/u, "managed stories must expose the bulk control route");
 assert.match(serialOperatorHtml, /프롤로그 등록 전 확인/u, "pre-publication prologues must use an accurate operator label");
 assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
+assert.match(serialOperatorSource, /서버에 재개 요청을 보내는 중입니다/u, "queue retry must show immediate persistent feedback");
+assert.match(serialOperatorSource, /설정을 시작하고 재개/u, "paused queue work must name that its schedule will also restart");
+assert.match(serialOperatorCss, /\.button\.is-busy/u, "operator buttons must expose a visible in-flight state");
 assert.match(serialOperatorSource, /지적 부분 다시 보완/u, "quality-held prologues must expose targeted rewrite recovery");
 assert.match(serialOperatorSource, /현재 원고 승인/u, "quality-held prologues must expose an operator approval path");
 assert.match(serialOperatorSource, /독자용 작품 소개에 내부 기획 표현이 포함됨/u, "public synopsis validation failures must be readable to operators");
@@ -182,6 +192,34 @@ assert.equal(archivedSchedule.canceled.runs, 2);
 assert.equal(archivedSchedule.canceled.publications, 2);
 assert.equal(archivedSchedule.canceled.continuations, 2);
 assert.ok(archiveStatements.some((sql) => /schedule_status = 'archived'/u.test(sql)));
+
+const retryStatements = [];
+const retryService = createStoryHeavenSerialService({
+  withConnection: async () => { throw new Error("unexpected_connection"); },
+  withTransaction: async (callback) => callback({
+    execute: async (sql) => {
+      retryStatements.push(sql);
+      if (/count\(distinct serial_run\.id\) as run_count/u.test(sql)) {
+        return { rows: [{
+          RUN_COUNT: 1,
+          ACTIVE_COUNT: 1,
+          WAITING_COUNT: 1,
+          RUNNING_COUNT: 0,
+          ERROR_COUNT: 0,
+          SCHEDULE_ID: "schedule-paused",
+          SCHEDULE_STATUS: "paused"
+        }] };
+      }
+      return { rows: [], rowsAffected: 1 };
+    }
+  }),
+  clob: (value) => value,
+  clobJson: (value) => value
+});
+const retriedPausedQueue = await retryService.retryQueueGroup("queue-paused");
+assert.equal(retriedPausedQueue.scheduleActivated, true);
+assert.equal(retriedPausedQueue.reused, true);
+assert.ok(retryStatements.some((sql) => /set schedule_status = 'active'/u.test(sql)));
 
 const claimStatements = [];
 const claimService = createStoryHeavenSerialService({
@@ -912,6 +950,7 @@ assert.ok(queueSummary.history.some((item) => item.id === "old-complete"));
 assert.ok(queueSummary.hiddenHistory.some((item) => item.id === "hidden-complete"));
 assert.ok(queueSummary.hiddenHistory.some((item) => item.id === "hidden-running"));
 assert.ok(queueSummary.items.some((item) => item.id === "hidden-running"), "hiding a running log must leave production visible and active");
+assert.equal(queueSummary.items.find((item) => item.id === "hidden-running")?.scheduleStatus, "active");
 
 function queueSummaryRow(id, completedAt, overrides = {}) {
   const completedTime = completedAt === null ? null : new Date(completedAt);
@@ -919,6 +958,7 @@ function queueSummaryRow(id, completedAt, overrides = {}) {
     ID: id,
     QUEUE_GROUP_ID: id,
     SCHEDULE_ID: "schedule-test",
+    SCHEDULE_STATUS: "active",
     STORY_ID: `story-${id}`,
     STORY_TITLE: id,
     RUN_TYPE: "draft",
