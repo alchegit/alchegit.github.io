@@ -430,6 +430,108 @@ assert.equal(hybridSchedule.schedule.primaryGenre, "romance");
 assert.equal(validateStoryHeavenEpisodeRun({ episodeNo: 4 }).ok, true);
 assert.equal(validateStoryHeavenEpisodeRun({ episodeNo: 0 }).ok, false);
 
+const developmentCandidates = [
+  {
+    candidateId: "candidate-bus",
+    workingTitle: "마지막 시간버스",
+    coreFantasy: "죽은 사람의 마지막 목적지를 잇는 비밀 버스를 운전하며 도시의 미련을 해결한다.",
+    humanDesire: "사라진 누나를 포기하지 못한 동생이 자신의 기억을 잃으면서도 누나가 남긴 길을 추적한다.",
+    protagonistContradiction: "남을 지키려는 책임감이 강하지만 도움을 청하지 않고 모든 대가를 혼자 치르려 한다.",
+    centralRelationship: "기록을 지켜야 하는 선배 기사와 기록을 열어 누나를 찾아야 하는 신입 기사가 서로 필요하면서 충돌한다.",
+    worldPressure: "도시가 외면한 죽음과 책임이 비밀 노선의 승객과 정류장으로 되돌아와 운수 회사를 압박한다.",
+    storyEngine: "승객의 미련을 해결할수록 누나의 단서를 얻지만 기사의 기억을 요금으로 잃어 다음 선택이 더 어려워진다.",
+    signatureScene: "도윤이 누나의 목소리 기억을 요금으로 내고도 울고 있는 첫 승객을 정확한 정류장에 내려 주는 장면이다.",
+    longTailQuestion: "누나를 되찾는 일과 도시가 버린 책임을 되돌리는 일 중 무엇을 먼저 선택해야 하는가.",
+    familiarFoundation: "도시괴담의 금지 규칙, 심야 운행 직업물, 가족 실종 미스터리라는 익숙한 기반이다.",
+    controlledDifference: "버스 요금을 기사 자신의 기억으로 치른다는 한 가지 결과 중심 차별점이다.",
+    fatalRisk: "승객 사연이 같은 해결 구조로 반복되거나 누나의 비밀만 남아 현재 회차의 보상이 약해질 수 있다.",
+    fingerprint: { protagonistFrame: "worker", openingMode: "quiet_anomaly", episodeEngine: "mystery_investigation", storyArena: "journey", powerSource: "artifact", oppositionType: "mystery" }
+  },
+  {
+    candidateId: "candidate-frontier",
+    workingTitle: "국경의 빈 지도",
+    coreFantasy: "지도에서 사라지는 국경 마을을 찾아 길과 주민의 이름을 되돌린다.",
+    humanDesire: "고향이 없어진 난민 안내자가 남은 가족에게 돌아갈 장소를 다시 만들고 싶어 한다.",
+    protagonistContradiction: "길을 누구보다 잘 찾지만 한곳에 책임을 지고 머무르는 선택을 두려워한다.",
+    centralRelationship: "국경을 고정하려는 장교와 사라진 길을 따라야 하는 안내자가 생존을 위해 협력하며 충돌한다.",
+    worldPressure: "전쟁으로 세운 경계와 이동하는 지형이 마을과 교역로를 차례로 지워 국가 간 분쟁을 키운다.",
+    storyEngine: "새 길을 되찾을 때마다 다른 마을과 세력의 이해가 충돌하고 지도가 바뀐 결과가 다음 국경 문제를 만든다.",
+    signatureScene: "주인공이 눈앞에서 지워지는 다리 위의 주민을 건너게 하려고 자신의 귀환로를 지도에서 포기한다.",
+    longTailQuestion: "사람의 고향을 결정하는 것은 지도와 국가인지 그곳을 기억하는 사람인지 묻는다.",
+    familiarFoundation: "국경 모험, 탐사대, 전쟁 난민과 귀환이라는 정통 판타지 기반이다.",
+    controlledDifference: "사람의 기억과 공인 지도 사이에서 실제 길이 달라진다는 한 가지 규칙을 둔다.",
+    fatalRisk: "지도 규칙 설명이 길어지면 인물의 귀환 욕망보다 퍼즐 풀이가 앞설 수 있다.",
+    fingerprint: { protagonistFrame: "outcast", openingMode: "chase", episodeEngine: "quest_adventure", storyArena: "frontier", powerSource: "knowledge", oppositionType: "environment" }
+  },
+  {
+    candidateId: "candidate-school",
+    workingTitle: "퇴학 전 마지막 합주",
+    coreFantasy: "마법 학교의 낙제생들이 해체될 합주반을 지키며 각자의 불완전한 마법을 연결한다.",
+    humanDesire: "혼자서는 실패한다고 믿는 학생이 처음으로 동료와 끝까지 무대를 완성하려 한다.",
+    protagonistContradiction: "다른 사람의 실수를 잘 보완하지만 자신의 부족함이 드러날 선택은 먼저 피한다.",
+    centralRelationship: "완벽을 요구하는 수석과 실수를 감추는 낙제생이 합주를 완성하려 서로의 약점을 맡아야 한다.",
+    worldPressure: "성과가 낮은 학과를 없애려는 학교와 학생을 영입하려는 길드가 합주반을 각기 다른 방식으로 압박한다.",
+    storyEngine: "매 공연과 시험에서 서로 다른 마법의 결함을 조합하고 실패의 책임이 관계와 진로를 바꾼다.",
+    signatureScene: "주인공이 자신의 음이 틀릴 것을 알면서도 동료의 폭주 마법을 받쳐 무대를 끝내는 장면이다.",
+    longTailQuestion: "완벽한 개인과 서로의 결함을 맡는 팀 중 무엇이 더 강한 마법을 만드는가.",
+    familiarFoundation: "마법 학교, 낙제생 팀, 시험과 성장이라는 친숙한 학원 판타지 기반이다.",
+    controlledDifference: "혼자서는 실패하는 마법이 합주할 때만 완성된다는 관계 중심 차별점이다.",
+    fatalRisk: "시험과 공연의 성공 구조가 반복되면 갈등과 성장 단계가 쉽게 예측될 수 있다.",
+    fingerprint: { protagonistFrame: "student", openingMode: "deadline", episodeEngine: "growth_combat", storyArena: "school", powerSource: "social_bond", oppositionType: "rival" }
+  },
+  {
+    candidateId: "candidate-village",
+    workingTitle: "마녀의 빚 장부",
+    coreFantasy: "저주 대신 사람 사이의 갚지 못한 약속을 거두는 마녀가 무너지는 마을을 되살린다.",
+    humanDesire: "가족의 빚을 떠안은 약초상이 누구의 희생도 새 빚으로 남기지 않는 마을을 만들려 한다.",
+    protagonistContradiction: "남의 사정을 세심히 헤아리지만 정작 자신의 손해와 분노는 계산에서 지운다.",
+    centralRelationship: "빚을 정확히 받아야 사는 마녀와 빚을 탕감하고 싶은 약초상이 서로의 생존을 위해 거래한다.",
+    worldPressure: "기근과 영주의 세금, 마녀 계약의 대가가 주민 사이의 오래된 약속을 현실의 재난으로 바꾼다.",
+    storyEngine: "한 약속을 정리하면 숨은 채무와 관계가 드러나고 해결 방식이 마을의 권력과 신뢰를 다시 배치한다.",
+    signatureScene: "마녀가 굶주린 아이의 빚을 거두지 않자 자신의 그림자가 장부에서 뜯겨 나가는 장면이다.",
+    longTailQuestion: "용서가 빚을 없애는 일인지 다른 사람이 대신 갚게 하는 일인지 묻는다.",
+    familiarFoundation: "마녀의 계약, 쇠락한 마을 재건, 주민 사연이라는 익숙한 생활 판타지 기반이다.",
+    controlledDifference: "금전이 아니라 지키지 못한 약속이 실제 채무로 작동한다는 한 가지 규칙이다.",
+    fatalRisk: "훈훈한 사연 해결에만 머물면 반대 세력과 주인공의 능동적 선택이 약해질 수 있다.",
+    fingerprint: { protagonistFrame: "caregiver", openingMode: "social_conflict", episodeEngine: "healing_community", storyArena: "village", powerSource: "magic", oppositionType: "institution" }
+  }
+];
+const developmentRoom = {
+  candidates: developmentCandidates,
+  selectionReport: {
+    selectedCandidateId: "candidate-bus",
+    ranking: developmentCandidates.map((candidate, index) => ({
+      candidateId: candidate.candidateId,
+      characterMagnetism: 94 - index * 4,
+      emotionalEngine: 95 - index * 4,
+      scenePotential: 93 - index * 3,
+      expansionCapacity: 92 - index * 3,
+      genreDelight: 91 - index * 2,
+      clarity: 94 - index * 2,
+      originalityDepth: 90 - index * 2,
+      verdict: index === 0 ? "selected" : "rejected",
+      weakness: candidate.fatalRisk
+    })),
+    whySelected: "가족을 찾으려는 단순하고 강한 욕망, 기억을 대가로 내는 선택, 불신하는 선배와의 관계가 한 장면에서 동시에 충돌한다.",
+    proofScene: "도윤이 첫 승객을 내려 주기 위해 누나의 목소리를 잃고, 이를 본 해진이 기록 일부를 건네는 장면으로 핵심 약속을 증명한다.",
+    fatalRisk: "승객 사연과 기억 상실이 같은 순서로 반복되면 감정과 사건이 빠르게 양식화될 수 있다.",
+    mitigation: "승객 해결뿐 아니라 회사의 선택, 산 사람의 불법 승차, 해진과의 빚, 기억을 되찾을 유혹을 교차해 선택의 결과를 다르게 만든다.",
+    rejectedReasons: developmentCandidates.slice(1).map((candidate) => ({ candidateId: candidate.candidateId, reason: candidate.fatalRisk }))
+  }
+};
+const storyCore = {
+  readerFantasy: "죽은 사람의 마지막 길을 운전하며 도시의 감춰진 사연을 해결하는 비밀 기사 체험이다.",
+  emotionalCore: "사라진 가족을 기억하려는 사랑과 모든 대가를 혼자 감당하려는 죄책감의 충돌이다.",
+  protagonistContradiction: "도윤의 책임감은 사람을 구하지만 도움을 거부하고 자기 기억을 함부로 희생하게 만든다.",
+  centralRelationship: "도윤은 기록이 필요한 반면 해진은 노선을 지키기 위해 기록을 숨겨야 해서 협력할수록 갈등도 깊어진다.",
+  worldPressure: "도시가 외면한 죽음과 책임이 승객과 정류장으로 돌아오고 운수 회사는 이를 은폐해 질서를 지키려 한다.",
+  repeatableStoryEngine: "한 승객의 미련을 해결하는 선택이 기억의 대가와 관계의 빚을 만들고 그 결과가 다음 노선 문제를 발생시킨다.",
+  signaturePromise: "매 운행에서 하나의 사연을 해결하고 실제 대가를 치르며 누나와 비밀 노선의 진실에 가까워진다.",
+  thematicQuestion: "고통스러운 책임을 잊는 일과 기억하며 살아가는 일 중 무엇이 사람을 더 지키는가.",
+  proofOfConceptScene: "도윤이 누나의 목소리 기억을 잃으면서 첫 승객을 내려 주고 해진의 제한된 신뢰를 얻는 장면이다.",
+  longTailSources: ["서로 다른 승객의 미련과 선택", "기억을 숨기고 거래하는 운수 회사", "도윤과 해진 사이에 쌓이는 정보와 희생의 빚", "산 사람이 비밀 노선을 이용할 때 생기는 도시 문제"]
+};
+
 const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   title: "마지막 시간버스",
   logline: "죽은 사람의 마지막 목적지를 지나는 심야버스에서 신입 기사가 사라진 누나의 승차 기록을 발견한다.",
@@ -442,6 +544,8 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   familiarPleasure: "도시괴담과 직업물의 친숙한 재미",
   novelTwist: "요금은 돈이 아니라 기사의 기억이다.",
   targetAge: "teen",
+  developmentRoom,
+  storyCore,
   premiseAudit: {
     entryType: "native",
     usesMatchingTaskTransfer: false,
@@ -503,6 +607,25 @@ assert.match(concept.internalPlanningSummary, /장기 갈등/u);
 assert.equal(concept.premiseAudit.abilityPlan.extraRuleCount, 0);
 assert.equal(concept.readerAppealPlan.earlyEpisodePlan[1].installment, "main-1");
 assert.equal(concept.readerAppealPlan.recentConceptComparison.fingerprint.episodeEngine, "mystery_investigation");
+assert.equal(concept.developmentRoom.candidates.length, 4);
+assert.equal(concept.developmentRoom.selectionReport.selectedCandidateId, "candidate-bus");
+assert.equal(concept.storyCore.longTailSources.length, 4);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  developmentRoom: {
+    ...concept.developmentRoom,
+    candidates: concept.developmentRoom.candidates.map((candidate, index) => index === 1
+      ? { ...candidate, fingerprint: concept.developmentRoom.candidates[0].fingerprint }
+      : candidate)
+  }
+}), /serial_concept_candidates_too_similar/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  developmentRoom: {
+    ...concept.developmentRoom,
+    selectionReport: { ...concept.developmentRoom.selectionReport, selectedCandidateId: "candidate-frontier" }
+  }
+}), /serial_candidate_ranking_invalid/u);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
   premiseAudit: { ...concept.premiseAudit, usesMatchingTaskTransfer: true }
@@ -589,6 +712,8 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
 const legacyConceptWithoutAudit = { ...concept };
 delete legacyConceptWithoutAudit.premiseAudit;
 delete legacyConceptWithoutAudit.readerAppealPlan;
+delete legacyConceptWithoutAudit.developmentRoom;
+delete legacyConceptWithoutAudit.storyCore;
 assert.throws(
   () => normalizeStoryHeavenSerialWorkerResult("concept_gate", legacyConceptWithoutAudit),
   /serial_premise_entry_type_invalid/u
@@ -601,6 +726,8 @@ const resumedLegacyConcept = normalizeStoryHeavenSerialWorkerResult("concept_gat
 assert.match(resumedLegacyConcept.internalPlanningSummary, /10권 동안/u);
 assert.equal("premiseAudit" in resumedLegacyConcept, false);
 assert.equal("readerAppealPlan" in resumedLegacyConcept, false);
+assert.equal("developmentRoom" in resumedLegacyConcept, false);
+assert.equal("storyCore" in resumedLegacyConcept, false);
 
 const testSeriesPlan = { totalVolumes: 10, episodesPerVolume: 25, totalMainEpisodes: 250 };
 const conflictSources = Array.from({ length: 5 }, (_, index) => ({
@@ -672,12 +799,21 @@ const seriesArchitecture = {
     "장기 복선의 답은 지정된 회수 권보다 먼저 설명하지 않는다."
   ]
 };
+const developmentBibleOptions = { seriesPlan: testSeriesPlan, payload: { concept: { storyCore } } };
 
 const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
   worldRules: ["0번 버스는 자정 이후 운행한다.", "승객은 생전 마지막 목적지만 말한다.", "기사는 기억으로 요금을 낸다.", "운행 기록은 거짓말을 하지 않는다.", "종점에서 내리지 못하면 노선에 묶인다."],
   characters: [
-    { name: "도윤", role: "신입 기사", desire: "누나를 찾는다.", fear: "누나에 대한 기억을 잃는다.", knowledge: ["버스 운전법"] },
-    { name: "해진", role: "차고지 관리자", desire: "0번 노선을 끝낸다.", fear: "과거 사고가 드러난다.", knowledge: ["노선 규칙"] }
+    { id: "character-1", name: "도윤", role: "신입 기사", desire: "실종된 누나의 마지막 행적을 찾는다.", fear: "누나에 대한 기억을 모두 잃는 일을 두려워한다.", secret: "어릴 때 누나가 사라진 밤의 일부를 이미 잊었다.", knowledge: ["버스 운전법"], misbelief: "모든 대가를 혼자 치러야만 다른 사람을 지킬 수 있다고 믿는다.", contradiction: "강한 책임감으로 사람을 구하지만 그 책임감 때문에 도움을 거부한다.", dignity: "어떤 승객도 목적지 전에 버리지 않는 기사라는 자부심을 지킨다.", shame: "누나가 사라진 날 자신이 먼저 도망쳤다는 기억을 감추고 싶어 한다.", competence: "복잡한 도로에서도 승객과 장애물의 움직임을 빠르게 읽고 운전한다.", behavioralTell: "불안할수록 도움을 청하지 않고 운전대 가장자리를 세게 쥔다.", decisionRule: "누군가 다칠 가능성이 보이면 자신의 손실을 계산에서 먼저 제외한다.", speechPattern: "필요한 사실부터 짧게 묻고 자신의 감정이나 두려움은 마지막까지 말하지 않는다.", changeResistance: "도움을 받으면 누나를 지키지 못한 책임까지 남에게 떠넘기는 것이라고 오해한다." },
+    { id: "character-2", name: "해진", role: "차고지 관리자", desire: "더 큰 사고가 나기 전에 0번 노선을 통제한다.", fear: "숨겨 온 과거 사고와 자신의 책임이 동료에게 드러날까 두려워한다.", secret: "누나의 마지막 승차 기록 일부를 따로 보관하고 있다.", knowledge: ["노선 규칙"], misbelief: "진실을 늦게 밝힐수록 남은 사람의 피해를 줄일 수 있다고 믿는다.", contradiction: "노선을 지키는 냉정함이 뛰어나지만 그 냉정함이 필요한 협력까지 막는다.", dignity: "자신의 판단 때문에 같은 기사를 두 번 잃지 않겠다는 원칙을 지킨다.", shame: "과거 사고 직후 기록을 숨기라는 지시에 따랐다는 사실을 감추려 한다.", competence: "승객 기록과 노선 변화에서 위험한 공통점을 빠르게 찾아낸다.", behavioralTell: "불리한 질문을 받으면 안경을 닦으며 대답 순서를 의도적으로 바꾼다.", decisionRule: "확실한 증거와 철수 경로가 함께 준비되지 않으면 누구도 현장에 보내지 않는다.", speechPattern: "결론과 금지 사항을 먼저 말하고 이유는 상대가 대가를 감당할 때만 알려 준다.", changeResistance: "진실을 공유했다가 또 사고가 나면 자신이 직접 모두를 죽인 셈이라고 여긴다." }
+  ],
+  relationshipWeb: [
+    { characterAId: "character-1", characterBId: "character-2", currentBond: "서로의 정보를 믿지 못하지만 첫 운행을 위해 임시로 협력한다.", mutualNeed: "도윤은 누나의 기록이 필요하고 해진은 위험한 승객을 내려 줄 운전자가 필요하다.", valueConflict: "도윤은 진실을 즉시 밝혀야 한다고 믿지만 해진은 피해를 막기 위해 통제해야 한다고 믿는다.", hiddenDebt: "해진은 누나의 마지막 선택 덕분에 과거 사고에서 살아남았지만 도윤에게 말하지 않았다.", boundary: "해진이 누나의 기록을 파기하거나 도윤이 승객을 미끼로 쓰면 관계는 즉시 깨진다.", pressureTest: "산 사람이 잘못 탄 버스를 구하려면 해진이 숨긴 기록과 도윤의 남은 기억을 동시에 내놓아야 한다.", possibleShift: "서로 하나씩 진실을 내놓으면 감시 관계에서 책임을 나누는 동료로 바뀔 수 있다." }
+  ],
+  worldDynamics: [
+    { key: "force-transit-company", force: "비밀 노선을 관리하는 오래된 운수 회사", want: "도시가 0번 노선의 존재를 모른 채 정해진 승객만 처리되는 상태", resources: ["공식 운행 기록", "차고지와 기사 배치 권한"], methods: ["기록 봉인", "위험 기사 대기 발령"], pressure: "도윤이 누나의 기록을 찾을수록 생계와 운전 자격을 빼앗겠다고 압박한다.", secondOrderConsequences: ["기록이 막히며 같은 사고가 다른 노선에서 반복된다.", "현장 기사들이 비공식 정보 거래에 의존한다."], storySeeds: ["봉인된 누나의 마지막 배차표", "회사 명령을 어기고 사라진 전임 기사"] },
+    { key: "force-lost-passengers", force: "목적지에 내리지 못해 노선에 남은 승객들", want: "생전에 끝내지 못한 선택을 산 사람에게 전달하는 상태", resources: ["생전 기억의 파편", "정류장과 노선을 잠시 바꾸는 미련"], methods: ["잘못된 목적지 말하기", "기사의 기억에 장면을 겹쳐 보이기"], pressure: "승객을 서둘러 처리하면 다른 산 사람에게 미련이 옮겨가 더 큰 피해가 생긴다.", secondOrderConsequences: ["산 사람이 죽은 승객의 습관을 따라 하기 시작한다.", "정류장 주변 시간이 반복되어 일반 노선도 멈춘다."], storySeeds: ["자신이 죽은 줄 모르는 첫 승객", "도윤의 누나와 같은 승차권을 든 아이"] },
+    { key: "force-memory-market", force: "기사들이 잃은 기억을 몰래 사고파는 중개망", want: "가치 있는 기억을 모아 신분과 노선 접근권으로 교환하는 상태", resources: ["병에 보관한 기사 기억", "회사 내부 협력자"], methods: ["잃은 기억을 되찾게 한다는 거래", "가짜 가족 기억을 심는 협박"], pressure: "도윤에게 누나의 목소리를 돌려주는 대가로 산 승객 한 명을 노선에 태우라고 요구한다.", secondOrderConsequences: ["기사들이 자신의 과거를 믿지 못해 팀의 신뢰가 무너진다.", "거래된 기억의 원래 주인이 다른 사람의 범죄 책임을 뒤집어쓴다."], storySeeds: ["도윤이 잃은 기억을 가진 낯선 기사", "해진의 사고 기억을 사려는 회사 간부"] }
   ],
   timeline: ["11년 전 노선 사고가 발생했다.", "누나가 3년 전 실종됐다.", "도윤이 오늘 첫 운행을 시작한다."],
   glossary: ["0번 노선"],
@@ -711,10 +847,20 @@ const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
     revealCadence: "매 화 작은 답 하나와 더 큰 질문 하나를 남기고 3화마다 기존 단서의 의미를 뒤집는다.",
     noveltyPolicy: "익숙한 심야 버스 미스터리를 중심에 두고 기억이 요금이라는 차별점 하나만 유지하며 새 마법 규칙을 추가하지 않는다.",
     antiRepetitionRules: ["같은 도입법을 연속 사용하지 않는다.", "항상 새 승객 등장으로 시작하지 않는다.", "모든 회차를 정체 공개로 끝내지 않는다."],
+    planningHorizon: {
+      detailedThroughVolume: 1,
+      directionalThroughVolume: 3,
+      laterVolumesAreHypotheses: true,
+      protectedElements: ["도윤의 책임감과 도움 거부라는 핵심 모순", "도윤과 해진의 상호 필요와 가치 충돌", "기억을 요금으로 치르는 중심 규칙", "마지막 운행에서 공동 책임을 선택하는 결말 경계"],
+      replanningTriggers: ["한 권이 끝나 실제로 강하게 작동한 관계를 확인할 때", "같은 승객 해결 방식이 두 번 반복되어 사건 원천을 바꿔야 할 때", "새 공개 사실이 후반 권 가설과 충돌하기 전에"]
+    },
     seriesArchitecture
   }
-}, { seriesPlan: testSeriesPlan });
+}, developmentBibleOptions);
 assert.equal(bible.narrativeBlueprint.openingModes.length, 3);
+assert.equal(bible.relationshipWeb[0].characterBId, "character-2");
+assert.equal(bible.worldDynamics.length, 3);
+assert.equal(bible.narrativeBlueprint.planningHorizon.directionalThroughVolume, 3);
 assert.match(bible.narrativeBlueprint.noveltyPolicy, /차별점 하나/u);
 assert.equal(bible.voiceProfile.readerOnboardingRules.length, 4);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan.length, 10);
@@ -734,7 +880,7 @@ boundaryBibleInput.narrativeBlueprint.seriesArchitecture.renewableConflictSource
 };
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.volumePlan[0].characterMilestoneIds = ["mistyped-milestone"];
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.volumePlan[2].protectedRevealKeys = ["series-return-ticket"];
-const boundaryBible = normalizeStoryHeavenSerialWorkerResult("build_bible", boundaryBibleInput, { seriesPlan: testSeriesPlan });
+const boundaryBible = normalizeStoryHeavenSerialWorkerResult("build_bible", boundaryBibleInput, developmentBibleOptions);
 assert.equal(boundaryBible.narrativeBlueprint.seriesArchitecture.longReveals[0].seedEpisodeWithinVolume, 0);
 assert.deepEqual(boundaryBible.narrativeBlueprint.seriesArchitecture.longReveals[0].deepenVolumes, [1, 2]);
 assert.equal(boundaryBible.narrativeBlueprint.seriesArchitecture.renewableConflictSources[0].source, "guild");
@@ -814,8 +960,19 @@ assert.deepEqual(legacyArc.architectureReferences.conflictSourceKeys, []);
 
 const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
   episodeNo: 1,
+  episodeMode: "discovery",
   promise: "첫 승객을 내려주며 0번 노선의 요금 규칙을 체험한다.",
   openingDisturbance: "도윤이 아직 출발하지 않은 버스 안에서 자신의 안내 방송을 듣는다.",
+  dramaticCore: {
+    desire: "도윤은 첫 운행을 끝내 누나의 마지막 승차 기록을 확인하고 싶다.",
+    obstacle: "목적지를 기억하지 못하는 승객과 기억을 요구하는 요금함이 운행을 막는다.",
+    choice: "도윤은 누나의 단서를 놓치지 않기 위해 자신의 소중한 기억 하나를 요금으로 낸다.",
+    cost: "도윤은 첫 승객을 내려 주는 대신 누나의 목소리에 관한 기억 한 조각을 잃는다.",
+    stateChange: "도윤은 비밀 노선의 정식 기사로 인정받지만 잃은 기억은 운행 전 상태로 돌아오지 않는다.",
+    emotionalTurn: "누나를 찾을 희망으로 시작한 운행이 누나를 기억하지 못할 공포와 함께 끝난다.",
+    imageAnchor: "요금함 속으로 젖은 승차권이 들어가자 노선도에서 누나 이름이 잠깐 빛나는 모습이다.",
+    subtextQuestion: "사랑하는 사람을 찾기 위해 그 사람의 기억을 잃는 선택은 누구를 위한 일인가?"
+  },
   scenes: Array.from({ length: 3 }, (_, index) => ({
     sceneNo: index + 1,
     goal: "승객의 목적지를 확인한다.",
@@ -872,10 +1029,12 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
 }, {
   payload: {
     episodeNo: 1,
-    bible: { narrativeBlueprint: bible.narrativeBlueprint }
+    bible: { concept: { storyCore }, narrativeBlueprint: bible.narrativeBlueprint }
   }
 });
 assert.equal(card.techniquePlan.openingMode, "사건 한가운데");
+assert.equal(card.episodeMode, "discovery");
+assert.match(card.dramaticCore.cost, /기억/u);
 assert.equal(card.techniquePlan.readerOrientation.newTerms.length, 1);
 assert.equal(card.techniquePlan.readerRewardPlan.concretePayoffs.length, 2);
 assert.equal(card.prologueDisclosurePlan.mustNotAnswerRevealKeys.length, 4);
@@ -978,6 +1137,7 @@ function queueSummaryRow(id, completedAt, overrides = {}) {
 
 const scores = Object.fromEntries(Object.keys(STORYHEAVEN_SERIAL_LIMITS.quality).map((key) => [key, 96]));
 const evidence = Object.fromEntries(Object.keys(scores).map((key) => [key, [`${key} 판단을 뒷받침하는 장면 근거입니다.`]]));
+const developmentReviewOptions = { payload: { bible: { concept: { storyCore } } } };
 const review = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
   decision: "approved",
   scores,
@@ -990,11 +1150,28 @@ const review = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
     { lens: "모바일 일반 독자", reaction: "첫 문단의 이상 방송이 빠르게 시선을 붙듭니다.", continueReason: "누나의 기록이 궁금합니다.", dropRisk: "규칙 설명이 길어지면 이탈할 수 있습니다." },
     { lens: "장르 선호 독자", reaction: "도시괴담 규칙과 직업물의 결합이 익숙하면서 새롭습니다.", continueReason: "노선의 비밀을 추리할 수 있습니다.", dropRisk: "승객 구조가 반복되면 익숙해질 수 있습니다." },
     { lens: "인내심 낮은 독자", reaction: "초반 사건은 빠르지만 중간 설명은 압축할 여지가 있습니다.", continueReason: "마지막 이름 반전이 강합니다.", dropRisk: "중반에 행동이 멈추면 이탈할 수 있습니다." }
-  ]
-});
+  ],
+  criticPanels: {
+    character: { verdict: "strong", evidence: ["도윤은 누나의 기록을 위해 자신의 기억을 내놓는 고유한 선택을 한다."], fatalRisk: "없음", nextAction: "도윤이 도움을 거부하는 선택 습관과 그 대가를 다음 화에서도 이어 간다." },
+    relationship: { verdict: "strong", evidence: ["해진은 운행을 막다가 도윤의 희생을 본 뒤 한 번의 공동 운행을 허락한다."], fatalRisk: "없음", nextAction: "해진의 독립 목적과 숨긴 기록 때문에 협력이 곧바로 신뢰로 바뀌지 않게 한다." },
+    serialMomentum: { verdict: "strong", evidence: ["첫 승객 문제를 해결한 결과 도윤의 이름이 다음 승객으로 기록된다."], fatalRisk: "승객 해결 순서가 반복될 위험이 있다.", nextAction: "다음 화는 승객 탑승이 아니라 회사의 기록 통제에서 갈등을 시작한다." },
+    worldCausality: { verdict: "strong", evidence: ["기억을 요금으로 낸 행동이 실제 기억 상실과 운행 자격 변화로 이어진다."], fatalRisk: "없음", nextAction: "새 규칙을 추가하지 말고 기억 상실의 사회적 결과를 확장한다." },
+    sceneExpression: { verdict: "strong", evidence: ["젖은 승차권과 꺼진 엔진 진동이 인물의 선택 전후를 구체적으로 보여 준다."], fatalRisk: "없음", nextAction: "감각 묘사는 행동을 바꾸는 단서로만 제한해 현재의 선명함을 보존한다." },
+    skepticalReader: { verdict: "strong", evidence: ["첫 회 안에서 승객을 내려 주는 보상과 누나 승차권 단서를 모두 받는다."], fatalRisk: "중간 규칙 설명이 늘어나면 이탈할 수 있다.", nextAction: "다음 화도 설명 전에 도윤이 원하는 기록과 이를 막는 사람을 먼저 보여 준다." }
+  },
+  comparativeVerdict: {
+    strongestAsset: "누나를 찾으려면 누나의 기억을 잃어야 한다는 선택이 감정과 장르 규칙을 동시에 움직인다.",
+    weakestAsset: "승객 사건이 같은 승차와 하차 순서로 반복되면 작품의 강한 대가도 금세 익숙해질 수 있다.",
+    genericnessSignals: ["비밀 회사의 기록 은폐는 익숙한 장기 미스터리 장치이므로 현재 회차의 유일한 동력이 되어서는 안 된다."],
+    wouldReadNext: true,
+    wouldReadNextReason: "첫 승객을 구한 대가로 누나의 목소리를 잃었고 다음 승객 칸에 도윤 이름이 생겨 선택의 결과를 확인하고 싶다.",
+    rewritePriority: "승객 구조의 반복을 피하면서 도윤과 해진의 정보 교환이 어떤 새 빚을 만드는지 가장 먼저 전개한다."
+  }
+}, developmentReviewOptions);
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);
+assert.equal(review.comparativeVerdict.wouldReadNext, true);
 assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 94.7);
 assert.equal(storyHeavenSerialQualityThresholds(1).readerOrientation, 92);
 assert.equal(storyHeavenSerialQualityThresholds(1).openingGrip, 90);
@@ -1042,6 +1219,12 @@ const weakReview = { ...review, decision: "rewrite_required", scores: { ...score
 const rewrite = decideStoryHeavenSerialReview({ qa, review: weakReview, rewriteCount: 0 });
 assert.equal(rewrite.state, "rewrite_required");
 assert.equal(rewrite.failedMetrics[0].name, "curiosityAndHook");
-assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", { ...review, scoreEvidence: {} }), /evidence_invalid/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", { ...review, scoreEvidence: {} }, developmentReviewOptions), /evidence_invalid/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  comparativeVerdict: { ...review.comparativeVerdict, wouldReadNext: false }
+}, developmentReviewOptions), /serial_review_next_read_approval_invalid/u);
+const reluctantReview = { ...review, decision: "rewrite_required", rewriteScenes: [2], comparativeVerdict: { ...review.comparativeVerdict, wouldReadNext: false } };
+assert.equal(decideStoryHeavenSerialReview({ qa, review: reluctantReview, rewriteCount: 0 }).state, "rewrite_required");
 
 console.log("StoryHeaven serial engine checks passed");

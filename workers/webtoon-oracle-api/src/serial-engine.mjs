@@ -500,7 +500,7 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
   if (jobType === "write_draft") return normalizeDraft(source, false, options);
   if (jobType === "rewrite_draft") return normalizeDraft(source, true, options);
-  return normalizeEditorialReview(source);
+  return normalizeEditorialReview(source, options);
 }
 
 export function analyzeStoryHeavenSerialDraft(input = {}) {
@@ -623,8 +623,12 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
   const failedMetrics = Object.entries(thresholds)
     .filter(([name, threshold]) => Number(scores[name]) < threshold)
     .map(([name, threshold]) => ({ name, score: Number(scores[name] || 0), threshold }));
+  const nextReadFailure = review?.comparativeVerdict
+    && review.comparativeVerdict.wouldReadNext !== true;
   const mandatoryFailure = !qa?.passed || Number(qa?.score || 0) < thresholds.koreanReadability
-    || review?.safetyPassed !== true || review?.decision === "blocked";
+    || review?.safetyPassed !== true
+    || nextReadFailure
+    || review?.decision === "blocked";
   const approved = !mandatoryFailure && review?.decision === "approved" && failedMetrics.length === 0;
   if (approved) return { state: "approved", failedMetrics, rewriteAllowed: false, readerExperienceScore };
   const rewriteAllowed = rewriteCount < STORYHEAVEN_SERIAL_LIMITS.rewriteMax && review?.decision !== "blocked";
@@ -680,6 +684,12 @@ function normalizeConcept(source, options = {}) {
   }
   if (!legacyConceptCopy || Object.keys(object(source.readerAppealPlan)).length > 0) {
     concept.readerAppealPlan = normalizeReaderAppealPlan(source.readerAppealPlan, options);
+  }
+  if (!legacyConceptCopy || Object.keys(object(source.developmentRoom)).length > 0) {
+    concept.developmentRoom = normalizeDevelopmentRoom(source.developmentRoom, concept.title);
+  }
+  if (!legacyConceptCopy || Object.keys(object(source.storyCore)).length > 0) {
+    concept.storyCore = normalizeStoryCore(source.storyCore);
   }
   return concept;
 }
@@ -796,6 +806,129 @@ function normalizeReaderAppealPlan(value, options = {}) {
   };
 }
 
+function normalizeDevelopmentRoom(value, finalTitle) {
+  const source = object(value);
+  const candidateInputs = array(source.candidates);
+  if (candidateInputs.length !== 4) throw new Error("serial_concept_candidates_invalid");
+  const candidates = candidateInputs.map((item) => {
+    const candidate = object(item);
+    return {
+      candidateId: requiredText(candidate.candidateId, 50, 3, "serial_candidate_id_invalid"),
+      workingTitle: requiredText(candidate.workingTitle, 80, 2, "serial_candidate_title_invalid"),
+      coreFantasy: requiredText(candidate.coreFantasy, 300, 20, "serial_candidate_fantasy_invalid"),
+      humanDesire: requiredText(candidate.humanDesire, 300, 20, "serial_candidate_desire_invalid"),
+      protagonistContradiction: requiredText(candidate.protagonistContradiction, 400, 20, "serial_candidate_contradiction_invalid"),
+      centralRelationship: requiredText(candidate.centralRelationship, 400, 30, "serial_candidate_relationship_invalid"),
+      worldPressure: requiredText(candidate.worldPressure, 400, 20, "serial_candidate_world_pressure_invalid"),
+      storyEngine: requiredText(candidate.storyEngine, 500, 30, "serial_candidate_story_engine_invalid"),
+      signatureScene: requiredText(candidate.signatureScene, 600, 40, "serial_candidate_signature_scene_invalid"),
+      longTailQuestion: requiredText(candidate.longTailQuestion, 400, 20, "serial_candidate_long_tail_invalid"),
+      familiarFoundation: requiredText(candidate.familiarFoundation, 300, 20, "serial_candidate_foundation_invalid"),
+      controlledDifference: requiredText(candidate.controlledDifference, 300, 10, "serial_candidate_difference_invalid"),
+      fatalRisk: requiredText(candidate.fatalRisk, 400, 20, "serial_candidate_risk_invalid"),
+      fingerprint: normalizeStoryFingerprint(candidate.fingerprint)
+    };
+  });
+  if (candidates.length !== 4 || new Set(candidates.map((item) => item.candidateId)).size !== 4) {
+    throw new Error("serial_concept_candidates_invalid");
+  }
+  const fingerprintAxes = ["protagonistFrame", "openingMode", "episodeEngine", "storyArena", "powerSource", "oppositionType"];
+  for (let left = 0; left < candidates.length; left += 1) {
+    for (let right = left + 1; right < candidates.length; right += 1) {
+      const matchingAxes = fingerprintAxes.filter((axis) => (
+        candidates[left].fingerprint[axis] !== "other"
+        && candidates[left].fingerprint[axis] === candidates[right].fingerprint[axis]
+      ));
+      if (matchingAxes.length >= 5) throw new Error("serial_concept_candidates_too_similar");
+    }
+  }
+
+  const reportSource = object(source.selectionReport);
+  const candidateIds = new Set(candidates.map((item) => item.candidateId));
+  const selectedCandidateId = requiredText(reportSource.selectedCandidateId, 50, 3, "serial_candidate_selection_invalid");
+  if (!candidateIds.has(selectedCandidateId)) throw new Error("serial_candidate_selection_invalid");
+  const rankingInputs = array(reportSource.ranking);
+  if (rankingInputs.length !== 4) throw new Error("serial_candidate_ranking_invalid");
+  const ranking = rankingInputs.map((item) => {
+    const rank = object(item);
+    const candidateId = requiredText(rank.candidateId, 50, 3, "serial_candidate_ranking_invalid");
+    return {
+      candidateId,
+      characterMagnetism: requiredScore(rank.characterMagnetism, "serial_candidate_character_score_invalid"),
+      emotionalEngine: requiredScore(rank.emotionalEngine, "serial_candidate_emotion_score_invalid"),
+      scenePotential: requiredScore(rank.scenePotential, "serial_candidate_scene_score_invalid"),
+      expansionCapacity: requiredScore(rank.expansionCapacity, "serial_candidate_expansion_score_invalid"),
+      genreDelight: requiredScore(rank.genreDelight, "serial_candidate_genre_score_invalid"),
+      clarity: requiredScore(rank.clarity, "serial_candidate_clarity_score_invalid"),
+      originalityDepth: requiredScore(rank.originalityDepth, "serial_candidate_originality_score_invalid"),
+      verdict: requiredEnum(rank.verdict, ["selected", "rejected"], "serial_candidate_verdict_invalid"),
+      weakness: requiredText(rank.weakness, 400, 10, "serial_candidate_weakness_invalid")
+    };
+  });
+  if (ranking.length !== 4
+    || new Set(ranking.map((item) => item.candidateId)).size !== 4
+    || ranking.some((item) => !candidateIds.has(item.candidateId))
+    || ranking.filter((item) => item.verdict === "selected").length !== 1
+    || ranking.find((item) => item.verdict === "selected")?.candidateId !== selectedCandidateId) {
+    throw new Error("serial_candidate_ranking_invalid");
+  }
+  const averageScore = (rank) => (
+    rank.characterMagnetism + rank.emotionalEngine + rank.scenePotential + rank.expansionCapacity
+    + rank.genreDelight + rank.clarity + rank.originalityDepth
+  ) / 7;
+  const selectedRank = ranking.find((item) => item.candidateId === selectedCandidateId);
+  if (ranking.some((item) => averageScore(item) > averageScore(selectedRank))) {
+    throw new Error("serial_candidate_selection_score_mismatch");
+  }
+  const selectedCandidate = candidates.find((item) => item.candidateId === selectedCandidateId);
+  if (selectedCandidate.workingTitle !== finalTitle) throw new Error("serial_candidate_title_mismatch");
+
+  const rejectionInputs = array(reportSource.rejectedReasons);
+  if (rejectionInputs.length !== 3) throw new Error("serial_candidate_rejection_invalid");
+  const rejectedReasons = rejectionInputs.map((item) => {
+    const rejected = object(item);
+    return {
+      candidateId: requiredText(rejected.candidateId, 50, 3, "serial_candidate_rejection_invalid"),
+      reason: requiredText(rejected.reason, 500, 20, "serial_candidate_rejection_invalid")
+    };
+  });
+  const rejectedIds = candidates.filter((item) => item.candidateId !== selectedCandidateId).map((item) => item.candidateId);
+  if (rejectedReasons.length !== 3
+    || new Set(rejectedReasons.map((item) => item.candidateId)).size !== 3
+    || rejectedIds.some((candidateId) => !rejectedReasons.some((item) => item.candidateId === candidateId))) {
+    throw new Error("serial_candidate_rejection_invalid");
+  }
+
+  return {
+    candidates,
+    selectionReport: {
+      selectedCandidateId,
+      ranking,
+      whySelected: requiredText(reportSource.whySelected, 700, 40, "serial_candidate_selection_reason_invalid"),
+      proofScene: requiredText(reportSource.proofScene, 700, 40, "serial_candidate_proof_scene_invalid"),
+      fatalRisk: requiredText(reportSource.fatalRisk, 500, 20, "serial_candidate_selected_risk_invalid"),
+      mitigation: requiredText(reportSource.mitigation, 700, 30, "serial_candidate_mitigation_invalid"),
+      rejectedReasons
+    }
+  };
+}
+
+function normalizeStoryCore(value) {
+  const source = object(value);
+  return {
+    readerFantasy: requiredText(source.readerFantasy, 300, 20, "serial_story_core_fantasy_invalid"),
+    emotionalCore: requiredText(source.emotionalCore, 300, 20, "serial_story_core_emotion_invalid"),
+    protagonistContradiction: requiredText(source.protagonistContradiction, 400, 20, "serial_story_core_contradiction_invalid"),
+    centralRelationship: requiredText(source.centralRelationship, 400, 30, "serial_story_core_relationship_invalid"),
+    worldPressure: requiredText(source.worldPressure, 400, 20, "serial_story_core_world_pressure_invalid"),
+    repeatableStoryEngine: requiredText(source.repeatableStoryEngine, 500, 30, "serial_story_core_engine_invalid"),
+    signaturePromise: requiredText(source.signaturePromise, 400, 20, "serial_story_core_promise_invalid"),
+    thematicQuestion: requiredText(source.thematicQuestion, 400, 20, "serial_story_core_theme_invalid"),
+    proofOfConceptScene: requiredText(source.proofOfConceptScene, 700, 40, "serial_story_core_proof_invalid"),
+    longTailSources: requiredList(source.longTailSources, { min: 3, max: 7, itemMax: 400 }, "serial_story_core_long_tail_invalid")
+  };
+}
+
 function normalizeRecentConceptComparison(value, options = {}) {
   const source = object(value);
   const recentConcepts = array(object(options.payload).recentConcepts);
@@ -870,9 +1003,10 @@ function normalizePublicSynopsis(value) {
 }
 
 function normalizeBible(source, options = {}) {
+  const developmentV2 = Object.keys(object(object(options.payload).concept?.storyCore)).length > 0;
   const characters = array(source.characters).slice(0, 12).map((item, index) => {
     const value = object(item);
-    return {
+    const character = {
       id: text(value.id, 50) || `character-${index + 1}`,
       name: requiredText(value.name, 80, 1, "serial_character_name_invalid"),
       role: requiredText(value.role, 120, 2, "serial_character_role_invalid"),
@@ -881,8 +1015,26 @@ function normalizeBible(source, options = {}) {
       secret: text(value.secret, 500),
       knowledge: stringList(value.knowledge, { max: 20, itemMax: 300 })
     };
+    if (developmentV2) {
+      Object.assign(character, {
+        misbelief: requiredText(value.misbelief, 400, 10, "serial_character_misbelief_invalid"),
+        contradiction: requiredText(value.contradiction, 400, 10, "serial_character_contradiction_invalid"),
+        dignity: requiredText(value.dignity, 300, 10, "serial_character_dignity_invalid"),
+        shame: requiredText(value.shame, 300, 10, "serial_character_shame_invalid"),
+        competence: requiredText(value.competence, 300, 10, "serial_character_competence_invalid"),
+        behavioralTell: requiredText(value.behavioralTell, 300, 10, "serial_character_behavior_invalid"),
+        decisionRule: requiredText(value.decisionRule, 400, 10, "serial_character_decision_rule_invalid"),
+        speechPattern: requiredText(value.speechPattern, 400, 10, "serial_character_speech_pattern_invalid"),
+        changeResistance: requiredText(value.changeResistance, 400, 10, "serial_character_change_resistance_invalid")
+      });
+    }
+    return character;
   });
-  if (characters.length < 2) throw new Error("serial_bible_characters_invalid");
+  if (characters.length < 2 || new Set(characters.map((character) => character.id)).size !== characters.length) {
+    throw new Error("serial_bible_characters_invalid");
+  }
+  const relationshipWeb = developmentV2 ? normalizeRelationshipWeb(source.relationshipWeb, characters) : null;
+  const worldDynamics = developmentV2 ? normalizeWorldDynamics(source.worldDynamics) : null;
   const worldRules = requiredList(source.worldRules, { min: 5, max: 24, itemMax: 500 }, "serial_world_rules_invalid");
   const forbiddenContradictions = requiredList(source.forbiddenContradictions, { min: 3, max: 20, itemMax: 500 }, "serial_forbidden_rules_invalid");
   const voice = object(source.voiceProfile);
@@ -896,6 +1048,7 @@ function normalizeBible(source, options = {}) {
   return {
     worldRules,
     characters,
+    ...(developmentV2 ? { relationshipWeb, worldDynamics } : {}),
     timeline: requiredList(source.timeline, { min: 3, max: 40, itemMax: 500 }, "serial_timeline_invalid"),
     glossary: stringList(source.glossary, { max: 40, itemMax: 300 }),
     forbiddenContradictions,
@@ -919,8 +1072,73 @@ function normalizeBible(source, options = {}) {
       revealCadence: requiredText(narrative.revealCadence, 500, 20, "serial_narrative_reveal_invalid"),
       noveltyPolicy: requiredText(narrative.noveltyPolicy, 500, 20, "serial_narrative_novelty_invalid"),
       antiRepetitionRules: requiredList(narrative.antiRepetitionRules, { min: 3, max: 10, itemMax: 240 }, "serial_narrative_repetition_invalid"),
+      ...(developmentV2 ? { planningHorizon: normalizePlanningHorizon(narrative.planningHorizon, expectedPlan) } : {}),
       seriesArchitecture
     }
+  };
+}
+
+function normalizeRelationshipWeb(value, characters) {
+  const characterIds = new Set(characters.map((character) => character.id));
+  const relationships = array(value).slice(0, 30).map((item) => {
+    const relationship = object(item);
+    const characterAId = requiredText(relationship.characterAId, 50, 1, "serial_relationship_character_invalid");
+    const characterBId = requiredText(relationship.characterBId, 50, 1, "serial_relationship_character_invalid");
+    if (characterAId === characterBId || !characterIds.has(characterAId) || !characterIds.has(characterBId)) {
+      throw new Error("serial_relationship_character_invalid");
+    }
+    return {
+      characterAId,
+      characterBId,
+      currentBond: requiredText(relationship.currentBond, 400, 10, "serial_relationship_bond_invalid"),
+      mutualNeed: requiredText(relationship.mutualNeed, 400, 10, "serial_relationship_need_invalid"),
+      valueConflict: requiredText(relationship.valueConflict, 400, 10, "serial_relationship_conflict_invalid"),
+      hiddenDebt: requiredText(relationship.hiddenDebt, 400, 10, "serial_relationship_debt_invalid"),
+      boundary: requiredText(relationship.boundary, 400, 10, "serial_relationship_boundary_invalid"),
+      pressureTest: requiredText(relationship.pressureTest, 500, 20, "serial_relationship_pressure_invalid"),
+      possibleShift: requiredText(relationship.possibleShift, 500, 20, "serial_relationship_shift_invalid")
+    };
+  });
+  if (relationships.length < 1) throw new Error("serial_relationship_web_invalid");
+  const pairKeys = relationships.map((item) => [item.characterAId, item.characterBId].sort().join("::"));
+  if (new Set(pairKeys).size !== pairKeys.length) throw new Error("serial_relationship_pair_duplicate");
+  return relationships;
+}
+
+function normalizeWorldDynamics(value) {
+  const dynamics = array(value).slice(0, 16).map((item) => {
+    const dynamic = object(item);
+    return {
+      key: requiredText(dynamic.key, 80, 3, "serial_world_dynamic_key_invalid"),
+      force: requiredText(dynamic.force, 240, 10, "serial_world_dynamic_force_invalid"),
+      want: requiredText(dynamic.want, 400, 10, "serial_world_dynamic_want_invalid"),
+      resources: requiredList(dynamic.resources, { min: 1, max: 6, itemMax: 240 }, "serial_world_dynamic_resources_invalid"),
+      methods: requiredList(dynamic.methods, { min: 1, max: 6, itemMax: 240 }, "serial_world_dynamic_methods_invalid"),
+      pressure: requiredText(dynamic.pressure, 500, 20, "serial_world_dynamic_pressure_invalid"),
+      secondOrderConsequences: requiredList(dynamic.secondOrderConsequences, { min: 2, max: 4, itemMax: 400 }, "serial_world_dynamic_consequences_invalid"),
+      storySeeds: requiredList(dynamic.storySeeds, { min: 2, max: 5, itemMax: 400 }, "serial_world_dynamic_seeds_invalid")
+    };
+  });
+  if (dynamics.length < 3 || new Set(dynamics.map((item) => item.key)).size !== dynamics.length) {
+    throw new Error("serial_world_dynamics_invalid");
+  }
+  return dynamics;
+}
+
+function normalizePlanningHorizon(value, expectedPlan) {
+  const source = object(value);
+  const directionalThroughVolume = Math.min(3, expectedPlan.totalVolumes);
+  if (integer(source.detailedThroughVolume, 1, expectedPlan.totalVolumes, null) !== 1
+    || integer(source.directionalThroughVolume, 1, expectedPlan.totalVolumes, null) !== directionalThroughVolume
+    || source.laterVolumesAreHypotheses !== true) {
+    throw new Error("serial_planning_horizon_invalid");
+  }
+  return {
+    detailedThroughVolume: 1,
+    directionalThroughVolume,
+    laterVolumesAreHypotheses: true,
+    protectedElements: requiredList(source.protectedElements, { min: 4, max: 10, itemMax: 400 }, "serial_planning_protected_elements_invalid"),
+    replanningTriggers: requiredList(source.replanningTriggers, { min: 3, max: 8, itemMax: 400 }, "serial_planning_triggers_invalid")
   };
 }
 
@@ -1015,13 +1233,18 @@ function normalizeEpisodeCard(source, options = {}) {
   }
   const episodeNo = integer(source.episodeNo, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null);
   const payload = object(options.payload);
+  const developmentV2 = Object.keys(object(payload.bible?.concept?.storyCore)).length > 0;
   if (payload.episodeNo && episodeNo !== Number(payload.episodeNo)) {
     throw new Error("serial_episode_card_number_mismatch");
   }
   return {
     episodeNo,
+    ...(developmentV2 ? {
+      episodeMode: requiredEnum(source.episodeMode, ["propulsion", "bonding", "discovery", "aftermath", "humor", "dread", "wonder", "training"], "serial_episode_mode_invalid")
+    } : {}),
     promise: requiredText(source.promise, 300, 10, "serial_episode_promise_invalid"),
     openingDisturbance: requiredText(source.openingDisturbance, 500, 10, "serial_episode_opening_invalid"),
+    ...(developmentV2 ? { dramaticCore: normalizeDramaticCore(source.dramaticCore) } : {}),
     scenes,
     payoff: requiredText(source.payoff, 500, 10, "serial_episode_payoff_invalid"),
     hook: requiredText(source.hook, 500, 10, "serial_episode_hook_invalid"),
@@ -1033,6 +1256,20 @@ function normalizeEpisodeCard(source, options = {}) {
       episodeNo,
       payload.bible?.narrativeBlueprint?.seriesArchitecture
     )
+  };
+}
+
+function normalizeDramaticCore(value) {
+  const source = object(value);
+  return {
+    desire: requiredText(source.desire, 300, 10, "serial_dramatic_core_desire_invalid"),
+    obstacle: requiredText(source.obstacle, 400, 10, "serial_dramatic_core_obstacle_invalid"),
+    choice: requiredText(source.choice, 400, 10, "serial_dramatic_core_choice_invalid"),
+    cost: requiredText(source.cost, 400, 10, "serial_dramatic_core_cost_invalid"),
+    stateChange: requiredText(source.stateChange, 400, 10, "serial_dramatic_core_change_invalid"),
+    emotionalTurn: requiredText(source.emotionalTurn, 400, 10, "serial_dramatic_core_emotion_invalid"),
+    imageAnchor: requiredText(source.imageAnchor, 400, 10, "serial_dramatic_core_image_invalid"),
+    subtextQuestion: requiredText(source.subtextQuestion, 400, 10, "serial_dramatic_core_subtext_invalid")
   };
 }
 
@@ -1097,7 +1334,7 @@ function normalizeDraft(source, rewritten, options = {}) {
   return draft;
 }
 
-function normalizeEditorialReview(source) {
+function normalizeEditorialReview(source, options = {}) {
   const scoresSource = object(source.scores);
   const scores = {};
   for (const key of Object.keys(STORYHEAVEN_SERIAL_LIMITS.quality)) {
@@ -1137,16 +1374,56 @@ function normalizeEditorialReview(source) {
     };
   });
   if (audienceLenses.length !== 3) throw new Error("serial_review_audience_lenses_invalid");
+  const developmentV2 = Object.keys(object(object(options.payload).bible?.concept?.storyCore)).length > 0;
+  const criticPanels = developmentV2 ? normalizeCriticPanels(source.criticPanels) : null;
+  const comparativeVerdictSource = object(source.comparativeVerdict);
+  const wouldReadNext = developmentV2
+    ? requiredBoolean(comparativeVerdictSource.wouldReadNext, "serial_review_would_read_next_invalid")
+    : null;
+  if (developmentV2 && decision === "approved" && !wouldReadNext) {
+    throw new Error("serial_review_next_read_approval_invalid");
+  }
+  const rewriteScenes = [...new Set(array(source.rewriteScenes)
+    .map((value) => integer(value, 1, STORYHEAVEN_SERIAL_LIMITS.scenesMax, null))
+    .filter(Boolean))];
+  if (developmentV2 && !wouldReadNext && decision === "rewrite_required" && !rewriteScenes.length) {
+    throw new Error("serial_review_next_read_rewrite_scenes_required");
+  }
   return {
     decision,
     scores,
     safetyPassed: source.safetyPassed === true,
     summary: requiredText(source.summary, 1_000, 10, "serial_review_summary_invalid"),
     issues,
-    rewriteScenes: [...new Set(array(source.rewriteScenes).map((value) => integer(value, 1, STORYHEAVEN_SERIAL_LIMITS.scenesMax, null)).filter(Boolean))],
+    rewriteScenes,
     scoreEvidence,
-    audienceLenses
+    audienceLenses,
+    ...(developmentV2 ? {
+      criticPanels,
+      comparativeVerdict: {
+        strongestAsset: requiredText(comparativeVerdictSource.strongestAsset, 500, 20, "serial_review_strongest_asset_invalid"),
+        weakestAsset: requiredText(comparativeVerdictSource.weakestAsset, 500, 20, "serial_review_weakest_asset_invalid"),
+        genericnessSignals: stringList(comparativeVerdictSource.genericnessSignals, { max: 5, itemMax: 300 }),
+        wouldReadNext,
+        wouldReadNextReason: requiredText(comparativeVerdictSource.wouldReadNextReason, 600, 30, "serial_review_next_read_reason_invalid"),
+        rewritePriority: requiredText(comparativeVerdictSource.rewritePriority, 500, 20, "serial_review_priority_invalid")
+      }
+    } : {})
   };
+}
+
+function normalizeCriticPanels(value) {
+  const source = object(value);
+  const panelNames = ["character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"];
+  return Object.fromEntries(panelNames.map((panelName) => {
+    const panel = object(source[panelName]);
+    return [panelName, {
+      verdict: requiredEnum(panel.verdict, ["strong", "mixed", "weak"], `serial_review_${panelName}_verdict_invalid`),
+      evidence: requiredList(panel.evidence, { min: 1, max: 3, itemMax: 400 }, `serial_review_${panelName}_evidence_invalid`),
+      fatalRisk: requiredText(panel.fatalRisk, 400, 2, `serial_review_${panelName}_risk_invalid`),
+      nextAction: requiredText(panel.nextAction, 500, 10, `serial_review_${panelName}_action_invalid`)
+    }];
+  }));
 }
 
 function expectedSeriesPlan(options = {}) {
@@ -1526,6 +1803,12 @@ function requiredList(value, limits, error) {
 function integer(value, min, max, fallback) {
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed >= min && parsed <= max ? parsed : fallback;
+}
+
+function requiredScore(value, error) {
+  const score = integer(value, 0, 100, null);
+  if (score === null) throw new Error(error);
+  return score;
 }
 
 function requiredBoolean(value, error) {

@@ -366,6 +366,10 @@ assert.ok(serialService.includes("serial_story_auto_continuation_disabled"));
 assert.ok(serialService.includes("control.CONTINUATION_MODE !== \"auto\""));
 assert.ok(serialService.includes("primary_genres_json"));
 assert.ok(serialService.includes("subgenres_by_genre_json"));
+assert.ok(serialService.includes("relationshipWeb: bible.relationshipWeb"));
+assert.ok(serialService.includes("worldDynamics: bible.worldDynamics"));
+assert.ok(serialService.includes("episodeMode: card.episodeMode"));
+assert.ok(serialService.includes("dramaticCore: card.dramaticCore"));
 const serialNarrativeMigration = await readFile(new URL("../../../oracle/20260731-storyheaven-serial-narrative-dna.sql", import.meta.url), "utf8");
 for (const column of ["primary_genre", "subgenres_json", "publication_mode", "narrative_blueprint_json", "narrative_plan_json", "technique_plan_json", "score_evidence_json", "audience_lenses_json"]) {
   assert.ok(serialNarrativeMigration.includes(column), "missing serial narrative column: " + column);

@@ -129,6 +129,12 @@ assert.match(conceptPrompt, /usesMatchingTaskTransfer must be false/u);
 assert.match(conceptPrompt, /nameKnownBeforeIntroduction/u);
 assert.match(conceptPrompt, /hasMultiStepTrigger must be false/u);
 assert.match(conceptPrompt, /현지인이 이름을 알게 되는 출처와 시점/u);
+assert.match(conceptPrompt, /developmentRoom and storyCore are mandatory/u);
+assert.match(conceptPrompt, /exactly four genuinely different candidates/u);
+assert.match(conceptPrompt, /character magnetism, emotional engine, scene potential/u);
+assert.match(conceptPrompt, /selected candidate must have the highest average score/u);
+assert.match(conceptPrompt, /작품을 움직이는 인간적 감정/u);
+assert.match(conceptPrompt, /candidate-4/u);
 
 const recentConceptPrompt = buildSerialPrompt({
   ...job,
@@ -191,9 +197,23 @@ const readerAppealPlan = {
   }
 };
 
-const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible", payload: { concept: { premiseAudit, readerAppealPlan } } });
+const storyCore = {
+  readerFantasy: "위험한 길을 통과해 다른 사람의 마지막 목적지를 찾아 주는 체험",
+  emotionalCore: "가족을 기억하려는 사랑과 책임을 혼자 지려는 죄책감의 충돌",
+  protagonistContradiction: "남을 지키는 책임감이 도움을 거부하고 자신을 희생하게 만든다",
+  centralRelationship: "기록을 원하는 주인공과 기록을 숨겨야 하는 동료가 서로 필요하다",
+  worldPressure: "도시가 외면한 책임이 승객과 정류장의 문제로 계속 돌아온다",
+  repeatableStoryEngine: "한 사건의 선택과 대가가 관계의 빚과 다음 사건을 함께 만든다",
+  signaturePromise: "매 운행에서 사건을 해결하고 실제 대가를 치르며 가족의 단서에 접근한다",
+  thematicQuestion: "책임을 잊는 일과 기억하며 나누는 일 중 무엇이 사람을 지키는가",
+  proofOfConceptScene: "가족의 목소리 기억을 잃고 승객을 구한 뒤 불신하던 동료가 기록 일부를 건넨다",
+  longTailSources: ["승객의 서로 다른 선택", "운수 회사의 기록 통제", "동료와 쌓이는 정보의 빚"]
+};
+
+const biblePrompt = buildSerialPrompt({ ...job, type: "build_bible", payload: { concept: { premiseAudit, readerAppealPlan, storyCore } } });
 assert.match(biblePrompt, /numeric seriesPlan is not a long-form plan by itself/u);
-assert.match(biblePrompt, /Every newly generated story must build a complete seriesArchitecture before its prologue is planned/u);
+assert.match(biblePrompt, /Every newly generated story must build a complete directional seriesArchitecture before its prologue is planned/u);
+assert.match(biblePrompt, /planningHorizon makes volume 1 detailed, volumes 2-3 directional/u);
 assert.match(biblePrompt, /private writer bible/u);
 assert.match(biblePrompt, /narrativeBlueprint\.noveltyPolicy/u);
 assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
@@ -210,30 +230,39 @@ assert.match(biblePrompt, /each character knowledge list must state whether and 
 assert.match(biblePrompt, /unearned acceptance, unexplained name use/u);
 assert.match(biblePrompt, /Turn the lack, want, stake, flawed choice pattern/u);
 assert.match(biblePrompt, /long mystery may deepen the story but may not be its only continuation reason/u);
+assert.match(biblePrompt, /Every major character must have a misbelief/u);
+assert.match(biblePrompt, /Build a relationshipWeb/u);
+assert.match(biblePrompt, /Build worldDynamics/u);
+assert.match(biblePrompt, /later volume entries are revisable hypotheses/u);
+assert.match(biblePrompt, /서로 필요한 이유/u);
+assert.match(biblePrompt, /laterVolumesAreHypotheses/u);
 
 const auditedPlanningPrompt = buildSerialPrompt({
   ...job,
   type: "build_episode_card",
-  payload: { bible: { concept: { premiseAudit, readerAppealPlan } } }
+  payload: { bible: { concept: { premiseAudit, readerAppealPlan, storyCore } } }
 });
 assert.match(auditedPlanningPrompt, /In knowledgeBefore, record by character/u);
 assert.match(auditedPlanningPrompt, /move visibly toward firstAcceptanceCondition/u);
 assert.match(auditedPlanningPrompt, /Complete techniquePlan\.readerRewardPlan before scenes/u);
 assert.match(auditedPlanningPrompt, /relationshipAfter must materially differ/u);
+assert.match(auditedPlanningPrompt, /Select one episodeMode/u);
+assert.match(auditedPlanningPrompt, /Complete dramaticCore as desire, obstacle, choice, cost/u);
 
 const auditedWritingPrompt = buildSerialPrompt({
   ...job,
   type: "write_draft",
-  payload: { bible: { concept: { premiseAudit, readerAppealPlan } } }
+  payload: { bible: { concept: { premiseAudit, readerAppealPlan, storyCore } } }
 });
 assert.match(auditedWritingPrompt, /check whether its speaker has learned the protagonist's name/u);
 assert.match(auditedWritingPrompt, /ordinary label, question, or omission/u);
 assert.match(auditedWritingPrompt, /Do not reduce supporting characters to cooperative exposition/u);
+assert.match(auditedWritingPrompt, /Follow episodeCard\.episodeMode and dramaticCore/u);
 
 const auditedReviewPrompt = buildSerialPrompt({
   ...job,
   type: "editorial_review",
-  payload: { bible: { concept: { premiseAudit, readerAppealPlan } } }
+  payload: { bible: { concept: { premiseAudit, readerAppealPlan, storyCore } } }
 });
 assert.match(auditedReviewPrompt, /unearned immediate acceptance of an outsider/u);
 assert.match(auditedReviewPrompt, /multi-step unrelated ability trigger/u);
@@ -242,6 +271,8 @@ assert.match(auditedReviewPrompt, /High characterAttachment requires/u);
 assert.match(auditedReviewPrompt, /High relationshipMomentum requires/u);
 assert.match(auditedReviewPrompt, /High readerReward requires/u);
 assert.match(auditedReviewPrompt, /High premiseAccessibility requires/u);
+assert.match(auditedReviewPrompt, /Return six independent criticPanels/u);
+assert.match(auditedReviewPrompt, /wouldReadNext is a publication gate/u);
 
 const appealArcPrompt = buildSerialPrompt({
   ...job,
@@ -254,7 +285,7 @@ assert.match(appealArcPrompt, /setup and conspiracy hints only/u);
 const appealRewritePrompt = buildSerialPrompt({
   ...job,
   type: "rewrite_draft",
-  payload: { bible: { concept: { premiseAudit, readerAppealPlan } } }
+  payload: { bible: { concept: { premiseAudit, readerAppealPlan, storyCore } } }
 });
 assert.match(appealRewritePrompt, /Repair generic altruism with a specific personal consequence/u);
 assert.match(appealRewritePrompt, /Do not solve a weak episode by adding another rule/u);

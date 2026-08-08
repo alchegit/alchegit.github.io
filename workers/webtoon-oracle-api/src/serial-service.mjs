@@ -2097,7 +2097,20 @@ export function createStoryHeavenSerialService({
     const previousNarrativeBlueprint = parseJson(previousBible?.NARRATIVE_BLUEPRINT_JSON, {});
     const previousArchitecture = previousNarrativeBlueprint.seriesArchitecture || null;
     const seriesPlan = normalizeSeriesPlan(payload.seriesPlan || payload.concept?.seriesPlan);
-    const narrativeBlueprint = { ...bible.narrativeBlueprint, seriesPlan };
+    const narrativeBlueprint = {
+      ...bible.narrativeBlueprint,
+      seriesPlan,
+      ...(Array.isArray(bible.relationshipWeb)
+        ? { relationshipWeb: bible.relationshipWeb }
+        : Array.isArray(previousNarrativeBlueprint.relationshipWeb)
+          ? { relationshipWeb: previousNarrativeBlueprint.relationshipWeb }
+          : {}),
+      ...(Array.isArray(bible.worldDynamics)
+        ? { worldDynamics: bible.worldDynamics }
+        : Array.isArray(previousNarrativeBlueprint.worldDynamics)
+          ? { worldDynamics: previousNarrativeBlueprint.worldDynamics }
+          : {})
+    };
     await connection.execute(
       `update storyheaven_serial_bibles set
           bible_status = 'active', world_rules_json = :world_rules_json,
@@ -2317,6 +2330,8 @@ export function createStoryHeavenSerialService({
         knowledge_json: clobJson(card.knowledgeBefore), canon_refs_json: clobJson(card.canonReferences),
         technique_plan_json: clobJson({
           ...card.techniquePlan,
+          ...(card.episodeMode ? { episodeMode: card.episodeMode } : {}),
+          ...(card.dramaticCore ? { dramaticCore: card.dramaticCore } : {}),
           prologueDisclosurePlan: card.prologueDisclosurePlan
         }),
         source_job_id: job.ID
@@ -3765,6 +3780,7 @@ function publicStory(row) {
 }
 
 function mapBible(row) {
+  const narrativeBlueprint = parseJson(row.NARRATIVE_BLUEPRINT_JSON, {});
   return {
     storyId: row.STORY_ID,
     version: Number(row.BIBLE_VERSION || 1),
@@ -3776,7 +3792,13 @@ function mapBible(row) {
     glossary: parseJson(row.GLOSSARY_JSON, []),
     forbiddenContradictions: parseJson(row.FORBIDDEN_JSON, []),
     voiceProfile: parseJson(row.VOICE_PROFILE_JSON, {}),
-    narrativeBlueprint: parseJson(row.NARRATIVE_BLUEPRINT_JSON, {})
+    ...(Array.isArray(narrativeBlueprint.relationshipWeb)
+      ? { relationshipWeb: narrativeBlueprint.relationshipWeb }
+      : {}),
+    ...(Array.isArray(narrativeBlueprint.worldDynamics)
+      ? { worldDynamics: narrativeBlueprint.worldDynamics }
+      : {}),
+    narrativeBlueprint
   };
 }
 
@@ -3818,6 +3840,8 @@ function mapCard(row) {
     hook: row.HOOK,
     knowledgeBefore: parseJson(row.KNOWLEDGE_JSON, []),
     canonReferences: parseJson(row.CANON_REFS_JSON, []),
+    ...(techniquePlan.episodeMode ? { episodeMode: techniquePlan.episodeMode } : {}),
+    ...(techniquePlan.dramaticCore ? { dramaticCore: techniquePlan.dramaticCore } : {}),
     techniquePlan,
     prologueDisclosurePlan: techniquePlan.prologueDisclosurePlan || {
       mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: []

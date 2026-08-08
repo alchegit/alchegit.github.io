@@ -6,6 +6,8 @@ When `STORYHEAVEN_SERIAL_ENGINE_ENABLED=true`, the same isolated process also ha
 
 The research basis for the nine controlled genre profiles and the shared opening rules is documented in [GENRE_BENCHMARKS_KO.md](./GENRE_BENCHMARKS_KO.md). The worker receives only aggregated, high-level craft guidance and never receives benchmark titles, excerpts, or instructions to imitate an author.
 
+New concepts created under editorial policy `2026-08-09-story-development-v17` retain four competing concept candidates, an auditable selection report, a binding story core, richer character and relationship dynamics, and causal world pressures. Episode cards rotate dramatic modes and explicit choice-cost chains. Editorial approval also requires six evidence-based critic panels and a positive voluntary next-read verdict; legacy stories continue under their existing contract without retroactive rewriting. The diagnosis, boundaries, and phased roadmap are documented in [serial-quality-v2-plan.md](../../storyheaven/serial-quality-v2-plan.md).
+
 When the queue is empty, polling backs off from 10 seconds to at most 60 seconds with a small jitter. Completing work resets the interval immediately, and `SIGTERM` interrupts idle sleep so deployments stop cleanly.
 
 ## Safety boundary
