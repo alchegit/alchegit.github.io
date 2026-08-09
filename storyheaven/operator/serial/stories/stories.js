@@ -121,13 +121,16 @@
       return (!query || searchText.includes(query))
         && (visibility === "all" || (visibility === "managed" ? story.visibility !== "archived" : story.visibility === visibility))
         && (elements.continuation.value === "all" || story.continuationMode === elements.continuation.value);
-    });
+    }).sort((left, right) => Number(pilotNeedsOperator(right)) - Number(pilotNeedsOperator(left)));
     const visibleIds = new Set(filtered.map((story) => story.id));
     for (const storyId of state.selectedStoryIds) {
       if (!visibleIds.has(storyId)) state.selectedStoryIds.delete(storyId);
     }
     state.visibleStoryIds = [...visibleIds];
-    elements.resultCount.textContent = `${filtered.length.toLocaleString("ko-KR")}편`;
+    const attentionCount = filtered.filter(pilotNeedsOperator).length;
+    elements.resultCount.textContent = attentionCount
+      ? `${filtered.length.toLocaleString("ko-KR")}편 · 확인 필요 ${attentionCount.toLocaleString("ko-KR")}편`
+      : `${filtered.length.toLocaleString("ko-KR")}편`;
     if (!filtered.length) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
@@ -489,7 +492,7 @@
     header.className = "opening-pilot-header";
     const copy = document.createElement("div");
     const eyebrow = document.createElement("span");
-    eyebrow.textContent = "첫 3편 파일럿";
+    eyebrow.textContent = "한 작품 · 첫 3편 파일럿";
     const title = document.createElement("strong");
     title.textContent = openingPilotStateLabel(pilot);
     const detail = document.createElement("p");
@@ -499,7 +502,7 @@
     status.className = "opening-pilot-feedback";
     status.setAttribute("role", "status");
     status.textContent = pilot.operatorDecision === "promoted"
-      ? "운영자 승격 결정이 저장되었습니다."
+      ? (pilot.promotionMode === "system_auto" ? "시스템 자동 승격이 완료되었습니다." : "운영자 승격 결정이 저장되었습니다.")
       : `${Number(pilot.completedInstallments || 0)} / ${Number(pilot.requiredInstallments || 3)}편 평가`;
     header.append(copy, status);
 
@@ -536,8 +539,11 @@
 
     const actions = document.createElement("div");
     actions.className = "opening-pilot-actions";
-    if (pilot.state === "ready_for_promotion" && pilot.operatorDecision !== "promoted") {
-      const promote = actionButton("정식 연재로 승격", "", () => promoteOpeningPilot(story, promote, status));
+    const requiresOperatorApproval = pilot.approvalMode !== "system_auto";
+    const canPromoteNormally = pilot.state === "ready_for_promotion" && requiresOperatorApproval;
+    const canOverride = pilot.state === "needs_editor_attention";
+    if (pilot.operatorDecision !== "promoted" && (canPromoteNormally || canOverride)) {
+      const promote = actionButton(canOverride ? "검토 후 예외 승격" : "정식 연재로 승격", canOverride ? "secondary" : "", () => promoteOpeningPilot(story, promote, status));
       promote.disabled = !state.enabled || Boolean(story.queue) || hasPilotProductionWork(story);
       actions.append(promote);
     }
@@ -546,6 +552,13 @@
     actions.append(recommendation);
     panel.append(header, metrics, episodes, actions);
     return panel;
+  }
+
+  function pilotNeedsOperator(story) {
+    const pilot = story.openingPilot || {};
+    if (!pilot.enabled || pilot.operatorDecision === "promoted") return false;
+    return pilot.state === "needs_editor_attention"
+      || (pilot.state === "ready_for_promotion" && pilot.approvalMode !== "system_auto");
   }
 
   function pilotMetric(label, value) {
@@ -559,7 +572,7 @@
   }
 
   function openingPilotStateLabel(pilot) {
-    if (pilot.operatorDecision === "promoted") return "승격 완료";
+    if (pilot.operatorDecision === "promoted") return pilot.promotionMode === "system_auto" ? "자동 승격 완료" : "승격 완료";
     return ({
       not_started: "파일럿 제작 전",
       collecting: "세 편을 만드는 중",
@@ -571,13 +584,20 @@
   function openingPilotGuidance(story) {
     const pilot = story.openingPilot || {};
     if (pilot.operatorDecision === "promoted") {
+      const source = pilot.promotionMode === "system_auto" ? "시스템이 높은 품질 기준을 확인해 자동 승격했습니다." : "운영자가 내용을 확인해 승격했습니다.";
       return story.schedule?.publicationMode === "auto_public"
-        ? "승격된 세 편은 프롤로그부터 순서대로 공개됩니다."
-        : "승격은 완료됐지만 테스트 비공개 설정이므로 원고는 공개하지 않고 보관합니다.";
+        ? `${source} 세 편은 프롤로그부터 순서대로 공개됩니다.`
+        : `${source} 테스트 비공개 설정이므로 원고는 공개하지 않고 보관합니다.`;
     }
-    if (pilot.state === "ready_for_promotion") return "세 편이 기준을 통과했습니다. 운영자가 승격하면 프롤로그부터 순서대로 공개합니다.";
-    if (pilot.state === "needs_editor_attention") return "세 편 중 약한 회차만 골라 다시 쓰면 평가가 자동으로 갱신됩니다.";
-    return "프롤로그와 본편 1·2화를 모두 검수할 때까지 독자 공개를 보류합니다.";
+    if (pilot.state === "ready_for_promotion") {
+      return pilot.approvalMode === "system_auto"
+        ? "세 편이 높은 기준을 통과했습니다. 시스템 승격과 공개 순서를 처리하고 있습니다."
+        : "세 편이 기준을 통과했습니다. 운영자가 승격하면 프롤로그부터 순서대로 공개합니다.";
+    }
+    if (pilot.state === "needs_editor_attention") return "기준에 미달해 공개를 보류했습니다. 약한 회차를 다시 쓰거나, 내용을 직접 확인한 뒤 예외 승격할 수 있습니다.";
+    return pilot.approvalMode === "system_auto"
+      ? "프롤로그와 본편 1·2화를 모두 검수합니다. 높은 기준을 통과하면 자동 승격하고, 나머지만 운영자에게 알립니다."
+      : "프롤로그와 본편 1·2화를 모두 검수할 때까지 독자 공개를 보류합니다.";
   }
 
   function hasPilotProductionWork(story) {
@@ -585,10 +605,14 @@
   }
 
   async function promoteOpeningPilot(story, button, status) {
+    const override = story.openingPilot?.state === "needs_editor_attention";
     const modeCopy = story.schedule?.publicationMode === "auto_public"
       ? "승격 즉시 프롤로그부터 세 편이 순서대로 공개됩니다."
       : "현재는 테스트 비공개 설정이라 승격 결정만 저장되고 원고는 공개되지 않습니다.";
-    if (!window.confirm(`${story.title}을 정식 연재로 승격할까요?\n\n${modeCopy}`)) return;
+    const qualityCopy = override
+      ? "이 작품은 자동 품질 기준에 미달했습니다. 세 편을 직접 확인했고 현재 원고 그대로 공개해도 된다고 판단한 경우에만 예외 승격하세요.\n\n"
+      : "";
+    if (!window.confirm(`${qualityCopy}${story.title}을 정식 연재로 승격할까요?\n\n${modeCopy}`)) return;
     const original = button.textContent;
     button.disabled = true;
     button.textContent = "승격 처리 중";
@@ -596,7 +620,7 @@
     try {
       const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/opening-pilot`, {
         method: "POST",
-        body: { action: "promote" }
+        body: { action: "promote", override }
       });
       const publishedCount = Number(payload.published?.length || 0);
       status.textContent = publishedCount

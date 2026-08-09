@@ -206,7 +206,8 @@ try {
     assert.equal(await noveltyControl.inputValue(), "2", `${viewport.name} starts with restrained novelty`);
     assert.match(await noveltyControl.locator("xpath=ancestor::label").textContent(), /참신성.*익숙한 장르 문법.*실험적 조합/u, `${viewport.name} explains the novelty range`);
     assert.equal(await noveltyControl.locator("xpath=ancestor::label").locator("output").getAttribute("title"), "절제된 차별화", `${viewport.name} names the default novelty level`);
-    await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').check();
+    assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').isChecked(), true, `${viewport.name} defaults to a three-installment pilot`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotApprovalMode"][value="system_auto"]').isChecked(), true, `${viewport.name} defaults to high-score automatic promotion`);
     assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "3", `${viewport.name} three-installment pilot raises the minimum initial batch`);
     await page.locator('[data-schedule-form] select[name="cadenceUnit"]').selectOption("minutes");
     await page.locator('[data-schedule-form] input[name="cadenceValue"]').fill("90");
@@ -227,7 +228,7 @@ try {
 
     await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').check();
     await page.locator('.subgenre-group:has(h3:text("SF")) input[value="near-future"]').check();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v10") || "null")?.primaryGenres?.length === 3);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v11") || "null")?.primaryGenres?.length === 3);
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
     await page.locator("[data-create-panel]").evaluate((node) => { node.open = true; });
@@ -235,6 +236,7 @@ try {
     assert.equal(await page.locator('[data-schedule-form] select[name="cadenceUnit"]').inputValue(), "minutes", `${viewport.name} restores cadence unit`);
     assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "4", `${viewport.name} restores target episode count`);
     assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').isChecked(), true, `${viewport.name} restores opening pilot mode`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotApprovalMode"][value="system_auto"]').isChecked(), true, `${viewport.name} restores pilot approval mode`);
     assert.equal(await page.locator('[data-schedule-form] input[name="creativeNovelty"]').inputValue(), "2", `${viewport.name} restores novelty`);
     assert.equal(await page.locator('[data-primary-genres] input:checked').count(), 3, `${viewport.name} restores primary genres`);
     assert.equal(await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').isChecked(), true, `${viewport.name} restores romance detail`);
@@ -254,6 +256,7 @@ try {
     assert.equal(submitted.cadenceMinutes, 90, `${viewport.name} minute cadence payload`);
     assert.equal(submitted.targetEpisodeCount, 4, `${viewport.name} initial episode target payload`);
     assert.equal(submitted.openingPilotMode, "three_episode_incubation", `${viewport.name} opening pilot payload`);
+    assert.equal(submitted.openingPilotApprovalMode, "system_auto", `${viewport.name} opening pilot approval payload`);
     assert.equal(submitted.totalVolumes, 10, `${viewport.name} default volume count payload`);
     assert.equal(submitted.episodesPerVolume, 25, `${viewport.name} default episodes-per-volume payload`);
     assert.equal(submitted.continuationBatchCount, 1, `${viewport.name} default continuation batch payload`);

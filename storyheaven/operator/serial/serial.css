@@ -660,6 +660,11 @@
   margin-bottom: 12px;
 }
 
+.pilot-approval-fieldset {
+  border-top: 1px solid #303747;
+  padding-top: 18px;
+}
+
 .advanced {
   border: 2px solid #303747;
   background: #11151e;

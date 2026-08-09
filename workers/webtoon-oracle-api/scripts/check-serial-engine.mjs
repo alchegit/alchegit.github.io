@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_DEFAULT_CONCEPT_POLICY,
+  STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES,
   STORYHEAVEN_OPENING_PILOT_MODES,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
@@ -26,7 +27,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
@@ -63,30 +64,52 @@ const strongPilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 3, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 88 }
 ]);
 assert.equal(strongPilot.state, "ready_for_promotion");
+const automaticallyPromotedPilot = applyStoryHeavenOpeningPilotPromotion(strongPilot, {
+  approvalMode: STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic,
+  promotedAt: "2026-08-09T00:00:00.000Z"
+});
+assert.equal(automaticallyPromotedPilot.operatorDecision, "promoted");
+assert.equal(automaticallyPromotedPilot.promotionMode, "system_auto");
+assert.equal(automaticallyPromotedPilot.promotedBy, "system");
+assert.equal(automaticallyPromotedPilot.promotedAt, "2026-08-09T00:00:00.000Z");
+assert.equal(applyStoryHeavenOpeningPilotPromotion(strongPilot).operatorDecision, undefined);
 const repetitivePilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 1, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 92 },
   { episodeNo: 2, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 90 },
   { episodeNo: 3, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 88 }
 ]);
 assert.equal(repetitivePilot.state, "needs_editor_attention");
+assert.equal(applyStoryHeavenOpeningPilotPromotion(repetitivePilot, {
+  approvalMode: STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic
+}).operatorDecision, undefined);
 const incubatedSchedule = validateStoryHeavenSerialSchedule({
   primaryGenre: "fantasy",
   subgenres: ["modern-fantasy"],
   targetEpisodeCount: 1,
   openingPilotMode: STORYHEAVEN_OPENING_PILOT_MODES.incubation,
+  openingPilotApprovalMode: STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic,
   conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
 });
 assert.equal(incubatedSchedule.ok, true);
 assert.equal(incubatedSchedule.schedule.targetEpisodeCount, 3);
 assert.equal(incubatedSchedule.schedule.openingPilotMode, "three_episode_incubation");
+assert.equal(incubatedSchedule.schedule.openingPilotApprovalMode, "system_auto");
 assert.equal(validateStoryHeavenSerialSchedule({
   primaryGenre: "fantasy",
   subgenres: ["modern-fantasy"],
   targetEpisodeCount: 1,
   conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
-}).schedule.openingPilotMode, "single_episode");
+}).schedule.openingPilotMode, "three_episode_incubation");
+assert.equal(validateStoryHeavenSerialSchedule({
+  primaryGenre: "fantasy",
+  subgenres: ["modern-fantasy"],
+  targetEpisodeCount: 1,
+  conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+}).schedule.openingPilotApprovalMode, "system_auto");
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
-assert.match(serialServiceSource, /pilotAssessment\.operatorDecision'[^]*= 'promoted'/u, "incubated opening episodes must stay held until operator promotion");
+assert.match(serialServiceSource, /pilotAssessment\.operatorDecision'[^]*= 'promoted'/u, "incubated opening episodes must stay held until a durable system or operator promotion");
+assert.match(serialServiceSource, /promotionMode: "system_auto"/u, "a strong three-installment pilot must support automatic promotion");
+assert.match(serialServiceSource, /serial_pilot_override_required/u, "a weak pilot must require an explicit operator override");
 assert.match(serialServiceSource, /async function resolveOpeningPilot/u, "opening pilots must expose a durable promotion operation");
 assert.match(serialServiceSource, /operator_pilot_rewrite/u, "an unpublished pilot installment must be replaceable without deleting its audit history");
 assert.match(serialServiceSource, /function mapRunDevelopment/u, "run details must expose concept candidate comparisons");
@@ -179,8 +202,10 @@ assert.match(serialOperatorHtml, /프롤로그는 설정 소개 외에 익숙한
 assert.match(serialOperatorSource, /능력 발동 방식이 지나치게 복잡해 기획 재작성 필요/u, "premise-gate failures must be readable to operators");
 assert.match(serialOperatorSource, /characterAttachment: "인물 애착"/u, "operator reviews must label character attachment clearly");
 assert.match(serialOperatorSource, /readerReward: "회차 보상"/u, "operator reviews must label concrete reader rewards clearly");
-assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v10/u, "draft persistence must include opening pilot mode");
-assert.match(serialOperatorHtml, /name="openingPilotMode" value="three_episode_incubation"/u, "operators must be able to select a held three-installment pilot");
+assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v11/u, "draft persistence must include pilot approval mode");
+assert.match(serialOperatorHtml, /name="openingPilotMode" value="three_episode_incubation" checked/u, "new serials must default to a three-installment pilot");
+assert.match(serialOperatorHtml, /name="openingPilotApprovalMode" value="system_auto" checked/u, "strong pilots must default to automatic promotion");
+assert.match(serialOperatorHtml, /네 개의 기획 후보를 점수로 비교해 가장 나은 기획 하나/u, "operators must know concept selection already happens before the three-installment pilot");
 assert.match(serialOperatorSource, /function renderDevelopmentComparison/u, "operator run details must render all concept candidates and the selection rationale");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
 assert.match(managedStoriesHtml, /data-created-from/u, "managed stories must provide a creation start date filter");
@@ -192,6 +217,8 @@ assert.match(managedStoriesSource, /offset \+= 100/u, "large bulk changes must b
 assert.match(managedStoriesSource, /목록에 복원/u, "hidden stories must be restorable");
 assert.match(managedStoriesSource, /function openingPilotPanel/u, "managed stories must explain opening pilot status and actions");
 assert.match(managedStoriesSource, /정식 연재로 승격/u, "ready pilots must provide an explicit operator promotion command");
+assert.match(managedStoriesSource, /검토 후 예외 승격/u, "weak pilots must allow a deliberate operator override");
+assert.match(managedStoriesSource, /function pilotNeedsOperator/u, "operator-required pilots must be grouped ahead of unattended stories");
 assert.match(managedStoriesSource, /이 회차 재작성/u, "operators must be able to rewrite a selected unpublished pilot installment");
 assert.match(managedStoriesCss, /\.opening-pilot-metrics/u, "opening pilot evidence must have a stable responsive layout");
 assert.match(managedStoriesCss, /\.bulk-apply:disabled[\s\S]*opacity: 1/u, "disabled bulk actions must keep readable contrast");
@@ -459,7 +486,7 @@ const schedule = validateStoryHeavenSerialSchedule({
 });
 assert.equal(schedule.ok, true);
 assert.equal(schedule.schedule.cadenceMinutes, 90);
-assert.equal(schedule.schedule.targetEpisodeCount, 1);
+assert.equal(schedule.schedule.targetEpisodeCount, 3);
 assert.equal(schedule.schedule.maxActiveSerials, 1);
 const fiveEpisodeSchedule = validateStoryHeavenSerialSchedule({ ...schedule.schedule, targetEpisodeCount: 5 });
 assert.equal(fiveEpisodeSchedule.ok, true);

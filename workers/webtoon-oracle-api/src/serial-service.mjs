@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
+  STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES,
   STORYHEAVEN_OPENING_PILOT_MODES,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
@@ -957,6 +958,7 @@ export function createStoryHeavenSerialService({
             seriesPlan: checked.schedule.seriesPlan,
             continuationBatchCount: checked.schedule.continuationBatchCount,
             openingPilotMode: checked.schedule.openingPilotMode,
+            openingPilotApprovalMode: checked.schedule.openingPilotApprovalMode,
             randomized: checked.schedule.randomized
           }),
           next_run_at: nextRunAt,
@@ -1359,8 +1361,12 @@ export function createStoryHeavenSerialService({
           pilot: assessment
         };
       }
-      if (assessment.state !== "ready_for_promotion" || Number(assessment.completedInstallments || 0) < 3) {
+      const override = input.override === true;
+      if (Number(assessment.completedInstallments || 0) < 3) {
         throw failure("serial_pilot_not_ready", 409);
+      }
+      if (assessment.state !== "ready_for_promotion" && !override) {
+        throw failure("serial_pilot_override_required", 409);
       }
       const ready = await selectOne(connection,
         `select count(distinct episode_no) as ready_count
@@ -1373,6 +1379,7 @@ export function createStoryHeavenSerialService({
       const promoted = {
         ...assessment,
         operatorDecision: "promoted",
+        promotionMode: assessment.state === "ready_for_promotion" ? "operator_review" : "operator_override",
         promotedBy: userId,
         promotedAt: new Date().toISOString()
       };
@@ -2979,14 +2986,21 @@ export function createStoryHeavenSerialService({
           completedInstallments: openingPilot.length,
           requiredInstallments: 3
         };
-    const pilotAssessment = previous.pilotAssessment?.operatorDecision === "promoted"
-      ? {
-          ...evaluatedPilotAssessment,
-          operatorDecision: "promoted",
-          promotedBy: previous.pilotAssessment.promotedBy || null,
-          promotedAt: previous.pilotAssessment.promotedAt || null
-        }
-      : evaluatedPilotAssessment;
+    const sourceSchedule = await selectOne(connection,
+      `select schedule.concept_policy_json
+         from storyheaven_serial_runs source_run
+         join storyheaven_serial_schedules schedule on schedule.id = source_run.schedule_id
+        where source_run.story_id = :story_id
+        order by source_run.created_at desc fetch first 1 row only`,
+      { story_id: run.STORY_ID });
+    const sourcePolicy = parseJson(sourceSchedule?.CONCEPT_POLICY_JSON, {});
+    const openingPilotApprovalMode = normalizeOpeningPilotMode(sourcePolicy.openingPilotMode) === STORYHEAVEN_OPENING_PILOT_MODES.incubation
+      ? normalizeOpeningPilotApprovalMode(sourcePolicy.openingPilotApprovalMode)
+      : STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.operator;
+    const pilotAssessment = applyStoryHeavenOpeningPilotPromotion(evaluatedPilotAssessment, {
+      approvalMode: openingPilotApprovalMode,
+      previousAssessment: previous.pilotAssessment
+    });
     const serialMemory = {
       ...previous,
       schemaVersion: "2026-08-09-v2",
@@ -3680,6 +3694,7 @@ function mapSchedule(row) {
     seriesPlan,
     continuationBatchCount: normalizeContinuationBatchCount(policy.continuationBatchCount),
     openingPilotMode: normalizeOpeningPilotMode(policy.openingPilotMode),
+    openingPilotApprovalMode: normalizeOpeningPilotApprovalMode(policy.openingPilotApprovalMode),
     creativeControls,
     humorIntensity: creativeControls.humorIntensity || "light",
     humorLabel: creativeControls.humorLabel || "미소 중심",
@@ -3760,6 +3775,12 @@ function normalizeOpeningPilotMode(value) {
   return value === STORYHEAVEN_OPENING_PILOT_MODES.incubation
     ? STORYHEAVEN_OPENING_PILOT_MODES.incubation
     : STORYHEAVEN_OPENING_PILOT_MODES.single;
+}
+
+function normalizeOpeningPilotApprovalMode(value) {
+  return value === STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic
+    ? STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic
+    : STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.operator;
 }
 
 function safeArcScope(firstEpisodeNo, plan, architecture) {
@@ -4148,6 +4169,7 @@ function mapManagedStory(row) {
   const schedulePolicy = parseJson(row.CONCEPT_POLICY_JSON, {});
   const scheduleSeriesPlan = row.SCHEDULE_ID ? normalizeSeriesPlan(schedulePolicy.seriesPlan) : null;
   const openingPilotMode = normalizeOpeningPilotMode(schedulePolicy.openingPilotMode);
+  const openingPilotApprovalMode = normalizeOpeningPilotApprovalMode(schedulePolicy.openingPilotApprovalMode);
   const pilotAssessment = parseJson(row.PILOT_ASSESSMENT_JSON, {});
   const pilotInstallments = parseJson(row.RECENT_INSTALLMENTS_JSON, [])
     .filter((item) => Number(item?.episodeNo) >= 1 && Number(item?.episodeNo) <= 3)
@@ -4189,8 +4211,12 @@ function mapManagedStory(row) {
     openingPilot: {
       enabled: openingPilotMode === STORYHEAVEN_OPENING_PILOT_MODES.incubation,
       mode: openingPilotMode,
+      approvalMode: openingPilotApprovalMode,
       state: pilotAssessment.state || (pilotInstallments.length ? "collecting" : "not_started"),
       operatorDecision: pilotAssessment.operatorDecision || null,
+      promotionMode: pilotAssessment.promotionMode || null,
+      promotedBy: pilotAssessment.promotedBy || null,
+      promotedAt: pilotAssessment.promotedAt || null,
       completedInstallments: Number(pilotAssessment.completedInstallments || pilotInstallments.length),
       requiredInstallments: Number(pilotAssessment.requiredInstallments || 3),
       allWouldReadNext: pilotAssessment.allWouldReadNext === true,
@@ -4228,7 +4254,8 @@ function mapManagedStory(row) {
       publicationMode: row.PUBLICATION_MODE || "test_private",
       seriesPlan: scheduleSeriesPlan,
       continuationBatchCount: normalizeContinuationBatchCount(schedulePolicy.continuationBatchCount),
-      openingPilotMode
+      openingPilotMode,
+      openingPilotApprovalMode
     } : null,
     publishedAt: isoTime(row.PUBLISHED_AT),
     createdAt: isoTime(row.CREATED_AT),
@@ -4616,8 +4643,34 @@ export function buildStoryHeavenOpeningPilotAssessment(installments) {
     distinctEpisodeModes: modes.size,
     variedRhythm,
     recommendation: ready
-      ? "프롤로그와 본편 1~2화가 다음 화 의향, 독자 보상, 리듬 변주 기준을 충족했다. 운영자 승격 검토가 가능하다."
+      ? "프롤로그와 본편 1~2화가 다음 화 의향, 독자 보상, 리듬 변주 승격 기준을 모두 충족했다."
       : "공개 확대 전에 다음 화 의향, 회차 보상, 리듬 반복 중 부족한 항목을 편집자가 확인해야 한다."
+  };
+}
+
+export function applyStoryHeavenOpeningPilotPromotion(assessment, {
+  approvalMode = STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.operator,
+  previousAssessment = null,
+  promotedAt = new Date().toISOString()
+} = {}) {
+  if (previousAssessment?.operatorDecision === "promoted") {
+    return {
+      ...assessment,
+      operatorDecision: "promoted",
+      promotionMode: previousAssessment.promotionMode || "operator_review",
+      promotedBy: previousAssessment.promotedBy || null,
+      promotedAt: previousAssessment.promotedAt || null
+    };
+  }
+  if (approvalMode !== STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic
+    || assessment?.state !== "ready_for_promotion") return assessment;
+  return {
+    ...assessment,
+    operatorDecision: "promoted",
+    promotionMode: "system_auto",
+    promotedBy: "system",
+    promotedAt,
+    recommendation: "세 편이 엄격한 파일럿 기준을 모두 통과해 시스템이 정식 연재로 자동 승격했다."
   };
 }
 

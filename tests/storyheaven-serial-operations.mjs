@@ -44,6 +44,26 @@ const stories = [
     queue: { id: "queue-next-4", status: "waiting", queuePosition: 2, cancelable: true },
     latestRunStatus: "published",
     readyPublicationCount: 0,
+    openingPilot: {
+      enabled: true,
+      mode: "three_episode_incubation",
+      approvalMode: "system_auto",
+      state: "ready_for_promotion",
+      operatorDecision: "promoted",
+      promotionMode: "system_auto",
+      completedInstallments: 3,
+      requiredInstallments: 3,
+      allWouldReadNext: true,
+      averageReaderReward: 88.7,
+      distinctEpisodeModes: 3,
+      variedRhythm: true,
+      recommendation: "세 편이 엄격한 파일럿 기준을 모두 통과해 시스템이 정식 연재로 자동 승격했다.",
+      installments: [
+        { episodeNo: 1, wouldReadNext: true, readerRewardScore: 89 },
+        { episodeNo: 2, wouldReadNext: true, readerRewardScore: 88 },
+        { episodeNo: 3, wouldReadNext: true, readerRewardScore: 89 }
+      ]
+    },
     latestReplan: {
       basedOnArcNo: 1,
       targetArcNo: 2,
@@ -84,6 +104,7 @@ const stories = [
     openingPilot: {
       enabled: true,
       mode: "three_episode_incubation",
+      approvalMode: "operator_review",
       state: "ready_for_promotion",
       operatorDecision: null,
       completedInstallments: 3,
@@ -219,7 +240,9 @@ try {
 
     await page.goto(`${root}/storyheaven/operator/serial/stories/`, { waitUntil: "networkidle" });
     await page.locator("[data-works-dashboard]").waitFor({ state: "visible" });
+    const automaticStory = page.locator(".managed-story").filter({ hasText: "0번 버스의 마지막 승객" });
     assert.equal(await page.locator(".managed-story").count(), 3, `${viewport.name} managed story count excludes hidden stories by default`);
+    assert.match(await page.locator("[data-result-count]").textContent(), /확인 필요 1편/u, `${viewport.name} operator-only pilot work is summarized without reading every story`);
     assert.equal(await page.locator("[data-summary-public]").textContent(), "1", `${viewport.name} public summary`);
     assert.equal(await page.locator("[data-summary-stopped]").textContent(), "1", `${viewport.name} stopped summary`);
     const layout = await page.evaluate(() => ({
@@ -229,10 +252,10 @@ try {
       hasExecutableImage: Boolean(document.querySelector(".managed-story img"))
     }));
     assert.equal(layout.documentWidth, layout.viewport, `${viewport.name} horizontal overflow`);
-    assert.equal(layout.title, "0번 버스의 마지막 승객", `${viewport.name} title`);
+    assert.equal(layout.title, "잠들지 않는 세탁소", `${viewport.name} operator-required pilot is listed first`);
     assert.equal(layout.hasExecutableImage, false, `${viewport.name} text-only rendering`);
     assert.equal(await page.locator(".operator-note").count(), 0, `${viewport.name} operator notes are not exposed`);
-    const latestReplan = page.locator(".managed-story").first().locator(".story-replanning");
+    const latestReplan = automaticStory.locator(".story-replanning");
     assert.match(await latestReplan.locator("summary").textContent(), /최근 구간 재기획.*1구간.*2구간/u, `${viewport.name} latest replan is summarized on the story`);
     await latestReplan.evaluate((node) => { node.open = true; });
     assert.match(await latestReplan.textContent(), /이어갈 강점.*고칠 점.*공개 사실과 핵심 약속 2개/u, `${viewport.name} latest replan explains preservation and repair`);
@@ -255,8 +278,11 @@ try {
     assert.match(await legacyStory.locator(".opening-pilot").textContent(), /승격 가능/u, `${viewport.name} opening pilot status is visible`);
     assert.equal(await legacyStory.getByRole("button", { name: "정식 연재로 승격" }).count(), 1, `${viewport.name} opening pilot promotion action is visible`);
     assert.equal(await legacyStory.getByRole("button", { name: "이 회차 재작성" }).count(), 3, `${viewport.name} each pilot installment can be rewritten independently`);
-    assert.match(await page.locator(".managed-story").first().locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
-    const firstManagement = page.locator(".managed-story").first().locator(".story-management");
+    const automaticPilot = automaticStory.locator(".opening-pilot");
+    assert.match(await automaticPilot.textContent(), /자동 승격 완료.*시스템 자동 승격/u, `${viewport.name} automatic pilot decision is visible`);
+    assert.equal(await automaticPilot.getByRole("button", { name: "정식 연재로 승격" }).count(), 0, `${viewport.name} automatic pilot does not ask for redundant promotion`);
+    assert.match(await automaticStory.locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
+    const firstManagement = automaticStory.locator(".story-management");
     assert.equal(await firstManagement.evaluate((element) => element.open), viewport.name === "desktop", `${viewport.name} management disclosure default`);
     if (viewport.name === "mobile") {
       await firstManagement.locator(":scope > summary").click();
@@ -265,7 +291,7 @@ try {
       assert.equal(expandedLayout.documentWidth, expandedLayout.viewport, "mobile expanded controls do not overflow");
       await page.screenshot({ path: "test-results/storyheaven-serial-operations-mobile-expanded.png", fullPage: true });
     }
-    assert.equal(await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).count(), 1, `${viewport.name} queue cancellation control`);
+    assert.equal(await automaticStory.getByRole("button", { name: "대기 취소" }).count(), 1, `${viewport.name} queue cancellation control`);
     const zeroStory = page.locator(".managed-story").filter({ hasText: "마왕의 박수 충전소" });
     assert.equal(await zeroStory.getByRole("button", { name: "프롤로그 제작 재개", includeHidden: true }).isEnabled(), true, `${viewport.name} zero-episode story can restart`);
     if (viewport.name === "desktop") {
@@ -276,7 +302,7 @@ try {
     }
 
     page.once("dialog", (dialog) => dialog.accept());
-    await page.locator(".managed-story").first().getByRole("button", { name: "대기 취소" }).click();
+    await automaticStory.getByRole("button", { name: "대기 취소" }).click();
     await page.waitForFunction(() => !document.querySelector(".managed-story .state-badge.waiting"));
     assert.equal(canceled.length, 1, `${viewport.name} cancels queued continuation`);
 
@@ -306,11 +332,10 @@ try {
     await page.locator("[data-story-search]").fill("");
 
     if (viewport.name === "desktop") {
-      const first = page.locator(".managed-story").first();
-      await first.locator(".control-field select").first().selectOption("private");
-      assert.equal(await first.getByRole("button", { name: "설정 저장" }).isEnabled(), true, "dirty settings enable save");
+      await automaticStory.locator(".control-field select").first().selectOption("private");
+      assert.equal(await automaticStory.getByRole("button", { name: "설정 저장" }).isEnabled(), true, "dirty settings enable save");
       page.once("dialog", (dialog) => dialog.accept());
-      await first.getByRole("button", { name: "설정 저장" }).click();
+      await automaticStory.getByRole("button", { name: "설정 저장" }).click();
       await page.waitForFunction(() => document.querySelector("[data-common-toast]")?.textContent.includes("저장했습니다"));
       assert.deepEqual(patchRequests[0], { visibility: "private", continuationMode: "manual", operatorNote: "" });
     }

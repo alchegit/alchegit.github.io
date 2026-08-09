@@ -328,6 +328,7 @@
       serial_pilot_action_invalid: "파일럿 처리 방법을 다시 선택해주세요.",
       serial_pilot_not_enabled: "이 작품은 첫 3편 파일럿 방식으로 만든 작품이 아닙니다.",
       serial_pilot_not_ready: "아직 세 편 평가가 끝나지 않았거나 보완이 필요한 회차가 있습니다.",
+      serial_pilot_override_required: "품질 기준에 미달한 파일럿입니다. 평가 내용을 확인한 뒤 예외 승격을 다시 선택해주세요.",
       serial_pilot_drafts_not_ready: "승격할 파일럿 원고 세 편을 모두 찾지 못했습니다. 작품 상태를 새로고침해주세요.",
       serial_queue_not_found: "재개할 자동 연재 작업을 찾을 수 없습니다.",
       serial_queue_not_retryable: "지금 다시 시작할 수 있는 중단 단계가 없습니다.",

@@ -36,8 +36,8 @@
     premiseCoherenceDefaultConceptPolicy,
     readerAppealDefaultConceptPolicy
   ]);
-  const draftStorageKey = "storyheaven.operator.serial-draft.v10";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v9", "storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const draftStorageKey = "storyheaven.operator.serial-draft.v11";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v10", "storyheaven.operator.serial-draft.v9", "storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   const queueActionFeedback = new Map();
   let draftReady = false;
@@ -419,7 +419,7 @@
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
     const detail = document.createElement("p");
-    detail.textContent = `${openingPilotLabel(schedule.openingPilotMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
+    detail.textContent = `${openingPilotLabel(schedule.openingPilotMode, schedule.openingPilotApprovalMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 예약 확인 ${formatDate(schedule.nextRunAt)}` : "이 설정과 연결된 새 제작·공개만 멈춰 있습니다.";
     copy.append(heading, detail, next);
@@ -488,6 +488,7 @@
           subgenresByGenre,
           publicationMode: form.get("publicationMode"),
           openingPilotMode: form.get("openingPilotMode"),
+          openingPilotApprovalMode: form.get("openingPilotApprovalMode"),
           cadenceMinutes,
           targetEpisodeCount,
           totalVolumes: seriesPlan.totalVolumes,
@@ -527,6 +528,7 @@
           subgenresByGenre: scheduleSubgenresByGenre(schedule),
           publicationMode: schedule.publicationMode,
           openingPilotMode: schedule.openingPilotMode || "single_episode",
+          openingPilotApprovalMode: schedule.openingPilotApprovalMode || "operator_review",
           cadenceMinutes: schedule.cadenceMinutes,
           targetEpisodeCount: schedule.targetEpisodeCount || 1,
           totalVolumes: schedule.seriesPlan?.totalVolumes || 10,
@@ -2080,8 +2082,9 @@
     return `${totalVolumes}권 × 권당 ${episodesPerVolume}화`;
   }
 
-  function openingPilotLabel(mode) {
-    return mode === "three_episode_incubation" ? "첫 3편 파일럿 평가" : "프롤로그부터 확인";
+  function openingPilotLabel(mode, approvalMode) {
+    if (mode !== "three_episode_incubation") return "프롤로그만 제작";
+    return approvalMode === "system_auto" ? "첫 3편 자동 검증" : "첫 3편 운영자 검증";
   }
 
   function scheduleSubgenresByGenre(schedule) {
@@ -2136,7 +2139,7 @@
 
   function syncOpeningPilotMode() {
     const input = selectors.scheduleForm?.elements.targetEpisodeCount;
-    const mode = selectors.scheduleForm?.elements.openingPilotMode?.value || "single_episode";
+    const mode = selectors.scheduleForm?.elements.openingPilotMode?.value || "three_episode_incubation";
     if (!input) return;
     const incubating = mode === "three_episode_incubation";
     input.min = incubating ? "3" : "1";
@@ -2144,9 +2147,11 @@
     const hint = selectors.scheduleForm.querySelector(".target-field small");
     if (hint) {
       hint.textContent = incubating
-        ? "파일럿은 프롤로그와 본편 1·2화까지 최소 3편을 만들며, 승격 전에는 공개하지 않습니다."
-        : "기본은 프롤로그 1편입니다. 마음에 들면 작품관리에서 본편 1화부터 이어갈 수 있습니다.";
+        ? "프롤로그와 본편 1·2화까지 최소 3편을 만든 뒤 묶어서 평가합니다. 승격 전에는 공개하지 않습니다."
+        : "프롤로그 한 편만 만든 뒤 작품관리에서 본편 1화부터 이어갈 수 있습니다.";
     }
+    const approval = selectors.scheduleForm.querySelector("[data-pilot-approval]");
+    if (approval) approval.hidden = !incubating;
     updateTargetButton();
   }
 
@@ -2190,7 +2195,7 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 10,
+      version: 11,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
@@ -2199,11 +2204,12 @@
       ])),
       cadenceValue: String(form.get("cadenceValue") || "2"),
       cadenceUnit: String(form.get("cadenceUnit") || "hours"),
-      targetEpisodeCount: String(form.get("targetEpisodeCount") || "1"),
+      targetEpisodeCount: String(form.get("targetEpisodeCount") || "3"),
       totalVolumes: String(form.get("totalVolumes") || "10"),
       episodesPerVolume: String(form.get("episodesPerVolume") || "25"),
       continuationBatchCount: String(form.get("continuationBatchCount") || "1"),
-      openingPilotMode: String(form.get("openingPilotMode") || "single_episode"),
+      openingPilotMode: String(form.get("openingPilotMode") || "three_episode_incubation"),
+      openingPilotApprovalMode: String(form.get("openingPilotApprovalMode") || "system_auto"),
       publicationMode: String(form.get("publicationMode") || "test_private"),
       creativeControls: readCreativeControls(),
       conceptPolicy: String(form.get("conceptPolicy") || "")
@@ -2227,7 +2233,7 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");
@@ -2236,11 +2242,12 @@
       setFormValue("cadenceValue", draft.cadenceValue);
       setFormValue("cadenceUnit", draft.cadenceUnit);
     }
-    setFormValue("targetEpisodeCount", draft.targetEpisodeCount || 1);
+    setFormValue("targetEpisodeCount", draft.version < 11 ? Math.max(3, Number(draft.targetEpisodeCount || 3)) : (draft.targetEpisodeCount || 3));
     setFormValue("totalVolumes", draft.totalVolumes || 10);
     setFormValue("episodesPerVolume", draft.episodesPerVolume || 25);
     setFormValue("continuationBatchCount", draft.continuationBatchCount || 1);
-    setFormValue("openingPilotMode", draft.openingPilotMode || "single_episode");
+    setFormValue("openingPilotMode", draft.version < 11 ? "three_episode_incubation" : (draft.openingPilotMode || "three_episode_incubation"));
+    setFormValue("openingPilotApprovalMode", draft.version < 11 ? "system_auto" : (draft.openingPilotApprovalMode || "system_auto"));
     setFormValue("publicationMode", draft.publicationMode);
     applyCreativeControlsToForm(draft.creativeControls || {
       ...creativePresets.balanced,
@@ -2318,6 +2325,7 @@
     setFormValue("episodesPerVolume", schedule.seriesPlan?.episodesPerVolume || 25);
     setFormValue("continuationBatchCount", schedule.continuationBatchCount || 1);
     setFormValue("openingPilotMode", schedule.openingPilotMode || "single_episode");
+    setFormValue("openingPilotApprovalMode", schedule.openingPilotApprovalMode || "operator_review");
     setFormValue("publicationMode", schedule.publicationMode);
     applyCreativeControlsToForm(schedule.creativeControls || { ...creativePresets.balanced, preset: "balanced" });
     setFormValue("conceptPolicy", normalizedConceptPolicy(schedule.conceptPolicy));
