@@ -178,6 +178,10 @@ async function tickSerial() {
     return true;
   } catch (error) {
     const errorCode = safeErrorCode(error);
+    console.error(
+      `[storyheaven-review-worker] serial failed job=${job.id} run=${job.runId} ` +
+      `type=${job.type} attempt=${job.attemptCount} code=${errorCode}`
+    );
     await apiRequest("/api/storyheaven/worker/serial-engine/fail", {
       workerId: config.workerId,
       leaseId: lease.leaseId,

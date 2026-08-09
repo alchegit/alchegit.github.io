@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
-import { SERIAL_EDITORIAL_POLICY_VERSION, buildSerialJsonRepairPrompt, buildSerialPrompt, modelRoleForSerialJob, parseSerialOutput } from "../src/serial.mjs";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { SERIAL_EDITORIAL_POLICY_VERSION, SERIAL_JOB_TYPES, buildSerialJsonRepairPrompt, buildSerialPrompt, modelRoleForSerialJob, parseSerialOutput } from "../src/serial.mjs";
 import { buildSerialGenreEditorialGuidance } from "../src/serial-editorial-guidance.mjs";
+
+const serialSchema = JSON.parse(await readFile(fileURLToPath(new URL("../schemas/serial-result.schema.json", import.meta.url)), "utf8"));
+assert.deepEqual(
+  [...serialSchema.properties.jobType.enum].sort(),
+  [...SERIAL_JOB_TYPES].sort(),
+  "Every accepted serial stage must also be allowed by the Codex structured-output schema."
+);
 
 const job = {
   id: "35de3aaf-bacc-45f8-8a86-257ec62f63ad",

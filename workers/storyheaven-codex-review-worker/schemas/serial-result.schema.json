@@ -8,7 +8,19 @@
     "inputHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "jobType": {
       "type": "string",
-      "enum": ["concept_gate", "build_bible", "build_arc", "build_episode_card", "write_draft", "editorial_review", "rewrite_draft"]
+      "enum": [
+        "concept_candidates",
+        "concept_selection",
+        "concept_gate",
+        "build_bible",
+        "replan_arc",
+        "build_arc",
+        "build_episode_card",
+        "write_draft",
+        "editorial_critique",
+        "editorial_review",
+        "rewrite_draft"
+      ]
     },
     "resultJson": {
       "type": "string",

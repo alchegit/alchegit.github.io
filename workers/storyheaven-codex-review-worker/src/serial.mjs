@@ -1,7 +1,7 @@
 import { buildSerialGenreEditorialGuidance } from "./serial-editorial-guidance.mjs";
 import { jsonrepair } from "jsonrepair";
 
-const JOB_TYPES = new Set([
+export const SERIAL_JOB_TYPES = Object.freeze([
   "concept_candidates",
   "concept_selection",
   "concept_gate",
@@ -14,6 +14,7 @@ const JOB_TYPES = new Set([
   "editorial_review",
   "rewrite_draft"
 ]);
+const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
 export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-09-story-development-v20";
 

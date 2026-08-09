@@ -1294,6 +1294,7 @@
       codex_auth_required: "AI 작성 서버 로그인이 필요합니다",
       codex_model_unavailable: "AI 작성 모델 연결 실패",
       codex_output_schema_invalid: "AI 작성 결과 형식 오류",
+      serial_output_identity_mismatch: "AI 작업 단계 계약 불일치",
       codex_rate_limited: "AI 작성 사용량 제한 대기",
       review_api_422_serial_public_synopsis_meta_exposed: "독자용 작품 소개에 내부 기획 표현이 포함됨",
       review_api_422_serial_public_synopsis_sentence_count_invalid: "독자용 작품 소개의 문장 구성이 기준에 맞지 않음",
