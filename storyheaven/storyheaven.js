@@ -33,7 +33,10 @@
     query: "",
     rankingPeriod: "daily",
     availabilityTimer: 0,
-    toastTimer: 0
+    toastTimer: 0,
+    profileRequest: null,
+    profileRequestToken: "",
+    profileRetryTimer: 0
   };
 
   document.addEventListener("DOMContentLoaded", init);
@@ -85,6 +88,7 @@
       state.session = session;
       if (!session) {
         state.profile = null;
+        clearProfileRetry();
       }
       renderAccount();
       if (session && (
@@ -126,6 +130,7 @@
   }
 
   async function logout() {
+    clearProfileRetry();
     await state.client?.auth.signOut();
     state.session = null;
     state.profile = null;
@@ -133,19 +138,60 @@
     await loadFeed();
   }
 
-  async function loadProfile() {
-    try {
-      const payload = await api("/api/storyheaven/profile");
-      state.profile = payload.profile;
-      renderAccount();
-      renderStories();
-      if (location.hash === "#nickname" && state.profile?.nicknameStatus !== "active") {
-        openNicknameDialog();
+  async function loadProfile({ force = false } = {}) {
+    const token = state.session?.access_token || "";
+    if (!token) return;
+    if (!force && state.profileRequest && state.profileRequestToken === token) return state.profileRequest;
+
+    const request = (async () => {
+      try {
+        const payload = await api("/api/storyheaven/profile");
+        if (state.session?.access_token !== token) return;
+        state.profile = payload.profile;
+        clearProfileRetry();
+        renderStories();
+        if (location.hash === "#nickname" && state.profile?.nicknameStatus !== "active") {
+          openNicknameDialog();
+        }
+      } catch (error) {
+        if (state.session?.access_token !== token) return;
+        if (error.status === 429 || error.message === "rate_limited") {
+          const seconds = retryDelaySeconds(error);
+          showToast(`Google 로그인은 완료되었습니다. 계정 정보 확인이 제한되어 ${seconds}초 후 자동으로 다시 확인합니다.`);
+          scheduleProfileRetry(seconds);
+        } else {
+          showToast(readableError(error));
+        }
+      } finally {
+        renderAccount();
       }
-    } catch (error) {
-      showToast(readableError(error));
-      renderAccount();
+    })();
+
+    state.profileRequest = request;
+    state.profileRequestToken = token;
+    try {
+      await request;
+    } finally {
+      if (state.profileRequest === request) state.profileRequest = null;
     }
+  }
+
+  function retryDelaySeconds(error) {
+    const seconds = Number(error?.retryAfterSeconds);
+    return Number.isFinite(seconds) ? Math.min(300, Math.max(1, Math.ceil(seconds))) : 10;
+  }
+
+  function scheduleProfileRetry(seconds) {
+    clearProfileRetry();
+    state.profileRetryTimer = window.setTimeout(() => {
+      state.profileRetryTimer = 0;
+      if (state.session) loadProfile({ force: true });
+    }, seconds * 1000);
+  }
+
+  function clearProfileRetry() {
+    window.clearTimeout(state.profileRetryTimer);
+    state.profileRetryTimer = 0;
   }
 
   function renderAccount() {
@@ -775,6 +821,7 @@
       const error = new Error(payload.error || "request_failed_" + response.status);
       error.status = response.status;
       error.details = payload.details;
+      error.retryAfterSeconds = Number(payload.retryAfterSeconds || response.headers.get("Retry-After")) || 0;
       throw error;
     }
     return payload;

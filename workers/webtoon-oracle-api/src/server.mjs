@@ -113,8 +113,11 @@ const config = {
   maxUploadMb: Number(process.env.MAX_UPLOAD_MB || 12),
   rateLimitWindowMs: clampInt(process.env.RATE_LIMIT_WINDOW_MS, 10_000, 600_000, 60_000),
   rateLimitPerWindow: clampInt(process.env.RATE_LIMIT_PER_WINDOW, 10, 300, 60),
+  readRateLimitPerWindow: clampInt(process.env.READ_RATE_LIMIT_PER_WINDOW, 30, 1200, 240),
+  profileRateLimitPerWindow: clampInt(process.env.PROFILE_RATE_LIMIT_PER_WINDOW, 10, 300, 30),
   creationRateLimitPerWindow: clampInt(process.env.CREATION_RATE_LIMIT_PER_WINDOW, 1, 30, 10),
   adminRateLimitPerWindow: clampInt(process.env.ADMIN_RATE_LIMIT_PER_WINDOW, 5, 120, 30),
+  adminReadRateLimitPerWindow: clampInt(process.env.ADMIN_READ_RATE_LIMIT_PER_WINDOW, 30, 600, 120),
   storyHeavenAiReviewMode: String(process.env.STORYHEAVEN_AI_REVIEW_MODE || "http").trim().toLowerCase(),
   storyHeavenAiReviewUrl: trimTrailingSlash(process.env.STORYHEAVEN_AI_REVIEW_URL || ""),
   storyHeavenAiReviewApiKey: process.env.STORYHEAVEN_AI_REVIEW_API_KEY || "",
@@ -257,32 +260,28 @@ app.use(cors({
 }));
 app.use("/api/storyheaven", express.json({ limit: "512kb" }));
 app.use(express.json({ limit: "2mb" }));
-app.use("/api/webtoon", createRateLimiter({
-  name: "api_ip",
-  limit: config.rateLimitPerWindow,
-  windowMs: config.rateLimitWindowMs,
-  keyResolver: (req) => `ip:${clientIp(req)}`
+app.use("/api/webtoon", createApiRateLimiter({
+  name: "webtoon",
+  keyPrefix: "webtoon",
+  skipMutation: null
 }));
 app.use("/api/webtoon", (_req, res, next) => {
   res.set("Cache-Control", "no-store, max-age=0");
   next();
 });
-app.use("/api/storyheaven", createRateLimiter({
-  name: "storyheaven_ip",
-  limit: config.rateLimitPerWindow,
-  windowMs: config.rateLimitWindowMs,
-  keyResolver: (req) => `storyheaven:${clientIp(req)}`,
-  skip: isSerialEmergencyPauseRequest
+app.use("/api/storyheaven", createApiRateLimiter({
+  name: "storyheaven",
+  keyPrefix: "storyheaven",
+  skipMutation: isSerialEmergencyPauseRequest
 }));
 app.use("/api/storyheaven", (_req, res, next) => {
   res.set("Cache-Control", "no-store, max-age=0");
   next();
 });
-app.use("/api/admin", createRateLimiter({
-  name: "admin_ip",
-  limit: config.rateLimitPerWindow,
-  windowMs: config.rateLimitWindowMs,
-  keyResolver: (req) => `admin:${clientIp(req)}`
+app.use("/api/admin", createApiRateLimiter({
+  name: "admin",
+  keyPrefix: "admin",
+  includeProfileBucket: false
 }));
 app.use("/api/admin", (_req, res, next) => {
   res.set("Cache-Control", "no-store, max-age=0");
@@ -307,11 +306,18 @@ const commentRateLimiter = createRateLimiter({
   keyResolver: (req) => `comment:${req.user?.id || "unknown"}`
 });
 
-const adminRateLimiter = createRateLimiter({
-  name: "admin_user",
+const adminReadRateLimiter = createRateLimiter({
+  name: "admin_user_read",
+  limit: config.adminReadRateLimitPerWindow,
+  windowMs: config.rateLimitWindowMs,
+  keyResolver: (req) => `admin-read:${req.user?.id || "unknown"}`
+});
+
+const adminMutationRateLimiter = createRateLimiter({
+  name: "admin_user_mutation",
   limit: config.adminRateLimitPerWindow,
   windowMs: config.rateLimitWindowMs,
-  keyResolver: (req) => `admin:${req.user?.id || "unknown"}`
+  keyResolver: (req) => `admin-mutation:${req.user?.id || "unknown"}`
 });
 
 const assetUploadRateLimiter = createRateLimiter({
@@ -7534,22 +7540,77 @@ function createRateLimiter({ name, limit, windowMs, keyResolver, skip = null }) 
     }
 
     if (count > limit) {
+      const retryAfterSeconds = Math.max(1, Math.ceil((resetAt - now) / 1000));
       if (count === limit + 1) {
         recordSecurityEvent({
           req,
           userId: req.user?.id,
           eventType: "rate_limited",
           severity: "warn",
-          details: { limiter: name, path: req.path }
+          details: {
+            limiter: name,
+            path: req.path,
+            method: req.method,
+            limit,
+            windowSeconds: Math.ceil(windowMs / 1000),
+            retryAfterSeconds,
+            authenticated: Boolean(req.user?.id)
+          }
         }).catch(() => {});
       }
-      res.set("Retry-After", String(Math.max(1, Math.ceil((resetAt - now) / 1000))));
-      res.status(429).json({ error: "rate_limited" });
+      res.set("Retry-After", String(retryAfterSeconds));
+      res.status(429).json({ error: "rate_limited", retryAfterSeconds });
       return;
     }
 
     next();
   };
+}
+
+function createApiRateLimiter({ name, keyPrefix, includeProfileBucket = true, skipMutation = null }) {
+  const profileLimiter = createRateLimiter({
+    name: `${name}_profile_ip`,
+    limit: config.profileRateLimitPerWindow,
+    windowMs: config.rateLimitWindowMs,
+    keyResolver: (req) => `${keyPrefix}-profile:${clientIp(req)}`
+  });
+  const readLimiter = createRateLimiter({
+    name: `${name}_read_ip`,
+    limit: config.readRateLimitPerWindow,
+    windowMs: config.rateLimitWindowMs,
+    keyResolver: (req) => `${keyPrefix}-read:${clientIp(req)}`
+  });
+  const mutationLimiter = createRateLimiter({
+    name: `${name}_mutation_ip`,
+    limit: config.rateLimitPerWindow,
+    windowMs: config.rateLimitWindowMs,
+    keyResolver: (req) => `${keyPrefix}-mutation:${clientIp(req)}`,
+    skip: skipMutation
+  });
+
+  return (req, res, next) => {
+    if (includeProfileBucket && req.method === "GET" && req.path === "/profile") {
+      profileLimiter(req, res, next);
+      return;
+    }
+    if (isReadRequest(req)) {
+      readLimiter(req, res, next);
+      return;
+    }
+    mutationLimiter(req, res, next);
+  };
+}
+
+function isReadRequest(req) {
+  return req.method === "GET" || req.method === "HEAD";
+}
+
+function adminRateLimiter(req, res, next) {
+  if (isReadRequest(req)) {
+    adminReadRateLimiter(req, res, next);
+    return;
+  }
+  adminMutationRateLimiter(req, res, next);
 }
 
 function isSerialEmergencyPauseRequest(req) {

@@ -152,7 +152,7 @@ assert.match(serialServiceSource, /episode-\$\{index \+ 1\}-card/u, "initial pro
 assert.match(serialServiceSource, /job\.job_status in \('queued', 'running', 'retry_wait'\)/u, "system pause must include an already running AI job");
 assert.match(serialServiceSource, /error_code = 'operator_system_paused'/u, "system pause must persist a resumable pause reason");
 assert.match(serialServiceSource, /lease_id = null,[\s\S]*worker_id = null/u, "system pause must revoke worker leases before a late result can be stored");
-assert.match(serverSource, /skip: isSerialEmergencyPauseRequest/u, "emergency pause must bypass the shared IP request limiter");
+assert.match(serverSource, /skipMutation: isSerialEmergencyPauseRequest/u, "emergency pause must bypass the shared IP request limiter");
 assert.match(serverSource, /requireAdminAccount, serialSystemRateLimiter/u, "emergency pause must bypass the shared admin limiter after admin authentication");
 assert.match(serverSource, /if \(storyHeavenSerialEmergencyPaused\) throw httpError\("serial_system_paused", 409\)/u, "late worker results must be rejected during emergency pause");
 assert.match(serverSource, /scheduleSerialPausePersistenceRetry/u, "emergency pause must retry database persistence without reopening the queue");

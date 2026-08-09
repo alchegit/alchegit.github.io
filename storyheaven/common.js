@@ -27,6 +27,9 @@
 
   let helpDialog = null;
   let helpReturnFocus = null;
+  let profileRequest = null;
+  let profileRequestToken = "";
+  let profileRetryTimer = 0;
 
   document.addEventListener("DOMContentLoaded", bindHelp);
 
@@ -44,19 +47,22 @@
     const { data } = await state.client.auth.getSession();
     state.session = data.session;
     renderAccount();
-    notify();
     if (state.session) await loadProfile();
+    else notify();
     state.client.auth.onAuthStateChange(async (_event, session) => {
       const previousUserId = state.session?.user?.id || null;
       const previousAccessToken = state.session?.access_token || null;
       state.session = session;
-      if (!session) state.profile = null;
+      if (!session) {
+        state.profile = null;
+        clearProfileRetry();
+      }
       renderAccount();
-      notify();
       if (session && (
         session.user?.id !== previousUserId
         || session.access_token !== previousAccessToken
       )) await loadProfile();
+      else notify();
     });
     return state;
   }
@@ -143,15 +149,58 @@
     }
   }
 
-  async function loadProfile() {
+  async function loadProfile({ force = false } = {}) {
+    const token = state.session?.access_token || "";
+    if (!token) return;
+    if (!force && profileRequest && profileRequestToken === token) return profileRequest;
+
+    const request = (async () => {
+      try {
+        const payload = await api("/api/storyheaven/profile");
+        if (state.session?.access_token === token) {
+          state.profile = payload.profile;
+          clearProfileRetry();
+        }
+      } catch (error) {
+        if (state.session?.access_token !== token) return;
+        if (error.status === 429 || error.message === "rate_limited") {
+          const seconds = retryDelaySeconds(error);
+          toast(`Google 로그인은 완료되었습니다. 계정 정보 확인이 제한되어 ${seconds}초 후 자동으로 다시 확인합니다.`);
+          scheduleProfileRetry(seconds);
+        } else {
+          toast(readableError(error));
+        }
+      } finally {
+        renderAccount();
+        notify();
+      }
+    })();
+
+    profileRequest = request;
+    profileRequestToken = token;
     try {
-      const payload = await api("/api/storyheaven/profile");
-      state.profile = payload.profile;
-    } catch (error) {
-      toast(readableError(error));
+      await request;
+    } finally {
+      if (profileRequest === request) profileRequest = null;
     }
-    renderAccount();
-    notify();
+  }
+
+  function retryDelaySeconds(error) {
+    const seconds = Number(error?.retryAfterSeconds);
+    return Number.isFinite(seconds) ? Math.min(300, Math.max(1, Math.ceil(seconds))) : 10;
+  }
+
+  function scheduleProfileRetry(seconds) {
+    clearProfileRetry();
+    profileRetryTimer = window.setTimeout(() => {
+      profileRetryTimer = 0;
+      if (state.session) loadProfile({ force: true });
+    }, seconds * 1000);
+  }
+
+  function clearProfileRetry() {
+    window.clearTimeout(profileRetryTimer);
+    profileRetryTimer = 0;
   }
 
   function renderAccount() {
@@ -229,6 +278,7 @@
   }
 
   async function logout() {
+    clearProfileRetry();
     await state.client?.auth.signOut();
   }
 
@@ -249,6 +299,7 @@
       const error = new Error(payload.error || "request_failed");
       error.status = response.status;
       error.details = payload.details || [];
+      error.retryAfterSeconds = Number(payload.retryAfterSeconds || response.headers.get("Retry-After")) || 0;
       throw error;
     }
     return payload;

@@ -44,6 +44,7 @@
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
   let queueRefreshTimer = 0;
+  let queueRefreshInFlight = null;
   let clockTimer = 0;
   let serverClockOffsetMs = 0;
   let showHiddenHistory = false;
@@ -134,6 +135,7 @@
     selectors.scheduleForm.elements.totalVolumes.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.elements.episodesPerVolume.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.elements.continuationBatchCount.addEventListener("change", queueDraftSave);
+    document.addEventListener("visibilitychange", handleQueueVisibilityChange);
     for (const input of selectors.scheduleForm.querySelectorAll("input[name='creativePreset']")) {
       input.addEventListener("change", () => {
         if (input.checked && input.value !== "custom") applyCreativePreset(input.value);
@@ -153,10 +155,7 @@
       await refreshSchedules();
       selectors.gate.hidden = true;
       selectors.dashboard.hidden = false;
-      clearInterval(queueRefreshTimer);
-      queueRefreshTimer = window.setInterval(() => {
-        if (!document.hidden) refreshSchedules().catch(markQueueRefreshFailure);
-      }, 6_000);
+      scheduleQueueRefresh();
     } catch (error) {
       showAccess();
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -167,7 +166,43 @@
     selectors.gate.hidden = false;
     selectors.dashboard.hidden = true;
     selectors.engineState.textContent = "관리자 확인 필요";
-    clearInterval(queueRefreshTimer);
+    stopQueueRefresh();
+  }
+
+  function scheduleQueueRefresh({ immediate = false } = {}) {
+    stopQueueRefresh();
+    if (document.hidden || selectors.dashboard.hidden) return;
+    const delayMs = immediate
+      ? 0
+      : Math.max(10, Number(latestSerialSnapshot.pollSeconds) || 60) * 1000;
+    queueRefreshTimer = window.setTimeout(runQueueRefresh, delayMs);
+  }
+
+  function stopQueueRefresh() {
+    window.clearTimeout(queueRefreshTimer);
+    queueRefreshTimer = 0;
+  }
+
+  async function runQueueRefresh() {
+    queueRefreshTimer = 0;
+    if (document.hidden || selectors.dashboard.hidden) return;
+    if (!queueRefreshInFlight) {
+      queueRefreshInFlight = refreshSchedules().catch(markQueueRefreshFailure);
+    }
+    try {
+      await queueRefreshInFlight;
+    } finally {
+      queueRefreshInFlight = null;
+      scheduleQueueRefresh();
+    }
+  }
+
+  function handleQueueVisibilityChange() {
+    if (document.hidden) {
+      stopQueueRefresh();
+      return;
+    }
+    if (!selectors.dashboard.hidden) scheduleQueueRefresh({ immediate: true });
   }
 
   function renderPrimaryGenres() {

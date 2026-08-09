@@ -321,6 +321,12 @@
   });
 
   let supabaseClient;
+  let oracleProfileRequest = null;
+  let oracleProfileRequestToken = "";
+  let oracleActiveToken = "";
+  let oracleVerifiedToken = "";
+  let oracleVerifiedProfile = null;
+  let oracleProfileRetryTimer = 0;
   const accessState = {
     isAdmin: false,
     signedIn: false,
@@ -423,6 +429,7 @@
 
     if (logoutButton) {
       logoutButton.addEventListener("click", async () => {
+        clearOracleProfileRetry();
         await client.auth.signOut();
         setAccess({ signedIn: false });
         renderAccount(root);
@@ -459,32 +466,92 @@
     });
   }
 
-  async function refreshOracleAccount(root, session) {
+  async function refreshOracleAccount(root, session, { force = false } = {}) {
     if (!session) {
+      oracleActiveToken = "";
+      oracleVerifiedToken = "";
+      oracleVerifiedProfile = null;
+      clearOracleProfileRetry();
       setAccess({ signedIn: false });
       renderAccount(root);
       return;
     }
 
-    renderAccount(root, { session, loading: true });
-    try {
-      const profile = await oracleFetch("/api/webtoon/profile");
-      setAccess({
-        signedIn: true,
-        isAdmin: Boolean(profile?.isAdmin),
-        acorns: Number(profile?.acorns || 0),
-        canCreate: Boolean(profile?.canCreate)
-      });
-      renderAccount(root, { session, profile });
-    } catch (error) {
-      if (error.code === "account_banned") {
-        await clientSignOut();
-      }
-      setAccess({ signedIn: false });
-      renderAccount(root, {
-        error: accountErrorMessage(error)
-      });
+    const token = session.access_token || "";
+    oracleActiveToken = token;
+    if (!force && oracleVerifiedToken === token && oracleVerifiedProfile) {
+      applyOracleProfile(root, session, oracleVerifiedProfile);
+      return oracleVerifiedProfile;
     }
+    if (!force && oracleProfileRequest && oracleProfileRequestToken === token) {
+      return oracleProfileRequest;
+    }
+
+    renderAccount(root, { session, loading: true });
+    const request = (async () => {
+      try {
+        const profile = await oracleFetch("/api/webtoon/profile");
+        if (oracleActiveToken !== token) return null;
+        oracleVerifiedToken = token;
+        oracleVerifiedProfile = profile;
+        clearOracleProfileRetry();
+        applyOracleProfile(root, session, profile);
+        return profile;
+      } catch (error) {
+        if (oracleActiveToken !== token) return null;
+        if (error.code === "account_banned") {
+          await clientSignOut();
+          return null;
+        }
+        setAccess({ signedIn: true });
+        const rateLimited = error.status === 429 || error.code === "rate_limited";
+        const message = rateLimited
+          ? `Google 로그인은 완료되었습니다. 계정 정보 확인이 제한되어 ${retryDelaySeconds(error)}초 후 자동으로 다시 확인합니다.`
+          : accountErrorMessage(error);
+        renderAccount(root, { session, error: message });
+        flash(message, rateLimited ? 5000 : 1400);
+        if (rateLimited) scheduleOracleProfileRetry(root, retryDelaySeconds(error));
+        return null;
+      }
+    })();
+
+    oracleProfileRequest = request;
+    oracleProfileRequestToken = token;
+    try {
+      return await request;
+    } finally {
+      if (oracleProfileRequest === request) oracleProfileRequest = null;
+    }
+  }
+
+  function applyOracleProfile(root, session, profile) {
+    setAccess({
+      signedIn: true,
+      isAdmin: Boolean(profile?.isAdmin),
+      acorns: Number(profile?.acorns || 0),
+      canCreate: Boolean(profile?.canCreate)
+    });
+    renderAccount(root, { session, profile });
+  }
+
+  function retryDelaySeconds(error) {
+    const seconds = Number(error?.retryAfterSeconds);
+    return Number.isFinite(seconds) ? Math.min(300, Math.max(1, Math.ceil(seconds))) : 10;
+  }
+
+  function scheduleOracleProfileRetry(root, seconds) {
+    clearOracleProfileRetry();
+    oracleProfileRetryTimer = window.setTimeout(async () => {
+      oracleProfileRetryTimer = 0;
+      const client = getSupabaseClient();
+      const { data } = client ? await client.auth.getSession() : { data: null };
+      if (data?.session) await refreshOracleAccount(root, data.session, { force: true });
+    }, seconds * 1000);
+  }
+
+  function clearOracleProfileRetry() {
+    window.clearTimeout(oracleProfileRetryTimer);
+    oracleProfileRetryTimer = 0;
   }
 
   async function refreshAccount(root, client, session) {
@@ -554,7 +621,7 @@
     if (name) {
       name.hidden = !signedIn;
       const label = profile?.displayName || session?.user?.email?.split("@")[0] || "로그인";
-      name.textContent = isAdmin ? `${label} · 관리자` : label;
+      name.textContent = error && signedIn ? "로그인 완료 · 계정 확인 대기" : isAdmin ? `${label} · 관리자` : label;
     }
     if (acorns) {
       acorns.hidden = !signedIn;
@@ -6372,6 +6439,7 @@
       const error = new Error(payload?.error || `oracle_api_${response.status}`);
       error.code = payload?.error || `oracle_api_${response.status}`;
       error.status = response.status;
+      error.retryAfterSeconds = Number(payload?.retryAfterSeconds || response.headers.get("Retry-After")) || 0;
       throw error;
     }
     return payload;
@@ -6791,7 +6859,7 @@
     }
   }
 
-  function flash(message) {
+  function flash(message, durationMs = 1400) {
     const toast = byId("toast");
     if (!toast) {
       return;
@@ -6801,7 +6869,7 @@
     window.clearTimeout(flash.timer);
     flash.timer = window.setTimeout(() => {
       toast.hidden = true;
-    }, 1400);
+    }, durationMs);
   }
 
   function escapeHtml(value) {
