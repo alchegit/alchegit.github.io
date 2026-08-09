@@ -62,6 +62,11 @@ export function editorialCriticRolesForPass({ rewritten = false, episodeNo = nul
   return EDITORIAL_CRITIC_ROLES.filter((role) => roles.has(role));
 }
 
+export function serialRetryDelaySeconds(errorCode, retryMinutes = 3) {
+  const fallback = Math.max(1, Number(retryMinutes || 3)) * 60;
+  return /^review_api_422_serial_/u.test(String(errorCode || "")) ? 15 : fallback;
+}
+
 export function continuationMinimumEpisode(triggerType) {
   return triggerType === "admin_request"
     ? STORYHEAVEN_CONTINUATION_POLICY.adminMinimumEpisodeCount
@@ -1997,22 +2002,24 @@ export function createStoryHeavenSerialService({
         { id: jobId, lease_id: leaseId, worker_id: workerId });
       if (!row) throw failure("serial_job_lease_mismatch", 409);
       const retry = Number(row.ATTEMPT_COUNT) < Number(row.MAX_ATTEMPTS);
+      const safeErrorCode = cleanCode(errorCode);
+      const retryDelaySeconds = serialRetryDelaySeconds(safeErrorCode, retryMinutes);
       await connection.execute(
         `update storyheaven_serial_jobs
             set job_status = :job_status,
                 next_attempt_at = case when :job_status = 'retry_wait'
-                  then systimestamp + numtodsinterval(:retry_minutes, 'MINUTE') else next_attempt_at end,
+                  then systimestamp + numtodsinterval(:retry_delay_seconds, 'SECOND') else next_attempt_at end,
                 error_code = :error_code, lease_id = null, lease_expires_at = null,
                 worker_id = null, completed_at = case when :job_status = 'error' then systimestamp else null end,
                 updated_at = systimestamp
           where id = :id`,
-        { id: row.ID, job_status: retry ? "retry_wait" : "error", retry_minutes: retryMinutes, error_code: cleanCode(errorCode) }
+        { id: row.ID, job_status: retry ? "retry_wait" : "error", retry_delay_seconds: retryDelaySeconds, error_code: safeErrorCode }
       );
       if (!retry) {
         await connection.execute(
           `update storyheaven_serial_runs set run_status = 'error', failure_code = :failure_code,
                   completed_at = systimestamp, updated_at = systimestamp where id = :run_id`,
-          { run_id: row.RUN_ID, failure_code: cleanCode(errorCode) }
+          { run_id: row.RUN_ID, failure_code: safeErrorCode }
         );
       }
       return { retry, runId: row.RUN_ID };

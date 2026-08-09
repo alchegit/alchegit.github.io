@@ -27,7 +27,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, summarizeQueue } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, summarizeQueue } from "../src/serial-service.mjs";
 import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
@@ -701,7 +701,7 @@ const selectedConcept = normalizeStoryHeavenSerialWorkerResult("concept_selectio
   payload: { developmentCandidates: candidateSlate.candidates }
 });
 assert.equal(selectedConcept.title, "마지막 시간버스");
-assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_selection", {
+const selectedConceptWithMutatedCandidates = normalizeStoryHeavenSerialWorkerResult("concept_selection", {
   ...concept,
   developmentRoom: {
     ...concept.developmentRoom,
@@ -709,7 +709,8 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_selection", 
       ? { ...candidate, humanDesire: `${candidate.humanDesire} 바뀐 내용` }
       : candidate)
   }
-}, { payload: { developmentCandidates: candidateSlate.candidates } }), /serial_candidate_selection_mutated_source/u);
+}, { payload: { developmentCandidates: candidateSlate.candidates } });
+assert.equal(selectedConceptWithMutatedCandidates.developmentRoom.candidates[0].humanDesire, candidateSlate.candidates[0].humanDesire);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
   developmentRoom: {
@@ -1505,13 +1506,27 @@ const reviewWithIndependentPacket = normalizeStoryHeavenSerialWorkerResult("edit
   payload: { bible: { concept: { storyCore } }, criticPacket: review.criticPanels }
 });
 assert.equal(reviewWithIndependentPacket.criticPanels.skepticalReader.verdict, "strong");
-assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+const reviewWithMutatedPacket = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
   ...review,
   criticPanels: {
     ...review.criticPanels,
     character: { ...review.criticPanels.character, verdict: "mixed" }
   }
-}, { payload: { bible: { concept: { storyCore } }, criticPacket: review.criticPanels } }), /serial_review_critic_packet_mutated/u);
+}, { payload: { bible: { concept: { storyCore } }, criticPacket: review.criticPanels } });
+assert.equal(reviewWithMutatedPacket.criticPanels.character.verdict, "strong");
+const { criticPanels: _omittedCriticPanels, ...reviewWithoutCriticPanels } = review;
+const reviewWithServerPacket = normalizeStoryHeavenSerialWorkerResult("editorial_review", reviewWithoutCriticPanels, {
+  payload: {
+    bible: { concept: { storyCore } },
+    criticPacket: {
+      ...review.criticPanels,
+      worldCausality: { ...review.criticPanels.worldCausality, fatalRisk: "" }
+    }
+  }
+});
+assert.equal(reviewWithServerPacket.criticPanels.worldCausality.fatalRisk, "없음");
+assert.equal(serialRetryDelaySeconds("review_api_422_serial_review_contract_invalid", 5), 15);
+assert.equal(serialRetryDelaySeconds("codex_review_timeout", 5), 300);
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);

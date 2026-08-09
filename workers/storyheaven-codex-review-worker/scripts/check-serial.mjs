@@ -180,7 +180,8 @@ const selectionPrompt = buildSerialPrompt({
 assert.match(selectionPrompt, /senior commissioning editor/u);
 assert.match(selectionPrompt, /immutable candidates/u);
 assert.match(selectionPrompt, /Do not invent a fifth candidate/u);
-assert.match(selectionPrompt, /copy all four into developmentRoom\.candidates/u);
+assert.match(selectionPrompt, /Do not reproduce developmentRoom\.candidates/u);
+assert.match(selectionPrompt, /server attaches the authoritative slate/u);
 
 const recentConceptPrompt = buildSerialPrompt({
   ...job,
@@ -382,7 +383,8 @@ const finalReviewPrompt = buildSerialPrompt({
   }
 });
 assert.match(finalReviewPrompt, /final senior editor after an independent six-role critique pass/u);
-assert.match(finalReviewPrompt, /Copy payload\.criticPacket exactly/u);
+assert.match(finalReviewPrompt, /Do not output criticPanels/u);
+assert.match(finalReviewPrompt, /server attaches the authoritative packet/u);
 
 const appealArcPrompt = buildSerialPrompt({
   ...job,
@@ -535,6 +537,36 @@ const correctedIdentity = parseSerialOutput({
 }, job, { model: "gpt-test" });
 assert.equal(correctedIdentity.identityCorrected, true);
 assert.deepEqual(correctedIdentity.result, {});
+
+const authoritativeCriticPacket = {
+  character: { verdict: "strong", evidence: ["원본 근거"], fatalRisk: "없음", nextAction: "강한 선택을 계속 보존한다." }
+};
+const authoritativeReview = parseSerialOutput({
+  jobId: job.id,
+  inputHash: job.inputHash,
+  jobType: job.type,
+  result: {
+    criticPanels: { character: { verdict: "weak" } },
+    decision: "approved"
+  }
+}, {
+  ...job,
+  payload: { ...job.payload, criticPacket: authoritativeCriticPacket }
+}, { model: "gpt-test" });
+assert.deepEqual(authoritativeReview.result.criticPanels, authoritativeCriticPacket);
+
+const authoritativeCandidates = [{ candidateId: "candidate-1", workingTitle: "원본 후보" }];
+const authoritativeSelection = parseSerialOutput({
+  jobId: job.id,
+  inputHash: job.inputHash,
+  jobType: "concept_selection",
+  result: { developmentRoom: { candidates: [{ candidateId: "mutated" }] } }
+}, {
+  ...job,
+  type: "concept_selection",
+  payload: { developmentCandidates: authoritativeCandidates }
+}, { model: "gpt-test" });
+assert.deepEqual(authoritativeSelection.result.developmentRoom.candidates, authoritativeCandidates);
 
 const usage = parseCodexJsonlUsage([
   JSON.stringify({ type: "turn.started" }),

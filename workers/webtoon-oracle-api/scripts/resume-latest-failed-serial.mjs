@@ -32,7 +32,7 @@ try {
     console.log("No terminally failed serial group found.");
     process.exitCode = 2;
   } else {
-    if (failed.SCHEDULE_ID) {
+    if (failed.SCHEDULE_ID && !targetRunId) {
       await connection.execute(
         `update storyheaven_serial_jobs
             set job_status = 'canceled', error_code = 'superseded_recovery',
@@ -86,7 +86,7 @@ try {
           and run_status = 'error'`,
       { queue_group_id: failed.QUEUE_GROUP_ID }
     );
-    if (failed.SCHEDULE_ID) {
+    if (failed.SCHEDULE_ID && !targetRunId) {
       await connection.execute(
         `update storyheaven_serial_schedules
             set schedule_status = 'active',

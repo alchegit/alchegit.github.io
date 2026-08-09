@@ -521,14 +521,16 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   const source = object(value);
   if (jobType === "concept_candidates") return { candidates: normalizeConceptCandidates(source) };
   if (jobType === "concept_selection") {
-    const concept = normalizeConcept(source, options);
     const suppliedCandidates = normalizeConceptCandidates({
       candidates: object(options.payload).developmentCandidates
     });
-    if (JSON.stringify(concept.developmentRoom.candidates) !== JSON.stringify(suppliedCandidates)) {
-      throw new Error("serial_candidate_selection_mutated_source");
-    }
-    return concept;
+    return normalizeConcept({
+      ...source,
+      developmentRoom: {
+        ...object(source.developmentRoom),
+        candidates: suppliedCandidates
+      }
+    }, options);
   }
   if (jobType === "concept_gate") return normalizeConcept(source, options);
   if (jobType === "build_bible") return normalizeBible(source, options);
@@ -1640,14 +1642,10 @@ function normalizeEditorialReview(source, options = {}) {
   });
   if (audienceLenses.length !== 3) throw new Error("serial_review_audience_lenses_invalid");
   const developmentV2 = Object.keys(object(object(options.payload).bible?.concept?.storyCore)).length > 0;
-  const criticPanels = developmentV2 ? normalizeCriticPanels(source.criticPanels) : null;
   const suppliedCriticPacket = object(object(options.payload).criticPacket);
-  if (developmentV2 && Object.keys(suppliedCriticPacket).length) {
-    const normalizedPacket = normalizeCriticPanels(suppliedCriticPacket);
-    if (JSON.stringify(criticPanels) !== JSON.stringify(normalizedPacket)) {
-      throw new Error("serial_review_critic_packet_mutated");
-    }
-  }
+  const criticPanels = developmentV2
+    ? normalizeCriticPanels(Object.keys(suppliedCriticPacket).length ? suppliedCriticPacket : source.criticPanels)
+    : null;
   const comparativeVerdictSource = object(source.comparativeVerdict);
   const wouldReadNext = developmentV2
     ? requiredBoolean(comparativeVerdictSource.wouldReadNext, "serial_review_would_read_next_invalid")
@@ -1706,7 +1704,7 @@ function normalizeCriticPanel(value, panelName) {
   return {
     verdict: requiredEnum(panel.verdict, ["strong", "mixed", "weak"], `serial_review_${panelName}_verdict_invalid`),
     evidence: requiredList(panel.evidence, { min: 1, max: 3, itemMax: 400 }, `serial_review_${panelName}_evidence_invalid`),
-    fatalRisk: requiredText(panel.fatalRisk, 400, 2, `serial_review_${panelName}_risk_invalid`),
+    fatalRisk: text(panel.fatalRisk, 400) || "없음",
     nextAction: requiredText(panel.nextAction, 500, 10, `serial_review_${panelName}_action_invalid`)
   };
 }
