@@ -28,6 +28,7 @@ node_modules/
 dist/
 build/
 .cache/
+.tmp/
 .wrangler/
 .vercel/
 .netlify/

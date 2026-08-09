@@ -1150,12 +1150,31 @@
           const row = document.createElement("li");
           row.className = `is-${timing.status || "unknown"}`;
           const label = document.createElement("span");
-          const value = document.createElement("b");
-          label.textContent = `${timing.episodeNo ? `${timing.episodeNo}화 · ` : ""}${stageLabel(timing.type)}`;
-          value.textContent = timing.durationSeconds === null
+          label.className = "stage-timing-label";
+          const name = document.createElement("span");
+          name.textContent = `${timing.episodeNo ? `${timing.episodeNo}화 · ` : ""}${stageDetailLabel(timing)}`;
+          label.append(name);
+          const description = stageDescription(timing);
+          if (description) {
+            const help = document.createElement("small");
+            help.textContent = description;
+            label.append(help);
+          }
+          const value = document.createElement("span");
+          value.className = "stage-timing-value";
+          const duration = document.createElement("b");
+          duration.textContent = timing.durationSeconds === null
             ? historyStatusLabel(timing.status)
             : formatDuration(timing.durationSeconds);
+          value.append(duration);
+          const telemetry = formatModelUsage(timing);
+          if (telemetry) {
+            const usage = document.createElement("small");
+            usage.textContent = telemetry;
+            value.append(usage);
+          }
           const time = document.createElement("small");
+          time.className = "stage-timing-time";
           time.textContent = formatDate(timing.completedAt || timing.startedAt || timing.createdAt);
           row.append(label, value);
           row.append(time);
@@ -1735,7 +1754,7 @@
     const title = document.createElement("h3");
     title.textContent = payload.run.episodeNo ? `${payload.run.episodeNo}화 · ${runStatus(payload.run)}` : runStatus(payload.run);
     const detail = document.createElement("p");
-    detail.textContent = `단계 ${stageLabel(payload.run.stage)} · 재작성 ${payload.run.rewriteCount}회`;
+    detail.textContent = `단계 ${stageLabel(payload.run.stage)} · 자동 보완 ${Number(payload.run.rewriteCount || 0)}회 · 운영자 표적 보완 ${Number(payload.run.operatorRewriteCount || 0)}회`;
     header.append(title, detail);
     wrapper.append(header);
 
@@ -1778,7 +1797,17 @@
     const list = document.createElement("ol");
     for (const job of payload.jobs || []) {
       const item = document.createElement("li");
-      item.textContent = `${stageLabel(job.type)} · ${historyStatusLabel(job.status)}${job.durationSeconds === null ? "" : ` · ${formatDuration(job.durationSeconds)}`}${job.attemptCount > 1 ? ` · ${job.attemptCount}회 시도` : ""}`;
+      const name = document.createElement("strong");
+      name.textContent = stageDetailLabel(job);
+      const meta = document.createElement("span");
+      meta.textContent = `${historyStatusLabel(job.status)}${job.durationSeconds === null ? "" : ` · ${formatDuration(job.durationSeconds)}`}${job.attemptCount > 1 ? ` · ${job.attemptCount}회 시도` : ""}${formatModelUsage(job) ? ` · ${formatModelUsage(job)}` : ""}`;
+      item.append(name, meta);
+      const description = stageDescription(job);
+      if (description) {
+        const help = document.createElement("small");
+        help.textContent = description;
+        item.append(help);
+      }
       list.append(item);
     }
     jobs.append(jobSummary, list);
@@ -2035,7 +2064,7 @@
     const title = document.createElement("strong");
     title.textContent = "원고 작성은 끝났고, 회차 등록만 보류된 상태입니다.";
     const detail = document.createElement("p");
-    detail.textContent = `자동 보완을 ${Number(run.rewriteCount || 0)}회 거쳤지만 위 기준이 남았습니다. 지적 부분만 한 번 더 보완하거나 현재 원고를 운영자 판단으로 승인할 수 있습니다.`;
+    detail.textContent = `자동 보완 ${Number(run.rewriteCount || 0)}회, 운영자 표적 보완 ${Number(run.operatorRewriteCount || 0)}회를 거쳤지만 위 기준이 남았습니다. 지적 부분만 다시 보완하거나 현재 원고를 운영자 판단으로 승인할 수 있습니다.`;
     copy.append(title, detail);
     const actions = document.createElement("div");
     actions.append(actionButton("지적 부분 다시 보완", "queue-retry", () => resolveQualityHold({ latestRunId: run.id, schedule: scheduleById.get(run.scheduleId) }, "rewrite")));
@@ -2505,6 +2534,43 @@
       history_hidden: "로그 숨김",
       queued: "작업 준비"
     })[value] || "작업 준비";
+  }
+
+  function stageDetailLabel(item = {}) {
+    const base = stageLabel(item.type || item.stage);
+    return item.criticRole ? `${base} · ${criticRoleLabel(item.criticRole)}` : base;
+  }
+
+  function criticRoleLabel(value) {
+    return ({
+      character: "인물",
+      relationship: "관계",
+      serialMomentum: "연재 추진력",
+      worldCausality: "세계 인과",
+      sceneExpression: "문장·장면",
+      skepticalReader: "회의적 독자"
+    })[value] || "검수";
+  }
+
+  function stageDescription(item = {}) {
+    if (item.type === "editorial_review") return "6개 독립 검수 결과와 원고 근거를 합쳐 점수, 보완 범위, 공개 가능 여부를 결정합니다.";
+    if (item.type !== "editorial_critique") return "";
+    return ({
+      character: "주인공의 욕망, 선택, 능동성, 변화가 설득력 있게 이어지는지 확인합니다.",
+      relationship: "인물들이 각자 목적을 갖고 상호 행동으로 관계가 실제 달라지는지 확인합니다.",
+      serialMomentum: "이번 화의 보상과 다음 화를 읽게 할 인과적 질문이 충분한지 확인합니다.",
+      worldCausality: "설정 규칙, 정보 전달, 사회 반응과 사건 결과가 모순 없이 이어지는지 확인합니다.",
+      sceneExpression: "한국어 문장, 공간 위치, 동작과 감각이 자연스럽고 쉽게 읽히는지 확인합니다.",
+      skepticalReader: "인내심이 낮은 독자가 혼란이나 지루함 때문에 이탈할 지점을 확인합니다."
+    })[item.criticRole] || "서로 영향을 주지 않는 독립 편집 관점으로 원고를 확인합니다.";
+  }
+
+  function formatModelUsage(item = {}) {
+    const model = String(item.model || "").replace(/^gpt-5\.6-/u, "").toUpperCase();
+    const input = Number(item.usage?.inputTokens || 0);
+    const output = Number(item.usage?.outputTokens || 0);
+    const tokenText = input || output ? `입력 ${input.toLocaleString("ko-KR")} · 출력 ${output.toLocaleString("ko-KR")}` : "";
+    return [model, tokenText].filter(Boolean).join(" · ");
   }
 
   function formatDuration(secondsValue) {

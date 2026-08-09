@@ -1187,6 +1187,40 @@
   border-left: 3px solid #667086;
 }
 
+.stage-timing-label,
+.stage-timing-value {
+  min-width: 0;
+}
+
+.stage-timing-label > span,
+.stage-timing-value > b {
+  display: block;
+}
+
+.stage-timing-label small,
+.stage-timing-value small {
+  margin-top: 3px;
+}
+
+.stage-timing-value {
+  text-align: right;
+}
+
+.stage-timing-time {
+  text-align: right;
+}
+
+.run-report details.advanced li strong,
+.run-report details.advanced li span,
+.run-report details.advanced li small {
+  display: block;
+}
+
+.run-report details.advanced li small {
+  margin-top: 3px;
+  color: #596273;
+}
+
 .stage-timing-list li.is-complete {
   border-color: #4fe0b3;
 }

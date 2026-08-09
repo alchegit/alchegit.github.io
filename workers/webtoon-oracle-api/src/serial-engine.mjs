@@ -667,7 +667,9 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
     || review?.safetyPassed !== true
     || nextReadFailure
     || review?.decision === "blocked";
-  const approved = !mandatoryFailure && review?.decision === "approved" && failedMetrics.length === 0;
+  const approved = !mandatoryFailure
+    && new Set(["approved", "rewrite_required"]).has(review?.decision)
+    && failedMetrics.length === 0;
   if (approved) return { state: "approved", failedMetrics, rewriteAllowed: false, readerExperienceScore };
   const rewriteAllowed = rewriteCount < STORYHEAVEN_SERIAL_LIMITS.rewriteMax && review?.decision !== "blocked";
   return { state: rewriteAllowed ? "rewrite_required" : "blocked", failedMetrics, rewriteAllowed, readerExperienceScore };

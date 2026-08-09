@@ -1345,7 +1345,8 @@ app.post("/api/storyheaven/worker/serial-engine/complete", requireWorker, requir
     }
     const model = boundedString(req.body?.model || "codex-cli", "model", 160, { required: true });
     res.json(await storyHeavenSerialService.completeJob({
-      workerId, leaseId, jobId, inputHash, result: req.body.result, model
+      workerId, leaseId, jobId, inputHash, result: req.body.result, model,
+      usage: req.body?.usage
     }));
   } catch (error) {
     next(error);

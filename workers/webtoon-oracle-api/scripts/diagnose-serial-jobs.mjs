@@ -1,9 +1,15 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import oracledb from "oracledb";
 
 await loadDotEnv(path.resolve(process.cwd(), ".env"));
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+oracledb.fetchAsString = [oracledb.CLOB];
+
+const runId = argumentValue("--run-id");
+const jobId = argumentValue("--job-id");
+const includeResult = process.argv.includes("--include-result");
+const exportJobPath = argumentValue("--export-job");
 
 const connection = await oracledb.getConnection({
   user: requiredEnv("ORACLE_USER"),
@@ -48,13 +54,105 @@ try {
     group by error_code
     order by count(*) desc, error_code
   `);
+  const details = runId || jobId
+    ? await connection.execute(`
+        select job.id, job.run_id, job.job_type, job.job_status,
+               job.attempt_count, job.max_attempts, job.error_code,
+               job.input_hash, job.input_json, job.output_json,
+               job.started_at, job.completed_at, job.created_at
+          from storyheaven_serial_jobs job
+         where (:run_id is not null and job.run_id = :run_id)
+            or (:job_id is not null and job.id = :job_id)
+         order by job.created_at
+      `, { run_id: runId || null, job_id: jobId || null })
+    : { rows: [] };
+  const runDetail = runId
+    ? await connection.execute(`
+        select serial_run.id, serial_run.episode_no, serial_run.run_status,
+               serial_run.current_stage, serial_run.input_json,
+               schedule.target_episode_count, schedule.concept_policy_json
+          from storyheaven_serial_runs serial_run
+          left join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
+         where serial_run.id = :run_id
+      `, { run_id: runId })
+    : { rows: [] };
+  if (exportJobPath) {
+    const row = details.rows[0];
+    if (!row) throw new Error("serial_job_not_found");
+    await writeFile(exportJobPath, JSON.stringify({
+      id: row.ID,
+      runId: row.RUN_ID,
+      type: row.JOB_TYPE,
+      inputHash: row.INPUT_HASH,
+      payload: parseJson(row.INPUT_JSON, {})
+    }), { encoding: "utf8", mode: 0o600 });
+  }
   console.log(JSON.stringify({
     checkedAt: new Date().toISOString(),
     recentJobs: recent.rows,
-    errorsLast24Hours: errors.rows
+    errorsLast24Hours: errors.rows,
+    ...(runDetail.rows[0] ? {
+      run: {
+        id: runDetail.rows[0].ID,
+        episodeNo: Number(runDetail.rows[0].EPISODE_NO || 0),
+        status: runDetail.rows[0].RUN_STATUS,
+        stage: runDetail.rows[0].CURRENT_STAGE,
+        input: parseJson(runDetail.rows[0].INPUT_JSON, {}),
+        scheduleTargetEpisodeCount: Number(runDetail.rows[0].TARGET_EPISODE_COUNT || 0),
+        schedulePolicy: parseJson(runDetail.rows[0].CONCEPT_POLICY_JSON, {})
+      }
+    } : {}),
+    ...(details.rows.length ? { details: details.rows.map(summarizeJob) } : {})
   }, null, 2));
 } finally {
   await connection.close();
+}
+
+function summarizeJob(row) {
+  const input = parseJson(row.INPUT_JSON, {});
+  const output = parseJson(row.OUTPUT_JSON, null);
+  const payload = input?.payload && typeof input.payload === "object" ? input.payload : input;
+  const startedAt = dateValue(row.STARTED_AT);
+  const completedAt = dateValue(row.COMPLETED_AT);
+  return {
+    id: row.ID,
+    runId: row.RUN_ID,
+    type: row.JOB_TYPE,
+    status: row.JOB_STATUS,
+    attemptCount: Number(row.ATTEMPT_COUNT || 0),
+    maxAttempts: Number(row.MAX_ATTEMPTS || 0),
+    errorCode: row.ERROR_CODE || null,
+    model: output?.model || null,
+    usage: output?.usage || null,
+    criticRole: payload?.criticRole || null,
+    inputHash: row.INPUT_HASH,
+    inputCharacters: String(row.INPUT_JSON || "").length,
+    outputCharacters: String(row.OUTPUT_JSON || "").length,
+    hasOutput: Boolean(output),
+    ...(includeResult && output?.result ? { result: output.result } : {}),
+    startedAt: startedAt?.toISOString() || null,
+    completedAt: completedAt?.toISOString() || null,
+    durationSeconds: startedAt && completedAt ? Math.max(0, Math.round((completedAt - startedAt) / 1_000)) : null
+  };
+}
+
+function argumentValue(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? String(process.argv[index + 1] || "").trim() : "";
+}
+
+function parseJson(value, fallback) {
+  try {
+    return value ? JSON.parse(String(value)) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function dateValue(value) {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 async function loadDotEnv(filePath) {

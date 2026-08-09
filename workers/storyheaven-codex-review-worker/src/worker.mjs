@@ -16,8 +16,10 @@ import {
 import {
   buildSerialJsonRepairPrompt,
   buildSerialPrompt,
-  modelRoleForSerialJob,
-  parseSerialOutput
+  mergeCodexUsage,
+  parseCodexJsonlUsage,
+  parseSerialOutput,
+  selectSerialModel
 } from "./serial.mjs";
 
 await loadDotEnv();
@@ -46,6 +48,7 @@ const config = {
   schemaPath: path.join(packageRoot, "schemas", "review-results.schema.json"),
   serialEnabled: parseBoolean(process.env.STORYHEAVEN_SERIAL_ENGINE_ENABLED, false),
   serialWriterModel: process.env.CODEX_SERIAL_WRITER_MODEL || process.env.CODEX_SECONDARY_MODEL || "gpt-5.6-terra",
+  serialEscalationModel: process.env.CODEX_SERIAL_ESCALATION_MODEL || "gpt-5.6-sol",
   serialEditorModel: process.env.CODEX_SERIAL_EDITOR_MODEL || process.env.CODEX_PRIMARY_MODEL || "gpt-5.6-luna",
   serialReasoningEffort: process.env.CODEX_SERIAL_REASONING_EFFORT || "medium",
   serialTimeoutMs: boundedInt(process.env.STORYHEAVEN_SERIAL_CODEX_TIMEOUT_MS, 60_000, 1_200_000, 480_000),
@@ -67,7 +70,7 @@ await mkdir(config.workspace, { recursive: true });
 console.log(
   `[storyheaven-review-worker] id=${config.workerId} claim=${config.batchSize} ` +
   `request=${config.requestMaxItems}/${config.requestMaxCharacters} primary=${config.primaryModel} ` +
-  `serial=${config.serialEnabled ? `${config.serialWriterModel}/${config.serialEditorModel}` : "off"}`
+  `serial=${config.serialEnabled ? `${config.serialWriterModel}/${config.serialEscalationModel}/${config.serialEditorModel}` : "off"}`
 );
 
 if (args.has("--once")) {
@@ -162,8 +165,11 @@ async function tickSerial() {
   });
   const job = lease.job;
   if (!job) return false;
-  const role = modelRoleForSerialJob(job.type);
-  const model = role === "editor" ? config.serialEditorModel : config.serialWriterModel;
+  const model = selectSerialModel(job, {
+    writerModel: config.serialWriterModel,
+    editorModel: config.serialEditorModel,
+    escalationModel: config.serialEscalationModel
+  });
   try {
     const parsed = await runCodexSerial(job, model);
     await apiRequest("/api/storyheaven/worker/serial-engine/complete", {
@@ -172,8 +178,12 @@ async function tickSerial() {
       jobId: job.id,
       inputHash: job.inputHash,
       result: parsed.result,
-      model: parsed.model
+      model: parsed.model,
+      usage: parsed.usage
     });
+    if (parsed.identityCorrected) {
+      console.warn(`[storyheaven-review-worker] serial envelope identity corrected job=${job.id} run=${job.runId}`);
+    }
     console.log(`[storyheaven-review-worker] serial ${job.type} completed run=${job.runId} model=${model}`);
     return true;
   } catch (error) {
@@ -234,19 +244,22 @@ async function runCodexSerial(job, model) {
     `model_reasoning_effort=\"${config.serialReasoningEffort}\"`,
     "--output-schema",
     config.serialSchemaPath,
+    "--json",
     "--output-last-message",
     outputPath,
     "-"
   ];
   try {
-    await runProcess(config.codexBinary, childArgs, prompt, config.serialTimeoutMs);
+    const processResult = await runProcess(config.codexBinary, childArgs, prompt, config.serialTimeoutMs);
+    const usage = parseCodexJsonlUsage(processResult.stdout);
     const output = await readFile(outputPath, "utf8");
     try {
-      return parseSerialOutput(output, job, { model });
+      return { ...parseSerialOutput(output, job, { model }), usage };
     } catch (error) {
       if (!(error instanceof SyntaxError)) throw error;
       console.warn(`[storyheaven-review-worker] repairing malformed serial JSON job=${job.id}`);
-      return repairSerialOutput(output, job, model);
+      const repaired = await repairSerialOutput(output, job, model);
+      return { ...repaired, usage: mergeCodexUsage(usage, repaired.usage) };
     }
   } finally {
     await unlink(outputPath).catch(() => {});
@@ -265,19 +278,23 @@ async function repairSerialOutput(output, job, model) {
     `model_reasoning_effort=\"${config.serialReasoningEffort}\"`,
     "--output-schema",
     config.serialSchemaPath,
+    "--json",
     "--output-last-message",
     outputPath,
     "-"
   ];
   try {
-    await runProcess(
+    const processResult = await runProcess(
       config.codexBinary,
       childArgs,
       buildSerialJsonRepairPrompt(output, job),
       config.serialTimeoutMs
     );
     const repaired = await readFile(outputPath, "utf8");
-    return parseSerialOutput(repaired, job, { model });
+    return {
+      ...parseSerialOutput(repaired, job, { model }),
+      usage: parseCodexJsonlUsage(processResult.stdout)
+    };
   } finally {
     await unlink(outputPath).catch(() => {});
   }
@@ -288,14 +305,18 @@ async function runProcess(command, childArgs, stdin, timeoutMs) {
     const child = spawn(command, childArgs, {
       cwd: config.workspace,
       env: process.env,
-      stdio: ["pipe", "ignore", "pipe"]
+      stdio: ["pipe", "pipe", "pipe"]
     });
+    let stdout = "";
     let stderr = "";
     const timeout = setTimeout(() => {
       child.kill("SIGTERM");
       setTimeout(() => child.kill("SIGKILL"), 5_000).unref();
     }, timeoutMs);
     timeout.unref();
+    child.stdout.on("data", (chunk) => {
+      stdout = `${stdout}${chunk}`.slice(-1_000_000);
+    });
     child.stderr.on("data", (chunk) => {
       stderr = `${stderr}${chunk}`.slice(-8_000);
     });
@@ -305,7 +326,7 @@ async function runProcess(command, childArgs, stdin, timeoutMs) {
     });
     child.on("close", (code, signal) => {
       clearTimeout(timeout);
-      if (code === 0) resolve();
+      if (code === 0) resolve({ stdout, stderr });
       else reject(new Error(signal ? "codex_review_timeout" : classifyCodexError(stderr, code)));
     });
     child.stdin.end(stdin);

@@ -44,6 +44,7 @@ export function buildSerialPrompt(job) {
     premiseCoherenceInstruction(type, job.payload),
     readerAppealInstruction(type, job.payload),
     storyDevelopmentInstruction(type, job.payload),
+    causalIntegrityInstruction(type),
     naturalKoreanInstruction(type),
     serialRetryInstruction(job),
     "The first generated installment is always a prologue. Internal episodeNo 1 is the prologue and must be titled or clearly labeled 프롤로그. The first main chapter starts after that as 본편 1화, even though the storage number may be the next internal episode number.",
@@ -88,11 +89,9 @@ export function parseSerialOutput(value, job, { model }) {
     source = parseRepairableJson(source.trim().replace(/^```(?:json)?\s*/iu, "").replace(/\s*```$/u, ""));
   }
   if (!source || typeof source !== "object" || Array.isArray(source)) throw new Error("serial_invalid_output");
-  if (String(source.jobId || "") !== String(job.id || "")
+  const identityCorrected = String(source.jobId || "") !== String(job.id || "")
     || String(source.inputHash || "").toLowerCase() !== String(job.inputHash || "").toLowerCase()
-    || String(source.jobType || "") !== String(job.type || "")) {
-    throw new Error("serial_output_identity_mismatch");
-  }
+    || String(source.jobType || "") !== String(job.type || "");
   let result = source.result;
   if ((!result || typeof result !== "object" || Array.isArray(result)) && typeof source.resultJson === "string") {
     result = parseRepairableJson(source.resultJson);
@@ -100,7 +99,48 @@ export function parseSerialOutput(value, job, { model }) {
   if (!result || typeof result !== "object" || Array.isArray(result)) {
     throw new Error("serial_result_missing");
   }
-  return { result, model };
+  // The leased job is the authoritative envelope. Model-authored envelope fields
+  // are never sent to the API, so a stale identifier must not discard valid prose.
+  return { result, model, identityCorrected };
+}
+
+export function parseCodexJsonlUsage(value) {
+  let usage = null;
+  for (const line of String(value || "").split(/\r?\n/u)) {
+    if (!line.trim()) continue;
+    try {
+      const event = JSON.parse(line);
+      if (event?.type === "turn.completed" && event.usage && typeof event.usage === "object") {
+        usage = normalizeUsage(event.usage);
+      }
+    } catch {
+      // stderr notices or a partially written final line are not usage events.
+    }
+  }
+  return usage;
+}
+
+export function mergeCodexUsage(...items) {
+  const valid = items.filter(Boolean);
+  if (!valid.length) return null;
+  return valid.reduce((total, item) => ({
+    inputTokens: total.inputTokens + Number(item.inputTokens || 0),
+    cachedInputTokens: total.cachedInputTokens + Number(item.cachedInputTokens || 0),
+    cacheWriteInputTokens: total.cacheWriteInputTokens + Number(item.cacheWriteInputTokens || 0),
+    outputTokens: total.outputTokens + Number(item.outputTokens || 0),
+    reasoningOutputTokens: total.reasoningOutputTokens + Number(item.reasoningOutputTokens || 0)
+  }), normalizeUsage({}));
+}
+
+function normalizeUsage(value = {}) {
+  const token = (key) => Math.max(0, Math.trunc(Number(value[key] || 0)));
+  return {
+    inputTokens: token("input_tokens"),
+    cachedInputTokens: token("cached_input_tokens"),
+    cacheWriteInputTokens: token("cache_write_input_tokens"),
+    outputTokens: token("output_tokens"),
+    reasoningOutputTokens: token("reasoning_output_tokens")
+  };
 }
 
 function parseRepairableJson(value) {
@@ -132,6 +172,13 @@ export function modelRoleForSerialJob(jobType) {
   return ["concept_selection", "replan_arc", "editorial_critique", "editorial_review"].includes(jobType)
     ? "editor"
     : "writer";
+}
+
+export function selectSerialModel(job, { writerModel, editorModel, escalationModel } = {}) {
+  if (modelRoleForSerialJob(job?.type) === "editor") return editorModel;
+  const rewriteNumber = Number(job?.payload?.rewriteNumber || 0);
+  if (job?.type === "rewrite_draft" && rewriteNumber >= 2 && escalationModel) return escalationModel;
+  return writerModel;
 }
 
 function isConceptDecisionStage(type) {
@@ -301,6 +348,22 @@ function naturalKoreanInstruction(type) {
   return `${rule} Use the same distinctions in all Korean planning fields so later prose inherits natural actors, targets, and consequences.`;
 }
 
+function causalIntegrityInstruction(type) {
+  if (type === "build_episode_card") {
+    return "Before accepting a scene solution, silently trace the exact obligation or danger, current actor, target or recipient, quantity or deadline when relevant, on-page action, binding world rule that authorizes the effect, and remaining consequence. Paperwork, a declaration, or starting an action may not count as completed physical performance unless an existing world rule explicitly says so. Never invent a new authority, exception, or procedure to rescue a planned payoff; change the action when the desired result is unsupported by worldRules and canon.";
+  }
+  if (type === "write_draft") {
+    return "For every decisive solution, keep the actor, recipient or target, promised amount or deadline, performed action, authorizing world rule, and remaining consequence consistent. Do not let a document, declaration, partial action, or reassigned responsibility erase an existing debt or produce a physical or supernatural result beyond the supplied world rules. If the episode card overpromises such a result, preserve its human choice and payoff but reduce the result to what the existing rule actually permits.";
+  }
+  if (type === "rewrite_draft") {
+    return "For a causality or world-rule failure, quote no new lore into existence. Identify the exact existing worldRule or canon fact, then make the actor perform the concrete action it requires. Keep actor, recipient or target, amount or deadline, legal effect, supernatural effect, and remaining debt distinct. A document or partial action cannot count as completion unless an existing rule explicitly grants that result.";
+  }
+  if (["editorial_critique", "editorial_review"].includes(type)) {
+    return "For every claimed solution, compare the result to the exact supplied worldRules and canon. Treat an unsupported effect as a causality failure, but recommend changing the on-page action or limiting its result instead of demanding a newly invented authority, exception, or procedure.";
+  }
+  return "";
+}
+
 function stageInstruction(type, payload = {}) {
   if (type === "concept_candidates") {
     return "Create exactly four original Korean long-form series candidates for the supplied schedule. This is a divergent development pass, not a final concept. Keep each candidate understandable in one breath, make its central desire emotionally legible, give the central counterpart an independent incompatible goal, and show how choices under clear rules create multiple kinds of scenes. Do not choose, rank, title the final work, or produce synopsis, premiseAudit, readerAppealPlan, or storyCore.";
@@ -358,7 +421,7 @@ function stageInstruction(type, payload = {}) {
     return "Write the full Korean installment manuscript within the supplied character limits. Follow the episode card and voice profile, especially episodeMode, dramaticCore, continuityMemoryPlan, techniquePlan.readerOrientation, techniquePlan.readerRewardPlan, and voiceProfile.readerOnboardingRules. Make dramaticCore.choice happen on the page, charge its stated cost, and leave the promised stateChange visible; a hook cannot substitute for them. Make each memory-plan resolution observable and create new promises or debts only through actual choices and consequences. Show the personal want and vulnerability before or alongside the unusual rule, visibly deliver every concretePayoff, and make relationshipAfter true through mutual action rather than narration. If episodeNo is 1, title it as a prologue and write a satisfying prologue that makes the operator want to continue with 본편 1화; do not call it 1화. The prologueDisclosurePlan is a hard information boundary: visibly deliver mustShow, answer resolvedNow, leave openQuestions alive, hint only listed mayHintRevealKeys, and do not state or effectively solve any mustNotAnswerRevealKey. revealUpdates may mark those protected keys only as planned or seeded, never revealed. If episodeNo is greater than 1, treat it as a main chapter and avoid repeating prologue framing. Convert every scene's spatialAnchor, characterBlocking, sensoryAnchor, and visualTurn into natural prose without printing those labels. Also embody dramaticCore.emotionalTurn and imageAnchor in the action without printing their labels. Give cause before effect, physical continuity between actions, dialogue with distinct intent, and enough selective detail for the reader to reconstruct the scene. The first sentence must orient the reader with a visible person, place, or action before naming a large mystery, system rule, faction, title, or abstract threat. Within the first two paragraphs, naturally establish the viewpoint, ordinary baseline, location, and immediate goal; by the third, make the first observable change and immediate stakes understandable. Do not confuse speed with omission. Within the first two paragraphs of later scenes, make clear where the viewpoint character is, what is nearest or obstructing them, and what is moving or changing. Obey the new-term budget exactly; when a term such as a skill, rank, rule, artifact, institution, or monster type first appears, make its plain practical meaning and visible effect clear within the same paragraph. Prefer one concrete sentence over a polished abstract phrase. Let dialogue happen alongside gaze, hands, footing, object use, or environmental response instead of in a blank space. Use paragraph breaks for mobile reading. Do not overdescribe, write screenplay directions, or include markdown headings, analysis, notes, or explanations outside the manuscript fields. sceneRanges use 1-based paragraph numbers and must cover each planned scene.";
   }
   if (type === "rewrite_draft") {
-    return "Rewrite the manuscript using the editor's evidence. Fix the named scenes first and repair only the neighboring continuity they affect. When readerOrientation fails, restore the shortest natural sequence that clarifies viewpoint, place, ordinary baseline, immediate goal, first change, and stakes; do not add a lore preface. When sceneVisualization fails, restore the missing spatial anchor, body or object movement, viewpoint-specific sensory cue, and visible consequence without inflating every paragraph. When characterAttachment fails, replace generic altruism with a specific personal want, vulnerability, cost, or flawed choice already supported by canon. When relationshipMomentum fails, give the supporting character an independent motive and dramatize a real shift in trust, distance, obligation, or conflict. When readerReward fails, deliver the missing planned payoffs instead of adding setup or a larger conspiracy. When premiseAccessibility or readability fails, lower the vocabulary level, define unfamiliar terms through immediate action, and replace abstract explanation with concrete cause-and-effect sentences. Keep good material intact, preserve canon, and return the complete revised manuscript. The changes array must identify what changed in each affected scene. Do not argue with the editor or include revision notes in the manuscript.";
+    return "Rewrite the manuscript using the editor's evidence. This is a surgical copy edit, not a fresh draft: preserve unaffected scenes and paragraphs verbatim, do not apply optional suggestions from carried strong critic panels, and change only the exact failed evidence plus the shortest neighboring continuity required to make it coherent. Fix the named scenes first. When readerOrientation fails, restore the shortest natural sequence that clarifies viewpoint, place, ordinary baseline, immediate goal, first change, and stakes; do not add a lore preface. When sceneVisualization fails, restore the missing spatial anchor, body or object movement, viewpoint-specific sensory cue, and visible consequence without inflating every paragraph. When characterAttachment fails, replace generic altruism with a specific personal want, vulnerability, cost, or flawed choice already supported by canon. When relationshipMomentum fails, give the supporting character an independent motive and dramatize a real shift in trust, distance, obligation, or conflict. When readerReward fails, deliver the missing planned payoffs instead of adding setup or a larger conspiracy. When premiseAccessibility or readability fails, lower the vocabulary level, define unfamiliar terms through immediate action, and replace abstract explanation with concrete cause-and-effect sentences. Before returning, compare the original and revision paragraph by paragraph and revert every change that is not required by the named issue. Then run a Korean subject-agent-object-predicate check on every changed sentence. Keep good material intact, preserve canon, and return the complete revised manuscript. The changes array must identify what changed in each affected scene. Do not argue with the editor or include revision notes in the manuscript.";
   }
   if (type === "editorial_critique") {
     const role = String(payload?.criticRole || "");

@@ -27,7 +27,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, summarizeQueue } from "../src/serial-service.mjs";
 import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
@@ -126,6 +126,7 @@ assert.match(serverSource, /stories\/:id\/opening-pilot/u, "opening pilot promot
 assert.match(serialServiceSource, /schedule\.schedule_status/u, "queue API must expose the schedule state that can block a waiting job");
 assert.match(serialServiceSource, /set schedule_status = 'active', updated_at = systimestamp/u, "queue retry must reactivate its paused schedule");
 assert.match(serialServiceSource, /const releaseAt = dateOrNull\(run\.RELEASE_AT\) \|\| new Date\(\)/u, "draft approval must convert fetched Oracle date strings before rebinding release_at");
+assert.match(serialServiceSource, /schedule\.CADENCE_MINUTES[^]*cadenceMinutes\) \* 60_000/u, "continuation release times must use the configured minute cadence");
 assert.match(retryQueueRouteSource, /storyHeavenSerialEmergencyPaused/u, "queue retry must reject a globally paused system explicitly");
 assert.match(serialServiceSource, /hiddenHistory/u, "queue API must expose hidden historical logs for full-view audits");
 assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use a dedicated service path");
@@ -1370,6 +1371,24 @@ const naturalKoreanQa = analyzeStoryHeavenSerialDraft({
 });
 assert.equal(naturalKoreanQa.errors.some((entry) => entry.code === "semantic_predicate_mismatch"), false);
 
+const strongCriticPanels = Object.fromEntries([
+  "character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"
+].map((role) => [role, { verdict: "strong" }]));
+const strongScores = Object.fromEntries(Object.keys(STORYHEAVEN_SERIAL_LIMITS.quality).map((name) => [name, 100]));
+assert.deepEqual(editorialCriticRolesForPass({ rewritten: false }), [
+  "character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"
+]);
+assert.deepEqual(editorialCriticRolesForPass({
+  rewritten: true,
+  episodeNo: 1,
+  quality: {
+    editorial: {
+      criticPanels: strongCriticPanels,
+      scores: { ...strongScores, causality: 80 }
+    }
+  }
+}), ["worldCausality", "skepticalReader"]);
+
 const now = Date.now();
 const queueSummary = summarizeQueue([
   queueSummaryRow("recent-a", now - 60 * 60 * 1_000),
@@ -1508,6 +1527,18 @@ assert.equal(storyHeavenSerialQualityThresholds(1).premiseAccessibility, 92);
 assert.equal(storyHeavenSerialQualityThresholds(1).novelty, 70);
 assert.equal(storyHeavenSerialQualityThresholds(2).openingGrip, 75);
 assert.equal(storyHeavenSerialQualityThresholds(2).novelty, 65);
+const advisoryReview = {
+  ...review,
+  decision: "rewrite_required",
+  issues: [{ code: "minor_clarity", severity: "warning" }],
+  rewriteScenes: [4]
+};
+assert.equal(decideStoryHeavenSerialReview({ qa, review: advisoryReview, rewriteCount: 2, episodeNo: 1 }).state, "approved");
+const criticalReview = {
+  ...advisoryReview,
+  issues: [{ code: "canon_break", severity: "critical" }]
+};
+assert.equal(decideStoryHeavenSerialReview({ qa, review: criticalReview, rewriteCount: 0, episodeNo: 1 }).state, "approved");
 const weakFirstEpisode = decideStoryHeavenSerialReview({
   qa,
   review: { ...review, scores: { ...scores, openingGrip: 85 } },

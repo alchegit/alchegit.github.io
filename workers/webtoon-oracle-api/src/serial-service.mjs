@@ -30,6 +30,14 @@ const EDITORIAL_CRITIC_ROLES = Object.freeze([
   "sceneExpression",
   "skepticalReader"
 ]);
+const EDITORIAL_ROLE_METRICS = Object.freeze({
+  character: ["characterAgency", "characterAttachment"],
+  relationship: ["relationshipMomentum", "emotionalPayoff"],
+  serialMomentum: ["openingGrip", "narrativeMomentum", "curiosityAndHook", "readerReward"],
+  worldCausality: ["canonConsistency", "causality", "premiseAccessibility"],
+  sceneExpression: ["koreanReadability", "readerOrientation", "sceneVisualization"],
+  skepticalReader: ["genrePromise", "curiosityAndHook", "readerReward", "novelty"]
+});
 const SEOUL_OFFSET = "+09:00";
 const OFFSET_TIME_RE = /(?:z|[+-]\d{2}:?\d{2})$/iu;
 const OFFSETLESS_TIME_RE = /^\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?)?$/u;
@@ -38,6 +46,21 @@ export const STORYHEAVEN_CONTINUATION_POLICY = Object.freeze({
   adminMinimumEpisodeCount: 1,
   recommendationThreshold: 11
 });
+
+export function editorialCriticRolesForPass({ rewritten = false, episodeNo = null, quality = null } = {}) {
+  if (!rewritten) return [...EDITORIAL_CRITIC_ROLES];
+  const editorial = quality?.editorial;
+  if (!editorial || typeof editorial !== "object") return [...EDITORIAL_CRITIC_ROLES];
+  const thresholds = storyHeavenSerialQualityThresholds(episodeNo);
+  const roles = new Set(["skepticalReader"]);
+  for (const role of EDITORIAL_CRITIC_ROLES) {
+    if (editorial.criticPanels?.[role]?.verdict !== "strong") roles.add(role);
+    if ((EDITORIAL_ROLE_METRICS[role] || []).some((metric) => (
+      Number(editorial.scores?.[metric] || 0) < Number(thresholds[metric] || 0)
+    ))) roles.add(role);
+  }
+  return EDITORIAL_CRITIC_ROLES.filter((role) => roles.has(role));
+}
 
 export function continuationMinimumEpisode(triggerType) {
   return triggerType === "admin_request"
@@ -76,6 +99,7 @@ export function createStoryHeavenSerialService({
     getStoryState,
     getRun,
     resolveQualityHold,
+    extendOpeningPilot,
     claimJob,
     completeJob,
     failJob,
@@ -165,6 +189,7 @@ export function createStoryHeavenSerialService({
         `select serial_run.queue_group_id, serial_run.id as run_id,
                 serial_run.episode_no, job.job_type, job.job_status,
                 job.attempt_count, job.error_code,
+                job.input_json, job.output_json,
                 job.started_at, job.completed_at, job.created_at
            from storyheaven_serial_jobs job
           join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
@@ -1630,7 +1655,7 @@ export function createStoryHeavenSerialService({
       if (!run) throw failure("serial_run_not_found", 404);
       const [jobs, drafts, reviews, metrics] = await Promise.all([
         connection.execute(`select id, job_type, job_status, attempt_count, max_attempts, worker_id,
-                                   error_code, output_json, started_at, completed_at, created_at
+                                   error_code, input_json, output_json, started_at, completed_at, created_at
                               from storyheaven_serial_jobs where run_id = :run_id order by created_at`, { run_id: runId }),
         connection.execute(`select id, version_no, draft_kind, title, public_summary, body_text, scene_ranges_json, deterministic_json, content_hash, created_at from storyheaven_serial_drafts where run_id = :run_id order by version_no`, { run_id: runId }),
         connection.execute(`select id, draft_id, review_version, decision, scores_json, safety_passed, summary_text, issues_json, rewrite_scenes_json, score_evidence_json, audience_lenses_json, created_at from storyheaven_editorial_reviews where run_id = :run_id order by review_version`, { run_id: runId }),
@@ -1640,19 +1665,7 @@ export function createStoryHeavenSerialService({
         run: mapRun(run),
         development: mapRunDevelopment(jobs.rows),
         replanning: mapRunReplanning(jobs.rows),
-        jobs: jobs.rows.map((row) => ({
-          id: row.ID,
-          type: row.JOB_TYPE,
-          status: row.JOB_STATUS,
-          attemptCount: Number(row.ATTEMPT_COUNT),
-          maxAttempts: Number(row.MAX_ATTEMPTS),
-          workerId: row.WORKER_ID,
-          errorCode: row.ERROR_CODE,
-          startedAt: isoTime(row.STARTED_AT),
-          completedAt: isoTime(row.COMPLETED_AT),
-          durationSeconds: elapsedSeconds(timeValue(row.STARTED_AT), timeValue(row.COMPLETED_AT)),
-          createdAt: isoTime(row.CREATED_AT)
-        })),
+        jobs: jobs.rows.map(mapRunJob),
         drafts: drafts.rows.map((row) => ({ id: row.ID, version: Number(row.VERSION_NO), kind: row.DRAFT_KIND, title: row.TITLE, summary: row.PUBLIC_SUMMARY, body: row.BODY_TEXT, sceneRanges: parseJson(row.SCENE_RANGES_JSON, []), qa: parseJson(row.DETERMINISTIC_JSON, {}), contentHash: row.CONTENT_HASH, createdAt: isoTime(row.CREATED_AT) })),
         reviews: reviews.rows.map((row) => ({ id: row.ID, draftId: row.DRAFT_ID, version: Number(row.REVIEW_VERSION), decision: row.DECISION, scores: parseJson(row.SCORES_JSON, {}), scoreEvidence: parseJson(row.SCORE_EVIDENCE_JSON, {}), audienceLenses: parseJson(row.AUDIENCE_LENSES_JSON, []), safetyPassed: row.SAFETY_PASSED === "Y", summary: row.SUMMARY_TEXT, issues: parseJson(row.ISSUES_JSON, []), rewriteScenes: parseJson(row.REWRITE_SCENES_JSON, []), createdAt: isoTime(row.CREATED_AT) })),
         metrics: metrics.rows.map((row) => ({ draftId: row.DRAFT_ID, name: row.METRIC_NAME, score: Number(row.METRIC_SCORE), threshold: Number(row.THRESHOLD_SCORE), passed: row.PASSED === "Y", evidence: parseJson(row.EVIDENCE_JSON, []) }))
@@ -1663,7 +1676,7 @@ export function createStoryHeavenSerialService({
   async function resolveQualityHold(runIdValue, userId, input = {}) {
     const runId = requireId(runIdValue, "run_id");
     const action = String(input.action || "").trim();
-    if (!new Set(["rewrite", "approve"]).has(action)) {
+    if (!new Set(["rewrite", "approve", "approve_best"]).has(action)) {
       throw failure("serial_quality_hold_action_invalid", 400);
     }
     return withTransaction(async (connection) => {
@@ -1682,12 +1695,12 @@ export function createStoryHeavenSerialService({
         { run_id: runId });
       if (Number(active?.ACTIVE_COUNT || 0) > 0) throw failure("serial_quality_hold_work_active", 409);
 
-      const draft = await selectOne(connection,
+      let draft = await selectOne(connection,
         `select * from storyheaven_serial_drafts
           where run_id = :run_id
           order by version_no desc fetch first 1 row only`,
         { run_id: runId });
-      const review = await selectOne(connection,
+      let review = await selectOne(connection,
         `select * from storyheaven_editorial_reviews
           where run_id = :run_id
           order by review_version desc fetch first 1 row only`,
@@ -1695,6 +1708,24 @@ export function createStoryHeavenSerialService({
       if (!draft || !review) throw failure("serial_quality_hold_evidence_missing", 409);
 
       const quality = parseJson(run.QUALITY_JSON, {});
+      let recoveredCandidate = null;
+      if (action === "approve_best") {
+        recoveredCandidate = await findBestApprovedDraft(connection, run);
+        if (!recoveredCandidate) throw failure("serial_quality_hold_approved_draft_missing", 409);
+        draft = recoveredCandidate.draft;
+        review = await recordRecoveredApproval(connection, run, recoveredCandidate, "operator_best_revision");
+      }
+      const resolutionQuality = recoveredCandidate ? {
+        deterministic: recoveredCandidate.qa,
+        editorial: recoveredCandidate.editorial,
+        decision: recoveredCandidate.decision,
+        recoveredRevision: {
+          reason: "operator_best_revision",
+          draftId: recoveredCandidate.draft.ID,
+          reviewJobId: recoveredCandidate.reviewJobId,
+          readerExperienceScore: recoveredCandidate.decision.readerExperienceScore
+        }
+      } : quality;
       const operatorResolution = {
         action,
         userId,
@@ -1709,15 +1740,19 @@ export function createStoryHeavenSerialService({
           where id = :run_id`,
         {
           run_id: runId,
-          quality_json: clobJson({ ...quality, operatorResolution })
+          quality_json: clobJson({ ...resolutionQuality, operatorResolution })
         }
       );
 
-      if (action === "approve") {
+      if (action === "approve" || action === "approve_best") {
         if (review.SAFETY_PASSED !== "Y") throw failure("serial_quality_hold_safety_failed", 409);
         await approveDraft(connection, run, draft);
       } else {
+        const storedEditorial = quality.editorial && typeof quality.editorial === "object"
+          ? quality.editorial
+          : {};
         const editor = {
+          ...storedEditorial,
           scores: parseJson(review.SCORES_JSON, {}),
           safetyPassed: review.SAFETY_PASSED === "Y",
           summary: review.SUMMARY_TEXT,
@@ -1727,14 +1762,14 @@ export function createStoryHeavenSerialService({
           audienceLenses: parseJson(review.AUDIENCE_LENSES_JSON, [])
         };
         const qa = parseJson(draft.DETERMINISTIC_JSON, {});
-        const rewriteNumber = Number(run.REWRITE_COUNT || 0) + 1;
+        const rewriteNumber = Number(run.REWRITE_COUNT || 0) + Number(run.OPERATOR_REWRITE_COUNT || 0) + 1;
         await connection.execute(
           `update storyheaven_serial_runs
               set run_status = 'rewrite', current_stage = 'rewrite_draft',
-                  rewrite_count = :rewrite_count, failure_code = null,
+                  operator_rewrite_count = operator_rewrite_count + 1, failure_code = null,
                   completed_at = null, updated_at = systimestamp
             where id = :run_id`,
-          { run_id: runId, rewrite_count: rewriteNumber }
+          { run_id: runId }
         );
         const context = await loadSerialContext(connection, run.STORY_ID);
         await queueJob(connection, {
@@ -1744,7 +1779,7 @@ export function createStoryHeavenSerialService({
           priority: 75,
           input: {
             story: context.story,
-            bible: context.bible,
+            bible: editorialBible(context.bible, run.EPISODE_NO),
             arc: context.arc,
             canon: context.canon,
             reveals: context.reveals,
@@ -1767,6 +1802,55 @@ export function createStoryHeavenSerialService({
         `select * from storyheaven_serial_runs where id = :run_id`,
         { run_id: runId });
       return { action, run: mapRun(updated) };
+    });
+  }
+
+  async function extendOpeningPilot(runIdValue, userId = SYSTEM_AUTHOR_ID) {
+    const runId = requireId(runIdValue, "run_id");
+    return withTransaction(async (connection) => {
+      const run = await selectOne(connection,
+        `select * from storyheaven_serial_runs where id = :run_id for update`,
+        { run_id: runId });
+      if (!run || Number(run.EPISODE_NO) !== 1 || !run.SCHEDULE_ID) {
+        throw failure("serial_opening_pilot_source_invalid", 409);
+      }
+      if (!new Set(["ready", "published"]).has(run.RUN_STATUS)) {
+        throw failure("serial_opening_pilot_source_not_ready", 409);
+      }
+      const schedule = await selectOne(connection,
+        `select * from storyheaven_serial_schedules where id = :schedule_id for update`,
+        { schedule_id: run.SCHEDULE_ID });
+      if (!schedule) throw failure("serial_schedule_not_found", 404);
+      const schedulePolicy = parseJson(schedule.CONCEPT_POLICY_JSON, {});
+      const nextPolicy = {
+        ...schedulePolicy,
+        openingPilotMode: STORYHEAVEN_OPENING_PILOT_MODES.incubation,
+        openingPilotApprovalMode: STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES.automatic
+      };
+      await connection.execute(
+        `update storyheaven_serial_schedules
+            set target_episode_count = greatest(target_episode_count, 3),
+                concept_policy_json = :concept_policy_json,
+                updated_at = systimestamp
+          where id = :schedule_id`,
+        { schedule_id: run.SCHEDULE_ID, concept_policy_json: clobJson(nextPolicy) }
+      );
+      const runInput = { ...parseJson(run.INPUT_JSON, {}), batchEndEpisodeNo: 3 };
+      await connection.execute(
+        `update storyheaven_serial_runs
+            set input_json = :input_json, failure_code = null, updated_at = systimestamp
+          where id = :run_id`,
+        { run_id: run.ID, input_json: clobJson(runInput) }
+      );
+      const queued = await queueNextEpisode(connection, { ...run, INPUT_JSON: JSON.stringify(runInput) }, {
+        ...schedule,
+        CREATED_BY: schedule.CREATED_BY || userId
+      }, {
+        queueGroupId: run.QUEUE_GROUP_ID,
+        batchEndEpisodeNo: 3,
+        notes: runInput.notes || ""
+      });
+      return { runId: run.ID, storyId: run.STORY_ID, batchEndEpisodeNo: 3, queued };
     });
   }
 
@@ -1865,7 +1949,7 @@ export function createStoryHeavenSerialService({
     });
   }
 
-  async function completeJob({ workerId, leaseId, jobId, inputHash, result, model }) {
+  async function completeJob({ workerId, leaseId, jobId, inputHash, result, model, usage = null }) {
     return withTransaction(async (connection) => {
       const job = await selectOne(connection,
         `select id, run_id, story_id, job_type, input_hash, input_json
@@ -1890,7 +1974,14 @@ export function createStoryHeavenSerialService({
             set job_status = 'complete', output_json = :output_json, completed_at = systimestamp,
                 lease_id = null, lease_expires_at = null, worker_id = null, updated_at = systimestamp
           where id = :id`,
-        { id: job.ID, output_json: clobJson({ model: cleanText(model, 160), result: safeResult }) }
+        {
+          id: job.ID,
+          output_json: clobJson({
+            model: cleanText(model, 160),
+            usage: normalizeSerialUsage(usage),
+            result: safeResult
+          })
+        }
       );
       await advanceJob(connection, { job, payload, result: safeResult });
       return { accepted: true, jobId: job.ID, runId: job.RUN_ID };
@@ -2640,9 +2731,19 @@ export function createStoryHeavenSerialService({
     );
     const context = await loadSerialContext(connection, job.STORY_ID);
     const reviewThresholds = storyHeavenSerialQualityThresholds(run.EPISODE_NO);
+    const previousQuality = parseJson(run.QUALITY_JSON, null);
+    const critiqueRoles = editorialCriticRolesForPass({
+      rewritten,
+      episodeNo: run.EPISODE_NO,
+      quality: previousQuality
+    });
+    const previousCriticPacket = previousQuality?.editorial?.criticPanels || {};
+    const carriedCriticPacket = Object.fromEntries(EDITORIAL_CRITIC_ROLES
+      .filter((role) => !critiqueRoles.includes(role) && previousCriticPacket[role])
+      .map((role) => [role, previousCriticPacket[role]]));
     const reviewPayload = {
       story: context.story,
-      bible: context.bible,
+      bible: editorialBible(context.bible, run.EPISODE_NO),
       arc: context.arc,
       canon: context.canon,
       reveals: context.reveals,
@@ -2652,8 +2753,11 @@ export function createStoryHeavenSerialService({
       reviewPolicy: {
         thresholds: reviewThresholds,
         rewriteCount: Number(run.REWRITE_COUNT || 0),
-        firstEpisode: Number(run.EPISODE_NO) === 1
-      }
+        firstEpisode: Number(run.EPISODE_NO) === 1,
+        verificationPass: rewritten
+      },
+      critiqueRoles,
+      carriedCriticPacket
     };
     const developmentV2 = Boolean(context.bible?.concept?.storyCore);
     if (developmentV2) {
@@ -2662,7 +2766,7 @@ export function createStoryHeavenSerialService({
         `update storyheaven_serial_runs set current_stage = 'editorial_critique', updated_at = systimestamp where id = :run_id`,
         { run_id: job.RUN_ID }
       );
-      for (const criticRole of EDITORIAL_CRITIC_ROLES) {
+      for (const criticRole of critiqueRoles) {
         await queueJob(connection, {
           runId: job.RUN_ID,
           storyId: job.STORY_ID,
@@ -2689,6 +2793,10 @@ export function createStoryHeavenSerialService({
   async function acceptEditorialCritique(connection, job, payload) {
     const critiqueBatchId = String(payload?.critiqueBatchId || "");
     if (!critiqueBatchId) throw failure("serial_critique_batch_missing", 409);
+    const expectedRoles = Array.isArray(payload?.critiqueRoles)
+      ? EDITORIAL_CRITIC_ROLES.filter((role) => payload.critiqueRoles.includes(role))
+      : [...EDITORIAL_CRITIC_ROLES];
+    if (!expectedRoles.length) throw failure("serial_critique_batch_invalid", 409);
     const result = await connection.execute(
       `select input_json, output_json, job_status
          from storyheaven_serial_jobs
@@ -2698,14 +2806,14 @@ export function createStoryHeavenSerialService({
     const batchJobs = result.rows.filter((row) => (
       String(parseJson(row.INPUT_JSON, {}).critiqueBatchId || "") === critiqueBatchId
     ));
-    if (batchJobs.length !== EDITORIAL_CRITIC_ROLES.length
+    if (batchJobs.length !== expectedRoles.length
       || batchJobs.some((row) => row.JOB_STATUS !== "complete")) return;
 
-    const criticPacket = {};
+    const criticPacket = { ...(payload?.carriedCriticPacket || {}) };
     for (const row of batchJobs) {
       const output = parseJson(row.OUTPUT_JSON, {});
       const critique = output.result || {};
-      if (!EDITORIAL_CRITIC_ROLES.includes(critique.criticRole) || criticPacket[critique.criticRole]) {
+      if (!expectedRoles.includes(critique.criticRole)) {
         throw failure("serial_critique_batch_invalid", 409);
       }
       criticPacket[critique.criticRole] = critique.panel;
@@ -2797,6 +2905,11 @@ export function createStoryHeavenSerialService({
     );
     if (decision.state === "approved") return approveDraft(connection, run, draft);
     if (!decision.rewriteAllowed) {
+      const recoveredCandidate = await findBestApprovedDraft(connection, run, draft.ID);
+      if (recoveredCandidate) {
+        await recordRecoveredApproval(connection, run, recoveredCandidate, "later_rewrite_regressed");
+        return approveDraft(connection, run, recoveredCandidate.draft);
+      }
       await connection.execute(
         `update storyheaven_serial_runs set run_status = 'blocked', current_stage = 'editorial_blocked',
                 failure_code = 'quality_threshold_not_met', completed_at = systimestamp,
@@ -2817,7 +2930,7 @@ export function createStoryHeavenSerialService({
       priority: 70,
       input: {
         story: context.story,
-        bible: context.bible,
+        bible: editorialBible(context.bible, run.EPISODE_NO),
         arc: context.arc,
         canon: context.canon,
         reveals: context.reveals,
@@ -2829,6 +2942,100 @@ export function createStoryHeavenSerialService({
         instruction: "지적된 장면만 우선 고치되 수정 때문에 앞뒤 인과나 설정이 깨지는 부분은 함께 정리한다."
       }
     });
+  }
+
+  async function findBestApprovedDraft(connection, run, excludedDraftId = null) {
+    const result = await connection.execute(
+      `select editorial_review.review_version, editorial_review.source_job_id as review_job_id,
+              review_job.output_json, serial_draft.*
+         from storyheaven_editorial_reviews editorial_review
+         join storyheaven_serial_drafts serial_draft on serial_draft.id = editorial_review.draft_id
+         join storyheaven_serial_jobs review_job on review_job.id = editorial_review.source_job_id
+        where editorial_review.run_id = :run_id
+          and (:excluded_draft_id is null or editorial_review.draft_id <> :excluded_draft_id)
+          and review_job.job_status = 'complete'
+        order by editorial_review.review_version desc`,
+      { run_id: run.ID, excluded_draft_id: excludedDraftId }
+    );
+    const candidates = [];
+    for (const row of result.rows) {
+      const stored = parseJson(row.OUTPUT_JSON, {});
+      const editorial = stored?.result && typeof stored.result === "object" ? stored.result : stored;
+      if (!editorial?.scores || !Array.isArray(editorial?.issues)) continue;
+      const qa = parseJson(row.DETERMINISTIC_JSON, {});
+      const candidateDecision = decideStoryHeavenSerialReview({
+        review: editorial,
+        qa,
+        rewriteCount: Number(run.REWRITE_COUNT || 0),
+        episodeNo: run.EPISODE_NO
+      });
+      if (candidateDecision.state !== "approved") continue;
+      candidates.push({
+        draft: row,
+        editorial,
+        qa,
+        decision: candidateDecision,
+        reviewJobId: row.REVIEW_JOB_ID,
+        reviewVersion: Number(row.REVIEW_VERSION || 0)
+      });
+    }
+    candidates.sort((left, right) => (
+      Number(right.decision.readerExperienceScore || 0) - Number(left.decision.readerExperienceScore || 0)
+      || right.reviewVersion - left.reviewVersion
+    ));
+    return candidates[0] || null;
+  }
+
+  async function recordRecoveredApproval(connection, run, candidate, reason) {
+    const reviewVersion = await selectOne(connection,
+      `select nvl(max(review_version), 0) + 1 as next_version
+         from storyheaven_editorial_reviews where run_id = :run_id`,
+      { run_id: run.ID });
+    const reviewId = randomId();
+    await connection.execute(
+      `insert into storyheaven_editorial_reviews (
+        id, run_id, draft_id, review_version, decision, scores_json,
+        safety_passed, summary_text, issues_json, rewrite_scenes_json,
+        score_evidence_json, audience_lenses_json, source_job_id
+      ) values (
+        :id, :run_id, :draft_id, :review_version, 'approved', :scores_json,
+        'Y', :summary_text, :issues_json, :rewrite_scenes_json,
+        :score_evidence_json, :audience_lenses_json, :source_job_id
+      )`,
+      {
+        id: reviewId,
+        run_id: run.ID,
+        draft_id: candidate.draft.ID,
+        review_version: Number(reviewVersion.NEXT_VERSION || 1),
+        scores_json: clobJson(candidate.editorial.scores),
+        summary_text: candidate.editorial.summary,
+        issues_json: clobJson(candidate.editorial.issues),
+        rewrite_scenes_json: clobJson(candidate.editorial.rewriteScenes || []),
+        score_evidence_json: clobJson(candidate.editorial.scoreEvidence || {}),
+        audience_lenses_json: clobJson(candidate.editorial.audienceLenses || []),
+        source_job_id: candidate.reviewJobId
+      }
+    );
+    await connection.execute(
+      `update storyheaven_serial_runs
+          set quality_json = :quality_json, updated_at = systimestamp
+        where id = :run_id`,
+      {
+        run_id: run.ID,
+        quality_json: clobJson({
+          deterministic: candidate.qa,
+          editorial: candidate.editorial,
+          decision: candidate.decision,
+          recoveredRevision: {
+            reason,
+            draftId: candidate.draft.ID,
+            reviewJobId: candidate.reviewJobId,
+            readerExperienceScore: candidate.decision.readerExperienceScore
+          }
+        })
+      }
+    );
+    return { ID: reviewId, SAFETY_PASSED: "Y", DECISION: "approved" };
   }
 
   async function approveDraft(connection, run, draft) {
@@ -2881,7 +3088,7 @@ export function createStoryHeavenSerialService({
     );
     await connection.execute(
       `update storyheaven_serial_runs set run_status = 'ready', current_stage = 'publication_ready',
-              completed_at = systimestamp, updated_at = systimestamp where id = :run_id`,
+              failure_code = null, completed_at = systimestamp, updated_at = systimestamp where id = :run_id`,
       { run_id: run.ID }
     );
     if (run.SCHEDULE_ID && Number(run.EPISODE_NO) === 1) {
@@ -3374,10 +3581,10 @@ export function createStoryHeavenSerialService({
     const arc = await selectOne(connection,
       `select episode_plan_json from storyheaven_serial_arcs where id = :arc_id`, { arc_id: run.ARC_ID });
     const releaseBase = dateOrNull(run.RELEASE_AT) || new Date();
-    const cadenceDays = schedule.CADENCE_DAYS === null || schedule.CADENCE_DAYS === undefined
-      ? 7
-      : Number(schedule.CADENCE_DAYS);
-    const releaseAt = new Date(releaseBase.getTime() + Math.max(0, cadenceDays) * 86_400_000);
+    const cadenceMinutes = schedule.CADENCE_MINUTES === null || schedule.CADENCE_MINUTES === undefined
+      ? Number(schedule.CADENCE_DAYS || 7) * 1_440
+      : Number(schedule.CADENCE_MINUTES);
+    const releaseAt = new Date(releaseBase.getTime() + Math.max(0, cadenceMinutes) * 60_000);
     const hasNext = parseJson(arc?.EPISODE_PLAN_JSON, []).some((item) => Number(item.episodeNo) === nextEpisodeNo);
     if (hasNext) {
       return createEpisodeRun(connection, {
@@ -3570,6 +3777,59 @@ export function createStoryHeavenSerialService({
         sceneClarity: "각 장면의 첫 2개 문단 안에 시점 인물의 위치, 가까운 장애물이나 물체, 움직이거나 달라지는 대상을 독자가 파악할 수 있게 한다.",
         concreteDetailBudget: "장면당 기억할 구체물은 2~4개만 선택하고 시점 인물이 실제 감지할 수 있는 감각만 쓴다.",
         spatialContinuity: "인물의 상대 위치, 이동 방향, 손에 든 물건과 행동 결과가 문단 사이에서 순간이동하거나 모순되지 않게 한다."
+      }
+    };
+  }
+
+  function editorialBible(bible = {}, episodeNo = null) {
+    const concept = bible.concept || {};
+    const blueprint = bible.narrativeBlueprint || {};
+    const architecture = blueprint.seriesArchitecture || {};
+    const seriesPlan = blueprint.seriesPlan || concept.seriesPlan || normalizeSeriesPlan();
+    const position = storyHeavenSeriesPosition(episodeNo, seriesPlan);
+    const currentVolume = (architecture.volumePlan || [])
+      .find((item) => Number(item.volumeNo) === Number(position.volumeNo));
+    return {
+      storyId: bible.storyId,
+      version: bible.version,
+      status: bible.status,
+      concept: {
+        title: concept.title,
+        logline: concept.logline,
+        synopsis: concept.synopsis,
+        genres: concept.genres,
+        tags: concept.tags,
+        rating: concept.rating,
+        readerPromise: concept.readerPromise,
+        familiarPleasure: concept.familiarPleasure,
+        novelTwist: concept.novelTwist,
+        storyCore: concept.storyCore,
+        premiseAudit: concept.premiseAudit,
+        readerAppealPlan: concept.readerAppealPlan,
+        seriesPlan: concept.seriesPlan
+      },
+      worldRules: bible.worldRules,
+      characters: bible.characters,
+      timeline: bible.timeline,
+      glossary: bible.glossary,
+      forbiddenContradictions: bible.forbiddenContradictions,
+      voiceProfile: bible.voiceProfile,
+      relationshipWeb: bible.relationshipWeb,
+      worldDynamics: bible.worldDynamics,
+      narrativeBlueprint: {
+        informationStrategy: blueprint.informationStrategy,
+        noveltyPolicy: blueprint.noveltyPolicy,
+        readerOnboardingRules: blueprint.readerOnboardingRules,
+        sensoryPalette: blueprint.sensoryPalette,
+        antiRepetitionRules: blueprint.antiRepetitionRules,
+        seriesPlan,
+        serialMemory: blueprint.serialMemory,
+        seriesArchitecture: {
+          schemaVersion: architecture.schemaVersion,
+          renewableConflictSources: architecture.renewableConflictSources,
+          prologueDisclosure: architecture.prologueDisclosure,
+          volumePlan: currentVolume ? [currentVolume] : []
+        }
       }
     };
   }
@@ -3883,13 +4143,18 @@ export function summarizeQueue(rows = [], timingRows = []) {
     if (!group) continue;
     const startedAt = timeValue(row.STARTED_AT);
     const completedAt = timeValue(row.COMPLETED_AT);
+    const input = parseJson(row.INPUT_JSON, {});
+    const output = parseJson(row.OUTPUT_JSON, {});
     group.stageTimings.push({
       runId: row.RUN_ID,
       episodeNo: row.EPISODE_NO === null || row.EPISODE_NO === undefined ? null : Number(row.EPISODE_NO),
       type: row.JOB_TYPE,
+      criticRole: cleanCriticRole(input.criticRole),
       status: row.JOB_STATUS,
       attemptCount: Number(row.ATTEMPT_COUNT || 0),
       errorCode: row.ERROR_CODE || null,
+      model: cleanText(output.model, 160) || null,
+      usage: normalizeSerialUsage(output.usage),
       startedAt: isoTime(startedAt),
       completedAt: isoTime(completedAt),
       durationSeconds: elapsedSeconds(startedAt, completedAt),
@@ -4362,6 +4627,7 @@ function mapStalledFirstEpisodeStory(row) {
     latestRunStatus: row.LATEST_RUN_STATUS || null,
     latestStage: row.LATEST_STAGE || null,
     rewriteCount: Number(row.REWRITE_COUNT || 0),
+    operatorRewriteCount: Number(row.OPERATOR_REWRITE_COUNT || 0),
     latestFailureCode: row.LATEST_FAILURE_CODE || null,
     draft: row.LATEST_DRAFT_ID ? {
       id: row.LATEST_DRAFT_ID,
@@ -4581,6 +4847,7 @@ function mapRun(row) {
     status: row.RUN_STATUS,
     stage: row.CURRENT_STAGE,
     rewriteCount: Number(row.REWRITE_COUNT || 0),
+    operatorRewriteCount: Number(row.OPERATOR_REWRITE_COUNT || 0),
     releaseAt: isoTime(row.RELEASE_AT),
     failureCode: row.FAILURE_CODE,
     startedAt,
@@ -4590,6 +4857,27 @@ function mapRun(row) {
     quality: parseJson(row.QUALITY_JSON, null),
     createdAt: isoTime(row.CREATED_AT),
     updatedAt: isoTime(row.UPDATED_AT)
+  };
+}
+
+function mapRunJob(row) {
+  const input = parseJson(row.INPUT_JSON, {});
+  const output = parseJson(row.OUTPUT_JSON, {});
+  return {
+    id: row.ID,
+    type: row.JOB_TYPE,
+    criticRole: cleanCriticRole(input.criticRole),
+    status: row.JOB_STATUS,
+    attemptCount: Number(row.ATTEMPT_COUNT),
+    maxAttempts: Number(row.MAX_ATTEMPTS),
+    workerId: row.WORKER_ID,
+    errorCode: row.ERROR_CODE,
+    model: cleanText(output.model, 160) || null,
+    usage: normalizeSerialUsage(output.usage),
+    startedAt: isoTime(row.STARTED_AT),
+    completedAt: isoTime(row.COMPLETED_AT),
+    durationSeconds: elapsedSeconds(timeValue(row.STARTED_AT), timeValue(row.COMPLETED_AT)),
+    createdAt: isoTime(row.CREATED_AT)
   };
 }
 
@@ -4683,6 +4971,23 @@ export function applyStoryHeavenOpeningPilotPromotion(assessment, {
 
 function cleanText(value, max) {
   return [...String(value ?? "").normalize("NFC").replace(/[\u0000-\u001F\u007F]/gu, " ").replace(/\s+/gu, " ").trim()].slice(0, max).join("");
+}
+
+function cleanCriticRole(value) {
+  const role = String(value || "");
+  return EDITORIAL_CRITIC_ROLES.includes(role) ? role : null;
+}
+
+function normalizeSerialUsage(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const token = (key) => Math.max(0, Math.min(2_000_000_000, Math.trunc(Number(value[key] || 0))));
+  return {
+    inputTokens: token("inputTokens"),
+    cachedInputTokens: token("cachedInputTokens"),
+    cacheWriteInputTokens: token("cacheWriteInputTokens"),
+    outputTokens: token("outputTokens"),
+    reasoningOutputTokens: token("reasoningOutputTokens")
+  };
 }
 
 function cleanCode(value) {

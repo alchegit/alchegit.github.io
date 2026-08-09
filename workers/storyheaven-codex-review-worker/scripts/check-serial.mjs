@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { SERIAL_EDITORIAL_POLICY_VERSION, SERIAL_JOB_TYPES, buildSerialJsonRepairPrompt, buildSerialPrompt, modelRoleForSerialJob, parseSerialOutput } from "../src/serial.mjs";
+import { SERIAL_EDITORIAL_POLICY_VERSION, SERIAL_JOB_TYPES, buildSerialJsonRepairPrompt, buildSerialPrompt, mergeCodexUsage, modelRoleForSerialJob, parseCodexJsonlUsage, parseSerialOutput, selectSerialModel } from "../src/serial.mjs";
 import { buildSerialGenreEditorialGuidance } from "../src/serial-editorial-guidance.mjs";
 
 const serialSchema = JSON.parse(await readFile(fileURLToPath(new URL("../schemas/serial-result.schema.json", import.meta.url)), "utf8"));
@@ -65,12 +65,20 @@ assert.equal(modelRoleForSerialJob("concept_selection"), "editor");
 assert.equal(modelRoleForSerialJob("replan_arc"), "editor");
 assert.equal(modelRoleForSerialJob("concept_candidates"), "writer");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
+const serialModels = { writerModel: "gpt-5.6-terra", editorModel: "gpt-5.6-luna", escalationModel: "gpt-5.6-sol" };
+assert.equal(selectSerialModel({ type: "write_draft", payload: {} }, serialModels), "gpt-5.6-terra");
+assert.equal(selectSerialModel({ type: "rewrite_draft", payload: { rewriteNumber: 1 } }, serialModels), "gpt-5.6-terra");
+assert.equal(selectSerialModel({ type: "rewrite_draft", payload: { rewriteNumber: 2 } }, serialModels), "gpt-5.6-sol");
+assert.equal(selectSerialModel({ type: "editorial_review", payload: { rewriteNumber: 9 } }, serialModels), "gpt-5.6-luna");
 
 const draftPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
 assert.match(draftPrompt, /silent sentence-by-sentence subject-predicate pass/u);
 assert.match(draftPrompt, /집은 부서졌다/u);
 const rewritePrompt = buildSerialPrompt({ ...job, type: "rewrite_draft" });
 assert.match(rewritePrompt, /semantic_predicate_mismatch/u);
+assert.match(rewritePrompt, /surgical copy edit/u);
+assert.match(rewritePrompt, /preserve unaffected scenes and paragraphs verbatim/u);
+assert.match(rewritePrompt, /subject-agent-object-predicate check/u);
 
 const genreProfileSignals = {
   fantasy: /ordinary lack, duty, or vulnerability/u,
@@ -519,11 +527,38 @@ assert.match(repairPrompt, /Repair only JSON punctuation and escaping/u);
 assert.match(repairPrompt, /JSON\.parse\(resultJson\) also succeeds/u);
 assert.match(repairPrompt, new RegExp(job.id, "u"));
 
-assert.throws(() => parseSerialOutput({
+const correctedIdentity = parseSerialOutput({
   jobId: job.id,
   inputHash: "b".repeat(64),
   jobType: job.type,
   result: {}
-}, job, { model: "gpt-test" }), /identity_mismatch/u);
+}, job, { model: "gpt-test" });
+assert.equal(correctedIdentity.identityCorrected, true);
+assert.deepEqual(correctedIdentity.result, {});
+
+const usage = parseCodexJsonlUsage([
+  JSON.stringify({ type: "turn.started" }),
+  JSON.stringify({ type: "turn.completed", usage: {
+    input_tokens: 100,
+    cached_input_tokens: 40,
+    cache_write_input_tokens: 5,
+    output_tokens: 20,
+    reasoning_output_tokens: 3
+  } })
+].join("\n"));
+assert.deepEqual(usage, {
+  inputTokens: 100,
+  cachedInputTokens: 40,
+  cacheWriteInputTokens: 5,
+  outputTokens: 20,
+  reasoningOutputTokens: 3
+});
+assert.deepEqual(mergeCodexUsage(usage, { inputTokens: 2, outputTokens: 1 }), {
+  inputTokens: 102,
+  cachedInputTokens: 40,
+  cacheWriteInputTokens: 5,
+  outputTokens: 21,
+  reasoningOutputTokens: 3
+});
 
 console.log("StoryHeaven serial prompt checks passed");

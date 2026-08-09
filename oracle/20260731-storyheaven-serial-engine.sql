@@ -137,6 +137,7 @@ begin
       ),
       current_stage varchar2(40) not null,
       rewrite_count number(1) default 0 not null check (rewrite_count between 0 and 2),
+      operator_rewrite_count number(2) default 0 not null check (operator_rewrite_count between 0 and 20),
       requested_by varchar2(80) not null references webtoon_profiles(user_id),
       release_at timestamp with time zone,
       input_json clob check (input_json is json),
