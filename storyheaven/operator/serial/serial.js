@@ -1,7 +1,6 @@
 (() => {
   const selectors = {};
   const scheduleById = new Map();
-  const queueByScheduleId = new Map();
   const failedByScheduleId = new Map();
   const selectedPrimaryGenres = new Set(["fantasy"]);
   const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
@@ -76,16 +75,21 @@
     selectors.systemClock = document.querySelector("[data-seoul-clock]");
     selectors.systemDetail = document.querySelector("[data-system-state-detail]");
     selectors.systemCause = document.querySelector("[data-system-state-cause]");
-    selectors.systemResume = document.querySelector("[data-resume-system]");
+    selectors.systemPrimary = document.querySelector("[data-system-primary]");
     selectors.systemPause = document.querySelector("[data-pause-system]");
-    selectors.systemStart = document.querySelector("[data-start-system]");
+    selectors.createPanel = document.querySelector("[data-create-panel]");
+    selectors.settingsBand = document.querySelector("[data-settings-band]");
+    selectors.inspectionBand = document.querySelector("[data-inspection-band]");
     selectors.scheduleForm = document.querySelector("[data-schedule-form]");
     selectors.scheduleList = document.querySelector("[data-schedule-list]");
+    selectors.waitingGroup = document.querySelector("[data-waiting-group]");
     selectors.queueList = document.querySelector("[data-queue-list]");
+    selectors.attentionGroup = document.querySelector("[data-attention-group]");
     selectors.attentionList = document.querySelector("[data-attention-list]");
     selectors.completedList = document.querySelector("[data-completed-list]");
     selectors.completedCaption = document.querySelector("[data-completed-caption]");
     selectors.stalledList = document.querySelector("[data-stalled-list]");
+    selectors.stalledGroup = document.querySelector("[data-stalled-group]");
     selectors.stalledCaption = document.querySelector("[data-stalled-caption]");
     selectors.waitingCaption = document.querySelector("[data-waiting-caption]");
     selectors.historySummary = document.querySelector("[data-history-summary]");
@@ -116,11 +120,11 @@
     selectors.scheduleForm.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.addEventListener("change", queueDraftSave);
     selectors.runSearch.addEventListener("submit", loadRunFromForm);
-    selectors.systemResume.addEventListener("click", () => guardedSystemButton(selectors.systemResume, resumeSystemFromPanel));
+    selectors.systemPrimary.addEventListener("click", () => guardedSystemButton(selectors.systemPrimary, handleSystemPrimary));
     selectors.systemPause.addEventListener("click", () => guardedSystemButton(selectors.systemPause, () => controlSerialSystem("pause")));
-    selectors.systemStart.addEventListener("click", () => guardedSystemButton(selectors.systemStart, () => controlSerialSystem("start")));
     selectors.historyHiddenToggle.addEventListener("click", toggleHiddenHistory);
     document.querySelector("[data-process-due]").addEventListener("click", processDue);
+    document.querySelector("[data-refresh-status]").addEventListener("click", refreshStatus);
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
     selectors.scheduleForm.elements.cadenceUnit.addEventListener("change", syncCadenceBounds);
     selectors.scheduleForm.elements.targetEpisodeCount.addEventListener("input", updateTargetButton);
@@ -392,14 +396,7 @@
       schedules: Array.isArray(payload.schedules) ? payload.schedules : [],
       queue
     };
-    queueByScheduleId.clear();
     failedByScheduleId.clear();
-    for (const item of queue.items || []) {
-      if (item.scheduleId) queueByScheduleId.set(item.scheduleId, item);
-    }
-    if (!queueByScheduleId.size && payload.schedules?.length === 1 && queue.items?.length) {
-      queueByScheduleId.set(payload.schedules[0].id, queue.items.find((item) => item.status === "running") || queue.items[0]);
-    }
     if (queue.lastFailed?.scheduleId) failedByScheduleId.set(queue.lastFailed.scheduleId, queue.lastFailed);
     scheduleById.clear();
     for (const schedule of payload.schedules || []) scheduleById.set(schedule.id, schedule);
@@ -422,30 +419,39 @@
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
     const detail = document.createElement("p");
-    const controls = schedule.creativeControls || {};
-    detail.textContent = `${subgenreLabels(schedule).join(" · ")} · ${seriesPlanLabel(schedule.seriesPlan)} · ${openingPilotLabel(schedule.openingPilotMode)} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · 강도 ${creativeControlSummary(controls)} · ${initialBatchText(schedule.targetEpisodeCount || 1)} 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
+    detail.textContent = `${openingPilotLabel(schedule.openingPilotMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
     const next = document.createElement("small");
-    next.textContent = schedule.status === "active" ? `다음 확인 ${formatDate(schedule.nextRunAt)}` : "서비스를 다시 시작할 때까지 생성과 공개가 멈춥니다.";
+    next.textContent = schedule.status === "active" ? `다음 예약 확인 ${formatDate(schedule.nextRunAt)}` : "이 설정과 연결된 새 제작·공개만 멈춰 있습니다.";
     copy.append(heading, detail, next);
 
     const actions = document.createElement("div");
     actions.className = "schedule-actions";
-    const power = actionButton(schedule.status === "active" ? "멈춤" : "시작", "secondary", () => updateSchedule(schedule, { status: schedule.status === "active" ? "paused" : "active" }));
+    const power = actionButton(schedule.status === "active" ? "이 설정 멈추기" : "이 설정 시작하기", schedule.status === "active" ? "secondary" : "queue-retry", () => updateSchedule(schedule, { status: schedule.status === "active" ? "paused" : "active" }));
+    const management = document.createElement("details");
+    management.className = "schedule-management";
+    const managementSummary = document.createElement("summary");
+    managementSummary.textContent = "설정 관리";
+    const managementBody = document.createElement("div");
+    managementBody.className = "schedule-management-body";
+    const managementCopy = document.createElement("p");
+    const controls = schedule.creativeControls || {};
+    managementCopy.textContent = `${subgenreLabels(schedule).join(" · ")} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · ${creativeControlSummary(controls)} · 첫 ${initialBatchText(schedule.targetEpisodeCount || 1)}`;
+    const managementActions = document.createElement("div");
+    managementActions.className = "schedule-management-actions";
     const switchMode = actionButton(schedule.publicationMode === "auto_public" ? "테스트로 전환" : "자동 공개로 전환", "secondary", async () => {
       if (schedule.publicationMode !== "auto_public" && !window.confirm("검수를 통과한 회차가 예약 순서대로 공개됩니다. 자동 공개로 전환할까요?")) return;
       await updateSchedule(schedule, { publicationMode: schedule.publicationMode === "auto_public" ? "test_private" : "auto_public" });
     });
-    actions.append(power, switchMode);
-    actions.append(actionButton("설정 불러오기", "secondary", () => loadScheduleIntoForm(schedule)));
-    if (schedule.lastRunId) actions.append(actionButton("최근 기록", "", () => loadRun(schedule.lastRunId)));
-    actions.append(actionButton(schedule.status === "active" ? "중지 후 삭제" : "삭제", "danger", () => deleteSchedule(schedule)));
+    managementActions.append(switchMode);
+    managementActions.append(actionButton("이 값으로 새 설정 만들기", "secondary", () => loadScheduleIntoForm(schedule)));
+    if (schedule.lastRunId) managementActions.append(actionButton("최근 기록 보기", "secondary", () => loadRun(schedule.lastRunId)));
+    managementActions.append(actionButton(schedule.status === "active" ? "중지 후 설정 삭제" : "설정 삭제", "danger", () => deleteSchedule(schedule)));
+    managementBody.append(managementCopy, managementActions);
+    management.append(managementSummary, managementBody);
+    actions.append(power, management);
     row.append(copy, actions);
-    const activeWork = queueByScheduleId.get(schedule.id);
-    if (activeWork) row.append(renderScheduleProgress(activeWork));
-    else {
-      const failedWork = failedByScheduleId.get(schedule.id);
-      if (failedWork) row.append(renderScheduleFailure(schedule, failedWork));
-    }
+    const failedWork = failedByScheduleId.get(schedule.id);
+    if (failedWork) row.append(renderScheduleFailure(schedule, failedWork));
     return row;
   }
 
@@ -569,12 +575,12 @@
     renderStatusCounts(queue.statusCounts || {}, running.length, waiting.length, completed.length, attention.length);
     renderQueueLive(running, queue.updatedAt);
     selectors.queueList.replaceChildren(...waiting.map(queueRow));
-    if (!waiting.length) selectors.queueList.append(message("대기 중인 제작이 없습니다."));
+    selectors.waitingGroup.hidden = !waiting.length;
     selectors.waitingCaption.textContent = `${waiting.length}건`;
     renderAttention(attention);
     renderStalledFirstEpisodes(Array.isArray(queue.stalledFirstEpisodeStories) ? queue.stalledFirstEpisodeStories : []);
     renderCompleted(completed);
-    selectors.queueNote.textContent = "진행 상황은 6초마다 갱신됩니다. 이전 실패와 공개 보류는 현재 작업과 분리해 기록으로 보관합니다.";
+    selectors.queueNote.textContent = "이 통계는 운영 참고용입니다. 현재 작업 제어는 위 제작 현황에서만 처리합니다.";
     const last = queue.lastCompleted;
     selectors.queueLast.replaceChildren();
     const title = document.createElement("strong");
@@ -613,14 +619,14 @@
     const qualityHold = attention.find((item) => item.attentionType === "quality_hold");
     const schedules = Array.isArray(snapshot.schedules) ? snapshot.schedules : [];
     const activeSchedules = schedules.filter((schedule) => schedule.status === "active");
-    const pausedSchedules = schedules.filter((schedule) => schedule.status === "paused");
-    const resumeTarget = findSystemResumeTarget(snapshot);
     const state = {
       kind: "cooldown",
       title: "쿨타임 대기",
       chip: "쿨타임 대기",
       detail: `${Math.max(1, Number(snapshot.pollSeconds) || 60)}초마다 예약 시간이 된 작업을 확인합니다.`,
-      cause: ""
+      cause: "",
+      action: "",
+      actionLabel: ""
     };
 
     if (!snapshot.enabled) {
@@ -628,20 +634,24 @@
       state.title = "서버 엔진 꺼짐";
       state.chip = "서버 설정 꺼짐";
       state.detail = "서버 설정에서 자동 연재 엔진이 꺼져 있어 제작과 예약 확인이 실행되지 않습니다.";
-      state.cause = "서버 환경 설정을 켠 뒤 다시 시작 버튼을 사용할 수 있습니다.";
-    } else if (snapshot.emergencyPaused || (schedules.length && !activeSchedules.length)) {
+      state.cause = "서버 환경 설정을 켜야 이 화면에서 연재를 시작할 수 있습니다.";
+    } else if (snapshot.emergencyPaused) {
       state.kind = "paused";
       state.title = "전체 중지됨";
       state.chip = "전체 중지";
-      state.detail = "새 예약과 다음 단계 처리가 멈춰 있습니다. 다시 시작을 누르면 대기열을 먼저 깨운 뒤 예약을 확인합니다.";
+      state.detail = "모든 새 예약과 다음 단계 처리가 멈춰 있습니다. 전체 다시 시작을 누르면 중지된 작업을 순서대로 깨웁니다.";
       state.cause = systemPauseCause({ running, waiting, systemAttention });
+      state.action = "start";
+      state.actionLabel = "전체 다시 시작";
     } else if (systemAttention.length) {
       const issue = systemAttention[0];
       state.kind = "attention";
       state.title = "확인 필요";
       state.chip = "확인 필요";
-      state.detail = "시스템 오류로 멈춘 작업이 있습니다. 중단 위치부터 재개하면 실패한 단계부터 다시 대기열에 넣습니다.";
+      state.detail = "시스템 오류로 멈춘 작업이 있습니다. 확인 필요 목록에서 해당 작품의 멈춘 단계만 재개하세요.";
       state.cause = `${workDisplayTitle(issue)} · ${stageLabel(issue.stage)} · ${failureLabel(issue.failureCode)}`;
+      state.action = "attention";
+      state.actionLabel = "문제 작업 보기";
     } else if (running.length) {
       const active = running[0];
       state.kind = "running";
@@ -654,7 +664,7 @@
       state.kind = "waiting";
       state.title = "대기열 준비됨";
       state.chip = "대기 중";
-      state.detail = `${waiting.length}건이 순서를 기다립니다. 중단 위치부터 재개를 누르면 다음 작업을 바로 확인합니다.`;
+      state.detail = `${waiting.length}건이 순서를 기다립니다. 정상 대기 작업은 작업 서버가 순서대로 가져가므로 별도 재개가 필요하지 않습니다.`;
       state.cause = `${workDisplayTitle(next)} · ${stageLabel(next.stage)} · ${formatDate(next.requestedAt)} 요청`;
     } else if (qualityHold) {
       state.kind = "attention";
@@ -662,6 +672,8 @@
       state.chip = "검수 보류";
       state.detail = "원고 생성은 끝났지만 자동 편집 검수에서 바로 공개하기 어렵다고 판단한 작업이 있습니다.";
       state.cause = `${workDisplayTitle(qualityHold)} · 검수 결과 보기를 열어 보류 사유를 확인하세요.`;
+      state.action = "attention";
+      state.actionLabel = "검수 보류 보기";
     } else if (activeSchedules.length) {
       const nextSchedule = nextActiveSchedule(activeSchedules);
       if (nextSchedule) {
@@ -676,12 +688,22 @@
         state.detail = "가동 중인 설정은 있지만 다음 예약 시간이 아직 정해지지 않았습니다.";
         state.cause = "설정 카드에서 다음 확인 시간을 조정할 수 있습니다.";
       }
+    } else if (schedules.length) {
+      state.kind = "paused";
+      state.title = "가동 설정 없음";
+      state.chip = "개별 설정 멈춤";
+      state.detail = `등록된 설정 ${schedules.length}개가 모두 개별 멈춤 상태입니다. 필요한 설정만 아래에서 시작하세요.`;
+      state.cause = "전체 중지 상태는 아니므로 다른 설정을 시작해도 기존의 개별 멈춤은 그대로 유지됩니다.";
+      state.action = "settings";
+      state.actionLabel = "가동 설정 보기";
     } else {
       state.kind = "setup";
       state.title = "설정 없음";
       state.chip = "설정 없음";
-      state.detail = "아직 자동 연재 설정이 없습니다. 장르를 고르고 첫 제작을 대기열에 넣어주세요.";
+      state.detail = "아직 자동 연재 설정이 없습니다. 새 작품 설정을 펼쳐 첫 파일럿을 대기열에 넣어주세요.";
       state.cause = "";
+      state.action = "create";
+      state.actionLabel = "새 작품 설정 열기";
     }
 
     selectors.systemPanel.className = `serial-control-panel is-${state.kind}`;
@@ -693,13 +715,16 @@
     selectors.systemCause.hidden = !state.cause;
     selectors.engineState.textContent = state.chip;
 
-    const globallyPaused = snapshot.emergencyPaused || (schedules.length > 0 && !activeSchedules.length);
-    selectors.systemResume.disabled = !snapshot.enabled || !resumeTarget || globallyPaused;
-    selectors.systemPause.disabled = !snapshot.enabled || globallyPaused;
-    selectors.systemStart.disabled = !snapshot.enabled || (!snapshot.emergencyPaused && (!schedules.length || (!pausedSchedules.length && !waiting.length && !systemAttention.length)));
-    selectors.systemResume.title = globallyPaused ? "전체 중지 상태에서는 다시 시작을 먼저 눌러주세요." : resumeTarget ? "" : "재개할 중단 또는 대기 작업이 없습니다.";
-    selectors.systemPause.title = activeSchedules.length ? "" : "이미 전체 중지 상태입니다.";
-    selectors.systemStart.title = selectors.systemStart.disabled ? "중지된 설정이나 깨울 대기열이 없습니다." : "";
+    selectors.systemPrimary.hidden = !state.action;
+    selectors.systemPrimary.dataset.action = state.action;
+    selectors.systemPrimary.textContent = state.actionLabel;
+    selectors.systemPrimary.classList.toggle("queue-retry", state.action === "start");
+    selectors.systemPrimary.disabled = !snapshot.enabled && state.action !== "create";
+    const canPause = snapshot.enabled
+      && !snapshot.emergencyPaused
+      && (activeSchedules.length > 0 || running.length > 0 || waiting.some((item) => item.scheduleStatus !== "paused"));
+    selectors.systemPause.hidden = !canPause;
+    selectors.systemPause.disabled = !canPause;
   }
 
   function systemPauseCause({ running, waiting, systemAttention }) {
@@ -716,21 +741,8 @@
       .sort((left, right) => serialTime(left.nextRunAt) - serialTime(right.nextRunAt))[0] || null;
   }
 
-  function findSystemResumeTarget(snapshot = latestSerialSnapshot) {
-    const queue = snapshot.queue || {};
-    const items = Array.isArray(queue.items) ? queue.items : [];
-    const attention = Array.isArray(queue.attention) ? queue.attention : (queue.lastFailed ? [queue.lastFailed] : []);
-    const issue = attention.find((item) => item.attentionType !== "quality_hold" && (item.id || item.scheduleId));
-    if (issue) return { item: issue, force: false };
-    const waiting = items.find((item) => item.status !== "running" && (item.id || item.scheduleId));
-    if (waiting) return { item: waiting, force: false };
-    const running = items.find((item) => item.status === "running" && item.id);
-    if (running) return { item: running, force: true };
-    return null;
-  }
-
   async function guardedSystemButton(button, handler) {
-    const controls = [selectors.systemResume, selectors.systemPause, selectors.systemStart].filter(Boolean);
+    const controls = [selectors.systemPrimary, selectors.systemPause].filter(Boolean);
     setButtonBusy(button, true, busyButtonLabel(button.textContent));
     controls.forEach((control) => { control.disabled = true; });
     try {
@@ -743,13 +755,23 @@
     }
   }
 
-  async function resumeSystemFromPanel(control) {
-    const target = findSystemResumeTarget();
-    if (target) {
-      await resumeQueue(target.item, { force: target.force, control });
-      return;
+  async function handleSystemPrimary(button) {
+    const action = button.dataset.action;
+    if (action === "start") return controlSerialSystem("start");
+    if (action === "attention") return revealSection(selectors.attentionGroup);
+    if (action === "settings") return revealSection(selectors.settingsBand);
+    if (action === "create") {
+      selectors.createPanel.open = true;
+      return revealSection(selectors.createPanel);
     }
-    await controlSerialSystem("resume");
+  }
+
+  function revealSection(section) {
+    if (!section) return;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    section.classList.remove("is-focused");
+    window.requestAnimationFrame(() => section.classList.add("is-focused"));
+    window.setTimeout(() => section.classList.remove("is-focused"), 2_400);
   }
 
   async function controlSerialSystem(action) {
@@ -798,13 +820,9 @@
   }
 
   function renderAttention(items) {
+    selectors.attentionGroup.hidden = !items.length;
     selectors.attentionList.replaceChildren();
-    if (!items.length) {
-      const empty = message("지금 조치할 문제는 없습니다.");
-      empty.classList.add("is-success");
-      selectors.attentionList.append(empty);
-      return;
-    }
+    if (!items.length) return;
     for (const item of items) {
       const row = document.createElement("article");
       row.className = "attention-row";
@@ -830,16 +848,12 @@
   }
 
   function renderStalledFirstEpisodes(items) {
+    selectors.stalledGroup.hidden = !items.length;
     selectors.stalledList.replaceChildren();
     const qualityCount = items.filter((story) => stalledPrologueState(story) === "quality").length;
     const errorCount = items.filter((story) => stalledPrologueState(story) === "error").length;
     selectors.stalledCaption.textContent = `${items.length}건 · 보완 ${qualityCount} · 오류 ${errorCount}`;
-    if (!items.length) {
-      const empty = message("프롤로그 등록 전에 확인할 작품은 없습니다.");
-      empty.classList.add("is-success");
-      selectors.stalledList.append(empty);
-      return;
-    }
+    if (!items.length) return;
     for (const story of items) {
       const row = document.createElement("article");
       row.className = "stalled-row";
@@ -1224,12 +1238,7 @@
     }
     copy.append(label, title, context);
     selectors.queueLive.append(copy, meter, detail);
-    if (active) {
-      const actions = document.createElement("div");
-      actions.className = "queue-live-actions";
-      actions.append(actionButton("멈춘 단계 다시 시작", "secondary queue-retry", (button) => resumeQueue(active, { force: true, control: button })));
-      selectors.queueLive.append(actions, renderProductionProgress(active));
-    }
+    if (active) selectors.queueLive.append(renderProductionProgress(active));
   }
 
   function markQueueRefreshFailure() {
@@ -1284,9 +1293,7 @@
       ? `원고는 보존돼 있으며 검수 사유를 확인한 뒤 추가 보완하거나 운영자 승인할 수 있습니다. · ${formatDate(failedWork.completedAt)}`
       : `${failureLabel(failedWork.failureCode)} · ${stageLabel(failedWork.stage)} · ${formatDate(failedWork.completedAt)}`;
     copy.append(title, detail);
-    const action = failedWork.attentionType === "quality_hold" && failedWork.latestRunId
-      ? actionButton("검수 결과 보기", "queue-retry", () => loadRun(failedWork.latestRunId))
-      : actionButton("중단 지점부터 재개", "queue-retry", (button) => resumeQueue(failedWork, { control: button }));
+    const action = actionButton("확인 필요에서 조치", "secondary", () => revealSection(selectors.attentionGroup));
     wrapper.append(copy, action);
     return wrapper;
   }
@@ -1384,7 +1391,7 @@
     }
     if (item.scheduleStatus === "paused") {
       return {
-        message: "연결된 자동 연재 설정이 중지되어 작업자가 가져갈 수 없습니다. 아래 버튼을 누르면 설정을 다시 시작하고 현재 단계부터 이어갑니다.",
+        message: "연결된 설정이 개별 멈춤 상태입니다. 아래 가동 설정에서 이 설정만 시작하면 대기 순서대로 이어집니다.",
         tone: "warning"
       };
     }
@@ -1443,13 +1450,8 @@
     row.append(position, copy);
     const actions = document.createElement("div");
     actions.className = "queue-row-actions";
-    if (item.status !== "running") {
-      const label = latestSerialSnapshot.emergencyPaused
-        ? "전체 시작 후 재개"
-        : item.scheduleStatus === "paused"
-          ? "설정을 시작하고 재개"
-          : "지금 재개";
-      actions.append(actionButton(label, "queue-retry", (button) => resumeQueue(item, { control: button })));
+    if (!latestSerialSnapshot.emergencyPaused && item.scheduleStatus === "paused" && item.scheduleId && scheduleById.has(item.scheduleId)) {
+      actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(item.scheduleId)));
     }
     if (item.cancelable) {
       actions.append(actionButton("대기 취소", "secondary queue-cancel", () => cancelQueue(item)));
@@ -1572,27 +1574,6 @@
     return number === 1 ? "프롤로그" : `본편 ${number - 1}화`;
   }
 
-  function renderScheduleProgress(item) {
-    const progress = productionProgressState(item);
-    const wrapper = document.createElement("div");
-    wrapper.className = "schedule-progress";
-    const title = document.createElement("strong");
-    title.textContent = `${item.status === "running" ? "제작 중" : `대기 ${item.queuePosition}번`} · ${progress.steps[progress.currentIndex]}`;
-    const meter = document.createElement("div");
-    meter.className = "schedule-progress-meter";
-    meter.style.setProperty("--progress", `${progress.percent}%`);
-    meter.setAttribute("role", "progressbar");
-    meter.setAttribute("aria-valuemin", "0");
-    meter.setAttribute("aria-valuemax", "100");
-    meter.setAttribute("aria-valuenow", String(progress.percent));
-    const fill = document.createElement("span");
-    meter.append(fill);
-    const copy = document.createElement("small");
-    copy.textContent = `${progress.percent}%${item.status === "running" ? ` · ${formatDuration(item.elapsedSeconds)}` : ""}`;
-    wrapper.append(title, meter, copy);
-    return wrapper;
-  }
-
   async function cancelQueue(item, options = {}) {
     const name = workDisplayTitle(item);
     if (!options.history && !window.confirm(`${name} 작업을 대기열에서 취소할까요? 이미 완료된 기록은 지우지 않습니다.`)) return;
@@ -1653,6 +1634,19 @@
     }
   }
 
+  async function refreshStatus(event) {
+    setButtonBusy(event.currentTarget, true, "불러오는 중...");
+    try {
+      await refreshSchedules();
+      StoryHeavenCommon.toast("서버의 현재 운영 상태를 다시 불러왔습니다.");
+    } catch (error) {
+      markQueueRefreshFailure();
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    } finally {
+      setButtonBusy(event.currentTarget, false);
+    }
+  }
+
   async function processDue(event) {
     setButtonBusy(event.currentTarget, true, "확인 중...");
     try {
@@ -1677,6 +1671,7 @@
       const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/runs/${encodeURIComponent(id)}`);
       selectors.runSearch.elements.runId.value = id;
       selectors.runState.replaceChildren(renderRun(payload));
+      selectors.inspectionBand.hidden = false;
       selectors.runState.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
@@ -2034,7 +2029,7 @@
     const label = String(text || "");
     if (label.includes("재개") || label.includes("다시 시작")) return "재개 요청 중...";
     if (label.includes("시작")) return "시작 요청 중...";
-    if (label.includes("중지") || label.includes("멈춤")) return "중지 요청 중...";
+    if (label.includes("중지") || label.includes("멈춤") || label.includes("멈추")) return "중지 요청 중...";
     if (label.includes("삭제")) return "삭제 중...";
     if (label.includes("숨기")) return "숨김 처리 중...";
     if (label.includes("취소")) return "취소 중...";
@@ -2313,6 +2308,7 @@
   }
 
   function loadScheduleIntoForm(schedule) {
+    selectors.createPanel.open = true;
     applyGenreSelection(schedulePrimaryGenres(schedule), scheduleSubgenresByGenre(schedule));
     const cadence = cadenceFields(schedule.cadenceMinutes);
     setFormValue("cadenceValue", cadence.value);

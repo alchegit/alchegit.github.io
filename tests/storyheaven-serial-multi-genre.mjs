@@ -42,6 +42,7 @@ try {
     let cooldownMode = false;
     let failureMode = false;
     let systemPaused = false;
+    let manualSchedulesPaused = false;
     let pauseRequestCount = 0;
     let stalledVisible = true;
     let titlelessLogVisible = true;
@@ -64,7 +65,7 @@ try {
       if (path === "/api/storyheaven/profile") return json({ profile: { nickname: "운영자", isAdmin: true } });
       if (path === "/api/storyheaven/operator/serial-engine/schedules" && request.method() === "GET") {
         const nextRunAt = cooldownMode ? new Date(Date.now() + 30 * 60_000).toISOString() : runningSchedule.nextRunAt;
-        return json({ enabled: true, emergencyPaused: systemPaused, schedules: [{ ...runningSchedule, nextRunAt, status: systemPaused ? "paused" : "active" }], queue: {
+        return json({ enabled: true, emergencyPaused: systemPaused, schedules: [{ ...runningSchedule, nextRunAt, status: systemPaused || manualSchedulesPaused ? "paused" : "active" }], queue: {
           concurrency: 1,
           updatedAt: cooldownMode ? new Date().toISOString() : "2026-07-31T05:01:00.000Z",
           items: cooldownMode || failureMode ? [] : [
@@ -193,8 +194,12 @@ try {
 
     await page.goto(`${root}/storyheaven/operator/serial/`, { waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    assert.equal(await page.locator("[data-create-panel]").evaluate((node) => node.open), false, `${viewport.name} new serial settings are collapsed by default`);
+    assert.equal(await page.locator("[data-inspection-band]").isHidden(), true, `${viewport.name} manuscript inspection stays hidden until selected`);
     assert.equal(await page.locator(".completed-group").evaluate((node) => node.open), false, `${viewport.name} recent completed production is collapsed by default`);
     assert.match(await page.locator("[data-completed-caption]").textContent(), /최근 24시간 · 1건/u, `${viewport.name} recent completed caption explains the rolling window`);
+    await page.screenshot({ path: `test-results/storyheaven-serial-simplified-${viewport.name}.png`, fullPage: true });
+    await page.locator("[data-create-panel]").evaluate((node) => { node.open = true; });
     await page.locator(".creative-details").evaluate((node) => { node.open = true; });
     const noveltyControl = page.locator('[data-schedule-form] input[name="creativeNovelty"]');
     assert.equal(await noveltyControl.isVisible(), true, `${viewport.name} shows novelty under item controls`);
@@ -225,6 +230,7 @@ try {
     await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v10") || "null")?.primaryGenres?.length === 3);
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    await page.locator("[data-create-panel]").evaluate((node) => { node.open = true; });
     assert.equal(await page.locator('[data-schedule-form] input[name="cadenceValue"]').inputValue(), "90", `${viewport.name} restores cadence value`);
     assert.equal(await page.locator('[data-schedule-form] select[name="cadenceUnit"]').inputValue(), "minutes", `${viewport.name} restores cadence unit`);
     assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "4", `${viewport.name} restores target episode count`);
@@ -257,15 +263,15 @@ try {
     const liveProgress = page.locator("[data-queue-live]");
     assert.match(await liveProgress.textContent(), /58%/u, `${viewport.name} live overview exposes numeric progress`);
     assert.equal(await liveProgress.locator('[role="progressbar"]').getAttribute("aria-valuenow"), "58", `${viewport.name} live overview is accessible`);
-    const scheduleProgress = page.locator(".schedule-row .schedule-progress");
-    assert.equal(await scheduleProgress.count(), 1, `${viewport.name} active schedule carries its own progress meter`);
-    assert.match(await scheduleProgress.textContent(), /58%/u, `${viewport.name} schedule meter exposes numeric progress`);
+    assert.equal(await page.locator(".schedule-row .schedule-progress").count(), 0, `${viewport.name} active progress is shown once instead of repeated on its setting card`);
+    assert.match(await page.locator(".schedule-row").textContent(), /이 설정 멈추기.*설정 관리/u, `${viewport.name} setting card exposes one scoped control and collapsed management`);
     assert.equal(await page.locator(".queue-row").count(), 1, `${viewport.name} waiting work is separated from live work`);
     const waitingText = await page.locator(".queue-row.waiting").textContent();
     assert.match(waitingText, /오전 12:04/u, `${viewport.name} offsetless DB time is treated as Seoul time`);
     assert.doesNotMatch(waitingText, /오전 0?9:04/u, `${viewport.name} offsetless DB time is not shifted nine hours`);
     const runningProgress = page.locator("[data-queue-live] .production-progress");
     assert.equal(await runningProgress.count(), 1, `${viewport.name} running work has a progress train`);
+    assert.equal(await page.locator("[data-queue-live]").getByRole("button", { name: /멈춘 단계|다시 시작/u }).count(), 0, `${viewport.name} healthy running work does not expose a dangerous forced restart`);
     assert.match(await runningProgress.locator(".production-progress-heading").textContent(), /현재 · 본편 1화 원고.*7 \/ 13단계 완료/u, `${viewport.name} current production stage is explicit`);
     assert.equal(await runningProgress.locator(".production-step.is-complete").count(), 7, `${viewport.name} completed stages are filled`);
     assert.equal(await runningProgress.locator(".production-step.is-current").textContent(), "08본편 1화 원고진행 중", `${viewport.name} current stage is highlighted`);
@@ -275,20 +281,18 @@ try {
     assert.equal(await page.locator("[data-status-complete]").textContent(), "1", `${viewport.name} completed count is explicit`);
     assert.match(await page.locator("[data-system-state-title]").textContent(), /제작 중/u, `${viewport.name} system panel shows live state`);
     const waitingRow = page.locator(".queue-row.waiting");
-    assert.match(await waitingRow.textContent(), /연결된 자동 연재 설정이 중지/u, `${viewport.name} explains why paused work cannot start`);
-    const queueResume = waitingRow.locator(".queue-retry");
-    assert.equal(await queueResume.textContent(), "설정을 시작하고 재개", `${viewport.name} paused retry names schedule activation`);
-    await queueResume.click();
-    assert.equal(await queueResume.getAttribute("aria-busy"), "true", `${viewport.name} resume button reacts immediately`);
-    assert.match(await queueResume.textContent(), /재개 요청 중/u, `${viewport.name} resume button names the in-flight request`);
-    assert.match(await waitingRow.locator("[data-queue-feedback]").textContent(), /서버에 재개 요청/u, `${viewport.name} resume request is visible inside the work row`);
-    await page.waitForFunction(() => document.querySelector(".queue-row.waiting [data-queue-feedback]")?.textContent.includes("재개 요청이 접수됐습니다"));
-    assert.deepEqual(queueRetries.at(-1), { force: false }, `${viewport.name} queue retry reaches the backend`);
-    assert.match(await page.locator(".queue-row.waiting [data-queue-feedback]").textContent(), /연결 설정을 다시 시작했고/u, `${viewport.name} confirms schedule activation and worker wait`);
-    await page.locator("[data-pause-system]").click();
+    assert.match(await waitingRow.textContent(), /연결된 설정이 개별 멈춤 상태/u, `${viewport.name} explains why paused work cannot start`);
+    assert.equal(await waitingRow.locator(".queue-retry").count(), 0, `${viewport.name} normal waiting work does not expose a misleading manual resume`);
+    assert.match(await waitingRow.locator("[data-queue-feedback]").textContent(), /가동 설정에서 이 설정만 시작/u, `${viewport.name} paused work points to the correct control scope`);
+    assert.deepEqual(await waitingRow.getByRole("button").allTextContents(), ["대기 취소"], `${viewport.name} waiting work exposes cancellation only`);
+    const pauseButton = page.locator("[data-pause-system]");
+    await pauseButton.click();
+    assert.equal(await pauseButton.getAttribute("aria-busy"), "true", `${viewport.name} emergency stop reacts immediately`);
     await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("전체 중지됨"));
     assert.match(await page.locator("[data-common-toast]").textContent(), /즉시 전체 중지.*작성 중 1건/u, `${viewport.name} emergency pause confirms running work interruption`);
-    await page.locator("[data-start-system]").click();
+    const systemPrimary = page.locator("[data-system-primary]");
+    assert.equal(await systemPrimary.textContent(), "전체 다시 시작", `${viewport.name} paused system exposes one unambiguous recovery action`);
+    await systemPrimary.click();
     await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("제작 중"));
     assert.equal(pauseRequestCount, 2, `${viewport.name} emergency pause retries a rejected rate-limited request`);
     assert.deepEqual(systemRequests.map((item) => item.action), ["pause", "start"], `${viewport.name} system controls call backend`);
@@ -322,12 +326,13 @@ try {
     await page.waitForFunction(() => !document.querySelector("[data-run-history]")?.textContent.includes("제목 생성 전 · 판타지 · 프롤로그"));
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    await page.locator("[data-create-panel]").evaluate((node) => { node.open = true; });
     await page.locator(".run-history").evaluate((node) => { node.open = true; });
     assert.doesNotMatch(await page.locator("[data-run-history]").textContent(), /제목 생성 전 · 판타지 · 프롤로그/u, `${viewport.name} browser-level history hide survives reload`);
     assert.match(await page.locator("[data-history-hidden-toggle]").textContent(), /숨긴 로그 보기 \(1\)/u, `${viewport.name} persisted hidden history remains available after reload`);
     assert.match(await page.locator("[data-stalled-list]").textContent(), /0화에서 멈춘 마법사.*프롤로그 회차 미등록/u, `${viewport.name} stalled first episode is visible`);
     await page.locator("[data-stalled-list]").getByRole("button", { name: "프롤로그 제작 다시 요청" }).click();
-    await page.waitForFunction(() => document.querySelector("[data-stalled-list]")?.textContent.includes("프롤로그 등록 전에 확인할 작품은 없습니다."));
+    await page.locator("[data-stalled-group]").waitFor({ state: "hidden" });
     assert.deepEqual(firstEpisodeResumes.at(-1), { autoEpisode: true }, `${viewport.name} stalled first episode resumes from planning`);
     page.once("dialog", (dialog) => dialog.accept());
     await page.locator(".queue-row.waiting").getByRole("button", { name: "대기 취소" }).click();
@@ -360,7 +365,15 @@ try {
     const clockText = await page.locator("[data-seoul-clock]").textContent();
     assert.match(clockText, /현재 .*오[전후] \d{2}:\d{2}:\d{2}.*서울/u, `${viewport.name} cooldown state shows a live Seoul clock with seconds`);
 
+    manualSchedulesPaused = true;
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    assert.equal(await page.locator("[data-system-state-title]").textContent(), "가동 설정 없음", `${viewport.name} manual schedule pause is not mislabeled as a global stop`);
+    assert.equal(await page.locator("[data-system-primary]").textContent(), "가동 설정 보기", `${viewport.name} manual pause points to individual settings`);
+    assert.equal(await page.locator("[data-pause-system]").isHidden(), true, `${viewport.name} emergency stop is hidden when every setting is already individually paused`);
+
     cooldownMode = false;
+    manualSchedulesPaused = false;
     failureMode = true;
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
@@ -368,10 +381,11 @@ try {
     assert.equal(await page.locator(".schedule-row .schedule-failure").count(), 1, `${viewport.name} schedule exposes its failed attempt`);
     assert.equal(await page.locator("[data-status-attention]").textContent(), "1", `${viewport.name} attention count is explicit`);
     assert.match(await page.locator("[data-system-state-title]").textContent(), /확인 필요/u, `${viewport.name} system panel lifts retryable failure`);
+    assert.equal(await page.locator("[data-system-primary]").textContent(), "문제 작업 보기", `${viewport.name} top action navigates instead of duplicating the retry command`);
     await page.locator("[data-attention-list]").getByRole("button", { name: "연결 설정 보기" }).click();
     await page.waitForFunction(() => document.querySelector(".schedule-row")?.classList.contains("is-focused"));
     await page.screenshot({ path: `test-results/storyheaven-serial-retry-${viewport.name}.png`, fullPage: true });
-    await page.locator("[data-resume-system]").click();
+    await page.locator("[data-attention-list]").getByRole("button", { name: "중단 지점부터 재개" }).click();
     await page.waitForFunction(() => document.querySelector("[data-queue-live]")?.textContent.includes("현재 제작 중"));
     assert.equal(retries.length, 1, `${viewport.name} failed schedule is retried directly`);
     await page.close();

@@ -330,9 +330,11 @@ for (const table of [
 const serialOperatorPage = await readFile(new URL("../../../storyheaven/operator/serial/index.html", import.meta.url), "utf8");
 assert.ok(serialOperatorPage.includes('name="robots" content="noindex,nofollow"'));
 assert.ok(serialOperatorPage.includes("data-access-gate"));
-assert.ok(serialOperatorPage.includes("장르를 조합하면"));
+assert.ok(serialOperatorPage.includes("자동 연재 운영"));
 assert.ok(serialOperatorPage.includes("소설 연재 관리"));
-assert.ok(serialOperatorPage.includes("기본 장르를 최대 세 개까지 조합"));
+assert.ok(serialOperatorPage.includes("data-system-primary"));
+assert.ok(serialOperatorPage.includes("모든 연재 즉시 중지"));
+assert.ok(serialOperatorPage.includes("data-create-panel"));
 assert.ok(serialOperatorPage.includes("로맨스 SF, 코믹 판타지"));
 assert.ok(serialOperatorPage.includes('value="test_private"'));
 assert.ok(serialOperatorPage.includes('value="auto_public"'));

@@ -149,12 +149,13 @@ assert.match(serverSource, /stories\/bulk-control/u, "managed stories must expos
 assert.match(serialOperatorHtml, /프롤로그 등록 전 확인/u, "pre-publication prologues must use an accurate operator label");
 assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
 assert.match(serialOperatorSource, /서버에 재개 요청을 보내는 중입니다/u, "queue retry must show immediate persistent feedback");
-assert.match(serialOperatorSource, /설정을 시작하고 재개/u, "paused queue work must name that its schedule will also restart");
+assert.match(serialOperatorSource, /가동 설정에서 이 설정만 시작/u, "paused queue work must point to the scoped schedule control");
+assert.doesNotMatch(serialOperatorSource, /멈춘 단계 다시 시작/u, "healthy running work must not expose a forced restart");
 assert.match(serialOperatorCss, /\.button\.is-busy/u, "operator buttons must expose a visible in-flight state");
 assert.match(serialOperatorSource, /지적 부분 다시 보완/u, "quality-held prologues must expose targeted rewrite recovery");
 assert.match(serialOperatorSource, /현재 원고 승인/u, "quality-held prologues must expose an operator approval path");
 assert.match(serialOperatorSource, /독자용 작품 소개에 내부 기획 표현이 포함됨/u, "public synopsis validation failures must be readable to operators");
-assert.match(serialOperatorSource, /중지 후 삭제/u, "active schedules must expose stop-and-delete");
+assert.match(serialOperatorSource, /중지 후 설정 삭제/u, "active schedules must expose stop-and-delete inside management");
 assert.match(serialServiceSource, /async function archiveSchedule/u, "schedule deletion must archive durable settings");
 assert.match(serialServiceSource, /error_code = 'operator_schedule_deleted'/u, "schedule deletion must revoke active jobs");
 assert.match(serialServiceSource, /queue_status = 'canceled'/u, "schedule deletion must cancel publication reservations");
@@ -166,7 +167,8 @@ assert.match(serialServiceSource, /last_cycle_completed_at < \([\s\S]*select ser
 assert.match(serverSource, /app\.delete\("\/api\/storyheaven\/operator\/serial-engine\/schedules\/:id"/u, "schedule deletion must have an admin API route");
 assert.match(serverSource, /resolve-quality-hold/u, "quality-hold resolution must have an admin API route");
 assert.match(serialOperatorSource, /latestRunStatus === "error"[\s\S]{0,200}latestRunStatus === "blocked"/u, "system errors must take precedence over stale quality reviews");
-assert.match(serialOperatorHtml, /문제 해결 도구/u, "operator recovery tools must use task-oriented language");
+assert.match(serialOperatorHtml, /문제 해결/u, "operator recovery tools must use task-oriented language");
+assert.match(serialOperatorHtml, /상태 다시 불러오기/u, "operator recovery must start with a non-destructive status refresh");
 assert.match(serialOperatorCss, /details\.advanced > summary[\s\S]*color: #f4f7fb/u, "dark advanced summaries must retain readable text");
 assert.match(serialOperatorHtml, /name="creativeNovelty"[\s\S]{0,100}value="2"/u, "novelty must be visible with the restrained default");
 assert.match(serialOperatorSource, /참신성 \$\{novelty\} · \$\{noveltyLevelLabel\(novelty\)\}/u, "schedule summaries must explain the novelty level");
