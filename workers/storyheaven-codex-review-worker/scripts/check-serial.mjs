@@ -51,6 +51,9 @@ assert.match(prompt, /An impossible subject-predicate pairing/u);
 assert.match(prompt, /do not approve the draft while any such sentence remains/u);
 assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
+assert.equal(modelRoleForSerialJob("editorial_critique"), "editor");
+assert.equal(modelRoleForSerialJob("concept_selection"), "editor");
+assert.equal(modelRoleForSerialJob("concept_candidates"), "writer");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
 
 const draftPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
@@ -135,6 +138,31 @@ assert.match(conceptPrompt, /character magnetism, emotional engine, scene potent
 assert.match(conceptPrompt, /selected candidate must have the highest average score/u);
 assert.match(conceptPrompt, /작품을 움직이는 인간적 감정/u);
 assert.match(conceptPrompt, /candidate-4/u);
+
+const candidatePrompt = buildSerialPrompt({
+  ...job,
+  type: "concept_candidates",
+  payload: { schedule: { policy: { creativeControls: { novelty: 2 } } }, recentConcepts: [] }
+});
+assert.match(candidatePrompt, /exactly four original Korean long-form series candidates/u);
+assert.match(candidatePrompt, /simple long-term human desire/u);
+assert.match(candidatePrompt, /opponents and companions want things that would still matter/u);
+assert.match(candidatePrompt, /Do not choose, rank, title the final work/u);
+assert.match(candidatePrompt, /candidate-4/u);
+
+const selectionPrompt = buildSerialPrompt({
+  ...job,
+  type: "concept_selection",
+  payload: {
+    schedule: { policy: { creativeControls: { novelty: 2 } } },
+    developmentCandidates: [{ candidateId: "candidate-1" }],
+    recentConcepts: []
+  }
+});
+assert.match(selectionPrompt, /senior commissioning editor/u);
+assert.match(selectionPrompt, /immutable candidates/u);
+assert.match(selectionPrompt, /Do not invent a fifth candidate/u);
+assert.match(selectionPrompt, /copy all four into developmentRoom\.candidates/u);
 
 const recentConceptPrompt = buildSerialPrompt({
   ...job,
@@ -273,6 +301,26 @@ assert.match(auditedReviewPrompt, /High readerReward requires/u);
 assert.match(auditedReviewPrompt, /High premiseAccessibility requires/u);
 assert.match(auditedReviewPrompt, /Return six independent criticPanels/u);
 assert.match(auditedReviewPrompt, /wouldReadNext is a publication gate/u);
+
+const critiquePrompt = buildSerialPrompt({
+  ...job,
+  type: "editorial_critique",
+  payload: { criticRole: "relationship", bible: { concept: { premiseAudit, readerAppealPlan, storyCore } } }
+});
+assert.match(critiquePrompt, /Act only as the 'relationship' critic/u);
+assert.match(critiquePrompt, /independent agendas, mutual need, value conflict/u);
+assert.match(critiquePrompt, /Do not output scores or a publication decision/u);
+
+const finalReviewPrompt = buildSerialPrompt({
+  ...job,
+  type: "editorial_review",
+  payload: {
+    bible: { concept: { premiseAudit, readerAppealPlan, storyCore } },
+    criticPacket: { character: { verdict: "strong" } }
+  }
+});
+assert.match(finalReviewPrompt, /final senior editor after an independent six-role critique pass/u);
+assert.match(finalReviewPrompt, /Copy payload\.criticPacket exactly/u);
 
 const appealArcPrompt = buildSerialPrompt({
   ...job,

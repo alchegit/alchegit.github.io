@@ -1532,7 +1532,7 @@
     if (initialBatch) {
       if (stage === "build_bible") currentIndex = 1;
       else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
-      else if (["build_episode_card", "write_draft", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
+      else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
         const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1))) - 1;
         const stageOffset = stage === "build_episode_card"
           ? 0
@@ -1545,11 +1545,11 @@
       if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
       else if (stage === "build_episode_card") currentIndex = 2;
       else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
-      else if (["editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
+      else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
       else if (["publication_ready", "published"].includes(stage)) currentIndex = 5;
     } else {
       if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 1;
-      else if (["editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 2;
+      else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 2;
       else if (["publication_ready", "published"].includes(stage)) currentIndex = 3;
     }
     const fallbackPercent = Math.round(((currentIndex + (item.status === "running" ? 0.5 : 0)) / steps.length) * 100);
@@ -2222,12 +2222,15 @@
 
   function stageLabel(value) {
     return ({
+      concept_candidates: "작품 후보 4개 발상",
+      concept_selection: "편집자 후보 선정",
       concept_gate: "작품 아이디어 검토",
       build_bible: "세계관과 인물 설정",
       architecture_complete: "장편 설계 완료",
       build_arc: "장기 전개 설계",
       build_episode_card: "회차 장면 구성",
       write_draft: "원고 작성",
+      editorial_critique: "독립 관점별 검수",
       editorial_review: "편집 검수",
       editorial_blocked: "원고 완성 · 품질 보완 필요",
       rewrite_draft: "원고 보완",

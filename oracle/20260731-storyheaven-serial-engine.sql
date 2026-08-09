@@ -155,7 +155,7 @@ begin
       run_id varchar2(36) not null references storyheaven_serial_runs(id),
       story_id varchar2(36) references storyheaven_stories(id),
       job_type varchar2(40) not null check (
-        job_type in ('concept_gate', 'build_bible', 'build_arc', 'build_episode_card', 'write_draft', 'editorial_review', 'rewrite_draft')
+        job_type in ('concept_candidates', 'concept_selection', 'concept_gate', 'build_bible', 'build_arc', 'build_episode_card', 'write_draft', 'editorial_critique', 'editorial_review', 'rewrite_draft')
       ),
       job_status varchar2(30) default 'queued' not null check (
         job_status in ('queued', 'running', 'retry_wait', 'complete', 'error', 'canceled')

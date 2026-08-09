@@ -2,16 +2,19 @@ import { buildSerialGenreEditorialGuidance } from "./serial-editorial-guidance.m
 import { jsonrepair } from "jsonrepair";
 
 const JOB_TYPES = new Set([
+  "concept_candidates",
+  "concept_selection",
   "concept_gate",
   "build_bible",
   "build_arc",
   "build_episode_card",
   "write_draft",
+  "editorial_critique",
   "editorial_review",
   "rewrite_draft"
 ]);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-09-story-development-v17";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-09-story-development-v18";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -101,7 +104,13 @@ export function buildSerialJsonRepairPrompt(value, job) {
 }
 
 export function modelRoleForSerialJob(jobType) {
-  return jobType === "editorial_review" ? "editor" : "writer";
+  return ["concept_selection", "editorial_critique", "editorial_review"].includes(jobType)
+    ? "editor"
+    : "writer";
+}
+
+function isConceptDecisionStage(type) {
+  return type === "concept_gate" || type === "concept_selection";
 }
 
 function hasSeriesArchitecture(payload = {}) {
@@ -114,7 +123,10 @@ function hasSeriesArchitecture(payload = {}) {
 }
 
 function architecturePolicyInstruction(type, payload = {}) {
-  if (type === "concept_gate" || (type === "build_bible" && hasStoryDevelopmentCore(payload))) {
+  if (type === "concept_candidates") {
+    return "Use the requested series length to test whether each candidate has several independent conflict sources and room for changing arc-level pleasures, but do not build the full seriesArchitecture in this divergent pass.";
+  }
+  if (isConceptDecisionStage(type) || (type === "build_bible" && hasStoryDevelopmentCore(payload))) {
     return "A numeric seriesPlan is not a long-form plan by itself. Every newly generated story must build a complete directional seriesArchitecture before its prologue is planned: volumePlan must have exactly totalVolumes entries, episode ranges must cover every requested main episode once, and character milestones, renewable conflicts, and long reveals must remain usable after volume 1. Do not pretend every distant event is equally certain. planningHorizon makes volume 1 detailed, volumes 2-3 directional, and later volumes revisable hypotheses bounded by protected truths, final consequences, and published canon. Keep two information layers separate. seriesArchitecture is the private writer bible and may contain the final truth. The prologue may use only seriesArchitecture.prologueDisclosure: demonstrate mustShow, hint only mayHintRevealKeys, answer resolvedNow, preserve openQuestions, and never answer a key in mustNotAnswerRevealKeys.";
   }
   if (hasSeriesArchitecture(payload)) {
@@ -124,7 +136,10 @@ function architecturePolicyInstruction(type, payload = {}) {
 }
 
 function premiseCoherenceInstruction(type, payload = {}) {
-  if (type === "concept_gate") {
+  if (type === "concept_candidates") {
+    return "Reject candidates that depend on an unexplained transition, instant trust for an outsider, knowledge of an unintroduced name, a mundane task copied into a matching fantasy job, or a multi-step novelty trigger. Candidate simplicity must not hide a causality gap.";
+  }
+  if (isConceptDecisionStage(type)) {
     return "A premiseAudit is mandatory for every new concept and is a server-enforced coherence gate. Choose one entryType and explain the transition cause, outsider reception, name-information source, language rule, first acceptance condition, familiar genre foundation, one differentiator, and the complete ability plan. Do not transfer a protagonist from a real-world task directly into the matching fantasy job, title, tool, or magic. Prior-life experience may affect a later choice only indirectly. For summoned, transported, reincarnated, possessed, or regressed protagonists, immediateAcceptance and nameKnownBeforeIntroduction must both be false: locals must react to an unknown outsider with understandable caution, confusion, verification, pressure, sponsorship, or exchange, and no one may use the protagonist's true name before hearing or discovering it through an established rule. Keep a power easy to repeat in one sentence: one core effect, one activation condition, one cost or limit, and at most one extra rule. hasMultiStepTrigger must be false; never chain unrelated chores, gestures, household objects, words, or coincidences into an activation ritual.";
   }
   const audit = payload?.premiseAudit
@@ -147,13 +162,19 @@ function premiseCoherenceInstruction(type, payload = {}) {
   if (type === "rewrite_draft") {
     return `${binding} Repair unexplained acceptance and information leaks in-scene: remove unknown-name dialogue, restore the shortest plausible reaction and verification chain, and simplify any ability explanation to its established core effect, activation, and cost without adding lore.`;
   }
-  if (type === "editorial_review") {
+  if (["editorial_critique", "editorial_review"].includes(type)) {
     return `${binding} Treat any unexplained use of the protagonist's name, origin, or ability, unearned immediate acceptance of an outsider, direct mundane-task-to-matching-fantasy-job transfer, or multi-step unrelated ability trigger as concrete causality and reader-orientation failures. Cite the exact manuscript evidence and do not approve until repaired.`;
   }
   return binding;
 }
 
 function readerAppealInstruction(type, payload = {}) {
+  if (type === "concept_candidates") {
+    return "Every candidate needs a plain human premise, relatable lack, immediate personal want, failure cost, flawed choice pattern, first relationship friction, familiar genre rewards, and concrete prologue, main-1, and main-2 pleasures. Compare the candidates against payload.recentConcepts and avoid repeating recent structural fingerprints.";
+  }
+  if (type === "concept_selection") {
+    return "Build readerAppealPlan only for the selected immutable candidate. Compare it with payload.recentConcepts, copy at least five recent titles or all when fewer exist, preserve the selected candidate's human desire and relationship axis, and specify concrete prologue, main-1, and main-2 rewards without adding a new premise.";
+  }
   if (type === "concept_gate") {
     return "A readerAppealPlan is mandatory for every new concept. Before returning, silently develop several genuinely different premise skeletons and compare the chosen one with payload.recentConcepts, not only payload.existingTitles. Inspect at least five recent concepts, or all of them when fewer than five exist; copy those titles exactly into comparedTitles. When recentConcepts is empty, return comparedTitles as [] and nearestTitle as 'none'. Do not default to the recently repeated combination of a diligent student, a matching otherworldly administrative chore, a palace institution, a complicated magical procedure, and an old royal-war cover-up. Fill humanPremise without invented nouns or rules; give the protagonist a relatable lack, an immediate personal want, a personal failure cost, a flawed choice pattern, and first relationship friction. Select one dominant pleasure, two to four familiar genre rewards, at least two dramatized prologue rewards, and binding reward plans for prologue, main-1, and main-2. recentConceptComparison must identify repeated patterns to avoid and at least three structural differences when references exist, set usesRecentTemplate false, report at most two overlapping axes, and classify the concept fingerprint honestly. If three or more structural axes still feel alike, rebuild the premise rather than changing props or terminology.";
   }
@@ -162,7 +183,7 @@ function readerAppealInstruction(type, payload = {}) {
     || payload?.bible?.concept?.readerAppealPlan
     || null;
   if (!plan || typeof plan !== "object") {
-    if (["build_episode_card", "write_draft", "rewrite_draft", "editorial_review"].includes(type)) {
+    if (["build_episode_card", "write_draft", "rewrite_draft", "editorial_critique", "editorial_review"].includes(type)) {
       return "This legacy story has no concept-level readerAppealPlan. Preserve its canon, but still require this installment to have a plain personal want and cost, at least two concrete reader payoffs, and a relationship state that changes through action. Create and follow techniquePlan.readerRewardPlan at episode-card stage; do not invent a replacement series premise.";
     }
     return "This legacy story has no readerAppealPlan. Preserve established canon and do not retrofit or block its planning solely because the newer concept field is absent.";
@@ -183,13 +204,19 @@ function readerAppealInstruction(type, payload = {}) {
   if (type === "rewrite_draft") {
     return `${binding} Repair generic altruism with a specific personal consequence, turn exposition-only helpers into people making choices for their own reasons, dramatize the planned relationship change, and deliver missing concrete payoffs. Do not solve a weak episode by adding another rule or a larger hidden conspiracy.`;
   }
-  if (type === "editorial_review") {
+  if (["editorial_critique", "editorial_review"].includes(type)) {
     return `${binding} Compare the manuscript to techniquePlan.readerRewardPlan. High characterAttachment requires a specific personal want, vulnerability, or flawed choice; generic kindness or competence is insufficient. High relationshipMomentum requires a relationship state to change through mutual action; a cooperative exposition helper is insufficient. High readerReward requires at least two concrete on-page payoffs, not setup plus a final hook. High premiseAccessibility requires that the current human conflict and episode question remain understandable in one plain sentence without invented terms. Penalize an ending whose only continuation reason is an ancient conspiracy.`;
   }
   return binding;
 }
 
 function storyDevelopmentInstruction(type, payload = {}) {
+  if (type === "concept_candidates") {
+    return "Return exactly four genuinely different development candidates and do not select a winner. Give each candidate a simple long-term human desire that can be stated in one sentence, then create depth through independent character agendas, rule-bound choices, earned alliances, and consequences. The four candidates must differ in causal skeleton, protagonist contradiction, central relationship, story arena, recurring pressure, and episode engine; changing names, jobs, objects, or powers is not enough. Prefer a familiar readable goal with layered decisions over a complicated premise explanation. Let opponents and companions want things that would still matter if the protagonist vanished. A series may change its arc-level pleasure among test, pursuit, investigation, survival, negotiation, training, wonder, or aftermath, but its central desire and relationship axis must remain stable. Do not borrow any existing work's characters, terminology, abilities, scenes, plot sequence, or prose.";
+  }
+  if (type === "concept_selection") {
+    return "The writer model has already supplied exactly four candidates in payload.developmentCandidates. Evaluate only those candidates, copy all four into developmentRoom.candidates without changing any field, rank them, reject three with concrete reasons, and expand only the selected candidate into the final concept and storyCore. Do not invent a fifth candidate or silently repair a weak candidate by replacing its premise. Choose the candidate with the strongest consequential choices, independent character agendas, relationship collisions, sustainable world pressure, varied arc potential, and plain one-sentence reader desire, not the strangest nouns. The selected candidate must have the highest average score and its workingTitle must exactly equal the final title.";
+  }
   if (type === "concept_gate") {
     return "A developmentRoom and storyCore are mandatory for every new concept. Return exactly four genuinely different candidates before selecting one. Each candidate needs a different causal skeleton, human desire, protagonist contradiction, central relationship, world pressure, repeatable engine, signature scene, long-tail question, familiar foundation, controlled difference, fatal risk, and honest structural fingerprint; changing only names, occupations, objects, powers, or terminology does not create a new candidate. Rank every candidate on character magnetism, emotional engine, scene potential, expansion capacity, genre delight, clarity, and originality through consequence rather than surface strangeness. The selected candidate must have the highest average score, its workingTitle must exactly equal the final title, and every rejected candidate needs a concrete rejection reason. storyCore must then lock the selected reader fantasy, emotional core, protagonist contradiction, central relationship, world pressure, repeatable story engine, signature promise, thematic question, proof-of-concept scene, and at least three independent long-tail sources. Choose the concept that can produce the most consequential character choices and relationship collisions, not the concept with the most unusual nouns.";
   }
@@ -203,19 +230,25 @@ function storyDevelopmentInstruction(type, payload = {}) {
     return `${binding} Every major character must have a misbelief, internal contradiction, dignity, shame, competence, behavioral tell, decision rule, speech pattern, and reason to resist change. Build a relationshipWeb whose edges carry mutual need, value conflict, hidden debt, a boundary, and a future pressure test. Build worldDynamics from institutions, factions, economies, ecologies, or social forces that want something, possess resources, use methods, create second-order consequences, and generate multiple story seeds. Treat volume 1 as detailed, volumes 2-3 as directional, and later volumes as revisable hypotheses bounded by protected truths and irreversible destinations.`;
   }
   if (type === "build_arc") {
-    return `${binding} Let the arc change at least one durable relationship, status, capability, or understanding through character choice. Draw conflict from the existing relationshipWeb and worldDynamics instead of introducing a replacement premise. Keep later-volume hypotheses flexible while preserving published facts and protected truths.`;
+    return `${binding} Let the arc change at least one durable relationship, status, capability, or understanding through character choice. Draw conflict from the existing relationshipWeb and worldDynamics instead of introducing a replacement premise. Read narrativeBlueprint.serialMemory: carry forward unresolved reader promises and emotional debts, preserve successful scene assets without repeating their surface form, and use recent rhythm history to change the arc-level pleasure when repetition is forming. Keep later-volume hypotheses flexible while preserving published facts and protected truths.`;
   }
   if (type === "build_episode_card") {
-    return `${binding} Select one episodeMode from propulsion, bonding, discovery, aftermath, humor, dread, wonder, or training, and avoid repeating the recent dominant rhythm without reason. Complete dramaticCore as desire, obstacle, choice, cost, state change, emotional turn, concrete image anchor, and subtext question before arranging scenes. A hook cannot replace the cost and state change.`;
+    return `${binding} Select one episodeMode from propulsion, bonding, discovery, aftermath, humor, dread, wonder, or training, and avoid repeating the recent dominant rhythm without reason. Complete dramaticCore as desire, obstacle, choice, cost, state change, emotional turn, concrete image anchor, and subtext question before arranging scenes. Complete continuityMemoryPlan against narrativeBlueprint.serialMemory: name existing promise and debt keys genuinely addressed, create only concrete new promises and debts caused on the page, preserve one proven strength, and vary one recent pattern. Never mark a promise or debt paid merely because a character discussed it. A hook cannot replace the cost and state change.`;
   }
   if (type === "write_draft") {
-    return `${binding} Follow episodeCard.episodeMode and dramaticCore. Make the protagonist's characteristic decision rule visible under pressure, let another character pursue an independent aim, and embody the emotional turn in action, changed attention, or a concrete image. Do not print planning labels or explain the thematic question.`;
+    return `${binding} Follow episodeCard.episodeMode and dramaticCore, plus continuityMemoryPlan. Make every addressed promise or paid debt visibly change action, knowledge, obligation, trust, or cost; create each new promise or debt through an event rather than narration. Make the protagonist's characteristic decision rule visible under pressure, let another character pursue an independent aim, and embody the emotional turn in action, changed attention, or a concrete image. Do not print planning labels or explain the thematic question.`;
   }
   if (type === "rewrite_draft") {
     return `${binding} Repair the weakest core asset named by comparativeVerdict and criticPanels without adding lore. If wouldReadNext was false, make the smallest scene-level change that creates a stronger choice, cost, relationship collision, or delivered pleasure, while preserving good material and canon.`;
   }
+  if (type === "editorial_critique") {
+    return `${binding} Act only as payload.criticRole. You are one independent critic and cannot see other critics. Check continuityMemoryPlan against the manuscript and prior serialMemory when relevant: a claimed promise or debt resolution must happen in action, and a pattern marked for variation must not simply repeat. Return one evidence-based panel for that role; do not assign final metric scores, choose approval, or soften your finding in anticipation of consensus. Name the strongest evidence, the fatal reading risk if any, and the smallest next action that preserves good material.`;
+  }
   if (type === "editorial_review") {
-    return `${binding} Return six independent criticPanels for character, relationship, serial momentum, world causality, scene expression, and a skeptical reader. Then make a comparativeVerdict that names the draft's strongest asset, weakest asset, genericness signals, rewrite priority, and whether you would voluntarily read the next installment. wouldReadNext is a publication gate, not a courtesy: it may be true only when this installment delivers a memorable present-tense pleasure and the next question arises from a consequential choice. If false, decision cannot be approved and a rewrite_required decision must name rewrite scenes; use blocked only when scene repair cannot rescue the premise.`;
+    const criticRule = payload?.criticPacket
+      ? "Treat payload.criticPacket as six independent prior reviews. Copy those panels exactly into criticPanels and weigh disagreements against the manuscript."
+      : "This is a legacy direct-review job created before the separated critic pass. Return six independent criticPanels yourself before the final verdict.";
+    return `${binding} ${criticRule} Verify continuityMemoryPlan claims against the manuscript before accepting them into serial memory. Make the final comparativeVerdict. Name the draft's strongest asset, weakest asset, genericness signals, rewrite priority, and whether you would voluntarily read the next installment. wouldReadNext is a publication gate, not a courtesy: it may be true only when this installment delivers a memorable present-tense pleasure and the next question arises from a consequential choice. If false, decision cannot be approved and a rewrite_required decision must name rewrite scenes; use blocked only when scene repair cannot rescue the premise.`;
   }
   return binding;
 }
@@ -228,13 +261,19 @@ function naturalKoreanInstruction(type) {
   if (type === "rewrite_draft") {
     return `${rule} Treat deterministicQa error semantic_predicate_mismatch and every editor-cited subject-predicate mismatch as mandatory repairs. Re-read neighboring sentences to restore the intended actor and target, then run the same silent sentence-level pass over the complete revised manuscript.`;
   }
-  if (type === "editorial_review") {
+  if (["editorial_critique", "editorial_review"].includes(type)) {
     return `${rule} Independently inspect every sentence even when deterministicQa is otherwise clean. An impossible subject-predicate pairing, confused actor or target, or literal translation metaphor is a concrete koreanReadability and causality failure. Cite the exact sentence, require a rewrite, and do not approve the draft while any such sentence remains.`;
   }
   return `${rule} Use the same distinctions in all Korean planning fields so later prose inherits natural actors, targets, and consequences.`;
 }
 
 function stageInstruction(type, payload = {}) {
+  if (type === "concept_candidates") {
+    return "Create exactly four original Korean long-form series candidates for the supplied schedule. This is a divergent development pass, not a final concept. Keep each candidate understandable in one breath, make its central desire emotionally legible, give the central counterpart an independent incompatible goal, and show how choices under clear rules create multiple kinds of scenes. Do not choose, rank, title the final work, or produce synopsis, premiseAudit, readerAppealPlan, or storyCore.";
+  }
+  if (type === "concept_selection") {
+    return "Act as a senior commissioning editor. Compare the four immutable candidates in payload.developmentCandidates, select one, and produce the complete final concept. The public synopsis remains only a 2-to-6-sentence opening-plot summary; all long-term machinery stays private. Preserve the selected candidate's core rather than decorating it with extra lore. Make the opening three-installment promise concrete, make local acceptance and information flow causal, and keep the central ability or rule easy to explain. Never mention reference works or planning terminology in reader-facing fields.";
+  }
   if (type === "concept_gate") {
     return [
       "Create one commercially readable, long-running series concept.",
@@ -266,55 +305,51 @@ function stageInstruction(type, payload = {}) {
     if (!hasSeriesArchitecture(payload)) {
       return `${shared} This legacy story has no complete seriesArchitecture. Treat the existing bible, prior arcs, canon, reveal ledger, and recent episodes as binding continuity. Plan only the requested range without rewriting prior material or inventing a full replacement architecture. architectureReferences.volumeNo should match payload.arcScope.volumeNo; conflictSourceKeys, characterMilestoneIds, and longRevealKeys may be empty when no stable architecture keys exist.`;
     }
-    return `${shared} Treat payload.bible.narrativeBlueprint.seriesArchitecture as binding: advance the active volume's role, character milestones, conflict sources, and irreversible change without moving a later-volume payoff forward. architectureReferences must name the supplied volume and the exact conflict, character-milestone, and long-reveal keys this arc advances. Reference private longReveals by key but do not redefine or reschedule them.`;
+    return `${shared} Treat payload.bible.narrativeBlueprint.seriesArchitecture as binding: advance the active volume's role, character milestones, conflict sources, and irreversible change without moving a later-volume payoff forward. Also use narrativeBlueprint.serialMemory to carry unresolved reader promises and emotional debts into the new arc, preserve proven strengths, and rotate away from recently repeated episode modes, techniques, costs, and relationship changes. architectureReferences must name the supplied volume and the exact conflict, character-milestone, and long-reveal keys this arc advances. Reference private longReveals by key but do not redefine or reschedule them.`;
   }
   if (type === "build_episode_card") {
     const developmentRule = hasStoryDevelopmentCore(payload)
       ? "Choose one episodeMode from propulsion, bonding, discovery, aftermath, humor, dread, wonder, or training, then complete dramaticCore as desire, obstacle, choice, cost, state change, emotional turn, image anchor, and subtext question."
       : "Preserve this legacy episode-card shape without retrofitting episodeMode or dramaticCore.";
-    return `${developmentRule} Create 3 to 5 sequential scenes. Every scene must have a visible goal, resistance, changed situation, and a local curiosity bridge into the next scene; no scene may exist only to explain lore. Before prose is written, lock a spatial anchor, character blocking, one or two viewpoint-specific sensory anchors, and a visible turn for every scene. These fields must describe usable staging, not camera jargon or atmospheric adjectives. Complete techniquePlan.readerOrientation and techniquePlan.readerRewardPlan before planning the scene sequence. The baseline may be brief but must give the first change something understandable to disturb, while the reward plan must name a personal want and cost, a familiar genre pleasure, two or three concrete payoffs, a relationship state before and after, and a rule-free episode question. Choose a technique plan suited to this exact installment. Internal episodeNo 1 is the prologue and must open the long series, prove the unique rule in action, force the protagonist into a costly or irreversible choice, deliver one memorable genre set piece or emotional reversal, and make the final hook a direct invitation to 본편 1화. For the prologue, copy the binding disclosure boundary into prologueDisclosurePlan: cover mustShow, answer only resolvedNow, use only approved mayHintRevealKeys, preserve openQuestions, and include every mustNotAnswerRevealKey. Do not reveal a protected answer even when it would make the scene easier to explain. Later installments should not keep pretending to be prologues and should return an empty prologueDisclosurePlan. Compare recent episode modes and technique plans and avoid automatic repetition. Begin with legible human pressure, ordinary friction, a quiet anomaly, social conflict, or a larger disturbance according to this story; do not force a catastrophe into the first two paragraphs. Preserve the reader-orientation ladder, deliver the concrete payoffs, and end with a question created by character action rather than withheld narration. Respect what each character currently knows and the active volume milestone.`;
+    return `${developmentRule} Create 3 to 5 sequential scenes. Every scene must have a visible goal, resistance, changed situation, and a local curiosity bridge into the next scene; no scene may exist only to explain lore. Before prose is written, lock a spatial anchor, character blocking, one or two viewpoint-specific sensory anchors, and a visible turn for every scene. These fields must describe usable staging, not camera jargon or atmospheric adjectives. Complete techniquePlan.readerOrientation and techniquePlan.readerRewardPlan before planning the scene sequence. For a development-v2 story, also complete continuityMemoryPlan from payload.bible.narrativeBlueprint.serialMemory. Use only existing keys in addressedPromiseKeys and paidDebtKeys, and create stable new keys prefixed 'promise-' or 'debt-'. The baseline may be brief but must give the first change something understandable to disturb, while the reward plan must name a personal want and cost, a familiar genre pleasure, two or three concrete payoffs, a relationship state before and after, and a rule-free episode question. Choose a technique plan suited to this exact installment. Internal episodeNo 1 is the prologue and must open the long series, prove the unique rule in action, force the protagonist into a costly or irreversible choice, deliver one memorable genre set piece or emotional reversal, and make the final hook a direct invitation to 본편 1화. For the prologue, copy the binding disclosure boundary into prologueDisclosurePlan: cover mustShow, answer only resolvedNow, use only approved mayHintRevealKeys, preserve openQuestions, and include every mustNotAnswerRevealKey. Do not reveal a protected answer even when it would make the scene easier to explain. Later installments should not keep pretending to be prologues and should return an empty prologueDisclosurePlan. Compare recent episode modes and technique plans and avoid automatic repetition. Begin with legible human pressure, ordinary friction, a quiet anomaly, social conflict, or a larger disturbance according to this story; do not force a catastrophe into the first two paragraphs. Preserve the reader-orientation ladder, deliver the concrete payoffs, and end with a question created by character action rather than withheld narration. Respect what each character currently knows and the active volume milestone.`;
   }
   if (type === "write_draft") {
-    return "Write the full Korean installment manuscript within the supplied character limits. Follow the episode card and voice profile, especially episodeMode, dramaticCore, techniquePlan.readerOrientation, techniquePlan.readerRewardPlan, and voiceProfile.readerOnboardingRules. Make dramaticCore.choice happen on the page, charge its stated cost, and leave the promised stateChange visible; a hook cannot substitute for them. Show the personal want and vulnerability before or alongside the unusual rule, visibly deliver every concretePayoff, and make relationshipAfter true through mutual action rather than narration. If episodeNo is 1, title it as a prologue and write a satisfying prologue that makes the operator want to continue with 본편 1화; do not call it 1화. The prologueDisclosurePlan is a hard information boundary: visibly deliver mustShow, answer resolvedNow, leave openQuestions alive, hint only listed mayHintRevealKeys, and do not state or effectively solve any mustNotAnswerRevealKey. revealUpdates may mark those protected keys only as planned or seeded, never revealed. If episodeNo is greater than 1, treat it as a main chapter and avoid repeating prologue framing. Convert every scene's spatialAnchor, characterBlocking, sensoryAnchor, and visualTurn into natural prose without printing those labels. Also embody dramaticCore.emotionalTurn and imageAnchor in the action without printing their labels. Give cause before effect, physical continuity between actions, dialogue with distinct intent, and enough selective detail for the reader to reconstruct the scene. The first sentence must orient the reader with a visible person, place, or action before naming a large mystery, system rule, faction, title, or abstract threat. Within the first two paragraphs, naturally establish the viewpoint, ordinary baseline, location, and immediate goal; by the third, make the first observable change and immediate stakes understandable. Do not confuse speed with omission. Within the first two paragraphs of later scenes, make clear where the viewpoint character is, what is nearest or obstructing them, and what is moving or changing. Obey the new-term budget exactly; when a term such as a skill, rank, rule, artifact, institution, or monster type first appears, make its plain practical meaning and visible effect clear within the same paragraph. Prefer one concrete sentence over a polished abstract phrase. Let dialogue happen alongside gaze, hands, footing, object use, or environmental response instead of in a blank space. Use paragraph breaks for mobile reading. Do not overdescribe, write screenplay directions, or include markdown headings, analysis, notes, or explanations outside the manuscript fields. sceneRanges use 1-based paragraph numbers and must cover each planned scene.";
+    return "Write the full Korean installment manuscript within the supplied character limits. Follow the episode card and voice profile, especially episodeMode, dramaticCore, continuityMemoryPlan, techniquePlan.readerOrientation, techniquePlan.readerRewardPlan, and voiceProfile.readerOnboardingRules. Make dramaticCore.choice happen on the page, charge its stated cost, and leave the promised stateChange visible; a hook cannot substitute for them. Make each memory-plan resolution observable and create new promises or debts only through actual choices and consequences. Show the personal want and vulnerability before or alongside the unusual rule, visibly deliver every concretePayoff, and make relationshipAfter true through mutual action rather than narration. If episodeNo is 1, title it as a prologue and write a satisfying prologue that makes the operator want to continue with 본편 1화; do not call it 1화. The prologueDisclosurePlan is a hard information boundary: visibly deliver mustShow, answer resolvedNow, leave openQuestions alive, hint only listed mayHintRevealKeys, and do not state or effectively solve any mustNotAnswerRevealKey. revealUpdates may mark those protected keys only as planned or seeded, never revealed. If episodeNo is greater than 1, treat it as a main chapter and avoid repeating prologue framing. Convert every scene's spatialAnchor, characterBlocking, sensoryAnchor, and visualTurn into natural prose without printing those labels. Also embody dramaticCore.emotionalTurn and imageAnchor in the action without printing their labels. Give cause before effect, physical continuity between actions, dialogue with distinct intent, and enough selective detail for the reader to reconstruct the scene. The first sentence must orient the reader with a visible person, place, or action before naming a large mystery, system rule, faction, title, or abstract threat. Within the first two paragraphs, naturally establish the viewpoint, ordinary baseline, location, and immediate goal; by the third, make the first observable change and immediate stakes understandable. Do not confuse speed with omission. Within the first two paragraphs of later scenes, make clear where the viewpoint character is, what is nearest or obstructing them, and what is moving or changing. Obey the new-term budget exactly; when a term such as a skill, rank, rule, artifact, institution, or monster type first appears, make its plain practical meaning and visible effect clear within the same paragraph. Prefer one concrete sentence over a polished abstract phrase. Let dialogue happen alongside gaze, hands, footing, object use, or environmental response instead of in a blank space. Use paragraph breaks for mobile reading. Do not overdescribe, write screenplay directions, or include markdown headings, analysis, notes, or explanations outside the manuscript fields. sceneRanges use 1-based paragraph numbers and must cover each planned scene.";
   }
   if (type === "rewrite_draft") {
     return "Rewrite the manuscript using the editor's evidence. Fix the named scenes first and repair only the neighboring continuity they affect. When readerOrientation fails, restore the shortest natural sequence that clarifies viewpoint, place, ordinary baseline, immediate goal, first change, and stakes; do not add a lore preface. When sceneVisualization fails, restore the missing spatial anchor, body or object movement, viewpoint-specific sensory cue, and visible consequence without inflating every paragraph. When characterAttachment fails, replace generic altruism with a specific personal want, vulnerability, cost, or flawed choice already supported by canon. When relationshipMomentum fails, give the supporting character an independent motive and dramatize a real shift in trust, distance, obligation, or conflict. When readerReward fails, deliver the missing planned payoffs instead of adding setup or a larger conspiracy. When premiseAccessibility or readability fails, lower the vocabulary level, define unfamiliar terms through immediate action, and replace abstract explanation with concrete cause-and-effect sentences. Keep good material intact, preserve canon, and return the complete revised manuscript. The changes array must identify what changed in each affected scene. Do not argue with the editor or include revision notes in the manuscript.";
+  }
+  if (type === "editorial_critique") {
+    const role = String(payload?.criticRole || "");
+    const roleFocus = {
+      character: "character desire, contradiction, agency, dignity, and memorable decision behavior",
+      relationship: "independent agendas, mutual need, value conflict, earned trust, and observable relationship change",
+      serialMomentum: "present-tense payoff, consequential next question, renewable engine, and rhythm variety",
+      worldCausality: "rules, information flow, social response, resources, institutions, and second-order consequences",
+      sceneExpression: "natural Korean, spatial continuity, concrete action, subtext, and image-level memorability",
+      skepticalReader: "confusion, genericness, patience cost, delivered pleasure, and the honest desire to read the next installment"
+    }[role] || "the assigned editorial risk";
+    return `Act only as the '${role}' critic. Inspect ${roleFocus}. Cite manuscript evidence, distinguish a fatal risk from a minor preference, and recommend one minimal next action. Do not output scores or a publication decision.`;
+  }
+  if (type === "editorial_review" && payload?.criticPacket) {
+    return "Act as the final senior editor after an independent six-role critique pass. Copy payload.criticPacket exactly into criticPanels. Resolve disagreements by checking the manuscript and deterministic QA, then score and decide. You may disagree with a panel in comparativeVerdict or issues, but may not rewrite, omit, or merge the panel evidence.";
   }
   return "Act as a blind senior Korean serialized-fiction editor. You did not write this draft. Evaluate only evidence present in the draft, episode card, canon, reveal ledger, deterministic QA, narrativeBlueprint.noveltyPolicy, and seriesArchitecture. Score natural Korean, canon, causality, reader orientation, scene visualization, opening grip, narrative momentum, emotional payoff, genre promise, curiosity, character agency, character attachment, relationship momentum, reader reward, premise accessibility, novelty, and safety separately. The novelty score measures fit to the requested novelty level, not maximum oddity. A level 1-2 story can earn a high novelty score when it uses a familiar genre foundation with one controlled differentiator and avoids arbitrary noun mashups or multiplying gimmicks. Penalize exceeding the requested level, random occupation-object-magic combinations, pun-first premises, and new rules that weaken immersion or causality. For koreanReadability, require prose that a Korean middle-school reader can follow without rereading: plain context before special terms, clear subject and action, short enough sentences, and immediate explanation for invented vocabulary. For readerOrientation, verify that the first two paragraphs establish viewpoint, location, ordinary baseline, and immediate goal, and that no later than the third paragraph the first observable change and stakes are understandable. Verify that the first paragraph has at most one unfamiliar named term and the first scene at most three, each explained by practical meaning or visible effect in the same paragraph. A fast incident does not compensate for missing orientation. For sceneVisualization, verify that a reader can track location, relative positions, purposeful movement, object interaction, and a visible or sensory consequence without rereading; high scores require selective concrete detail, not longer description. For characterAttachment, require a specific personal want, vulnerability, or flawed choice whose consequence matters to this person; competence and generic kindness alone do not qualify. For relationshipMomentum, require an observable change in trust, distance, obligation, dependence, or conflict caused by mutual action; an exposition helper who simply cooperates does not qualify. For readerReward, require at least two concrete on-page payoffs promised by techniquePlan.readerRewardPlan; setup, lore, and a final hook are not payoffs. For premiseAccessibility, require the human conflict and current episode question to remain understandable in one plain sentence after all invented terms are removed. Penalize disembodied dialogue, teleporting characters or objects, contradictory blocking, generic atmosphere, repetitive sensory clichés, emotion labels unsupported by behavior, exposition-first openings, fancy abstract phrases that hide what is physically happening, and continuation hooks that depend only on an ancient conspiracy. When reviewPolicy.firstEpisode is true, compare the manuscript against episodeCard.prologueDisclosurePlan. Require every mustShow and resolvedNow promise to be dramatized, keep openQuestions genuinely open, reject any direct or indirect answer to mustNotAnswerRevealKeys, reject a synopsis-like tour of later volume turns, and reject an ending that exhausts the recurring story engine. Also reject openings that start with unexplained jargon, distant lore, or a major incident before the reader knows who is present, what ordinary state was interrupted, what the viewpoint character wants, and what is at risk in plain terms. Every score needs one to four concrete pieces of manuscript evidence. Also simulate three clearly labeled reading lenses: a mobile general reader, an experienced fan of the selected genre, and a skeptical reader with low patience. These are editorial heuristics, never claims about real readers. Approve only when every supplied threshold is met; otherwise request the smallest set of scene rewrites. Block safety violations or an unusable premise.";
 }
 
 function resultContract(type, payload = {}) {
   const developmentV2 = hasStoryDevelopmentCore(payload);
-  if (type === "concept_gate") return {
+  if (type === "concept_candidates") return {
+    candidates: Array.from({ length: 4 }, (_, index) => conceptCandidateContract(index))
+  };
+  if (isConceptDecisionStage(type)) return {
     title: "2-80자", logline: "20-220자", synopsis: "상세 페이지용 초반 줄거리 요약 100-700자, 2-6문장",
     internalPlanningSummary: "비공개 작가용 장기 기획 100-4000자",
     genres: ["1-5개"], tags: ["0-5개"], rating: "all|teen",
     readerPromise: "20-300자", familiarPleasure: "10-300자",
     novelTwist: "10-300자", targetAge: "all|teen",
     developmentRoom: {
-      candidates: Array.from({ length: 4 }, (_, index) => ({
-        candidateId: `candidate-${index + 1}`,
-        workingTitle: "후보 제목",
-        coreFantasy: "독자가 대리 체험할 핵심 판타지",
-        humanDesire: "고유 용어 없이 설명한 인간적 욕망",
-        protagonistContradiction: "장점과 약점이 함께 되는 자기모순",
-        centralRelationship: "서로 필요하지만 충돌하는 중심 관계",
-        worldPressure: "세계를 움직이며 주인공을 압박하는 힘",
-        storyEngine: "선택과 결과를 반복 생성하는 장편 동력",
-        signatureScene: "이 작품만의 재미를 증명할 구체적 장면",
-        longTailQuestion: "여러 아크를 거치며 깊어질 질문",
-        familiarFoundation: "즉시 이해되는 장르 기반",
-        controlledDifference: "결과를 바꾸는 한 가지 차별점",
-        fatalRisk: "이 후보가 얕거나 반복적으로 변할 위험",
-        fingerprint: {
-          protagonistFrame: "student|worker|caregiver|outcast|authority|ensemble|nonhuman|other",
-          openingMode: "quiet_anomaly|social_conflict|deadline|investigation|chase|accident|combat|arrival|aftermath|other",
-          episodeEngine: "growth_combat|quest_adventure|case_solving|survival|relationship|craft_work|political|mystery_investigation|healing_community|comedy_escalation|other",
-          storyArena: "school|workplace|household|journey|court|frontier|city|village|institution|wilderness|multiple|other",
-          powerSource: "none|body_skill|magic|system|artifact|knowledge|social_bond|craft|transformation|other",
-          oppositionType: "rival|monster|institution|environment|inner_conflict|relationship|mystery|mixed|other"
-        }
-      })),
+      candidates: Array.from({ length: 4 }, (_, index) => conceptCandidateContract(index)),
       selectionReport: {
         selectedCandidateId: "candidate-1",
         ranking: Array.from({ length: 4 }, (_, index) => ({
@@ -441,7 +476,15 @@ function resultContract(type, payload = {}) {
     episodeNo: 1,
     ...(developmentV2 ? {
       episodeMode: "propulsion|bonding|discovery|aftermath|humor|dread|wonder|training",
-      dramaticCore: { desire: "이번 회차의 인간적 욕망", obstacle: "욕망을 막는 인물·상황", choice: "주인공이 실제로 내릴 선택", cost: "선택으로 치를 대가", stateChange: "되돌릴 수 없이 달라지는 상태", emotionalTurn: "감정의 방향이 달라지는 순간", imageAnchor: "회차를 기억하게 할 구체적 이미지", subtextQuestion: "인물이 말로 설명하지 않을 하위 질문" }
+      dramaticCore: { desire: "이번 회차의 인간적 욕망", obstacle: "욕망을 막는 인물·상황", choice: "주인공이 실제로 내릴 선택", cost: "선택으로 치를 대가", stateChange: "되돌릴 수 없이 달라지는 상태", emotionalTurn: "감정의 방향이 달라지는 순간", imageAnchor: "회차를 기억하게 할 구체적 이미지", subtextQuestion: "인물이 말로 설명하지 않을 하위 질문" },
+      continuityMemoryPlan: {
+        addressedPromiseKeys: ["이번 회차에서 실제로 진전하거나 해결할 기존 promise key, 없으면 빈 배열"],
+        newReaderPromises: [{ key: "promise-stable-key", promise: "독자가 이후 확인할 구체적 인과 질문", expectedWindow: "next_episode|this_arc|later_arc" }],
+        paidDebtKeys: ["행동과 결과로 실제 갚을 기존 debt key, 없으면 빈 배열"],
+        emotionalDebtsCreated: [{ key: "debt-stable-key", debt: "이번 선택이 남긴 감정적 빚", owner: "빚을 지거나 받아야 할 인물", pressure: "이 빚이 다음 선택을 압박하는 방식" }],
+        patternToPreserve: "직전 성공에서 기능을 보존할 장면 자산",
+        patternToVary: "최근 반복을 피하기 위해 표면 형식을 바꿀 패턴"
+      }
     } : {}),
     promise: "회차 약속", openingDisturbance: "도입 사건",
     scenes: [{ sceneNo: 1, goal: "목표", conflict: "저항", change: "달라진 상태", location: "장소", pov: "시점 인물", spatialAnchor: "공간 배치와 가까운 장애물", characterBlocking: "등장인물의 시작 위치와 핵심 이동", sensoryAnchor: "시점 인물이 감지하는 1-2개 단서", visualTurn: "장면 끝에 눈에 보이게 달라진 상태", cameraIntent: "선택적 장면의 시각적 의도" }],
@@ -469,25 +512,58 @@ function resultContract(type, payload = {}) {
   };
   if (type === "write_draft") return draftContract(false);
   if (type === "rewrite_draft") return draftContract(true);
+  if (type === "editorial_critique") return {
+    criticRole: String(payload?.criticRole || "character"),
+    panel: criticPanelContract()
+  };
   return {
     decision: "approved|rewrite_required|blocked",
     scores: { koreanReadability: 0, canonConsistency: 0, causality: 0, readerOrientation: 0, sceneVisualization: 0, openingGrip: 0, narrativeMomentum: 0, emotionalPayoff: 0, genrePromise: 0, curiosityAndHook: 0, characterAgency: 0, characterAttachment: 0, relationshipMomentum: 0, readerReward: 0, premiseAccessibility: 0, novelty: 0 },
     scoreEvidence: { koreanReadability: ["원고 근거"], canonConsistency: ["원고 근거"], causality: ["원고 근거"], readerOrientation: ["인물·장소·평소 상태·목표·변화·손실의 원고 근거"], sceneVisualization: ["공간·동작·감각의 원고 근거"], openingGrip: ["원고 근거"], narrativeMomentum: ["원고 근거"], emotionalPayoff: ["원고 근거"], genrePromise: ["원고 근거"], curiosityAndHook: ["원고 근거"], characterAgency: ["원고 근거"], characterAttachment: ["개인적 욕구·취약점·잘못된 선택의 원고 근거"], relationshipMomentum: ["상호 행동으로 달라진 관계의 원고 근거"], readerReward: ["원고에서 실제 일어난 두 가지 이상 보상"], premiseAccessibility: ["고유 용어 없이 이해되는 인간적 갈등 근거"], novelty: ["원고 근거"] },
     audienceLenses: [{ lens: "모바일 일반 독자", reaction: "읽는 동안의 반응", continueReason: "계속 읽을 이유", dropRisk: "이탈 위험" }, { lens: "장르 독자", reaction: "장르 약속에 대한 반응", continueReason: "계속 읽을 이유", dropRisk: "이탈 위험" }, { lens: "인내심 낮은 독자", reaction: "느린 부분에 대한 반응", continueReason: "계속 읽을 이유", dropRisk: "이탈 위험" }],
-    ...(developmentV2 ? { criticPanels: {
-      character: { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" },
-      relationship: { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" },
-      serialMomentum: { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" },
-      worldCausality: { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" },
-      sceneExpression: { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" },
-      skepticalReader: { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" }
-    },
+    ...(developmentV2 ? { criticPanels: criticPanelsContract(),
     comparativeVerdict: { strongestAsset: "반드시 보존할 가장 강한 자산", weakestAsset: "다음 화 이탈을 부르는 가장 약한 자산", genericnessSignals: ["평범하거나 양식적으로 느껴지는 근거"], wouldReadNext: true, wouldReadNextReason: "의무 없이 다음 화를 읽거나 읽지 않을 구체적 이유", rewritePriority: "설정 추가 없이 가장 먼저 고칠 한 가지" } } : {}),
     safetyPassed: true,
     summary: "10-1000자 편집 판단",
     issues: [{ code: "metric-or-issue-code", severity: "info|warning|critical", sceneNo: 1, evidence: "원고 근거", suggestion: "최소 수정 지시" }],
     rewriteScenes: [1]
   };
+}
+
+function conceptCandidateContract(index) {
+  return {
+    candidateId: `candidate-${index + 1}`,
+    workingTitle: "후보 제목",
+    coreFantasy: "독자가 대리 체험할 핵심 판타지",
+    humanDesire: "고유 용어 없이 설명한 인간적 욕망",
+    protagonistContradiction: "장점과 약점이 함께 되는 자기모순",
+    centralRelationship: "서로 필요하지만 충돌하는 중심 관계",
+    worldPressure: "세계를 움직이며 주인공을 압박하는 힘",
+    storyEngine: "선택과 결과를 반복 생성하는 장편 동력",
+    signatureScene: "이 작품만의 재미를 증명할 구체적 장면",
+    longTailQuestion: "여러 아크를 거치며 깊어질 질문",
+    familiarFoundation: "즉시 이해되는 장르 기반",
+    controlledDifference: "결과를 바꾸는 한 가지 차별점",
+    fatalRisk: "이 후보가 얕거나 반복적으로 변할 위험",
+    fingerprint: {
+      protagonistFrame: "student|worker|caregiver|outcast|authority|ensemble|nonhuman|other",
+      openingMode: "quiet_anomaly|social_conflict|deadline|investigation|chase|accident|combat|arrival|aftermath|other",
+      episodeEngine: "growth_combat|quest_adventure|case_solving|survival|relationship|craft_work|political|mystery_investigation|healing_community|comedy_escalation|other",
+      storyArena: "school|workplace|household|journey|court|frontier|city|village|institution|wilderness|multiple|other",
+      powerSource: "none|body_skill|magic|system|artifact|knowledge|social_bond|craft|transformation|other",
+      oppositionType: "rival|monster|institution|environment|inner_conflict|relationship|mystery|mixed|other"
+    }
+  };
+}
+
+function criticPanelContract() {
+  return { verdict: "strong|mixed|weak", evidence: ["원고 근거"], fatalRisk: "치명 위험 또는 없음", nextAction: "보존 또는 최소 수정" };
+}
+
+function criticPanelsContract() {
+  return Object.fromEntries([
+    "character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"
+  ].map((role) => [role, criticPanelContract()]));
 }
 
 function hasStoryDevelopmentCore(payload = {}) {

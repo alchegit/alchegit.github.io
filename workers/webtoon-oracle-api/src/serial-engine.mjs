@@ -1,11 +1,14 @@
 import { validateSerialGenreSelection } from "./serial-genres.mjs";
 
 const JOB_TYPES = new Set([
+  "concept_candidates",
+  "concept_selection",
   "concept_gate",
   "build_bible",
   "build_arc",
   "build_episode_card",
   "write_draft",
+  "editorial_critique",
   "editorial_review",
   "rewrite_draft"
 ]);
@@ -494,12 +497,24 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   const jobType = String(jobTypeValue || "").trim();
   if (!JOB_TYPES.has(jobType)) throw new Error("serial_unknown_job_type");
   const source = object(value);
+  if (jobType === "concept_candidates") return { candidates: normalizeConceptCandidates(source) };
+  if (jobType === "concept_selection") {
+    const concept = normalizeConcept(source, options);
+    const suppliedCandidates = normalizeConceptCandidates({
+      candidates: object(options.payload).developmentCandidates
+    });
+    if (JSON.stringify(concept.developmentRoom.candidates) !== JSON.stringify(suppliedCandidates)) {
+      throw new Error("serial_candidate_selection_mutated_source");
+    }
+    return concept;
+  }
   if (jobType === "concept_gate") return normalizeConcept(source, options);
   if (jobType === "build_bible") return normalizeBible(source, options);
   if (jobType === "build_arc") return normalizeArc(source, options);
   if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
   if (jobType === "write_draft") return normalizeDraft(source, false, options);
   if (jobType === "rewrite_draft") return normalizeDraft(source, true, options);
+  if (jobType === "editorial_critique") return normalizeEditorialCritique(source, options);
   return normalizeEditorialReview(source, options);
 }
 
@@ -808,40 +823,7 @@ function normalizeReaderAppealPlan(value, options = {}) {
 
 function normalizeDevelopmentRoom(value, finalTitle) {
   const source = object(value);
-  const candidateInputs = array(source.candidates);
-  if (candidateInputs.length !== 4) throw new Error("serial_concept_candidates_invalid");
-  const candidates = candidateInputs.map((item) => {
-    const candidate = object(item);
-    return {
-      candidateId: requiredText(candidate.candidateId, 50, 3, "serial_candidate_id_invalid"),
-      workingTitle: requiredText(candidate.workingTitle, 80, 2, "serial_candidate_title_invalid"),
-      coreFantasy: requiredText(candidate.coreFantasy, 300, 20, "serial_candidate_fantasy_invalid"),
-      humanDesire: requiredText(candidate.humanDesire, 300, 20, "serial_candidate_desire_invalid"),
-      protagonistContradiction: requiredText(candidate.protagonistContradiction, 400, 20, "serial_candidate_contradiction_invalid"),
-      centralRelationship: requiredText(candidate.centralRelationship, 400, 30, "serial_candidate_relationship_invalid"),
-      worldPressure: requiredText(candidate.worldPressure, 400, 20, "serial_candidate_world_pressure_invalid"),
-      storyEngine: requiredText(candidate.storyEngine, 500, 30, "serial_candidate_story_engine_invalid"),
-      signatureScene: requiredText(candidate.signatureScene, 600, 40, "serial_candidate_signature_scene_invalid"),
-      longTailQuestion: requiredText(candidate.longTailQuestion, 400, 20, "serial_candidate_long_tail_invalid"),
-      familiarFoundation: requiredText(candidate.familiarFoundation, 300, 20, "serial_candidate_foundation_invalid"),
-      controlledDifference: requiredText(candidate.controlledDifference, 300, 10, "serial_candidate_difference_invalid"),
-      fatalRisk: requiredText(candidate.fatalRisk, 400, 20, "serial_candidate_risk_invalid"),
-      fingerprint: normalizeStoryFingerprint(candidate.fingerprint)
-    };
-  });
-  if (candidates.length !== 4 || new Set(candidates.map((item) => item.candidateId)).size !== 4) {
-    throw new Error("serial_concept_candidates_invalid");
-  }
-  const fingerprintAxes = ["protagonistFrame", "openingMode", "episodeEngine", "storyArena", "powerSource", "oppositionType"];
-  for (let left = 0; left < candidates.length; left += 1) {
-    for (let right = left + 1; right < candidates.length; right += 1) {
-      const matchingAxes = fingerprintAxes.filter((axis) => (
-        candidates[left].fingerprint[axis] !== "other"
-        && candidates[left].fingerprint[axis] === candidates[right].fingerprint[axis]
-      ));
-      if (matchingAxes.length >= 5) throw new Error("serial_concept_candidates_too_similar");
-    }
-  }
+  const candidates = normalizeConceptCandidates(source);
 
   const reportSource = object(source.selectionReport);
   const candidateIds = new Set(candidates.map((item) => item.candidateId));
@@ -911,6 +893,46 @@ function normalizeDevelopmentRoom(value, finalTitle) {
       rejectedReasons
     }
   };
+}
+
+function normalizeConceptCandidates(value) {
+  const source = object(value);
+  const candidateInputs = array(source.candidates);
+  if (candidateInputs.length !== 4) throw new Error("serial_concept_candidates_invalid");
+  const candidates = candidateInputs.map((item) => {
+    const candidate = object(item);
+    return {
+      candidateId: requiredText(candidate.candidateId, 50, 3, "serial_candidate_id_invalid"),
+      workingTitle: requiredText(candidate.workingTitle, 80, 2, "serial_candidate_title_invalid"),
+      coreFantasy: requiredText(candidate.coreFantasy, 300, 20, "serial_candidate_fantasy_invalid"),
+      humanDesire: requiredText(candidate.humanDesire, 300, 20, "serial_candidate_desire_invalid"),
+      protagonistContradiction: requiredText(candidate.protagonistContradiction, 400, 20, "serial_candidate_contradiction_invalid"),
+      centralRelationship: requiredText(candidate.centralRelationship, 400, 30, "serial_candidate_relationship_invalid"),
+      worldPressure: requiredText(candidate.worldPressure, 400, 20, "serial_candidate_world_pressure_invalid"),
+      storyEngine: requiredText(candidate.storyEngine, 500, 30, "serial_candidate_story_engine_invalid"),
+      signatureScene: requiredText(candidate.signatureScene, 600, 40, "serial_candidate_signature_scene_invalid"),
+      longTailQuestion: requiredText(candidate.longTailQuestion, 400, 20, "serial_candidate_long_tail_invalid"),
+      familiarFoundation: requiredText(candidate.familiarFoundation, 300, 20, "serial_candidate_foundation_invalid"),
+      controlledDifference: requiredText(candidate.controlledDifference, 300, 10, "serial_candidate_difference_invalid"),
+      fatalRisk: requiredText(candidate.fatalRisk, 400, 20, "serial_candidate_risk_invalid"),
+      fingerprint: normalizeStoryFingerprint(candidate.fingerprint)
+    };
+  });
+  if (candidates.length !== 4 || new Set(candidates.map((item) => item.candidateId)).size !== 4) {
+    throw new Error("serial_concept_candidates_invalid");
+  }
+  const fingerprintAxes = ["protagonistFrame", "openingMode", "episodeEngine", "storyArena", "powerSource", "oppositionType"];
+  for (let left = 0; left < candidates.length; left += 1) {
+    for (let right = left + 1; right < candidates.length; right += 1) {
+      const matchingAxes = fingerprintAxes.filter((axis) => (
+        candidates[left].fingerprint[axis] !== "other"
+        && candidates[left].fingerprint[axis] === candidates[right].fingerprint[axis]
+      ));
+      if (matchingAxes.length >= 5) throw new Error("serial_concept_candidates_too_similar");
+    }
+  }
+
+  return candidates;
 }
 
 function normalizeStoryCore(value) {
@@ -1244,7 +1266,13 @@ function normalizeEpisodeCard(source, options = {}) {
     } : {}),
     promise: requiredText(source.promise, 300, 10, "serial_episode_promise_invalid"),
     openingDisturbance: requiredText(source.openingDisturbance, 500, 10, "serial_episode_opening_invalid"),
-    ...(developmentV2 ? { dramaticCore: normalizeDramaticCore(source.dramaticCore) } : {}),
+    ...(developmentV2 ? {
+      dramaticCore: normalizeDramaticCore(source.dramaticCore),
+      continuityMemoryPlan: normalizeContinuityMemoryPlan(
+        source.continuityMemoryPlan,
+        payload.bible?.narrativeBlueprint?.serialMemory
+      )
+    } : {}),
     scenes,
     payoff: requiredText(source.payoff, 500, 10, "serial_episode_payoff_invalid"),
     hook: requiredText(source.hook, 500, 10, "serial_episode_hook_invalid"),
@@ -1270,6 +1298,61 @@ function normalizeDramaticCore(value) {
     emotionalTurn: requiredText(source.emotionalTurn, 400, 10, "serial_dramatic_core_emotion_invalid"),
     imageAnchor: requiredText(source.imageAnchor, 400, 10, "serial_dramatic_core_image_invalid"),
     subtextQuestion: requiredText(source.subtextQuestion, 400, 10, "serial_dramatic_core_subtext_invalid")
+  };
+}
+
+function normalizeContinuityMemoryPlan(value, memoryValue) {
+  const source = object(value);
+  const memory = object(memoryValue);
+  const existingPromiseKeys = new Set(array(memory.unresolvedReaderPromises).map((item) => String(object(item).key || "")));
+  const existingDebtKeys = new Set(array(memory.emotionalDebts).map((item) => String(object(item).key || "")));
+  const addressedPromiseKeys = [...new Set(stringList(source.addressedPromiseKeys, { max: 4, itemMax: 80 }))];
+  const paidDebtKeys = [...new Set(stringList(source.paidDebtKeys, { max: 4, itemMax: 80 }))];
+  if (addressedPromiseKeys.some((key) => !existingPromiseKeys.has(key))) {
+    throw new Error("serial_memory_promise_reference_invalid");
+  }
+  if (paidDebtKeys.some((key) => !existingDebtKeys.has(key))) {
+    throw new Error("serial_memory_debt_reference_invalid");
+  }
+  const newReaderPromises = array(source.newReaderPromises).slice(0, 2).map((item) => {
+    const entry = object(item);
+    const key = requiredText(entry.key, 80, 8, "serial_memory_promise_key_invalid");
+    if (!/^promise-[a-z0-9-]+$/u.test(key) || existingPromiseKeys.has(key)) {
+      throw new Error("serial_memory_promise_key_invalid");
+    }
+    return {
+      key,
+      promise: requiredText(entry.promise, 400, 20, "serial_memory_promise_invalid"),
+      expectedWindow: requiredEnum(entry.expectedWindow, ["next_episode", "this_arc", "later_arc"], "serial_memory_promise_window_invalid")
+    };
+  });
+  if (newReaderPromises.length < 1
+    || new Set(newReaderPromises.map((item) => item.key)).size !== newReaderPromises.length) {
+    throw new Error("serial_memory_promises_invalid");
+  }
+  const emotionalDebtsCreated = array(source.emotionalDebtsCreated).slice(0, 2).map((item) => {
+    const entry = object(item);
+    const key = requiredText(entry.key, 80, 5, "serial_memory_debt_key_invalid");
+    if (!/^debt-[a-z0-9-]+$/u.test(key) || existingDebtKeys.has(key)) {
+      throw new Error("serial_memory_debt_key_invalid");
+    }
+    return {
+      key,
+      debt: requiredText(entry.debt, 400, 20, "serial_memory_debt_invalid"),
+      owner: requiredText(entry.owner, 120, 1, "serial_memory_debt_owner_invalid"),
+      pressure: requiredText(entry.pressure, 400, 20, "serial_memory_debt_pressure_invalid")
+    };
+  });
+  if (new Set(emotionalDebtsCreated.map((item) => item.key)).size !== emotionalDebtsCreated.length) {
+    throw new Error("serial_memory_debts_invalid");
+  }
+  return {
+    addressedPromiseKeys,
+    newReaderPromises,
+    paidDebtKeys,
+    emotionalDebtsCreated,
+    patternToPreserve: requiredText(source.patternToPreserve, 400, 10, "serial_memory_preserve_pattern_invalid"),
+    patternToVary: requiredText(source.patternToVary, 400, 10, "serial_memory_vary_pattern_invalid")
   };
 }
 
@@ -1376,6 +1459,13 @@ function normalizeEditorialReview(source, options = {}) {
   if (audienceLenses.length !== 3) throw new Error("serial_review_audience_lenses_invalid");
   const developmentV2 = Object.keys(object(object(options.payload).bible?.concept?.storyCore)).length > 0;
   const criticPanels = developmentV2 ? normalizeCriticPanels(source.criticPanels) : null;
+  const suppliedCriticPacket = object(object(options.payload).criticPacket);
+  if (developmentV2 && Object.keys(suppliedCriticPacket).length) {
+    const normalizedPacket = normalizeCriticPanels(suppliedCriticPacket);
+    if (JSON.stringify(criticPanels) !== JSON.stringify(normalizedPacket)) {
+      throw new Error("serial_review_critic_packet_mutated");
+    }
+  }
   const comparativeVerdictSource = object(source.comparativeVerdict);
   const wouldReadNext = developmentV2
     ? requiredBoolean(comparativeVerdictSource.wouldReadNext, "serial_review_would_read_next_invalid")
@@ -1412,18 +1502,31 @@ function normalizeEditorialReview(source, options = {}) {
   };
 }
 
+function normalizeEditorialCritique(source, options = {}) {
+  const roles = ["character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"];
+  const criticRole = requiredEnum(source.criticRole, roles, "serial_critic_role_invalid");
+  const expectedRole = String(object(options.payload).criticRole || "");
+  if (criticRole !== expectedRole) throw new Error("serial_critic_role_mismatch");
+  return { criticRole, panel: normalizeCriticPanel(source.panel, criticRole) };
+}
+
 function normalizeCriticPanels(value) {
   const source = object(value);
   const panelNames = ["character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"];
-  return Object.fromEntries(panelNames.map((panelName) => {
-    const panel = object(source[panelName]);
-    return [panelName, {
-      verdict: requiredEnum(panel.verdict, ["strong", "mixed", "weak"], `serial_review_${panelName}_verdict_invalid`),
-      evidence: requiredList(panel.evidence, { min: 1, max: 3, itemMax: 400 }, `serial_review_${panelName}_evidence_invalid`),
-      fatalRisk: requiredText(panel.fatalRisk, 400, 2, `serial_review_${panelName}_risk_invalid`),
-      nextAction: requiredText(panel.nextAction, 500, 10, `serial_review_${panelName}_action_invalid`)
-    }];
-  }));
+  return Object.fromEntries(panelNames.map((panelName) => [
+    panelName,
+    normalizeCriticPanel(source[panelName], panelName)
+  ]));
+}
+
+function normalizeCriticPanel(value, panelName) {
+  const panel = object(value);
+  return {
+    verdict: requiredEnum(panel.verdict, ["strong", "mixed", "weak"], `serial_review_${panelName}_verdict_invalid`),
+    evidence: requiredList(panel.evidence, { min: 1, max: 3, itemMax: 400 }, `serial_review_${panelName}_evidence_invalid`),
+    fatalRisk: requiredText(panel.fatalRisk, 400, 2, `serial_review_${panelName}_risk_invalid`),
+    nextAction: requiredText(panel.nextAction, 500, 10, `serial_review_${panelName}_action_invalid`)
+  };
 }
 
 function expectedSeriesPlan(options = {}) {

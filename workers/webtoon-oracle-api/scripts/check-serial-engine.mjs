@@ -25,7 +25,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
@@ -54,6 +54,18 @@ assert.match(
   "new story bibles must seed the required narrative blueprint"
 );
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
+const strongPilot = buildStoryHeavenOpeningPilotAssessment([
+  { episodeNo: 1, episodeMode: "discovery", wouldReadNext: true, readerRewardScore: 92 },
+  { episodeNo: 2, episodeMode: "bonding", wouldReadNext: true, readerRewardScore: 90 },
+  { episodeNo: 3, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 88 }
+]);
+assert.equal(strongPilot.state, "ready_for_promotion");
+const repetitivePilot = buildStoryHeavenOpeningPilotAssessment([
+  { episodeNo: 1, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 92 },
+  { episodeNo: 2, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 90 },
+  { episodeNo: 3, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 88 }
+]);
+assert.equal(repetitivePilot.state, "needs_editor_attention");
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
 assert.match(serialServiceSource, /schedule\.schedule_status/u, "queue API must expose the schedule state that can block a waiting job");
 assert.match(serialServiceSource, /set schedule_status = 'active', updated_at = systimestamp/u, "queue retry must reactivate its paused schedule");
@@ -610,6 +622,23 @@ assert.equal(concept.readerAppealPlan.recentConceptComparison.fingerprint.episod
 assert.equal(concept.developmentRoom.candidates.length, 4);
 assert.equal(concept.developmentRoom.selectionReport.selectedCandidateId, "candidate-bus");
 assert.equal(concept.storyCore.longTailSources.length, 4);
+const candidateSlate = normalizeStoryHeavenSerialWorkerResult("concept_candidates", {
+  candidates: developmentCandidates
+});
+assert.equal(candidateSlate.candidates.length, 4);
+const selectedConcept = normalizeStoryHeavenSerialWorkerResult("concept_selection", concept, {
+  payload: { developmentCandidates: candidateSlate.candidates }
+});
+assert.equal(selectedConcept.title, "마지막 시간버스");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_selection", {
+  ...concept,
+  developmentRoom: {
+    ...concept.developmentRoom,
+    candidates: concept.developmentRoom.candidates.map((candidate, index) => index === 0
+      ? { ...candidate, humanDesire: `${candidate.humanDesire} 바뀐 내용` }
+      : candidate)
+  }
+}, { payload: { developmentCandidates: candidateSlate.candidates } }), /serial_candidate_selection_mutated_source/u);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
   developmentRoom: {
@@ -973,6 +1002,23 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
     imageAnchor: "요금함 속으로 젖은 승차권이 들어가자 노선도에서 누나 이름이 잠깐 빛나는 모습이다.",
     subtextQuestion: "사랑하는 사람을 찾기 위해 그 사람의 기억을 잃는 선택은 누구를 위한 일인가?"
   },
+  continuityMemoryPlan: {
+    addressedPromiseKeys: [],
+    newReaderPromises: [{
+      key: "promise-doyoon-next-passenger",
+      promise: "운행 기록에 다음 승객으로 찍힌 도윤의 이름이 실제로 무엇을 뜻하는지 확인한다.",
+      expectedWindow: "next_episode"
+    }],
+    paidDebtKeys: [],
+    emotionalDebtsCreated: [{
+      key: "debt-haejin-witnessed-sacrifice",
+      debt: "해진은 도윤이 누나의 목소리 기억을 잃는 선택을 막지 못했다는 빚을 진다.",
+      owner: "해진",
+      pressure: "다음 운행에서 해진은 기록을 계속 숨길지 일부를 건넬지 선택해야 한다."
+    }],
+    patternToPreserve: "규칙의 대가가 인물 관계를 동시에 바꾸는 선택 장면을 보존한다.",
+    patternToVary: "다음 회차는 승객 탑승과 하차 순서를 반복하지 않고 회사의 기록 통제에서 갈등을 시작한다."
+  },
   scenes: Array.from({ length: 3 }, (_, index) => ({
     sceneNo: index + 1,
     goal: "승객의 목적지를 확인한다.",
@@ -1035,6 +1081,7 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
 assert.equal(card.techniquePlan.openingMode, "사건 한가운데");
 assert.equal(card.episodeMode, "discovery");
 assert.match(card.dramaticCore.cost, /기억/u);
+assert.equal(card.continuityMemoryPlan.newReaderPromises[0].expectedWindow, "next_episode");
 assert.equal(card.techniquePlan.readerOrientation.newTerms.length, 1);
 assert.equal(card.techniquePlan.readerRewardPlan.concretePayoffs.length, 2);
 assert.equal(card.prologueDisclosurePlan.mustNotAnswerRevealKeys.length, 4);
@@ -1168,6 +1215,27 @@ const review = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
     rewritePriority: "승객 구조의 반복을 피하면서 도윤과 해진의 정보 교환이 어떤 새 빚을 만드는지 가장 먼저 전개한다."
   }
 }, developmentReviewOptions);
+const relationshipCritique = normalizeStoryHeavenSerialWorkerResult("editorial_critique", {
+  criticRole: "relationship",
+  panel: review.criticPanels.relationship
+}, { payload: { criticRole: "relationship" } });
+assert.equal(relationshipCritique.criticRole, "relationship");
+assert.equal(relationshipCritique.panel.verdict, "strong");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_critique", {
+  criticRole: "character",
+  panel: review.criticPanels.character
+}, { payload: { criticRole: "relationship" } }), /serial_critic_role_mismatch/u);
+const reviewWithIndependentPacket = normalizeStoryHeavenSerialWorkerResult("editorial_review", review, {
+  payload: { bible: { concept: { storyCore } }, criticPacket: review.criticPanels }
+});
+assert.equal(reviewWithIndependentPacket.criticPanels.skepticalReader.verdict, "strong");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  criticPanels: {
+    ...review.criticPanels,
+    character: { ...review.criticPanels.character, verdict: "mixed" }
+  }
+}, { payload: { bible: { concept: { storyCore } }, criticPacket: review.criticPanels } }), /serial_review_critic_packet_mutated/u);
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);
