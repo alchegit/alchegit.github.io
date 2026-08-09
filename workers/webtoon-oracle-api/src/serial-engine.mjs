@@ -5,6 +5,7 @@ const JOB_TYPES = new Set([
   "concept_selection",
   "concept_gate",
   "build_bible",
+  "replan_arc",
   "build_arc",
   "build_episode_card",
   "write_draft",
@@ -522,6 +523,7 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   }
   if (jobType === "concept_gate") return normalizeConcept(source, options);
   if (jobType === "build_bible") return normalizeBible(source, options);
+  if (jobType === "replan_arc") return normalizeArcReplan(source, options);
   if (jobType === "build_arc") return normalizeArc(source, options);
   if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
   if (jobType === "write_draft") return normalizeDraft(source, false, options);
@@ -1176,10 +1178,132 @@ function normalizePlanningHorizon(value, expectedPlan) {
   };
 }
 
+function normalizeArcReplan(source, options = {}) {
+  const payload = object(options.payload);
+  const blueprint = object(payload.bible?.narrativeBlueprint);
+  const horizon = object(blueprint.planningHorizon);
+  const architecture = object(blueprint.seriesArchitecture);
+  const arcScope = object(payload.arcScope);
+  const protectedElements = array(horizon.protectedElements).map((item) => String(item || "").trim()).filter(Boolean);
+  const replanningTriggers = array(horizon.replanningTriggers).map((item) => String(item || "").trim()).filter(Boolean);
+  if (!protectedElements.length || !replanningTriggers.length || !arcScope.volumeNo) {
+    throw new Error("serial_arc_replan_not_supported");
+  }
+
+  const protectedCommitmentChecks = array(source.protectedCommitmentChecks).map((item) => {
+    const value = object(item);
+    return {
+      commitment: requiredText(value.commitment, 400, 1, "serial_arc_replan_commitment_invalid"),
+      status: requiredEnum(value.status, ["preserve"], "serial_arc_replan_commitment_invalid"),
+      evidence: requiredText(value.evidence, 600, 10, "serial_arc_replan_commitment_evidence_invalid")
+    };
+  });
+  if (protectedCommitmentChecks.length !== protectedElements.length
+    || new Set(protectedCommitmentChecks.map((item) => item.commitment)).size !== protectedElements.length
+    || protectedElements.some((item) => !protectedCommitmentChecks.some((check) => check.commitment === item))) {
+    throw new Error("serial_arc_replan_commitment_mismatch");
+  }
+
+  const triggerAssessment = array(source.triggerAssessment).map((item) => {
+    const value = object(item);
+    return {
+      trigger: requiredText(value.trigger, 400, 1, "serial_arc_replan_trigger_invalid"),
+      matched: requiredBoolean(value.matched, "serial_arc_replan_trigger_invalid"),
+      evidence: requiredText(value.evidence, 600, 10, "serial_arc_replan_trigger_evidence_invalid")
+    };
+  });
+  if (triggerAssessment.length !== replanningTriggers.length
+    || new Set(triggerAssessment.map((item) => item.trigger)).size !== replanningTriggers.length
+    || replanningTriggers.some((item) => !triggerAssessment.some((assessment) => assessment.trigger === item))) {
+    throw new Error("serial_arc_replan_trigger_mismatch");
+  }
+
+  const strengthsToPreserve = array(source.strengthsToPreserve).slice(0, 6).map((item) => {
+    const value = object(item);
+    return {
+      asset: requiredText(value.asset, 300, 10, "serial_arc_replan_strength_invalid"),
+      evidence: requiredText(value.evidence, 600, 10, "serial_arc_replan_strength_evidence_invalid"),
+      carryForward: requiredText(value.carryForward, 500, 10, "serial_arc_replan_strength_action_invalid")
+    };
+  });
+  if (!strengthsToPreserve.length) throw new Error("serial_arc_replan_strengths_invalid");
+
+  const weaknessesToRepair = array(source.weaknessesToRepair).slice(0, 6).map((item) => {
+    const value = object(item);
+    return {
+      risk: requiredText(value.risk, 300, 10, "serial_arc_replan_weakness_invalid"),
+      evidence: requiredText(value.evidence, 600, 10, "serial_arc_replan_weakness_evidence_invalid"),
+      correction: requiredText(value.correction, 500, 10, "serial_arc_replan_correction_invalid")
+    };
+  });
+  if (!weaknessesToRepair.length) throw new Error("serial_arc_replan_weaknesses_invalid");
+
+  const directive = object(source.nextArcDirective);
+  const nextArcDirective = {
+    arcIntent: requiredText(directive.arcIntent, 600, 20, "serial_arc_replan_intent_invalid"),
+    protagonistPressure: requiredText(directive.protagonistPressure, 500, 20, "serial_arc_replan_protagonist_invalid"),
+    relationshipPressure: requiredText(directive.relationshipPressure, 500, 20, "serial_arc_replan_relationship_invalid"),
+    worldPressure: requiredText(directive.worldPressure, 500, 20, "serial_arc_replan_world_invalid"),
+    readerPayoffs: requiredList(directive.readerPayoffs, { min: 2, max: 4, itemMax: 300 }, "serial_arc_replan_payoffs_invalid"),
+    rhythmShift: requiredText(directive.rhythmShift, 400, 20, "serial_arc_replan_rhythm_invalid"),
+    avoidPatterns: requiredList(directive.avoidPatterns, { min: 3, max: 6, itemMax: 300 }, "serial_arc_replan_avoid_invalid"),
+    architectureReferences: normalizeArchitectureReferences(directive.architectureReferences, arcScope, architecture)
+  };
+  const relevantLongRevealKeys = new Set(array(arcScope.relevantLongReveals).map((item) => String(item?.key || "")).filter(Boolean));
+  if (nextArcDirective.architectureReferences.longRevealKeys.some((key) => !relevantLongRevealKeys.has(key))) {
+    throw new Error("serial_arc_replan_long_reveal_scope_invalid");
+  }
+
+  const plannedVolumeCount = Number(architecture.plannedVolumeCount || 0);
+  const currentVolumeNo = Number(arcScope.volumeNo);
+  const hypothesisAdjustments = array(source.hypothesisAdjustments).slice(0, 6).map((item) => {
+    const value = object(item);
+    const volumeNo = integer(value.volumeNo, currentVolumeNo + 1, plannedVolumeCount, null);
+    const protectedCommitment = requiredText(value.protectedCommitment, 400, 1, "serial_arc_replan_hypothesis_commitment_invalid");
+    if (volumeNo === null || !protectedElements.includes(protectedCommitment)) {
+      throw new Error("serial_arc_replan_hypothesis_invalid");
+    }
+    return {
+      volumeNo,
+      currentHypothesis: requiredText(value.currentHypothesis, 500, 20, "serial_arc_replan_hypothesis_current_invalid"),
+      adjustedDirection: requiredText(value.adjustedDirection, 500, 20, "serial_arc_replan_hypothesis_direction_invalid"),
+      evidence: requiredText(value.evidence, 500, 10, "serial_arc_replan_hypothesis_evidence_invalid"),
+      protectedCommitment
+    };
+  });
+  if ((requiredBoolean(source.immutableFactsAcknowledged, "serial_arc_replan_immutability_invalid") !== true)
+    || requiredBoolean(source.retconRequired, "serial_arc_replan_retcon_invalid") !== false) {
+    throw new Error("serial_arc_replan_retcon_forbidden");
+  }
+
+  const evidenceInstallments = array(payload.evidence?.installments);
+  return {
+    schemaVersion: "2026-08-09-v1",
+    basedOnArcNo: Number(payload.previousArc?.arcNo || 0),
+    targetArcNo: Number(payload.arcNo || 0),
+    targetScope: {
+      firstEpisodeNo: Number(arcScope.firstEpisodeNo || 0),
+      lastEpisodeNo: Number(arcScope.lastEpisodeNo || 0),
+      volumeNo: currentVolumeNo
+    },
+    evidenceEpisodeNos: evidenceInstallments.map((item) => Number(item?.episodeNo)).filter(Number.isFinite),
+    immutableFactsAcknowledged: true,
+    retconRequired: false,
+    protectedCommitmentChecks,
+    triggerAssessment,
+    strengthsToPreserve,
+    weaknessesToRepair,
+    nextArcDirective,
+    hypothesisAdjustments,
+    decisionSummary: requiredText(source.decisionSummary, 900, 40, "serial_arc_replan_summary_invalid")
+  };
+}
+
 function normalizeArc(source, options = {}) {
   const payload = object(options.payload);
   const arcScope = object(payload.arcScope);
   const seriesArchitecture = object(payload.bible?.narrativeBlueprint?.seriesArchitecture);
+  const activeReplan = object(payload.replan);
   const episodePlan = array(source.episodePlan).slice(0, STORYHEAVEN_SERIAL_LIMITS.episodesPerArcMax).map((item) => {
     const value = object(item);
     return {
@@ -1230,6 +1354,41 @@ function normalizeArc(source, options = {}) {
   if (reveals.some((item) => longRevealKeys.has(item.key))) {
     throw new Error("serial_arc_long_reveal_redefinition");
   }
+  const architectureReferences = normalizeArchitectureReferences(source.architectureReferences, arcScope, seriesArchitecture);
+  const expectedReferences = object(activeReplan.nextArcDirective?.architectureReferences);
+  if (activeReplan.sourceJobId) {
+    const sameMembers = (actual, expected) => {
+      const actualValues = stringList(actual, { max: 20, itemMax: 80 }).sort();
+      const expectedValues = stringList(expected, { max: 20, itemMax: 80 }).sort();
+      return actualValues.length === expectedValues.length
+        && actualValues.every((item, index) => item === expectedValues[index]);
+    };
+    if (Number(architectureReferences.volumeNo) !== Number(expectedReferences.volumeNo)
+      || !sameMembers(architectureReferences.conflictSourceKeys, expectedReferences.conflictSourceKeys)
+      || !sameMembers(architectureReferences.characterMilestoneIds, expectedReferences.characterMilestoneIds)
+      || !sameMembers(architectureReferences.longRevealKeys, expectedReferences.longRevealKeys)) {
+      throw new Error("serial_arc_replan_references_mismatch");
+    }
+  }
+  const narrativePlan = normalizeNarrativePlan(source.narrativePlan);
+  if (activeReplan.sourceJobId) {
+    const application = object(source.replanApplication);
+    const expectedAssets = array(activeReplan.strengthsToPreserve).map((item) => String(item?.asset || "")).filter(Boolean);
+    const expectedRisks = array(activeReplan.weaknessesToRepair).map((item) => String(item?.risk || "")).filter(Boolean);
+    const preservedAssets = requiredList(application.preservedAssets, { min: 1, max: 6, itemMax: 300 }, "serial_arc_replan_application_assets_invalid");
+    const correctedRisks = requiredList(application.correctedRisks, { min: 1, max: 6, itemMax: 300 }, "serial_arc_replan_application_risks_invalid");
+    if (String(application.sourceJobId || "") !== String(activeReplan.sourceJobId)
+      || expectedAssets.some((item) => !preservedAssets.includes(item))
+      || expectedRisks.some((item) => !correctedRisks.includes(item))) {
+      throw new Error("serial_arc_replan_application_mismatch");
+    }
+    narrativePlan.replanApplication = {
+      sourceJobId: activeReplan.sourceJobId,
+      preservedAssets,
+      correctedRisks,
+      directiveExecution: requiredText(application.directiveExecution, 700, 30, "serial_arc_replan_application_invalid")
+    };
+  }
   return {
     arcTitle: requiredText(source.arcTitle, 120, 2, "serial_arc_title_invalid"),
     centralQuestion: requiredText(source.centralQuestion, 500, 20, "serial_arc_question_invalid"),
@@ -1237,8 +1396,8 @@ function normalizeArc(source, options = {}) {
     endingTruth: requiredText(source.endingTruth, 800, 20, "serial_arc_ending_invalid"),
     episodePlan,
     reveals,
-    architectureReferences: normalizeArchitectureReferences(source.architectureReferences, arcScope, seriesArchitecture),
-    narrativePlan: normalizeNarrativePlan(source.narrativePlan)
+    architectureReferences,
+    narrativePlan
   };
 }
 

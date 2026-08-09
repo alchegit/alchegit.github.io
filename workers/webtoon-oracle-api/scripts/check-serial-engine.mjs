@@ -36,6 +36,8 @@ const serialOperatorCss = await readFile(new URL("../../../storyheaven/operator/
 const managedStoriesSource = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.js", import.meta.url), "utf8");
 const managedStoriesHtml = await readFile(new URL("../../../storyheaven/operator/serial/stories/index.html", import.meta.url), "utf8");
 const managedStoriesCss = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.css", import.meta.url), "utf8");
+const serialWorkerSource = await readFile(new URL("../../storyheaven-codex-review-worker/src/serial.mjs", import.meta.url), "utf8");
+const arcReplanningMigration = await readFile(new URL("../../../oracle/20260809-storyheaven-arc-replanning.sql", import.meta.url), "utf8");
 const createEpisodeRunSource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function createEpisodeRun"),
   serialServiceSource.indexOf("async function advanceJob")
@@ -88,6 +90,14 @@ assert.match(serialServiceSource, /pilotAssessment\.operatorDecision'[^]*= 'prom
 assert.match(serialServiceSource, /async function resolveOpeningPilot/u, "opening pilots must expose a durable promotion operation");
 assert.match(serialServiceSource, /operator_pilot_rewrite/u, "an unpublished pilot installment must be replaceable without deleting its audit history");
 assert.match(serialServiceSource, /function mapRunDevelopment/u, "run details must expose concept candidate comparisons");
+assert.match(serialServiceSource, /function arcPlanningJobType[\s\S]*"replan_arc"/u, "development-v2 stories must insert a replan job at later arc boundaries");
+assert.match(serialServiceSource, /async function loadArcReplanEvidence/u, "arc replanning must use approved installment evidence");
+assert.match(serialServiceSource, /activeReplan,[\s\S]*replanningHistory/u, "accepted replans must remain in serial memory and audit history");
+assert.match(serialServiceSource, /mapRunReplanning/u, "run details must expose the replan decision and application");
+assert.match(serialWorkerSource, /completed development replan in payload\.replan is binding/u, "the next arc prompt must apply the completed replan");
+assert.match(arcReplanningMigration, /'build_bible', 'replan_arc', 'build_arc'/u, "the Oracle job contract must allow the replan stage");
+assert.match(serialOperatorSource, /구간 종료 재기획/u, "run details must explain the latest replan in operator language");
+assert.match(managedStoriesSource, /최근 구간 재기획/u, "managed stories must expose the latest replan summary");
 assert.match(serverSource, /stories\/:id\/opening-pilot/u, "opening pilot promotion must have an operator API route");
 assert.match(serialServiceSource, /schedule\.schedule_status/u, "queue API must expose the schedule state that can block a waiting job");
 assert.match(serialServiceSource, /set schedule_status = 'active', updated_at = systimestamp/u, "queue retry must reactivate its paused schedule");
@@ -998,6 +1008,134 @@ const arc = normalizeStoryHeavenSerialWorkerResult("build_arc", {
 });
 assert.equal(arc.episodePlan.length, 26);
 assert.equal(arc.architectureReferences.volumeNo, 1);
+
+const secondArcScope = buildStoryHeavenArcScope(27, testSeriesPlan, bible.narrativeBlueprint.seriesArchitecture);
+const replanPayload = {
+  bible: {
+    concept: { storyCore },
+    narrativeBlueprint: bible.narrativeBlueprint
+  },
+  previousArc: { arcNo: 1, ...arc },
+  arcNo: 2,
+  arcScope: secondArcScope,
+  evidence: {
+    installments: [
+      { episodeNo: 24, title: "기억의 환승", summary: "도윤과 해진이 서로의 기록 한 장씩을 공개한다." },
+      { episodeNo: 25, title: "마지막 정류장", summary: "도윤은 혼자 대가를 치르는 선택이 더 큰 피해를 만든다는 사실을 본다." },
+      { episodeNo: 26, title: "함께 내는 요금", summary: "두 사람이 기억의 대가와 책임을 처음으로 나눈다." }
+    ]
+  }
+};
+const replanInput = {
+  immutableFactsAcknowledged: true,
+  retconRequired: false,
+  protectedCommitmentChecks: bible.narrativeBlueprint.planningHorizon.protectedElements.map((commitment) => ({
+    commitment,
+    status: "preserve",
+    evidence: "이미 공개된 인물 선택과 결말 경계를 바꾸지 않고 다음 구간의 압력으로 이어 간다."
+  })),
+  triggerAssessment: bible.narrativeBlueprint.planningHorizon.replanningTriggers.map((trigger, index) => ({
+    trigger,
+    matched: index < 2,
+    evidence: index < 2
+      ? "24화부터 26화까지 관계 협상은 강했지만 같은 승객 해결 순서가 반복되었다."
+      : "현재 공개 사실은 후반 권 가설과 아직 충돌하지 않는다."
+  })),
+  strengthsToPreserve: [{
+    asset: "도윤과 해진이 정보를 한 장씩 교환하며 신뢰를 선택으로 쌓는 관계 장면",
+    evidence: "24화와 26화에서 각자의 손실을 감수한 교환이 관계 변화를 만들었다.",
+    carryForward: "다음 구간에서는 공동 조사 대신 서로 다른 목적의 협상으로 상호 필요를 살린다."
+  }],
+  weaknessesToRepair: [{
+    risk: "새 승객 등장과 기억 요금 지불이 같은 순서로 반복되는 사건 박자",
+    evidence: "23화부터 25화까지 도입과 해결 순서가 거의 같아 다음 전환을 예상하기 쉬웠다.",
+    correction: "운수 회사의 조사와 해진의 독립 행동을 먼저 제시하고 승객 사건은 결과로 뒤늦게 연결한다."
+  }],
+  nextArcDirective: {
+    arcIntent: "도윤과 해진이 책임을 나누기 시작한 직후 회사의 조사를 서로 다른 방식으로 통과하며 동료 관계의 조건을 다시 정한다.",
+    protagonistPressure: "도윤은 혼자 손해를 떠안는 습관을 버리지 않으면 해진의 선택권까지 빼앗게 되는 압박을 받는다.",
+    relationshipPressure: "해진은 기록을 숨기면 도윤을 보호할 수 있지만 함께 책임지겠다는 새 약속을 스스로 깨게 된다.",
+    worldPressure: "운수 회사는 운행 자격과 기록 접근권을 분리해 두 사람 중 한 명만 조직 안에 남도록 압박한다.",
+    readerPayoffs: ["두 사람이 서로 다른 방식으로 같은 조사를 돌파하는 협상", "기억 요금 없이 기존 규칙의 빈틈을 이용하는 해결"],
+    rhythmShift: "승객 사건 중심 진행에서 관계 협상과 추적이 번갈아 움직이는 긴장으로 바꾼다.",
+    avoidPatterns: ["새 승객의 목적지를 듣는 장면으로 시작", "도윤 혼자 기억을 내고 해진이 사후 설명", "오래된 음모 단서만으로 회차를 끝내기"],
+    architectureReferences: {
+      volumeNo: 2,
+      conflictSourceKeys: ["conflict-2"],
+      characterMilestoneIds: ["doyoon-volume-2"],
+      longRevealKeys: ["series-return-ticket"]
+    }
+  },
+  hypothesisAdjustments: [{
+    volumeNo: 3,
+    currentHypothesis: "도윤이 회사 바깥에서 혼자 새 노선을 조사한다.",
+    adjustedDirection: "도윤과 해진이 서로 다른 소속을 택하되 정보를 교환하는 불완전한 동맹으로 조사한다.",
+    evidence: "24화부터 26화까지 두 사람의 가치 충돌과 상호 필요가 독자 보상을 가장 크게 만들었다.",
+    protectedCommitment: "도윤과 해진의 상호 필요와 가치 충돌"
+  }],
+  decisionSummary: "다음 구간은 새 규칙을 더하지 않고 도윤과 해진의 불완전한 동맹을 중심에 둔다. 반복된 승객 해결 박자는 회사 조사와 협상으로 바꾸되 기억 요금 규칙과 결말 경계는 그대로 지킨다."
+};
+const replan = normalizeStoryHeavenSerialWorkerResult("replan_arc", replanInput, { payload: replanPayload });
+assert.equal(replan.basedOnArcNo, 1);
+assert.equal(replan.targetScope.volumeNo, 2);
+assert.deepEqual(replan.evidenceEpisodeNos, [24, 25, 26]);
+assert.equal(replan.nextArcDirective.architectureReferences.conflictSourceKeys[0], "conflict-2");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("replan_arc", {
+  ...replanInput,
+  protectedCommitmentChecks: replanInput.protectedCommitmentChecks.slice(1)
+}, { payload: replanPayload }), /serial_arc_replan_commitment_mismatch/u);
+
+const activeReplan = { ...replan, sourceJobId: "replan-job-2" };
+const adaptiveArcInput = {
+  arcTitle: "갈라진 차고지",
+  centralQuestion: "도윤과 해진은 서로 다른 조직의 감시를 받으면서도 공동 책임을 지킬 수 있는가?",
+  midpointReversal: "해진이 숨긴 기록은 배신의 증거가 아니라 도윤의 운행 자격을 지키기 위한 불완전한 거래였음이 드러난다.",
+  endingTruth: "두 사람은 같은 조직에 남는 대신 서로 다른 위치에서 한 사건의 책임을 함께 지는 새 동맹을 선택한다.",
+  episodePlan: Array.from({ length: secondArcScope.episodeCount }, (_, index) => ({
+    episodeNo: secondArcScope.firstEpisodeNo + index,
+    promise: `${index + 1}번째 조사에서 도윤과 해진이 서로 다른 목표를 협상한다.`,
+    turn: `${index + 1}번째 선택으로 회사와 두 사람의 관계가 이전과 다르게 바뀐다.`,
+    hook: "다음 조사에서 누가 기록 접근권을 잃을지 선택해야 한다."
+  })),
+  reveals: [
+    { key: "audit-route", secret: "회사의 감사 노선은 기사들의 기억 손실 순서를 추적한다.", introduceEpisode: 27, payoffEpisode: 31 },
+    { key: "split-license", secret: "도윤의 운행 자격 절반이 해진의 보증에 묶여 있다.", introduceEpisode: 28, payoffEpisode: 34 },
+    { key: "shared-ledger", secret: "두 사람이 따로 보관한 기록은 합쳐야만 원문이 된다.", introduceEpisode: 30, payoffEpisode: 39 }
+  ],
+  architectureReferences: activeReplan.nextArcDirective.architectureReferences,
+  narrativePlan: {
+    arcShape: "회사 조사와 두 사람의 독립 행동이 번갈아 압박을 높이고 마지막에 불완전한 동맹으로 합쳐진다.",
+    tensionEngine: "한 사람이 조직 안에서 얻는 안전이 다른 사람의 기록 접근권을 줄이는 선택 압박",
+    openingRotation: ["회사 조사 통보", "해진의 독립 행동", "도윤의 잘못된 추적"],
+    techniqueRotationRules: ["승객 도입을 연속하지 않는다.", "협상 뒤에는 행동 결과를 보여준다.", "관계 회수와 추적 전환을 번갈아 둔다."],
+    climaxMethod: "두 사람이 같은 편임을 선언하지 않고 서로 다른 불이익을 감수해 공동 책임을 증명한다.",
+    avoidPatterns: activeReplan.nextArcDirective.avoidPatterns
+  },
+  replanApplication: {
+    sourceJobId: activeReplan.sourceJobId,
+    preservedAssets: activeReplan.strengthsToPreserve.map((item) => item.asset),
+    correctedRisks: activeReplan.weaknessesToRepair.map((item) => item.risk),
+    directiveExecution: "조사와 협상을 교차하고 두 인물이 각자 손실을 선택하게 해 관계 자산을 살리면서 반복된 승객 해결 순서를 제거한다."
+  }
+};
+const adaptiveArc = normalizeStoryHeavenSerialWorkerResult("build_arc", adaptiveArcInput, {
+  payload: {
+    arcScope: secondArcScope,
+    bible: { narrativeBlueprint: bible.narrativeBlueprint },
+    replan: activeReplan
+  }
+});
+assert.equal(adaptiveArc.narrativePlan.replanApplication.sourceJobId, "replan-job-2");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("build_arc", {
+  ...adaptiveArcInput,
+  architectureReferences: { ...adaptiveArcInput.architectureReferences, conflictSourceKeys: ["conflict-1"] }
+}, {
+  payload: {
+    arcScope: secondArcScope,
+    bible: { narrativeBlueprint: bible.narrativeBlueprint },
+    replan: activeReplan
+  }
+}), /serial_arc_architecture_references_invalid|serial_arc_replan_references_mismatch/u);
 
 const legacyArcInput = structuredClone(arc);
 legacyArcInput.architectureReferences = {

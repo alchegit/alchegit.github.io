@@ -1522,6 +1522,8 @@
   function productionProgressState(item) {
     const initialBatch = item.initialBatch === true || isPendingWorkTitle(item) || /^새 작품 ·/u.test(String(item.workLabel || ""));
     const bootstrapPlan = item.bootstrapPlan === true;
+    const adaptiveReplan = String(item.stage || "") === "replan_arc"
+      || (item.stageTimings || []).some((timing) => timing.type === "replan_arc");
     const targetEpisodeCount = Math.max(1, Math.min(10, Number(item.targetEpisodeCount || 1)));
     const episodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => [
       `${installmentLabel(index + 1)} 구성`,
@@ -1531,13 +1533,13 @@
     const steps = initialBatch
       ? ["아이디어", "설정집", "장기 전개", ...episodeSteps, "공개 준비"]
       : bootstrapPlan
-        ? ["설정집", "장기 전개", "회차 구성", "원고 작성", "편집 검수", "공개 준비"]
+        ? [adaptiveReplan ? "완료 구간 검토" : "설정집", adaptiveReplan ? "다음 구간 설계" : "장기 전개", "회차 구성", "원고 작성", "편집 검수", "공개 준비"]
         : ["회차 구성", "원고 작성", "편집 검수", "공개 준비"];
     const stage = String(item.stage || "queued");
     let currentIndex = 0;
     if (initialBatch) {
       if (stage === "build_bible") currentIndex = 1;
-      else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
+      else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
       else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
         const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1))) - 1;
         const stageOffset = stage === "build_episode_card"
@@ -1548,7 +1550,8 @@
         currentIndex = 3 + (episodeIndex * 3) + stageOffset;
       } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
     } else if (bootstrapPlan) {
-      if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
+      if (stage === "replan_arc") currentIndex = 0;
+      else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
       else if (stage === "build_episode_card") currentIndex = 2;
       else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
       else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
@@ -1687,13 +1690,14 @@
     const title = document.createElement("h3");
     title.textContent = payload.run.episodeNo ? `${payload.run.episodeNo}화 · ${runStatus(payload.run)}` : runStatus(payload.run);
     const detail = document.createElement("p");
-    detail.textContent = `단계 ${payload.run.stage} · 재작성 ${payload.run.rewriteCount}회`;
+    detail.textContent = `단계 ${stageLabel(payload.run.stage)} · 재작성 ${payload.run.rewriteCount}회`;
     header.append(title, detail);
     wrapper.append(header);
 
     if (payload.development?.candidates?.length) {
       wrapper.append(renderDevelopmentComparison(payload.development));
     }
+    if (payload.replanning) wrapper.append(renderArcReplanning(payload.replanning));
 
     const latestReview = payload.reviews?.at(-1);
     if (latestReview) wrapper.append(renderScoreBoard(latestReview, payload.run.quality?.decision?.readerExperienceScore, payload.metrics || []));
@@ -1809,6 +1813,98 @@
     copy.textContent = value || "기록 없음";
     item.append(title, copy);
     return item;
+  }
+
+  function renderArcReplanning(replanning) {
+    const section = document.createElement("section");
+    section.className = "arc-replanning";
+    const heading = document.createElement("div");
+    heading.className = "development-heading";
+    const title = document.createElement("h4");
+    title.textContent = "구간 종료 재기획";
+    const state = document.createElement("strong");
+    state.textContent = replanning.application ? "다음 구간 반영 완료" : "다음 구간 지시 완료";
+    heading.append(title, state);
+    const summary = document.createElement("p");
+    summary.textContent = replanning.decisionSummary || "완료된 회차를 근거로 다음 구간의 강점과 보완점을 다시 정했습니다.";
+    const scope = document.createElement("div");
+    scope.className = "replan-scope";
+    const episodeRange = replanning.targetScope
+      ? `${replanning.targetScope.firstEpisodeNo}-${replanning.targetScope.lastEpisodeNo}화`
+      : "다음 구간";
+    scope.append(
+      replanMetric("검토 구간", `${replanning.basedOnArcNo}구간`),
+      replanMetric("다음 설계", `${replanning.targetArcNo}구간 · ${episodeRange}`),
+      replanMetric("근거 회차", replanning.evidenceEpisodeNos?.length ? `${replanning.evidenceEpisodeNos.length}편` : "기록 확인")
+    );
+
+    const comparison = document.createElement("div");
+    comparison.className = "replan-comparison";
+    comparison.append(
+      replanList("이어갈 강점", replanning.strengthsToPreserve, "asset", "carryForward"),
+      replanList("이번에 고칠 점", replanning.weaknessesToRepair, "risk", "correction")
+    );
+
+    const directive = document.createElement("div");
+    directive.className = "replan-directive";
+    const directiveTitle = document.createElement("strong");
+    directiveTitle.textContent = "다음 구간 운영 방향";
+    const directiveCopy = document.createElement("p");
+    directiveCopy.textContent = replanning.nextArcDirective?.arcIntent || "다음 구간 방향 기록이 없습니다.";
+    directive.append(directiveTitle, directiveCopy);
+    if (replanning.nextArcDirective) {
+      const points = document.createElement("div");
+      points.className = "replan-directive-points";
+      points.append(
+        candidateFact("주인공 압력", replanning.nextArcDirective.protagonistPressure),
+        candidateFact("관계 압력", replanning.nextArcDirective.relationshipPressure),
+        candidateFact("세계 압력", replanning.nextArcDirective.worldPressure),
+        candidateFact("리듬 변화", replanning.nextArcDirective.rhythmShift)
+      );
+      directive.append(points);
+    }
+
+    const guard = document.createElement("details");
+    guard.className = "replan-guard";
+    const guardSummary = document.createElement("summary");
+    guardSummary.textContent = `바꾸지 않을 약속 ${replanning.protectedCommitmentChecks?.length || 0}개 · 먼 계획 조정 ${replanning.hypothesisAdjustments?.length || 0}개`;
+    const guardList = document.createElement("ul");
+    for (const check of replanning.protectedCommitmentChecks || []) {
+      const item = document.createElement("li");
+      item.textContent = check.commitment;
+      guardList.append(item);
+    }
+    guard.append(guardSummary, guardList);
+    section.append(heading, summary, scope, comparison, directive, guard);
+    return section;
+  }
+
+  function replanMetric(label, value) {
+    const item = document.createElement("span");
+    const title = document.createElement("small");
+    title.textContent = label;
+    const copy = document.createElement("strong");
+    copy.textContent = value;
+    item.append(title, copy);
+    return item;
+  }
+
+  function replanList(titleValue, items, primaryKey, actionKey) {
+    const section = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = titleValue;
+    const list = document.createElement("ul");
+    for (const value of items || []) {
+      const item = document.createElement("li");
+      const name = document.createElement("b");
+      name.textContent = value[primaryKey] || "기록 없음";
+      const action = document.createElement("span");
+      action.textContent = value[actionKey] || value.evidence || "";
+      item.append(name, action);
+      list.append(item);
+    }
+    section.append(title, list);
+    return section;
   }
 
   function renderScoreBoard(review, weightedScore, metrics = []) {
@@ -2339,6 +2435,7 @@
       concept_gate: "작품 아이디어 검토",
       build_bible: "세계관과 인물 설정",
       architecture_complete: "장편 설계 완료",
+      replan_arc: "완료 구간 검토와 재기획",
       build_arc: "장기 전개 설계",
       build_episode_card: "회차 장면 구성",
       write_draft: "원고 작성",

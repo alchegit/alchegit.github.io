@@ -44,6 +44,17 @@ const stories = [
     queue: { id: "queue-next-4", status: "waiting", queuePosition: 2, cancelable: true },
     latestRunStatus: "published",
     readyPublicationCount: 0,
+    latestReplan: {
+      basedOnArcNo: 1,
+      targetArcNo: 2,
+      targetScope: { firstEpisodeNo: 27, lastEpisodeNo: 51, volumeNo: 2 },
+      decisionSummary: "관계 협상은 이어가고 반복된 승객 해결 순서는 회사 조사와 추적으로 바꿉니다.",
+      strengthsToPreserve: [{ asset: "도윤과 해진의 정보 교환", carryForward: "서로 다른 목적의 협상으로 기능을 이어 갑니다." }],
+      weaknessesToRepair: [{ risk: "같은 승객 해결 순서", correction: "회사 조사 결과로 사건이 연결되게 바꿉니다." }],
+      protectedCommitmentChecks: [{ commitment: "기억을 요금으로 치르는 규칙" }, { commitment: "공동 책임 결말 경계" }],
+      hypothesisAdjustments: [{ volumeNo: 3 }],
+      completedAt: "2026-07-31T02:45:00.000Z"
+    },
     architecture: completeArchitecture,
     schedule: { id: "schedule-a", name: "주간 판타지", status: "active", publicationMode: "auto_public" },
     publishedAt: "2026-07-20T03:00:00.000Z",
@@ -221,6 +232,10 @@ try {
     assert.equal(layout.title, "0번 버스의 마지막 승객", `${viewport.name} title`);
     assert.equal(layout.hasExecutableImage, false, `${viewport.name} text-only rendering`);
     assert.equal(await page.locator(".operator-note").count(), 0, `${viewport.name} operator notes are not exposed`);
+    const latestReplan = page.locator(".managed-story").first().locator(".story-replanning");
+    assert.match(await latestReplan.locator("summary").textContent(), /최근 구간 재기획.*1구간.*2구간/u, `${viewport.name} latest replan is summarized on the story`);
+    await latestReplan.evaluate((node) => { node.open = true; });
+    assert.match(await latestReplan.textContent(), /이어갈 강점.*고칠 점.*공개 사실과 핵심 약속 2개/u, `${viewport.name} latest replan explains preservation and repair`);
     await page.locator("[data-visibility-filter]").selectOption("all");
     assert.equal(await page.locator(".managed-story").count(), 4, `${viewport.name} full view includes hidden stories`);
     assert.equal(

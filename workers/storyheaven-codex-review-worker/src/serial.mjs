@@ -6,6 +6,7 @@ const JOB_TYPES = new Set([
   "concept_selection",
   "concept_gate",
   "build_bible",
+  "replan_arc",
   "build_arc",
   "build_episode_card",
   "write_draft",
@@ -14,7 +15,7 @@ const JOB_TYPES = new Set([
   "rewrite_draft"
 ]);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-09-story-development-v18";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-09-story-development-v20";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -104,7 +105,7 @@ export function buildSerialJsonRepairPrompt(value, job) {
 }
 
 export function modelRoleForSerialJob(jobType) {
-  return ["concept_selection", "editorial_critique", "editorial_review"].includes(jobType)
+  return ["concept_selection", "replan_arc", "editorial_critique", "editorial_review"].includes(jobType)
     ? "editor"
     : "writer";
 }
@@ -128,6 +129,9 @@ function architecturePolicyInstruction(type, payload = {}) {
   }
   if (isConceptDecisionStage(type) || (type === "build_bible" && hasStoryDevelopmentCore(payload))) {
     return "A numeric seriesPlan is not a long-form plan by itself. Every newly generated story must build a complete directional seriesArchitecture before its prologue is planned: volumePlan must have exactly totalVolumes entries, episode ranges must cover every requested main episode once, and character milestones, renewable conflicts, and long reveals must remain usable after volume 1. Do not pretend every distant event is equally certain. planningHorizon makes volume 1 detailed, volumes 2-3 directional, and later volumes revisable hypotheses bounded by protected truths, final consequences, and published canon. Keep two information layers separate. seriesArchitecture is the private writer bible and may contain the final truth. The prologue may use only seriesArchitecture.prologueDisclosure: demonstrate mustShow, hint only mayHintRevealKeys, answer resolvedNow, preserve openQuestions, and never answer a key in mustNotAnswerRevealKeys.";
+  }
+  if (type === "replan_arc") {
+    return "The supplied seriesArchitecture remains the binding private writer bible. This is a constrained development edit, not a retcon or a new premise. Preserve every published fact, protected planningHorizon element, ending boundary, established character identity, long-reveal key and scheduled answer. Reconsider only how the next arc uses existing conflict sources, relationships, world pressures, rhythm, and still-hypothetical later-volume directions. Do not rewrite prior arcs or mutate the architecture itself; record any later-volume change only as a revisable hypothesis adjustment.";
   }
   if (hasSeriesArchitecture(payload)) {
     return "The supplied seriesArchitecture is the binding private writer bible. Use its exact volume plan, conflict sources, character milestones, long reveals, and prologue disclosure boundary. Do not move later answers forward or replace the architecture with a new plan.";
@@ -192,6 +196,9 @@ function readerAppealInstruction(type, payload = {}) {
   if (type === "build_bible") {
     return `${binding} Turn the lack, want, stake, flawed choice pattern, and relationship friction into character desires, fears, decision patterns, secrets, bounded knowledge, and renewable relationship conflicts. The long mystery may deepen the story but may not be its only continuation reason.`;
   }
+  if (type === "replan_arc") {
+    return `${binding} Use the evidence packet to identify which concrete pleasures, personal consequences, and relationship changes actually worked, then make the next arc deliver two to four readable payoffs rather than relying on setup or a distant conspiracy. Correct repetition through a different dramatic pressure or rhythm, never by adding a new premise rule.`;
+  }
   if (type === "build_arc") {
     return `${binding} Preserve the exact prologue, main-1, and main-2 reward commitments when they fall inside this arc. Later episodes must rotate concrete genre pleasure, personal consequence, and relationship movement instead of offering setup and conspiracy hints only.`;
   }
@@ -228,6 +235,9 @@ function storyDevelopmentInstruction(type, payload = {}) {
   const binding = "The supplied concept.storyCore is the binding identity of this series. Preserve its reader fantasy, emotional core, protagonist contradiction, central relationship, world pressure, repeatable engine, signature promise, thematic question, proof scene, and independent long-tail sources. Originality must grow from choices and consequences inside this core; do not add a new gimmick, secret organization, power exception, or ancient conspiracy to simulate depth.";
   if (type === "build_bible") {
     return `${binding} Every major character must have a misbelief, internal contradiction, dignity, shame, competence, behavioral tell, decision rule, speech pattern, and reason to resist change. Build a relationshipWeb whose edges carry mutual need, value conflict, hidden debt, a boundary, and a future pressure test. Build worldDynamics from institutions, factions, economies, ecologies, or social forces that want something, possess resources, use methods, create second-order consequences, and generate multiple story seeds. Treat volume 1 as detailed, volumes 2-3 as directional, and later volumes as revisable hypotheses bounded by protected truths and irreversible destinations.`;
+  }
+  if (type === "replan_arc") {
+    return `${binding} Act as a senior development editor at an arc boundary. Evaluate what the completed installments actually made vivid, weak, repetitive, or emotionally unfinished. Preserve successful scene assets by function while changing their surface form. Turn unresolved reader promises and emotional debts into pressure for the next arc. The nextArcDirective must deepen an existing character choice, relationship collision, and world pressure; it may not add a replacement gimmick, power exception, secret organization, or premise. Future hypothesis adjustments may redirect only unpublished later volumes and must name one exact protected commitment they still preserve.`;
   }
   if (type === "build_arc") {
     return `${binding} Let the arc change at least one durable relationship, status, capability, or understanding through character choice. Draw conflict from the existing relationshipWeb and worldDynamics instead of introducing a replacement premise. Read narrativeBlueprint.serialMemory: carry forward unresolved reader promises and emotional debts, preserve successful scene assets without repeating their surface form, and use recent rhythm history to change the arc-level pleasure when repetition is forming. Keep later-volume hypotheses flexible while preserving published facts and protected truths.`;
@@ -300,12 +310,18 @@ function stageInstruction(type, payload = {}) {
       : "Treat the supplied legacy planning shape as binding and do not retrofit planningHorizon.";
     return `Build a compact source of truth, not prose. ${developmentRule} World rules must be testable, costs and loopholes must be concrete, the timeline must not contradict itself, and forbidden contradictions must name mistakes future episodes may never make. Provide multiple places, institutions, factions, resources, and unresolved past events so the series has deep roots beyond its opening gimmick. Create a complete private seriesArchitecture for exactly ${plan.totalVolumes} volumes and ${plan.episodesPerVolume} main episodes per volume (${plan.totalMainEpisodes} main episodes after the prologue). volumePlan must contain exactly ${plan.totalVolumes} sequential entries. Give every volume a distinct role, goal, opposition pressure, midpoint turn, climax, irreversible consequence, and bridge. ${planningHorizonRule} protectedRevealKeys may contain only long-reveal keys whose payoffVolume is later than that volume. ${characterArcRule} Every characterArc must contain at least ${Math.min(3, plan.totalVolumes)} milestones. Within one characterArc, each milestone must use a different volumeNo and a different id. Every characterArc id and every milestone id must be globally unique. Across all characterArcs, the union of milestone volumeNo values must cover every volume from 1 through ${plan.totalVolumes}. Mirror each milestone id in its matching volumePlan.characterMilestoneIds entry and list only later-payoff long reveals in protectedRevealKeys; the server will canonically derive both reference lists from characterArcs and longReveals to prevent clerical drift. Define at least five renewableConflictSources with variation and exhaustion guards, and use every conflict key in at least one volumePlan.conflictSourceKeys. Schedule longReveals with stable keys beginning 'series-' across early, middle, late, and final volumes; no more than 25 percent may pay off in volume 1, at least one prologue-seeded reveal must use seedVolume 0 and seedEpisodeWithinVolume 0, and at least one must pay off in the final volume. For every long reveal, seedVolume must be 0 through ${plan.totalVolumes}, payoffVolume must be 1 through ${plan.totalVolumes}, and seedVolume must not exceed payoffVolume. When seedVolume is 0, seedEpisodeWithinVolume must be exactly 0; otherwise it must be 1 through ${plan.episodesPerVolume}. payoffEpisodeWithinVolume must always be 1 through ${plan.episodesPerVolume}. Every deepenVolumes entry must be at least max(1, seedVolume) and strictly less than payoffVolume; never include payoffVolume itself. Keep the full answers in the private architecture. Define prologueDisclosure separately with concrete mustShow and resolvedNow items, one to three openQuestions, optional hint keys, and every later secret in mustNotAnswerRevealKeys. mayHintRevealKeys must also remain in mustNotAnswerRevealKeys because a hint is not an answer. The prologue must prove the premise but must not summarize the series, identify the final opponent, explain the final truth, complete the protagonist's growth, or consume the volume-level turns. Before returning, mechanically check the counts and references: exact volume count, sequential volumeNo values, exact binding character ids, unique arc and milestone ids, every volume covered by milestones, every conflict key used, valid long-reveal episode and deepen boundaries, long reveals distributed through the final volume, and every later reveal protected by prologueDisclosure.mustNotAnswerRevealKeys. Create a voice profile that differs through information order and rhythm, not difficult vocabulary, and translate the creative controls into concrete pacing, tension, reveal, emotion, relationship, action, description, humor, and novelty rules with recovery beats and anti-repetition rules. Define narrativeBlueprint.noveltyPolicy from the requested level: state the familiar genre foundation, the permitted differentiator, and what kinds of new gimmicks may not be added later. A low novelty target must remain deliberately familiar and coherent rather than accumulating a new strange rule each episode. Define readerOnboardingRules that keep baseline, goal, change, stakes, and new-term explanations clear throughout the series without making every opening identical. Define a restrained sensory palette and visualization rules that make this series recognizable without repeating the same weather, light, smell, or body reaction in every episode. Also design how information is withheld fairly, at least three compatible opening modes, signature techniques, escalation and reveal cadence, and anti-repetition rules. Every selected primary genre and its subgenres are foundational constraints. Preserve their distinct jobs and prevent one genre from disappearing after the premise.`;
   }
+  if (type === "replan_arc") {
+    return "Review the completed arc as a senior development editor before the next arc is planned. Use only payload.evidence, payload.previousArc, prior arcs, canon, reveal ledger, relationship and world data, and narrativeBlueprint.serialMemory. Copy every planningHorizon.replanningTriggers string exactly once into triggerAssessment and judge it with concrete evidence; copy every planningHorizon.protectedElements string exactly once into protectedCommitmentChecks with status preserve. immutableFactsAcknowledged must be true and retconRequired must be false. Name at least one strength to carry forward by function and at least one weakness or repetition risk to correct. Build one nextArcDirective that uses only valid conflictSourceKeys, characterMilestoneIds, and longRevealKeys from the target volume in payload.arcScope. It must state the next dramatic intent, protagonist pressure, relationship pressure, world pressure, two to four on-page reader payoffs, a rhythm change, and patterns to avoid. Do not draft episode beats here. hypothesisAdjustments may redirect only unpublished volumes after the target volume and must preserve one exact protected element; return an empty array when no later volume exists. Do not alter published facts, prior arc outcomes, stable keys, the ending boundary, or the core premise.";
+  }
   if (type === "build_arc") {
     const shared = "Plan one continuous arc for exactly payload.arcScope.firstEpisodeNo through payload.arcScope.lastEpisodeNo, inclusive. Episode numbers must be sequential and must not cross the supplied volume boundary. Arc reveals are local questions that introduce and pay off inside this arc. If payload.arcScope.allowShortBoundaryTail is true, use the exact short range and at least one local setup/payoff instead of padding or crossing into the next volume. If firstEpisodeNo is 1, episode 1 is the prologue: its promise must open the premise and its hook must invite 본편 1화, not resolve the story as a short piece. If firstEpisodeNo is 2, treat it as 본편 1화. Every episode needs its own payoff and turn while advancing the central question. Otherwise plant at least three local reveals before their payoff. The midpoint must alter the protagonist's understanding or method, and the ending truth must change the next arc's available choices. Build an arc narrative plan that rotates openings and techniques without repeating the same opening, twist, or hook mechanically in adjacent episodes.";
+    const replanRule = payload?.replan?.sourceJobId
+      ? " The completed development replan in payload.replan is binding. Copy its architectureReferences exactly into architectureReferences. Apply every strengthsToPreserve asset by function, every weaknessesToRepair risk as a correction, its protagonist, relationship, and world pressures, reader payoffs, rhythm shift, and avoid patterns. Return replanApplication with the exact sourceJobId and exact asset and risk strings, then explain how the episode plan executes the directive without adding a new premise."
+      : "";
     if (!hasSeriesArchitecture(payload)) {
-      return `${shared} This legacy story has no complete seriesArchitecture. Treat the existing bible, prior arcs, canon, reveal ledger, and recent episodes as binding continuity. Plan only the requested range without rewriting prior material or inventing a full replacement architecture. architectureReferences.volumeNo should match payload.arcScope.volumeNo; conflictSourceKeys, characterMilestoneIds, and longRevealKeys may be empty when no stable architecture keys exist.`;
+      return `${shared}${replanRule} This legacy story has no complete seriesArchitecture. Treat the existing bible, prior arcs, canon, reveal ledger, and recent episodes as binding continuity. Plan only the requested range without rewriting prior material or inventing a full replacement architecture. architectureReferences.volumeNo should match payload.arcScope.volumeNo; conflictSourceKeys, characterMilestoneIds, and longRevealKeys may be empty when no stable architecture keys exist.`;
     }
-    return `${shared} Treat payload.bible.narrativeBlueprint.seriesArchitecture as binding: advance the active volume's role, character milestones, conflict sources, and irreversible change without moving a later-volume payoff forward. Also use narrativeBlueprint.serialMemory to carry unresolved reader promises and emotional debts into the new arc, preserve proven strengths, and rotate away from recently repeated episode modes, techniques, costs, and relationship changes. architectureReferences must name the supplied volume and the exact conflict, character-milestone, and long-reveal keys this arc advances. Reference private longReveals by key but do not redefine or reschedule them.`;
+    return `${shared}${replanRule} Treat payload.bible.narrativeBlueprint.seriesArchitecture as binding: advance the active volume's role, character milestones, conflict sources, and irreversible change without moving a later-volume payoff forward. Also use narrativeBlueprint.serialMemory to carry unresolved reader promises and emotional debts into the new arc, preserve proven strengths, and rotate away from recently repeated episode modes, techniques, costs, and relationship changes. architectureReferences must name the supplied volume and the exact conflict, character-milestone, and long-reveal keys this arc advances. Reference private longReveals by key but do not redefine or reschedule them.`;
   }
   if (type === "build_episode_card") {
     const developmentRule = hasStoryDevelopmentCore(payload)
@@ -465,13 +481,78 @@ function resultContract(type, payload = {}) {
       seriesArchitecture: seriesArchitectureContract(payload)
     }
   };
-  if (type === "build_arc") return {
-    arcTitle: "제목", centralQuestion: "중심 질문", midpointReversal: "중간 반전", endingTruth: "끝에서 드러날 진실",
-    episodePlan: [{ episodeNo: 1, promise: "회차 약속", turn: "전환", hook: "다음 질문" }],
-    reveals: [{ key: "stable-key", secret: "숨은 사실", introduceEpisode: 1, payoffEpisode: 5 }],
-    architectureReferences: { volumeNo: 1, conflictSourceKeys: ["사용할 장기 갈등 key"], characterMilestoneIds: ["진전시킬 인물 단계 id"], longRevealKeys: ["이번 아크에서 심화할 장기 복선 key"] },
-    narrativePlan: { arcShape: "이번 아크의 전개 곡선", tensionEngine: "긴장을 계속 만드는 원리", openingRotation: ["3-7개 도입 순환"], techniqueRotationRules: ["3-8개 기법 운용 규칙"], climaxMethod: "절정 방식", avoidPatterns: ["3-8개 피할 반복"] }
-  };
+  if (type === "replan_arc") {
+    const horizon = payload?.bible?.narrativeBlueprint?.planningHorizon || {};
+    const architecture = payload?.bible?.narrativeBlueprint?.seriesArchitecture || {};
+    const currentVolumeNo = Number(payload?.arcScope?.volumeNo || 1);
+    const hasLaterVolume = currentVolumeNo < Number(architecture?.plannedVolumeCount || 0);
+    return {
+      immutableFactsAcknowledged: true,
+      retconRequired: false,
+      protectedCommitmentChecks: (horizon.protectedElements || []).map((commitment) => ({
+        commitment,
+        status: "preserve",
+        evidence: "이 약속을 다음 구간에서도 바꾸지 않고 지키는 구체적 방법"
+      })),
+      triggerAssessment: (horizon.replanningTriggers || []).map((trigger) => ({
+        trigger,
+        matched: false,
+        evidence: "완료 회차와 편집 기록에서 확인한 구체적 근거"
+      })),
+      strengthsToPreserve: [{
+        asset: "실제 원고에서 강하게 작동한 장면 또는 관계 자산",
+        evidence: "회차 번호와 구체적인 결과",
+        carryForward: "표면 반복 없이 다음 구간에서 기능을 살릴 방법"
+      }],
+      weaknessesToRepair: [{
+        risk: "다음 구간에서 고칠 약점 또는 반복 위험",
+        evidence: "회차 번호와 편집 결과",
+        correction: "새 설정을 추가하지 않고 압력·선택·관계·리듬으로 고칠 방법"
+      }],
+      nextArcDirective: {
+        arcIntent: "다음 구간에서 인물의 선택으로 달라질 핵심 상태",
+        protagonistPressure: "주인공의 욕망과 모순을 시험할 기존 압력",
+        relationshipPressure: "중심 관계의 필요와 가치 충돌을 움직일 압력",
+        worldPressure: "기존 세계 동역학이 실제 사건을 만드는 방식",
+        readerPayoffs: ["다음 구간에서 체감할 구체적 보상 1", "구체적 보상 2"],
+        rhythmShift: "최근 회차와 다른 주된 호흡과 그 이유",
+        avoidPatterns: ["반복하지 않을 도입·갈등·보상 패턴 1", "패턴 2", "패턴 3"],
+        architectureReferences: {
+          volumeNo: currentVolumeNo,
+          conflictSourceKeys: ["payload.arcScope.volume.conflictSourceKeys에서 선택"],
+          characterMilestoneIds: ["payload.arcScope.volume.characterMilestoneIds에서 선택"],
+          longRevealKeys: ["payload.arcScope.relevantLongReveals에서 필요한 key, 없으면 빈 배열"]
+        }
+      },
+      hypothesisAdjustments: hasLaterVolume ? [{
+        volumeNo: currentVolumeNo + 1,
+        currentHypothesis: "기존 비공개 방향 가설",
+        adjustedDirection: "현재 원고의 강점과 약점을 반영한 새 방향 가설",
+        evidence: "조정이 필요한 완료 회차 근거",
+        protectedCommitment: "planningHorizon.protectedElements에서 정확히 복사"
+      }] : [],
+      decisionSummary: "무엇을 보존하고 무엇을 고쳐 다음 구간을 설계할지 운영자가 이해할 수 있는 요약"
+    };
+  }
+  if (type === "build_arc") {
+    const replan = payload?.replan;
+    return {
+      arcTitle: "제목", centralQuestion: "중심 질문", midpointReversal: "중간 반전", endingTruth: "끝에서 드러날 진실",
+      episodePlan: [{ episodeNo: 1, promise: "회차 약속", turn: "전환", hook: "다음 질문" }],
+      reveals: [{ key: "stable-key", secret: "숨은 사실", introduceEpisode: 1, payoffEpisode: 5 }],
+      architectureReferences: replan?.nextArcDirective?.architectureReferences
+        || { volumeNo: 1, conflictSourceKeys: ["사용할 장기 갈등 key"], characterMilestoneIds: ["진전시킬 인물 단계 id"], longRevealKeys: ["이번 아크에서 심화할 장기 복선 key"] },
+      narrativePlan: { arcShape: "이번 아크의 전개 곡선", tensionEngine: "긴장을 계속 만드는 원리", openingRotation: ["3-7개 도입 순환"], techniqueRotationRules: ["3-8개 기법 운용 규칙"], climaxMethod: "절정 방식", avoidPatterns: ["3-8개 피할 반복"] },
+      ...(replan?.sourceJobId ? {
+        replanApplication: {
+          sourceJobId: replan.sourceJobId,
+          preservedAssets: (replan.strengthsToPreserve || []).map((item) => item.asset),
+          correctedRisks: (replan.weaknessesToRepair || []).map((item) => item.risk),
+          directiveExecution: "재기획의 강점 보존·약점 교정·관계와 세계 압력을 실제 회차 약속과 전환에 반영하는 방법"
+        }
+      } : {})
+    };
+  }
   if (type === "build_episode_card") return {
     episodeNo: 1,
     ...(developmentV2 ? {

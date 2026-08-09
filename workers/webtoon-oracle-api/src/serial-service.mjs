@@ -589,6 +589,8 @@ export function createStoryHeavenSerialService({
                   returning clob null on error) as pilot_assessment_json,
                 json_query(bible.narrative_blueprint_json, '$.serialMemory.recentInstallments'
                   returning clob null on error) as recent_installments_json,
+                json_query(bible.narrative_blueprint_json, '$.serialMemory.activeReplan'
+                  returning clob null on error) as active_replan_json,
                 (select count(*) from storyheaven_episodes episode
                   where episode.story_id = story.id) as episode_count,
                 (select count(*) from storyheaven_episodes episode
@@ -667,6 +669,8 @@ export function createStoryHeavenSerialService({
                 returning clob null on error) as pilot_assessment_json,
               json_query(bible.narrative_blueprint_json, '$.serialMemory.recentInstallments'
                 returning clob null on error) as recent_installments_json,
+              json_query(bible.narrative_blueprint_json, '$.serialMemory.activeReplan'
+                returning clob null on error) as active_replan_json,
               (select count(*) from storyheaven_episodes episode
                 where episode.story_id = story.id) as episode_count,
               (select count(*) from storyheaven_episodes episode
@@ -1160,29 +1164,23 @@ export function createStoryHeavenSerialService({
     const nextArcNo = Math.max(0, ...context.priorArcs.map((arc) => Number(arc.arcNo || 0))) + 1;
     const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
     const arcScope = safeArcScope(targetEpisodeNo, seriesPlan, context.bible.narrativeBlueprint?.seriesArchitecture);
+    const planningStage = arcPlanningJobType(context);
     const planning = await createRun(connection, {
       storyId: story.ID,
       runType: "planning",
-      stage: "build_arc",
+      stage: planningStage,
       userId,
       input: { autoEpisode: true, releaseAt: null, batchEndEpisodeNo }
     });
-    await queueJob(connection, {
+    await queueArcPlanningJob(connection, {
       runId: planning.id,
       storyId: story.ID,
-      type: "build_arc",
-      input: {
-        story: context.story,
-        concept: context.bible.concept,
-        bible: context.bible,
-        arcNo: nextArcNo,
-        firstEpisodeNo: targetEpisodeNo,
-        seriesPlan,
-        arcScope,
-        priorArcs: context.priorArcs,
-        canon: context.canon,
-        autoEpisode: true
-      }
+      context,
+      arcNo: nextArcNo,
+      firstEpisodeNo: targetEpisodeNo,
+      seriesPlan,
+      arcScope,
+      autoEpisode: true
     });
     return planning;
   }
@@ -1633,6 +1631,7 @@ export function createStoryHeavenSerialService({
       return {
         run: mapRun(run),
         development: mapRunDevelopment(jobs.rows),
+        replanning: mapRunReplanning(jobs.rows),
         jobs: jobs.rows.map((row) => ({
           id: row.ID,
           type: row.JOB_TYPE,
@@ -2167,6 +2166,7 @@ export function createStoryHeavenSerialService({
     if (job.JOB_TYPE === "concept_selection") return acceptConcept(connection, job, payload, result);
     if (job.JOB_TYPE === "concept_gate") return acceptConcept(connection, job, payload, result);
     if (job.JOB_TYPE === "build_bible") return acceptBible(connection, job, payload, result);
+    if (job.JOB_TYPE === "replan_arc") return acceptArcReplan(connection, job, payload, result);
     if (job.JOB_TYPE === "build_arc") return acceptArc(connection, job, payload, result);
     if (job.JOB_TYPE === "build_episode_card") return acceptEpisodeCard(connection, job, result);
     if (job.JOB_TYPE === "write_draft" || job.JOB_TYPE === "rewrite_draft") {
@@ -2401,6 +2401,67 @@ export function createStoryHeavenSerialService({
         }
       );
     }
+  }
+
+  async function acceptArcReplan(connection, job, payload, replan) {
+    const bibleRow = await selectOne(connection,
+      `select narrative_blueprint_json
+         from storyheaven_serial_bibles
+        where story_id = :story_id for update`,
+      { story_id: job.STORY_ID });
+    if (!bibleRow) throw failure("serial_bible_required", 409);
+    const blueprint = parseJson(bibleRow.NARRATIVE_BLUEPRINT_JSON, {});
+    const previousMemory = blueprint.serialMemory && typeof blueprint.serialMemory === "object"
+      ? blueprint.serialMemory
+      : {};
+    const completedAt = new Date().toISOString();
+    const activeReplan = {
+      ...replan,
+      sourceJobId: job.ID,
+      completedAt
+    };
+    const replanningHistory = [
+      ...(Array.isArray(previousMemory.replanningHistory) ? previousMemory.replanningHistory : []),
+      activeReplan
+    ].slice(-12);
+    const serialMemory = {
+      ...previousMemory,
+      schemaVersion: "2026-08-09-v2",
+      activeReplan,
+      replanningHistory
+    };
+    const narrativeBlueprint = { ...blueprint, serialMemory };
+    await connection.execute(
+      `update storyheaven_serial_bibles
+          set narrative_blueprint_json = :narrative_blueprint_json,
+              updated_at = systimestamp
+        where story_id = :story_id`,
+      { story_id: job.STORY_ID, narrative_blueprint_json: clobJson(narrativeBlueprint) }
+    );
+    await connection.execute(
+      `update storyheaven_serial_runs
+          set current_stage = 'build_arc', updated_at = systimestamp
+        where id = :run_id`,
+      { run_id: job.RUN_ID }
+    );
+    await queueJob(connection, {
+      runId: job.RUN_ID,
+      storyId: job.STORY_ID,
+      type: "build_arc",
+      input: {
+        story: payload.story,
+        concept: payload.concept,
+        bible: { ...payload.bible, narrativeBlueprint },
+        seriesPlan: payload.seriesPlan,
+        arcNo: payload.arcNo,
+        firstEpisodeNo: payload.firstEpisodeNo,
+        arcScope: payload.arcScope,
+        priorArcs: payload.priorArcs,
+        canon: payload.canon,
+        autoEpisode: payload.autoEpisode === true,
+        replan: activeReplan
+      }
+    });
   }
 
   async function acceptArc(connection, job, payload, arc) {
@@ -2927,7 +2988,8 @@ export function createStoryHeavenSerialService({
         }
       : evaluatedPilotAssessment;
     const serialMemory = {
-      schemaVersion: "2026-08-09-v1",
+      ...previous,
+      schemaVersion: "2026-08-09-v2",
       lastUpdatedEpisodeNo: Number(run.EPISODE_NO),
       unresolvedReaderPromises,
       emotionalDebts,
@@ -3097,6 +3159,132 @@ export function createStoryHeavenSerialService({
     });
   }
 
+  function arcPlanningJobType(context) {
+    const blueprint = context?.bible?.narrativeBlueprint || {};
+    const horizon = blueprint.planningHorizon || {};
+    const architecture = blueprint.seriesArchitecture || {};
+    return context?.arc
+      && context?.bible?.concept?.storyCore
+      && architecture.schemaVersion
+      && Array.isArray(architecture.volumePlan)
+      && architecture.volumePlan.length > 0
+      && Array.isArray(horizon.protectedElements)
+      && horizon.protectedElements.length > 0
+      && Array.isArray(horizon.replanningTriggers)
+      && horizon.replanningTriggers.length > 0
+        ? "replan_arc"
+        : "build_arc";
+  }
+
+  async function queueArcPlanningJob(connection, {
+    runId,
+    storyId,
+    context,
+    arcNo,
+    firstEpisodeNo,
+    seriesPlan,
+    arcScope,
+    autoEpisode
+  }) {
+    const type = arcPlanningJobType(context);
+    const sharedInput = {
+      story: context.story,
+      concept: context.bible.concept,
+      bible: context.bible,
+      arcNo,
+      firstEpisodeNo,
+      seriesPlan,
+      arcScope,
+      priorArcs: context.priorArcs,
+      canon: context.canon,
+      autoEpisode: autoEpisode === true
+    };
+    if (type === "build_arc") {
+      return queueJob(connection, { runId, storyId, type, input: sharedInput });
+    }
+    const evidence = await loadArcReplanEvidence(connection, storyId, context.arc);
+    return queueJob(connection, {
+      runId,
+      storyId,
+      type,
+      input: {
+        ...sharedInput,
+        previousArc: context.arc,
+        reveals: context.reveals,
+        evidence
+      }
+    });
+  }
+
+  async function loadArcReplanEvidence(connection, storyId, previousArc) {
+    const episodeNos = Array.isArray(previousArc?.episodePlan)
+      ? previousArc.episodePlan.map((item) => Number(item?.episodeNo)).filter(Number.isFinite)
+      : [];
+    if (!episodeNos.length) return { firstEpisodeNo: null, lastEpisodeNo: null, installments: [] };
+    const firstEpisodeNo = Math.min(...episodeNos);
+    const lastEpisodeNo = Math.max(...episodeNos);
+    const result = await connection.execute(
+      `select approved_run.episode_no, approved_run.quality_json,
+              draft.title, draft.public_summary,
+              card.episode_promise, card.payoff, card.hook, card.technique_plan_json
+         from (
+           select serial_run.*,
+                  row_number() over (
+                    partition by serial_run.episode_no
+                    order by serial_run.completed_at desc nulls last, serial_run.created_at desc
+                  ) as rank_no
+             from storyheaven_serial_runs serial_run
+            where serial_run.story_id = :story_id
+              and serial_run.run_type = 'episode'
+              and serial_run.run_status in ('ready', 'published')
+              and serial_run.episode_no between :first_episode_no and :last_episode_no
+         ) approved_run
+         left join storyheaven_serial_drafts draft on draft.id = (
+           select max(serial_draft.id) keep (dense_rank last order by serial_draft.version_no)
+             from storyheaven_serial_drafts serial_draft
+            where serial_draft.run_id = approved_run.id
+         )
+         left join storyheaven_episode_cards card
+           on card.story_id = approved_run.story_id
+          and card.episode_no = approved_run.episode_no
+          and card.card_status = 'active'
+        where approved_run.rank_no = 1
+        order by approved_run.episode_no`,
+      { story_id: storyId, first_episode_no: firstEpisodeNo, last_episode_no: lastEpisodeNo }
+    );
+    const installments = result.rows.map((row) => {
+      const quality = parseJson(row.QUALITY_JSON, {});
+      const editorial = quality.editorial || {};
+      const techniquePlan = parseJson(row.TECHNIQUE_PLAN_JSON, {});
+      return {
+        episodeNo: Number(row.EPISODE_NO),
+        title: row.TITLE || "",
+        summary: row.PUBLIC_SUMMARY || "",
+        promise: row.EPISODE_PROMISE || "",
+        payoff: row.PAYOFF || "",
+        hook: row.HOOK || "",
+        episodeMode: techniquePlan.episodeMode || "legacy",
+        dramaticCore: techniquePlan.dramaticCore || null,
+        relationshipAfter: techniquePlan.readerRewardPlan?.relationshipAfter || "",
+        wouldReadNext: editorial.comparativeVerdict?.wouldReadNext === true,
+        strongestAsset: editorial.comparativeVerdict?.strongestAsset || "",
+        weakestAsset: editorial.comparativeVerdict?.weakestAsset || "",
+        scores: {
+          characterAttachment: Number(editorial.scores?.characterAttachment || 0),
+          relationshipMomentum: Number(editorial.scores?.relationshipMomentum || 0),
+          readerReward: Number(editorial.scores?.readerReward || 0),
+          narrativeMomentum: Number(editorial.scores?.narrativeMomentum || 0)
+        }
+      };
+    });
+    return {
+      firstEpisodeNo,
+      lastEpisodeNo,
+      completedInstallmentCount: installments.length,
+      installments
+    };
+  }
+
   async function queueFollowingEpisode(connection, run) {
     const control = await selectOne(connection,
       `select continuation_mode from storyheaven_serial_story_controls where story_id = :story_id`,
@@ -3203,21 +3391,22 @@ export function createStoryHeavenSerialService({
     const context = await loadSerialContext(connection, run.STORY_ID);
     const seriesPlan = context.bible.narrativeBlueprint?.seriesPlan || context.bible.concept?.seriesPlan || normalizeSeriesPlan();
     const arcScope = safeArcScope(nextEpisodeNo, seriesPlan, context.bible.narrativeBlueprint?.seriesArchitecture);
+    const planningStage = arcPlanningJobType(context);
     const planning = await createRun(connection, {
       scheduleId: run.SCHEDULE_ID, storyId: run.STORY_ID, runType: "planning",
-      stage: "build_arc", userId: schedule.CREATED_BY,
+      stage: planningStage, userId: schedule.CREATED_BY,
       queueGroupId,
       input: { autoEpisode: true, releaseAt: releaseAt.toISOString(), batchEndEpisodeNo }
     });
-    await queueJob(connection, {
-      runId: planning.id, storyId: run.STORY_ID, type: "build_arc",
-      input: {
-        story: context.story, concept: context.bible.concept, bible: context.bible,
-        arcNo: Number(context.arc.arcNo) + 1, firstEpisodeNo: nextEpisodeNo,
-        seriesPlan,
-        arcScope,
-        priorArcs: context.priorArcs, canon: context.canon, autoEpisode: true
-      }
+    await queueArcPlanningJob(connection, {
+      runId: planning.id,
+      storyId: run.STORY_ID,
+      context,
+      arcNo: Number(context.arc.arcNo) + 1,
+      firstEpisodeNo: nextEpisodeNo,
+      seriesPlan,
+      arcScope,
+      autoEpisode: true
     });
     return planning;
   }
@@ -3862,6 +4051,8 @@ function initialBatchLabel(value) {
 function queueProgressView(group, status) {
   const initialBatch = group.hasConcept;
   const bootstrapPlan = group.hasPlanning && !group.hasConcept;
+  const adaptiveReplan = String(group.stage || "") === "replan_arc"
+    || (group.stageTimings || []).some((item) => item.type === "replan_arc");
   const targetEpisodeCount = Math.max(1, Number(group.targetEpisodeCount || STORYHEAVEN_CONTINUATION_POLICY.initialEpisodeCount));
   const initialEpisodeSteps = Array.from({ length: targetEpisodeCount }, (_, index) => [
     `episode-${index + 1}-card`,
@@ -3871,13 +4062,13 @@ function queueProgressView(group, status) {
   const steps = initialBatch
     ? ["concept", "bible", "arc", ...initialEpisodeSteps, "publication"]
     : bootstrapPlan
-      ? ["bible", "arc", "episode-card", "draft", "review", "publication"]
+      ? [adaptiveReplan ? "arc-review" : "bible", "arc", "episode-card", "draft", "review", "publication"]
       : ["episode-card", "draft", "review", "publication"];
   const stage = String(group.stage || "queued");
   let currentIndex = 0;
   if (initialBatch) {
     if (stage === "build_bible") currentIndex = 1;
-    else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
+    else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
     else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
       const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(group.maxEpisodeNo || 1))) - 1;
       const stageOffset = stage === "build_episode_card"
@@ -3888,7 +4079,8 @@ function queueProgressView(group, status) {
       currentIndex = 3 + (episodeIndex * 3) + stageOffset;
     } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
   } else if (bootstrapPlan) {
-    if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
+    if (stage === "replan_arc") currentIndex = 0;
+    else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
     else if (stage === "build_episode_card") currentIndex = 2;
     else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
     else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
@@ -3960,6 +4152,7 @@ function mapManagedStory(row) {
   const pilotInstallments = parseJson(row.RECENT_INSTALLMENTS_JSON, [])
     .filter((item) => Number(item?.episodeNo) >= 1 && Number(item?.episodeNo) <= 3)
     .sort((left, right) => Number(left.episodeNo) - Number(right.episodeNo));
+  const activeReplan = parseJson(row.ACTIVE_REPLAN_JSON, null);
   const architectureVolumeCount = Number(row.ARCHITECTURE_VOLUME_COUNT || 0);
   const architectureEpisodeCount = Number(row.ARCHITECTURE_EPISODE_COUNT || 0);
   const architectureConflictCount = Number(row.ARCHITECTURE_CONFLICT_COUNT || 0);
@@ -4007,6 +4200,18 @@ function mapManagedStory(row) {
       recommendation: pilotAssessment.recommendation || "",
       installments: pilotInstallments
     },
+    latestReplan: activeReplan ? {
+      basedOnArcNo: Number(activeReplan.basedOnArcNo || 0),
+      targetArcNo: Number(activeReplan.targetArcNo || 0),
+      targetScope: activeReplan.targetScope || null,
+      decisionSummary: activeReplan.decisionSummary || "",
+      strengthsToPreserve: Array.isArray(activeReplan.strengthsToPreserve) ? activeReplan.strengthsToPreserve : [],
+      weaknessesToRepair: Array.isArray(activeReplan.weaknessesToRepair) ? activeReplan.weaknessesToRepair : [],
+      protectedCommitmentChecks: Array.isArray(activeReplan.protectedCommitmentChecks) ? activeReplan.protectedCommitmentChecks : [],
+      nextArcDirective: activeReplan.nextArcDirective || null,
+      hypothesisAdjustments: Array.isArray(activeReplan.hypothesisAdjustments) ? activeReplan.hypothesisAdjustments : [],
+      completedAt: activeReplan.completedAt || null
+    } : null,
     architecture: {
       status: architectureComplete ? "complete" : "legacy",
       schemaVersion: row.ARCHITECTURE_VERSION || null,
@@ -4297,6 +4502,34 @@ function mapRunDevelopment(rows = []) {
         } : null
       };
     })
+  };
+}
+
+function mapRunReplanning(rows = []) {
+  let replan = null;
+  let application = null;
+  for (const row of rows) {
+    const output = parseJson(row.OUTPUT_JSON, {}).result || {};
+    if (row.JOB_TYPE === "replan_arc" && output.schemaVersion) replan = output;
+    if (row.JOB_TYPE === "build_arc" && output.narrativePlan?.replanApplication) {
+      application = output.narrativePlan.replanApplication;
+    }
+  }
+  if (!replan) return null;
+  return {
+    schemaVersion: replan.schemaVersion,
+    basedOnArcNo: Number(replan.basedOnArcNo || 0),
+    targetArcNo: Number(replan.targetArcNo || 0),
+    targetScope: replan.targetScope || null,
+    evidenceEpisodeNos: Array.isArray(replan.evidenceEpisodeNos) ? replan.evidenceEpisodeNos.map(Number) : [],
+    decisionSummary: replan.decisionSummary || "",
+    strengthsToPreserve: Array.isArray(replan.strengthsToPreserve) ? replan.strengthsToPreserve : [],
+    weaknessesToRepair: Array.isArray(replan.weaknessesToRepair) ? replan.weaknessesToRepair : [],
+    triggerAssessment: Array.isArray(replan.triggerAssessment) ? replan.triggerAssessment : [],
+    protectedCommitmentChecks: Array.isArray(replan.protectedCommitmentChecks) ? replan.protectedCommitmentChecks : [],
+    nextArcDirective: replan.nextArcDirective || null,
+    hypothesisAdjustments: Array.isArray(replan.hypothesisAdjustments) ? replan.hypothesisAdjustments : [],
+    application
   };
 }
 

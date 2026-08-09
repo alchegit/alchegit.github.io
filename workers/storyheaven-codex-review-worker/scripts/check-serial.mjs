@@ -53,6 +53,7 @@ assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
 assert.equal(modelRoleForSerialJob("editorial_critique"), "editor");
 assert.equal(modelRoleForSerialJob("concept_selection"), "editor");
+assert.equal(modelRoleForSerialJob("replan_arc"), "editor");
 assert.equal(modelRoleForSerialJob("concept_candidates"), "writer");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
 
@@ -353,6 +354,71 @@ const scopedArcPrompt = buildSerialPrompt({
 });
 assert.match(scopedArcPrompt, /exactly payload\.arcScope\.firstEpisodeNo through payload\.arcScope\.lastEpisodeNo/u);
 assert.match(scopedArcPrompt, /do not redefine or reschedule/u);
+
+const replan = {
+  sourceJobId: "replan-job-2",
+  strengthsToPreserve: [{ asset: "관계 협상 장면" }],
+  weaknessesToRepair: [{ risk: "같은 사건 순서 반복" }],
+  nextArcDirective: {
+    architectureReferences: {
+      volumeNo: 2,
+      conflictSourceKeys: ["conflict-2"],
+      characterMilestoneIds: ["milestone-2"],
+      longRevealKeys: []
+    }
+  }
+};
+const replanPrompt = buildSerialPrompt({
+  ...job,
+  type: "replan_arc",
+  payload: {
+    concept: { readerAppealPlan, storyCore },
+    arcNo: 2,
+    arcScope: {
+      firstEpisodeNo: 27,
+      lastEpisodeNo: 51,
+      volumeNo: 2,
+      volume: { conflictSourceKeys: ["conflict-2"], characterMilestoneIds: ["milestone-2"] },
+      relevantLongReveals: []
+    },
+    bible: {
+      concept: { readerAppealPlan, storyCore },
+      narrativeBlueprint: {
+        planningHorizon: {
+          protectedElements: ["중심 관계의 가치 충돌", "기억을 요금으로 치르는 규칙"],
+          replanningTriggers: ["같은 사건 박자가 반복될 때", "관계의 실제 강점이 예상과 다를 때"]
+        },
+        seriesArchitecture: { schemaVersion: "2026-08-03-v1", plannedVolumeCount: 10, volumePlan: [{ volumeNo: 2 }] }
+      }
+    },
+    evidence: { installments: [{ episodeNo: 26, summary: "두 인물이 책임을 나누었다." }] }
+  }
+});
+assert.match(replanPrompt, /senior development editor before the next arc is planned/u);
+assert.match(replanPrompt, /immutableFactsAcknowledged must be true and retconRequired must be false/u);
+assert.match(replanPrompt, /중심 관계의 가치 충돌/u);
+assert.match(replanPrompt, /같은 사건 박자가 반복될 때/u);
+assert.match(replanPrompt, /may redirect only unpublished volumes after the target volume/u);
+
+const adaptiveArcPrompt = buildSerialPrompt({
+  ...job,
+  type: "build_arc",
+  payload: {
+    concept: { readerAppealPlan, storyCore },
+    arcScope: { firstEpisodeNo: 27, lastEpisodeNo: 51, volumeNo: 2 },
+    bible: {
+      concept: { readerAppealPlan, storyCore },
+      narrativeBlueprint: {
+        seriesArchitecture: { schemaVersion: "2026-08-03-v1", volumePlan: [{ volumeNo: 2 }] }
+      }
+    },
+    replan
+  }
+});
+assert.match(adaptiveArcPrompt, /completed development replan in payload\.replan is binding/u);
+assert.match(adaptiveArcPrompt, /Copy its architectureReferences exactly/u);
+assert.match(adaptiveArcPrompt, /replanApplication/u);
+assert.match(adaptiveArcPrompt, /관계 협상 장면/u);
 
 const legacyArcPrompt = buildSerialPrompt({
   ...job,

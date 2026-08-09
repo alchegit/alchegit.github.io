@@ -158,6 +158,33 @@ try {
             mitigation: "회사와 산 사람의 불법 승차, 동료와의 빚을 교차해 선택 결과를 바꾼다.",
             candidates
           },
+          replanning: {
+            basedOnArcNo: 1,
+            targetArcNo: 2,
+            targetScope: { firstEpisodeNo: 27, lastEpisodeNo: 51, volumeNo: 2 },
+            evidenceEpisodeNos: [24, 25, 26],
+            decisionSummary: "관계 협상은 살리고 반복된 승객 해결 순서는 회사 조사와 추적으로 바꿉니다. 공개된 기억 요금 규칙과 결말 경계는 그대로 지킵니다.",
+            strengthsToPreserve: [{ asset: "도윤과 해진의 정보 교환", carryForward: "공동 조사 대신 서로 다른 목적의 협상으로 기능을 이어 갑니다." }],
+            weaknessesToRepair: [{ risk: "새 승객과 기억 요금이 같은 순서로 반복", correction: "회사 조사의 결과로 승객 사건이 뒤늦게 연결되게 바꿉니다." }],
+            nextArcDirective: {
+              arcIntent: "서로 다른 조직의 감시 속에서 두 사람이 공동 책임의 조건을 다시 정합니다.",
+              protagonistPressure: "도윤이 혼자 손해를 떠안으면 해진의 선택권까지 빼앗게 됩니다.",
+              relationshipPressure: "해진은 기록을 숨겨 보호할지 새 약속을 지킬지 선택해야 합니다.",
+              worldPressure: "운수 회사가 두 사람의 자격과 기록 접근권을 갈라놓습니다.",
+              rhythmShift: "승객 해결 중심에서 협상과 추적이 번갈아 움직이는 호흡으로 바꿉니다."
+            },
+            protectedCommitmentChecks: [
+              { commitment: "도윤과 해진의 가치 충돌" },
+              { commitment: "기억을 요금으로 치르는 중심 규칙" },
+              { commitment: "공동 책임을 선택하는 결말 경계" }
+            ],
+            hypothesisAdjustments: [{ volumeNo: 3 }],
+            application: {
+              sourceJobId: "replan-job-2",
+              preservedAssets: ["도윤과 해진의 정보 교환"],
+              correctedRisks: ["새 승객과 기억 요금이 같은 순서로 반복"]
+            }
+          },
           jobs: [], drafts: [], reviews: [], metrics: []
         });
       }
@@ -314,6 +341,9 @@ try {
     assert.equal(await page.locator(".development-candidate").count(), 4, `${viewport.name} shows all four development candidates`);
     assert.match(await page.locator(".development-candidate.is-selected").textContent(), /선정 · 마지막 시간버스/u, `${viewport.name} highlights the selected candidate`);
     assert.match(await page.locator(".selection-rationale").textContent(), /최종 선정 근거.*위험 보완/u, `${viewport.name} explains selection evidence and mitigation`);
+    assert.equal(await page.locator(".arc-replanning").count(), 1, `${viewport.name} shows the completed arc replan`);
+    assert.match(await page.locator(".arc-replanning").textContent(), /구간 종료 재기획.*다음 구간 반영 완료.*이어갈 강점.*이번에 고칠 점/u, `${viewport.name} explains what the replan preserves and repairs`);
+    assert.match(await page.locator(".replan-directive").textContent(), /주인공 압력.*관계 압력.*세계 압력.*리듬 변화/u, `${viewport.name} exposes the next-arc operating direction`);
     await page.screenshot({ path: `test-results/storyheaven-serial-development-${viewport.name}.png`, fullPage: true });
 
     const layout = await page.evaluate(() => ({ viewport: innerWidth, documentWidth: document.documentElement.scrollWidth }));

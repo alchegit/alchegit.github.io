@@ -413,6 +413,96 @@
   flex: 1 1 auto;
 }
 
+.story-replanning {
+  grid-column: 1 / -1;
+  border-top: 2px solid #11131a;
+  background: #edf4ff;
+}
+
+.story-replanning > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 48px;
+  padding: 10px 17px;
+  cursor: pointer;
+}
+
+.story-replanning > summary strong {
+  color: #173a72;
+  font-size: 13px;
+}
+
+.story-replanning > summary small {
+  color: #52627a;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.story-replanning-content {
+  display: grid;
+  gap: 11px;
+  padding: 0 17px 15px;
+}
+
+.story-replanning-content > p {
+  margin: 0;
+  color: #3f4d62;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.story-replanning-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid #9ca9bb;
+  background: #fff;
+}
+
+.story-replanning-columns section {
+  min-width: 0;
+  padding: 11px 13px;
+}
+
+.story-replanning-columns section:first-child {
+  border-right: 1px solid #c8d0da;
+  box-shadow: inset 4px 0 #087c5d;
+}
+
+.story-replanning-columns section:last-child {
+  box-shadow: inset 4px 0 #b87900;
+}
+
+.story-replanning-columns ul {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.story-replanning-columns li {
+  color: #515c6e;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.story-replanning-columns li b,
+.story-replanning-columns li span {
+  display: block;
+}
+
+.story-replanning-columns li b {
+  color: #252d3b;
+}
+
+.story-replanning-guard {
+  padding: 8px 10px;
+  border-left: 4px solid #3b73d9;
+  background: #fff;
+  font-weight: 850;
+}
+
 .story-summary {
   min-width: 0;
   padding: 15px 17px;
@@ -807,6 +897,21 @@
   .opening-pilot-metrics,
   .opening-pilot-episodes {
     grid-template-columns: 1fr;
+  }
+
+  .story-replanning > summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .story-replanning-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .story-replanning-columns section:first-child {
+    border-right: 0;
+    border-bottom: 1px solid #c8d0da;
   }
 }
 

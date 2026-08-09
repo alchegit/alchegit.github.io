@@ -432,7 +432,53 @@
     management.append(managementSummary, managementContent);
     row.append(summary, management);
     if (story.openingPilot?.enabled) row.append(openingPilotPanel(story));
+    if (story.latestReplan) row.append(replanningPanel(story.latestReplan));
     return row;
+  }
+
+  function replanningPanel(replan) {
+    const panel = document.createElement("details");
+    panel.className = "story-replanning";
+    const summary = document.createElement("summary");
+    const title = document.createElement("strong");
+    title.textContent = `최근 구간 재기획 · ${Number(replan.basedOnArcNo || 0)}구간 → ${Number(replan.targetArcNo || 0)}구간`;
+    const status = document.createElement("small");
+    status.textContent = replan.completedAt ? formatDate(replan.completedAt) : "다음 구간 반영 완료";
+    summary.append(title, status);
+    const content = document.createElement("div");
+    content.className = "story-replanning-content";
+    const decision = document.createElement("p");
+    decision.textContent = replan.decisionSummary || "완료된 회차를 바탕으로 다음 구간 방향을 다시 정했습니다.";
+    const columns = document.createElement("div");
+    columns.className = "story-replanning-columns";
+    columns.append(
+      replanningList("이어갈 강점", replan.strengthsToPreserve, "asset", "carryForward"),
+      replanningList("고칠 점", replan.weaknessesToRepair, "risk", "correction")
+    );
+    const guard = document.createElement("p");
+    guard.className = "story-replanning-guard";
+    guard.textContent = `공개 사실과 핵심 약속 ${Number(replan.protectedCommitmentChecks?.length || 0)}개는 그대로 보호 · 먼 계획 가설 ${Number(replan.hypothesisAdjustments?.length || 0)}개 조정`;
+    content.append(decision, columns, guard);
+    panel.append(summary, content);
+    return panel;
+  }
+
+  function replanningList(titleValue, values, primaryKey, actionKey) {
+    const section = document.createElement("section");
+    const title = document.createElement("strong");
+    title.textContent = titleValue;
+    const list = document.createElement("ul");
+    for (const value of values || []) {
+      const item = document.createElement("li");
+      const name = document.createElement("b");
+      name.textContent = value[primaryKey] || "기록 없음";
+      const action = document.createElement("span");
+      action.textContent = value[actionKey] || value.evidence || "";
+      item.append(name, action);
+      list.append(item);
+    }
+    section.append(title, list);
+    return section;
   }
 
   function openingPilotPanel(story) {
