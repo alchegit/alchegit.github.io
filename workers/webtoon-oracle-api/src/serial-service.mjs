@@ -164,7 +164,8 @@ export function createStoryHeavenSerialService({
       const timing = await connection.execute(
         `select serial_run.queue_group_id, serial_run.id as run_id,
                 serial_run.episode_no, job.job_type, job.job_status,
-                job.attempt_count, job.started_at, job.completed_at, job.created_at
+                job.attempt_count, job.error_code,
+                job.started_at, job.completed_at, job.created_at
            from storyheaven_serial_jobs job
           join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
           where serial_run.created_at >= systimestamp - numtodsinterval(30, 'DAY')
@@ -1781,7 +1782,7 @@ export function createStoryHeavenSerialService({
       const result = await connection.execute(
         `select * from (
            select job.id, job.run_id, job.story_id, job.job_type,
-                  job.input_hash, job.input_json, job.attempt_count
+                  job.input_hash, job.input_json, job.attempt_count, job.error_code
              from storyheaven_serial_jobs job
              join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
             where job.job_status in ('queued', 'retry_wait')
@@ -1857,6 +1858,7 @@ export function createStoryHeavenSerialService({
           type: row.JOB_TYPE,
           inputHash: row.INPUT_HASH,
           attemptCount: Number(row.ATTEMPT_COUNT || 0) + 1,
+          previousErrorCode: row.ERROR_CODE || null,
           payload: parseJson(row.INPUT_JSON, {})
         }
       };
@@ -3840,6 +3842,7 @@ export function summarizeQueue(rows = [], timingRows = []) {
       stageTimings: [],
       stage: row.CURRENT_STAGE || "queued",
       failureCode: row.FAILURE_CODE || null,
+      activeFailureCode: null,
       hasConcept: false,
       hasPlanning: false,
       hasError: false,
@@ -3886,11 +3889,15 @@ export function summarizeQueue(rows = [], timingRows = []) {
       type: row.JOB_TYPE,
       status: row.JOB_STATUS,
       attemptCount: Number(row.ATTEMPT_COUNT || 0),
+      errorCode: row.ERROR_CODE || null,
       startedAt: isoTime(startedAt),
       completedAt: isoTime(completedAt),
       durationSeconds: elapsedSeconds(startedAt, completedAt),
       createdAt: isoTime(timeValue(row.CREATED_AT))
     });
+    if (["retry_wait", "error"].includes(row.JOB_STATUS) && row.ERROR_CODE) {
+      group.activeFailureCode = row.ERROR_CODE;
+    }
   }
 
   const all = [...groups.values()];
@@ -4055,7 +4062,7 @@ function queueGroupView(group, overrides) {
     hiddenAt: isoTime(group.hiddenAt),
     totalJobs: group.totalJobs,
     completedJobs: group.completedJobs,
-    failureCode: group.failureCode,
+    failureCode: group.failureCode || group.activeFailureCode,
     attentionType: group.hasBlocked ? "quality_hold" : group.hasError ? "system_error" : null,
     retryable: group.hasError,
     ...overrides

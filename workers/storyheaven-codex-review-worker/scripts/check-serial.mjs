@@ -255,7 +255,7 @@ assert.match(biblePrompt, /planningHorizon makes volume 1 detailed, volumes 2-3 
 assert.match(biblePrompt, /private writer bible/u);
 assert.match(biblePrompt, /narrativeBlueprint\.noveltyPolicy/u);
 assert.match(biblePrompt, /what kinds of new gimmicks may not be added later/u);
-assert.match(biblePrompt, /참신성 목표와 새 요소 추가 제한/u);
+assert.match(biblePrompt, /중심 차별점 하나의 인물·사회적 결과만 깊게 변주한다/u);
 assert.match(biblePrompt, /volumePlan must contain exactly 10 sequential entries/u);
 assert.match(biblePrompt, /Every characterArc must contain at least 3 milestones/u);
 assert.match(biblePrompt, /Every characterArc id and every milestone id must be globally unique/u);
@@ -269,11 +269,55 @@ assert.match(biblePrompt, /unearned acceptance, unexplained name use/u);
 assert.match(biblePrompt, /Turn the lack, want, stake, flawed choice pattern/u);
 assert.match(biblePrompt, /long mystery may deepen the story but may not be its only continuation reason/u);
 assert.match(biblePrompt, /Every major character must have a misbelief/u);
+assert.match(biblePrompt, /Every development field from misbelief through changeResistance must be a concrete description of at least 10 characters/u);
 assert.match(biblePrompt, /Build a relationshipWeb/u);
 assert.match(biblePrompt, /Build worldDynamics/u);
+assert.match(biblePrompt, /at least three causal worldDynamics/u);
+assert.match(biblePrompt, /possibleShift must name the triggering choice/u);
+assert.match(biblePrompt, /force is a concrete 2-240 character name or label/u);
+assert.match(biblePrompt, /world-force-3/u);
+assert.match(biblePrompt, /conflict-stable-key-5/u);
+assert.match(biblePrompt, /series-reveal-stable-key-4/u);
+assert.match(biblePrompt, /character-2-volume-10/u);
+assert.match(biblePrompt, /"directionalThroughVolume":3/u);
+assert.match(biblePrompt, /행동으로 확인할 핵심 규칙/u);
+assert.match(biblePrompt, /기존 전제와 복선을 지키는 확장 규칙 4/u);
+assert.doesNotMatch(biblePrompt, /"openingModes":\["3-7개 도입 방식"\]/u);
 assert.match(biblePrompt, /later volume entries are revisable hypotheses/u);
-assert.match(biblePrompt, /서로 필요한 이유/u);
+assert.match(biblePrompt, /각자 혼자서는 얻을 수 없는 정보와 행동력이 필요하다/u);
+assert.match(biblePrompt, /실제 장면에서 행동과 결과로 증명할 수 있는 능숙한 기술이나 판단/u);
 assert.match(biblePrompt, /laterVolumesAreHypotheses/u);
+
+const retryBiblePrompt = buildSerialPrompt({
+  ...job,
+  type: "build_bible",
+  attemptCount: 2,
+  previousErrorCode: "review_api_422_serial_world_dynamic_force_invalid",
+  payload: { concept: { premiseAudit, readerAppealPlan, storyCore } }
+});
+assert.match(retryBiblePrompt, /previous result failed validation/u);
+assert.match(retryBiblePrompt, /Short proper labels such as '왕실' are valid/u);
+assert.doesNotMatch(biblePrompt, /previous result failed validation/u);
+
+const conflictRetryBiblePrompt = buildSerialPrompt({
+  ...job,
+  type: "build_bible",
+  attemptCount: 2,
+  previousErrorCode: "review_api_422_serial_architecture_conflicts_invalid",
+  payload: { concept: { premiseAudit, readerAppealPlan, storyCore } }
+});
+assert.match(conflictRetryBiblePrompt, /at least five entries with five distinct non-empty keys/u);
+assert.match(conflictRetryBiblePrompt, /use every key in at least one volumePlan\.conflictSourceKeys/u);
+
+const competenceRetryBiblePrompt = buildSerialPrompt({
+  ...job,
+  type: "build_bible",
+  attemptCount: 3,
+  previousErrorCode: "review_api_422_serial_character_competence_invalid",
+  payload: { concept: { premiseAudit, readerAppealPlan, storyCore } }
+});
+assert.match(competenceRetryBiblePrompt, /characters\[\]\.competence value must be a concrete 10-300 character description/u);
+assert.match(competenceRetryBiblePrompt, /Do not return a short category label/u);
 
 const auditedPlanningPrompt = buildSerialPrompt({
   ...job,

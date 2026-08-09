@@ -1300,6 +1300,10 @@
       review_api_422_serial_public_synopsis_sentence_count_invalid: "독자용 작품 소개의 문장 구성이 기준에 맞지 않음",
       review_api_422_serial_concept_synopsis_invalid: "독자용 작품 소개의 길이가 기준에 맞지 않음",
       review_api_422_serial_internal_planning_summary_invalid: "비공개 장기 기획 요약이 누락되거나 너무 짧음",
+      review_api_422_serial_relationship_shift_invalid: "인물 관계 변화 계획을 다시 작성 중",
+      review_api_422_serial_world_dynamic_force_invalid: "세계관 세력 이름과 역할을 다시 작성 중",
+      review_api_422_serial_architecture_conflicts_invalid: "장기 갈등 원천 5개를 다시 구성 중",
+      review_api_422_serial_character_competence_invalid: "인물의 실제 능력과 장면 활용법을 다시 작성 중",
       review_api_422_serial_premise_matching_task_transfer_forbidden: "현실 작업과 이세계 역할이 그대로 겹치는 기획이라 재작성 필요",
       review_api_422_serial_premise_immediate_acceptance_forbidden: "낯선 주인공을 받아들이는 과정이 없어 기획 재작성 필요",
       review_api_422_serial_premise_name_leak_forbidden: "현지인이 이름을 알게 된 근거가 없어 기획 재작성 필요",
@@ -1432,6 +1436,12 @@
     if (item.scheduleStatus === "paused") {
       return {
         message: "연결된 설정이 개별 멈춤 상태입니다. 아래 가동 설정에서 이 설정만 시작하면 대기 순서대로 이어집니다.",
+        tone: "warning"
+      };
+    }
+    if (item.status === "waiting" && item.failureCode) {
+      return {
+        message: `직전 시도에서 ‘${failureLabel(item.failureCode)}’ 검수에 걸렸습니다. 다음 시도에서는 해당 항목을 고쳐 다시 검수합니다.`,
         tone: "warning"
       };
     }

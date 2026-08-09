@@ -1141,7 +1141,7 @@ function normalizeRelationshipWeb(value, characters) {
       hiddenDebt: requiredText(relationship.hiddenDebt, 400, 10, "serial_relationship_debt_invalid"),
       boundary: requiredText(relationship.boundary, 400, 10, "serial_relationship_boundary_invalid"),
       pressureTest: requiredText(relationship.pressureTest, 500, 20, "serial_relationship_pressure_invalid"),
-      possibleShift: requiredText(relationship.possibleShift, 500, 20, "serial_relationship_shift_invalid")
+      possibleShift: requiredText(relationship.possibleShift, 500, 10, "serial_relationship_shift_invalid")
     };
   });
   if (relationships.length < 1) throw new Error("serial_relationship_web_invalid");
@@ -1155,7 +1155,7 @@ function normalizeWorldDynamics(value) {
     const dynamic = object(item);
     return {
       key: requiredText(dynamic.key, 80, 3, "serial_world_dynamic_key_invalid"),
-      force: requiredText(dynamic.force, 240, 10, "serial_world_dynamic_force_invalid"),
+      force: requiredText(dynamic.force, 240, 2, "serial_world_dynamic_force_invalid"),
       want: requiredText(dynamic.want, 400, 10, "serial_world_dynamic_want_invalid"),
       resources: requiredList(dynamic.resources, { min: 1, max: 6, itemMax: 240 }, "serial_world_dynamic_resources_invalid"),
       methods: requiredList(dynamic.methods, { min: 1, max: 6, itemMax: 240 }, "serial_world_dynamic_methods_invalid"),

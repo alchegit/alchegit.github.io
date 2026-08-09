@@ -28,6 +28,7 @@ import {
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
 import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, summarizeQueue } from "../src/serial-service.mjs";
+import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
@@ -131,6 +132,8 @@ assert.match(serialServiceSource, /hideQueueHistory/u, "history hiding must use 
 assert.match(serialServiceSource, /newTermBudget/u, "draft payloads must carry the first-scene term budget");
 assert.match(serialServiceSource, /syncSeriesArchitectureReveals/u, "long-form bible reveals must be stored in the reveal ledger");
 assert.match(serialServiceSource, /validationCode\.startsWith\("serial_"\)[\s\S]*failure\(validationCode, 422\)/u, "worker contract failures must return their actionable validation code");
+assert.match(serialServiceSource, /job\.attempt_count, job\.error_code[\s\S]*previousErrorCode: row\.ERROR_CODE \|\| null/u, "claimed retries must carry the prior validation error to the worker");
+assert.match(serialServiceSource, /activeFailureCode[\s\S]*group\.failureCode \|\| group\.activeFailureCode/u, "active retry causes must be exposed to the operator queue");
 assert.doesNotMatch(serialServiceSource, /strengthenStoryArchitecture/u, "existing stories must not expose architecture backfills");
 assert.doesNotMatch(serialServiceSource, /throw failure\("serial_architecture_required"/u, "legacy stories must not be blocked from continuing");
 assert.doesNotMatch(serverSource, /architecture\/strengthen/u, "existing-story architecture backfill API must stay removed");
@@ -897,6 +900,22 @@ const seriesArchitecture = {
 };
 const developmentBibleOptions = { seriesPlan: testSeriesPlan, payload: { concept: { storyCore } } };
 
+const bibleContractPrompt = buildSerialPrompt({
+  id: "contract-job",
+  inputHash: "contract-hash",
+  type: "build_bible",
+  payload: { seriesPlan: testSeriesPlan, concept: { storyCore } }
+});
+const bibleContractMarker = "resultJson must be a JSON-encoded string whose decoded object follows this contract:\n\n";
+const bibleContractStart = bibleContractPrompt.indexOf(bibleContractMarker) + bibleContractMarker.length;
+const bibleContractEnd = bibleContractPrompt.indexOf("\n\nUNTRUSTED_SERIAL_INPUT_JSON_START", bibleContractStart);
+assert.ok(bibleContractStart >= bibleContractMarker.length && bibleContractEnd > bibleContractStart);
+const bibleContract = JSON.parse(bibleContractPrompt.slice(bibleContractStart, bibleContractEnd));
+const normalizedBibleContract = normalizeStoryHeavenSerialWorkerResult("build_bible", bibleContract, developmentBibleOptions);
+assert.equal(normalizedBibleContract.worldDynamics.length, 3);
+assert.equal(normalizedBibleContract.narrativeBlueprint.seriesArchitecture.renewableConflictCount, 5);
+assert.equal(normalizedBibleContract.narrativeBlueprint.seriesArchitecture.longRevealCount, 4);
+
 const bible = normalizeStoryHeavenSerialWorkerResult("build_bible", {
   worldRules: ["0번 버스는 자정 이후 운행한다.", "승객은 생전 마지막 목적지만 말한다.", "기사는 기억으로 요금을 낸다.", "운행 기록은 거짓말을 하지 않는다.", "종점에서 내리지 못하면 노선에 묶인다."],
   characters: [
@@ -963,6 +982,24 @@ assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan.length, 10);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan[9].internalEpisodeEnd, 251);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.longReveals.at(-1).payoffEpisode, 251);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.renewableConflictCount, 5);
+
+const conciseBibleInput = structuredClone(bible);
+conciseBibleInput.relationshipWeb[0].possibleShift = "서약 뒤 책임을 나누는 동맹이 된다.";
+conciseBibleInput.worldDynamics[0].force = "왕실";
+const conciseBible = normalizeStoryHeavenSerialWorkerResult("build_bible", conciseBibleInput, developmentBibleOptions);
+assert.equal(conciseBible.worldDynamics[0].force, "왕실");
+const invalidShortForceBible = structuredClone(conciseBibleInput);
+invalidShortForceBible.worldDynamics[0].force = "왕";
+assert.throws(
+  () => normalizeStoryHeavenSerialWorkerResult("build_bible", invalidShortForceBible, developmentBibleOptions),
+  /serial_world_dynamic_force_invalid/u
+);
+const invalidShortShiftBible = structuredClone(conciseBibleInput);
+invalidShortShiftBible.relationshipWeb[0].possibleShift = "동맹";
+assert.throws(
+  () => normalizeStoryHeavenSerialWorkerResult("build_bible", invalidShortShiftBible, developmentBibleOptions),
+  /serial_relationship_shift_invalid/u
+);
 
 const boundaryBibleInput = structuredClone(bible);
 boundaryBibleInput.narrativeBlueprint.seriesArchitecture.longReveals[0].seedEpisodeWithinVolume = 7;
@@ -1345,14 +1382,39 @@ const queueSummary = summarizeQueue([
     RUNNING_JOB_COUNT: 1,
     COMPLETED_JOB_COUNT: 0,
     HISTORY_HIDDEN_AT: new Date(now - 10 * 60 * 1_000)
+  }),
+  queueSummaryRow("active-retry", null, {
+    RUN_STATUS: "running",
+    CURRENT_STAGE: "build_bible",
+    ACTIVE_JOB_COUNT: 1,
+    COMPLETED_JOB_COUNT: 0
   })
-]);
+], [{
+  QUEUE_GROUP_ID: "active-retry",
+  RUN_ID: "active-retry",
+  EPISODE_NO: null,
+  JOB_TYPE: "build_bible",
+  JOB_STATUS: "retry_wait",
+  ATTEMPT_COUNT: 2,
+  ERROR_CODE: "review_api_422_serial_world_dynamic_force_invalid",
+  CREATED_AT: new Date(now - 8 * 60 * 1_000),
+  STARTED_AT: new Date(now - 6 * 60 * 1_000),
+  COMPLETED_AT: null
+}]);
 assert.deepEqual(queueSummary.recentCompleted.map((item) => item.id), ["recent-a", "recent-b"]);
 assert.ok(queueSummary.history.some((item) => item.id === "old-complete"));
 assert.ok(queueSummary.hiddenHistory.some((item) => item.id === "hidden-complete"));
 assert.ok(queueSummary.hiddenHistory.some((item) => item.id === "hidden-running"));
 assert.ok(queueSummary.items.some((item) => item.id === "hidden-running"), "hiding a running log must leave production visible and active");
 assert.equal(queueSummary.items.find((item) => item.id === "hidden-running")?.scheduleStatus, "active");
+assert.equal(
+  queueSummary.items.find((item) => item.id === "active-retry")?.failureCode,
+  "review_api_422_serial_world_dynamic_force_invalid"
+);
+assert.equal(
+  queueSummary.items.find((item) => item.id === "active-retry")?.stageTimings[0]?.errorCode,
+  "review_api_422_serial_world_dynamic_force_invalid"
+);
 
 function queueSummaryRow(id, completedAt, overrides = {}) {
   const completedTime = completedAt === null ? null : new Date(completedAt);
