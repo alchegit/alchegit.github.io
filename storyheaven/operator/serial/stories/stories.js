@@ -431,7 +431,162 @@
     managementContent.append(metrics, controls);
     management.append(managementSummary, managementContent);
     row.append(summary, management);
+    if (story.openingPilot?.enabled) row.append(openingPilotPanel(story));
     return row;
+  }
+
+  function openingPilotPanel(story) {
+    const pilot = story.openingPilot || {};
+    const panel = document.createElement("section");
+    panel.className = `opening-pilot is-${pilot.state || "not_started"}`;
+    const header = document.createElement("div");
+    header.className = "opening-pilot-header";
+    const copy = document.createElement("div");
+    const eyebrow = document.createElement("span");
+    eyebrow.textContent = "첫 3편 파일럿";
+    const title = document.createElement("strong");
+    title.textContent = openingPilotStateLabel(pilot);
+    const detail = document.createElement("p");
+    detail.textContent = openingPilotGuidance(story);
+    copy.append(eyebrow, title, detail);
+    const status = document.createElement("p");
+    status.className = "opening-pilot-feedback";
+    status.setAttribute("role", "status");
+    status.textContent = pilot.operatorDecision === "promoted"
+      ? "운영자 승격 결정이 저장되었습니다."
+      : `${Number(pilot.completedInstallments || 0)} / ${Number(pilot.requiredInstallments || 3)}편 평가`;
+    header.append(copy, status);
+
+    const metrics = document.createElement("div");
+    metrics.className = "opening-pilot-metrics";
+    metrics.append(
+      pilotMetric("다음 화 의향", pilot.completedInstallments < 3 ? "평가 중" : (pilot.allWouldReadNext ? "세 편 모두 있음" : "부족한 회차 있음")),
+      pilotMetric("독자 보상", pilot.completedInstallments < 3 ? "평가 중" : `${Number(pilot.averageReaderReward || 0)}점 / 기준 84`),
+      pilotMetric("전개 변주", pilot.completedInstallments < 3 ? "평가 중" : `${Number(pilot.distinctEpisodeModes || 0)}가지 / 기준 2`)
+    );
+
+    const episodes = document.createElement("div");
+    episodes.className = "opening-pilot-episodes";
+    const installmentByEpisode = new Map((pilot.installments || []).map((item) => [Number(item.episodeNo), item]));
+    for (let episodeNo = 1; episodeNo <= 3; episodeNo += 1) {
+      const installment = installmentByEpisode.get(episodeNo);
+      const item = document.createElement("div");
+      const itemCopy = document.createElement("span");
+      const itemTitle = document.createElement("strong");
+      itemTitle.textContent = episodeDisplayLabel(episodeNo);
+      const itemDetail = document.createElement("small");
+      itemDetail.textContent = installment
+        ? `다음 화 ${installment.wouldReadNext ? "의향 있음" : "의향 부족"} · 보상 ${Number(installment.readerRewardScore || 0)}점`
+        : "제작 또는 검수 대기";
+      itemCopy.append(itemTitle, itemDetail);
+      item.append(itemCopy);
+      if (installment && pilot.operatorDecision !== "promoted") {
+        const rewrite = actionButton("이 회차 재작성", "secondary", () => requestPilotRewrite(story, episodeNo, rewrite, status));
+        rewrite.disabled = !state.enabled || Boolean(story.queue) || hasPilotProductionWork(story);
+        item.append(rewrite);
+      }
+      episodes.append(item);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "opening-pilot-actions";
+    if (pilot.state === "ready_for_promotion" && pilot.operatorDecision !== "promoted") {
+      const promote = actionButton("정식 연재로 승격", "", () => promoteOpeningPilot(story, promote, status));
+      promote.disabled = !state.enabled || Boolean(story.queue) || hasPilotProductionWork(story);
+      actions.append(promote);
+    }
+    const recommendation = document.createElement("p");
+    recommendation.textContent = pilot.recommendation || "세 편의 제작과 검수가 끝나면 승격 여부를 판단합니다.";
+    actions.append(recommendation);
+    panel.append(header, metrics, episodes, actions);
+    return panel;
+  }
+
+  function pilotMetric(label, value) {
+    const item = document.createElement("div");
+    const title = document.createElement("span");
+    title.textContent = label;
+    const copy = document.createElement("strong");
+    copy.textContent = value;
+    item.append(title, copy);
+    return item;
+  }
+
+  function openingPilotStateLabel(pilot) {
+    if (pilot.operatorDecision === "promoted") return "승격 완료";
+    return ({
+      not_started: "파일럿 제작 전",
+      collecting: "세 편을 만드는 중",
+      ready_for_promotion: "승격 가능",
+      needs_editor_attention: "회차 보완 필요"
+    })[pilot.state] || "상태 확인 필요";
+  }
+
+  function openingPilotGuidance(story) {
+    const pilot = story.openingPilot || {};
+    if (pilot.operatorDecision === "promoted") {
+      return story.schedule?.publicationMode === "auto_public"
+        ? "승격된 세 편은 프롤로그부터 순서대로 공개됩니다."
+        : "승격은 완료됐지만 테스트 비공개 설정이므로 원고는 공개하지 않고 보관합니다.";
+    }
+    if (pilot.state === "ready_for_promotion") return "세 편이 기준을 통과했습니다. 운영자가 승격하면 프롤로그부터 순서대로 공개합니다.";
+    if (pilot.state === "needs_editor_attention") return "세 편 중 약한 회차만 골라 다시 쓰면 평가가 자동으로 갱신됩니다.";
+    return "프롤로그와 본편 1·2화를 모두 검수할 때까지 독자 공개를 보류합니다.";
+  }
+
+  function hasPilotProductionWork(story) {
+    return Number(story.activeRunCount || 0) > Number(story.readyPublicationCount || 0);
+  }
+
+  async function promoteOpeningPilot(story, button, status) {
+    const modeCopy = story.schedule?.publicationMode === "auto_public"
+      ? "승격 즉시 프롤로그부터 세 편이 순서대로 공개됩니다."
+      : "현재는 테스트 비공개 설정이라 승격 결정만 저장되고 원고는 공개되지 않습니다.";
+    if (!window.confirm(`${story.title}을 정식 연재로 승격할까요?\n\n${modeCopy}`)) return;
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = "승격 처리 중";
+    status.textContent = "승격 결정을 서버에 저장하고 공개 가능 상태를 확인하고 있습니다.";
+    try {
+      const payload = await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/opening-pilot`, {
+        method: "POST",
+        body: { action: "promote" }
+      });
+      const publishedCount = Number(payload.published?.length || 0);
+      status.textContent = publishedCount
+        ? `${publishedCount}편을 순서대로 공개했습니다.`
+        : "승격 결정을 저장했습니다. 공개 설정과 예약 순서에 따라 처리됩니다.";
+      StoryHeavenCommon.toast(status.textContent);
+      await refresh();
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = original;
+      status.textContent = StoryHeavenCommon.readableError(error);
+      StoryHeavenCommon.toast(status.textContent);
+    }
+  }
+
+  async function requestPilotRewrite(story, episodeNo, button, status) {
+    const label = episodeDisplayLabel(episodeNo);
+    if (!window.confirm(`${story.title} ${label}만 다시 작성할까요?\n\n다른 파일럿 회차는 유지하고 이 회차가 검수를 통과하면 세 편 평가를 다시 계산합니다.`)) return;
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = "재작성 요청 중";
+    status.textContent = `${label} 재작성 요청을 서버에 보내고 있습니다.`;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/stories/${encodeURIComponent(story.id)}/episodes/${episodeNo}/rewrite`, {
+        method: "POST",
+        body: { notes: `첫 3편 파일럿 평가에 따른 ${label} 선택 재작성` }
+      });
+      status.textContent = `${label} 재작성 작업을 대기열에 넣었습니다.`;
+      StoryHeavenCommon.toast(status.textContent);
+      await refresh();
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = original;
+      status.textContent = StoryHeavenCommon.readableError(error);
+      StoryHeavenCommon.toast(status.textContent);
+    }
   }
 
   function normalizeControlPair(visibility, continuation) {

@@ -70,6 +70,24 @@ const stories = [
     activeRunCount: 0,
     latestRunStatus: "published",
     readyPublicationCount: 0,
+    openingPilot: {
+      enabled: true,
+      mode: "three_episode_incubation",
+      state: "ready_for_promotion",
+      operatorDecision: null,
+      completedInstallments: 3,
+      requiredInstallments: 3,
+      allWouldReadNext: true,
+      averageReaderReward: 89.3,
+      distinctEpisodeModes: 3,
+      variedRhythm: true,
+      recommendation: "세 편이 기준을 통과해 운영자 승격 검토가 가능합니다.",
+      installments: [
+        { episodeNo: 1, wouldReadNext: true, readerRewardScore: 91 },
+        { episodeNo: 2, wouldReadNext: true, readerRewardScore: 89 },
+        { episodeNo: 3, wouldReadNext: true, readerRewardScore: 88 }
+      ]
+    },
     architecture: weakArchitecture,
     schedule: null,
     createdAt: "2026-07-24T03:00:00.000Z",
@@ -219,6 +237,9 @@ try {
     assert.equal(await legacyStory.getByRole("button", { name: /장편 설계/u }).count(), 0, `${viewport.name} legacy story has no strengthening action`);
     assert.equal(await legacyStory.locator('[data-metric="architecture"] strong').textContent(), "기존 설정 유지", `${viewport.name} legacy architecture stays unchanged`);
     assert.match(await legacyStory.locator(".schedule-note").textContent(), /작품 설정부터 자동 준비/u, `${viewport.name} explains automatic bootstrap`);
+    assert.match(await legacyStory.locator(".opening-pilot").textContent(), /승격 가능/u, `${viewport.name} opening pilot status is visible`);
+    assert.equal(await legacyStory.getByRole("button", { name: "정식 연재로 승격" }).count(), 1, `${viewport.name} opening pilot promotion action is visible`);
+    assert.equal(await legacyStory.getByRole("button", { name: "이 회차 재작성" }).count(), 3, `${viewport.name} each pilot installment can be rewritten independently`);
     assert.match(await page.locator(".managed-story").first().locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
     const firstManagement = page.locator(".managed-story").first().locator(".story-management");
     assert.equal(await firstManagement.evaluate((element) => element.open), viewport.name === "desktop", `${viewport.name} management disclosure default`);

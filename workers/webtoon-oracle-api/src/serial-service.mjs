@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
+  STORYHEAVEN_OPENING_PILOT_MODES,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
@@ -70,12 +71,14 @@ export function createStoryHeavenSerialService({
     queueEpisode,
     requestContinuation,
     rewriteEpisode,
+    resolveOpeningPilot,
     getStoryState,
     getRun,
     resolveQualityHold,
     claimJob,
     completeJob,
     failJob,
+    publishReady,
     processDue
   });
 
@@ -582,6 +585,10 @@ export function createStoryHeavenSerialService({
                   returning number null on error) as architecture_reveal_count,
                 json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.lateRevealCount'
                   returning number null on error) as architecture_late_reveal_count,
+                json_query(bible.narrative_blueprint_json, '$.serialMemory.pilotAssessment'
+                  returning clob null on error) as pilot_assessment_json,
+                json_query(bible.narrative_blueprint_json, '$.serialMemory.recentInstallments'
+                  returning clob null on error) as recent_installments_json,
                 (select count(*) from storyheaven_episodes episode
                   where episode.story_id = story.id) as episode_count,
                 (select count(*) from storyheaven_episodes episode
@@ -656,6 +663,10 @@ export function createStoryHeavenSerialService({
                 returning number null on error) as architecture_reveal_count,
               json_value(bible.narrative_blueprint_json, '$.seriesArchitecture.lateRevealCount'
                 returning number null on error) as architecture_late_reveal_count,
+              json_query(bible.narrative_blueprint_json, '$.serialMemory.pilotAssessment'
+                returning clob null on error) as pilot_assessment_json,
+              json_query(bible.narrative_blueprint_json, '$.serialMemory.recentInstallments'
+                returning clob null on error) as recent_installments_json,
               (select count(*) from storyheaven_episodes episode
                 where episode.story_id = story.id) as episode_count,
               (select count(*) from storyheaven_episodes episode
@@ -941,6 +952,7 @@ export function createStoryHeavenSerialService({
             creativeControls: checked.schedule.creativeControls,
             seriesPlan: checked.schedule.seriesPlan,
             continuationBatchCount: checked.schedule.continuationBatchCount,
+            openingPilotMode: checked.schedule.openingPilotMode,
             randomized: checked.schedule.randomized
           }),
           next_run_at: nextRunAt,
@@ -1202,25 +1214,69 @@ export function createStoryHeavenSerialService({
       if (story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
         throw failure("serial_story_not_system_owned", 409);
       }
-      const existing = await selectOne(connection,
+      let existing = await selectOne(connection,
         `select title, public_summary, episode_status
            from storyheaven_episodes
           where story_id = :story_id and episode_no = :episode_no`,
         { story_id: storyId, episode_no: episodeNo });
-      if (!existing) throw failure("episode_not_found", 404);
+      let pilotSource = null;
+      if (!existing) {
+        pilotSource = await selectOne(connection,
+          `select publication.id as publication_id, publication.run_id,
+                  draft.title, draft.public_summary,
+                  schedule.concept_policy_json
+             from storyheaven_publication_queue publication
+             join storyheaven_serial_drafts draft on draft.id = publication.draft_id
+             join storyheaven_serial_runs serial_run on serial_run.id = publication.run_id
+             left join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
+            where publication.story_id = :story_id
+              and publication.episode_no = :episode_no
+              and publication.queue_status = 'ready'
+            order by publication.created_at desc fetch first 1 row only`,
+          { story_id: storyId, episode_no: episodeNo });
+        const pilotPolicy = parseJson(pilotSource?.CONCEPT_POLICY_JSON, {});
+        if (!pilotSource
+          || episodeNo > 3
+          || normalizeOpeningPilotMode(pilotPolicy.openingPilotMode) !== STORYHEAVEN_OPENING_PILOT_MODES.incubation) {
+          throw failure("episode_not_found", 404);
+        }
+        existing = {
+          TITLE: pilotSource.TITLE,
+          PUBLIC_SUMMARY: pilotSource.PUBLIC_SUMMARY,
+          EPISODE_STATUS: "pilot_ready"
+        };
+      }
       const active = await selectOne(connection,
         `select count(*) as run_count
            from storyheaven_serial_runs
           where story_id = :story_id
             and episode_no = :episode_no
             and run_status in ('queued', 'running', 'rewrite', 'ready')
-            and queue_canceled_at is null`,
-        { story_id: storyId, episode_no: episodeNo });
+            and queue_canceled_at is null
+            and (:excluded_run_id is null or id <> :excluded_run_id)`,
+        { story_id: storyId, episode_no: episodeNo, excluded_run_id: pilotSource?.RUN_ID || null });
       if (Number(active.RUN_COUNT || 0) > 0) throw failure("serial_episode_already_queued", 409);
       const context = await loadSerialContext(connection, storyId);
       const planItem = context.arc.episodePlan.find((item) => Number(item.episodeNo) === episodeNo)
         || context.cards.find((item) => Number(item.episodeNo) === episodeNo);
       if (!planItem) throw failure("serial_arc_episode_not_planned", 409);
+      if (pilotSource) {
+        await connection.execute(
+          `update storyheaven_publication_queue
+              set queue_status = 'canceled', failure_code = 'operator_pilot_rewrite',
+                  updated_at = systimestamp
+            where id = :publication_id and queue_status = 'ready'`,
+          { publication_id: pilotSource.PUBLICATION_ID }
+        );
+        await connection.execute(
+          `update storyheaven_serial_runs
+              set run_status = 'blocked', current_stage = 'pilot_rewrite_requested',
+                  failure_code = 'operator_pilot_rewrite', completed_at = systimestamp,
+                  updated_at = systimestamp
+            where id = :run_id and run_status = 'ready'`,
+          { run_id: pilotSource.RUN_ID }
+        );
+      }
       const run = await createRun(connection, {
         storyId,
         arcId: context.arc.id,
@@ -1232,6 +1288,7 @@ export function createStoryHeavenSerialService({
         input: {
           notes: cleanText(input.notes, 1000),
           rewriteEpisode: true,
+          pilotRewrite: Boolean(pilotSource),
           rewriteTarget: {
             episodeNo,
             title: existing.TITLE,
@@ -1250,11 +1307,96 @@ export function createStoryHeavenSerialService({
             episodeNo,
             title: existing.TITLE,
             summary: existing.PUBLIC_SUMMARY || "",
-            instruction: "운영자가 이 회차를 다시 쓰라고 요청했다. 기존 회차의 핵심 기능은 살리되 더 명확하고 이어 읽기 좋은 새 원고로 교체할 준비를 한다."
+            instruction: pilotSource
+              ? "운영자가 3화 파일럿 평가를 보고 이 미공개 회차만 다시 쓰라고 요청했다. 다른 두 파일럿 회차와 설정 연속성을 지키면서 약한 독자 보상과 리듬을 보완한다."
+              : "운영자가 이 회차를 다시 쓰라고 요청했다. 기존 회차의 핵심 기능은 살리되 더 명확하고 이어 읽기 좋은 새 원고로 교체할 준비를 한다."
           }
         }
       });
       return run;
+    });
+  }
+
+  async function resolveOpeningPilot(storyIdValue, userId, input = {}) {
+    const storyId = requireId(storyIdValue, "story_id");
+    const action = String(input.action || "").trim();
+    if (action !== "promote") throw failure("serial_pilot_action_invalid", 400);
+    return withTransaction(async (connection) => {
+      const story = await selectOne(connection,
+        `select id, author_user_id, content_origin
+           from storyheaven_stories where id = :story_id for update`,
+        { story_id: storyId });
+      if (!story) throw failure("story_not_found", 404);
+      if (story.AUTHOR_USER_ID !== SYSTEM_AUTHOR_ID || story.CONTENT_ORIGIN !== "admin_seed") {
+        throw failure("serial_story_not_system_owned", 409);
+      }
+      const source = await selectOne(connection,
+        `select schedule.id, schedule.publication_mode, schedule.concept_policy_json
+           from storyheaven_serial_runs serial_run
+           join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
+          where serial_run.story_id = :story_id
+          order by serial_run.created_at desc fetch first 1 row only`,
+        { story_id: storyId });
+      const schedulePolicy = parseJson(source?.CONCEPT_POLICY_JSON, {});
+      if (!source || normalizeOpeningPilotMode(schedulePolicy.openingPilotMode) !== STORYHEAVEN_OPENING_PILOT_MODES.incubation) {
+        throw failure("serial_pilot_not_enabled", 409);
+      }
+      const bible = await selectOne(connection,
+        `select narrative_blueprint_json
+           from storyheaven_serial_bibles where story_id = :story_id for update`,
+        { story_id: storyId });
+      if (!bible) throw failure("serial_bible_not_found", 409);
+      const blueprint = parseJson(bible.NARRATIVE_BLUEPRINT_JSON, {});
+      const serialMemory = blueprint.serialMemory && typeof blueprint.serialMemory === "object"
+        ? blueprint.serialMemory
+        : {};
+      const assessment = serialMemory.pilotAssessment && typeof serialMemory.pilotAssessment === "object"
+        ? serialMemory.pilotAssessment
+        : {};
+      if (assessment.operatorDecision === "promoted") {
+        return {
+          action,
+          alreadyPromoted: true,
+          publicationMode: source.PUBLICATION_MODE || "test_private",
+          pilot: assessment
+        };
+      }
+      if (assessment.state !== "ready_for_promotion" || Number(assessment.completedInstallments || 0) < 3) {
+        throw failure("serial_pilot_not_ready", 409);
+      }
+      const ready = await selectOne(connection,
+        `select count(distinct episode_no) as ready_count
+           from storyheaven_publication_queue
+          where story_id = :story_id
+            and episode_no between 1 and 3
+            and queue_status = 'ready'`,
+        { story_id: storyId });
+      if (Number(ready?.READY_COUNT || 0) !== 3) throw failure("serial_pilot_drafts_not_ready", 409);
+      const promoted = {
+        ...assessment,
+        operatorDecision: "promoted",
+        promotedBy: userId,
+        promotedAt: new Date().toISOString()
+      };
+      await connection.execute(
+        `update storyheaven_serial_bibles
+            set narrative_blueprint_json = :narrative_blueprint_json,
+                updated_at = systimestamp
+          where story_id = :story_id`,
+        {
+          story_id: storyId,
+          narrative_blueprint_json: clobJson({
+            ...blueprint,
+            serialMemory: { ...serialMemory, pilotAssessment: promoted }
+          })
+        }
+      );
+      return {
+        action,
+        alreadyPromoted: false,
+        publicationMode: source.PUBLICATION_MODE || "test_private",
+        pilot: promoted
+      };
     });
   }
 
@@ -1481,13 +1623,16 @@ export function createStoryHeavenSerialService({
       const run = await selectOne(connection, `select * from storyheaven_serial_runs where id = :run_id`, { run_id: runId });
       if (!run) throw failure("serial_run_not_found", 404);
       const [jobs, drafts, reviews, metrics] = await Promise.all([
-        connection.execute(`select id, job_type, job_status, attempt_count, max_attempts, worker_id, error_code, started_at, completed_at, created_at from storyheaven_serial_jobs where run_id = :run_id order by created_at`, { run_id: runId }),
+        connection.execute(`select id, job_type, job_status, attempt_count, max_attempts, worker_id,
+                                   error_code, output_json, started_at, completed_at, created_at
+                              from storyheaven_serial_jobs where run_id = :run_id order by created_at`, { run_id: runId }),
         connection.execute(`select id, version_no, draft_kind, title, public_summary, body_text, scene_ranges_json, deterministic_json, content_hash, created_at from storyheaven_serial_drafts where run_id = :run_id order by version_no`, { run_id: runId }),
         connection.execute(`select id, draft_id, review_version, decision, scores_json, safety_passed, summary_text, issues_json, rewrite_scenes_json, score_evidence_json, audience_lenses_json, created_at from storyheaven_editorial_reviews where run_id = :run_id order by review_version`, { run_id: runId }),
         connection.execute(`select draft_id, metric_name, metric_score, threshold_score, passed, evidence_json from storyheaven_quality_metrics where run_id = :run_id order by created_at`, { run_id: runId })
       ]);
       return {
         run: mapRun(run),
+        development: mapRunDevelopment(jobs.rows),
         jobs: jobs.rows.map((row) => ({
           id: row.ID,
           type: row.JOB_TYPE,
@@ -1811,14 +1956,20 @@ export function createStoryHeavenSerialService({
       }
       return queued;
     });
+    const published = await publishReady(3);
+    const continuations = await queueDueContinuations();
+    return { scheduled, published, continuations };
+  }
+
+  async function publishReady(limitValue = 3) {
+    const limit = Math.max(1, Math.min(10, Math.round(Number(limitValue) || 3)));
     const published = [];
-    for (let index = 0; index < 3; index += 1) {
+    for (let index = 0; index < limit; index += 1) {
       const item = await publishNextDue();
       if (!item) break;
       published.push(item);
     }
-    const continuations = await queueDueContinuations();
-    return { scheduled, published, continuations };
+    return published;
   }
 
   async function queueDueContinuations() {
@@ -2760,13 +2911,21 @@ export function createStoryHeavenSerialService({
         ].slice(-8)
       : (previous.successfulScenePatterns || []).slice(-8);
     const openingPilot = recentInstallments.filter((item) => item.episodeNo >= 1 && item.episodeNo <= 3);
-    const pilotAssessment = openingPilot.length === 3
+    const evaluatedPilotAssessment = openingPilot.length === 3
       ? buildStoryHeavenOpeningPilotAssessment(openingPilot)
       : previous.pilotAssessment || {
           state: "collecting",
           completedInstallments: openingPilot.length,
           requiredInstallments: 3
         };
+    const pilotAssessment = previous.pilotAssessment?.operatorDecision === "promoted"
+      ? {
+          ...evaluatedPilotAssessment,
+          operatorDecision: "promoted",
+          promotedBy: previous.pilotAssessment.promotedBy || null,
+          promotedAt: previous.pilotAssessment.promotedAt || null
+        }
+      : evaluatedPilotAssessment;
     const serialMemory = {
       schemaVersion: "2026-08-09-v1",
       lastUpdatedEpisodeNo: Number(run.EPISODE_NO),
@@ -2793,6 +2952,7 @@ export function createStoryHeavenSerialService({
              join storyheaven_serial_runs serial_run on serial_run.id = publication.run_id
              join storyheaven_stories story on story.id = publication.story_id
              left join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
+             left join storyheaven_serial_bibles bible on bible.story_id = publication.story_id
              left join storyheaven_serial_story_controls control on control.story_id = publication.story_id
             where publication.queue_status = 'ready'
               and publication.release_at <= systimestamp
@@ -2801,6 +2961,14 @@ export function createStoryHeavenSerialService({
               and (serial_run.schedule_id is null or (
                 schedule.schedule_status = 'active' and schedule.publication_mode = 'auto_public'
               ))
+              and (
+                nvl(json_value(schedule.concept_policy_json, '$.openingPilotMode'
+                  returning varchar2(40) null on error), 'single_episode') <> 'three_episode_incubation'
+                or publication.episode_no > 3
+                or json_value(bible.narrative_blueprint_json,
+                  '$.serialMemory.pilotAssessment.operatorDecision'
+                  returning varchar2(30) null on error) = 'promoted'
+              )
               and (
                 publication.episode_no = nvl((
                   select max(episode.episode_no)
@@ -3322,6 +3490,7 @@ function mapSchedule(row) {
     conceptPolicy: policy.instruction || "",
     seriesPlan,
     continuationBatchCount: normalizeContinuationBatchCount(policy.continuationBatchCount),
+    openingPilotMode: normalizeOpeningPilotMode(policy.openingPilotMode),
     creativeControls,
     humorIntensity: creativeControls.humorIntensity || "light",
     humorLabel: creativeControls.humorLabel || "미소 중심",
@@ -3396,6 +3565,12 @@ function normalizeSeriesPlan(value = {}) {
     firstMainEpisodeLabel: "본편 1화",
     planningRule: `프롤로그 1편 뒤에 본편 ${totalVolumes}권, 권당 ${episodesPerVolume}화, 총 본편 ${totalVolumes * episodesPerVolume}화를 버틸 장편 구조로 설계한다.`
   };
+}
+
+function normalizeOpeningPilotMode(value) {
+  return value === STORYHEAVEN_OPENING_PILOT_MODES.incubation
+    ? STORYHEAVEN_OPENING_PILOT_MODES.incubation
+    : STORYHEAVEN_OPENING_PILOT_MODES.single;
 }
 
 function safeArcScope(firstEpisodeNo, plan, architecture) {
@@ -3780,6 +3955,11 @@ function isoTime(value) {
 function mapManagedStory(row) {
   const schedulePolicy = parseJson(row.CONCEPT_POLICY_JSON, {});
   const scheduleSeriesPlan = row.SCHEDULE_ID ? normalizeSeriesPlan(schedulePolicy.seriesPlan) : null;
+  const openingPilotMode = normalizeOpeningPilotMode(schedulePolicy.openingPilotMode);
+  const pilotAssessment = parseJson(row.PILOT_ASSESSMENT_JSON, {});
+  const pilotInstallments = parseJson(row.RECENT_INSTALLMENTS_JSON, [])
+    .filter((item) => Number(item?.episodeNo) >= 1 && Number(item?.episodeNo) <= 3)
+    .sort((left, right) => Number(left.episodeNo) - Number(right.episodeNo));
   const architectureVolumeCount = Number(row.ARCHITECTURE_VOLUME_COUNT || 0);
   const architectureEpisodeCount = Number(row.ARCHITECTURE_EPISODE_COUNT || 0);
   const architectureConflictCount = Number(row.ARCHITECTURE_CONFLICT_COUNT || 0);
@@ -3813,6 +3993,20 @@ function mapManagedStory(row) {
     activeRunCount: Number(row.ACTIVE_RUN_COUNT || 0),
     latestRunStatus: row.LATEST_RUN_STATUS || null,
     readyPublicationCount: Number(row.READY_PUBLICATION_COUNT || 0),
+    openingPilot: {
+      enabled: openingPilotMode === STORYHEAVEN_OPENING_PILOT_MODES.incubation,
+      mode: openingPilotMode,
+      state: pilotAssessment.state || (pilotInstallments.length ? "collecting" : "not_started"),
+      operatorDecision: pilotAssessment.operatorDecision || null,
+      completedInstallments: Number(pilotAssessment.completedInstallments || pilotInstallments.length),
+      requiredInstallments: Number(pilotAssessment.requiredInstallments || 3),
+      allWouldReadNext: pilotAssessment.allWouldReadNext === true,
+      averageReaderReward: Number(pilotAssessment.averageReaderReward || 0),
+      distinctEpisodeModes: Number(pilotAssessment.distinctEpisodeModes || 0),
+      variedRhythm: pilotAssessment.variedRhythm === true,
+      recommendation: pilotAssessment.recommendation || "",
+      installments: pilotInstallments
+    },
     architecture: {
       status: architectureComplete ? "complete" : "legacy",
       schemaVersion: row.ARCHITECTURE_VERSION || null,
@@ -3828,7 +4022,8 @@ function mapManagedStory(row) {
       status: row.SCHEDULE_STATUS || "archived",
       publicationMode: row.PUBLICATION_MODE || "test_private",
       seriesPlan: scheduleSeriesPlan,
-      continuationBatchCount: normalizeContinuationBatchCount(schedulePolicy.continuationBatchCount)
+      continuationBatchCount: normalizeContinuationBatchCount(schedulePolicy.continuationBatchCount),
+      openingPilotMode
     } : null,
     publishedAt: isoTime(row.PUBLISHED_AT),
     createdAt: isoTime(row.CREATED_AT),
@@ -4032,6 +4227,76 @@ function mapCard(row) {
     prologueDisclosurePlan: techniquePlan.prologueDisclosurePlan || {
       mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: []
     }
+  };
+}
+
+function mapRunDevelopment(rows = []) {
+  let candidates = [];
+  let selectionReport = null;
+  for (const row of rows) {
+    const output = parseJson(row.OUTPUT_JSON, {}).result || {};
+    if (row.JOB_TYPE === "concept_candidates" && Array.isArray(output.candidates)) {
+      candidates = output.candidates;
+    }
+    if (row.JOB_TYPE === "concept_selection") {
+      const developmentRoom = output.developmentRoom && typeof output.developmentRoom === "object"
+        ? output.developmentRoom
+        : {};
+      if (Array.isArray(developmentRoom.candidates)) candidates = developmentRoom.candidates;
+      if (developmentRoom.selectionReport && typeof developmentRoom.selectionReport === "object") {
+        selectionReport = developmentRoom.selectionReport;
+      }
+    }
+  }
+  if (!candidates.length) return null;
+  const rankingById = new Map((selectionReport?.ranking || []).map((item) => [item.candidateId, item]));
+  const rejectionById = new Map((selectionReport?.rejectedReasons || []).map((item) => [item.candidateId, item.reason]));
+  return {
+    selectedCandidateId: selectionReport?.selectedCandidateId || null,
+    whySelected: selectionReport?.whySelected || "",
+    proofScene: selectionReport?.proofScene || "",
+    fatalRisk: selectionReport?.fatalRisk || "",
+    mitigation: selectionReport?.mitigation || "",
+    candidates: candidates.map((candidate) => {
+      const ranking = rankingById.get(candidate.candidateId) || null;
+      const scoreValues = ranking
+        ? [
+            ranking.characterMagnetism,
+            ranking.emotionalEngine,
+            ranking.scenePotential,
+            ranking.expansionCapacity,
+            ranking.genreDelight,
+            ranking.clarity,
+            ranking.originalityDepth
+          ].map(Number).filter(Number.isFinite)
+        : [];
+      return {
+        id: candidate.candidateId,
+        title: candidate.workingTitle,
+        selected: selectionReport?.selectedCandidateId === candidate.candidateId,
+        averageScore: scoreValues.length
+          ? Number((scoreValues.reduce((sum, score) => sum + score, 0) / scoreValues.length).toFixed(1))
+          : null,
+        coreFantasy: candidate.coreFantasy || "",
+        humanDesire: candidate.humanDesire || "",
+        protagonistContradiction: candidate.protagonistContradiction || "",
+        centralRelationship: candidate.centralRelationship || "",
+        storyEngine: candidate.storyEngine || "",
+        signatureScene: candidate.signatureScene || "",
+        fatalRisk: candidate.fatalRisk || "",
+        weakness: ranking?.weakness || "",
+        rejectionReason: rejectionById.get(candidate.candidateId) || "",
+        scores: ranking ? {
+          characterMagnetism: Number(ranking.characterMagnetism || 0),
+          emotionalEngine: Number(ranking.emotionalEngine || 0),
+          scenePotential: Number(ranking.scenePotential || 0),
+          expansionCapacity: Number(ranking.expansionCapacity || 0),
+          genreDelight: Number(ranking.genreDelight || 0),
+          clarity: Number(ranking.clarity || 0),
+          originalityDepth: Number(ranking.originalityDepth || 0)
+        } : null
+      };
+    })
   };
 }
 

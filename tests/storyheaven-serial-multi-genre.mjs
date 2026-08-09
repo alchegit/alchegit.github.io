@@ -134,6 +134,33 @@ try {
         stalledVisible = false;
         return json({ run: { id: "stalled-plan", queueGroupId: "stalled-plan" } }, 202);
       }
+      if (path === "/api/storyheaven/operator/serial-engine/runs/development-run" && request.method() === "GET") {
+        const candidates = ["마지막 시간버스", "국경의 빈 지도", "퇴학 전 마지막 합주", "마녀의 빚 장부"].map((title, index) => ({
+          id: `candidate-${index + 1}`,
+          title,
+          selected: index === 0,
+          averageScore: 92 - index * 3,
+          coreFantasy: `${title}에서 독자가 직접 선택과 대가를 체험하는 익숙하고 선명한 장르 재미다.`,
+          humanDesire: "잃어버린 가족과 돌아갈 장소를 되찾고 싶은 인간적인 욕망이 사건을 움직인다.",
+          centralRelationship: "서로 필요한 두 사람이 정보를 감추는 이유 때문에 협력할수록 더 크게 충돌한다.",
+          storyEngine: "한 사건의 선택과 대가가 관계의 빚과 다음 사건의 조건을 계속 바꾼다.",
+          signatureScene: "주인공이 소중한 기억을 대가로 내면서도 눈앞의 사람을 구하는 선택을 한다.",
+          fatalRisk: "같은 해결 순서가 반복되면 사건과 감정이 양식화될 수 있다.",
+          rejectionReason: index ? "선명한 장점은 있으나 선정안보다 인물 욕망과 장면 보상의 결합이 약하다." : ""
+        }));
+        return json({
+          run: { id: "development-run", status: "published", stage: "published", rewriteCount: 0, episodeNo: null },
+          development: {
+            selectedCandidateId: "candidate-1",
+            whySelected: "가족을 찾는 단순한 욕망과 기억을 대가로 내는 선택, 불신하는 동료와의 관계가 한 장면에서 함께 충돌한다.",
+            proofScene: "첫 승객을 내려 주기 위해 가장 소중한 목소리 기억을 포기하는 장면이다.",
+            fatalRisk: "승객 사연과 기억 상실이 같은 순서로 반복될 수 있다.",
+            mitigation: "회사와 산 사람의 불법 승차, 동료와의 빚을 교차해 선택 결과를 바꾼다.",
+            candidates
+          },
+          jobs: [], drafts: [], reviews: [], metrics: []
+        });
+      }
       return json({ error: "not_found" }, 404);
     });
 
@@ -147,6 +174,8 @@ try {
     assert.equal(await noveltyControl.inputValue(), "2", `${viewport.name} starts with restrained novelty`);
     assert.match(await noveltyControl.locator("xpath=ancestor::label").textContent(), /참신성.*익숙한 장르 문법.*실험적 조합/u, `${viewport.name} explains the novelty range`);
     assert.equal(await noveltyControl.locator("xpath=ancestor::label").locator("output").getAttribute("title"), "절제된 차별화", `${viewport.name} names the default novelty level`);
+    await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').check();
+    assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "3", `${viewport.name} three-installment pilot raises the minimum initial batch`);
     await page.locator('[data-schedule-form] select[name="cadenceUnit"]').selectOption("minutes");
     await page.locator('[data-schedule-form] input[name="cadenceValue"]').fill("90");
     await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').fill("4");
@@ -166,12 +195,13 @@ try {
 
     await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').check();
     await page.locator('.subgenre-group:has(h3:text("SF")) input[value="near-future"]').check();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v9") || "null")?.primaryGenres?.length === 3);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v10") || "null")?.primaryGenres?.length === 3);
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
     assert.equal(await page.locator('[data-schedule-form] input[name="cadenceValue"]').inputValue(), "90", `${viewport.name} restores cadence value`);
     assert.equal(await page.locator('[data-schedule-form] select[name="cadenceUnit"]').inputValue(), "minutes", `${viewport.name} restores cadence unit`);
     assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "4", `${viewport.name} restores target episode count`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').isChecked(), true, `${viewport.name} restores opening pilot mode`);
     assert.equal(await page.locator('[data-schedule-form] input[name="creativeNovelty"]').inputValue(), "2", `${viewport.name} restores novelty`);
     assert.equal(await page.locator('[data-primary-genres] input:checked').count(), 3, `${viewport.name} restores primary genres`);
     assert.equal(await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').isChecked(), true, `${viewport.name} restores romance detail`);
@@ -190,6 +220,7 @@ try {
     assert.equal(submitted.creativeControls.novelty, 2, `${viewport.name} novelty payload`);
     assert.equal(submitted.cadenceMinutes, 90, `${viewport.name} minute cadence payload`);
     assert.equal(submitted.targetEpisodeCount, 4, `${viewport.name} initial episode target payload`);
+    assert.equal(submitted.openingPilotMode, "three_episode_incubation", `${viewport.name} opening pilot payload`);
     assert.equal(submitted.totalVolumes, 10, `${viewport.name} default volume count payload`);
     assert.equal(submitted.episodesPerVolume, 25, `${viewport.name} default episodes-per-volume payload`);
     assert.equal(submitted.continuationBatchCount, 1, `${viewport.name} default continuation batch payload`);
@@ -275,6 +306,15 @@ try {
     await page.locator(".queue-row.waiting").getByRole("button", { name: "대기 취소" }).click();
     await page.waitForFunction(() => document.querySelectorAll(".queue-row").length === 0);
     assert.equal(canceled.length, 1, `${viewport.name} cancels a waiting queue item`);
+
+    await page.locator("details.maintenance").evaluate((node) => { node.open = true; });
+    await page.locator('[data-run-search] input[name="runId"]').fill("development-run");
+    await page.locator("[data-run-search]").getByRole("button", { name: "기록 열기" }).click();
+    await page.locator(".development-comparison").waitFor({ state: "visible" });
+    assert.equal(await page.locator(".development-candidate").count(), 4, `${viewport.name} shows all four development candidates`);
+    assert.match(await page.locator(".development-candidate.is-selected").textContent(), /선정 · 마지막 시간버스/u, `${viewport.name} highlights the selected candidate`);
+    assert.match(await page.locator(".selection-rationale").textContent(), /최종 선정 근거.*위험 보완/u, `${viewport.name} explains selection evidence and mitigation`);
+    await page.screenshot({ path: `test-results/storyheaven-serial-development-${viewport.name}.png`, fullPage: true });
 
     const layout = await page.evaluate(() => ({ viewport: innerWidth, documentWidth: document.documentElement.scrollWidth }));
     assert.equal(layout.documentWidth, layout.viewport, `${viewport.name} horizontal overflow`);

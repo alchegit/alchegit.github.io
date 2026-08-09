@@ -290,6 +290,129 @@
   box-shadow: 3px 3px 0 #11131a;
 }
 
+.opening-pilot {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 12px;
+  padding: 15px 17px;
+  border-top: 2px solid #11131a;
+  background: #f5f6f8;
+}
+
+.opening-pilot.is-ready_for_promotion,
+.opening-pilot.is-promoted {
+  background: #e9fff8;
+}
+
+.opening-pilot.is-needs_editor_attention {
+  background: #fff7d9;
+}
+
+.opening-pilot-header,
+.opening-pilot-actions,
+.opening-pilot-episodes > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.opening-pilot-header > div {
+  min-width: 0;
+}
+
+.opening-pilot-header span,
+.opening-pilot-header strong,
+.opening-pilot-header p {
+  display: block;
+}
+
+.opening-pilot-header span {
+  color: #087c5d;
+  font-size: 11px;
+  font-weight: 950;
+}
+
+.opening-pilot-header strong {
+  margin-top: 3px;
+  font-size: 17px;
+}
+
+.opening-pilot-header p,
+.opening-pilot-actions p {
+  margin: 4px 0 0;
+  color: #4f5868;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.opening-pilot-feedback {
+  flex: 0 0 auto;
+  max-width: 330px;
+  padding: 8px 10px;
+  color: #303846;
+  background: #fff;
+  border: 1px solid #8a919c;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.opening-pilot-metrics,
+.opening-pilot-episodes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.opening-pilot-metrics > div,
+.opening-pilot-episodes > div {
+  min-width: 0;
+  padding: 10px 11px;
+  background: #fff;
+  border: 1px solid #aeb4bd;
+}
+
+.opening-pilot-metrics span,
+.opening-pilot-metrics strong,
+.opening-pilot-episodes strong,
+.opening-pilot-episodes small {
+  display: block;
+}
+
+.opening-pilot-metrics span,
+.opening-pilot-episodes small {
+  color: #626a78;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.opening-pilot-metrics strong {
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+
+.opening-pilot-episodes .button {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.opening-pilot-actions {
+  align-items: flex-start;
+}
+
+.opening-pilot-actions .button {
+  flex: 0 0 auto;
+  min-height: 39px;
+}
+
+.opening-pilot-actions p {
+  flex: 1 1 auto;
+}
+
 .story-summary {
   min-width: 0;
   padding: 15px 17px;
@@ -669,6 +792,21 @@
   .story-controls {
     border-top: 1px solid #c8ccd3;
     border-left: 0;
+  }
+
+  .opening-pilot-header,
+  .opening-pilot-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .opening-pilot-feedback {
+    max-width: none;
+  }
+
+  .opening-pilot-metrics,
+  .opening-pilot-episodes {
+    grid-template-columns: 1fr;
   }
 }
 

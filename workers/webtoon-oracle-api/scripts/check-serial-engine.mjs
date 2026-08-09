@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_DEFAULT_CONCEPT_POLICY,
+  STORYHEAVEN_OPENING_PILOT_MODES,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
@@ -66,7 +67,28 @@ const repetitivePilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 3, episodeMode: "propulsion", wouldReadNext: true, readerRewardScore: 88 }
 ]);
 assert.equal(repetitivePilot.state, "needs_editor_attention");
+const incubatedSchedule = validateStoryHeavenSerialSchedule({
+  primaryGenre: "fantasy",
+  subgenres: ["modern-fantasy"],
+  targetEpisodeCount: 1,
+  openingPilotMode: STORYHEAVEN_OPENING_PILOT_MODES.incubation,
+  conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+});
+assert.equal(incubatedSchedule.ok, true);
+assert.equal(incubatedSchedule.schedule.targetEpisodeCount, 3);
+assert.equal(incubatedSchedule.schedule.openingPilotMode, "three_episode_incubation");
+assert.equal(validateStoryHeavenSerialSchedule({
+  primaryGenre: "fantasy",
+  subgenres: ["modern-fantasy"],
+  targetEpisodeCount: 1,
+  conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+}).schedule.openingPilotMode, "single_episode");
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
+assert.match(serialServiceSource, /pilotAssessment\.operatorDecision'[^]*= 'promoted'/u, "incubated opening episodes must stay held until operator promotion");
+assert.match(serialServiceSource, /async function resolveOpeningPilot/u, "opening pilots must expose a durable promotion operation");
+assert.match(serialServiceSource, /operator_pilot_rewrite/u, "an unpublished pilot installment must be replaceable without deleting its audit history");
+assert.match(serialServiceSource, /function mapRunDevelopment/u, "run details must expose concept candidate comparisons");
+assert.match(serverSource, /stories\/:id\/opening-pilot/u, "opening pilot promotion must have an operator API route");
 assert.match(serialServiceSource, /schedule\.schedule_status/u, "queue API must expose the schedule state that can block a waiting job");
 assert.match(serialServiceSource, /set schedule_status = 'active', updated_at = systimestamp/u, "queue retry must reactivate its paused schedule");
 assert.match(serialServiceSource, /const releaseAt = dateOrNull\(run\.RELEASE_AT\) \|\| new Date\(\)/u, "draft approval must convert fetched Oracle date strings before rebinding release_at");
@@ -145,7 +167,9 @@ assert.match(serialOperatorHtml, /프롤로그는 설정 소개 외에 익숙한
 assert.match(serialOperatorSource, /능력 발동 방식이 지나치게 복잡해 기획 재작성 필요/u, "premise-gate failures must be readable to operators");
 assert.match(serialOperatorSource, /characterAttachment: "인물 애착"/u, "operator reviews must label character attachment clearly");
 assert.match(serialOperatorSource, /readerReward: "회차 보상"/u, "operator reviews must label concrete reader rewards clearly");
-assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v9/u, "draft persistence must include the novelty control");
+assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v10/u, "draft persistence must include opening pilot mode");
+assert.match(serialOperatorHtml, /name="openingPilotMode" value="three_episode_incubation"/u, "operators must be able to select a held three-installment pilot");
+assert.match(serialOperatorSource, /function renderDevelopmentComparison/u, "operator run details must render all concept candidates and the selection rationale");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");
 assert.match(managedStoriesHtml, /data-created-from/u, "managed stories must provide a creation start date filter");
 assert.match(managedStoriesHtml, /data-created-to/u, "managed stories must provide a creation end date filter");
@@ -154,6 +178,10 @@ assert.match(managedStoriesHtml, /data-bulk-visibility/u, "managed stories must 
 assert.match(managedStoriesSource, /selectedStoryIds: new Set\(\)/u, "managed story selection must use stable story ids");
 assert.match(managedStoriesSource, /offset \+= 100/u, "large bulk changes must be split into safe API batches");
 assert.match(managedStoriesSource, /목록에 복원/u, "hidden stories must be restorable");
+assert.match(managedStoriesSource, /function openingPilotPanel/u, "managed stories must explain opening pilot status and actions");
+assert.match(managedStoriesSource, /정식 연재로 승격/u, "ready pilots must provide an explicit operator promotion command");
+assert.match(managedStoriesSource, /이 회차 재작성/u, "operators must be able to rewrite a selected unpublished pilot installment");
+assert.match(managedStoriesCss, /\.opening-pilot-metrics/u, "opening pilot evidence must have a stable responsive layout");
 assert.match(managedStoriesCss, /\.bulk-apply:disabled[\s\S]*opacity: 1/u, "disabled bulk actions must keep readable contrast");
 
 let managedStoryQuery = null;

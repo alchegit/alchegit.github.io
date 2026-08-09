@@ -9,11 +9,11 @@
   <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
   <title>소설 연재 관리 | StoryHeaven</title>
   <link rel="stylesheet" href="../../workspace.css?v=20260801-help1">
-  <link rel="stylesheet" href="./serial.css?v=20260803-novelty1">
+  <link rel="stylesheet" href="./serial.css?v=20260809-pilot1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-  <script defer src="../../common.js?v=20260803-novelty1"></script>
+  <script defer src="../../common.js?v=20260809-pilot1"></script>
   <script defer src="./genre-catalog.js?v=20260731-genre2"></script>
-  <script defer src="./serial.js?v=20260803-reader-appeal1"></script>
+  <script defer src="./serial.js?v=20260809-pilot1"></script>
 </head>
 <body>
   <header class="site-header">
@@ -50,6 +50,10 @@
               <label class="field target-field"><span class="help-topic"><span>처음 몇 편까지 만들까요?</span><button class="help-button" type="button" data-help data-help-title="처음 제작할 편수" data-help-body="새 작품의 첫 제작 묶음입니다. 첫 편은 항상 프롤로그로 작성됩니다. 기본 1편은 프롤로그만 만들어 운영자가 방향을 확인하기 좋습니다.&#10;&#10;2편 이상으로 늘리면 프롤로그 뒤 본편 1화부터 순서대로 이어 제작합니다.">?</button></span><input name="targetEpisodeCount" type="number" inputmode="numeric" min="1" max="10" value="1" required><small>기본은 프롤로그 1편입니다. 마음에 들면 작품관리에서 본편 1화부터 이어갈 수 있습니다.</small></label>
               <label class="field interval-field"><span class="help-topic"><span>다음 새 작품까지 기다릴 시간</span><button class="help-button" type="button" data-help data-help-title="새 작품 예약 간격" data-help-body="선택한 마지막 화가 끝난 뒤 다음 새 작품을 자동으로 요청하기까지 기다리는 시간입니다.&#10;&#10;이미 진행 중인 작업이 있으면 새 요청은 대기열에서 순서를 기다립니다. 너무 짧게 잡으면 보류나 대기가 쌓여 운영 화면이 복잡해질 수 있습니다.">?</button></span><span class="interval-input"><input name="cadenceValue" type="number" inputmode="numeric" min="1" max="168" value="2" required><select name="cadenceUnit" aria-label="시간 단위"><option value="hours" selected>시간</option><option value="minutes">분</option></select></span><small>선택한 마지막 화가 완성된 뒤부터 계산합니다. 기본 2시간, 최소 15분, 최대 7일입니다.</small></label>
             </div>
+            <fieldset class="mode-fieldset pilot-fieldset wide"><legend><span class="help-topic"><span>첫 작품 확인 방식</span><button class="help-button" type="button" data-help data-help-title="첫 작품 확인 방식" data-help-body="기본 1편 확인은 프롤로그부터 보고 마음에 들 때 본편을 이어 만드는 방식입니다.&#10;&#10;첫 3편 파일럿은 프롤로그와 본편 1·2화를 모두 비공개로 만든 뒤 인물 애착, 회차 보상, 다음 화 의향과 전개 변주를 함께 평가합니다. 통과해도 운영자가 승격하기 전에는 공개되지 않습니다.">?</button></span></legend>
+              <label class="mode-card"><input type="radio" name="openingPilotMode" value="single_episode" checked><span><strong>기본 1편 확인</strong><small>프롤로그부터 확인하고 본편은 작품관리에서 이어 만듭니다.</small></span></label>
+              <label class="mode-card"><input type="radio" name="openingPilotMode" value="three_episode_incubation"><span><strong>첫 3편 파일럿</strong><small>세 편을 묶어 평가하고 운영자가 승격할 때까지 공개를 보류합니다.</small></span></label>
+            </fieldset>
             <div class="series-length-settings wide">
               <label class="field"><span class="help-topic"><span>전체 권수</span><button class="help-button" type="button" data-help data-help-title="전체 권수" data-help-body="설정집과 장기 전개를 만들 때 목표로 삼을 장편 분량입니다. 기본은 10권입니다.&#10;&#10;이 값은 당장 한 번에 모두 쓰라는 뜻이 아니라, 인물 관계·세계 규칙·복선·갈등 재료를 장편용으로 넉넉하게 설계하게 하는 기준입니다.">?</button></span><input name="totalVolumes" type="number" inputmode="numeric" min="1" max="30" value="10" required><small>기본 10권 · 최대 30권</small></label>
               <label class="field"><span class="help-topic"><span>1권당 본편 화수</span><button class="help-button" type="button" data-help data-help-title="1권당 본편 화수" data-help-body="한 권을 몇 화 분량으로 볼지 정합니다. 기본은 25화입니다. 프롤로그는 본편 화수에 포함하지 않습니다.&#10;&#10;예를 들어 10권, 권당 25화면 프롤로그 뒤 본편 250화를 버틸 구조로 설정집을 만듭니다.">?</button></span><input name="episodesPerVolume" type="number" inputmode="numeric" min="10" max="50" value="25" required><small>기본 25화 · 프롤로그 제외</small></label>

@@ -37,8 +37,8 @@
     premiseCoherenceDefaultConceptPolicy,
     readerAppealDefaultConceptPolicy
   ]);
-  const draftStorageKey = "storyheaven.operator.serial-draft.v9";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const draftStorageKey = "storyheaven.operator.serial-draft.v10";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v9", "storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   const queueActionFeedback = new Map();
   let draftReady = false;
@@ -60,6 +60,7 @@
     bind();
     startSeoulClock();
     syncCadenceBounds();
+    syncOpeningPilotMode();
     updateTargetButton();
     draftReady = true;
     updateDraftStatus(restoredDraftAt ? `마지막 설정 ${formatDraftTime(restoredDraftAt)} 복원` : "설정 자동 저장");
@@ -123,6 +124,9 @@
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
     selectors.scheduleForm.elements.cadenceUnit.addEventListener("change", syncCadenceBounds);
     selectors.scheduleForm.elements.targetEpisodeCount.addEventListener("input", updateTargetButton);
+    for (const input of selectors.scheduleForm.querySelectorAll("input[name='openingPilotMode']")) {
+      input.addEventListener("change", syncOpeningPilotMode);
+    }
     selectors.scheduleForm.elements.totalVolumes.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.elements.episodesPerVolume.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.elements.continuationBatchCount.addEventListener("change", queueDraftSave);
@@ -419,7 +423,7 @@
     heading.append(title, status, mode);
     const detail = document.createElement("p");
     const controls = schedule.creativeControls || {};
-    detail.textContent = `${subgenreLabels(schedule).join(" · ")} · ${seriesPlanLabel(schedule.seriesPlan)} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · 강도 ${creativeControlSummary(controls)} · ${initialBatchText(schedule.targetEpisodeCount || 1)} 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
+    detail.textContent = `${subgenreLabels(schedule).join(" · ")} · ${seriesPlanLabel(schedule.seriesPlan)} · ${openingPilotLabel(schedule.openingPilotMode)} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · 강도 ${creativeControlSummary(controls)} · ${initialBatchText(schedule.targetEpisodeCount || 1)} 완성 뒤 ${formatCadence(schedule.cadenceMinutes)} 대기`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 확인 ${formatDate(schedule.nextRunAt)}` : "서비스를 다시 시작할 때까지 생성과 공개가 멈춥니다.";
     copy.append(heading, detail, next);
@@ -477,6 +481,7 @@
           subgenres,
           subgenresByGenre,
           publicationMode: form.get("publicationMode"),
+          openingPilotMode: form.get("openingPilotMode"),
           cadenceMinutes,
           targetEpisodeCount,
           totalVolumes: seriesPlan.totalVolumes,
@@ -515,6 +520,7 @@
           subgenres: schedule.subgenres,
           subgenresByGenre: scheduleSubgenresByGenre(schedule),
           publicationMode: schedule.publicationMode,
+          openingPilotMode: schedule.openingPilotMode || "single_episode",
           cadenceMinutes: schedule.cadenceMinutes,
           targetEpisodeCount: schedule.targetEpisodeCount || 1,
           totalVolumes: schedule.seriesPlan?.totalVolumes || 10,
@@ -1685,6 +1691,10 @@
     header.append(title, detail);
     wrapper.append(header);
 
+    if (payload.development?.candidates?.length) {
+      wrapper.append(renderDevelopmentComparison(payload.development));
+    }
+
     const latestReview = payload.reviews?.at(-1);
     if (latestReview) wrapper.append(renderScoreBoard(latestReview, payload.run.quality?.decision?.readerExperienceScore, payload.metrics || []));
 
@@ -1725,6 +1735,80 @@
     jobs.append(jobSummary, list);
     wrapper.append(jobs);
     return wrapper;
+  }
+
+  function renderDevelopmentComparison(development) {
+    const section = document.createElement("section");
+    section.className = "development-comparison";
+    const heading = document.createElement("div");
+    heading.className = "development-heading";
+    const title = document.createElement("h4");
+    title.textContent = "작품 후보 비교";
+    const status = document.createElement("strong");
+    status.textContent = development.selectedCandidateId ? "편집자 선정 완료" : "후보 생성 완료";
+    heading.append(title, status);
+    const guide = document.createElement("p");
+    guide.textContent = "표면적으로 가장 낯선 소재가 아니라 인물의 욕망, 관계 충돌, 장면 잠재력과 장편 확장성을 함께 비교한 기록입니다.";
+    const list = document.createElement("div");
+    list.className = "development-candidates";
+    const candidates = [...development.candidates].sort((left, right) => Number(right.selected) - Number(left.selected));
+    for (const candidate of candidates) {
+      const item = document.createElement("details");
+      item.className = `development-candidate${candidate.selected ? " is-selected" : ""}`;
+      item.open = candidate.selected;
+      const summary = document.createElement("summary");
+      const name = document.createElement("span");
+      name.textContent = `${candidate.selected ? "선정 · " : "후보 · "}${candidate.title}`;
+      const score = document.createElement("strong");
+      score.textContent = candidate.averageScore === null ? "평가 전" : `평균 ${candidate.averageScore}점`;
+      summary.append(name, score);
+      const facts = document.createElement("div");
+      facts.className = "candidate-facts";
+      facts.append(
+        candidateFact("독자가 누릴 재미", candidate.coreFantasy),
+        candidateFact("주인공의 인간적 욕망", candidate.humanDesire),
+        candidateFact("중심 관계", candidate.centralRelationship),
+        candidateFact("반복 가능한 사건", candidate.storyEngine),
+        candidateFact("대표 장면", candidate.signatureScene),
+        candidateFact(candidate.selected ? "관리할 위험" : "탈락 이유", candidate.selected
+          ? (development.fatalRisk || candidate.fatalRisk)
+          : (candidate.rejectionReason || candidate.weakness || candidate.fatalRisk))
+      );
+      item.append(summary, facts);
+      list.append(item);
+    }
+    section.append(heading, guide, list);
+    if (development.whySelected) {
+      const rationale = document.createElement("div");
+      rationale.className = "selection-rationale";
+      const rationaleTitle = document.createElement("strong");
+      rationaleTitle.textContent = "최종 선정 근거";
+      const reason = document.createElement("p");
+      reason.textContent = development.whySelected;
+      rationale.append(rationaleTitle, reason);
+      if (development.proofScene) {
+        const proof = document.createElement("p");
+        proof.textContent = `대표 장면 · ${development.proofScene}`;
+        rationale.append(proof);
+      }
+      if (development.mitigation) {
+        const mitigation = document.createElement("p");
+        mitigation.textContent = `위험 보완 · ${development.mitigation}`;
+        rationale.append(mitigation);
+      }
+      section.append(rationale);
+    }
+    return section;
+  }
+
+  function candidateFact(label, value) {
+    const item = document.createElement("p");
+    const title = document.createElement("strong");
+    title.textContent = label;
+    const copy = document.createElement("span");
+    copy.textContent = value || "기록 없음";
+    item.append(title, copy);
+    return item;
   }
 
   function renderScoreBoard(review, weightedScore, metrics = []) {
@@ -1905,6 +1989,10 @@
     return `${totalVolumes}권 × 권당 ${episodesPerVolume}화`;
   }
 
+  function openingPilotLabel(mode) {
+    return mode === "three_episode_incubation" ? "첫 3편 파일럿 평가" : "프롤로그부터 확인";
+  }
+
   function scheduleSubgenresByGenre(schedule) {
     if (schedule.subgenresByGenre && typeof schedule.subgenresByGenre === "object") return schedule.subgenresByGenre;
     return schedule.primaryGenre ? { [schedule.primaryGenre]: schedule.subgenres || [] } : {};
@@ -1923,7 +2011,10 @@
   function readTargetEpisodeCount() {
     const input = selectors.scheduleForm.elements.targetEpisodeCount;
     const value = Math.round(Number(input.value));
-    input.setCustomValidity(value < 1 || value > 10 ? "1편 이상 10편 이하로 설정해주세요." : "");
+    const minimum = selectors.scheduleForm.elements.openingPilotMode.value === "three_episode_incubation" ? 3 : 1;
+    input.setCustomValidity(value < minimum || value > 10
+      ? `${minimum}편 이상 10편 이하로 설정해주세요.`
+      : "");
     if (!input.reportValidity()) return null;
     return value;
   }
@@ -1950,6 +2041,22 @@
     if (!input || !button) return;
     const value = Math.max(1, Math.min(10, Math.round(Number(input.value) || 1)));
     button.textContent = `${initialBatchText(value)} 제작을 대기열에 추가`;
+  }
+
+  function syncOpeningPilotMode() {
+    const input = selectors.scheduleForm?.elements.targetEpisodeCount;
+    const mode = selectors.scheduleForm?.elements.openingPilotMode?.value || "single_episode";
+    if (!input) return;
+    const incubating = mode === "three_episode_incubation";
+    input.min = incubating ? "3" : "1";
+    if (incubating && Number(input.value || 0) < 3) input.value = "3";
+    const hint = selectors.scheduleForm.querySelector(".target-field small");
+    if (hint) {
+      hint.textContent = incubating
+        ? "파일럿은 프롤로그와 본편 1·2화까지 최소 3편을 만들며, 승격 전에는 공개하지 않습니다."
+        : "기본은 프롤로그 1편입니다. 마음에 들면 작품관리에서 본편 1화부터 이어갈 수 있습니다.";
+    }
+    updateTargetButton();
   }
 
   function initialBatchText(value) {
@@ -1992,7 +2099,7 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 9,
+      version: 10,
       savedAt: new Date().toISOString(),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
@@ -2005,6 +2112,7 @@
       totalVolumes: String(form.get("totalVolumes") || "10"),
       episodesPerVolume: String(form.get("episodesPerVolume") || "25"),
       continuationBatchCount: String(form.get("continuationBatchCount") || "1"),
+      openingPilotMode: String(form.get("openingPilotMode") || "single_episode"),
       publicationMode: String(form.get("publicationMode") || "test_private"),
       creativeControls: readCreativeControls(),
       conceptPolicy: String(form.get("conceptPolicy") || "")
@@ -2028,7 +2136,7 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");
@@ -2041,6 +2149,7 @@
     setFormValue("totalVolumes", draft.totalVolumes || 10);
     setFormValue("episodesPerVolume", draft.episodesPerVolume || 25);
     setFormValue("continuationBatchCount", draft.continuationBatchCount || 1);
+    setFormValue("openingPilotMode", draft.openingPilotMode || "single_episode");
     setFormValue("publicationMode", draft.publicationMode);
     applyCreativeControlsToForm(draft.creativeControls || {
       ...creativePresets.balanced,
@@ -2116,12 +2225,14 @@
     setFormValue("totalVolumes", schedule.seriesPlan?.totalVolumes || 10);
     setFormValue("episodesPerVolume", schedule.seriesPlan?.episodesPerVolume || 25);
     setFormValue("continuationBatchCount", schedule.continuationBatchCount || 1);
+    setFormValue("openingPilotMode", schedule.openingPilotMode || "single_episode");
     setFormValue("publicationMode", schedule.publicationMode);
     applyCreativeControlsToForm(schedule.creativeControls || { ...creativePresets.balanced, preset: "balanced" });
     setFormValue("conceptPolicy", normalizedConceptPolicy(schedule.conceptPolicy));
     renderPrimaryGenres();
     renderSubgenres();
     syncCadenceBounds();
+    syncOpeningPilotMode();
     updateTargetButton();
     renderCreativeControls();
     saveDraftNow();
@@ -2138,6 +2249,7 @@
     renderPrimaryGenres();
     renderSubgenres();
     syncCadenceBounds();
+    syncOpeningPilotMode();
     updateTargetButton();
     applyCreativePreset("balanced");
     saveDraftNow();

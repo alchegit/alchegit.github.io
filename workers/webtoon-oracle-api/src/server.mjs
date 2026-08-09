@@ -1016,6 +1016,19 @@ app.post("/api/storyheaven/operator/serial-engine/stories/:id/episodes/:episodeN
   }
 });
 
+app.post("/api/storyheaven/operator/serial-engine/stories/:id/opening-pilot", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    const pilot = await storyHeavenSerialService.resolveOpeningPilot(req.params.id, req.user.id, req.body || {});
+    const published = config.storyHeavenSerialEngineEnabled && !storyHeavenSerialEmergencyPaused
+      ? await storyHeavenSerialService.publishReady(3)
+      : [];
+    res.status(202).json({ pilot, published });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/api/storyheaven/operator/serial-engine/stories/:id", requireUser, requireAdminAccount, adminRateLimiter, async (req, res, next) => {
   try {
     res.json(await storyHeavenSerialService.getStoryState(req.params.id));

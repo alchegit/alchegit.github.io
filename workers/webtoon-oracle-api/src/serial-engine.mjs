@@ -69,6 +69,11 @@ export const STORYHEAVEN_SERIAL_LIMITS = Object.freeze({
   })
 });
 
+export const STORYHEAVEN_OPENING_PILOT_MODES = Object.freeze({
+  single: "single_episode",
+  incubation: "three_episode_incubation"
+});
+
 const STORYHEAVEN_DEFAULT_CONCEPT_POLICY_BASE = Object.freeze([
   "중학생 독자도 첫 장면부터 인물과 사건을 따라갈 수 있는 쉬운 한국어로 쓴다.",
   "첫 2개 문단 안에 시점 인물, 장소, 사건 전의 평소 상태와 당장 이루려는 목표를 밝히고, 3번째 문단까지 처음 달라진 현상과 실패할 때의 손실을 구체적으로 보여준다.",
@@ -220,12 +225,18 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     STORYHEAVEN_SERIAL_LIMITS.cadenceMinutesMax,
     120
   );
-  const targetEpisodeCount = integer(
+  const openingPilotMode = Object.values(STORYHEAVEN_OPENING_PILOT_MODES).includes(input.openingPilotMode)
+    ? input.openingPilotMode
+    : STORYHEAVEN_OPENING_PILOT_MODES.single;
+  const requestedTargetEpisodeCount = integer(
     input.targetEpisodeCount,
     STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin,
     STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMax,
     1
   );
+  const targetEpisodeCount = openingPilotMode === STORYHEAVEN_OPENING_PILOT_MODES.incubation
+    ? Math.max(3, requestedTargetEpisodeCount)
+    : requestedTargetEpisodeCount;
   const totalVolumes = integer(
     input.totalVolumes ?? input.volumeCount,
     STORYHEAVEN_SERIAL_LIMITS.seriesVolumeCountMin,
@@ -306,6 +317,7 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
       cadenceMinutes,
       cadenceDays: Math.max(1, Math.ceil(cadenceMinutes / 1_440)),
       targetEpisodeCount,
+      openingPilotMode,
       seriesPlan: seriesPlan(totalVolumes, episodesPerVolume),
       continuationBatchCount,
       maxActiveSerials: 1,
