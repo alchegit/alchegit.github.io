@@ -13,15 +13,17 @@ a { color: inherit; text-decoration: none; }
 button { color: inherit; }
 .skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; padding: 10px 14px; background: var(--white); border: 2px solid var(--ink); transform: translateY(-150%); }
 .skip-link:focus { transform: translateY(0); }
-.site-header { position: sticky; top: 0; z-index: 30; min-height: 70px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 26px; padding: 10px clamp(16px, 3vw, 52px); color: var(--white); background: rgba(17, 19, 26, .96); border-bottom: 1px solid rgba(255,255,255,.15); backdrop-filter: blur(14px); }
+.site-header { position: sticky; top: 0; z-index: 30; min-height: 70px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 26px; padding: 10px clamp(16px, 3vw, 52px); color: var(--white); background: rgba(17, 19, 26, .96); border-bottom: 1px solid rgba(255,255,255,.15); backdrop-filter: blur(14px); }
 #browse, #discover, #weekly, #editorial, #continuation { scroll-margin-top: 96px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; min-width: max-content; }
 .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; color: var(--ink); background: var(--mint); border: 2px solid currentColor; font-weight: 950; }
 .brand strong, .brand small { display: block; }
 .brand strong { font-size: 16px; }
 .brand small { margin-top: 1px; color: #aeb5c3; font-size: 11px; }
-.main-nav { justify-self: center; display: flex; align-items: center; gap: 28px; color: #d5d8df; font-size: 14px; font-weight: 800; }
-.main-nav a:hover, .main-nav a:focus-visible { color: var(--mint); }
+.main-nav { width: 100%; min-width: 0; justify-self: center; display: flex; align-items: center; justify-content: center; gap: 24px; overflow-x: auto; color: #d5d8df; font-size: 14px; font-weight: 800; white-space: nowrap; scrollbar-width: none; }
+.main-nav::-webkit-scrollbar { display: none; }
+.main-nav a[aria-current="page"], .main-nav a:hover, .main-nav a:focus-visible { color: var(--mint); }
+.main-nav > a:not(.admin-nav-link) + .admin-nav-link { margin-left: 2px; padding-left: 24px; border-left: 1px solid #555c69; }
 .account-actions { display: flex; align-items: center; gap: 8px; }
 .solid-button, .text-button, .icon-button, .feed-tabs button, .serial-stage-tabs button, .like-button, .endorse-button { min-height: 44px; border: 2px solid var(--ink); border-radius: 4px; cursor: pointer; font-weight: 900; }
 .solid-button { display: inline-flex; align-items: center; justify-content: center; padding: 0 20px; background: var(--mint); box-shadow: 3px 3px 0 var(--ink); }
@@ -187,7 +189,7 @@ footer > a:last-child { font-weight: 850; text-decoration: underline; }
 @media (max-width: 980px) {
   .site-header { grid-template-columns: auto 1fr; }
   #browse, #discover, #weekly, #editorial, #continuation { scroll-margin-top: 126px; }
-  .main-nav { order: 3; grid-column: 1 / -1; justify-self: stretch; overflow-x: auto; gap: 22px; padding-top: 6px; scrollbar-width: none; }
+  .main-nav { order: 3; grid-column: 1 / -1; justify-self: stretch; justify-content: flex-start; gap: 22px; padding-top: 6px; }
   .account-actions { justify-self: end; }
   .intro-band { grid-template-columns: 1fr; }
   .story-ticket { min-height: 420px; border-left: 0; border-top: 3px solid var(--ink); }
@@ -198,7 +200,8 @@ footer > a:last-child { font-weight: 850; text-decoration: underline; }
   .site-header { min-height: 62px; gap: 12px; padding: 8px 12px; }
   .brand-mark { width: 38px; height: 38px; }
   .brand strong { font-size: 14px; }
-  .main-nav { margin: 0 -12px; padding: 7px 12px 2px; font-size: 12px; }
+  .main-nav { width: auto; margin: 0 -12px; padding: 7px 12px 2px; font-size: 12px; }
+  .main-nav > a:not(.admin-nav-link) + .admin-nav-link { padding-left: 20px; }
   .nickname-button { max-width: 112px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .login-button { min-height: 40px; padding: 0 11px; font-size: 12px; }
   .intro-copy { padding: 62px 18px 54px; }

@@ -138,6 +138,10 @@ summary:focus-visible {
   color: var(--amber);
 }
 
+[data-admin-only][hidden] {
+  display: none !important;
+}
+
 .terminal-actions {
   display: flex;
   align-items: center;

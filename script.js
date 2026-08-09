@@ -151,6 +151,7 @@ const colorPreviewRounds = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
+  window.StoryHeavenCommon?.init();
   const initialLocale = getInitialLocale();
   currentLocale = initialLocale.locale;
 

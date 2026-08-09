@@ -162,6 +162,12 @@
   transform: scaleX(1);
 }
 
+.webtoon-app-page .topbar-nav > a:not([data-admin-only]) + a[data-admin-only] {
+  margin-left: 2px;
+  padding-left: 24px;
+  border-left: 1px solid rgba(248, 243, 232, 0.28);
+}
+
 .webtoon-app-page .account-widget {
   display: flex;
   align-items: center;
@@ -2234,6 +2240,10 @@
 
   .webtoon-app-page .topbar-nav a {
     scroll-snap-align: center;
+  }
+
+  .webtoon-app-page .topbar-nav > a:not([data-admin-only]) + a[data-admin-only] {
+    padding-left: 22px;
   }
 
   .webtoon-app-page .account-name {

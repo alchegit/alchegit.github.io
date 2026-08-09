@@ -12,8 +12,18 @@
     logout,
     toast,
     readableError,
-    createHelpButton
+    createHelpButton,
+    renderNavigation
   };
+
+  const adminNavigationItems = Object.freeze([
+    { href: "/storyheaven/operator/", label: "운영 검수", active: (path) => path === "/storyheaven/operator/" },
+    { href: "/storyheaven/operator/serial/", label: "자동 연재", active: (path) => path === "/storyheaven/operator/serial/" },
+    { href: "/storyheaven/operator/serial/stories/", label: "작품 관리", active: (path) => path.startsWith("/storyheaven/operator/serial/stories/") },
+    { href: "/", label: "앱 홈", active: (path) => path === "/" },
+    { href: "/webtoon/", label: "웹툰", active: (path) => path.startsWith("/webtoon/") },
+    { href: "/operator/members/", label: "회원 관리", active: (path) => path.startsWith("/operator/members/") }
+  ]);
 
   let helpDialog = null;
   let helpReturnFocus = null;
@@ -153,46 +163,35 @@
       element.hidden = !signedIn;
       element.textContent = state.profile?.nickname || "로그인 중";
     });
-    document.querySelectorAll("[data-storyheaven-admin-menu]").forEach((element) => { element.hidden = !isAdmin; });
-    renderAdminNavigation();
+    renderNavigation({ isAdmin });
   }
 
-  function renderAdminNavigation() {
+  function renderNavigation({ isAdmin = Boolean(state.profile?.isAdmin) } = {}) {
+    document.documentElement.dataset.storyheavenAccess = isAdmin ? "admin" : "visitor";
+    document.querySelectorAll("[data-admin-only]").forEach((element) => { element.hidden = !isAdmin; });
     const nav = document.querySelector(".main-nav");
     if (!nav) return;
-    const serialLink = nav.querySelector("[data-storyheaven-admin-nav]");
-    const webtoonLink = nav.querySelector("[data-storyheaven-admin-webtoon-nav]");
-    const membersLink = nav.querySelector("[data-storyheaven-admin-members-nav]");
-    if (!state.profile?.isAdmin) {
-      serialLink?.remove();
-      webtoonLink?.remove();
-      membersLink?.remove();
-      return;
-    }
-    if (!serialLink && !nav.querySelector('a[href="/storyheaven/operator/serial/"]')) {
+    nav.querySelectorAll("[data-storyheaven-admin-nav]").forEach((element) => element.remove());
+    nav.dataset.navigationRole = isAdmin ? "admin" : "reader";
+    if (!isAdmin) return;
+    const path = normalizedPath(location.pathname);
+    for (const item of adminNavigationItems) {
       const link = document.createElement("a");
-      link.href = "/storyheaven/operator/serial/";
+      link.href = item.href;
       link.dataset.storyheavenAdminNav = "";
-      link.textContent = "소설 연재 관리";
-      link.setAttribute("aria-label", "관리자 전용 소설 연재 관리");
+      if (item.href === "/webtoon/") link.dataset.storyheavenAdminWebtoonNav = "";
+      if (item.href === "/operator/members/") link.dataset.storyheavenAdminMembersNav = "";
+      link.className = "admin-nav-link";
+      link.textContent = item.label;
+      link.setAttribute("aria-label", `관리자 전용 ${item.label} 이동`);
+      if (item.active(path)) link.setAttribute("aria-current", "page");
       nav.append(link);
     }
-    if (!webtoonLink && !nav.querySelector('a[href^="/webtoon/"]')) {
-      const link = document.createElement("a");
-      link.href = "/webtoon/";
-      link.dataset.storyheavenAdminWebtoonNav = "";
-      link.textContent = "웹툰 스튜디오";
-      link.setAttribute("aria-label", "관리자 전용 웹툰 스튜디오 이동");
-      nav.append(link);
-    }
-    if (!membersLink && !nav.querySelector('a[href="/operator/members/"]')) {
-      const link = document.createElement("a");
-      link.href = "/operator/members/";
-      link.dataset.storyheavenAdminMembersNav = "";
-      link.textContent = "회원 관리";
-      link.setAttribute("aria-label", "관리자 전용 회원 관리 이동");
-      nav.append(link);
-    }
+  }
+
+  function normalizedPath(value) {
+    const path = String(value || "/").replace(/\/+/gu, "/");
+    return path.endsWith("/") ? path : `${path}/`;
   }
 
   function notify() {

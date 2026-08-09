@@ -21,12 +21,15 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
 
     <title data-i18n="seo.title">NeoKIM App Lab | 무료 Android 미니앱 컬렉션</title>
-    <link rel="stylesheet" href="style.css?v=20260715-webtoon-link">
+    <link rel="stylesheet" href="style.css?v=20260809-nav1">
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
+    <script defer src="/storyheaven/common.js?v=20260809-nav1"></script>
     <script defer src="assets/i18n/index.js?v=20260703-darkmaze-playable"></script>
     <script defer src="assets/i18n/generated-translations.js?v=20260531-v6"></script>
-    <script defer src="script.js?v=20260703-darkmaze-playable"></script>
+    <script defer src="script.js?v=20260809-nav1"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -62,8 +65,9 @@
             <a href="#featured-app" data-i18n="nav.featured">추천 앱</a>
             <a href="#apps" data-i18n="nav.apps">전체 앱</a>
             <a href="/games/" aria-label="HTML5 web game experiments">Games</a>
-            <a href="/webtoon/" aria-label="Webtoon studio">Webtoon</a>
             <a href="/storyheaven/" aria-label="StoryHeaven story community">StoryHeaven</a>
+            <a href="/webtoon/" aria-label="Webtoon studio" data-admin-only hidden>Webtoon</a>
+            <a href="/operator/members/" aria-label="회원 관리" data-admin-only hidden>회원 관리</a>
             <a href="#faq" data-i18n="nav.faq">FAQ</a>
             <button type="button" id="languageTrigger" class="language-trigger" aria-label="언어 선택" data-i18n-attr="aria-label:language.buttonLabel">
               <span aria-hidden="true">🌐</span>
@@ -89,7 +93,7 @@
                 <span>HTML5 게임 실험실</span>
                 <small>좋아요로 앱 후보 고르기</small>
               </a>
-              <a class="secondary-cta game-lab-cta webtoon-lab-cta" href="/webtoon/" aria-label="웹툰 제작 스튜디오 소개로 이동">
+              <a class="secondary-cta game-lab-cta webtoon-lab-cta" href="/webtoon/" aria-label="웹툰 제작 스튜디오 소개로 이동" data-admin-only hidden>
                 <span>웹툰 제작 스튜디오</span>
                 <small>한 줄 아이디어를 첫 화로</small>
               </a>
@@ -103,7 +107,7 @@
               <li data-i18n="hero.badges.0">Free Apps</li>
               <li data-i18n="hero.badges.1">Android</li>
               <li>HTML5 Games</li>
-              <li>Webtoon Studio</li>
+              <li data-admin-only hidden>Webtoon Studio</li>
               <li>StoryHeaven</li>
               <li data-i18n="hero.badges.2">회원가입 없음</li>
               <li data-i18n="hero.badges.3">Made by NeoKIM</li>

@@ -20,9 +20,9 @@
     <meta name="twitter:image" content="https://alchegit.github.io/webtoon/assets/webtoon-studio-og-v1.jpg">
     <title>NeoKIM Webtoon Studio | 한 줄 이야기를 AI 웹툰으로</title>
     <link rel="preload" href="./assets/webtoon-studio-hero-v1.webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="stylesheet" href="./landing.css?v=20260722-focus1">
+    <link rel="stylesheet" href="./landing.css?v=20260809-nav1">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="./webtoon.js?v=20260727-login1"></script>
+    <script defer src="./webtoon.js?v=20260809-nav1"></script>
     <script defer src="./landing.js?v=20260722-focus1"></script>
   </head>
   <body class="webtoon-landing">
@@ -35,13 +35,15 @@
       </a>
       <div class="landing-header-actions">
         <nav class="landing-nav" aria-label="웹툰 메뉴">
-          <a href="#story">소개</a>
-          <a href="/webtoon/reader/">감상</a>
+          <a href="/webtoon/" aria-current="page">소개</a>
+          <a class="nav-studio" href="/webtoon/studio/">작업대</a>
           <a href="/webtoon/guide/">가이드</a>
+          <a href="/webtoon/templates/">템플릿</a>
+          <a href="/webtoon/reader/">감상</a>
+          <a href="/" data-admin-only>앱 홈</a>
           <a href="/storyheaven/" data-admin-only>스토리천국</a>
           <a href="/operator/members/" data-admin-only>회원 관리</a>
           <a href="/webtoon/plan/" data-admin-only>설계</a>
-          <a class="nav-studio" href="/webtoon/studio/">내 웹툰 만들기</a>
         </nav>
         <div class="landing-account" data-account>
           <span class="account-name" data-account-name hidden></span>
