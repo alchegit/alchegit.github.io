@@ -6,7 +6,11 @@ if [[ "$(id -u)" != "0" ]]; then
   exit 1
 fi
 
-dnf install -y git curl tar gzip
+dnf install -y git curl tar gzip chrony
+
+timedatectl set-timezone Asia/Seoul
+systemctl enable --now chronyd
+chronyc waitsync 30 0.5
 
 if ! command -v node >/dev/null 2>&1; then
   dnf module enable -y nodejs:20 || true
@@ -20,4 +24,5 @@ install -d -m 755 -o webtoonapi -g webtoonapi /var/lib/neokim-webtoon/tmp
 
 echo "Node: $(node --version)"
 echo "NPM: $(npm --version)"
+echo "Clock: $(date --iso-8601=seconds)"
 echo "Install complete. Copy the API files to /opt/neokim-webtoon-oracle-api and create .env there."

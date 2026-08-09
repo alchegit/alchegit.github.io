@@ -40,6 +40,7 @@ try {
     let waitingQueueVisible = true;
     let waitingQueueScheduleStatus = "paused";
     let cooldownMode = false;
+    let clockSkewMode = false;
     let failureMode = false;
     let systemPaused = false;
     let manualSchedulesPaused = false;
@@ -67,7 +68,7 @@ try {
         const nextRunAt = cooldownMode ? new Date(Date.now() + 30 * 60_000).toISOString() : runningSchedule.nextRunAt;
         return json({ enabled: true, emergencyPaused: systemPaused, schedules: [{ ...runningSchedule, nextRunAt, status: systemPaused || manualSchedulesPaused ? "paused" : "active" }], queue: {
           concurrency: 1,
-          updatedAt: cooldownMode ? new Date().toISOString() : "2026-07-31T05:01:00.000Z",
+          updatedAt: cooldownMode ? new Date(Date.now() + (clockSkewMode ? 9 * 60 * 60_000 : 0)).toISOString() : "2026-07-31T05:01:00.000Z",
           items: cooldownMode || failureMode ? [] : [
             { id: "queue-running", scheduleId: "schedule-running", status: systemPaused ? "waiting" : "running", queuePosition: 0, cancelable: false, initialBatch: true, targetEpisodeCount: 3, workLabel: "새 작품 · 3화까지", stage: "write_draft", episodeNo: 2, completedJobs: 8, totalJobs: 9, elapsedSeconds: 246, requestedAt: "2026-07-31T04:56:00.000Z" },
             ...(waitingQueueVisible ? [{ id: "queue-a", scheduleId: "schedule-paused", scheduleStatus: systemPaused ? "paused" : waitingQueueScheduleStatus, status: "waiting", queuePosition: 1, cancelable: true, workLabel: "미스터리 · 4화", stage: "write_draft", episodeNo: 4, completedJobs: 1, totalJobs: 3, requestedAt: "2026-08-02T00:04:00" }] : [])
@@ -367,6 +368,14 @@ try {
     await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("쿨타임 대기"));
     const clockText = await page.locator("[data-seoul-clock]").textContent();
     assert.match(clockText, /현재 .*오[전후] \d{2}:\d{2}:\d{2}.*서울/u, `${viewport.name} cooldown state shows a live Seoul clock with seconds`);
+    assert.equal(await page.locator("[data-seoul-clock]").getAttribute("data-clock-source"), "server-aligned", `${viewport.name} trusts a healthy server clock`);
+
+    clockSkewMode = true;
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    assert.equal(await page.locator("[data-seoul-clock]").getAttribute("data-clock-source"), "browser-fallback", `${viewport.name} rejects a server clock more than two minutes in the future`);
+    assert.match(await page.locator("[data-seoul-clock]").getAttribute("title"), /운영자 기기의 서울 시각/u, `${viewport.name} explains the safe clock fallback`);
+    clockSkewMode = false;
 
     manualSchedulesPaused = true;
     await page.reload({ waitUntil: "networkidle" });

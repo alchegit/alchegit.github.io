@@ -1,7 +1,7 @@
 [Unit]
 Description=NeoKIM Webtoon Oracle API
-After=network-online.target
-Wants=network-online.target
+After=network-online.target chronyd.service
+Wants=network-online.target chronyd.service
 
 [Service]
 Type=simple
@@ -9,6 +9,7 @@ User=webtoonapi
 Group=webtoonapi
 WorkingDirectory=/opt/neokim-webtoon-oracle-api
 Environment=NODE_ENV=production
+ExecStartPre=/usr/bin/chronyc waitsync 10 0.5
 ExecStart=/usr/bin/node src/server.mjs
 Restart=always
 RestartSec=5

@@ -7,6 +7,7 @@
   const primaryGenreLimit = 3;
   const subgenreLimit = 10;
   const seoulTimeZone = "Asia/Seoul";
+  const maxTrustedServerClockDriftMs = 2 * 60 * 1000;
   const creativeFields = Object.freeze({
     pace: "creativePace",
     suspense: "creativeSuspense",
@@ -47,6 +48,7 @@
   let queueRefreshInFlight = null;
   let clockTimer = 0;
   let serverClockOffsetMs = 0;
+  let serverClockTrusted = true;
   let showHiddenHistory = false;
   const locallyHiddenHistory = new Map();
   let latestSerialSnapshot = { enabled: false, emergencyPaused: false, pollSeconds: 60, schedules: [], queue: {} };
@@ -2404,7 +2406,10 @@
 
   function syncServerClock(value) {
     const serverTime = serialTime(value);
-    if (Number.isFinite(serverTime)) serverClockOffsetMs = serverTime - Date.now();
+    if (!Number.isFinite(serverTime)) return;
+    const offset = serverTime - Date.now();
+    serverClockTrusted = Math.abs(offset) <= maxTrustedServerClockDriftMs;
+    serverClockOffsetMs = serverClockTrusted ? offset : 0;
   }
 
   function serialNow() {
@@ -2414,7 +2419,10 @@
   function updateSeoulClock() {
     if (!selectors.systemClock) return;
     selectors.systemClock.textContent = `현재 ${formatSeoulClock(serialNow())}`;
-    selectors.systemClock.title = "서버 응답 시각을 기준으로 보정한 대한민국 서울 현재 시각입니다.";
+    selectors.systemClock.dataset.clockSource = serverClockTrusted ? "server-aligned" : "browser-fallback";
+    selectors.systemClock.title = serverClockTrusted
+      ? "서버와 운영자 기기 시각을 대조한 대한민국 서울 현재 시각입니다."
+      : "서버 시각 차이가 2분을 넘어 운영자 기기의 서울 시각으로 안전하게 표시합니다.";
   }
 
   function parseSerialDate(value) {
