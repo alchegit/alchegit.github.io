@@ -1976,11 +1976,17 @@ function normalizeDraft(source, rewritten, options = {}) {
   };
   if (draft.sceneRanges.length < STORYHEAVEN_SERIAL_LIMITS.scenesMin) throw new Error("serial_scene_ranges_invalid");
   const sceneRangeNumbers = draft.sceneRanges.map((item) => item.sceneNo);
+  const paragraphCount = draft.body.split(/\n{2,}/u).map((item) => item.trim()).filter(Boolean).length;
+  const sceneRangesCoverBody = draft.sceneRanges.every((item, index) => (
+    item.sceneNo === index + 1
+    && item.startParagraph === (index === 0 ? 1 : draft.sceneRanges[index - 1].endParagraph + 1)
+  )) && draft.sceneRanges.at(-1)?.endParagraph === paragraphCount;
   if (draft.sceneRanges.some((item) => item.sceneNo === null
       || item.startParagraph === null
       || item.endParagraph === null
       || item.endParagraph < item.startParagraph)
-    || new Set(sceneRangeNumbers).size !== sceneRangeNumbers.length) {
+    || new Set(sceneRangeNumbers).size !== sceneRangeNumbers.length
+    || !sceneRangesCoverBody) {
     throw new Error("serial_scene_ranges_invalid");
   }
   const payload = object(options.payload);

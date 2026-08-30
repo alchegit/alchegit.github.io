@@ -1555,6 +1555,12 @@ const originalDraft = normalizeStoryHeavenSerialWorkerResult("write_draft", {
   newCanonFacts: [{ key: "first-drive", category: "event", value: "도윤이 첫 심야 운행을 시작했다." }],
   revealUpdates: [{ key: "series-terminal-truth", status: "seeded" }]
 }, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } });
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("write_draft", {
+  ...originalDraft,
+  sceneRanges: originalDraft.sceneRanges.map((range, index) => (
+    index === originalDraft.sceneRanges.length - 1 ? { ...range, endParagraph: 35 } : range
+  ))
+}, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_scene_ranges_invalid/u);
 const polishedDraft = normalizeStoryHeavenSerialWorkerResult("line_polish", {
   ...originalDraft,
   body: originalDraft.body.replace("천천히 확인했다", "좌석 끝까지 차분히 살폈다"),
@@ -1573,7 +1579,7 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("line_polish", {
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("line_polish", {
   ...polishedDraft,
   body: `${polishedDraft.body}\n\n새 문단을 추가했다.`
-}, { payload: { episodeNo: 1, draft: originalDraft, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_line_polish_paragraph_structure_mutated/u);
+}, { payload: { episodeNo: 1, draft: originalDraft, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_(?:scene_ranges_invalid|line_polish_paragraph_structure_mutated)/u);
 const qa = analyzeStoryHeavenSerialDraft({ title: "돌아오지 않는 종점", summary: "도윤이 첫 승객의 목적지를 찾다가 누나의 왕복 승차권과 기억을 요금으로 내는 규칙을 발견한다.", body });
 assert.equal(qa.passed, true);
 assert.ok(qa.characterCount >= STORYHEAVEN_SERIAL_LIMITS.draftCharactersMin);
