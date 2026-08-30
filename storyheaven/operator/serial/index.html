@@ -63,8 +63,32 @@
               <label class="field"><span class="help-topic"><span>다음 화 연속 제작</span><button class="help-button" type="button" data-help data-help-title="다음 화 연속 제작 기본값" data-help-body="작품관리에서 다음 화 작성 버튼을 누를 때 기본으로 몇 화를 이어 만들지 정합니다. 기본은 1화입니다.&#10;&#10;3화 또는 5화는 앞 회차가 검수를 통과한 뒤 다음 회차를 차례로 넣어, 앞뒤 설정이 반영되도록 처리합니다.">?</button></span><select name="continuationBatchCount"><option value="1" selected>1화씩</option><option value="3">3화 연속</option><option value="5">5화 연속</option></select><small>작품관리 화면에서 요청할 때 다시 바꿀 수 있습니다.</small></label>
             </div>
 
-            <fieldset class="genre-fieldset wide"><legend><span class="help-topic"><span>기본 장르 <small>1~3개</small></span><button class="help-button" type="button" data-help data-help-title="기본 장르" data-help-body="작품의 가장 큰 재미 약속입니다. 예를 들어 로맨스 SF는 관계 변화와 과학적 규칙이 한 사건 안에서 함께 작동해야 합니다.&#10;&#10;랜덤은 장르 선택까지 시스템에 맡기는 방식이므로 다른 기본 장르와 함께 고를 수 없습니다.">?</button></span></legend><p class="field-help">로맨스 SF, 코믹 판타지처럼 결합할 수 있습니다. 랜덤은 다른 장르와 함께 선택할 수 없습니다.</p><div class="primary-genres" data-primary-genres></div></fieldset>
-            <fieldset class="genre-fieldset wide"><legend><span class="help-topic"><span>세부장르 <small data-subgenre-count>1 / 10</small></span><button class="help-button" type="button" data-help data-help-title="세부장르" data-help-body="기본 장르 안에서 어떤 맛을 더 강하게 낼지 정하는 세부 선택입니다. 기본 장르마다 최소 한 개를 골라야 합니다.&#10;&#10;전체 합계는 최대 10개입니다. 너무 많이 고르면 작품의 중심이 흐려질 수 있으니 핵심 취향 위주로 고르세요.">?</button></span></legend><p class="field-help" data-subgenre-help>선택한 기본 장르마다 한 개 이상 고르세요. 전체 합계는 최대 열 개입니다.</p><div class="subgenres" data-subgenres></div></fieldset>
+            <fieldset class="genre-preset-fieldset wide" data-genre-preset><legend><span class="help-topic"><span>장편 판타지 계열</span><button class="help-button" type="button" data-help data-help-title="장편 판타지 계열" data-help-body="장르 이름 하나가 아니라 성장 방식, 반복 보상, 아크 변화와 피해야 할 진부함까지 함께 정하는 장편용 설정입니다.&#10;&#10;추천 랜덤은 네 계열 중 하나를 등록할 때 한 번만 정하고 작품이 끝날 때까지 유지합니다. 작품이나 작가의 설정·문체를 복제하지 않고 일반적인 장르 원리만 사용합니다.">?</button></span></legend>
+              <p class="field-help">잘 모르겠다면 추천 랜덤을 그대로 사용하세요. 정해진 결과는 설정 카드와 작업 기록에 표시됩니다.</p>
+              <div class="experience-presets" role="radiogroup" aria-label="장편 판타지 계열">
+                <label><input type="radio" name="genrePresetId" value="curated-long-fantasy-random" checked><span><strong>장편 판타지 추천 랜덤</strong><small>아래 네 계열 중 하나를 작품별로 확정</small></span></label>
+                <label><input type="radio" name="genrePresetId" value="heroic-epic-adventure-v1"><span><strong>정통 영웅 모험</strong><small>탐험·전투·동료·책임의 성장</small></span></label>
+                <label><input type="radio" name="genrePresetId" value="mythic-world-epic-v1"><span><strong>신화적 세계 대서사</strong><small>문화·세력·가치 충돌과 큰 세계</small></span></label>
+                <label><input type="radio" name="genrePresetId" value="martial-fusion-fantasy-v1"><span><strong>무협 융합 판타지</strong><small>수련·대결·은원과 강함의 대가</small></span></label>
+                <label><input type="radio" name="genrePresetId" value="game-progression-adventure-v1"><span><strong>게임 모험 성장</strong><small>작은 성취가 능력·관계·지위를 변화</small></span></label>
+                <label><input type="radio" name="genrePresetId" value="manual"><span><strong>직접 장르 설정</strong><small>아래 기본·세부장르를 직접 조합</small></span></label>
+              </div>
+              <p class="preset-preview" data-genre-preset-preview>등록 시 네 장편 판타지 계열 중 하나를 한 번만 정합니다.</p>
+            </fieldset>
+
+            <fieldset class="genre-fieldset wide" data-manual-genre-fieldset><legend><span class="help-topic"><span>기본 장르 <small>1~3개</small></span><button class="help-button" type="button" data-help data-help-title="기본 장르" data-help-body="직접 장르 설정을 선택했을 때 사용하는 세부 조합입니다. 작품의 가장 큰 재미 약속이며, 복합 장르는 각 장르가 한 사건 안에서 서로 다른 역할을 맡습니다.">?</button></span></legend><p class="field-help">직접 장르 설정을 선택하면 로맨스 SF, 코믹 판타지처럼 결합할 수 있습니다.</p><div class="primary-genres" data-primary-genres></div></fieldset>
+            <fieldset class="genre-fieldset wide" data-manual-genre-fieldset><legend><span class="help-topic"><span>세부장르 <small data-subgenre-count>1 / 10</small></span><button class="help-button" type="button" data-help data-help-title="세부장르" data-help-body="직접 장르 설정을 선택했을 때 기본 장르 안에서 어떤 맛을 강하게 낼지 정합니다. 기본 장르마다 최소 한 개, 전체 최대 10개입니다.">?</button></span></legend><p class="field-help" data-subgenre-help>직접 장르 설정을 선택하면 기본 장르마다 한 개 이상 고르세요.</p><div class="subgenres" data-subgenres></div></fieldset>
+
+            <fieldset class="prose-style-fieldset wide" data-prose-style><legend><span class="help-topic"><span>문체</span><button class="help-button" type="button" data-help data-help-title="문체" data-help-body="문체는 문장의 목소리와 정보 배열을 정하며 웃음·속도·묘사 강도와 별개입니다. 선택한 문체는 작품별로 한 번 확정되어 프롤로그부터 후속 회차까지 유지됩니다.&#10;&#10;특정 작품이나 작가를 흉내 내지 않고 서술 거리, 문장 호흡, 어휘, 대화 비율, 유머 원천과 금지 습관으로 정의합니다.">?</button></span></legend>
+              <p class="field-help">기본은 쉽게 읽히면서 인물의 허점과 관계에서 웃음이 나오는 문체입니다.</p>
+              <div class="prose-style-presets" role="radiogroup" aria-label="소설 문체">
+                <label><input type="radio" name="proseStyleId" value="light-witty-v1" checked><span><strong>가볍고 유쾌한 몰입형</strong><small>쉬운 문장·인물 중심 유머</small></span></label>
+                <label><input type="radio" name="proseStyleId" value="serious-grand-v1"><span><strong>진지하고 웅장한 서사형</strong><small>절제된 문장·선택과 세계의 무게</small></span></label>
+                <label><input type="radio" name="proseStyleId" value="clear-adventure-v1"><span><strong>담백하고 선명한 모험형</strong><small>원인·행동·결과가 빠른 문장</small></span></label>
+                <label><input type="radio" name="proseStyleId" value="dark-tense-v1"><span><strong>어둡고 긴장감 있는 몰입형</strong><small>공간과 원인을 잃지 않는 압박</small></span></label>
+                <label><input type="radio" name="proseStyleId" value="random"><span><strong>작품별 랜덤</strong><small>네 문체 중 하나를 한 번만 확정</small></span></label>
+              </div>
+            </fieldset>
 
             <fieldset class="creative-fieldset wide" data-creative-controls><legend><span class="help-topic"><span>창작 강도</span><button class="help-button" type="button" data-help data-help-title="창작 강도" data-help-body="작품이 독자에게 어떤 감각으로 읽히길 원하는지 정하는 조절값입니다. 숫자가 높을수록 항상 좋은 것이 아니라, 핵심 재미 2~3개만 높이고 나머지는 받쳐주는 편이 안정적입니다.&#10;&#10;참신성 기본값 2는 익숙한 장르 문법을 중심으로 한 가지 차별점만 더합니다. 4~5는 낯선 소재와 실험적인 규칙을 의도할 때만 선택하세요.">?</button></span></legend>
               <p class="field-help">먼저 작품의 호흡을 고르세요. 숫자가 높다고 항상 좋은 것은 아니며, 장면마다 고조와 휴식을 만들도록 적용됩니다.</p>

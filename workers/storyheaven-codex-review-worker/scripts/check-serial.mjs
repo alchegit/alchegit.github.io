@@ -157,6 +157,48 @@ assert.match(conceptPrompt, /selected candidate must have the highest average sc
 assert.match(conceptPrompt, /작품을 움직이는 인간적 감정/u);
 assert.match(conceptPrompt, /candidate-4/u);
 
+const genrePreset = {
+  requestedId: "curated-long-fantasy-random",
+  resolvedId: "game-progression-adventure-v1",
+  version: "2026-08-30",
+  label: "게임 모험 성장",
+  experience: {
+    corePromise: "분명한 목표와 규칙 아래 작은 성취가 능력·관계·지위와 다음 선택지를 누적해서 바꾼다.",
+    recurringRewards: ["퀘스트 해결", "희귀 발견", "기술 숙련", "동료 협력"],
+    progressionRule: "수치 상승은 새로운 행동과 관계와 사회적 결과로 체감되게 한다.",
+    arcVariationRule: "탐험·제작·거래·협동·경쟁·방어를 번갈아 사용한다.",
+    forbiddenShortcuts: ["상태창이 장면을 대신하는 설명", "사용 결과 없는 보상 수치"]
+  }
+};
+const proseStyle = {
+  requestedId: "light-witty-v1",
+  resolvedId: "light-witty-v1",
+  version: "2026-08-30",
+  label: "가볍고 유쾌한 몰입형",
+  lockedStyle: {
+    narratorDistance: "주인공의 판단과 감각에 가까운 제한적 서술을 유지한다.",
+    sentenceRhythm: "짧은 행동문 뒤 선택의 감정적 결과에는 한 호흡의 여유를 준다.",
+    vocabulary: "중학생도 문맥에서 바로 이해할 생활어와 정확한 보통말을 우선한다.",
+    dialogueRange: [30, 48],
+    humorSource: "욕망, 허점, 체면과 관계의 엇갈림에서 웃음을 만든다.",
+    descriptionRule: "행동과 판단을 바꾸는 구체물만 골라 보여준다.",
+    emotionRule: "감정을 선언하기 전에 반응과 선택의 변화를 보여준다.",
+    forbiddenHabits: ["매 문단 농담", "손실을 농담으로 무효화"]
+  }
+};
+const genreStyleConceptPrompt = buildSerialPrompt({
+  ...job,
+  type: "concept_gate",
+  payload: { schedule: { policy: { creativeControls: { novelty: 2 }, genrePreset, proseStyle } } }
+});
+assert.match(genreStyleConceptPrompt, /server-locked long-form genre experience/u);
+assert.match(genreStyleConceptPrompt, /game-progression-adventure-v1/u);
+assert.match(genreStyleConceptPrompt, /genreExperiencePlan/u);
+assert.match(genreStyleConceptPrompt, /server-locked prose style/u);
+assert.match(genreStyleConceptPrompt, /가볍고 유쾌한 몰입형/u);
+assert.match(genreStyleConceptPrompt, /quietEpisodePleasure/u);
+assert.doesNotMatch(genreStyleConceptPrompt, /가즈나이트|눈물을 마시는 새|묵향|더 로그|템빨|달빛조각사/u);
+
 const candidatePrompt = buildSerialPrompt({
   ...job,
   type: "concept_candidates",
@@ -293,6 +335,14 @@ assert.match(biblePrompt, /행동으로 확인할 핵심 규칙/u);
 assert.match(biblePrompt, /기존 전제와 복선을 지키는 확장 규칙 4/u);
 assert.doesNotMatch(biblePrompt, /"openingModes":\["3-7개 도입 방식"\]/u);
 assert.match(biblePrompt, /later volume entries are revisable hypotheses/u);
+const styledBiblePrompt = buildSerialPrompt({
+  ...job,
+  type: "build_bible",
+  payload: { concept: { premiseAudit, readerAppealPlan, storyCore, genrePreset, genreExperiencePlan: { recurringRewards: genrePreset.experience.recurringRewards } }, genrePreset, proseStyle }
+});
+assert.match(styledBiblePrompt, /Build the story-specific voiceProfile inside this locked range/u);
+assert.match(styledBiblePrompt, /Do not output proseStyle or styleContractId/u);
+assert.match(styledBiblePrompt, /dialogue percentage range: \[30,48\]/iu);
 assert.match(biblePrompt, /각자 혼자서는 얻을 수 없는 정보와 행동력이 필요하다/u);
 assert.match(biblePrompt, /실제 장면에서 행동과 결과로 증명할 수 있는 능숙한 기술이나 판단/u);
 assert.match(biblePrompt, /laterVolumesAreHypotheses/u);
@@ -385,6 +435,18 @@ const finalReviewPrompt = buildSerialPrompt({
 assert.match(finalReviewPrompt, /final senior editor after an independent six-role critique pass/u);
 assert.match(finalReviewPrompt, /Do not output criticPanels/u);
 assert.match(finalReviewPrompt, /server attaches the authoritative packet/u);
+const styledReviewPrompt = buildSerialPrompt({
+  ...job,
+  type: "editorial_review",
+  payload: {
+    bible: { concept: { premiseAudit, readerAppealPlan, storyCore, genrePreset }, voiceProfile: { proseStyle } },
+    criticPacket: { character: { verdict: "strong" } }
+  }
+});
+assert.match(styledReviewPrompt, /Return styleAssessment with 0-100 scores/u);
+assert.match(styledReviewPrompt, /voiceAdherence, dialogueCharacterization, toneConsistency, and sentenceRhythm/u);
+assert.match(styledReviewPrompt, /"styleAssessment"/u);
+assert.match(styledReviewPrompt, /확정 문체와 원고의 구체적 근거/u);
 
 const appealArcPrompt = buildSerialPrompt({
   ...job,

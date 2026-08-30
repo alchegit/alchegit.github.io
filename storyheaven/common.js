@@ -368,7 +368,7 @@
       serial_system_paused: "자동 연재가 전체 중지 상태입니다. 다시 시작한 뒤 이용해주세요.",
       rate_limited: "요청이 많아 잠시 제한되었습니다. 잠시 후 다시 시도해주세요.",
       serial_system_action_invalid: "자동 연재 시스템 동작을 다시 선택해주세요.",
-      serial_schedule_invalid: "연재 이름, 기본 장르 1~3개, 세부장르 전체 1~10개와 기획 원칙을 확인해주세요.",
+      serial_schedule_invalid: "장편 판타지 계열 또는 직접 장르, 문체와 기획 원칙을 다시 확인해주세요.",
       serial_schedule_not_found: "제작 일정을 찾을 수 없습니다.",
       serial_quality_hold_action_invalid: "검수 보류 작품의 처리 방법을 다시 선택해주세요.",
       serial_quality_hold_not_active: "이 원고는 더 이상 검수 보류 상태가 아닙니다. 화면을 새로고침해주세요.",

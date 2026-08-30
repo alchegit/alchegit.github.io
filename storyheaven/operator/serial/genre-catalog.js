@@ -2,7 +2,8 @@ window.StoryHeavenGenreCatalog = Object.freeze({
   fantasy: entry("판타지", "현실과 다른 규칙이 인물의 선택과 대가를 바꿉니다.", {
     "power-fantasy": "먼치킨", isekai: "이세계", "modern-fantasy": "현대판타지", "classic-fantasy": "정통판타지",
     "hunter-dungeon": "헌터·던전", "regression-possession": "회귀·빙의·환생", academy: "아카데미",
-    "territory-management": "영지경영", "oriental-fantasy": "동양판타지", "game-system": "게임·시스템"
+    "territory-management": "영지경영", "oriental-fantasy": "동양판타지", "game-system": "게임·시스템",
+    "mythic-world": "신화·독자세계"
   }),
   romance: entry("로맨스", "관계의 거리와 선택이 회차마다 달라집니다.", {
     "romance-fantasy": "로맨스판타지", "modern-romance": "현대로맨스", "office-romance": "오피스로맨스",

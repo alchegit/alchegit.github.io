@@ -28,6 +28,8 @@ try {
       primaryGenres: ["fantasy"],
       subgenres: ["modern-fantasy"],
       subgenresByGenre: { fantasy: ["modern-fantasy"] },
+      genrePreset: { requestedId: "curated-long-fantasy-random", resolvedId: "game-progression-adventure-v1", label: "게임 모험 성장", version: "2026-08-30" },
+      proseStyle: { requestedId: "light-witty-v1", resolvedId: "light-witty-v1", label: "가볍고 유쾌한 몰입형", version: "2026-08-30" },
       humorIntensity: "light",
       creativeControls: { preset: "balanced", pace: 3, suspense: 3, curiosity: 4, surprise: 3, emotion: 3, romance: 2, action: 3, description: 3, humor: 2, novelty: 2 },
       targetAge: "teen",
@@ -210,10 +212,20 @@ try {
     assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').isChecked(), true, `${viewport.name} defaults to a three-installment pilot`);
     assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotApprovalMode"][value="system_auto"]').isChecked(), true, `${viewport.name} defaults to high-score automatic promotion`);
     assert.equal(await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').inputValue(), "3", `${viewport.name} three-installment pilot raises the minimum initial batch`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="genrePresetId"][value="curated-long-fantasy-random"]').isChecked(), true, `${viewport.name} defaults to curated long-fantasy random`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="proseStyleId"][value="light-witty-v1"]').isChecked(), true, `${viewport.name} defaults to light witty prose`);
+    assert.match(await page.locator("[data-genre-preset-preview]").textContent(), /정통 영웅 모험.*신화적 세계 대서사.*무협 융합.*게임 모험 성장/u, `${viewport.name} explains the curated genre pool`);
+    await page.locator("[data-create-panel]").screenshot({ path: `test-results/storyheaven-serial-v3-defaults-${viewport.name}.png` });
     await page.locator('[data-schedule-form] select[name="cadenceUnit"]').selectOption("minutes");
     await page.locator('[data-schedule-form] input[name="cadenceValue"]').fill("90");
     await page.locator('[data-schedule-form] input[name="targetEpisodeCount"]').fill("4");
+    await page.locator('[data-schedule-form] input[name="genrePresetId"][value="mythic-world-epic-v1"]').check();
+    assert.match(await page.locator("[data-genre-preset-preview]").textContent(), /신화적 세계 대서사.*신화·독자세계.*시대판타지.*전쟁/u, `${viewport.name} previews a concrete genre experience`);
+    assert.equal(await page.locator("[data-manual-genre-fieldset]:visible").count(), 0, `${viewport.name} hides manual genre complexity for a preset`);
+    await page.locator('[data-schedule-form] input[name="genrePresetId"][value="manual"]').check();
+    assert.equal(await page.locator("[data-manual-genre-fieldset]:visible").count(), 2, `${viewport.name} reveals manual genres only on demand`);
     const primary = page.locator("[data-primary-genres]");
+    await primary.locator('input[value="historical"]').uncheck();
     assert.equal(await primary.locator("input:checked").count(), 1, `${viewport.name} starts with one genre`);
 
     await primary.locator('input[value="romance"]').check();
@@ -229,7 +241,7 @@ try {
 
     await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').check();
     await page.locator('.subgenre-group:has(h3:text("SF")) input[value="near-future"]').check();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v11") || "null")?.primaryGenres?.length === 3);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem("storyheaven.operator.serial-draft.v12") || "null")?.primaryGenres?.length === 3);
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
     await page.locator("[data-create-panel]").evaluate((node) => { node.open = true; });
@@ -239,6 +251,8 @@ try {
     assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotMode"][value="three_episode_incubation"]').isChecked(), true, `${viewport.name} restores opening pilot mode`);
     assert.equal(await page.locator('[data-schedule-form] input[name="openingPilotApprovalMode"][value="system_auto"]').isChecked(), true, `${viewport.name} restores pilot approval mode`);
     assert.equal(await page.locator('[data-schedule-form] input[name="creativeNovelty"]').inputValue(), "2", `${viewport.name} restores novelty`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="genrePresetId"][value="manual"]').isChecked(), true, `${viewport.name} restores manual genre mode`);
+    assert.equal(await page.locator('[data-schedule-form] input[name="proseStyleId"][value="light-witty-v1"]').isChecked(), true, `${viewport.name} restores prose style`);
     assert.equal(await page.locator('[data-primary-genres] input:checked').count(), 3, `${viewport.name} restores primary genres`);
     assert.equal(await page.locator('.subgenre-group:has(h3:text("로맨스")) input[value="office-romance"]').isChecked(), true, `${viewport.name} restores romance detail`);
     assert.equal(await page.locator('.subgenre-group:has(h3:text("SF")) input[value="near-future"]').isChecked(), true, `${viewport.name} restores sf detail`);
@@ -254,6 +268,8 @@ try {
     assert.equal(submitted.humorIntensity, "light", `${viewport.name} derives legacy humor compatibility`);
     assert.equal(submitted.creativeControls.curiosity, 4, `${viewport.name} creative control payload`);
     assert.equal(submitted.creativeControls.novelty, 2, `${viewport.name} novelty payload`);
+    assert.equal(submitted.genrePresetId, "manual", `${viewport.name} genre preset payload`);
+    assert.equal(submitted.proseStyleId, "light-witty-v1", `${viewport.name} prose style payload`);
     assert.equal(submitted.cadenceMinutes, 90, `${viewport.name} minute cadence payload`);
     assert.equal(submitted.targetEpisodeCount, 4, `${viewport.name} initial episode target payload`);
     assert.equal(submitted.openingPilotMode, "three_episode_incubation", `${viewport.name} opening pilot payload`);
@@ -269,6 +285,7 @@ try {
     assert.equal(await liveProgress.locator('[role="progressbar"]').getAttribute("aria-valuenow"), "58", `${viewport.name} live overview is accessible`);
     assert.equal(await page.locator(".schedule-row .schedule-progress").count(), 0, `${viewport.name} active progress is shown once instead of repeated on its setting card`);
     assert.match(await page.locator(".schedule-row").textContent(), /이 설정 멈추기.*설정 관리/u, `${viewport.name} setting card exposes one scoped control and collapsed management`);
+    assert.match(await page.locator(".schedule-row").textContent(), /게임 모험 성장.*가볍고 유쾌한 몰입형/u, `${viewport.name} setting card exposes resolved genre and prose profiles`);
     assert.equal(await page.locator(".queue-row").count(), 1, `${viewport.name} waiting work is separated from live work`);
     const waitingText = await page.locator(".queue-row.waiting").textContent();
     assert.match(waitingText, /오전 12:04/u, `${viewport.name} offsetless DB time is treated as Seoul time`);

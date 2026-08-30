@@ -331,6 +331,8 @@
 }
 
 .genre-fieldset,
+.genre-preset-fieldset,
+.prose-style-fieldset,
 .mode-fieldset,
 .humor-fieldset,
 .creative-fieldset {
@@ -341,6 +343,8 @@
 }
 
 .genre-fieldset legend,
+.genre-preset-fieldset legend,
+.prose-style-fieldset legend,
 .mode-fieldset legend,
 .humor-fieldset legend,
 .creative-fieldset legend {
@@ -368,6 +372,72 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.experience-presets,
+.prose-style-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.experience-presets label,
+.prose-style-presets label {
+  position: relative;
+  min-width: 0;
+}
+
+.experience-presets input,
+.prose-style-presets input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+}
+
+.experience-presets span,
+.prose-style-presets span {
+  box-sizing: border-box;
+  display: grid;
+  gap: 5px;
+  height: 100%;
+  border: 2px solid #303747;
+  padding: 15px;
+  background: #171b25;
+  color: #f4f7fb;
+  cursor: pointer;
+}
+
+.experience-presets small,
+.prose-style-presets small {
+  color: #aeb6c7;
+  line-height: 1.4;
+}
+
+.experience-presets input:checked + span,
+.prose-style-presets input:checked + span {
+  border-color: #4de0b5;
+  background: #102923;
+  box-shadow: inset 0 -4px 0 #4de0b5;
+}
+
+.experience-presets input:focus-visible + span,
+.prose-style-presets input:focus-visible + span {
+  outline: 3px solid #ffd45c;
+  outline-offset: 2px;
+}
+
+.preset-preview {
+  margin: 10px 0 0;
+  border-left: 4px solid #ffd45c;
+  padding: 10px 12px;
+  background: #11151e;
+  color: #eef2f8;
+  font-weight: 750;
+}
+
+[data-manual-genre-fieldset][data-locked="true"] {
+  opacity: 0.55;
 }
 
 .genre-choice,
@@ -2191,7 +2261,9 @@
 }
 
 @media (max-width: 900px) {
-  .primary-genres {
+  .primary-genres,
+  .experience-presets,
+  .prose-style-presets {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2216,6 +2288,8 @@
   .initial-settings,
   .series-length-settings,
   .primary-genres,
+    .experience-presets,
+    .prose-style-presets,
     .mode-fieldset,
     .humor-options,
     .creative-presets,

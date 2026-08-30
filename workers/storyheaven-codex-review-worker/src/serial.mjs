@@ -16,7 +16,7 @@ export const SERIAL_JOB_TYPES = Object.freeze([
 ]);
 const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-09-story-development-v20";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-30-genre-voice-quality-v30";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -44,6 +44,7 @@ export function buildSerialPrompt(job) {
     premiseCoherenceInstruction(type, job.payload),
     readerAppealInstruction(type, job.payload),
     storyDevelopmentInstruction(type, job.payload),
+    genreExperienceAndStyleInstruction(type, job.payload),
     causalIntegrityInstruction(type),
     naturalKoreanInstruction(type),
     serialRetryInstruction(job),
@@ -349,6 +350,60 @@ function storyDevelopmentInstruction(type, payload = {}) {
   return binding;
 }
 
+function genreExperienceAndStyleInstruction(type, payload = {}) {
+  const genrePreset = resolvedGenrePreset(payload);
+  const proseStyle = resolvedProseStyle(payload);
+  const instructions = [];
+  if (genrePreset) {
+    const experience = genrePreset.experience || {};
+    const binding = `The server-locked long-form genre experience is '${genrePreset.label}' (${genrePreset.resolvedId}). Its core promise is '${experience.corePromise}'. Its recurring rewards are ${JSON.stringify(experience.recurringRewards || [])}. Its progression rule is '${experience.progressionRule}'. Its arc variation rule is '${experience.arcVariationRule}'. Never use these shortcuts: ${JSON.stringify(experience.forbiddenShortcuts || [])}. This is an original high-level craft contract, not a request to imitate any existing work.`;
+    if (["concept_candidates", "concept_selection", "concept_gate"].includes(type)) {
+      instructions.push(`${binding} Every candidate must honor this experience while differing in protagonist desire, central relationship, world pressure, story arena, and causal engine. The selected concept must return genreExperiencePlan with at least four concrete recurring rewards and four genuinely different arc variations, a first-volume arc, a sustainable progression loop, a real power or skill limit, quiet-episode pleasure, and specific cliché risks.`);
+    } else if (type === "build_bible") {
+      instructions.push(`${binding} Treat concept.genreExperiencePlan as binding. Make characters, relationship pressures, world dynamics, progression limits, and seriesArchitecture repeatedly produce those rewards without adding a replacement premise.`);
+    } else if (["build_arc", "replan_arc", "build_episode_card"].includes(type)) {
+      instructions.push(`${binding} Choose this installment or arc's reward from concept.genreExperiencePlan and make it change a capability, relationship, status, responsibility, or future choice. Rotate arc forms as promised and do not reduce progression to labels or numbers.`);
+    } else if (["write_draft", "rewrite_draft"].includes(type)) {
+      instructions.push(`${binding} Put the planned genre reward and earned progression on the page as action and consequence. A status window, rank name, lore statement, or victory claim without a changed choice is not a delivered reward.`);
+    } else if (["editorial_critique", "editorial_review"].includes(type)) {
+      instructions.push(`${binding} Judge whether the manuscript actually delivers the planned familiar pleasure, earned progression, and current consequence. Do not award genrePromise for labels, power levels, worldbuilding volume, or future setup alone.`);
+    }
+  }
+  if (proseStyle) {
+    const style = proseStyle.lockedStyle || {};
+    const binding = `The server-locked prose style is '${proseStyle.label}' (${proseStyle.resolvedId}). Narrator distance: ${style.narratorDistance} Sentence rhythm: ${style.sentenceRhythm} Vocabulary: ${style.vocabulary} Dialogue percentage range: ${JSON.stringify(style.dialogueRange || [])}. Humor source: ${style.humorSource} Description: ${style.descriptionRule} Emotion: ${style.emotionRule} Forbidden habits: ${JSON.stringify(style.forbiddenHabits || [])}. Never name or imitate an author or benchmark work.`;
+    if (type === "build_bible") {
+      instructions.push(`${binding} Build the story-specific voiceProfile inside this locked range. Do not output proseStyle or styleContractId; the server attaches the authoritative contract. Specialize only the sensory palette, character speech patterns, visualization rules, onboarding rules, and work-specific forbidden habits.`);
+    } else if (["build_arc", "replan_arc", "build_episode_card"].includes(type)) {
+      instructions.push(`${binding} Plan tone movement and dialogue pressure that fit this voice. Vary intensity by scene without changing the series voice.`);
+    } else if (["write_draft", "rewrite_draft"].includes(type)) {
+      instructions.push(`${binding} Apply this profile sentence by sentence. Humor must arise from the specified source, grandeur must be physically demonstrated, and darkness must not hide basic facts. Preserve natural Korean and causal clarity over decorative styling.`);
+    } else if (["editorial_critique", "editorial_review"].includes(type)) {
+      instructions.push(`${binding} Evaluate adherence from manuscript evidence, not from the profile label or the writer's claim. Distinguish deliberate scene-level variation from voice drift.${type === "editorial_review" ? " Return styleAssessment with 0-100 scores and concrete evidence for voiceAdherence, dialogueCharacterization, toneConsistency, and sentenceRhythm. Any score below the supplied style threshold requires rewrite_required with the affected scene." : " The sceneExpression panel must cite any voice drift, interchangeable dialogue, arbitrary tone shift, or repetitive sentence rhythm."}`);
+    } else {
+      instructions.push(binding);
+    }
+  }
+  return instructions.join("\n");
+}
+
+function resolvedGenrePreset(payload = {}) {
+  const source = payload.genrePreset
+    || payload.schedule?.policy?.genrePreset
+    || payload.concept?.genrePreset
+    || payload.bible?.concept?.genrePreset
+    || null;
+  return source && typeof source === "object" && source.resolvedId && source.resolvedId !== "manual" ? source : null;
+}
+
+function resolvedProseStyle(payload = {}) {
+  const source = payload.proseStyle
+    || payload.schedule?.policy?.proseStyle
+    || payload.bible?.voiceProfile?.proseStyle
+    || null;
+  return source && typeof source === "object" && source.resolvedId ? source : null;
+}
+
 function naturalKoreanInstruction(type) {
   const rule = "Korean semantic agreement is a publication gate. For every sentence, identify the explicit or omitted grammatical subject, the actual actor, the affected object, and the predicate. Use a predicate that the subject can naturally perform or undergo. Living beings may be hurt, wounded, bleed, or feel bodily pain. Houses, buildings, walls, roads, rooms, tools, and other objects are damaged, cracked, broken, blocked, burned, or collapsed; never say that a house '상처를 입었다' unless the story has already established a literally living body, and even then name the damaged body part or structure clearly. Keep cause, actor, target, and result in the same natural Korean logic rather than translating an English metaphor literally.";
   if (type === "write_draft") {
@@ -458,6 +513,8 @@ function stageInstruction(type, payload = {}) {
 
 function resultContract(type, payload = {}) {
   const developmentV2 = hasStoryDevelopmentCore(payload);
+  const genrePreset = resolvedGenrePreset(payload);
+  const proseStyle = resolvedProseStyle(payload);
   if (type === "concept_candidates") return {
     candidates: Array.from({ length: 4 }, (_, index) => conceptCandidateContract(index))
   };
@@ -467,6 +524,16 @@ function resultContract(type, payload = {}) {
     genres: ["1-5개"], tags: ["0-5개"], rating: "all|teen",
     readerPromise: "20-300자", familiarPleasure: "10-300자",
     novelTwist: "10-300자", targetAge: "all|teen",
+    ...(genrePreset ? { genreExperiencePlan: {
+      corePromise: "선택 계열의 독자 약속을 이 작품 인물과 사건으로 구현하는 방식",
+      progressionLoop: "작은 성취가 능력·관계·지위·책임·다음 선택을 누적해서 바꾸는 반복 구조",
+      firstVolumeArc: "1권에서 욕망·관계·세계 압력과 장르 보상이 어떻게 비가역적으로 변하는지",
+      recurringRewards: ["원고에서 실제 일어날 보상 1", "보상 2", "보상 3", "보상 4"],
+      arcVariations: ["서로 다른 아크 형식 1", "형식 2", "형식 3", "형식 4"],
+      powerOrSkillLimit: "성장이 모든 갈등을 지우지 못하게 하는 대가·한계·대응 가능성",
+      quietEpisodePleasure: "전투나 큰 반전 없이도 인물과 세계를 즐길 수 있는 회차 보상",
+      clicheRisks: ["이 계열이 진부해지는 위험 1", "위험 2"]
+    } } : {}),
     developmentRoom: {
       ...(type !== "concept_selection" ? { candidates: Array.from({ length: 4 }, (_, index) => conceptCandidateContract(index)) } : {}),
       selectionReport: {
@@ -704,6 +771,11 @@ function resultContract(type, payload = {}) {
     decision: "approved|rewrite_required|blocked",
     scores: { koreanReadability: 0, canonConsistency: 0, causality: 0, readerOrientation: 0, sceneVisualization: 0, openingGrip: 0, narrativeMomentum: 0, emotionalPayoff: 0, genrePromise: 0, curiosityAndHook: 0, characterAgency: 0, characterAttachment: 0, relationshipMomentum: 0, readerReward: 0, premiseAccessibility: 0, novelty: 0 },
     scoreEvidence: { koreanReadability: ["원고 근거"], canonConsistency: ["원고 근거"], causality: ["원고 근거"], readerOrientation: ["인물·장소·평소 상태·목표·변화·손실의 원고 근거"], sceneVisualization: ["공간·동작·감각의 원고 근거"], openingGrip: ["원고 근거"], narrativeMomentum: ["원고 근거"], emotionalPayoff: ["원고 근거"], genrePromise: ["원고 근거"], curiosityAndHook: ["원고 근거"], characterAgency: ["원고 근거"], characterAttachment: ["개인적 욕구·취약점·잘못된 선택의 원고 근거"], relationshipMomentum: ["상호 행동으로 달라진 관계의 원고 근거"], readerReward: ["원고에서 실제 일어난 두 가지 이상 보상"], premiseAccessibility: ["고유 용어 없이 이해되는 인간적 갈등 근거"], novelty: ["원고 근거"] },
+    ...(proseStyle ? { styleAssessment: {
+      scores: { voiceAdherence: 0, dialogueCharacterization: 0, toneConsistency: 0, sentenceRhythm: 0 },
+      evidence: { voiceAdherence: ["확정 문체와 원고의 구체적 근거"], dialogueCharacterization: ["말의 목적·정보 순서·태도로 인물이 구분되는 근거"], toneConsistency: ["장면 목적에 맞는 어조 이동과 일관성 근거"], sentenceRhythm: ["문장 길이·어미·강조와 행동·감정 호흡 근거"] },
+      summary: "확정 문체를 얼마나 일관되게 구현했는지 20-600자 판단"
+    } } : {}),
     audienceLenses: [{ lens: "모바일 일반 독자", reaction: "읽는 동안의 반응", continueReason: "계속 읽을 이유", dropRisk: "이탈 위험" }, { lens: "장르 독자", reaction: "장르 약속에 대한 반응", continueReason: "계속 읽을 이유", dropRisk: "이탈 위험" }, { lens: "인내심 낮은 독자", reaction: "느린 부분에 대한 반응", continueReason: "계속 읽을 이유", dropRisk: "이탈 위험" }],
     ...(developmentV2 ? {
       ...(!payload?.criticPacket ? { criticPanels: criticPanelsContract() } : {}),

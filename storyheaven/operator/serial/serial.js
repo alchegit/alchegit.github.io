@@ -3,7 +3,23 @@
   const scheduleById = new Map();
   const failedByScheduleId = new Map();
   const selectedPrimaryGenres = new Set(["fantasy"]);
-  const selectedSubgenresByGenre = new Map([["fantasy", new Set(["modern-fantasy"])] ]);
+  const selectedSubgenresByGenre = new Map([["fantasy", new Set(["classic-fantasy"])] ]);
+  const genrePresetDefinitions = Object.freeze({
+    "curated-long-fantasy-random": Object.freeze({ label: "장편 판타지 추천 랜덤", preview: "등록 시 정통 영웅 모험, 신화적 세계 대서사, 무협 융합, 게임 모험 성장 중 하나를 한 번만 정합니다." }),
+    "heroic-epic-adventure-v1": Object.freeze({ label: "정통 영웅 모험", preview: "정통판타지 · 히어로 · 탐험·유적", primaryGenres: ["fantasy", "action-adventure"], subgenresByGenre: { fantasy: ["classic-fantasy"], "action-adventure": ["hero", "exploration"] } }),
+    "mythic-world-epic-v1": Object.freeze({ label: "신화적 세계 대서사", preview: "신화·독자세계 · 시대판타지 · 전쟁", primaryGenres: ["fantasy", "historical"], subgenresByGenre: { fantasy: ["mythic-world"], historical: ["historical-fantasy", "war"] } }),
+    "martial-fusion-fantasy-v1": Object.freeze({ label: "무협 융합 판타지", preview: "동양판타지 · 무협", primaryGenres: ["fantasy", "action-adventure"], subgenresByGenre: { fantasy: ["oriental-fantasy"], "action-adventure": ["martial"] } }),
+    "game-progression-adventure-v1": Object.freeze({ label: "게임 모험 성장", preview: "게임·시스템 · 탐험·유적", primaryGenres: ["fantasy", "action-adventure"], subgenresByGenre: { fantasy: ["game-system"], "action-adventure": ["exploration"] } }),
+    manual: Object.freeze({ label: "직접 장르 설정", preview: "아래 기본 장르와 세부장르를 직접 조합합니다." })
+  });
+  const proseStyleLabels = Object.freeze({
+    "light-witty-v1": "가볍고 유쾌한 몰입형",
+    "serious-grand-v1": "진지하고 웅장한 서사형",
+    "clear-adventure-v1": "담백하고 선명한 모험형",
+    "dark-tense-v1": "어둡고 긴장감 있는 몰입형",
+    random: "작품별 문체 랜덤"
+  });
+  let selectedGenrePresetId = "curated-long-fantasy-random";
   const primaryGenreLimit = 3;
   const subgenreLimit = 10;
   const seoulTimeZone = "Asia/Seoul";
@@ -37,8 +53,8 @@
     premiseCoherenceDefaultConceptPolicy,
     readerAppealDefaultConceptPolicy
   ]);
-  const draftStorageKey = "storyheaven.operator.serial-draft.v11";
-  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v10", "storyheaven.operator.serial-draft.v9", "storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
+  const draftStorageKey = "storyheaven.operator.serial-draft.v12";
+  const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v11", "storyheaven.operator.serial-draft.v10", "storyheaven.operator.serial-draft.v9", "storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   const queueActionFeedback = new Map();
   let draftReady = false;
@@ -59,6 +75,7 @@
     restoreHiddenHistory();
     renderPrimaryGenres();
     renderSubgenres();
+    syncGenrePresetUi();
     bind();
     startSeoulClock();
     syncCadenceBounds();
@@ -110,6 +127,8 @@
     selectors.subgenres = document.querySelector("[data-subgenres]");
     selectors.subgenreCount = document.querySelector("[data-subgenre-count]");
     selectors.subgenreHelp = document.querySelector("[data-subgenre-help]");
+    selectors.genrePresetPreview = document.querySelector("[data-genre-preset-preview]");
+    selectors.manualGenreFieldsets = [...document.querySelectorAll("[data-manual-genre-fieldset]")];
     selectors.creativeControls = document.querySelector("[data-creative-controls]");
     selectors.creativeSummary = document.querySelector("[data-creative-summary]");
     selectors.creativeWarning = document.querySelector("[data-creative-warning]");
@@ -137,6 +156,16 @@
     selectors.scheduleForm.elements.totalVolumes.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.elements.episodesPerVolume.addEventListener("input", queueDraftSave);
     selectors.scheduleForm.elements.continuationBatchCount.addEventListener("change", queueDraftSave);
+    for (const input of selectors.scheduleForm.querySelectorAll("input[name='genrePresetId']")) {
+      input.addEventListener("change", () => {
+        if (!input.checked) return;
+        selectGenrePreset(input.value, { applySelection: true });
+        queueDraftSave();
+      });
+    }
+    for (const input of selectors.scheduleForm.querySelectorAll("input[name='proseStyleId']")) {
+      input.addEventListener("change", queueDraftSave);
+    }
     document.addEventListener("visibilitychange", handleQueueVisibilityChange);
     for (const input of selectors.scheduleForm.querySelectorAll("input[name='creativePreset']")) {
       input.addEventListener("change", () => {
@@ -169,6 +198,34 @@
     selectors.dashboard.hidden = true;
     selectors.engineState.textContent = "관리자 확인 필요";
     stopQueueRefresh();
+  }
+
+  function selectGenrePreset(value, { applySelection = false } = {}) {
+    const id = genrePresetDefinitions[value] ? value : "curated-long-fantasy-random";
+    selectedGenrePresetId = id;
+    const definition = genrePresetDefinitions[id];
+    if (applySelection && definition.primaryGenres) {
+      applyGenreSelection(definition.primaryGenres, definition.subgenresByGenre);
+    }
+    const radio = selectors.scheduleForm?.querySelector(`input[name='genrePresetId'][value='${id}']`);
+    if (radio) radio.checked = true;
+    renderPrimaryGenres();
+    renderSubgenres();
+    syncGenrePresetUi();
+  }
+
+  function syncGenrePresetUi() {
+    const definition = genrePresetDefinitions[selectedGenrePresetId] || genrePresetDefinitions["curated-long-fantasy-random"];
+    const locked = selectedGenrePresetId !== "manual";
+    for (const fieldset of selectors.manualGenreFieldsets || []) {
+      fieldset.dataset.locked = String(locked);
+      fieldset.hidden = locked;
+    }
+    if (selectors.genrePresetPreview) {
+      selectors.genrePresetPreview.textContent = selectedGenrePresetId === "curated-long-fantasy-random"
+        ? definition.preview
+        : `${definition.label} · ${definition.preview}`;
+    }
   }
 
   function scheduleQueueRefresh({ immediate = false } = {}) {
@@ -221,9 +278,9 @@
       input.name = "primaryGenres";
       input.value = id;
       input.checked = selectedPrimaryGenres.has(id);
-      input.disabled = id !== "random"
+      input.disabled = selectedGenrePresetId !== "manual" || (id !== "random"
         && !input.checked
-        && (selectedPrimaryGenres.has("random") || selectedPrimaryGenres.size >= primaryGenreLimit);
+        && (selectedPrimaryGenres.has("random") || selectedPrimaryGenres.size >= primaryGenreLimit));
       input.addEventListener("change", () => {
         if (id === "random") {
           selectedPrimaryGenres.clear();
@@ -261,10 +318,13 @@
   }
 
   function renderSubgenres() {
+    const locked = selectedGenrePresetId !== "manual";
     if (selectedPrimaryGenres.has("random")) {
       selectors.subgenres.replaceChildren(createSubgenreChoice("random", "random", "기본·세부장르 모두 랜덤", true));
       selectors.subgenreCount.textContent = "랜덤";
-      selectors.subgenreHelp.textContent = "연재 시작 시 기본 장르 하나와 세부장르 하나를 확정하고 작품이 끝날 때까지 유지합니다.";
+      selectors.subgenreHelp.textContent = locked
+        ? "선택한 장편 판타지 계열이 실제 장르를 확정합니다."
+        : "연재 시작 시 기본 장르 하나와 세부장르 하나를 확정하고 작품이 끝날 때까지 유지합니다.";
       selectors.subgenreHelp.classList.remove("invalid");
       renderHumorControl();
       return;
@@ -287,8 +347,10 @@
     selectors.subgenres.replaceChildren(...groups);
     const count = selectedSubgenreCount();
     selectors.subgenreCount.textContent = `${count} / ${subgenreLimit}`;
-    selectors.subgenreHelp.textContent = "선택한 기본 장르마다 세부장르를 한 개 이상 고르세요. 전체 합계는 최대 열 개입니다.";
-    selectors.subgenreHelp.classList.toggle("invalid", !hasValidSubgenreSelection());
+    selectors.subgenreHelp.textContent = locked
+      ? "현재 장르 계열에 포함된 실제 기본·세부장르입니다. 직접 바꾸려면 위에서 직접 장르 설정을 선택하세요."
+      : "선택한 기본 장르마다 세부장르를 한 개 이상 고르세요. 전체 합계는 최대 열 개입니다.";
+    selectors.subgenreHelp.classList.toggle("invalid", !locked && !hasValidSubgenreSelection());
     renderHumorControl();
   }
 
@@ -301,7 +363,7 @@
     input.type = "checkbox";
     input.value = id;
     input.checked = selection.has(id);
-    input.disabled = locked || (id !== "random" && (randomSelected || (!input.checked && selectedSubgenreCount() >= subgenreLimit)));
+    input.disabled = locked || selectedGenrePresetId !== "manual" || (id !== "random" && (randomSelected || (!input.checked && selectedSubgenreCount() >= subgenreLimit)));
     input.addEventListener("change", () => {
       if (id === "random" && input.checked) {
         selection.clear();
@@ -329,7 +391,7 @@
 
   function selectDefaultGenre() {
     selectedPrimaryGenres.add("fantasy");
-    selectedSubgenresByGenre.set("fantasy", new Set(["modern-fantasy"]));
+    selectedSubgenresByGenre.set("fantasy", new Set(["classic-fantasy"]));
   }
 
   function ensureSubgenreSelection(genreId) {
@@ -456,7 +518,7 @@
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
     const detail = document.createElement("p");
-    detail.textContent = `${openingPilotLabel(schedule.openingPilotMode, schedule.openingPilotApprovalMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
+    detail.textContent = `${schedule.genrePreset?.label || subgenreLabels(schedule).join(" · ")} · ${schedule.proseStyle?.label || "기존 작품별 문체"} · ${openingPilotLabel(schedule.openingPilotMode, schedule.openingPilotApprovalMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 예약 확인 ${formatDate(schedule.nextRunAt)}` : "이 설정과 연결된 새 제작·공개만 멈춰 있습니다.";
     copy.append(heading, detail, next);
@@ -472,7 +534,7 @@
     managementBody.className = "schedule-management-body";
     const managementCopy = document.createElement("p");
     const controls = schedule.creativeControls || {};
-    managementCopy.textContent = `${subgenreLabels(schedule).join(" · ")} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · ${creativeControlSummary(controls)} · 첫 ${initialBatchText(schedule.targetEpisodeCount || 1)}`;
+    managementCopy.textContent = `${schedule.genrePreset?.label || subgenreLabels(schedule).join(" · ")} · ${schedule.proseStyle?.label || "기존 작품별 문체"} · 다음 화 기본 ${schedule.continuationBatchCount || 1}화 · ${creativeControlSummary(controls)} · 첫 ${initialBatchText(schedule.targetEpisodeCount || 1)}`;
     const managementActions = document.createElement("div");
     managementActions.className = "schedule-management-actions";
     const switchMode = actionButton(schedule.publicationMode === "auto_public" ? "테스트로 전환" : "자동 공개로 전환", "secondary", async () => {
@@ -523,6 +585,8 @@
           primaryGenres,
           subgenres,
           subgenresByGenre,
+          genrePresetId: selectedGenrePresetId,
+          proseStyleId: String(form.get("proseStyleId") || "light-witty-v1"),
           publicationMode: form.get("publicationMode"),
           openingPilotMode: form.get("openingPilotMode"),
           openingPilotApprovalMode: form.get("openingPilotApprovalMode"),
@@ -563,6 +627,10 @@
           primaryGenres: schedulePrimaryGenres(schedule),
           subgenres: schedule.subgenres,
           subgenresByGenre: scheduleSubgenresByGenre(schedule),
+          genrePresetId: schedule.genrePreset?.requestedId || "manual",
+          resolvedGenrePresetId: schedule.genrePreset?.resolvedId || "manual",
+          proseStyleId: schedule.proseStyle?.requestedId || undefined,
+          resolvedProseStyleId: schedule.proseStyle?.resolvedId || undefined,
           publicationMode: schedule.publicationMode,
           openingPilotMode: schedule.openingPilotMode || "single_episode",
           openingPilotApprovalMode: schedule.openingPilotApprovalMode || "operator_review",
@@ -2272,8 +2340,10 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 11,
+      version: 12,
       savedAt: new Date().toISOString(),
+      genrePresetId: selectedGenrePresetId,
+      proseStyleId: String(form.get("proseStyleId") || "light-witty-v1"),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
         genreId,
@@ -2310,8 +2380,15 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(draft.version)) return;
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
+    selectedGenrePresetId = draft.version >= 12 && genrePresetDefinitions[draft.genrePresetId]
+      ? draft.genrePresetId
+      : "manual";
+    setFormValue("genrePresetId", selectedGenrePresetId);
+    setFormValue("proseStyleId", draft.version >= 12 && proseStyleLabels[draft.proseStyleId]
+      ? draft.proseStyleId
+      : "light-witty-v1");
     if (draft.version < 5) {
       setFormValue("cadenceValue", "2");
       setFormValue("cadenceUnit", "hours");
@@ -2394,6 +2471,13 @@
   function loadScheduleIntoForm(schedule) {
     selectors.createPanel.open = true;
     applyGenreSelection(schedulePrimaryGenres(schedule), scheduleSubgenresByGenre(schedule));
+    selectedGenrePresetId = genrePresetDefinitions[schedule.genrePreset?.requestedId]
+      ? schedule.genrePreset.requestedId
+      : "manual";
+    setFormValue("genrePresetId", selectedGenrePresetId);
+    setFormValue("proseStyleId", proseStyleLabels[schedule.proseStyle?.requestedId]
+      ? schedule.proseStyle.requestedId
+      : "light-witty-v1");
     const cadence = cadenceFields(schedule.cadenceMinutes);
     setFormValue("cadenceValue", cadence.value);
     setFormValue("cadenceUnit", cadence.unit);
@@ -2408,6 +2492,7 @@
     setFormValue("conceptPolicy", normalizedConceptPolicy(schedule.conceptPolicy));
     renderPrimaryGenres();
     renderSubgenres();
+    syncGenrePresetUi();
     syncCadenceBounds();
     syncOpeningPilotMode();
     updateTargetButton();
@@ -2420,11 +2505,13 @@
 
   function resetDraft() {
     selectors.scheduleForm.reset();
+    selectedGenrePresetId = "curated-long-fantasy-random";
     selectedPrimaryGenres.clear();
     selectedSubgenresByGenre.clear();
     selectDefaultGenre();
     renderPrimaryGenres();
     renderSubgenres();
+    syncGenrePresetUi();
     syncCadenceBounds();
     syncOpeningPilotMode();
     updateTargetButton();
@@ -2617,7 +2704,7 @@
   }
 
   function scoreLabel(key) {
-    return ({ koreanReadability: "한국어 문장", canonConsistency: "설정 일관성", causality: "인과관계", readerOrientation: "독자 안내", sceneVisualization: "장면 가시성", openingGrip: "초반 흡입력", narrativeMomentum: "전개 추진력", emotionalPayoff: "감정 보상", genrePromise: "장르 만족", curiosityAndHook: "다음 화 궁금증", characterAgency: "주인공의 능동성", characterAttachment: "인물 애착", relationshipMomentum: "관계 변화", readerReward: "회차 보상", premiseAccessibility: "설정 이해도", novelty: "참신성" })[key] || key;
+    return ({ koreanReadability: "한국어 문장", canonConsistency: "설정 일관성", causality: "인과관계", readerOrientation: "독자 안내", sceneVisualization: "장면 가시성", openingGrip: "초반 흡입력", narrativeMomentum: "전개 추진력", emotionalPayoff: "감정 보상", genrePromise: "장르 만족", curiosityAndHook: "다음 화 궁금증", characterAgency: "주인공의 능동성", characterAttachment: "인물 애착", relationshipMomentum: "관계 변화", readerReward: "회차 보상", premiseAccessibility: "설정 이해도", novelty: "참신성", "style.voiceAdherence": "문체 적합도", "style.dialogueCharacterization": "대화 인물성", "style.toneConsistency": "어조 일관성", "style.sentenceRhythm": "문장 리듬" })[key] || key;
   }
 
   function message(text) {

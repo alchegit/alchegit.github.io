@@ -9,7 +9,8 @@ export const STORYHEAVEN_SERIAL_GENRES = Object.freeze({
     academy: "아카데미",
     "territory-management": "영지경영",
     "oriental-fantasy": "동양판타지",
-    "game-system": "게임·시스템"
+    "game-system": "게임·시스템",
+    "mythic-world": "신화·독자세계"
   }),
   romance: genre("로맨스", {
     "romance-fantasy": "로맨스판타지",

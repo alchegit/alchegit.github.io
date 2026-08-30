@@ -5,6 +5,7 @@ import {
   STORYHEAVEN_DEFAULT_CONCEPT_POLICY,
   STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES,
   STORYHEAVEN_OPENING_PILOT_MODES,
+  STORYHEAVEN_PROSE_STYLE_QUALITY,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
@@ -13,6 +14,8 @@ import {
   decideStoryHeavenSerialReview,
   normalizeStoryHeavenConceptPolicy,
   normalizeStoryHeavenCreativeControls,
+  resolveStoryHeavenGenrePreset,
+  resolveStoryHeavenProseStyle,
   storyHeavenCreativeControlGuidance,
   storyHeavenSerialQualityThresholds,
   storyHeavenSeriesPosition,
@@ -206,7 +209,13 @@ assert.match(serialOperatorHtml, /프롤로그는 설정 소개 외에 익숙한
 assert.match(serialOperatorSource, /능력 발동 방식이 지나치게 복잡해 기획 재작성 필요/u, "premise-gate failures must be readable to operators");
 assert.match(serialOperatorSource, /characterAttachment: "인물 애착"/u, "operator reviews must label character attachment clearly");
 assert.match(serialOperatorSource, /readerReward: "회차 보상"/u, "operator reviews must label concrete reader rewards clearly");
-assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v11/u, "draft persistence must include pilot approval mode");
+assert.match(serialOperatorSource, /storyheaven\.operator\.serial-draft\.v12/u, "draft persistence must include genre and prose presets");
+assert.match(serialOperatorHtml, /name="genrePresetId" value="curated-long-fantasy-random" checked/u, "new serials must default to curated long-fantasy random");
+assert.match(serialOperatorHtml, /name="proseStyleId" value="light-witty-v1" checked/u, "new serials must default to light witty prose");
+assert.match(serialOperatorHtml, /신화적 세계 대서사/u, "operator genre presets must expose mythic epic fantasy");
+assert.match(serialOperatorSource, /genrePresetId: selectedGenrePresetId/u, "operator requests must submit the genre preset");
+assert.match(serialOperatorSource, /proseStyleId:/u, "operator requests must submit the prose style");
+assert.match(serialOperatorSource, /"style\.voiceAdherence": "문체 적합도"/u, "operator reviews must label prose-style evidence clearly");
 assert.match(serialOperatorHtml, /name="openingPilotMode" value="three_episode_incubation" checked/u, "new serials must default to a three-installment pilot");
 assert.match(serialOperatorHtml, /name="openingPilotApprovalMode" value="system_auto" checked/u, "strong pilots must default to automatic promotion");
 assert.match(serialOperatorHtml, /네 개의 기획 후보를 점수로 비교해 가장 나은 기획 하나/u, "operators must know concept selection already happens before the three-installment pilot");
@@ -374,8 +383,9 @@ assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "private", cont
 assert.equal(validateStoryHeavenSerialStoryControl({ visibility: "archived", continuationMode: "paused" }).errors[0].code, "serial_archived_story_must_end");
 
 for (const [primaryGenre, definition] of Object.entries(STORYHEAVEN_SERIAL_GENRES)) {
-  assert.equal(Object.keys(definition.subgenres).length, 10, `${primaryGenre} must expose ten subgenres`);
+  assert.equal(Object.keys(definition.subgenres).length, primaryGenre === "fantasy" ? 11 : 10, `${primaryGenre} must expose the planned subgenres`);
 }
+assert.equal(STORYHEAVEN_SERIAL_GENRES.fantasy.subgenres["mythic-world"], "신화·독자세계");
 
 const randomGenre = validateSerialGenreSelection("random", ["random"], { random: () => 0 });
 assert.equal(randomGenre.ok, true);
@@ -394,6 +404,39 @@ assert.equal(STORYHEAVEN_SUBGENRE_LIMIT, 10);
 assert.equal(validateSerialGenreSelection(["random", "sf"], { random: ["random"], sf: ["near-future"] }).error, "serial_random_primary_exclusive");
 assert.equal(validateSerialGenreSelection(["fantasy", "romance", "sf", "comedy"], {}).error, "serial_primary_genre_limit");
 
+const curatedFantasySchedule = validateStoryHeavenSerialSchedule({
+  genrePresetId: "curated-long-fantasy-random",
+  proseStyleId: "light-witty-v1",
+  conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+}, { random: () => 0 });
+assert.equal(curatedFantasySchedule.ok, true);
+assert.equal(curatedFantasySchedule.schedule.genrePreset.requestedId, "curated-long-fantasy-random");
+assert.equal(curatedFantasySchedule.schedule.genrePreset.resolvedId, "heroic-epic-adventure-v1");
+assert.deepEqual(curatedFantasySchedule.schedule.primaryGenres, ["fantasy", "action-adventure"]);
+assert.deepEqual(curatedFantasySchedule.schedule.subgenresByGenre, {
+  fantasy: ["classic-fantasy"],
+  "action-adventure": ["hero", "exploration"]
+});
+assert.equal(curatedFantasySchedule.schedule.proseStyle.resolvedId, "light-witty-v1");
+assert.equal(curatedFantasySchedule.schedule.proseStyle.lockedStyle.dialogueRange[0], 30);
+const preservedRandomFantasy = validateStoryHeavenSerialSchedule({
+  genrePresetId: "curated-long-fantasy-random",
+  resolvedGenrePresetId: "martial-fusion-fantasy-v1",
+  proseStyleId: "random",
+  resolvedProseStyleId: "serious-grand-v1",
+  conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
+}, { random: () => 0.99 });
+assert.equal(preservedRandomFantasy.schedule.genrePreset.resolvedId, "martial-fusion-fantasy-v1");
+assert.equal(preservedRandomFantasy.schedule.proseStyle.resolvedId, "serious-grand-v1");
+assert.equal(resolveStoryHeavenGenrePreset({ genrePresetId: "unknown" }).error, "serial_genre_preset_invalid");
+assert.equal(resolveStoryHeavenProseStyle({ proseStyleId: "unknown" }).error, "serial_prose_style_invalid");
+assert.deepEqual(STORYHEAVEN_PROSE_STYLE_QUALITY, {
+  voiceAdherence: 90,
+  dialogueCharacterization: 86,
+  toneConsistency: 88,
+  sentenceRhythm: 88
+});
+
 const hybridGenre = validateSerialGenreSelection(
   ["romance", "sf"],
   { romance: ["office-romance"], sf: ["near-future", "android-ai"] }
@@ -406,7 +449,7 @@ assert.deepEqual(hybridGenre.subgenresByGenre, {
   sf: ["near-future", "android-ai"]
 });
 
-const allFantasySubgenres = Object.keys(STORYHEAVEN_SERIAL_GENRES.fantasy.subgenres);
+const allFantasySubgenres = Object.keys(STORYHEAVEN_SERIAL_GENRES.fantasy.subgenres).slice(0, STORYHEAVEN_SUBGENRE_LIMIT);
 const maximumGenreSchedule = validateStoryHeavenSerialSchedule({
   name: "세부장르 최대 선택 연재",
   primaryGenre: "fantasy",
@@ -417,7 +460,7 @@ assert.equal(maximumGenreSchedule.ok, true);
 assert.equal(maximumGenreSchedule.schedule.subgenres.length, 10);
 const excessiveGenreSchedule = validateStoryHeavenSerialSchedule({
   ...maximumGenreSchedule.schedule,
-  subgenresByGenre: { fantasy: [...allFantasySubgenres, "unexpected-eleventh-genre"] }
+  subgenresByGenre: { fantasy: [...allFantasySubgenres, "mythic-world"] }
 });
 assert.equal(excessiveGenreSchedule.ok, false);
 assert.equal(excessiveGenreSchedule.errors[0].code, "serial_subgenre_limit");
@@ -693,6 +736,30 @@ assert.equal(concept.readerAppealPlan.recentConceptComparison.fingerprint.episod
 assert.equal(concept.developmentRoom.candidates.length, 4);
 assert.equal(concept.developmentRoom.selectionReport.selectedCandidateId, "candidate-bus");
 assert.equal(concept.storyCore.longTailSources.length, 4);
+const genreExperiencePlan = {
+  corePromise: "위험한 세계를 이동하며 임무와 동료와 강적을 만나고 선택의 대가로 책임과 해결 방식이 달라진다.",
+  progressionLoop: "승객 사건의 해결이 도윤의 운전 능력뿐 아니라 해진과의 신뢰, 회사의 권한, 다음 노선의 선택지를 누적해서 바꾼다.",
+  firstVolumeArc: "1권에서 도윤은 비밀 노선의 신입 기사에서 공동 책임을 요구할 수 있는 동료로 변하고, 운수 회사도 그를 단순한 대체 기사로 취급할 수 없게 된다.",
+  recurringRewards: ["새 노선 탐험", "승객 문제 해결", "운전 기술의 응용", "해진과의 신뢰 변화"],
+  arcVariations: ["심야 노선 탐험", "실종 기사 추적", "차고지 방어", "회사와 기록 협상"],
+  powerOrSkillLimit: "목적지가 보여도 승객의 진짜 미련은 알 수 없고, 기억을 대가로 내므로 혼자 모든 문제를 해결할수록 정체성을 잃는다.",
+  quietEpisodePleasure: "큰 사고가 없는 날에는 기사들의 생활, 승객과의 짧은 대화, 노선 지리를 익히는 성취와 관계의 미세한 변화를 즐긴다.",
+  clicheRisks: ["더 강한 유령만 추가하는 확대", "모든 승객을 같은 희생 순서로 해결하는 반복"]
+};
+const genrePresetConcept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  genreExperiencePlan
+}, { payload: { schedule: { policy: { genrePreset: curatedFantasySchedule.schedule.genrePreset } } } });
+assert.equal(genrePresetConcept.genrePreset.resolvedId, "heroic-epic-adventure-v1");
+assert.equal(genrePresetConcept.genreExperiencePlan.recurringRewards.length, 4);
+assert.equal(genrePresetConcept.genreExperiencePlan.presetId, "heroic-epic-adventure-v1");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", concept, {
+  payload: { schedule: { policy: { genrePreset: curatedFantasySchedule.schedule.genrePreset } } }
+}), /serial_genre_experience_promise_invalid/u);
+const manualPresetConcept = normalizeStoryHeavenSerialWorkerResult("concept_gate", concept, {
+  payload: { schedule: { policy: { genrePreset: { requestedId: "manual", resolvedId: "manual", version: "2026-08-30" } } } }
+});
+assert.equal("genreExperiencePlan" in manualPresetConcept, false);
 const candidateSlate = normalizeStoryHeavenSerialWorkerResult("concept_candidates", {
   candidates: developmentCandidates
 });
@@ -984,6 +1051,22 @@ assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan.length, 10);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.volumePlan[9].internalEpisodeEnd, 251);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.longReveals.at(-1).payoffEpisode, 251);
 assert.equal(bible.narrativeBlueprint.seriesArchitecture.renewableConflictCount, 5);
+const styledBible = normalizeStoryHeavenSerialWorkerResult("build_bible", bible, {
+  seriesPlan: testSeriesPlan,
+  payload: {
+    concept: { storyCore, genrePreset: curatedFantasySchedule.schedule.genrePreset },
+    proseStyle: curatedFantasySchedule.schedule.proseStyle
+  }
+});
+assert.equal(styledBible.voiceProfile.proseStyle.resolvedId, "light-witty-v1");
+assert.equal(styledBible.voiceProfile.styleContractId, "2026-08-30:light-witty-v1");
+assert.equal(styledBible.voiceProfile.dialogueRatio, 40);
+const styleRangeBible = structuredClone(bible);
+styleRangeBible.voiceProfile.dialogueRatio = 20;
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("build_bible", styleRangeBible, {
+  seriesPlan: testSeriesPlan,
+  payload: { concept: { storyCore }, proseStyle: curatedFantasySchedule.schedule.proseStyle }
+}), /serial_voice_dialogue_style_range_invalid/u);
 
 const conciseBibleInput = structuredClone(bible);
 conciseBibleInput.relationshipWeb[0].possibleShift = "서약 뒤 책임을 나누는 동맹이 된다.";
@@ -1389,6 +1472,17 @@ assert.deepEqual(editorialCriticRolesForPass({
     }
   }
 }), ["worldCausality", "skepticalReader"]);
+assert.deepEqual(editorialCriticRolesForPass({
+  rewritten: true,
+  episodeNo: 2,
+  quality: {
+    editorial: {
+      criticPanels: strongCriticPanels,
+      scores: strongScores,
+      styleAssessment: { scores: { ...STORYHEAVEN_PROSE_STYLE_QUALITY, sentenceRhythm: 70 } }
+    }
+  }
+}), ["sceneExpression", "skepticalReader"]);
 
 const now = Date.now();
 const queueSummary = summarizeQueue([
@@ -1530,6 +1624,40 @@ assert.equal(serialRetryDelaySeconds("codex_review_timeout", 5), 300);
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");
 assert.equal(approved.readerExperienceScore, 96);
+const styleAssessment = {
+  scores: { voiceAdherence: 94, dialogueCharacterization: 91, toneConsistency: 93, sentenceRhythm: 92 },
+  evidence: {
+    voiceAdherence: ["도윤의 짧은 판단과 행동 뒤에 기억 손실의 감정 결과를 한 호흡 길게 보여 준다."],
+    dialogueCharacterization: ["도윤은 필요한 사실부터 묻고 해진은 결론과 금지부터 말해 이름을 가려도 목적과 정보 순서가 다르다."],
+    toneConsistency: ["승객 구조의 긴장 뒤 기사들의 건조한 반응으로만 짧은 숨구멍을 만들고 손실을 농담으로 지우지 않는다."],
+    sentenceRhythm: ["운전 행동은 짧게 끊고 기억을 잃은 결과는 길이를 늘려 행동과 감정의 호흡을 구분한다."]
+  },
+  summary: "가볍고 유쾌한 몰입형의 쉬운 행동문과 인물 목적에서 생기는 짧은 유머를 일관되게 유지한다."
+};
+const styledReview = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  styleAssessment
+}, {
+  payload: {
+    bible: { concept: { storyCore }, voiceProfile: { proseStyle: curatedFantasySchedule.schedule.proseStyle } },
+    criticPacket: review.criticPanels
+  }
+});
+assert.equal(styledReview.styleAssessment.profileId, "light-witty-v1");
+assert.equal(decideStoryHeavenSerialReview({ qa, review: styledReview, rewriteCount: 0 }).state, "approved");
+const weakStyleDecision = decideStoryHeavenSerialReview({
+  qa,
+  review: {
+    ...styledReview,
+    styleAssessment: {
+      ...styledReview.styleAssessment,
+      scores: { ...styledReview.styleAssessment.scores, voiceAdherence: 82 }
+    }
+  },
+  rewriteCount: 0
+});
+assert.equal(weakStyleDecision.state, "rewrite_required");
+assert.equal(weakStyleDecision.failedMetrics[0].name, "style.voiceAdherence");
 assert.equal(review.comparativeVerdict.wouldReadNext, true);
 assert.equal(calculateStoryHeavenReaderExperienceScore({ ...scores, openingGrip: 80 }), 94.7);
 assert.equal(storyHeavenSerialQualityThresholds(1).readerOrientation, 92);

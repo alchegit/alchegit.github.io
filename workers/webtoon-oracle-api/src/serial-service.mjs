@@ -3,6 +3,7 @@ import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES,
   STORYHEAVEN_OPENING_PILOT_MODES,
+  STORYHEAVEN_PROSE_STYLE_QUALITY,
   STORYHEAVEN_SERIAL_LIMITS,
   STORYHEAVEN_SERIAL_STORY_CONTROL,
   analyzeStoryHeavenSerialDraft,
@@ -58,6 +59,10 @@ export function editorialCriticRolesForPass({ rewritten = false, episodeNo = nul
     if ((EDITORIAL_ROLE_METRICS[role] || []).some((metric) => (
       Number(editorial.scores?.[metric] || 0) < Number(thresholds[metric] || 0)
     ))) roles.add(role);
+  }
+  if (editorial.styleAssessment && Object.entries(editorial.styleAssessment.scores || {})
+    .some(([name, score]) => Number(score) < Number(STORYHEAVEN_PROSE_STYLE_QUALITY[name] || 0))) {
+    roles.add("sceneExpression");
   }
   return EDITORIAL_CRITIC_ROLES.filter((role) => roles.has(role));
 }
@@ -990,6 +995,8 @@ export function createStoryHeavenSerialService({
             continuationBatchCount: checked.schedule.continuationBatchCount,
             openingPilotMode: checked.schedule.openingPilotMode,
             openingPilotApprovalMode: checked.schedule.openingPilotApprovalMode,
+            genrePreset: checked.schedule.genrePreset,
+            proseStyle: checked.schedule.proseStyle,
             randomized: checked.schedule.randomized
           }),
           next_run_at: nextRunAt,
@@ -2373,6 +2380,8 @@ export function createStoryHeavenSerialService({
         story: publicStory(story),
         concept: conceptWithPlan,
         creativeControls: payload?.schedule?.policy?.creativeControls || null,
+        genrePreset: payload?.schedule?.policy?.genrePreset || null,
+        proseStyle: payload?.schedule?.policy?.proseStyle || null,
         seriesPlan
       }
     });
@@ -2882,10 +2891,18 @@ export function createStoryHeavenSerialService({
       {
         id: randomId(), run_id: job.RUN_ID, draft_id: draft.ID,
         review_version: Number(reviewVersion.NEXT_VERSION || 1), decision: decision.state === "approved" ? "approved" : decision.state,
-        scores_json: clobJson(review.scores), safety_passed: review.safetyPassed ? "Y" : "N",
+        scores_json: clobJson({
+          ...review.scores,
+          ...(review.styleAssessment ? Object.fromEntries(Object.entries(review.styleAssessment.scores)
+            .map(([name, score]) => [`style.${name}`, score])) : {})
+        }), safety_passed: review.safetyPassed ? "Y" : "N",
         summary_text: review.summary, issues_json: clobJson(review.issues),
         rewrite_scenes_json: clobJson(review.rewriteScenes),
-        score_evidence_json: clobJson(review.scoreEvidence),
+        score_evidence_json: clobJson({
+          ...review.scoreEvidence,
+          ...(review.styleAssessment ? Object.fromEntries(Object.entries(review.styleAssessment.evidence)
+            .map(([name, evidence]) => [`style.${name}`, evidence])) : {})
+        }),
         audience_lenses_json: clobJson(review.audienceLenses), source_job_id: job.ID
       }
     );
@@ -2903,6 +2920,24 @@ export function createStoryHeavenSerialService({
           id: randomId(), run_id: job.RUN_ID, draft_id: draft.ID, metric_name: name,
           metric_score: review.scores[name], threshold_score: threshold,
           passed: Number(review.scores[name]) >= threshold ? "Y" : "N", evidence_json: clobJson(evidence)
+        }
+      );
+    }
+    for (const [name, threshold] of Object.entries(review.styleAssessment ? STORYHEAVEN_PROSE_STYLE_QUALITY : {})) {
+      const score = Number(review.styleAssessment.scores[name] || 0);
+      await connection.execute(
+        `insert into storyheaven_quality_metrics (
+          id, run_id, draft_id, metric_name, metric_score,
+          threshold_score, passed, evidence_json
+        ) values (
+          :id, :run_id, :draft_id, :metric_name, :metric_score,
+          :threshold_score, :passed, :evidence_json
+        )`,
+        {
+          id: randomId(), run_id: job.RUN_ID, draft_id: draft.ID, metric_name: `style.${name}`,
+          metric_score: score, threshold_score: threshold,
+          passed: score >= threshold ? "Y" : "N",
+          evidence_json: clobJson(review.styleAssessment.evidence[name] || [])
         }
       );
     }
@@ -3811,6 +3846,8 @@ export function createStoryHeavenSerialService({
         familiarPleasure: concept.familiarPleasure,
         novelTwist: concept.novelTwist,
         storyCore: concept.storyCore,
+        genrePreset: concept.genrePreset,
+        genreExperiencePlan: concept.genreExperiencePlan,
         premiseAudit: concept.premiseAudit,
         readerAppealPlan: concept.readerAppealPlan,
         seriesPlan: concept.seriesPlan
@@ -3964,6 +4001,8 @@ function mapSchedule(row) {
     continuationBatchCount: normalizeContinuationBatchCount(policy.continuationBatchCount),
     openingPilotMode: normalizeOpeningPilotMode(policy.openingPilotMode),
     openingPilotApprovalMode: normalizeOpeningPilotApprovalMode(policy.openingPilotApprovalMode),
+    genrePreset: policy.genrePreset || null,
+    proseStyle: policy.proseStyle || null,
     creativeControls,
     humorIntensity: creativeControls.humorIntensity || "light",
     humorLabel: creativeControls.humorLabel || "미소 중심",

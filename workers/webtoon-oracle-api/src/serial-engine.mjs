@@ -155,6 +155,13 @@ const STORYHEAVEN_FIRST_EPISODE_QUALITY = Object.freeze({
   novelty: 70
 });
 
+export const STORYHEAVEN_PROSE_STYLE_QUALITY = Object.freeze({
+  voiceAdherence: 90,
+  dialogueCharacterization: 86,
+  toneConsistency: 88,
+  sentenceRhythm: 88
+});
+
 export const STORYHEAVEN_HUMOR_PROFILES = Object.freeze({
   light: Object.freeze({
     label: "미소 중심",
@@ -189,6 +196,147 @@ export const STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS = Object.freeze({
   novelty: 2
 });
 
+export const STORYHEAVEN_GENRE_PRESET_VERSION = "2026-08-30";
+export const STORYHEAVEN_PROSE_STYLE_VERSION = "2026-08-30";
+
+export const STORYHEAVEN_LONG_FANTASY_PRESETS = Object.freeze({
+  "heroic-epic-adventure-v1": genrePreset("정통 영웅 모험", {
+    fantasy: ["classic-fantasy"],
+    "action-adventure": ["hero", "exploration"]
+  }, {
+    corePromise: "위험한 세계를 이동하며 임무·동료·강적을 만나고 선택의 대가로 영웅의 자격과 책임이 달라진다.",
+    recurringRewards: ["탐험과 발견", "전투에서 드러나는 판단", "동료와 신뢰의 변화", "명예와 책임의 확대"],
+    progressionRule: "힘의 등급보다 선택할 수 있는 책임, 동료, 이동 범위와 해결 방식이 누적되어 넓어진다.",
+    arcVariationRule: "임무·추적·탐험·구출·방어·협상을 번갈아 사용하되 중심 욕망과 관계축을 유지한다.",
+    forbiddenShortcuts: ["이유 없이 주인공을 숭배하는 조연", "전투력 등급만 올라가는 전투 목록", "매 아크 더 큰 신만 추가하는 확대"]
+  }),
+  "mythic-world-epic-v1": genrePreset("신화적 세계 대서사", {
+    fantasy: ["mythic-world"],
+    historical: ["historical-fantasy", "war"]
+  }, {
+    corePromise: "서로 다른 문화와 세력이 자기 논리로 움직이며 개인의 선택이 세계 질서와 큰 주제에 구체적인 결과를 남긴다.",
+    recurringRewards: ["낯선 문화의 행동 원리 발견", "가치와 의무의 충돌", "정치적 선택의 파장", "세계 규모의 경이"],
+    progressionRule: "고유명사 수가 아니라 인물이 이해하는 문화·동맹·책임과 세계에 미칠 수 있는 영향이 누적된다.",
+    arcVariationRule: "여정·외교·전쟁·의식·생존·통치의 압력을 교차하며 각 세력의 독립 목적을 보존한다.",
+    forbiddenShortcuts: ["고유명사와 연대기 나열", "현재 목표 없는 철학 대화", "신비하다는 이유로 생략한 인과"]
+  }),
+  "martial-fusion-fantasy-v1": genrePreset("무협 융합 판타지", {
+    fantasy: ["oriental-fantasy"],
+    "action-adventure": ["martial"]
+  }, {
+    corePromise: "수련과 대결로 실력이 축적되고 은원·문파·신념·책임이 강함을 어디에 쓸지 압박한다.",
+    recurringRewards: ["수련 성과의 실전 증명", "기술의 공정한 응용", "강적과의 수 싸움", "은원과 세력 질서의 변화"],
+    progressionRule: "경지 이름보다 기술의 이해, 대가, 평판, 적의 대응과 주인공의 선택지가 누적되어 변한다.",
+    arcVariationRule: "수련·비무·호위·추적·문파 갈등·세력 협상을 교차하고 압도적 힘만으로 결말을 내지 않는다.",
+    forbiddenShortcuts: ["이름만 바뀌는 경지 상승", "모든 갈등의 압도적 힘 해결", "무협과 서양 판타지의 장식적 병치"]
+  }),
+  "game-progression-adventure-v1": genrePreset("게임 모험 성장", {
+    fantasy: ["game-system"],
+    "action-adventure": ["exploration"]
+  }, {
+    corePromise: "분명한 목표와 규칙 아래 작은 성취가 능력·관계·지위와 다음 선택지를 누적해서 바꾼다.",
+    recurringRewards: ["퀘스트 해결과 실용적 보상", "희귀한 발견", "기술 숙련과 응용", "동료 협력과 세력 확장"],
+    progressionRule: "수치 상승은 반드시 새로운 행동, 관계, 경제적 선택 또는 사회적 결과로 체감되게 한다.",
+    arcVariationRule: "탐험·제작·거래·협동·경쟁·방어를 번갈아 사용하며 우연한 히든 보상에 의존하지 않는다.",
+    forbiddenShortcuts: ["상태창이 장면을 대신하는 설명", "사용 결과 없는 보상 수치", "우연한 히든 보상의 연속"]
+  })
+});
+
+export const STORYHEAVEN_PROSE_STYLES = Object.freeze({
+  "light-witty-v1": proseStyle("가볍고 유쾌한 몰입형", {
+    narratorDistance: "주인공의 판단과 감각에 가까운 제한적 서술을 유지한다.",
+    sentenceRhythm: "짧고 명확한 행동문을 기본으로 하고 선택의 감정적 결과에는 한 호흡의 여유를 준다.",
+    vocabulary: "중학생도 문맥에서 바로 이해할 생활어와 정확한 보통말을 우선한다.",
+    dialogueRange: [30, 48],
+    humorSource: "붙인 농담이 아니라 욕망, 허점, 체면과 관계의 엇갈림에서 웃음을 만든다.",
+    descriptionRule: "행동과 판단을 바꾸는 구체물만 짧게 골라 보여준다.",
+    emotionRule: "감정을 선언하기 전에 반응, 선택, 머뭇거림과 관계 변화를 보여준다.",
+    forbiddenHabits: ["매 문단 농담", "진지한 손실을 즉시 농담으로 무효화", "인터넷 유행어 남용", "가벼움과 무책임의 혼동"]
+  }),
+  "serious-grand-v1": proseStyle("진지하고 웅장한 서사형", {
+    narratorDistance: "인물에 밀착하되 선택의 결과가 역사와 세계에 미치는 무게를 필요한 순간에 넓혀 보여준다.",
+    sentenceRhythm: "평상시에는 절제하고 결정·전투·상실의 핵심 순간에만 문장 호흡을 확장한다.",
+    vocabulary: "정확한 보통말을 중심으로 하고 한자어와 고어는 시대와 인물에 꼭 필요할 때만 쓴다.",
+    dialogueRange: [22, 38],
+    humorSource: "긴장을 무너뜨리지 않는 건조한 반응과 관계의 짧은 숨구멍으로 제한한다.",
+    descriptionRule: "추상적인 장엄함 대신 규모, 거리, 소리, 군중과 물자의 변화로 웅장함을 증명한다.",
+    emotionRule: "큰 선언보다 감당해야 할 책임, 포기와 행동의 무게로 감정을 드러낸다.",
+    forbiddenHabits: ["모든 문장의 비장함", "뜻이 흐린 수사", "철학 대사 남발", "과도한 감탄과 운명론"]
+  }),
+  "clear-adventure-v1": proseStyle("담백하고 선명한 모험형", {
+    narratorDistance: "행동과 선택을 빠르게 읽을 수 있는 제한적 서술을 유지한다.",
+    sentenceRhythm: "원인·행동·결과를 선명하게 잇고 장면마다 핵심 이미지 하나만 남긴다.",
+    vocabulary: "짧고 구체적인 동사와 공간어를 우선하고 장식적인 추상어를 피한다.",
+    dialogueRange: [25, 42],
+    humorSource: "인물 성격과 목적 차이가 드러나는 짧은 반응에서만 웃음을 만든다.",
+    descriptionRule: "이동, 장애물, 거리와 행동 결과를 재구성할 만큼만 묘사한다.",
+    emotionRule: "감정은 선택 속도, 시선, 거리와 행동의 변화로 간결하게 보여준다.",
+    forbiddenHabits: ["보고서 문장", "동작 목록", "감정 없는 속도전", "장면마다 같은 짧은 호흡"]
+  }),
+  "dark-tense-v1": proseStyle("어둡고 긴장감 있는 몰입형", {
+    narratorDistance: "불확실한 정보와 시점 인물의 감각에 가까이 머물되 독자가 공간과 원인을 잃지 않게 한다.",
+    sentenceRhythm: "짧은 압박과 긴 관찰을 교차해 긴장과 이해의 호흡을 함께 만든다.",
+    vocabulary: "모호한 공포 형용사보다 눈에 보이는 변화와 구체적인 위험을 우선한다.",
+    dialogueRange: [18, 35],
+    humorSource: "인물이 공포를 견디기 위한 방어 반응으로만 드물게 사용한다.",
+    descriptionRule: "안전했던 기준이 어떻게 어긋났는지 비교 가능한 감각과 물체로 보여준다.",
+    emotionRule: "두려움을 이름 붙이기보다 잘못된 판단, 망설임과 신체 행동의 변화로 보여준다.",
+    forbiddenHabits: ["모호한 어둠 반복", "피 냄새와 심장 박동 반복", "잔혹함을 깊이로 착각", "사실을 숨겨 만든 가짜 반전"]
+  })
+});
+
+const STORYHEAVEN_LONG_FANTASY_RANDOM_WEIGHTS = Object.freeze([
+  ["heroic-epic-adventure-v1", 30],
+  ["mythic-world-epic-v1", 15],
+  ["martial-fusion-fantasy-v1", 20],
+  ["game-progression-adventure-v1", 35]
+]);
+const STORYHEAVEN_PROSE_STYLE_IDS = Object.freeze(Object.keys(STORYHEAVEN_PROSE_STYLES));
+
+export function resolveStoryHeavenGenrePreset(input = {}, { random = Math.random } = {}) {
+  const requestedId = String(input.genrePresetId || input.genrePreset?.requestedId || "manual").trim();
+  const suppliedResolvedId = String(input.resolvedGenrePresetId || input.genrePreset?.resolvedId || "").trim();
+  if (requestedId === "manual") {
+    return { ok: true, value: { requestedId: "manual", resolvedId: "manual", version: STORYHEAVEN_GENRE_PRESET_VERSION, label: "직접 설정" } };
+  }
+  const resolvedId = requestedId === "curated-long-fantasy-random"
+    ? (STORYHEAVEN_LONG_FANTASY_PRESETS[suppliedResolvedId] ? suppliedResolvedId : weightedChoice(STORYHEAVEN_LONG_FANTASY_RANDOM_WEIGHTS, random))
+    : requestedId;
+  const profile = STORYHEAVEN_LONG_FANTASY_PRESETS[resolvedId];
+  if (!profile) return { ok: false, error: "serial_genre_preset_invalid" };
+  return {
+    ok: true,
+    value: {
+      requestedId,
+      resolvedId,
+      version: STORYHEAVEN_GENRE_PRESET_VERSION,
+      ...profile
+    }
+  };
+}
+
+export function resolveStoryHeavenProseStyle(input = {}, { random = Math.random } = {}) {
+  const requestedId = String(input.proseStyleId || input.proseStyle?.requestedId || "").trim();
+  if (!requestedId) return { ok: true, value: null };
+  const suppliedResolvedId = String(input.resolvedProseStyleId || input.proseStyle?.resolvedId || "").trim();
+  const resolvedId = requestedId === "random"
+    ? (STORYHEAVEN_PROSE_STYLES[suppliedResolvedId]
+      ? suppliedResolvedId
+      : STORYHEAVEN_PROSE_STYLE_IDS[Math.min(STORYHEAVEN_PROSE_STYLE_IDS.length - 1, Math.max(0, Math.floor(safeRandom(random) * STORYHEAVEN_PROSE_STYLE_IDS.length)))])
+    : requestedId;
+  const profile = STORYHEAVEN_PROSE_STYLES[resolvedId];
+  if (!profile) return { ok: false, error: "serial_prose_style_invalid" };
+  return {
+    ok: true,
+    value: {
+      requestedId,
+      resolvedId,
+      version: STORYHEAVEN_PROSE_STYLE_VERSION,
+      ...profile
+    }
+  };
+}
+
 const STORYHEAVEN_CREATIVE_CONTROL_KEYS = Object.freeze(Object.keys(STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS));
 const STORYHEAVEN_CREATIVE_PRESETS = new Set(["balanced", "fast", "emotional", "custom"]);
 
@@ -218,11 +366,17 @@ export function validateStoryHeavenSerialStoryControl(input = {}) {
   return { ok: errors.length === 0, errors, control: { visibility, continuationMode, operatorNote } };
 }
 
-export function validateStoryHeavenSerialSchedule(input = {}) {
+export function validateStoryHeavenSerialSchedule(input = {}, { random = Math.random } = {}) {
   const errors = [];
+  const genrePreset = resolveStoryHeavenGenrePreset(input, { random });
+  const proseStyle = resolveStoryHeavenProseStyle(input, { random });
+  const presetSelection = genrePreset.ok && genrePreset.value.resolvedId !== "manual"
+    ? genrePreset.value
+    : null;
   const genre = validateSerialGenreSelection(
-    input.primaryGenres || input.primaryGenre,
-    input.subgenresByGenre || input.subgenres
+    presetSelection ? Object.keys(presetSelection.subgenresByGenre) : input.primaryGenres || input.primaryGenre,
+    presetSelection ? presetSelection.subgenresByGenre : input.subgenresByGenre || input.subgenres,
+    { random }
   );
   const legacyCadence = Number(input.cadenceDays) * 1_440;
   const cadenceMinutes = integer(
@@ -285,6 +439,8 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     ? input.publicationMode
     : "test_private";
   const conceptPolicy = normalizeStoryHeavenConceptPolicy(input.conceptPolicy);
+  if (!genrePreset.ok) errors.push(fieldError("genrePresetId", genrePreset.error));
+  if (!proseStyle.ok) errors.push(fieldError("proseStyleId", proseStyle.error));
   if (!genre.ok) errors.push(fieldError("subgenres", genre.error));
   if (!Number.isInteger(rawTargetEpisodeCount)
     || rawTargetEpisodeCount < STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin
@@ -313,7 +469,7 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
     ok: errors.length === 0,
     errors,
     schedule: {
-      name: genre.ok ? `${genre.primaryLabels.join(" × ")} 자동 연재` : "자동 연재",
+      name: genre.ok ? `${genrePreset.value?.label && genrePreset.value.resolvedId !== "manual" ? genrePreset.value.label : genre.primaryLabels.join(" × ")} 자동 연재` : "자동 연재",
       primaryGenre: genre.primaryGenre,
       primaryGenreLabel: genre.primaryLabel || "",
       primaryGenres: genre.primaryGenres || [],
@@ -334,6 +490,8 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
       targetAge,
       publicationMode,
       conceptPolicy,
+      genrePreset: genrePreset.ok ? genrePreset.value : null,
+      proseStyle: proseStyle.ok ? proseStyle.value : null,
       creativeControls: {
         ...creativeControls.values,
         preset: creativeControls.preset,
@@ -344,9 +502,52 @@ export function validateStoryHeavenSerialSchedule(input = {}) {
         humorShare: humorProfile?.humorShare || STORYHEAVEN_HUMOR_PROFILES.light.humorShare,
         guidance: storyHeavenCreativeControlGuidance(creativeControls.values)
       },
-      randomized: genre.randomized || { primaryGenre: false, subgenres: false }
+      randomized: {
+        ...(genre.randomized || { primaryGenre: false, subgenres: false }),
+        genrePreset: genrePreset.value?.requestedId === "curated-long-fantasy-random",
+        proseStyle: proseStyle.value?.requestedId === "random"
+      }
     }
   };
+}
+
+function genrePreset(label, subgenresByGenre, experience) {
+  return Object.freeze({
+    label,
+    subgenresByGenre: Object.freeze(Object.fromEntries(Object.entries(subgenresByGenre)
+      .map(([key, values]) => [key, Object.freeze([...values])]))),
+    experience: Object.freeze({
+      ...experience,
+      recurringRewards: Object.freeze([...experience.recurringRewards]),
+      forbiddenShortcuts: Object.freeze([...experience.forbiddenShortcuts])
+    })
+  });
+}
+
+function proseStyle(label, lockedStyle) {
+  return Object.freeze({
+    label,
+    lockedStyle: Object.freeze({
+      ...lockedStyle,
+      dialogueRange: Object.freeze([...lockedStyle.dialogueRange]),
+      forbiddenHabits: Object.freeze([...lockedStyle.forbiddenHabits])
+    })
+  });
+}
+
+function weightedChoice(entries, random) {
+  const total = entries.reduce((sum, [, weight]) => sum + weight, 0);
+  let cursor = safeRandom(random) * total;
+  for (const [id, weight] of entries) {
+    cursor -= weight;
+    if (cursor < 0) return id;
+  }
+  return entries.at(-1)[0];
+}
+
+function safeRandom(random) {
+  const value = Number(typeof random === "function" ? random() : 0);
+  return Number.isFinite(value) ? Math.min(0.999999999, Math.max(0, value)) : 0;
 }
 
 export function normalizeStoryHeavenCreativeControls(input, legacyHumorIntensity) {
@@ -663,6 +864,12 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
   const failedMetrics = Object.entries(thresholds)
     .filter(([name, threshold]) => Number(scores[name]) < threshold)
     .map(([name, threshold]) => ({ name, score: Number(scores[name] || 0), threshold }));
+  if (review?.styleAssessment) {
+    for (const [name, threshold] of Object.entries(STORYHEAVEN_PROSE_STYLE_QUALITY)) {
+      const score = Number(review.styleAssessment.scores?.[name] || 0);
+      if (score < threshold) failedMetrics.push({ name: `style.${name}`, score, threshold });
+    }
+  }
   const nextReadFailure = review?.comparativeVerdict
     && review.comparativeVerdict.wouldReadNext !== true;
   const mandatoryFailure = !qa?.passed || Number(qa?.score || 0) < thresholds.koreanReadability
@@ -701,6 +908,7 @@ export function calculateStoryHeavenReaderExperienceScore(scores = {}) {
 
 function normalizeConcept(source, options = {}) {
   const legacyConceptCopy = options.allowLegacyConceptCopy === true;
+  const genrePreset = expectedGenrePreset(options);
   const concept = {
     title: requiredText(source.title, 80, 2, "serial_concept_title_invalid"),
     logline: requiredText(source.logline, 220, 20, "serial_concept_logline_invalid"),
@@ -721,6 +929,10 @@ function normalizeConcept(source, options = {}) {
     novelTwist: requiredText(source.novelTwist, 300, 10, "serial_novel_twist_invalid"),
     targetAge: ["all", "teen"].includes(source.targetAge) ? source.targetAge : "teen"
   };
+  if (genrePreset) {
+    concept.genrePreset = genrePreset;
+    concept.genreExperiencePlan = normalizeGenreExperiencePlan(source.genreExperiencePlan, genrePreset);
+  }
   if (!legacyConceptCopy || Object.keys(object(source.premiseAudit)).length > 0) {
     concept.premiseAudit = normalizePremiseAudit(source.premiseAudit);
   }
@@ -1087,6 +1299,12 @@ function normalizeBible(source, options = {}) {
   const worldRules = requiredList(source.worldRules, { min: 5, max: 24, itemMax: 500 }, "serial_world_rules_invalid");
   const forbiddenContradictions = requiredList(source.forbiddenContradictions, { min: 3, max: 20, itemMax: 500 }, "serial_forbidden_rules_invalid");
   const voice = object(source.voiceProfile);
+  const proseStyle = expectedProseStyle(options);
+  const dialogueRange = array(proseStyle?.lockedStyle?.dialogueRange);
+  const dialogueRatio = integer(voice.dialogueRatio, 0, 100, 35);
+  if (proseStyle && (dialogueRatio < Number(dialogueRange[0]) || dialogueRatio > Number(dialogueRange[1]))) {
+    throw new Error("serial_voice_dialogue_style_range_invalid");
+  }
   const narrative = object(source.narrativeBlueprint);
   const expectedPlan = expectedSeriesPlan(options);
   const seriesArchitecture = normalizeSeriesArchitecture(
@@ -1102,9 +1320,13 @@ function normalizeBible(source, options = {}) {
     glossary: stringList(source.glossary, { max: 40, itemMax: 300 }),
     forbiddenContradictions,
     voiceProfile: {
+      ...(proseStyle ? {
+        proseStyle,
+        styleContractId: `${proseStyle.version}:${proseStyle.resolvedId}`
+      } : {}),
       narratorDistance: requiredText(voice.narratorDistance, 120, 2, "serial_voice_distance_invalid"),
       sentenceRhythm: requiredText(voice.sentenceRhythm, 200, 2, "serial_voice_rhythm_invalid"),
-      dialogueRatio: integer(voice.dialogueRatio, 0, 100, 35),
+      dialogueRatio,
       humorStyle: text(voice.humorStyle, 200),
       descriptionDensity: integer(voice.descriptionDensity, 0, 100, 50),
       emotionStyle: requiredText(voice.emotionStyle, 200, 2, "serial_voice_emotion_invalid"),
@@ -1125,6 +1347,42 @@ function normalizeBible(source, options = {}) {
       seriesArchitecture
     }
   };
+}
+
+function normalizeGenreExperiencePlan(value, preset) {
+  const source = object(value);
+  return {
+    presetId: preset.resolvedId,
+    corePromise: requiredText(source.corePromise, 500, 20, "serial_genre_experience_promise_invalid"),
+    progressionLoop: requiredText(source.progressionLoop, 600, 30, "serial_genre_experience_progression_invalid"),
+    firstVolumeArc: requiredText(source.firstVolumeArc, 800, 40, "serial_genre_experience_first_volume_invalid"),
+    recurringRewards: requiredList(source.recurringRewards, { min: 4, max: 6, itemMax: 240 }, "serial_genre_experience_rewards_invalid"),
+    arcVariations: requiredList(source.arcVariations, { min: 4, max: 8, itemMax: 240 }, "serial_genre_experience_variations_invalid"),
+    powerOrSkillLimit: requiredText(source.powerOrSkillLimit, 500, 20, "serial_genre_experience_limit_invalid"),
+    quietEpisodePleasure: requiredText(source.quietEpisodePleasure, 500, 20, "serial_genre_experience_quiet_invalid"),
+    clicheRisks: requiredList(source.clicheRisks, { min: 2, max: 5, itemMax: 240 }, "serial_genre_experience_cliche_invalid")
+  };
+}
+
+function expectedGenrePreset(options = {}) {
+  const payload = object(options.payload);
+  const source = object(
+    payload.genrePreset
+    || payload.schedule?.policy?.genrePreset
+    || payload.concept?.genrePreset
+    || payload.bible?.concept?.genrePreset
+  );
+  return source.resolvedId && source.resolvedId !== "manual" && source.version ? source : null;
+}
+
+function expectedProseStyle(options = {}) {
+  const payload = object(options.payload);
+  const source = object(
+    payload.proseStyle
+    || payload.schedule?.policy?.proseStyle
+    || payload.bible?.voiceProfile?.proseStyle
+  );
+  return source.resolvedId && source.version && object(source.lockedStyle).sentenceRhythm ? source : null;
 }
 
 function normalizeRelationshipWeb(value, characters) {
@@ -1642,6 +1900,8 @@ function normalizeEditorialReview(source, options = {}) {
   });
   if (audienceLenses.length !== 3) throw new Error("serial_review_audience_lenses_invalid");
   const developmentV2 = Object.keys(object(object(options.payload).bible?.concept?.storyCore)).length > 0;
+  const proseStyle = expectedProseStyle(options);
+  const styleAssessment = proseStyle ? normalizeStyleAssessment(source.styleAssessment, proseStyle) : null;
   const suppliedCriticPacket = object(object(options.payload).criticPacket);
   const criticPanels = developmentV2
     ? normalizeCriticPanels(Object.keys(suppliedCriticPacket).length ? suppliedCriticPacket : source.criticPanels)
@@ -1668,6 +1928,7 @@ function normalizeEditorialReview(source, options = {}) {
     rewriteScenes,
     scoreEvidence,
     audienceLenses,
+    ...(styleAssessment ? { styleAssessment } : {}),
     ...(developmentV2 ? {
       criticPanels,
       comparativeVerdict: {
@@ -1679,6 +1940,27 @@ function normalizeEditorialReview(source, options = {}) {
         rewritePriority: requiredText(comparativeVerdictSource.rewritePriority, 500, 20, "serial_review_priority_invalid")
       }
     } : {})
+  };
+}
+
+function normalizeStyleAssessment(value, proseStyle) {
+  const source = object(value);
+  const scoreSource = object(source.scores);
+  const evidenceSource = object(source.evidence);
+  const scores = {};
+  const evidence = {};
+  for (const key of Object.keys(STORYHEAVEN_PROSE_STYLE_QUALITY)) {
+    const score = integer(scoreSource[key], 0, 100, null);
+    if (score === null) throw new Error(`serial_review_style_${key}_invalid`);
+    scores[key] = score;
+    evidence[key] = requiredList(evidenceSource[key], { min: 1, max: 3, itemMax: 300 }, `serial_review_style_${key}_evidence_invalid`);
+  }
+  return {
+    profileId: proseStyle.resolvedId,
+    profileLabel: proseStyle.label,
+    scores,
+    evidence,
+    summary: requiredText(source.summary, 600, 20, "serial_review_style_summary_invalid")
   };
 }
 
