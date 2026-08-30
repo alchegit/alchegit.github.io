@@ -67,6 +67,7 @@ assert.equal(modelRoleForSerialJob("replan_arc"), "editor");
 assert.equal(modelRoleForSerialJob("concept_candidates"), "writer");
 assert.equal(modelRoleForSerialJob("voice_sample"), "writer");
 assert.equal(modelRoleForSerialJob("line_polish"), "writer");
+assert.equal(modelRoleForSerialJob("revise_episode_card"), "writer");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
 const serialModels = { writerModel: "gpt-5.6-terra", editorModel: "gpt-5.6-luna", escalationModel: "gpt-5.6-sol" };
 assert.equal(selectSerialModel({ type: "write_draft", payload: {} }, serialModels), "gpt-5.6-terra");
@@ -76,6 +77,7 @@ assert.equal(selectSerialModel({ type: "editorial_review", payload: { rewriteNum
 assert.equal(selectSerialModel({ type: "voice_sample", payload: {} }, serialModels), "gpt-5.6-terra");
 assert.equal(selectSerialModel({ type: "voice_review", payload: {} }, serialModels), "gpt-5.6-luna");
 assert.equal(selectSerialModel({ type: "line_polish", payload: { rewriteNumber: 1 } }, serialModels), "gpt-5.6-terra");
+assert.equal(selectSerialModel({ type: "revise_episode_card", payload: {} }, serialModels), "gpt-5.6-sol");
 
 const draftPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
 assert.match(draftPrompt, /silent sentence-by-sentence subject-predicate pass/u);
@@ -93,6 +95,14 @@ assert.match(linePolishPrompt, /prose-only local polish/u);
 assert.match(linePolishPrompt, /Preserve title, summary, paragraph count and boundaries/u);
 assert.match(linePolishPrompt, /Do not add or remove a paragraph, event, fact, action, speaker turn/u);
 assert.match(linePolishPrompt, /Run the silent subject-agent-object-predicate check/u);
+const cardRepairPrompt = buildSerialPrompt({
+  ...job,
+  type: "revise_episode_card",
+  payload: { currentCard: {}, editor: { issues: [] }, bible: { concept: { storyCore: {} } } }
+});
+assert.match(cardRepairPrompt, /senior structural editor after prose rewrites failed/u);
+assert.match(cardRepairPrompt, /opponent, witness, enforcer, or nearby person is not automatically/u);
+assert.match(cardRepairPrompt, /server supersedes the prior card and writes a fresh draft/u);
 
 const genreProfileSignals = {
   fantasy: /ordinary lack, duty, or vulnerability/u,
@@ -133,6 +143,8 @@ assert.match(planningPrompt, /techniquePlan\.readerOrientation and techniquePlan
 assert.match(planningPrompt, /ordinaryBaseline[\s\S]*immediateGoal[\s\S]*knownContext[\s\S]*firstChange[\s\S]*stakes/u);
 assert.match(planningPrompt, /do not force a catastrophe into the first two paragraphs/u);
 assert.match(planningPrompt, /copy the binding disclosure boundary/u);
+assert.match(planningPrompt, /Return at least one ruleApplicationProof/u);
+assert.match(planningPrompt, /eligibilityEvidence must be an observable existing fact/u);
 
 const conceptPrompt = buildSerialPrompt({
   ...job,
@@ -163,6 +175,8 @@ assert.match(conceptPrompt, /real-world task directly into the matching fantasy 
 assert.match(conceptPrompt, /usesMatchingTaskTransfer must be false/u);
 assert.match(conceptPrompt, /nameKnownBeforeIntroduction/u);
 assert.match(conceptPrompt, /hasMultiStepTrigger must be false/u);
+assert.match(conceptPrompt, /targetType, eligibilityRule, requiredEvidence, and forbiddenInference are mandatory/u);
+assert.match(conceptPrompt, /enemy, witness, enforcer, nearby person/u);
 assert.match(conceptPrompt, /현지인이 이름을 알게 되는 출처와 시점/u);
 assert.match(conceptPrompt, /developmentRoom and storyCore are mandatory/u);
 assert.match(conceptPrompt, /exactly four genuinely different candidates/u);
@@ -294,7 +308,11 @@ const premiseAudit = {
     costOrLimit: "체력 소모",
     extraRuleCount: 0,
     hasMultiStepTrigger: false,
-    readerExplanation: "주문하면 방어막이 생기고 체력이 줄어든다."
+    readerExplanation: "주문하면 방어막이 생기고 체력이 줄어든다.",
+    targetType: "person",
+    eligibilityRule: "시야 안에서 주문자가 이름을 직접 부른 한 사람만 방어막의 보호 대상이 된다.",
+    requiredEvidence: "주문자가 상대를 보고 이름을 부르는 행동이 방어막 생성보다 먼저 원고에 나타나야 한다.",
+    forbiddenInference: "가까이 있거나 같은 편이라는 이유만으로 이름을 부르지 않은 사람까지 보호할 수 없다."
   }
 };
 

@@ -10,6 +10,7 @@ const JOB_TYPES = new Set([
   "replan_arc",
   "build_arc",
   "build_episode_card",
+  "revise_episode_card",
   "write_draft",
   "editorial_critique",
   "editorial_review",
@@ -743,6 +744,7 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   if (jobType === "replan_arc") return normalizeArcReplan(source, options);
   if (jobType === "build_arc") return normalizeArc(source, options);
   if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
+  if (jobType === "revise_episode_card") return normalizeEpisodeCard(source, options);
   if (jobType === "write_draft") return normalizeDraft(source, false, options);
   if (jobType === "rewrite_draft") return normalizeDraft(source, true, options);
   if (jobType === "line_polish") return normalizeLinePolish(source, options);
@@ -1056,6 +1058,12 @@ function normalizePremiseAudit(value) {
     "serial_ability_trigger_shape_invalid"
   );
   if (hasMultiStepTrigger) throw new Error("serial_ability_trigger_too_complex");
+  const targetType = requiredEnum(
+    abilitySource.targetType,
+    ["none", "self", "person", "object", "place", "contract_party", "promise_party", "other"],
+    "serial_ability_target_type_invalid"
+  );
+  const requiresTargetEvidence = abilityMode !== "none" && targetType !== "none";
 
   return {
     entryType,
@@ -1077,7 +1085,17 @@ function normalizePremiseAudit(value) {
       costOrLimit: requiredText(abilitySource.costOrLimit, 180, 5, "serial_ability_limit_invalid"),
       extraRuleCount,
       hasMultiStepTrigger,
-      readerExplanation: requiredText(abilitySource.readerExplanation, 180, 10, "serial_ability_explanation_invalid")
+      readerExplanation: requiredText(abilitySource.readerExplanation, 180, 10, "serial_ability_explanation_invalid"),
+      targetType,
+      eligibilityRule: requiresTargetEvidence
+        ? requiredText(abilitySource.eligibilityRule, 400, 20, "serial_ability_eligibility_rule_invalid")
+        : text(abilitySource.eligibilityRule, 400),
+      requiredEvidence: requiresTargetEvidence
+        ? requiredText(abilitySource.requiredEvidence, 400, 20, "serial_ability_required_evidence_invalid")
+        : text(abilitySource.requiredEvidence, 400),
+      forbiddenInference: requiresTargetEvidence
+        ? requiredText(abilitySource.forbiddenInference, 400, 20, "serial_ability_forbidden_inference_invalid")
+        : text(abilitySource.forbiddenInference, 400)
     }
   };
 }
@@ -1782,6 +1800,9 @@ function normalizeEpisodeCard(source, options = {}) {
   const episodeNo = integer(source.episodeNo, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null);
   const payload = object(options.payload);
   const developmentV2 = Object.keys(object(payload.bible?.concept?.storyCore)).length > 0;
+  const ruleApplicationProofs = developmentV2
+    ? normalizeRuleApplicationProofs(source.ruleApplicationProofs, payload.bible?.worldRules, scenes)
+    : [];
   if (payload.episodeNo && episodeNo !== Number(payload.episodeNo)) {
     throw new Error("serial_episode_card_number_mismatch");
   }
@@ -1797,7 +1818,8 @@ function normalizeEpisodeCard(source, options = {}) {
       continuityMemoryPlan: normalizeContinuityMemoryPlan(
         source.continuityMemoryPlan,
         payload.bible?.narrativeBlueprint?.serialMemory
-      )
+      ),
+      ruleApplicationProofs
     } : {}),
     scenes,
     payoff: requiredText(source.payoff, 500, 10, "serial_episode_payoff_invalid"),
@@ -1811,6 +1833,30 @@ function normalizeEpisodeCard(source, options = {}) {
       payload.bible?.narrativeBlueprint?.seriesArchitecture
     )
   };
+}
+
+function normalizeRuleApplicationProofs(value, worldRulesValue, scenes) {
+  const worldRules = new Set(array(worldRulesValue).map((item) => String(item || "").trim()).filter(Boolean));
+  const sceneNumbers = new Set(scenes.map((scene) => scene.sceneNo));
+  const proofs = array(value).slice(0, 4).map((item) => {
+    const source = object(item);
+    const sceneNo = integer(source.sceneNo, 1, STORYHEAVEN_SERIAL_LIMITS.scenesMax, null);
+    const ruleText = requiredText(source.ruleText, 500, 5, "serial_rule_proof_rule_invalid");
+    if (!sceneNumbers.has(sceneNo) || !worldRules.has(ruleText)) throw new Error("serial_rule_proof_reference_invalid");
+    return {
+      sceneNo,
+      ruleText,
+      actor: requiredText(source.actor, 120, 1, "serial_rule_proof_actor_invalid"),
+      target: requiredText(source.target, 160, 1, "serial_rule_proof_target_invalid"),
+      eligibilityEvidence: requiredText(source.eligibilityEvidence, 500, 20, "serial_rule_proof_eligibility_invalid"),
+      evidencePlacement: requiredText(source.evidencePlacement, 300, 10, "serial_rule_proof_placement_invalid"),
+      triggerAction: requiredText(source.triggerAction, 400, 10, "serial_rule_proof_trigger_invalid"),
+      allowedEffect: requiredText(source.allowedEffect, 400, 10, "serial_rule_proof_effect_invalid"),
+      remainingCost: requiredText(source.remainingCost, 400, 10, "serial_rule_proof_cost_invalid")
+    };
+  });
+  if (!proofs.length) throw new Error("serial_rule_application_proofs_invalid");
+  return proofs;
 }
 
 function normalizeDramaticCore(value) {

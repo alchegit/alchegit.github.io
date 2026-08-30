@@ -18,6 +18,7 @@
         "replan_arc",
         "build_arc",
         "build_episode_card",
+        "revise_episode_card",
         "write_draft",
         "editorial_critique",
         "editorial_review",

@@ -30,7 +30,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, serialRevisionJobType, summarizeQueue, voiceAuditionTransition } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, serialRevisionJobType, shouldRepairEpisodeCard, summarizeQueue, voiceAuditionTransition } from "../src/serial-service.mjs";
 import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
@@ -45,6 +45,7 @@ const serialWorkerSource = await readFile(new URL("../../storyheaven-codex-revie
 const arcReplanningMigration = await readFile(new URL("../../../oracle/20260809-storyheaven-arc-replanning.sql", import.meta.url), "utf8");
 const voiceAuditionMigration = await readFile(new URL("../../../oracle/20260830-storyheaven-voice-audition.sql", import.meta.url), "utf8");
 const linePolishMigration = await readFile(new URL("../../../oracle/20260831-storyheaven-line-polish.sql", import.meta.url), "utf8");
+const cardRepairMigration = await readFile(new URL("../../../oracle/20260831-storyheaven-card-repair.sql", import.meta.url), "utf8");
 const createEpisodeRunSource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function createEpisodeRun"),
   serialServiceSource.indexOf("async function advanceJob")
@@ -70,6 +71,7 @@ assert.match(
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
 assert.match(voiceAuditionMigration, /'voice_sample', 'voice_review'/u, "voice audition migration must allow both private stages");
 assert.match(linePolishMigration, /'rewrite_draft', 'line_polish'/u, "line-polish migration must allow prose-only corrections");
+assert.match(cardRepairMigration, /'build_episode_card', 'revise_episode_card'/u, "card-repair migration must allow one structural planning repair");
 assert.match(serialServiceSource, /async function acceptVoiceSample/u, "voice samples must advance to an independent review");
 assert.match(serialServiceSource, /transition\.action === "retry_sample"/u, "voice audition must route a failed first sample through the bounded transition");
 assert.match(serialServiceSource, /function buildWritingBrief/u, "draft jobs must receive a compact one-page writing brief");
@@ -90,6 +92,18 @@ assert.equal(serialRevisionJobType({
   qa: { passed: true },
   review: { safetyPassed: true, decision: "rewrite_required" }
 }), "rewrite_draft");
+assert.equal(shouldRepairEpisodeCard({
+  decision: { failedMetrics: [{ name: "canonConsistency" }, { name: "causality" }] },
+  runInput: {},
+  review: { safetyPassed: true, decision: "rewrite_required" }
+}), true);
+assert.equal(shouldRepairEpisodeCard({
+  decision: { failedMetrics: [{ name: "causality" }] },
+  runInput: { cardRepairCount: 1 },
+  review: { safetyPassed: true, decision: "rewrite_required" }
+}), false);
+assert.match(serialServiceSource, /type: "revise_episode_card"/u, "structural quality failures must queue a card repair stage");
+assert.match(serialServiceSource, /cardRepairCount: Number\(runInput\.cardRepairCount/u, "card repair must be bounded in durable run input");
 const strongPilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 1, episodeMode: "discovery", wouldReadNext: true, readerRewardScore: 92 },
   { episodeNo: 2, episodeMode: "bonding", wouldReadNext: true, readerRewardScore: 90 },
@@ -749,7 +763,11 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
       costOrLimit: "승객 한 명을 내려줄 때마다 도윤의 기억 하나가 흐려진다.",
       extraRuleCount: 0,
       hasMultiStepTrigger: false,
-      readerExplanation: "0번 버스를 운전하면 죽은 승객의 목적지가 보이지만, 운행할수록 자신의 기억을 잃는다."
+      readerExplanation: "0번 버스를 운전하면 죽은 승객의 목적지가 보이지만, 운행할수록 자신의 기억을 잃는다.",
+      targetType: "person",
+      eligibilityRule: "0번 버스의 문이 열린 뒤 스스로 승차권을 내민 죽은 승객만 목적지 확인 대상이 된다.",
+      requiredEvidence: "승객이 버스 문을 통과해 승차권을 직접 내미는 행동이 목적지가 보이기 전에 원고에 나타나야 한다.",
+      forbiddenInference: "정류장 근처에 있거나 죽은 사람처럼 보인다는 이유만으로 승객 또는 능력 대상으로 판단할 수 없다."
     }
   },
   readerAppealPlan: {
@@ -788,6 +806,8 @@ const concept = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
 assert.equal(concept.genres.length, 3);
 assert.match(concept.internalPlanningSummary, /장기 갈등/u);
 assert.equal(concept.premiseAudit.abilityPlan.extraRuleCount, 0);
+assert.equal(concept.premiseAudit.abilityPlan.targetType, "person");
+assert.match(concept.premiseAudit.abilityPlan.requiredEvidence, /승차권/u);
 assert.equal(concept.readerAppealPlan.earlyEpisodePlan[1].installment, "main-1");
 assert.equal(concept.readerAppealPlan.recentConceptComparison.fingerprint.episodeEngine, "mystery_investigation");
 assert.equal(concept.developmentRoom.candidates.length, 4);
@@ -870,6 +890,13 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
     abilityPlan: { ...concept.premiseAudit.abilityPlan, hasMultiStepTrigger: true }
   }
 }), /serial_ability_trigger_too_complex/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  premiseAudit: {
+    ...concept.premiseAudit,
+    abilityPlan: { ...concept.premiseAudit.abilityPlan, requiredEvidence: "" }
+  }
+}), /serial_ability_required_evidence_invalid/u);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("concept_gate", {
   ...concept,
   readerAppealPlan: {
@@ -1403,6 +1430,17 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
     patternToPreserve: "규칙의 대가가 인물 관계를 동시에 바꾸는 선택 장면을 보존한다.",
     patternToVary: "다음 회차는 승객 탑승과 하차 순서를 반복하지 않고 회사의 기록 통제에서 갈등을 시작한다."
   },
+  ruleApplicationProofs: [{
+    sceneNo: 1,
+    ruleText: "승객은 생전 마지막 목적지만 말한다.",
+    actor: "도윤",
+    target: "직접 승차권을 내민 첫 승객",
+    eligibilityEvidence: "첫 승객이 버스 문을 통과해 좌석에 앉고 자신의 승차권을 도윤에게 직접 내민다.",
+    evidencePlacement: "장면 1에서 목적지가 보이기 전 승객의 승차와 승차권 제출을 먼저 보여 준다.",
+    triggerAction: "도윤이 승차권을 요금함에 넣고 승객이 말한 마지막 목적지를 확인한다.",
+    allowedEffect: "노선도에 해당 승객이 말한 마지막 목적지만 표시된다.",
+    remainingCost: "승객을 내려 주려면 도윤이 자신의 기억 하나를 요금으로 내야 한다."
+  }],
   scenes: Array.from({ length: 3 }, (_, index) => ({
     sceneNo: index + 1,
     goal: "승객의 목적지를 확인한다.",
@@ -1459,7 +1497,7 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
 }, {
   payload: {
     episodeNo: 1,
-    bible: { concept: { storyCore }, narrativeBlueprint: bible.narrativeBlueprint }
+    bible: { concept: { storyCore }, worldRules: bible.worldRules, narrativeBlueprint: bible.narrativeBlueprint }
   }
 });
 assert.equal(card.techniquePlan.openingMode, "사건 한가운데");
@@ -1481,7 +1519,7 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("build_episode_card",
 }, {
   payload: {
     episodeNo: 1,
-    bible: { narrativeBlueprint: bible.narrativeBlueprint }
+    bible: { worldRules: bible.worldRules, narrativeBlueprint: bible.narrativeBlueprint }
   }
 }), /serial_episode_reward_relationship_unchanged/u);
 

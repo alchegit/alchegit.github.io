@@ -11,6 +11,7 @@ export const SERIAL_JOB_TYPES = Object.freeze([
   "replan_arc",
   "build_arc",
   "build_episode_card",
+  "revise_episode_card",
   "write_draft",
   "editorial_critique",
   "editorial_review",
@@ -225,6 +226,7 @@ export function modelRoleForSerialJob(jobType) {
 }
 
 export function selectSerialModel(job, { writerModel, editorModel, escalationModel } = {}) {
+  if (job?.type === "revise_episode_card" && escalationModel) return escalationModel;
   if (modelRoleForSerialJob(job?.type) === "editor") return editorModel;
   const rewriteNumber = Number(job?.payload?.rewriteNumber || 0);
   if (job?.type === "rewrite_draft" && rewriteNumber >= 2 && escalationModel) return escalationModel;
@@ -265,7 +267,7 @@ function premiseCoherenceInstruction(type, payload = {}) {
     return "Reject candidates that depend on an unexplained transition, instant trust for an outsider, knowledge of an unintroduced name, a mundane task copied into a matching fantasy job, or a multi-step novelty trigger. Candidate simplicity must not hide a causality gap.";
   }
   if (isConceptDecisionStage(type)) {
-    return "A premiseAudit is mandatory for every new concept and is a server-enforced coherence gate. Choose one entryType and explain the transition cause, outsider reception, name-information source, language rule, first acceptance condition, familiar genre foundation, one differentiator, and the complete ability plan. Do not transfer a protagonist from a real-world task directly into the matching fantasy job, title, tool, or magic. Prior-life experience may affect a later choice only indirectly. For summoned, transported, reincarnated, possessed, or regressed protagonists, immediateAcceptance and nameKnownBeforeIntroduction must both be false: locals must react to an unknown outsider with understandable caution, confusion, verification, pressure, sponsorship, or exchange, and no one may use the protagonist's true name before hearing or discovering it through an established rule. Keep a power easy to repeat in one sentence: one core effect, one activation condition, one cost or limit, and at most one extra rule. hasMultiStepTrigger must be false; never chain unrelated chores, gestures, household objects, words, or coincidences into an activation ritual.";
+    return "A premiseAudit is mandatory for every new concept and is a server-enforced coherence gate. Choose one entryType and explain the transition cause, outsider reception, name-information source, language rule, first acceptance condition, familiar genre foundation, one differentiator, and the complete ability plan. Do not transfer a protagonist from a real-world task directly into the matching fantasy job, title, tool, or magic. Prior-life experience may affect a later choice only indirectly. For summoned, transported, reincarnated, possessed, or regressed protagonists, immediateAcceptance and nameKnownBeforeIntroduction must both be false: locals must react to an unknown outsider with understandable caution, confusion, verification, pressure, sponsorship, or exchange, and no one may use the protagonist's true name before hearing or discovering it through an established rule. Keep a power easy to repeat in one sentence: one core effect, one activation condition, one cost or limit, and at most one extra rule. hasMultiStepTrigger must be false; never chain unrelated chores, gestures, household objects, words, or coincidences into an activation ritual. For every non-none power, targetType, eligibilityRule, requiredEvidence, and forbiddenInference are mandatory. Define exactly who or what qualifies as the target and what observable proof must appear before activation. An enemy, witness, enforcer, nearby person, or convenient object never becomes a target merely because the scene needs their ability or information.";
   }
   const audit = payload?.premiseAudit
     || payload?.concept?.premiseAudit
@@ -274,18 +276,18 @@ function premiseCoherenceInstruction(type, payload = {}) {
   if (!audit || typeof audit !== "object") {
     return "This legacy story has no premiseAudit. Preserve established canon and published events; do not retrofit the new audit, and do not block continuation solely because it is absent.";
   }
-  const binding = "The supplied concept.premiseAudit is binding canon. Preserve its entryType, transition cause, local reception process, nameKnowledgeRule, languageRule, firstAcceptanceCondition, familiar genre foundation, differentiator, and abilityPlan. A prior real-world skill may influence judgment only as priorLifeSkillRelation permits; never turn the same mundane task into the protagonist's matching fantasy assignment, title, tool, or power. Treat a newcomer as unknown until the stated acceptance condition is earned. No character may know or speak the protagonist's true name, origin, or ability before learning it through dialogue, observation, investigation, or the exact established rule. Keep the ability to its one core effect, one activation, one cost or limit, and permitted extraRuleCount; do not add chained triggers or new exceptions for convenience.";
+  const binding = "The supplied concept.premiseAudit is binding canon. Preserve its entryType, transition cause, local reception process, nameKnowledgeRule, languageRule, firstAcceptanceCondition, familiar genre foundation, differentiator, and abilityPlan. A prior real-world skill may influence judgment only as priorLifeSkillRelation permits; never turn the same mundane task into the protagonist's matching fantasy assignment, title, tool, or power. Treat a newcomer as unknown until the stated acceptance condition is earned. No character may know or speak the protagonist's true name, origin, or ability before learning it through dialogue, observation, investigation, or the exact established rule. Keep the ability to its one core effect, one activation, one cost or limit, and permitted extraRuleCount; do not add chained triggers or new exceptions for convenience. Preserve targetType, eligibilityRule, requiredEvidence, and forbiddenInference exactly. A target is ineligible until the required evidence is visible on the page; opposition, proximity, witnessing, enforcement, pursuit, or convenience never substitutes for eligibility.";
   if (type === "build_bible") {
-    return `${binding} Convert the audit into enforceable canon: worldRules must record transition and language logic, each character knowledge list must state whether and how that character knows the protagonist's name, origin, and ability, and forbiddenContradictions must forbid unearned acceptance, unexplained name use, direct mundane-task-to-fantasy-job mirroring, and any extra ability trigger or exception. Make early trust arise from firstAcceptanceCondition through visible action, not narration.`;
+    return `${binding} Convert the audit into enforceable canon: copy the target eligibility rule and required evidence into worldRules as separate testable sentences; each character knowledge list must state whether and how that character knows the protagonist's name, origin, and ability; forbiddenContradictions must forbid unearned acceptance, unexplained name use, direct mundane-task-to-fantasy-job mirroring, extra ability triggers, and treating an ineligible person or object as a target. Make early trust arise from firstAcceptanceCondition through visible action, not narration.`;
   }
-  if (type === "build_episode_card") {
-    return `${binding} In knowledgeBefore, record by character who currently knows the protagonist's name and exactly how it was learned. If acceptance is not yet earned, at least one planned scene must dramatize the relevant caution, misunderstanding, verification, pressure, sponsorship, or exchange and move visibly toward firstAcceptanceCondition.`;
+  if (["build_episode_card", "revise_episode_card"].includes(type)) {
+    return `${binding} In knowledgeBefore, record by character who currently knows the protagonist's name and exactly how it was learned. Before planning any power effect, identify the eligible target and put abilityPlan.requiredEvidence in an earlier scene beat; if it cannot be shown from existing canon, remove that target or effect. If acceptance is not yet earned, at least one planned scene must dramatize the relevant caution, misunderstanding, verification, pressure, sponsorship, or exchange and move visibly toward firstAcceptanceCondition.`;
   }
   if (type === "write_draft") {
-    return `${binding} Before writing every line of dialogue, check whether its speaker has learned the protagonist's name and facts. Use an ordinary label, question, or omission when they have not. Dramatize social friction and earned trust in action; never erase it with an explanatory sentence or genre convenience.`;
+    return `${binding} Before writing every line of dialogue, check whether its speaker has learned the protagonist's name and facts. Before writing every power effect, show the exact required target evidence before activation and never claim it appeared earlier when it did not. Use an ordinary label, question, or omission when a name is unknown. Dramatize social friction and earned trust in action; never erase it with an explanatory sentence or genre convenience.`;
   }
   if (type === "rewrite_draft") {
-    return `${binding} Repair unexplained acceptance and information leaks in-scene: remove unknown-name dialogue, restore the shortest plausible reaction and verification chain, and simplify any ability explanation to its established core effect, activation, and cost without adding lore.`;
+    return `${binding} Repair unexplained acceptance, information leaks, and target eligibility in-scene: remove unknown-name dialogue, restore the shortest plausible reaction and verification chain, and either put the existing required target evidence before activation or remove the unsupported effect. Never invent a new authority, signature, contract clause, or retrospective claim that the evidence appeared earlier.`;
   }
   if (["editorial_critique", "editorial_review"].includes(type)) {
     return `${binding} Treat any unexplained use of the protagonist's name, origin, or ability, unearned immediate acceptance of an outsider, direct mundane-task-to-matching-fantasy-job transfer, or multi-step unrelated ability trigger as concrete causality and reader-orientation failures. Cite the exact manuscript evidence and do not approve until repaired.`;
@@ -308,7 +310,7 @@ function readerAppealInstruction(type, payload = {}) {
     || payload?.bible?.concept?.readerAppealPlan
     || null;
   if (!plan || typeof plan !== "object") {
-    if (["build_episode_card", "write_draft", "rewrite_draft", "editorial_critique", "editorial_review"].includes(type)) {
+    if (["build_episode_card", "revise_episode_card", "write_draft", "rewrite_draft", "editorial_critique", "editorial_review"].includes(type)) {
       return "This legacy story has no concept-level readerAppealPlan. Preserve its canon, but still require this installment to have a plain personal want and cost, at least two concrete reader payoffs, and a relationship state that changes through action. Create and follow techniquePlan.readerRewardPlan at episode-card stage; do not invent a replacement series premise.";
     }
     return "This legacy story has no readerAppealPlan. Preserve established canon and do not retrofit or block its planning solely because the newer concept field is absent.";
@@ -323,7 +325,7 @@ function readerAppealInstruction(type, payload = {}) {
   if (type === "build_arc") {
     return `${binding} Preserve the exact prologue, main-1, and main-2 reward commitments when they fall inside this arc. Later episodes must rotate concrete genre pleasure, personal consequence, and relationship movement instead of offering setup and conspiracy hints only.`;
   }
-  if (type === "build_episode_card") {
+  if (["build_episode_card", "revise_episode_card"].includes(type)) {
     return `${binding} Complete techniquePlan.readerRewardPlan before scenes: state the current personal want and cost, one familiar genre reward, two or three concrete payoffs that happen on the page, the relationship state before and after, and one rule-free episode question. relationshipAfter must materially differ from relationshipBefore because of mutual action. A revelation about an old conspiracy is not, by itself, a payoff.`;
   }
   if (type === "write_draft") {
@@ -363,7 +365,7 @@ function storyDevelopmentInstruction(type, payload = {}) {
   if (type === "build_arc") {
     return `${binding} Let the arc change at least one durable relationship, status, capability, or understanding through character choice. Draw conflict from the existing relationshipWeb and worldDynamics instead of introducing a replacement premise. Read narrativeBlueprint.serialMemory: carry forward unresolved reader promises and emotional debts, preserve successful scene assets without repeating their surface form, and use recent rhythm history to change the arc-level pleasure when repetition is forming. Keep later-volume hypotheses flexible while preserving published facts and protected truths.`;
   }
-  if (type === "build_episode_card") {
+  if (["build_episode_card", "revise_episode_card"].includes(type)) {
     return `${binding} Select one episodeMode from propulsion, bonding, discovery, aftermath, humor, dread, wonder, or training, and avoid repeating the recent dominant rhythm without reason. Complete dramaticCore as desire, obstacle, choice, cost, state change, emotional turn, concrete image anchor, and subtext question before arranging scenes. Complete continuityMemoryPlan against narrativeBlueprint.serialMemory: name existing promise and debt keys genuinely addressed, create only concrete new promises and debts caused on the page, preserve one proven strength, and vary one recent pattern. Never mark a promise or debt paid merely because a character discussed it. A hook cannot replace the cost and state change.`;
   }
   if (type === "write_draft") {
@@ -395,7 +397,7 @@ function genreExperienceAndStyleInstruction(type, payload = {}) {
       instructions.push(`${binding} Every candidate must honor this experience while differing in protagonist desire, central relationship, world pressure, story arena, and causal engine. The selected concept must return genreExperiencePlan with at least four concrete recurring rewards and four genuinely different arc variations, a first-volume arc, a sustainable progression loop, a real power or skill limit, quiet-episode pleasure, and specific cliché risks.`);
     } else if (type === "build_bible") {
       instructions.push(`${binding} Treat concept.genreExperiencePlan as binding. Make characters, relationship pressures, world dynamics, progression limits, and seriesArchitecture repeatedly produce those rewards without adding a replacement premise.`);
-    } else if (["build_arc", "replan_arc", "build_episode_card"].includes(type)) {
+    } else if (["build_arc", "replan_arc", "build_episode_card", "revise_episode_card"].includes(type)) {
       instructions.push(`${binding} Choose this installment or arc's reward from concept.genreExperiencePlan and make it change a capability, relationship, status, responsibility, or future choice. Rotate arc forms as promised and do not reduce progression to labels or numbers.`);
     } else if (["write_draft", "rewrite_draft", "line_polish"].includes(type)) {
       instructions.push(`${binding} Put the planned genre reward and earned progression on the page as action and consequence. A status window, rank name, lore statement, or victory claim without a changed choice is not a delivered reward.`);
@@ -409,7 +411,7 @@ function genreExperienceAndStyleInstruction(type, payload = {}) {
     const binding = `The server-locked prose style is '${proseStyle.label}' (${proseStyle.resolvedId}). Narrator distance: ${style.narratorDistance} Sentence rhythm: ${style.sentenceRhythm} Vocabulary: ${style.vocabulary} Dialogue percentage range: ${JSON.stringify(style.dialogueRange || [])}. Humor source: ${style.humorSource} Description: ${style.descriptionRule} Emotion: ${style.emotionRule} Forbidden habits: ${JSON.stringify(style.forbiddenHabits || [])}. Never name or imitate an author or benchmark work.`;
     if (type === "build_bible") {
       instructions.push(`${binding} Build the story-specific voiceProfile inside this locked range. Do not output proseStyle, styleContractId, or calibration; the server attaches the authoritative contract. Specialize only the sensory palette, character speech patterns, visualization rules, onboarding rules, and work-specific forbidden habits.${calibration ? ` The private voice audition ended with status '${calibration.status}'. Apply these compact calibration corrections while designing the voice card: ${JSON.stringify(calibration.corrections || [])}. Do not copy or reconstruct the audition sample.` : ""}`);
-    } else if (["build_arc", "replan_arc", "build_episode_card"].includes(type)) {
+    } else if (["build_arc", "replan_arc", "build_episode_card", "revise_episode_card"].includes(type)) {
       instructions.push(`${binding} Plan tone movement and dialogue pressure that fit this voice. Vary intensity by scene without changing the series voice.`);
     } else if (["write_draft", "rewrite_draft", "line_polish"].includes(type)) {
       instructions.push(`${binding} Apply this profile sentence by sentence. Humor must arise from the specified source, grandeur must be physically demonstrated, and darkness must not hide basic facts. Preserve natural Korean and causal clarity over decorative styling.`);
@@ -457,20 +459,20 @@ function naturalKoreanInstruction(type) {
 }
 
 function causalIntegrityInstruction(type) {
-  if (type === "build_episode_card") {
-    return "Before accepting a scene solution, silently trace the exact obligation or danger, current actor, target or recipient, quantity or deadline when relevant, on-page action, binding world rule that authorizes the effect, and remaining consequence. Paperwork, a declaration, or starting an action may not count as completed physical performance unless an existing world rule explicitly says so. Never invent a new authority, exception, or procedure to rescue a planned payoff; change the action when the desired result is unsupported by worldRules and canon.";
+  if (["build_episode_card", "revise_episode_card"].includes(type)) {
+    return "Before accepting a scene solution, trace the exact obligation or danger, current actor, target or recipient, quantity or deadline when relevant, on-page action, binding world rule that authorizes the effect, and remaining consequence. Return at least one ruleApplicationProof. ruleText must copy one complete payload.bible.worldRules string exactly. eligibilityEvidence must be an observable existing fact placed before the effect, never a retrospective explanation. Paperwork, a declaration, or starting an action may not count as completed physical performance unless the copied world rule explicitly says so. An opponent, witness, pursuer, official, enforcer, or nearby object is not an eligible target unless the copied rule and visible evidence establish it. Never invent a new authority, signature, contract clause, exception, or procedure to rescue a planned payoff; change or remove the effect when existing worldRules and canon do not support it.";
   }
   if (type === "write_draft") {
-    return "For every decisive solution, keep the actor, recipient or target, promised amount or deadline, performed action, authorizing world rule, and remaining consequence consistent. Do not let a document, declaration, partial action, or reassigned responsibility erase an existing debt or produce a physical or supernatural result beyond the supplied world rules. If the episode card overpromises such a result, preserve its human choice and payoff but reduce the result to what the existing rule actually permits.";
+    return "For every ruleApplicationProof, put eligibilityEvidence on the page at evidencePlacement before triggerAction, then limit the outcome to allowedEffect and preserve remainingCost. Never state or imply that evidence appeared earlier unless the actual manuscript contains it. Keep the actor, recipient or target, promised amount or deadline, performed action, authorizing world rule, and remaining consequence consistent. Do not let a document, declaration, partial action, opposition, proximity, enforcement, or reassigned responsibility create target eligibility, erase a debt, or produce a physical or supernatural result beyond the copied world rule. If the episode card overpromises such a result, preserve its human choice and payoff but reduce or remove the result to what the existing rule actually permits.";
   }
   if (type === "rewrite_draft") {
-    return "For a causality or world-rule failure, quote no new lore into existence. Identify the exact existing worldRule or canon fact, then make the actor perform the concrete action it requires. Keep actor, recipient or target, amount or deadline, legal effect, supernatural effect, and remaining debt distinct. A document or partial action cannot count as completion unless an existing rule explicitly grants that result.";
+    return "For a causality or world-rule failure, quote no new lore into existence. Compare the manuscript to episodeCard.ruleApplicationProofs. Put the already planned eligibilityEvidence before activation, or remove the unsupported target or effect; never invent a new authority, signature, contract clause, or claim that evidence appeared earlier. Identify the exact existing worldRule or canon fact, then make the actor perform the concrete action it requires. Keep actor, recipient or target, amount or deadline, legal effect, supernatural effect, and remaining debt distinct. A document or partial action cannot count as completion unless an existing rule explicitly grants that result.";
   }
   if (type === "line_polish") {
     return "Perform a prose-only local polish for the scenes named by the editor's failed style metrics. Preserve title, summary, paragraph count and boundaries, sceneRanges, event order, actions, dialogue facts, character decisions, payoffs, hook, newCanonFacts, and revealUpdates exactly. You may change sentence wording, sentence boundaries inside a paragraph, dialogue phrasing without changing intent or information, connective rhythm, and selective descriptive wording. Do not add or remove a paragraph, event, fact, action, speaker turn, object, rule, clue, joke beat, or emotional outcome. Keep every unaffected paragraph verbatim. Return the complete manuscript and list each changed scene and style reason in changes.";
   }
   if (["editorial_critique", "editorial_review"].includes(type)) {
-    return "For every claimed solution, compare the result to the exact supplied worldRules and canon. Treat an unsupported effect as a causality failure, but recommend changing the on-page action or limiting its result instead of demanding a newly invented authority, exception, or procedure.";
+    return "For every claimed solution, compare the result to the exact supplied worldRules, canon, and episodeCard.ruleApplicationProofs. Verify that each eligibilityEvidence is literally present before triggerAction and that the target satisfies abilityPlan.targetType and eligibilityRule without relying on opposition, proximity, witnessing, enforcement, pursuit, or convenience. Treat missing evidence or an unsupported effect as a causality failure, but recommend removing the target/effect or using existing evidence instead of demanding a newly invented authority, signature, contract clause, exception, or procedure.";
   }
   return "";
 }
@@ -534,6 +536,9 @@ function stageInstruction(type, payload = {}) {
       ? "Choose one episodeMode from propulsion, bonding, discovery, aftermath, humor, dread, wonder, or training, then complete dramaticCore as desire, obstacle, choice, cost, state change, emotional turn, image anchor, and subtext question."
       : "Preserve this legacy episode-card shape without retrofitting episodeMode or dramaticCore.";
     return `${developmentRule} Create 3 to 5 sequential scenes. Every scene must have a visible goal, resistance, changed situation, and a local curiosity bridge into the next scene; no scene may exist only to explain lore. Before prose is written, lock a spatial anchor, character blocking, one or two viewpoint-specific sensory anchors, and a visible turn for every scene. These fields must describe usable staging, not camera jargon or atmospheric adjectives. Complete techniquePlan.readerOrientation and techniquePlan.readerRewardPlan before planning the scene sequence. For a development-v2 story, also complete continuityMemoryPlan from payload.bible.narrativeBlueprint.serialMemory. Use only existing keys in addressedPromiseKeys and paidDebtKeys, and create stable new keys prefixed 'promise-' or 'debt-'. The baseline may be brief but must give the first change something understandable to disturb, while the reward plan must name a personal want and cost, a familiar genre pleasure, two or three concrete payoffs, a relationship state before and after, and a rule-free episode question. Choose a technique plan suited to this exact installment. Internal episodeNo 1 is the prologue and must open the long series, prove the unique rule in action, force the protagonist into a costly or irreversible choice, deliver one memorable genre set piece or emotional reversal, and make the final hook a direct invitation to 본편 1화. For the prologue, copy the binding disclosure boundary into prologueDisclosurePlan: cover mustShow, answer only resolvedNow, use only approved mayHintRevealKeys, preserve openQuestions, and include every mustNotAnswerRevealKey. Do not reveal a protected answer even when it would make the scene easier to explain. Later installments should not keep pretending to be prologues and should return an empty prologueDisclosurePlan. Compare recent episode modes and technique plans and avoid automatic repetition. Begin with legible human pressure, ordinary friction, a quiet anomaly, social conflict, or a larger disturbance according to this story; do not force a catastrophe into the first two paragraphs. Preserve the reader-orientation ladder, deliver the concrete payoffs, and end with a question created by character action rather than withheld narration. Respect what each character currently knows and the active volume milestone.`;
+  }
+  if (type === "revise_episode_card") {
+    return "Repair the supplied current episode card as a senior structural editor after prose rewrites failed. Preserve the episode number, human desire, delivered genre rewards, successful character choices, relationship movement, continuity-memory commitments, prologue disclosure boundary, and all valid canon references. Change only the causal mechanism, rule eligibility, information order, scene blocking, or hook that the final editor proved unusable. For every power, contract, promise, debt, authority, clue, or physical solution, name an exact existing world rule or canon fact and put the observable eligibility evidence before the effect. An opponent, witness, enforcer, or nearby person is not automatically a contract party or power target. Do not add a new power exception, institution, secret, event, or premise. Return a complete replacement episode card; the server supersedes the prior card and writes a fresh draft from this one.";
   }
   if (type === "write_draft") {
     return "Treat payload.writingBrief as the primary one-page assignment. Use the compact bible only to verify canon, character knowledge, the current volume, and the locked voice; never expand the brief with unused distant-volume lore. Write the full Korean installment manuscript within the supplied character limits. Follow the episode card and voice profile, especially episodeMode, dramaticCore, continuityMemoryPlan, techniquePlan.readerOrientation, techniquePlan.readerRewardPlan, and voiceProfile.readerOnboardingRules. Make dramaticCore.choice happen on the page, charge its stated cost, and leave the promised stateChange visible; a hook cannot substitute for them. Make each memory-plan resolution observable and create new promises or debts only through actual choices and consequences. Show the personal want and vulnerability before or alongside the unusual rule, visibly deliver every concretePayoff, and make relationshipAfter true through mutual action rather than narration. If episodeNo is 1, title it as a prologue and write a satisfying prologue that makes the operator want to continue with 본편 1화; do not call it 1화. The prologueDisclosurePlan is a hard information boundary: visibly deliver mustShow, answer resolvedNow, leave openQuestions alive, hint only listed mayHintRevealKeys, and do not state or effectively solve any mustNotAnswerRevealKey. revealUpdates may mark those protected keys only as planned or seeded, never revealed. If episodeNo is greater than 1, treat it as a main chapter and avoid repeating prologue framing. Convert every scene's spatialAnchor, characterBlocking, sensoryAnchor, and visualTurn into natural prose without printing those labels. Also embody dramaticCore.emotionalTurn and imageAnchor in the action without printing their labels. Give cause before effect, physical continuity between actions, dialogue with distinct intent, and enough selective detail for the reader to reconstruct the scene. The first sentence must orient the reader with a visible person, place, or action before naming a large mystery, system rule, faction, title, or abstract threat. Within the first two paragraphs, naturally establish the viewpoint, ordinary baseline, location, and immediate goal; by the third, make the first observable change and immediate stakes understandable. Do not confuse speed with omission. Within the first two paragraphs of later scenes, make clear where the viewpoint character is, what is nearest or obstructing them, and what is moving or changing. Obey the new-term budget exactly; when a term such as a skill, rank, rule, artifact, institution, or monster type first appears, make its plain practical meaning and visible effect clear within the same paragraph. Prefer one concrete sentence over a polished abstract phrase. Let dialogue happen alongside gaze, hands, footing, object use, or environmental response instead of in a blank space. Use paragraph breaks for mobile reading. Do not overdescribe, write screenplay directions, or include markdown headings, analysis, notes, or explanations outside the manuscript fields. sceneRanges use 1-based paragraph numbers and must cover each planned scene.";
@@ -654,7 +659,11 @@ function resultContract(type, payload = {}) {
         costOrLimit: "대가나 한계 하나 5-180자",
         extraRuleCount: 0,
         hasMultiStepTrigger: false,
-        readerExplanation: "중학생도 한 번에 이해할 한 문장 10-180자"
+        readerExplanation: "중학생도 한 번에 이해할 한 문장 10-180자",
+        targetType: "none|self|person|object|place|contract_party|promise_party|other",
+        eligibilityRule: "누가 또는 무엇이 효과 대상 자격을 얻는지 예외 없이 판정하는 규칙 20-400자",
+        requiredEvidence: "발동 전에 원고에서 독자가 직접 확인해야 하는 서명·행동·물증·관계 20-400자",
+        forbiddenInference: "적대자·목격자·집행자·근처 사람이라는 이유만으로 대상이라 추론할 수 없다는 금지 조건 20-400자"
       }
     },
     readerAppealPlan: {
@@ -784,7 +793,7 @@ function resultContract(type, payload = {}) {
       } : {})
     };
   }
-  if (type === "build_episode_card") return {
+  if (["build_episode_card", "revise_episode_card"].includes(type)) return {
     episodeNo: 1,
     ...(developmentV2 ? {
       episodeMode: "propulsion|bonding|discovery|aftermath|humor|dread|wonder|training",
@@ -796,7 +805,18 @@ function resultContract(type, payload = {}) {
         emotionalDebtsCreated: [{ key: "debt-stable-key", debt: "이번 선택이 남긴 감정적 빚", owner: "빚을 지거나 받아야 할 인물", pressure: "이 빚이 다음 선택을 압박하는 방식" }],
         patternToPreserve: "직전 성공에서 기능을 보존할 장면 자산",
         patternToVary: "최근 반복을 피하기 위해 표면 형식을 바꿀 패턴"
-      }
+      },
+      ruleApplicationProofs: [{
+        sceneNo: 1,
+        ruleText: "payload.bible.worldRules에서 글자 하나 바꾸지 않고 복사한 실제 허용 규칙",
+        actor: "효과를 일으키는 행위자",
+        target: "규칙상 자격이 확인된 대상",
+        eligibilityEvidence: "발동 전에 독자가 직접 볼 서명·행동·물증·관계",
+        evidencePlacement: "그 물증을 효과보다 먼저 보여 줄 장면 위치",
+        triggerAction: "규칙이 요구하는 실제 발동 행동",
+        allowedEffect: "해당 규칙이 허용하는 범위 안의 결과",
+        remainingCost: "효과 뒤에도 남는 대가·부채·제약"
+      }]
     } : {}),
     promise: "회차 약속", openingDisturbance: "도입 사건",
     scenes: [{ sceneNo: 1, goal: "목표", conflict: "저항", change: "달라진 상태", location: "장소", pov: "시점 인물", spatialAnchor: "공간 배치와 가까운 장애물", characterBlocking: "등장인물의 시작 위치와 핵심 이동", sensoryAnchor: "시점 인물이 감지하는 1-2개 단서", visualTurn: "장면 끝에 눈에 보이게 달라진 상태", cameraIntent: "선택적 장면의 시각적 의도" }],

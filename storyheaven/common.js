@@ -375,6 +375,8 @@
       serial_quality_hold_work_active: "이미 이 원고의 보완 작업이 진행 중입니다.",
       serial_quality_hold_evidence_missing: "보완하거나 승인할 원고와 검수 기록을 찾을 수 없습니다.",
       serial_quality_hold_safety_failed: "안전성 검수를 통과하지 못한 원고는 운영자 승인할 수 없습니다. 지적 부분 다시 보완을 이용해주세요.",
+      serial_episode_card_repair_unavailable: "현재 보류 사유는 회차 구성 재설계 대상이 아닙니다. 지적 부분 다시 보완을 이용해주세요.",
+      serial_episode_card_repair_limit: "회차 구성 재설계는 한 번만 사용할 수 있습니다. 최신 검수 결과를 확인해주세요.",
       serial_pilot_action_invalid: "파일럿 처리 방법을 다시 선택해주세요.",
       serial_pilot_not_enabled: "이 작품은 첫 3편 파일럿 방식으로 만든 작품이 아닙니다.",
       serial_pilot_not_ready: "아직 세 편 평가가 끝나지 않았거나 보완이 필요한 회차가 있습니다.",

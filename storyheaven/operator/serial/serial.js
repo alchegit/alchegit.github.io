@@ -1076,9 +1076,11 @@
         body: { action }
       });
       await refreshSchedules();
-      StoryHeavenCommon.toast(action === "rewrite"
-        ? "검수 지적 부분만 다시 보완하도록 대기열에 넣었습니다."
-        : "현재 원고를 승인했습니다. 연결 설정의 공개 방식에 따라 처리됩니다.");
+      StoryHeavenCommon.toast(action === "repair_card"
+        ? "설정과 인과를 바로잡도록 회차 구성 단계부터 다시 대기열에 넣었습니다."
+        : action === "rewrite"
+          ? "검수 지적 부분만 다시 보완하도록 대기열에 넣었습니다."
+          : "현재 원고를 승인했습니다. 연결 설정의 공개 방식에 따라 처리됩니다.");
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
@@ -1680,9 +1682,9 @@
       if (["voice_sample", "voice_review"].includes(stage)) currentIndex = 1;
       else if (stage === "build_bible") currentIndex = 2;
       else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 3;
-      else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "line_polish", "editorial_blocked"].includes(stage)) {
+      else if (["build_episode_card", "revise_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "line_polish", "editorial_blocked"].includes(stage)) {
         const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1))) - 1;
-        const stageOffset = stage === "build_episode_card"
+        const stageOffset = ["build_episode_card", "revise_episode_card"].includes(stage)
           ? 0
           : ["write_draft", "rewrite_draft", "line_polish"].includes(stage)
             ? 1
@@ -1692,7 +1694,7 @@
     } else if (bootstrapPlan) {
       if (stage === "replan_arc") currentIndex = 0;
       else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
-      else if (stage === "build_episode_card") currentIndex = 2;
+      else if (["build_episode_card", "revise_episode_card"].includes(stage)) currentIndex = 2;
       else if (["write_draft", "rewrite_draft", "line_polish"].includes(stage)) currentIndex = 3;
       else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
       else if (["publication_ready", "published"].includes(stage)) currentIndex = 5;
@@ -2181,6 +2183,9 @@
     detail.textContent = `자동 보완 ${Number(run.rewriteCount || 0)}회, 운영자 표적 보완 ${Number(run.operatorRewriteCount || 0)}회를 거쳤지만 위 기준이 남았습니다. 지적 부분만 다시 보완하거나 현재 원고를 운영자 판단으로 승인할 수 있습니다.`;
     copy.append(title, detail);
     const actions = document.createElement("div");
+    if (Number(review.scores?.canonConsistency || 0) < 95 || Number(review.scores?.causality || 0) < 90) {
+      actions.append(actionButton("회차 구성부터 바로잡기", "queue-retry", () => resolveQualityHold({ latestRunId: run.id, schedule: scheduleById.get(run.scheduleId) }, "repair_card")));
+    }
     actions.append(actionButton("지적 부분 다시 보완", "queue-retry", () => resolveQualityHold({ latestRunId: run.id, schedule: scheduleById.get(run.scheduleId) }, "rewrite")));
     if (review.safetyPassed !== false) {
       actions.append(actionButton("현재 원고 승인", "warning", () => resolveQualityHold({ latestRunId: run.id, schedule: scheduleById.get(run.scheduleId), review }, "approve")));
@@ -2660,6 +2665,7 @@
       replan_arc: "완료 구간 검토와 재기획",
       build_arc: "장기 전개 설계",
       build_episode_card: "회차 장면 구성",
+      revise_episode_card: "회차 구성 재설계",
       write_draft: "원고 작성",
       editorial_critique: "독립 관점별 검수",
       editorial_review: "편집 검수",
@@ -2691,6 +2697,7 @@
   function stageDescription(item = {}) {
     if (item.type === "voice_sample") return "선정 기획의 작은 비공개 장면으로 문장 호흡, 대화와 어조를 먼저 시험합니다. 실제 프롤로그에는 복사하지 않습니다.";
     if (item.type === "voice_review") return "확정 문체에 맞는지 별도 편집 모델이 검사합니다. 부족하면 문체만 한 번 보정하고 설정집으로 이어갑니다.";
+    if (item.type === "revise_episode_card") return "원고 수정을 반복해도 남은 설정·인과 문제를 해결하기 위해, 성공한 장면 보상은 보존하고 규칙 적용과 공간 구성부터 한 번 다시 설계합니다.";
     if (item.type === "line_polish") return "줄거리·인과·설정은 그대로 두고 문체가 부족하다고 지적된 장면의 문장과 대화 표현만 고칩니다.";
     if (item.type === "editorial_review") return "6개 독립 검수 결과와 원고 근거를 합쳐 점수, 보완 범위, 공개 가능 여부를 결정합니다.";
     if (item.type !== "editorial_critique") return "";
