@@ -1756,6 +1756,7 @@ const reviewWithServerPacket = normalizeStoryHeavenSerialWorkerResult("editorial
 });
 assert.equal(reviewWithServerPacket.criticPanels.worldCausality.fatalRisk, "없음");
 assert.equal(serialRetryDelaySeconds("review_api_422_serial_review_contract_invalid", 5), 15);
+assert.equal(serialRetryDelaySeconds("serial_result_missing", 5), 15);
 assert.equal(serialRetryDelaySeconds("codex_review_timeout", 5), 300);
 const approved = decideStoryHeavenSerialReview({ qa, review, rewriteCount: 0 });
 assert.equal(approved.state, "approved");

@@ -69,7 +69,9 @@ export function editorialCriticRolesForPass({ rewritten = false, episodeNo = nul
 
 export function serialRetryDelaySeconds(errorCode, retryMinutes = 3) {
   const fallback = Math.max(1, Number(retryMinutes || 3)) * 60;
-  return /^review_api_422_serial_/u.test(String(errorCode || "")) ? 15 : fallback;
+  return /^(?:review_api_422_serial_|serial_(?:result_missing|invalid_output|json_parse_failed))/u.test(String(errorCode || ""))
+    ? 15
+    : fallback;
 }
 
 export function voiceAuditionTransition({ approved = false, attemptCount = 1 } = {}) {
