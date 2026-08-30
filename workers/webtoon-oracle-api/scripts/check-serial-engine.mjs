@@ -1590,6 +1590,13 @@ const naturalKoreanQa = analyzeStoryHeavenSerialDraft({
   body: `괴물은 막혔고 집 벽은 무너졌다. 집 안의 도윤이 상처를 입었다.\n\n${body}`
 });
 assert.equal(naturalKoreanQa.errors.some((entry) => entry.code === "semantic_predicate_mismatch"), false);
+const foreignScriptQa = analyzeStoryHeavenSerialDraft({
+  title: "검수할 원고",
+  summary: "구조 기록을 확인한 주인공이 다음 길을 찾기 위해 다시 출발하는 이야기입니다.",
+  body: `${body}\n\n그는 기록을 확인했다. ثم 자신의 도장을 다시 꺼냈다. 然后 문을 닫았다.`
+});
+assert.equal(foreignScriptQa.passed, false);
+assert.ok(foreignScriptQa.errors.some((entry) => entry.code === "foreign_script_text"));
 
 const strongCriticPanels = Object.fromEntries([
   "character", "relationship", "serialMomentum", "worldCausality", "sceneExpression", "skepticalReader"
@@ -1736,6 +1743,19 @@ const reviewWithIndependentPacket = normalizeStoryHeavenSerialWorkerResult("edit
   payload: { bible: { concept: { storyCore } }, criticPacket: review.criticPanels }
 });
 assert.equal(reviewWithIndependentPacket.criticPanels.skepticalReader.verdict, "strong");
+const reviewWithHallucinatedForeignText = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  issues: [{
+    code: "foreign-text-in-korean-prose",
+    severity: "critical",
+    sceneNo: 4,
+    evidence: "본문에 ‘ثم’과 ‘然后’가 그대로 남아 있다.",
+    suggestion: "두 표현을 자연스러운 한국어로 교정한다."
+  }]
+}, {
+  payload: { bible: { concept: { storyCore } }, draft: { body }, criticPacket: review.criticPanels }
+});
+assert.equal(reviewWithHallucinatedForeignText.issues.length, 0);
 const reviewWithMutatedPacket = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
   ...review,
   criticPanels: {

@@ -777,6 +777,14 @@ export function analyzeStoryHeavenSerialDraft(input = {}) {
   if (/<\/?(?:script|iframe|object|embed|style)\b|javascript\s*:/iu.test(body)) {
     errors.push(issue("executable_markup", "실행 가능한 마크업이 포함되어 있습니다."));
   }
+  const foreignScriptRuns = findForeignScriptRuns(body);
+  if (foreignScriptRuns.length) {
+    errors.push(issue(
+      "foreign_script_text",
+      "한국어 본문에 설명 없이 삽입된 외국 문자 표현이 있습니다. 자연스러운 한국어로 고쳐야 합니다.",
+      foreignScriptRuns.slice(0, 10)
+    ));
+  }
 
   const longSentences = sentences
     .map((sentence, index) => ({ index: index + 1, length: [...sentence].length, sentence }))
@@ -834,6 +842,15 @@ export function analyzeStoryHeavenSerialDraft(input = {}) {
     errors,
     warnings
   };
+}
+
+function findForeignScriptRuns(body = "") {
+  const pattern = /[\p{Script=Arabic}\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Cyrillic}\p{Script=Devanagari}\p{Script=Thai}]+/gu;
+  return [...String(body).matchAll(pattern)].map((match) => ({
+    index: Number(match.index || 0),
+    text: match[0],
+    context: String(body).slice(Math.max(0, Number(match.index || 0) - 24), Number(match.index || 0) + match[0].length + 24)
+  }));
 }
 
 function findSemanticPredicateMismatches(sentences = []) {
@@ -2015,6 +2032,7 @@ function normalizeLinePolish(source, options = {}) {
 
 function normalizeEditorialReview(source, options = {}) {
   const scoresSource = object(source.scores);
+  const reviewDraftBody = String(object(object(options.payload).draft).body || "");
   const scores = {};
   for (const key of Object.keys(STORYHEAVEN_SERIAL_LIMITS.quality)) {
     const score = integer(scoresSource[key], 0, 100, null);
@@ -2033,6 +2051,9 @@ function normalizeEditorialReview(source, options = {}) {
       evidence: requiredText(value.evidence, 500, 5, "serial_review_evidence_invalid"),
       suggestion: requiredText(value.suggestion, 500, 5, "serial_review_suggestion_invalid")
     };
+  }).filter((editorialIssue) => {
+    const foreignTokens = findForeignScriptRuns(editorialIssue.evidence);
+    return !foreignTokens.length || foreignTokens.every((entry) => reviewDraftBody.includes(entry.text));
   });
   if (decision !== "approved" && !issues.length) throw new Error("serial_review_issues_required");
   if (decision === "rewrite_required" && !array(source.rewriteScenes).length) {
