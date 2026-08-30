@@ -1680,11 +1680,11 @@
       if (["voice_sample", "voice_review"].includes(stage)) currentIndex = 1;
       else if (stage === "build_bible") currentIndex = 2;
       else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 3;
-      else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
+      else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "line_polish", "editorial_blocked"].includes(stage)) {
         const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1))) - 1;
         const stageOffset = stage === "build_episode_card"
           ? 0
-          : ["write_draft", "rewrite_draft"].includes(stage)
+          : ["write_draft", "rewrite_draft", "line_polish"].includes(stage)
             ? 1
             : 2;
         currentIndex = 4 + (episodeIndex * 3) + stageOffset;
@@ -1693,11 +1693,11 @@
       if (stage === "replan_arc") currentIndex = 0;
       else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
       else if (stage === "build_episode_card") currentIndex = 2;
-      else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
+      else if (["write_draft", "rewrite_draft", "line_polish"].includes(stage)) currentIndex = 3;
       else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
       else if (["publication_ready", "published"].includes(stage)) currentIndex = 5;
     } else {
-      if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 1;
+      if (["write_draft", "rewrite_draft", "line_polish"].includes(stage)) currentIndex = 1;
       else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 2;
       else if (["publication_ready", "published"].includes(stage)) currentIndex = 3;
     }
@@ -2665,6 +2665,7 @@
       editorial_review: "편집 검수",
       editorial_blocked: "원고 완성 · 품질 보완 필요",
       rewrite_draft: "원고 보완",
+      line_polish: "문체 국소 보정",
       schedule_deleted: "자동연재 설정 삭제",
       history_hidden: "로그 숨김",
       queued: "작업 준비"
@@ -2690,6 +2691,7 @@
   function stageDescription(item = {}) {
     if (item.type === "voice_sample") return "선정 기획의 작은 비공개 장면으로 문장 호흡, 대화와 어조를 먼저 시험합니다. 실제 프롤로그에는 복사하지 않습니다.";
     if (item.type === "voice_review") return "확정 문체에 맞는지 별도 편집 모델이 검사합니다. 부족하면 문체만 한 번 보정하고 설정집으로 이어갑니다.";
+    if (item.type === "line_polish") return "줄거리·인과·설정은 그대로 두고 문체가 부족하다고 지적된 장면의 문장과 대화 표현만 고칩니다.";
     if (item.type === "editorial_review") return "6개 독립 검수 결과와 원고 근거를 합쳐 점수, 보완 범위, 공개 가능 여부를 결정합니다.";
     if (item.type !== "editorial_critique") return "";
     return ({

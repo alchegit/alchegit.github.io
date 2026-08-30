@@ -66,6 +66,7 @@ assert.equal(modelRoleForSerialJob("voice_review"), "editor");
 assert.equal(modelRoleForSerialJob("replan_arc"), "editor");
 assert.equal(modelRoleForSerialJob("concept_candidates"), "writer");
 assert.equal(modelRoleForSerialJob("voice_sample"), "writer");
+assert.equal(modelRoleForSerialJob("line_polish"), "writer");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
 const serialModels = { writerModel: "gpt-5.6-terra", editorModel: "gpt-5.6-luna", escalationModel: "gpt-5.6-sol" };
 assert.equal(selectSerialModel({ type: "write_draft", payload: {} }, serialModels), "gpt-5.6-terra");
@@ -74,6 +75,7 @@ assert.equal(selectSerialModel({ type: "rewrite_draft", payload: { rewriteNumber
 assert.equal(selectSerialModel({ type: "editorial_review", payload: { rewriteNumber: 9 } }, serialModels), "gpt-5.6-luna");
 assert.equal(selectSerialModel({ type: "voice_sample", payload: {} }, serialModels), "gpt-5.6-terra");
 assert.equal(selectSerialModel({ type: "voice_review", payload: {} }, serialModels), "gpt-5.6-luna");
+assert.equal(selectSerialModel({ type: "line_polish", payload: { rewriteNumber: 1 } }, serialModels), "gpt-5.6-terra");
 
 const draftPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
 assert.match(draftPrompt, /silent sentence-by-sentence subject-predicate pass/u);
@@ -86,6 +88,11 @@ assert.match(rewritePrompt, /surgical copy edit/u);
 assert.match(rewritePrompt, /preserve unaffected scenes and paragraphs verbatim/u);
 assert.match(rewritePrompt, /subject-agent-object-predicate check/u);
 assert.match(rewritePrompt, /payload\.writingBrief/u);
+const linePolishPrompt = buildSerialPrompt({ ...job, type: "line_polish", payload: { writingBrief: {}, draft: { body: "원문" } } });
+assert.match(linePolishPrompt, /prose-only local polish/u);
+assert.match(linePolishPrompt, /Preserve title, summary, paragraph count and boundaries/u);
+assert.match(linePolishPrompt, /Do not add or remove a paragraph, event, fact, action, speaker turn/u);
+assert.match(linePolishPrompt, /Run the silent subject-agent-object-predicate check/u);
 
 const genreProfileSignals = {
   fantasy: /ordinary lack, duty, or vulnerability/u,
@@ -660,6 +667,35 @@ const authoritativeSelection = parseSerialOutput({
   payload: { developmentCandidates: authoritativeCandidates }
 }, { model: "gpt-test" });
 assert.deepEqual(authoritativeSelection.result.developmentRoom.candidates, authoritativeCandidates);
+const authoritativeDraftState = {
+  title: "원본 제목",
+  summary: "원본 요약은 문체 보정에서 바뀌지 않는다.",
+  body: "원본 본문",
+  sceneRanges: [{ sceneNo: 1, startParagraph: 1, endParagraph: 1 }],
+  newCanonFacts: [{ key: "fact-1", category: "event", value: "원본 사건" }],
+  revealUpdates: [{ key: "reveal-1", status: "seeded" }]
+};
+const authoritativeLinePolish = parseSerialOutput({
+  jobId: job.id,
+  inputHash: job.inputHash,
+  jobType: "line_polish",
+  result: {
+    title: "바뀐 제목",
+    summary: "바뀐 요약",
+    body: "표현만 고친 본문",
+    sceneRanges: [],
+    newCanonFacts: [],
+    revealUpdates: [],
+    changes: [{ sceneNo: 1, reason: "문장 리듬 보정" }]
+  }
+}, {
+  ...job,
+  type: "line_polish",
+  payload: { draft: authoritativeDraftState }
+}, { model: "gpt-test" });
+assert.equal(authoritativeLinePolish.result.title, authoritativeDraftState.title);
+assert.deepEqual(authoritativeLinePolish.result.sceneRanges, authoritativeDraftState.sceneRanges);
+assert.deepEqual(authoritativeLinePolish.result.newCanonFacts, authoritativeDraftState.newCanonFacts);
 
 const usage = parseCodexJsonlUsage([
   JSON.stringify({ type: "turn.started" }),

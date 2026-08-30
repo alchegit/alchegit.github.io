@@ -13,7 +13,8 @@ const JOB_TYPES = new Set([
   "write_draft",
   "editorial_critique",
   "editorial_review",
-  "rewrite_draft"
+  "rewrite_draft",
+  "line_polish"
 ]);
 
 const STORYHEAVEN_PUBLIC_SYNOPSIS_META_PATTERNS = Object.freeze([
@@ -744,6 +745,7 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
   if (jobType === "build_episode_card") return normalizeEpisodeCard(source, options);
   if (jobType === "write_draft") return normalizeDraft(source, false, options);
   if (jobType === "rewrite_draft") return normalizeDraft(source, true, options);
+  if (jobType === "line_polish") return normalizeLinePolish(source, options);
   if (jobType === "editorial_critique") return normalizeEditorialCritique(source, options);
   return normalizeEditorialReview(source, options);
 }
@@ -1939,6 +1941,30 @@ function normalizeDraft(source, rewritten, options = {}) {
     if (!draft.changes.length) throw new Error("serial_rewrite_changes_required");
   }
   return draft;
+}
+
+function normalizeLinePolish(source, options = {}) {
+  const originalSource = object(object(options.payload).draft);
+  if (!originalSource.body) throw new Error("serial_line_polish_original_missing");
+  const original = normalizeDraft(originalSource, false, options);
+  const polished = normalizeDraft(source, true, options);
+  if (polished.title !== original.title || polished.summary !== original.summary) {
+    throw new Error("serial_line_polish_metadata_mutated");
+  }
+  if (JSON.stringify(polished.sceneRanges) !== JSON.stringify(original.sceneRanges)) {
+    throw new Error("serial_line_polish_scene_ranges_mutated");
+  }
+  if (JSON.stringify(polished.newCanonFacts) !== JSON.stringify(original.newCanonFacts)
+    || JSON.stringify(polished.revealUpdates) !== JSON.stringify(original.revealUpdates)) {
+    throw new Error("serial_line_polish_story_state_mutated");
+  }
+  const originalParagraphCount = original.body.split(/\n{2,}/u).filter((item) => item.trim()).length;
+  const polishedParagraphCount = polished.body.split(/\n{2,}/u).filter((item) => item.trim()).length;
+  if (polishedParagraphCount !== originalParagraphCount) {
+    throw new Error("serial_line_polish_paragraph_structure_mutated");
+  }
+  if (polished.body === original.body) throw new Error("serial_line_polish_unchanged");
+  return polished;
 }
 
 function normalizeEditorialReview(source, options = {}) {

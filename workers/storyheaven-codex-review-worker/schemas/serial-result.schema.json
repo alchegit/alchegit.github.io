@@ -21,7 +21,8 @@
         "write_draft",
         "editorial_critique",
         "editorial_review",
-        "rewrite_draft"
+        "rewrite_draft",
+        "line_polish"
       ]
     },
     "resultJson": {

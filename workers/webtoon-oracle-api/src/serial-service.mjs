@@ -79,6 +79,15 @@ export function voiceAuditionTransition({ approved = false, attemptCount = 1 } =
   return { action: "build_bible", status: "caution", attemptCount: attempt };
 }
 
+export function serialRevisionJobType({ decision = {}, qa = {}, review = {} } = {}) {
+  const failedMetrics = Array.isArray(decision.failedMetrics) ? decision.failedMetrics : [];
+  const styleOnly = failedMetrics.length > 0
+    && failedMetrics.every((item) => String(item?.name || "").startsWith("style."));
+  return styleOnly && qa?.passed === true && review?.safetyPassed === true && review?.decision !== "blocked"
+    ? "line_polish"
+    : "rewrite_draft";
+}
+
 export function continuationMinimumEpisode(triggerType) {
   return triggerType === "admin_request"
     ? STORYHEAVEN_CONTINUATION_POLICY.adminMinimumEpisodeCount
@@ -2293,8 +2302,8 @@ export function createStoryHeavenSerialService({
     if (job.JOB_TYPE === "replan_arc") return acceptArcReplan(connection, job, payload, result);
     if (job.JOB_TYPE === "build_arc") return acceptArc(connection, job, payload, result);
     if (job.JOB_TYPE === "build_episode_card") return acceptEpisodeCard(connection, job, result);
-    if (job.JOB_TYPE === "write_draft" || job.JOB_TYPE === "rewrite_draft") {
-      return acceptDraft(connection, job, result, job.JOB_TYPE === "rewrite_draft");
+    if (["write_draft", "rewrite_draft", "line_polish"].includes(job.JOB_TYPE)) {
+      return acceptDraft(connection, job, result, job.JOB_TYPE !== "write_draft");
     }
     if (job.JOB_TYPE === "editorial_critique") return acceptEditorialCritique(connection, job, payload);
     return acceptEditorialReview(connection, job, result);
@@ -3109,17 +3118,18 @@ export function createStoryHeavenSerialService({
       return;
     }
     const nextRewrite = Number(run.REWRITE_COUNT || 0) + 1;
+    const revisionJobType = serialRevisionJobType({ decision, qa, review });
     await connection.execute(
-      `update storyheaven_serial_runs set run_status = 'rewrite', current_stage = 'rewrite_draft',
+      `update storyheaven_serial_runs set run_status = 'rewrite', current_stage = :current_stage,
               rewrite_count = :rewrite_count, updated_at = systimestamp where id = :run_id`,
-      { run_id: job.RUN_ID, rewrite_count: nextRewrite }
+      { run_id: job.RUN_ID, current_stage: revisionJobType, rewrite_count: nextRewrite }
     );
     const context = await loadSerialContext(connection, job.STORY_ID);
     const activeCard = context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO));
     await queueJob(connection, {
       runId: job.RUN_ID,
       storyId: job.STORY_ID,
-      type: "rewrite_draft",
+      type: revisionJobType,
       priority: 70,
       input: {
         story: context.story,
@@ -3129,7 +3139,15 @@ export function createStoryHeavenSerialService({
         reveals: context.reveals,
         episodeCard: activeCard,
         writingBrief: buildWritingBrief(context, activeCard, Number(run.EPISODE_NO)),
-        draft: { id: draft.ID, title: draft.TITLE, summary: draft.PUBLIC_SUMMARY, body: draft.BODY_TEXT, sceneRanges: parseJson(draft.SCENE_RANGES_JSON, []) },
+        draft: {
+          id: draft.ID,
+          title: draft.TITLE,
+          summary: draft.PUBLIC_SUMMARY,
+          body: draft.BODY_TEXT,
+          sceneRanges: parseJson(draft.SCENE_RANGES_JSON, []),
+          newCanonFacts: parseJson(draft.CANON_CANDIDATES_JSON, []),
+          revealUpdates: parseJson(draft.REVEAL_UPDATES_JSON, [])
+        },
         deterministicQa: qa,
         editor: review,
         rewriteNumber: nextRewrite,
@@ -4628,11 +4646,11 @@ function queueProgressView(group, status) {
     if (["voice_sample", "voice_review"].includes(stage)) currentIndex = 1;
     else if (stage === "build_bible") currentIndex = 2;
     else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 3;
-    else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
+    else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "line_polish", "editorial_blocked"].includes(stage)) {
       const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(group.maxEpisodeNo || 1))) - 1;
       const stageOffset = stage === "build_episode_card"
         ? 0
-        : ["write_draft", "rewrite_draft"].includes(stage)
+        : ["write_draft", "rewrite_draft", "line_polish"].includes(stage)
           ? 1
           : 2;
       currentIndex = 4 + (episodeIndex * 3) + stageOffset;
@@ -4641,11 +4659,11 @@ function queueProgressView(group, status) {
     if (stage === "replan_arc") currentIndex = 0;
     else if (stage === "build_arc" || stage === "plan_complete") currentIndex = 1;
     else if (stage === "build_episode_card") currentIndex = 2;
-    else if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 3;
+    else if (["write_draft", "rewrite_draft", "line_polish"].includes(stage)) currentIndex = 3;
     else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 4;
     else if (["publication_ready", "published"].includes(stage)) currentIndex = 5;
   } else {
-    if (["write_draft", "rewrite_draft"].includes(stage)) currentIndex = 1;
+    if (["write_draft", "rewrite_draft", "line_polish"].includes(stage)) currentIndex = 1;
     else if (["editorial_critique", "editorial_review", "editorial_blocked"].includes(stage)) currentIndex = 2;
     else if (["publication_ready", "published"].includes(stage)) currentIndex = 3;
   }

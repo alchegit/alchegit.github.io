@@ -30,7 +30,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, summarizeQueue, voiceAuditionTransition } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, serialRevisionJobType, summarizeQueue, voiceAuditionTransition } from "../src/serial-service.mjs";
 import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
@@ -44,6 +44,7 @@ const managedStoriesCss = await readFile(new URL("../../../storyheaven/operator/
 const serialWorkerSource = await readFile(new URL("../../storyheaven-codex-review-worker/src/serial.mjs", import.meta.url), "utf8");
 const arcReplanningMigration = await readFile(new URL("../../../oracle/20260809-storyheaven-arc-replanning.sql", import.meta.url), "utf8");
 const voiceAuditionMigration = await readFile(new URL("../../../oracle/20260830-storyheaven-voice-audition.sql", import.meta.url), "utf8");
+const linePolishMigration = await readFile(new URL("../../../oracle/20260831-storyheaven-line-polish.sql", import.meta.url), "utf8");
 const createEpisodeRunSource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function createEpisodeRun"),
   serialServiceSource.indexOf("async function advanceJob")
@@ -68,6 +69,7 @@ assert.match(
 );
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
 assert.match(voiceAuditionMigration, /'voice_sample', 'voice_review'/u, "voice audition migration must allow both private stages");
+assert.match(linePolishMigration, /'rewrite_draft', 'line_polish'/u, "line-polish migration must allow prose-only corrections");
 assert.match(serialServiceSource, /async function acceptVoiceSample/u, "voice samples must advance to an independent review");
 assert.match(serialServiceSource, /transition\.action === "retry_sample"/u, "voice audition must route a failed first sample through the bounded transition");
 assert.match(serialServiceSource, /function buildWritingBrief/u, "draft jobs must receive a compact one-page writing brief");
@@ -78,6 +80,16 @@ assert.match(serialServiceSource, /rebuildFinalReviewPayload/u, "final editorial
 assert.deepEqual(voiceAuditionTransition({ approved: true, attemptCount: 1 }), { action: "build_bible", status: "approved", attemptCount: 1 });
 assert.deepEqual(voiceAuditionTransition({ approved: false, attemptCount: 1 }), { action: "retry_sample", status: "correcting", attemptCount: 2 });
 assert.deepEqual(voiceAuditionTransition({ approved: false, attemptCount: 2 }), { action: "build_bible", status: "caution", attemptCount: 2 });
+assert.equal(serialRevisionJobType({
+  decision: { failedMetrics: [{ name: "style.voiceAdherence" }, { name: "style.sentenceRhythm" }] },
+  qa: { passed: true },
+  review: { safetyPassed: true, decision: "rewrite_required" }
+}), "line_polish");
+assert.equal(serialRevisionJobType({
+  decision: { failedMetrics: [{ name: "style.voiceAdherence" }, { name: "causality" }] },
+  qa: { passed: true },
+  review: { safetyPassed: true, decision: "rewrite_required" }
+}), "rewrite_draft");
 const strongPilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 1, episodeMode: "discovery", wouldReadNext: true, readerRewardScore: 92 },
   { episodeNo: 2, episodeMode: "bonding", wouldReadNext: true, readerRewardScore: 90 },
@@ -1493,6 +1505,37 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("write_draft", {
     bible: { narrativeBlueprint: bible.narrativeBlueprint }
   }
 }), /protected_reveal_exposed/u);
+const originalDraft = normalizeStoryHeavenSerialWorkerResult("write_draft", {
+  title: "프롤로그 - 돌아오지 않는 종점",
+  summary: "도윤이 첫 승객을 내려주며 기억을 요금으로 내는 규칙과 누나의 지워진 기록을 발견한다.",
+  body,
+  sceneRanges: [
+    { sceneNo: 1, startParagraph: 1, endParagraph: 12 },
+    { sceneNo: 2, startParagraph: 13, endParagraph: 24 },
+    { sceneNo: 3, startParagraph: 25, endParagraph: 36 }
+  ],
+  newCanonFacts: [{ key: "first-drive", category: "event", value: "도윤이 첫 심야 운행을 시작했다." }],
+  revealUpdates: [{ key: "series-terminal-truth", status: "seeded" }]
+}, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } });
+const polishedDraft = normalizeStoryHeavenSerialWorkerResult("line_polish", {
+  ...originalDraft,
+  body: originalDraft.body.replace("천천히 확인했다", "좌석 끝까지 차분히 살폈다"),
+  changes: [{ sceneNo: 1, reason: "같은 문장 호흡을 줄이고 확정 문체의 선명한 동사를 적용했다." }]
+}, { payload: { episodeNo: 1, draft: originalDraft, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } });
+assert.match(polishedDraft.body, /차분히 살폈다/u);
+assert.deepEqual(polishedDraft.newCanonFacts, originalDraft.newCanonFacts);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("line_polish", {
+  ...polishedDraft,
+  title: "바뀐 제목"
+}, { payload: { episodeNo: 1, draft: originalDraft, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_line_polish_metadata_mutated/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("line_polish", {
+  ...polishedDraft,
+  newCanonFacts: [{ key: "new-event", category: "event", value: "없던 사건을 새로 추가했다." }]
+}, { payload: { episodeNo: 1, draft: originalDraft, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_line_polish_story_state_mutated/u);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("line_polish", {
+  ...polishedDraft,
+  body: `${polishedDraft.body}\n\n새 문단을 추가했다.`
+}, { payload: { episodeNo: 1, draft: originalDraft, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_line_polish_paragraph_structure_mutated/u);
 const qa = analyzeStoryHeavenSerialDraft({ title: "돌아오지 않는 종점", summary: "도윤이 첫 승객의 목적지를 찾다가 누나의 왕복 승차권과 기억을 요금으로 내는 규칙을 발견한다.", body });
 assert.equal(qa.passed, true);
 assert.ok(qa.characterCount >= STORYHEAVEN_SERIAL_LIMITS.draftCharactersMin);

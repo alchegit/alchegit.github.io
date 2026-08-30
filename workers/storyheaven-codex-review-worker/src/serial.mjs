@@ -14,7 +14,8 @@ export const SERIAL_JOB_TYPES = Object.freeze([
   "write_draft",
   "editorial_critique",
   "editorial_review",
-  "rewrite_draft"
+  "rewrite_draft",
+  "line_polish"
 ]);
 const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
@@ -135,6 +136,17 @@ export function parseSerialOutput(value, job, { model }) {
         ...(result.developmentRoom && typeof result.developmentRoom === "object" ? result.developmentRoom : {}),
         candidates: job.payload.developmentCandidates
       }
+    };
+  }
+  if (job?.type === "line_polish" && job?.payload?.draft && typeof job.payload.draft === "object") {
+    const original = job.payload.draft;
+    result = {
+      ...result,
+      title: original.title,
+      summary: original.summary,
+      sceneRanges: original.sceneRanges,
+      newCanonFacts: original.newCanonFacts,
+      revealUpdates: original.revealUpdates
     };
   }
   // The leased job is the authoritative envelope. Model-authored envelope fields
@@ -385,7 +397,7 @@ function genreExperienceAndStyleInstruction(type, payload = {}) {
       instructions.push(`${binding} Treat concept.genreExperiencePlan as binding. Make characters, relationship pressures, world dynamics, progression limits, and seriesArchitecture repeatedly produce those rewards without adding a replacement premise.`);
     } else if (["build_arc", "replan_arc", "build_episode_card"].includes(type)) {
       instructions.push(`${binding} Choose this installment or arc's reward from concept.genreExperiencePlan and make it change a capability, relationship, status, responsibility, or future choice. Rotate arc forms as promised and do not reduce progression to labels or numbers.`);
-    } else if (["write_draft", "rewrite_draft"].includes(type)) {
+    } else if (["write_draft", "rewrite_draft", "line_polish"].includes(type)) {
       instructions.push(`${binding} Put the planned genre reward and earned progression on the page as action and consequence. A status window, rank name, lore statement, or victory claim without a changed choice is not a delivered reward.`);
     } else if (["editorial_critique", "editorial_review"].includes(type)) {
       instructions.push(`${binding} Judge whether the manuscript actually delivers the planned familiar pleasure, earned progression, and current consequence. Do not award genrePromise for labels, power levels, worldbuilding volume, or future setup alone.`);
@@ -399,7 +411,7 @@ function genreExperienceAndStyleInstruction(type, payload = {}) {
       instructions.push(`${binding} Build the story-specific voiceProfile inside this locked range. Do not output proseStyle, styleContractId, or calibration; the server attaches the authoritative contract. Specialize only the sensory palette, character speech patterns, visualization rules, onboarding rules, and work-specific forbidden habits.${calibration ? ` The private voice audition ended with status '${calibration.status}'. Apply these compact calibration corrections while designing the voice card: ${JSON.stringify(calibration.corrections || [])}. Do not copy or reconstruct the audition sample.` : ""}`);
     } else if (["build_arc", "replan_arc", "build_episode_card"].includes(type)) {
       instructions.push(`${binding} Plan tone movement and dialogue pressure that fit this voice. Vary intensity by scene without changing the series voice.`);
-    } else if (["write_draft", "rewrite_draft"].includes(type)) {
+    } else if (["write_draft", "rewrite_draft", "line_polish"].includes(type)) {
       instructions.push(`${binding} Apply this profile sentence by sentence. Humor must arise from the specified source, grandeur must be physically demonstrated, and darkness must not hide basic facts. Preserve natural Korean and causal clarity over decorative styling.`);
     } else if (["editorial_critique", "editorial_review"].includes(type)) {
       instructions.push(`${binding} Evaluate adherence from manuscript evidence, not from the profile label or the writer's claim. Distinguish deliberate scene-level variation from voice drift.${type === "editorial_review" ? " Return styleAssessment with 0-100 scores and concrete evidence for voiceAdherence, dialogueCharacterization, toneConsistency, and sentenceRhythm. Any score below the supplied style threshold requires rewrite_required with the affected scene." : " The sceneExpression panel must cite any voice drift, interchangeable dialogue, arbitrary tone shift, or repetitive sentence rhythm."}`);
@@ -435,6 +447,9 @@ function naturalKoreanInstruction(type) {
   if (type === "rewrite_draft") {
     return `${rule} Treat deterministicQa error semantic_predicate_mismatch and every editor-cited subject-predicate mismatch as mandatory repairs. Re-read neighboring sentences to restore the intended actor and target, then run the same silent sentence-level pass over the complete revised manuscript.`;
   }
+  if (type === "line_polish") {
+    return `${rule} Run the silent subject-agent-object-predicate check on every changed sentence. Preserve every event, fact, paragraph boundary, and scene range while correcting only the editor-cited prose-style weaknesses.`;
+  }
   if (["editorial_critique", "editorial_review"].includes(type)) {
     return `${rule} Independently inspect every sentence even when deterministicQa is otherwise clean. An impossible subject-predicate pairing, confused actor or target, or literal translation metaphor is a concrete koreanReadability and causality failure. Cite the exact sentence, require a rewrite, and do not approve the draft while any such sentence remains.`;
   }
@@ -450,6 +465,9 @@ function causalIntegrityInstruction(type) {
   }
   if (type === "rewrite_draft") {
     return "For a causality or world-rule failure, quote no new lore into existence. Identify the exact existing worldRule or canon fact, then make the actor perform the concrete action it requires. Keep actor, recipient or target, amount or deadline, legal effect, supernatural effect, and remaining debt distinct. A document or partial action cannot count as completion unless an existing rule explicitly grants that result.";
+  }
+  if (type === "line_polish") {
+    return "Perform a prose-only local polish for the scenes named by the editor's failed style metrics. Preserve title, summary, paragraph count and boundaries, sceneRanges, event order, actions, dialogue facts, character decisions, payoffs, hook, newCanonFacts, and revealUpdates exactly. You may change sentence wording, sentence boundaries inside a paragraph, dialogue phrasing without changing intent or information, connective rhythm, and selective descriptive wording. Do not add or remove a paragraph, event, fact, action, speaker turn, object, rule, clue, joke beat, or emotional outcome. Keep every unaffected paragraph verbatim. Return the complete manuscript and list each changed scene and style reason in changes.";
   }
   if (["editorial_critique", "editorial_review"].includes(type)) {
     return "For every claimed solution, compare the result to the exact supplied worldRules and canon. Treat an unsupported effect as a causality failure, but recommend changing the on-page action or limiting its result instead of demanding a newly invented authority, exception, or procedure.";
@@ -806,6 +824,7 @@ function resultContract(type, payload = {}) {
   };
   if (type === "write_draft") return draftContract(false);
   if (type === "rewrite_draft") return draftContract(true);
+  if (type === "line_polish") return draftContract(true);
   if (type === "editorial_critique") return {
     criticRole: String(payload?.criticRole || "character"),
     panel: criticPanelContract()
