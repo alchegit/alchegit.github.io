@@ -11,12 +11,13 @@ const execute = process.argv.includes("--execute");
 const report = process.argv.includes("--report");
 const resumeBlocked = process.argv.includes("--resume-blocked");
 const repairCard = process.argv.includes("--repair-card");
+const pauseSchedule = process.argv.includes("--pause-schedule");
 const slot = Math.max(1, Math.min(9, Number(argumentValue("--slot=") || 1)));
 const requestedGenrePreset = argumentValue("--genre=") || "curated-long-fantasy-random";
 const stateDir = path.resolve(process.env.STORYHEAVEN_REVIEW_STATE_DIR || "./runtime");
 const statePath = path.join(stateDir, slot === 1 ? "v3-private-pilot.json" : `v3-private-pilot-${slot}.json`);
 const previous = await readJson(statePath);
-if (previous?.scheduleId && previous?.runId && !report && !resumeBlocked && !repairCard) {
+if (previous?.scheduleId && previous?.runId && !report && !resumeBlocked && !repairCard && !pauseSchedule) {
   console.log(JSON.stringify({ reused: true, ...previous }, null, 2));
   process.exit(0);
 }
@@ -50,7 +51,7 @@ const request = {
   conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
 };
 
-if (!execute && !report && !resumeBlocked && !repairCard) {
+if (!execute && !report && !resumeBlocked && !repairCard && !pauseSchedule) {
   console.log(JSON.stringify({ dryRun: true, statePath, request }, null, 2));
   process.exit(0);
 }
@@ -100,7 +101,33 @@ const service = createStoryHeavenSerialService({
 });
 
 try {
-  if (report) {
+  if (pauseSchedule) {
+    if (!previous?.scheduleId) throw new Error("v3_pilot_state_missing");
+    const result = await withTransaction(async (connection) => {
+      const schedule = await connection.execute(
+        `select schedule_status, publication_mode
+           from storyheaven_serial_schedules
+          where id = :schedule_id for update`,
+        { schedule_id: previous.scheduleId }
+      );
+      const row = schedule.rows[0] || null;
+      if (!row) throw new Error("v3_pilot_schedule_missing");
+      if (row.PUBLICATION_MODE !== "test_private") throw new Error("v3_pilot_schedule_not_private");
+      await connection.execute(
+        `update storyheaven_serial_schedules
+            set schedule_status = 'paused', next_run_at = null, updated_at = systimestamp
+          where id = :schedule_id`,
+        { schedule_id: previous.scheduleId }
+      );
+      return {
+        scheduleId: previous.scheduleId,
+        previousStatus: row.SCHEDULE_STATUS,
+        status: "paused",
+        publicationMode: row.PUBLICATION_MODE
+      };
+    });
+    console.log(JSON.stringify({ paused: true, ...result }, null, 2));
+  } else if (report) {
     if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
     const runRows = await withConnection(async (connection) => {
       const result = await connection.execute(
@@ -128,11 +155,22 @@ try {
       );
       return result.rows[0] || null;
     });
+    const managedStory = story
+      ? (await service.listManagedStories()).find((item) => item.id === story.ID) || null
+      : null;
     console.log(JSON.stringify({
       checkedAt: new Date().toISOString(),
       scheduleId: previous.scheduleId,
       queueGroupId: previous.queueGroupId,
       story: story ? { id: story.ID, title: story.TITLE } : null,
+      operation: managedStory ? {
+        storyStatus: managedStory.storyStatus,
+        visibility: managedStory.visibility,
+        publishedEpisodeCount: managedStory.publishedEpisodeCount,
+        readyPublicationCount: managedStory.readyPublicationCount,
+        schedule: managedStory.schedule,
+        openingPilot: managedStory.openingPilot
+      } : null,
       voiceAudition: reports.find((item) => item.voiceAudition)?.voiceAudition || null,
       runs: reports.map(summarizeRun),
       totals: summarizeTotals(reports)
