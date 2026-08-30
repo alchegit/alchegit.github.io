@@ -162,6 +162,16 @@ try {
             mitigation: "회사와 산 사람의 불법 승차, 동료와의 빚을 교차해 선택 결과를 바꾼다.",
             candidates
           },
+          voiceAudition: {
+            status: "approved",
+            attemptCount: 1,
+            readableCharacters: 782,
+            profileId: "light-witty-v1",
+            profileLabel: "가볍고 유쾌한 몰입형",
+            scores: { voiceAdherence: 94, dialogueCharacterization: 91, toneConsistency: 93, sentenceRhythm: 92 },
+            summary: "쉬운 행동문과 인물 목적에서 생기는 짧은 유머가 확정 문체 안에서 안정적으로 작동합니다.",
+            corrections: []
+          },
           replanning: {
             basedOnArcNo: 1,
             targetArcNo: 2,
@@ -281,8 +291,8 @@ try {
     assert.equal("maxActiveSerials" in submitted, false, `${viewport.name} omits parallel-work setting`);
     assert.ok(runs.length > 0, `${viewport.name} queues selected initial work`);
     const liveProgress = page.locator("[data-queue-live]");
-    assert.match(await liveProgress.textContent(), /58%/u, `${viewport.name} live overview exposes numeric progress`);
-    assert.equal(await liveProgress.locator('[role="progressbar"]').getAttribute("aria-valuenow"), "58", `${viewport.name} live overview is accessible`);
+    assert.match(await liveProgress.textContent(), /61%/u, `${viewport.name} live overview exposes numeric progress`);
+    assert.equal(await liveProgress.locator('[role="progressbar"]').getAttribute("aria-valuenow"), "61", `${viewport.name} live overview is accessible`);
     assert.equal(await page.locator(".schedule-row .schedule-progress").count(), 0, `${viewport.name} active progress is shown once instead of repeated on its setting card`);
     assert.match(await page.locator(".schedule-row").textContent(), /이 설정 멈추기.*설정 관리/u, `${viewport.name} setting card exposes one scoped control and collapsed management`);
     assert.match(await page.locator(".schedule-row").textContent(), /게임 모험 성장.*가볍고 유쾌한 몰입형/u, `${viewport.name} setting card exposes resolved genre and prose profiles`);
@@ -293,9 +303,9 @@ try {
     const runningProgress = page.locator("[data-queue-live] .production-progress");
     assert.equal(await runningProgress.count(), 1, `${viewport.name} running work has a progress train`);
     assert.equal(await page.locator("[data-queue-live]").getByRole("button", { name: /멈춘 단계|다시 시작/u }).count(), 0, `${viewport.name} healthy running work does not expose a dangerous forced restart`);
-    assert.match(await runningProgress.locator(".production-progress-heading").textContent(), /현재 · 본편 1화 원고.*7 \/ 13단계 완료/u, `${viewport.name} current production stage is explicit`);
-    assert.equal(await runningProgress.locator(".production-step.is-complete").count(), 7, `${viewport.name} completed stages are filled`);
-    assert.equal(await runningProgress.locator(".production-step.is-current").textContent(), "08본편 1화 원고진행 중", `${viewport.name} current stage is highlighted`);
+    assert.match(await runningProgress.locator(".production-progress-heading").textContent(), /현재 · 본편 1화 원고.*8 \/ 14단계 완료/u, `${viewport.name} current production stage is explicit`);
+    assert.equal(await runningProgress.locator(".production-step.is-complete").count(), 8, `${viewport.name} completed stages are filled`);
+    assert.equal(await runningProgress.locator(".production-step.is-current").textContent(), "09본편 1화 원고진행 중", `${viewport.name} current stage is highlighted`);
     assert.equal(await runningProgress.locator(".production-step.is-upcoming").count(), 5, `${viewport.name} planned stages remain unfilled`);
     assert.equal(await page.locator("[data-status-running]").textContent(), "1", `${viewport.name} running count is explicit`);
     assert.equal(await page.locator("[data-status-waiting]").textContent(), "1", `${viewport.name} waiting count is explicit`);
@@ -367,6 +377,7 @@ try {
     assert.equal(await page.locator(".development-candidate").count(), 4, `${viewport.name} shows all four development candidates`);
     assert.match(await page.locator(".development-candidate.is-selected").textContent(), /선정 · 마지막 시간버스/u, `${viewport.name} highlights the selected candidate`);
     assert.match(await page.locator(".selection-rationale").textContent(), /최종 선정 근거.*위험 보완/u, `${viewport.name} explains selection evidence and mitigation`);
+    assert.match(await page.locator(".voice-audition").textContent(), /비공개 문체 오디션.*문체 확정.*782자.*문체 적합도.*94점.*대화 인물성.*91점/u, `${viewport.name} explains the private voice audition without exposing sample prose`);
     assert.equal(await page.locator(".arc-replanning").count(), 1, `${viewport.name} shows the completed arc replan`);
     assert.match(await page.locator(".arc-replanning").textContent(), /구간 종료 재기획.*다음 구간 반영 완료.*이어갈 강점.*이번에 고칠 점/u, `${viewport.name} explains what the replan preserves and repairs`);
     assert.match(await page.locator(".replan-directive").textContent(), /주인공 압력.*관계 압력.*세계 압력.*리듬 변화/u, `${viewport.name} exposes the next-arc operating direction`);

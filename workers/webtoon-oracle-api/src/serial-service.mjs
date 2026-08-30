@@ -72,6 +72,13 @@ export function serialRetryDelaySeconds(errorCode, retryMinutes = 3) {
   return /^review_api_422_serial_/u.test(String(errorCode || "")) ? 15 : fallback;
 }
 
+export function voiceAuditionTransition({ approved = false, attemptCount = 1 } = {}) {
+  const attempt = Math.max(1, Math.min(2, Number(attemptCount || 1)));
+  if (approved === true) return { action: "build_bible", status: "approved", attemptCount: attempt };
+  if (attempt < 2) return { action: "retry_sample", status: "correcting", attemptCount: attempt + 1 };
+  return { action: "build_bible", status: "caution", attemptCount: attempt };
+}
+
 export function continuationMinimumEpisode(triggerType) {
   return triggerType === "admin_request"
     ? STORYHEAVEN_CONTINUATION_POLICY.adminMinimumEpisodeCount
@@ -1676,6 +1683,7 @@ export function createStoryHeavenSerialService({
       return {
         run: mapRun(run),
         development: mapRunDevelopment(jobs.rows),
+        voiceAudition: mapRunVoiceAudition(jobs.rows),
         replanning: mapRunReplanning(jobs.rows),
         jobs: jobs.rows.map(mapRunJob),
         drafts: drafts.rows.map((row) => ({ id: row.ID, version: Number(row.VERSION_NO), kind: row.DRAFT_KIND, title: row.TITLE, summary: row.PUBLIC_SUMMARY, body: row.BODY_TEXT, sceneRanges: parseJson(row.SCENE_RANGES_JSON, []), qa: parseJson(row.DETERMINISTIC_JSON, {}), contentHash: row.CONTENT_HASH, createdAt: isoTime(row.CREATED_AT) })),
@@ -2279,6 +2287,8 @@ export function createStoryHeavenSerialService({
     if (job.JOB_TYPE === "concept_candidates") return acceptConceptCandidates(connection, job, payload, result);
     if (job.JOB_TYPE === "concept_selection") return acceptConcept(connection, job, payload, result);
     if (job.JOB_TYPE === "concept_gate") return acceptConcept(connection, job, payload, result);
+    if (job.JOB_TYPE === "voice_sample") return acceptVoiceSample(connection, job, payload, result);
+    if (job.JOB_TYPE === "voice_review") return acceptVoiceReview(connection, job, payload, result);
     if (job.JOB_TYPE === "build_bible") return acceptBible(connection, job, payload, result);
     if (job.JOB_TYPE === "replan_arc") return acceptArcReplan(connection, job, payload, result);
     if (job.JOB_TYPE === "build_arc") return acceptArc(connection, job, payload, result);
@@ -2366,23 +2376,99 @@ export function createStoryHeavenSerialService({
     const seriesPlan = normalizeSeriesPlan(payload?.schedule?.policy?.seriesPlan);
     const conceptWithPlan = { ...concept, seriesPlan };
     await upsertBibleConcept(connection, storyId, conceptWithPlan);
+    const proseStyle = payload?.schedule?.policy?.proseStyle || null;
+    const nextStage = proseStyle ? "voice_sample" : "build_bible";
     await connection.execute(
       `update storyheaven_serial_runs set story_id = :story_id, run_type = 'planning',
-              current_stage = 'build_bible', updated_at = systimestamp where id = :run_id`,
-      { story_id: storyId, run_id: job.RUN_ID }
+              current_stage = :current_stage, updated_at = systimestamp where id = :run_id`,
+      { story_id: storyId, current_stage: nextStage, run_id: job.RUN_ID }
     );
     const story = { ID: storyId, TITLE: concept.title, LOGLINE: concept.logline, PUBLIC_SYNOPSIS: concept.synopsis, GENRE: concept.genres[0], GENRES_JSON: JSON.stringify(concept.genres), TAGS_JSON: JSON.stringify(concept.tags), CONTENT_RATING: concept.rating };
+    const planningPayload = {
+      story: publicStory(story),
+      concept: conceptWithPlan,
+      creativeControls: payload?.schedule?.policy?.creativeControls || null,
+      genrePreset: payload?.schedule?.policy?.genrePreset || null,
+      proseStyle,
+      seriesPlan
+    };
+    if (proseStyle) {
+      await queueJob(connection, {
+        runId: job.RUN_ID,
+        storyId,
+        type: "voice_sample",
+        priority: 85,
+        input: { ...planningPayload, voiceAttempt: 1 }
+      });
+      return;
+    }
+    await queueBibleStage(connection, job, planningPayload);
+  }
+
+  async function acceptVoiceSample(connection, job, payload, voiceSample) {
+    await connection.execute(
+      `update storyheaven_serial_runs set current_stage = 'voice_review', updated_at = systimestamp where id = :run_id`,
+      { run_id: job.RUN_ID }
+    );
     await queueJob(connection, {
       runId: job.RUN_ID,
-      storyId,
+      storyId: job.STORY_ID,
+      type: "voice_review",
+      priority: 84,
+      input: { ...payload, voiceSample, voiceSampleJobId: job.ID, styleThresholds: STORYHEAVEN_PROSE_STYLE_QUALITY }
+    });
+  }
+
+  async function acceptVoiceReview(connection, job, payload, voiceReview) {
+    const voiceAttempt = Math.max(1, Math.min(2, Number(payload.voiceAttempt || 1)));
+    const transition = voiceAuditionTransition({ approved: voiceReview.approved, attemptCount: voiceAttempt });
+    const { voiceSample: _voiceSample, voiceSampleJobId: _voiceSampleJobId, voiceFeedback: _voiceFeedback, ...planningPayload } = payload;
+    if (transition.action === "retry_sample") {
+      await connection.execute(
+        `update storyheaven_serial_runs set current_stage = 'voice_sample', updated_at = systimestamp where id = :run_id`,
+        { run_id: job.RUN_ID }
+      );
+      await queueJob(connection, {
+        runId: job.RUN_ID,
+        storyId: job.STORY_ID,
+        type: "voice_sample",
+        priority: 83,
+        input: {
+          ...planningPayload,
+          voiceAttempt: transition.attemptCount,
+          voiceFeedback: {
+            reviewJobId: job.ID,
+            summary: voiceReview.summary,
+            corrections: voiceReview.corrections
+          }
+        }
+      });
+      return;
+    }
+    await queueBibleStage(connection, job, planningPayload, {
+      status: transition.status,
+      attemptCount: transition.attemptCount,
+      profileId: voiceReview.profileId,
+      scores: voiceReview.scores,
+      summary: voiceReview.summary,
+      corrections: voiceReview.corrections,
+      sourceReviewJobId: job.ID
+    });
+  }
+
+  async function queueBibleStage(connection, job, planningPayload, voiceCalibration = null) {
+    await connection.execute(
+      `update storyheaven_serial_runs set current_stage = 'build_bible', updated_at = systimestamp where id = :run_id`,
+      { run_id: job.RUN_ID }
+    );
+    await queueJob(connection, {
+      runId: job.RUN_ID,
+      storyId: job.STORY_ID || planningPayload.story?.id,
       type: "build_bible",
+      priority: 82,
       input: {
-        story: publicStory(story),
-        concept: conceptWithPlan,
-        creativeControls: payload?.schedule?.policy?.creativeControls || null,
-        genrePreset: payload?.schedule?.policy?.genrePreset || null,
-        proseStyle: payload?.schedule?.policy?.proseStyle || null,
-        seriesPlan
+        ...planningPayload,
+        ...(voiceCalibration ? { voiceCalibration } : {})
       }
     });
   }
@@ -2788,7 +2874,7 @@ export function createStoryHeavenSerialService({
           storyId: job.STORY_ID,
           type: "editorial_critique",
           priority: 80,
-          input: { ...reviewPayload, critiqueBatchId, criticRole }
+          input: { ...compactCriticPayload(reviewPayload, criticRole), critiqueBatchId, criticRole }
         });
       }
       return;
@@ -2846,7 +2932,7 @@ export function createStoryHeavenSerialService({
       String(parseJson(row.INPUT_JSON, {}).critiqueBatchId || "") === critiqueBatchId
     ))) return;
 
-    const { criticRole: _criticRole, ...basePayload } = payload;
+    const basePayload = await rebuildFinalReviewPayload(connection, job, payload, critiqueBatchId);
     await connection.execute(
       `update storyheaven_serial_runs set current_stage = 'editorial_review', updated_at = systimestamp where id = :run_id`,
       { run_id: job.RUN_ID }
@@ -2858,6 +2944,70 @@ export function createStoryHeavenSerialService({
       priority: 85,
       input: { ...basePayload, criticPacket }
     });
+  }
+
+  function compactCriticPayload(payload, role) {
+    const bible = payload.bible || {};
+    const baseBible = {
+      storyId: bible.storyId,
+      version: bible.version,
+      concept: bible.concept
+    };
+    const roleBible = ({
+      character: { ...baseBible, characters: bible.characters, relationshipWeb: bible.relationshipWeb },
+      relationship: { ...baseBible, characters: bible.characters, relationshipWeb: bible.relationshipWeb },
+      serialMomentum: { ...baseBible, characters: bible.characters, relationshipWeb: bible.relationshipWeb, narrativeBlueprint: bible.narrativeBlueprint },
+      worldCausality: { ...baseBible, worldRules: bible.worldRules, timeline: bible.timeline, glossary: bible.glossary, forbiddenContradictions: bible.forbiddenContradictions, worldDynamics: bible.worldDynamics, narrativeBlueprint: bible.narrativeBlueprint },
+      sceneExpression: { ...baseBible, characters: bible.characters, voiceProfile: bible.voiceProfile },
+      skepticalReader: { ...baseBible, characters: bible.characters, relationshipWeb: bible.relationshipWeb, voiceProfile: bible.voiceProfile, narrativeBlueprint: bible.narrativeBlueprint }
+    })[role] || baseBible;
+    const includeWorldState = ["serialMomentum", "worldCausality", "skepticalReader"].includes(role);
+    return {
+      story: payload.story,
+      bible: roleBible,
+      ...(includeWorldState ? { arc: payload.arc, canon: payload.canon, reveals: payload.reveals } : {}),
+      episodeCard: payload.episodeCard,
+      draft: payload.draft,
+      deterministicQa: payload.deterministicQa,
+      reviewPolicy: payload.reviewPolicy,
+      critiqueRoles: payload.critiqueRoles,
+      carriedCriticPacket: payload.carriedCriticPacket
+    };
+  }
+
+  async function rebuildFinalReviewPayload(connection, job, payload, critiqueBatchId) {
+    const run = await selectOne(connection,
+      `select * from storyheaven_serial_runs where id = :run_id`,
+      { run_id: job.RUN_ID });
+    const draft = await selectOne(connection,
+      `select * from storyheaven_serial_drafts where run_id = :run_id order by version_no desc fetch first 1 row only`,
+      { run_id: job.RUN_ID });
+    if (!run || !draft) throw failure("serial_critique_source_missing", 409);
+    const context = await loadSerialContext(connection, job.STORY_ID);
+    return {
+      story: context.story,
+      bible: editorialBible(context.bible, run.EPISODE_NO),
+      arc: context.arc,
+      canon: context.canon,
+      reveals: context.reveals,
+      episodeCard: context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO)),
+      draft: {
+        id: draft.ID,
+        version: Number(draft.VERSION_NO || 1),
+        title: draft.TITLE,
+        summary: draft.PUBLIC_SUMMARY,
+        body: draft.BODY_TEXT,
+        sceneRanges: parseJson(draft.SCENE_RANGES_JSON, []),
+        newCanonFacts: parseJson(draft.CANON_CANDIDATES_JSON, []),
+        revealUpdates: parseJson(draft.REVEAL_UPDATES_JSON, []),
+        changes: parseJson(draft.CHANGES_JSON, [])
+      },
+      deterministicQa: parseJson(draft.DETERMINISTIC_JSON, {}),
+      reviewPolicy: payload.reviewPolicy,
+      critiqueRoles: payload.critiqueRoles,
+      carriedCriticPacket: payload.carriedCriticPacket,
+      critiqueBatchId
+    };
   }
 
   async function acceptEditorialReview(connection, job, review) {
@@ -2965,6 +3115,7 @@ export function createStoryHeavenSerialService({
       { run_id: job.RUN_ID, rewrite_count: nextRewrite }
     );
     const context = await loadSerialContext(connection, job.STORY_ID);
+    const activeCard = context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO));
     await queueJob(connection, {
       runId: job.RUN_ID,
       storyId: job.STORY_ID,
@@ -2976,7 +3127,8 @@ export function createStoryHeavenSerialService({
         arc: context.arc,
         canon: context.canon,
         reveals: context.reveals,
-        episodeCard: context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO)),
+        episodeCard: activeCard,
+        writingBrief: buildWritingBrief(context, activeCard, Number(run.EPISODE_NO)),
         draft: { id: draft.ID, title: draft.TITLE, summary: draft.PUBLIC_SUMMARY, body: draft.BODY_TEXT, sceneRanges: parseJson(draft.SCENE_RANGES_JSON, []) },
         deterministicQa: qa,
         editor: review,
@@ -3798,13 +3950,14 @@ export function createStoryHeavenSerialService({
     const seriesPosition = storyHeavenSeriesPosition(episodeNo, seriesPlan);
     return {
       story: context.story,
-      bible: context.bible,
+      bible: editorialBible(context.bible, episodeNo),
       arc: context.arc,
       episodeNo,
       installment: installmentMeta(episodeNo),
       seriesPlan,
       seriesPosition,
       episodeCard: card,
+      writingBrief: buildWritingBrief(context, card, episodeNo),
       canon: context.canon,
       reveals: context.reveals,
       recentEpisodes: context.recentEpisodes,
@@ -3820,6 +3973,72 @@ export function createStoryHeavenSerialService({
         concreteDetailBudget: "장면당 기억할 구체물은 2~4개만 선택하고 시점 인물이 실제 감지할 수 있는 감각만 쓴다.",
         spatialContinuity: "인물의 상대 위치, 이동 방향, 손에 든 물건과 행동 결과가 문단 사이에서 순간이동하거나 모순되지 않게 한다."
       }
+    };
+  }
+
+  function buildWritingBrief(context, card, episodeNo) {
+    const bible = context.bible || {};
+    const concept = bible.concept || {};
+    const blueprint = bible.narrativeBlueprint || {};
+    const architecture = blueprint.seriesArchitecture || {};
+    const seriesPlan = blueprint.seriesPlan || concept.seriesPlan || normalizeSeriesPlan();
+    const position = storyHeavenSeriesPosition(episodeNo, seriesPlan);
+    const volume = (architecture.volumePlan || [])
+      .find((item) => Number(item.volumeNo) === Number(position.volumeNo)) || null;
+    const technique = card?.techniquePlan || {};
+    return {
+      policyVersion: "2026-08-30-writing-brief-v1",
+      installment: installmentMeta(episodeNo),
+      genreExperience: concept.genrePreset ? {
+        presetId: concept.genrePreset.resolvedId,
+        label: concept.genrePreset.label,
+        corePromise: concept.genreExperiencePlan?.corePromise,
+        progressionLoop: concept.genreExperiencePlan?.progressionLoop,
+        recurringRewards: concept.genreExperiencePlan?.recurringRewards,
+        quietEpisodePleasure: concept.genreExperiencePlan?.quietEpisodePleasure
+      } : null,
+      proseStyle: bible.voiceProfile?.proseStyle ? {
+        profileId: bible.voiceProfile.proseStyle.resolvedId,
+        label: bible.voiceProfile.proseStyle.label,
+        lockedStyle: bible.voiceProfile.proseStyle.lockedStyle,
+        calibration: bible.voiceProfile.calibration || null
+      } : null,
+      currentVolume: volume ? {
+        volumeNo: volume.volumeNo,
+        role: volume.role,
+        mainGoal: volume.mainGoal,
+        antagonistPressure: volume.antagonistPressure,
+        irreversibleChange: volume.irreversibleChange,
+        conflictSourceKeys: volume.conflictSourceKeys,
+        characterMilestoneIds: volume.characterMilestoneIds
+      } : null,
+      episode: {
+        promise: card?.promise,
+        mode: card?.episodeMode || technique.episodeMode,
+        openingDisturbance: card?.openingDisturbance,
+        dramaticCore: card?.dramaticCore || technique.dramaticCore,
+        readerRewardPlan: technique.readerRewardPlan,
+        payoff: card?.payoff,
+        hook: card?.hook
+      },
+      sceneBriefs: (card?.scenes || []).map((scene) => ({
+        sceneNo: scene.sceneNo,
+        pov: scene.pov,
+        location: scene.location,
+        goal: scene.goal,
+        conflict: scene.conflict,
+        change: scene.change,
+        spatialAnchor: scene.spatialAnchor,
+        characterBlocking: scene.characterBlocking,
+        sensoryAnchor: scene.sensoryAnchor,
+        visualTurn: scene.visualTurn
+      })),
+      continuity: {
+        knowledgeBefore: card?.knowledgeBefore || [],
+        canonReferences: card?.canonReferences || [],
+        memoryPlan: card?.continuityMemoryPlan || technique.continuityMemoryPlan || null
+      },
+      disclosureBoundary: card?.prologueDisclosurePlan || technique.prologueDisclosurePlan || null
     };
   }
 
@@ -4399,15 +4618,16 @@ function queueProgressView(group, status) {
     `episode-${index + 1}-review`
   ]).flat();
   const steps = initialBatch
-    ? ["concept", "bible", "arc", ...initialEpisodeSteps, "publication"]
+    ? ["concept", "voice", "bible", "arc", ...initialEpisodeSteps, "publication"]
     : bootstrapPlan
       ? [adaptiveReplan ? "arc-review" : "bible", "arc", "episode-card", "draft", "review", "publication"]
       : ["episode-card", "draft", "review", "publication"];
   const stage = String(group.stage || "queued");
   let currentIndex = 0;
   if (initialBatch) {
-    if (stage === "build_bible") currentIndex = 1;
-    else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
+    if (["voice_sample", "voice_review"].includes(stage)) currentIndex = 1;
+    else if (stage === "build_bible") currentIndex = 2;
+    else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 3;
     else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
       const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(group.maxEpisodeNo || 1))) - 1;
       const stageOffset = stage === "build_episode_card"
@@ -4415,7 +4635,7 @@ function queueProgressView(group, status) {
         : ["write_draft", "rewrite_draft"].includes(stage)
           ? 1
           : 2;
-      currentIndex = 3 + (episodeIndex * 3) + stageOffset;
+      currentIndex = 4 + (episodeIndex * 3) + stageOffset;
     } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
   } else if (bootstrapPlan) {
     if (stage === "replan_arc") currentIndex = 0;
@@ -4848,6 +5068,51 @@ function mapRunDevelopment(rows = []) {
         } : null
       };
     })
+  };
+}
+
+function mapRunVoiceAudition(rows = []) {
+  const samples = [];
+  const reviews = [];
+  for (const row of rows) {
+    const input = parseJson(row.INPUT_JSON, {});
+    const output = parseJson(row.OUTPUT_JSON, {}).result || {};
+    if (row.JOB_TYPE === "voice_sample" && output.sampleBody) {
+      samples.push({
+        attemptCount: Number(input.voiceAttempt || 1),
+        readableCharacters: Number(output.readableCharacters || 0),
+        sceneIntent: output.sceneIntent || ""
+      });
+    }
+    if (row.JOB_TYPE === "voice_review" && output.scores) {
+      reviews.push({
+        attemptCount: Number(input.voiceAttempt || 1),
+        approved: output.approved === true,
+        profileId: output.profileId || input.proseStyle?.resolvedId || "",
+        profileLabel: output.profileLabel || input.proseStyle?.label || "",
+        scores: output.scores,
+        summary: output.summary || "",
+        corrections: Array.isArray(output.corrections) ? output.corrections : []
+      });
+    }
+  }
+  if (!samples.length && !reviews.length) return null;
+  const latestReview = reviews.at(-1) || null;
+  const latestSample = samples.at(-1) || null;
+  return {
+    status: latestReview
+      ? latestReview.approved
+        ? "approved"
+        : latestReview.attemptCount >= 2 ? "caution" : "correcting"
+      : "sampling",
+    attemptCount: Math.max(Number(latestSample?.attemptCount || 0), Number(latestReview?.attemptCount || 0)),
+    readableCharacters: Number(latestSample?.readableCharacters || 0),
+    sceneIntent: latestSample?.sceneIntent || "",
+    profileId: latestReview?.profileId || "",
+    profileLabel: latestReview?.profileLabel || "",
+    scores: latestReview?.scores || {},
+    summary: latestReview?.summary || "",
+    corrections: latestReview?.corrections || []
   };
 }
 

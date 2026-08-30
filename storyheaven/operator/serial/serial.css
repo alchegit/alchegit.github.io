@@ -1821,6 +1821,62 @@
   line-height: 1.55;
 }
 
+.voice-audition {
+  display: grid;
+  gap: 11px;
+  border-left: 5px solid #087c5d;
+  padding: 15px 16px;
+  background: #eafff7;
+}
+
+.voice-audition.is-correcting,
+.voice-audition.is-caution {
+  border-left-color: #d29a00;
+  background: #fff8df;
+}
+
+.voice-audition > p,
+.voice-audition-scores p,
+.voice-audition-corrections {
+  margin: 0;
+}
+
+.voice-audition > p {
+  color: #4d586a;
+  line-height: 1.55;
+}
+
+.voice-audition-scores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.voice-audition-scores p {
+  display: grid;
+  gap: 3px;
+  border: 1px solid #aeb5c1;
+  padding: 10px 11px;
+  background: #fff;
+}
+
+.voice-audition-scores span {
+  color: #596274;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.voice-audition-scores strong {
+  color: #075c46;
+}
+
+.voice-audition-corrections {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+  color: #624c09;
+}
+
 .arc-replanning {
   display: grid;
   gap: 14px;
@@ -2274,6 +2330,10 @@
   .creative-grid {
     grid-template-columns: 1fr;
   }
+
+  .voice-audition-scores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -2293,6 +2353,7 @@
     .mode-fieldset,
     .humor-options,
     .creative-presets,
+    .voice-audition-scores,
     .run-search,
     .maintenance-tool,
   .score-grid,

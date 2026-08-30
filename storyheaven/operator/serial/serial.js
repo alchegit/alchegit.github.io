@@ -1670,15 +1670,16 @@
       `${installmentLabel(index + 1)} 검수`
     ]).flat();
     const steps = initialBatch
-      ? ["아이디어", "설정집", "장기 전개", ...episodeSteps, "공개 준비"]
+      ? ["아이디어", "문체 확인", "설정집", "장기 전개", ...episodeSteps, "공개 준비"]
       : bootstrapPlan
         ? [adaptiveReplan ? "완료 구간 검토" : "설정집", adaptiveReplan ? "다음 구간 설계" : "장기 전개", "회차 구성", "원고 작성", "편집 검수", "공개 준비"]
         : ["회차 구성", "원고 작성", "편집 검수", "공개 준비"];
     const stage = String(item.stage || "queued");
     let currentIndex = 0;
     if (initialBatch) {
-      if (stage === "build_bible") currentIndex = 1;
-      else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 2;
+      if (["voice_sample", "voice_review"].includes(stage)) currentIndex = 1;
+      else if (stage === "build_bible") currentIndex = 2;
+      else if (stage === "replan_arc" || stage === "build_arc" || stage === "plan_complete") currentIndex = 3;
       else if (["build_episode_card", "write_draft", "editorial_critique", "editorial_review", "rewrite_draft", "editorial_blocked"].includes(stage)) {
         const episodeIndex = Math.min(targetEpisodeCount, Math.max(1, Number(item.episodeNo || 1))) - 1;
         const stageOffset = stage === "build_episode_card"
@@ -1686,7 +1687,7 @@
           : ["write_draft", "rewrite_draft"].includes(stage)
             ? 1
             : 2;
-        currentIndex = 3 + (episodeIndex * 3) + stageOffset;
+        currentIndex = 4 + (episodeIndex * 3) + stageOffset;
       } else if (["publication_ready", "published"].includes(stage)) currentIndex = steps.length - 1;
     } else if (bootstrapPlan) {
       if (stage === "replan_arc") currentIndex = 0;
@@ -1829,6 +1830,7 @@
     if (payload.development?.candidates?.length) {
       wrapper.append(renderDevelopmentComparison(payload.development));
     }
+    if (payload.voiceAudition) wrapper.append(renderVoiceAudition(payload.voiceAudition));
     if (payload.replanning) wrapper.append(renderArcReplanning(payload.replanning));
 
     const latestReview = payload.reviews?.at(-1);
@@ -1955,6 +1957,50 @@
     copy.textContent = value || "기록 없음";
     item.append(title, copy);
     return item;
+  }
+
+  function renderVoiceAudition(audition) {
+    const section = document.createElement("section");
+    section.className = `voice-audition is-${audition.status || "sampling"}`;
+    const heading = document.createElement("div");
+    heading.className = "development-heading";
+    const title = document.createElement("h4");
+    title.textContent = "비공개 문체 오디션";
+    const status = document.createElement("strong");
+    status.textContent = ({ approved: "문체 확정", correcting: "한 번 보정 중", caution: "교정 지침과 함께 진행", sampling: "샘플 작성 중" })[audition.status] || "확인 중";
+    heading.append(title, status);
+    const guide = document.createElement("p");
+    guide.textContent = `실제 프롤로그가 아닌 ${Number(audition.readableCharacters || 0).toLocaleString("ko-KR")}자 비공개 장면으로 문체를 먼저 확인했습니다. 샘플 본문은 공개 원고에 복사하지 않습니다.`;
+    section.append(heading, guide);
+    const scores = document.createElement("div");
+    scores.className = "voice-audition-scores";
+    for (const [name, score] of Object.entries(audition.scores || {})) {
+      const item = document.createElement("p");
+      const label = document.createElement("span");
+      label.textContent = scoreLabel(`style.${name}`);
+      const value = document.createElement("strong");
+      value.textContent = `${Number(score || 0)}점`;
+      item.append(label, value);
+      scores.append(item);
+    }
+    if (scores.childElementCount) section.append(scores);
+    if (audition.summary) {
+      const summary = document.createElement("p");
+      summary.className = "voice-audition-summary";
+      summary.textContent = audition.summary;
+      section.append(summary);
+    }
+    if (audition.corrections?.length) {
+      const corrections = document.createElement("ul");
+      corrections.className = "voice-audition-corrections";
+      for (const correction of audition.corrections) {
+        const item = document.createElement("li");
+        item.textContent = correction;
+        corrections.append(item);
+      }
+      section.append(corrections);
+    }
+    return section;
   }
 
   function renderArcReplanning(replanning) {
@@ -2607,6 +2653,8 @@
       concept_candidates: "작품 후보 4개 발상",
       concept_selection: "편집자 후보 선정",
       concept_gate: "작품 아이디어 검토",
+      voice_sample: "비공개 문체 샘플",
+      voice_review: "문체 독립 검수",
       build_bible: "세계관과 인물 설정",
       architecture_complete: "장편 설계 완료",
       replan_arc: "완료 구간 검토와 재기획",
@@ -2640,6 +2688,8 @@
   }
 
   function stageDescription(item = {}) {
+    if (item.type === "voice_sample") return "선정 기획의 작은 비공개 장면으로 문장 호흡, 대화와 어조를 먼저 시험합니다. 실제 프롤로그에는 복사하지 않습니다.";
+    if (item.type === "voice_review") return "확정 문체에 맞는지 별도 편집 모델이 검사합니다. 부족하면 문체만 한 번 보정하고 설정집으로 이어갑니다.";
     if (item.type === "editorial_review") return "6개 독립 검수 결과와 원고 근거를 합쳐 점수, 보완 범위, 공개 가능 여부를 결정합니다.";
     if (item.type !== "editorial_critique") return "";
     return ({

@@ -62,23 +62,30 @@ assert.match(prompt, /scoreEvidence/u);
 assert.equal(modelRoleForSerialJob("editorial_review"), "editor");
 assert.equal(modelRoleForSerialJob("editorial_critique"), "editor");
 assert.equal(modelRoleForSerialJob("concept_selection"), "editor");
+assert.equal(modelRoleForSerialJob("voice_review"), "editor");
 assert.equal(modelRoleForSerialJob("replan_arc"), "editor");
 assert.equal(modelRoleForSerialJob("concept_candidates"), "writer");
+assert.equal(modelRoleForSerialJob("voice_sample"), "writer");
 assert.equal(modelRoleForSerialJob("write_draft"), "writer");
 const serialModels = { writerModel: "gpt-5.6-terra", editorModel: "gpt-5.6-luna", escalationModel: "gpt-5.6-sol" };
 assert.equal(selectSerialModel({ type: "write_draft", payload: {} }, serialModels), "gpt-5.6-terra");
 assert.equal(selectSerialModel({ type: "rewrite_draft", payload: { rewriteNumber: 1 } }, serialModels), "gpt-5.6-terra");
 assert.equal(selectSerialModel({ type: "rewrite_draft", payload: { rewriteNumber: 2 } }, serialModels), "gpt-5.6-sol");
 assert.equal(selectSerialModel({ type: "editorial_review", payload: { rewriteNumber: 9 } }, serialModels), "gpt-5.6-luna");
+assert.equal(selectSerialModel({ type: "voice_sample", payload: {} }, serialModels), "gpt-5.6-terra");
+assert.equal(selectSerialModel({ type: "voice_review", payload: {} }, serialModels), "gpt-5.6-luna");
 
 const draftPrompt = buildSerialPrompt({ ...job, type: "write_draft" });
 assert.match(draftPrompt, /silent sentence-by-sentence subject-predicate pass/u);
 assert.match(draftPrompt, /집은 부서졌다/u);
+assert.match(draftPrompt, /writingBrief as the primary one-page assignment/u);
+assert.match(draftPrompt, /never expand the brief with unused distant-volume lore/u);
 const rewritePrompt = buildSerialPrompt({ ...job, type: "rewrite_draft" });
 assert.match(rewritePrompt, /semantic_predicate_mismatch/u);
 assert.match(rewritePrompt, /surgical copy edit/u);
 assert.match(rewritePrompt, /preserve unaffected scenes and paragraphs verbatim/u);
 assert.match(rewritePrompt, /subject-agent-object-predicate check/u);
+assert.match(rewritePrompt, /payload\.writingBrief/u);
 
 const genreProfileSignals = {
   fantasy: /ordinary lack, duty, or vulnerability/u,
@@ -198,6 +205,30 @@ assert.match(genreStyleConceptPrompt, /server-locked prose style/u);
 assert.match(genreStyleConceptPrompt, /가볍고 유쾌한 몰입형/u);
 assert.match(genreStyleConceptPrompt, /quietEpisodePleasure/u);
 assert.doesNotMatch(genreStyleConceptPrompt, /가즈나이트|눈물을 마시는 새|묵향|더 로그|템빨|달빛조각사/u);
+const voiceSamplePrompt = buildSerialPrompt({
+  ...job,
+  type: "voice_sample",
+  payload: { concept: { title: "검수용 기획", storyCore: {} }, genrePreset, proseStyle, voiceAttempt: 1 }
+});
+assert.match(voiceSamplePrompt, /private Korean prose-voice audition of 600-900 readable characters/u);
+assert.match(voiceSamplePrompt, /not the prologue and must never be published or copied/u);
+assert.doesNotMatch(voiceSamplePrompt, /first generated installment is always a prologue/u);
+assert.match(voiceSamplePrompt, /"sampleBody"/u);
+const correctedVoiceSamplePrompt = buildSerialPrompt({
+  ...job,
+  type: "voice_sample",
+  payload: { concept: { title: "검수용 기획", storyCore: {} }, genrePreset, proseStyle, voiceAttempt: 2, voiceFeedback: { corrections: ["대화 목적을 분리한다.", "같은 종결을 줄인다."] } }
+});
+assert.match(correctedVoiceSamplePrompt, /single correction attempt/u);
+assert.match(correctedVoiceSamplePrompt, /대화 목적을 분리한다/u);
+const voiceReviewPrompt = buildSerialPrompt({
+  ...job,
+  type: "voice_review",
+  payload: { concept: { title: "검수용 기획", storyCore: {} }, genrePreset, proseStyle, voiceSample: { sampleBody: "비공개 샘플" }, voiceAttempt: 1 }
+});
+assert.match(voiceReviewPrompt, /independent Korean prose editor/u);
+assert.match(voiceReviewPrompt, /Approve only when every supplied style threshold is met/u);
+assert.match(voiceReviewPrompt, /"dialogueCharacterization"/u);
 
 const candidatePrompt = buildSerialPrompt({
   ...job,
@@ -341,7 +372,7 @@ const styledBiblePrompt = buildSerialPrompt({
   payload: { concept: { premiseAudit, readerAppealPlan, storyCore, genrePreset, genreExperiencePlan: { recurringRewards: genrePreset.experience.recurringRewards } }, genrePreset, proseStyle }
 });
 assert.match(styledBiblePrompt, /Build the story-specific voiceProfile inside this locked range/u);
-assert.match(styledBiblePrompt, /Do not output proseStyle or styleContractId/u);
+assert.match(styledBiblePrompt, /Do not output proseStyle, styleContractId, or calibration/u);
 assert.match(styledBiblePrompt, /dialogue percentage range: \[30,48\]/iu);
 assert.match(biblePrompt, /각자 혼자서는 얻을 수 없는 정보와 행동력이 필요하다/u);
 assert.match(biblePrompt, /실제 장면에서 행동과 결과로 증명할 수 있는 능숙한 기술이나 판단/u);

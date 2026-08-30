@@ -12,6 +12,8 @@
         "concept_candidates",
         "concept_selection",
         "concept_gate",
+        "voice_sample",
+        "voice_review",
         "build_bible",
         "replan_arc",
         "build_arc",

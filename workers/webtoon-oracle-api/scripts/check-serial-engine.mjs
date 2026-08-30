@@ -30,7 +30,7 @@ import {
   STORYHEAVEN_SUBGENRE_LIMIT,
   validateSerialGenreSelection
 } from "../src/serial-genres.mjs";
-import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, summarizeQueue } from "../src/serial-service.mjs";
+import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, summarizeQueue, voiceAuditionTransition } from "../src/serial-service.mjs";
 import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
@@ -43,6 +43,7 @@ const managedStoriesHtml = await readFile(new URL("../../../storyheaven/operator
 const managedStoriesCss = await readFile(new URL("../../../storyheaven/operator/serial/stories/stories.css", import.meta.url), "utf8");
 const serialWorkerSource = await readFile(new URL("../../storyheaven-codex-review-worker/src/serial.mjs", import.meta.url), "utf8");
 const arcReplanningMigration = await readFile(new URL("../../../oracle/20260809-storyheaven-arc-replanning.sql", import.meta.url), "utf8");
+const voiceAuditionMigration = await readFile(new URL("../../../oracle/20260830-storyheaven-voice-audition.sql", import.meta.url), "utf8");
 const createEpisodeRunSource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function createEpisodeRun"),
   serialServiceSource.indexOf("async function advanceJob")
@@ -50,6 +51,10 @@ const createEpisodeRunSource = serialServiceSource.slice(
 const hideQueueHistorySource = serialServiceSource.slice(
   serialServiceSource.indexOf("async function hideQueueHistory"),
   serialServiceSource.indexOf("async function retryQueueGroup")
+);
+const writingPayloadSource = serialServiceSource.slice(
+  serialServiceSource.indexOf("function writingPayload"),
+  serialServiceSource.indexOf("function editorialBible")
 );
 const retryQueueRouteSource = serverSource.slice(
   serverSource.indexOf('app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry"'),
@@ -62,6 +67,17 @@ assert.match(
   "new story bibles must seed the required narrative blueprint"
 );
 assert.match(serialServiceSource, /recentCompleted/u, "queue API must separate recent completed work");
+assert.match(voiceAuditionMigration, /'voice_sample', 'voice_review'/u, "voice audition migration must allow both private stages");
+assert.match(serialServiceSource, /async function acceptVoiceSample/u, "voice samples must advance to an independent review");
+assert.match(serialServiceSource, /transition\.action === "retry_sample"/u, "voice audition must route a failed first sample through the bounded transition");
+assert.match(serialServiceSource, /function buildWritingBrief/u, "draft jobs must receive a compact one-page writing brief");
+assert.match(writingPayloadSource, /bible: editorialBible\(context\.bible, episodeNo\)/u, "draft jobs must use the current-volume compact bible");
+assert.doesNotMatch(writingPayloadSource, /bible: context\.bible/u, "draft jobs must not repeat the full long-range bible");
+assert.match(serialServiceSource, /compactCriticPayload/u, "independent critics must receive role-focused packets");
+assert.match(serialServiceSource, /rebuildFinalReviewPayload/u, "final editorial review must reconstruct the authoritative full packet");
+assert.deepEqual(voiceAuditionTransition({ approved: true, attemptCount: 1 }), { action: "build_bible", status: "approved", attemptCount: 1 });
+assert.deepEqual(voiceAuditionTransition({ approved: false, attemptCount: 1 }), { action: "retry_sample", status: "correcting", attemptCount: 2 });
+assert.deepEqual(voiceAuditionTransition({ approved: false, attemptCount: 2 }), { action: "build_bible", status: "caution", attemptCount: 2 });
 const strongPilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 1, episodeMode: "discovery", wouldReadNext: true, readerRewardScore: 92 },
   { episodeNo: 2, episodeMode: "bonding", wouldReadNext: true, readerRewardScore: 90 },
@@ -436,6 +452,35 @@ assert.deepEqual(STORYHEAVEN_PROSE_STYLE_QUALITY, {
   toneConsistency: 88,
   sentenceRhythm: 88
 });
+const voiceSampleBody = Array.from({ length: 14 }, (_, index) => (
+  `도윤은 ${index + 1}번 정류장의 젖은 표지판을 확인하고 해진에게 먼저 갈 길을 물었다. 해진은 대답 대신 닫힌 문을 가리켰고, 도윤은 웃음을 삼킨 채 다른 손잡이를 당겨 길을 열었다.`
+)).join(" ");
+const voiceSample = normalizeStoryHeavenSerialWorkerResult("voice_sample", {
+  sampleTitle: "닫힌 문 앞의 짧은 실랑이",
+  sampleBody: voiceSampleBody,
+  sceneIntent: "작은 이동 목표와 서로 다른 대화 목적을 통해 가볍고 유쾌한 문장 호흡과 관계의 긴장을 함께 시험한다.",
+  styleChoices: ["행동문은 짧게 쓴다.", "농담 대신 반응의 엇갈림으로 웃음을 만든다.", "결과 문장은 한 호흡 길게 둔다."]
+});
+assert.ok(voiceSample.readableCharacters >= 500 && voiceSample.readableCharacters <= 1_000);
+const passingVoiceScores = Object.fromEntries(Object.entries(STORYHEAVEN_PROSE_STYLE_QUALITY).map(([name, threshold]) => [name, threshold + 2]));
+const voiceEvidence = Object.fromEntries(Object.keys(STORYHEAVEN_PROSE_STYLE_QUALITY).map((name) => [name, [`${name}을 확인할 수 있는 비공개 샘플의 구체적인 문장 근거다.`]]));
+const voiceReview = normalizeStoryHeavenSerialWorkerResult("voice_review", {
+  approved: true,
+  scores: passingVoiceScores,
+  evidence: voiceEvidence,
+  summary: "확정 문체의 쉬운 행동문과 인물 반응에서 생기는 유머가 안정적으로 구현되었다.",
+  corrections: []
+}, { payload: { proseStyle: curatedFantasySchedule.schedule.proseStyle } });
+assert.equal(voiceReview.approved, true);
+assert.equal(voiceReview.profileId, "light-witty-v1");
+const correctedVoiceReviewDecision = normalizeStoryHeavenSerialWorkerResult("voice_review", {
+  ...voiceReview,
+  approved: true,
+  scores: { ...passingVoiceScores, voiceAdherence: 70 },
+  corrections: []
+}, { payload: { proseStyle: curatedFantasySchedule.schedule.proseStyle } });
+assert.equal(correctedVoiceReviewDecision.approved, false);
+assert.ok(correctedVoiceReviewDecision.corrections.length >= 2);
 
 const hybridGenre = validateSerialGenreSelection(
   ["romance", "sf"],
@@ -1055,11 +1100,21 @@ const styledBible = normalizeStoryHeavenSerialWorkerResult("build_bible", bible,
   seriesPlan: testSeriesPlan,
   payload: {
     concept: { storyCore, genrePreset: curatedFantasySchedule.schedule.genrePreset },
-    proseStyle: curatedFantasySchedule.schedule.proseStyle
+    proseStyle: curatedFantasySchedule.schedule.proseStyle,
+    voiceCalibration: {
+      status: "approved",
+      attemptCount: 1,
+      profileId: "light-witty-v1",
+      scores: passingVoiceScores,
+      summary: "비공개 문체 샘플이 네 기준을 모두 통과했다.",
+      corrections: [],
+      sourceReviewJobId: "voice-review-job"
+    }
   }
 });
 assert.equal(styledBible.voiceProfile.proseStyle.resolvedId, "light-witty-v1");
 assert.equal(styledBible.voiceProfile.styleContractId, "2026-08-30:light-witty-v1");
+assert.equal(styledBible.voiceProfile.calibration.status, "approved");
 assert.equal(styledBible.voiceProfile.dialogueRatio, 40);
 const styleRangeBible = structuredClone(bible);
 styleRangeBible.voiceProfile.dialogueRatio = 20;

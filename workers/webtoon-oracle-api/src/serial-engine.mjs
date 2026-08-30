@@ -4,6 +4,8 @@ const JOB_TYPES = new Set([
   "concept_candidates",
   "concept_selection",
   "concept_gate",
+  "voice_sample",
+  "voice_review",
   "build_bible",
   "replan_arc",
   "build_arc",
@@ -734,6 +736,8 @@ export function normalizeStoryHeavenSerialWorkerResult(jobTypeValue, value, opti
     }, options);
   }
   if (jobType === "concept_gate") return normalizeConcept(source, options);
+  if (jobType === "voice_sample") return normalizeVoiceSample(source);
+  if (jobType === "voice_review") return normalizeVoiceReview(source, options);
   if (jobType === "build_bible") return normalizeBible(source, options);
   if (jobType === "replan_arc") return normalizeArcReplan(source, options);
   if (jobType === "build_arc") return normalizeArc(source, options);
@@ -946,6 +950,64 @@ function normalizeConcept(source, options = {}) {
     concept.storyCore = normalizeStoryCore(source.storyCore);
   }
   return concept;
+}
+
+function normalizeVoiceSample(value) {
+  const source = object(value);
+  const sampleBody = requiredText(source.sampleBody, 1_400, 500, "serial_voice_sample_body_invalid");
+  const readableCharacters = [...sampleBody.replace(/\s+/gu, "")].length;
+  if (readableCharacters < 500 || readableCharacters > 1_000) {
+    throw new Error("serial_voice_sample_length_invalid");
+  }
+  return {
+    sampleTitle: requiredText(source.sampleTitle, 80, 2, "serial_voice_sample_title_invalid"),
+    sampleBody,
+    readableCharacters,
+    sceneIntent: requiredText(source.sceneIntent, 500, 20, "serial_voice_sample_intent_invalid"),
+    styleChoices: requiredList(source.styleChoices, { min: 3, max: 6, itemMax: 240 }, "serial_voice_sample_choices_invalid")
+  };
+}
+
+function normalizeVoiceReview(value, options = {}) {
+  const source = object(value);
+  const proseStyle = expectedProseStyle(options);
+  if (!proseStyle) throw new Error("serial_voice_review_style_missing");
+  const scoresSource = object(source.scores);
+  const evidenceSource = object(source.evidence);
+  const scores = {};
+  const evidence = {};
+  for (const key of Object.keys(STORYHEAVEN_PROSE_STYLE_QUALITY)) {
+    const score = integer(scoresSource[key], 0, 100, null);
+    if (score === null) throw new Error(`serial_voice_review_${key}_invalid`);
+    scores[key] = score;
+    evidence[key] = requiredList(evidenceSource[key], { min: 1, max: 3, itemMax: 300 }, `serial_voice_review_${key}_evidence_invalid`);
+  }
+  const thresholdPassed = Object.entries(STORYHEAVEN_PROSE_STYLE_QUALITY)
+    .every(([name, threshold]) => Number(scores[name]) >= threshold);
+  const corrections = stringList(source.corrections, { max: 6, itemMax: 300 });
+  if (!thresholdPassed) {
+    const fallbackCorrections = Object.entries(STORYHEAVEN_PROSE_STYLE_QUALITY)
+      .filter(([name, threshold]) => Number(scores[name]) < threshold)
+      .map(([name]) => ({
+        voiceAdherence: "확정 문체의 서술 거리·어휘·유머 원천과 어긋난 문장을 프로필 범위 안에서 고친다.",
+        dialogueCharacterization: "두 인물의 대화 목적과 정보 제시 순서를 분리해 이름을 가려도 구분되게 한다.",
+        toneConsistency: "장면의 감정 전환은 유지하되 이유 없는 어조 변화와 손실을 지우는 반응을 고친다.",
+        sentenceRhythm: "같은 길이와 종결이 반복되는 문장을 행동·반응·결과의 서로 다른 호흡으로 조정한다."
+      })[name]);
+    for (const correction of fallbackCorrections) {
+      if (correction && !corrections.includes(correction)) corrections.push(correction);
+    }
+    if (corrections.length < 2) corrections.push("샘플의 약한 문장만 고치고 기획·사건·인물 설정은 바꾸지 않는다.");
+  }
+  return {
+    profileId: proseStyle.resolvedId,
+    profileLabel: proseStyle.label,
+    approved: thresholdPassed,
+    scores,
+    evidence,
+    summary: requiredText(source.summary, 600, 20, "serial_voice_review_summary_invalid"),
+    corrections
+  };
 }
 
 function normalizePremiseAudit(value) {
@@ -1300,6 +1362,7 @@ function normalizeBible(source, options = {}) {
   const forbiddenContradictions = requiredList(source.forbiddenContradictions, { min: 3, max: 20, itemMax: 500 }, "serial_forbidden_rules_invalid");
   const voice = object(source.voiceProfile);
   const proseStyle = expectedProseStyle(options);
+  const voiceCalibration = normalizeVoiceCalibration(object(options.payload).voiceCalibration, proseStyle);
   const dialogueRange = array(proseStyle?.lockedStyle?.dialogueRange);
   const dialogueRatio = integer(voice.dialogueRatio, 0, 100, 35);
   if (proseStyle && (dialogueRatio < Number(dialogueRange[0]) || dialogueRatio > Number(dialogueRange[1]))) {
@@ -1322,7 +1385,8 @@ function normalizeBible(source, options = {}) {
     voiceProfile: {
       ...(proseStyle ? {
         proseStyle,
-        styleContractId: `${proseStyle.version}:${proseStyle.resolvedId}`
+        styleContractId: `${proseStyle.version}:${proseStyle.resolvedId}`,
+        ...(voiceCalibration ? { calibration: voiceCalibration } : {})
       } : {}),
       narratorDistance: requiredText(voice.narratorDistance, 120, 2, "serial_voice_distance_invalid"),
       sentenceRhythm: requiredText(voice.sentenceRhythm, 200, 2, "serial_voice_rhythm_invalid"),
@@ -1346,6 +1410,24 @@ function normalizeBible(source, options = {}) {
       ...(developmentV2 ? { planningHorizon: normalizePlanningHorizon(narrative.planningHorizon, expectedPlan) } : {}),
       seriesArchitecture
     }
+  };
+}
+
+function normalizeVoiceCalibration(value, proseStyle) {
+  const source = object(value);
+  if (!proseStyle || !source.status) return null;
+  const scores = {};
+  for (const key of Object.keys(STORYHEAVEN_PROSE_STYLE_QUALITY)) {
+    scores[key] = integer(object(source.scores)[key], 0, 100, 0);
+  }
+  return {
+    status: ["approved", "caution"].includes(source.status) ? source.status : "caution",
+    attemptCount: integer(source.attemptCount, 1, 2, 1),
+    profileId: proseStyle.resolvedId,
+    scores,
+    summary: text(source.summary, 600),
+    corrections: stringList(source.corrections, { max: 6, itemMax: 300 }),
+    sourceReviewJobId: text(source.sourceReviewJobId, 36)
   };
 }
 
