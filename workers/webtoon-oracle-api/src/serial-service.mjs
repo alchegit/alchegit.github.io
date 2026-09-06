@@ -54,6 +54,10 @@ export function editorialCriticRolesForPass({ rewritten = false, episodeNo = nul
   if (!editorial || typeof editorial !== "object") return [...EDITORIAL_CRITIC_ROLES];
   const thresholds = storyHeavenSerialQualityThresholds(episodeNo);
   const roles = new Set(["skepticalReader"]);
+  if (editorial.toneAssessment?.fitsDirection === false) {
+    roles.add("relationship");
+    roles.add("sceneExpression");
+  }
   for (const role of EDITORIAL_CRITIC_ROLES) {
     if (editorial.criticPanels?.[role]?.verdict !== "strong") roles.add(role);
     if ((EDITORIAL_ROLE_METRICS[role] || []).some((metric) => (
@@ -85,7 +89,8 @@ export function serialRevisionJobType({ decision = {}, qa = {}, review = {} } = 
   const failedMetrics = Array.isArray(decision.failedMetrics) ? decision.failedMetrics : [];
   const styleOnly = failedMetrics.length > 0
     && failedMetrics.every((item) => String(item?.name || "").startsWith("style."));
-  return styleOnly && qa?.passed === true && review?.safetyPassed === true && review?.decision !== "blocked"
+  return styleOnly && review?.toneAssessment?.fitsDirection !== false
+    && qa?.passed === true && review?.safetyPassed === true && review?.decision !== "blocked"
     ? "line_polish"
     : "rewrite_draft";
 }
@@ -1024,6 +1029,7 @@ export function createStoryHeavenSerialService({
             openingPilotApprovalMode: checked.schedule.openingPilotApprovalMode,
             genrePreset: checked.schedule.genrePreset,
             proseStyle: checked.schedule.proseStyle,
+            narrativeDirection: checked.schedule.narrativeDirection,
             randomized: checked.schedule.randomized
           }),
           next_run_at: nextRunAt,
@@ -2818,6 +2824,7 @@ export function createStoryHeavenSerialService({
         knowledge_json: clobJson(card.knowledgeBefore), canon_refs_json: clobJson(card.canonReferences),
         technique_plan_json: clobJson({
           ...card.techniquePlan,
+          ...(card.tonePlan ? { tonePlan: card.tonePlan } : {}),
           ...(card.episodeMode ? { episodeMode: card.episodeMode } : {}),
           ...(card.dramaticCore ? { dramaticCore: card.dramaticCore } : {}),
           ...(card.continuityMemoryPlan ? { continuityMemoryPlan: card.continuityMemoryPlan } : {}),
@@ -3459,7 +3466,12 @@ export function createStoryHeavenSerialService({
       preservedAsset: plan.patternToPreserve,
       variedPattern: plan.patternToVary,
       wouldReadNext: editorial.comparativeVerdict?.wouldReadNext === true,
-      readerRewardScore: Number(editorial.scores?.readerReward || 0)
+      readerRewardScore: Number(editorial.scores?.readerReward || 0),
+      plannedHumorPatterns: (techniquePlan.tonePlan?.humorBeats || []).map((beat) => ({
+        patternKey: beat.patternKey,
+        characterFriction: beat.characterFriction,
+        payoff: beat.payoff
+      }))
     };
     const recentInstallments = [
       ...(previous.recentInstallments || []).filter((item) => Number(item.episodeNo) !== Number(run.EPISODE_NO)),
@@ -4083,6 +4095,8 @@ export function createStoryHeavenSerialService({
     return {
       policyVersion: "2026-08-30-writing-brief-v1",
       installment: installmentMeta(episodeNo),
+      narrativeDirection: bible.voiceProfile?.narrativeDirection || concept.narrativeDirection || null,
+      tonePlan: card?.tonePlan || technique.tonePlan || null,
       genreExperience: concept.genrePreset ? {
         presetId: concept.genrePreset.resolvedId,
         label: concept.genrePreset.label,
@@ -4151,6 +4165,7 @@ export function createStoryHeavenSerialService({
       status: bible.status,
       concept: {
         title: concept.title,
+        narrativeDirection: concept.narrativeDirection || bible.voiceProfile?.narrativeDirection || null,
         logline: concept.logline,
         synopsis: concept.synopsis,
         genres: concept.genres,
@@ -4317,6 +4332,7 @@ function mapSchedule(row) {
     openingPilotApprovalMode: normalizeOpeningPilotApprovalMode(policy.openingPilotApprovalMode),
     genrePreset: policy.genrePreset || null,
     proseStyle: policy.proseStyle || null,
+    narrativeDirection: policy.narrativeDirection || null,
     creativeControls,
     humorIntensity: creativeControls.humorIntensity || "light",
     humorLabel: creativeControls.humorLabel || "미소 중심",
@@ -5087,6 +5103,7 @@ function mapCard(row) {
     knowledgeBefore: parseJson(row.KNOWLEDGE_JSON, []),
     canonReferences: parseJson(row.CANON_REFS_JSON, []),
     ...(techniquePlan.episodeMode ? { episodeMode: techniquePlan.episodeMode } : {}),
+    ...(techniquePlan.tonePlan ? { tonePlan: techniquePlan.tonePlan } : {}),
     ...(techniquePlan.dramaticCore ? { dramaticCore: techniquePlan.dramaticCore } : {}),
     ...(techniquePlan.continuityMemoryPlan ? { continuityMemoryPlan: techniquePlan.continuityMemoryPlan } : {}),
     ...(techniquePlan.ruleApplicationProofs ? { ruleApplicationProofs: techniquePlan.ruleApplicationProofs } : {}),

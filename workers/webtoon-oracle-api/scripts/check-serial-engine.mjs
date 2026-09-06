@@ -32,6 +32,7 @@ import {
 } from "../src/serial-genres.mjs";
 import { STORYHEAVEN_CONTINUATION_POLICY, applyStoryHeavenOpeningPilotPromotion, buildStoryHeavenOpeningPilotAssessment, continuationMinimumEpisode, createStoryHeavenSerialService, editorialCriticRolesForPass, serialRetryDelaySeconds, serialRevisionJobType, shouldRepairEpisodeCard, summarizeQueue, voiceAuditionTransition } from "../src/serial-service.mjs";
 import { buildSerialPrompt } from "../../storyheaven-codex-review-worker/src/serial.mjs";
+import { resolveNarrativeDirection, narrativeDirectionFromPayload, normalizeTonePlan, normalizeToneAssessment } from "../src/serial-direction.mjs";
 
 const serialServiceSource = await readFile(new URL("../src/serial-service.mjs", import.meta.url), "utf8");
 const serverSource = await readFile(new URL("../src/server.mjs", import.meta.url), "utf8");
@@ -1888,5 +1889,67 @@ assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", {
 }, developmentReviewOptions), /serial_review_next_read_approval_invalid/u);
 const reluctantReview = { ...review, decision: "rewrite_required", rewriteScenes: [2], comparativeVerdict: { ...review.comparativeVerdict, wouldReadNext: false } };
 assert.equal(decideStoryHeavenSerialReview({ qa, review: reluctantReview, rewriteCount: 0 }).state, "rewrite_required");
+
+const revengeScheduleInput = {
+  genrePresetId: "martial-fusion-fantasy-v1",
+  proseStyleId: "light-witty-v1",
+  narrativeDirectionId: "revenge",
+  creativeControls: { humor: 5 }
+};
+const revengeSchedule = validateStoryHeavenSerialSchedule(revengeScheduleInput);
+assert.equal(revengeSchedule.ok, true);
+assert.equal(revengeSchedule.schedule.narrativeDirection.humorMode, "none");
+assert.equal(revengeSchedule.schedule.creativeControls.humor, 0);
+assert.equal(revengeSchedule.schedule.creativeControls.humorShare, 0);
+assert.equal(revengeSchedule.schedule.creativeControls.humorIntensity, "none");
+assert.equal(normalizeStoryHeavenCreativeControls({ humor: 0 }).valid, true);
+assert.equal(normalizeStoryHeavenCreativeControls({ pace: 0 }).valid, false);
+assert.equal(validateStoryHeavenSerialSchedule({ ...revengeScheduleInput, narrativeDirectionId: "unknown" }).ok, false);
+assert.equal(resolveNarrativeDirection({}).value, null);
+const autoSerious = validateStoryHeavenSerialSchedule({ ...revengeScheduleInput, proseStyleId: "random", resolvedProseStyleId: "dark-tense-v1", narrativeDirectionId: "auto" });
+assert.equal(autoSerious.schedule.narrativeDirection.resolvedId, "serious");
+const playfulDirection = resolveNarrativeDirection({ narrativeDirectionId: "playful" }, null, 3).value;
+const revengeDirection = revengeSchedule.schedule.narrativeDirection;
+assert.equal(narrativeDirectionFromPayload({ bible: { voiceProfile: { narrativeDirection: revengeDirection } }, schedule: { policy: { narrativeDirection: playfulDirection } } }).resolvedId, "revenge");
+const seriousTonePlan = { register: "serious", mainReward: "오랜 수련의 성취와 복수의 결심", protectedEmotion: "상실의 무게를 그대로 지킨다.", humorBeats: [] };
+assert.equal(normalizeTonePlan(seriousTonePlan, revengeDirection, card.scenes).humorBeats.length, 0);
+assert.throws(() => normalizeTonePlan({ ...seriousTonePlan, register: "comic" }, revengeDirection, card.scenes), /serial_tone_humor_forbidden/u);
+const humorousTonePlan = {
+  ...seriousTonePlan, register: "playful",
+  humorBeats: [{ sceneNo: 1, patternKey: "pride-and-fees", characterFriction: "체면을 지키려는 기사와 밀린 요금을 받으려는 주인", setup: "기사는 보상금이 필요 없다고 말한다.", turn: "주인이 숙박비를 요구한다.", payoff: "기사가 먼저 정산 장소를 묻는다." }]
+};
+assert.equal(normalizeTonePlan(humorousTonePlan, playfulDirection, card.scenes).humorBeats[0].patternKey, "pride-and-fees");
+assert.throws(() => normalizeTonePlan(humorousTonePlan, revengeDirection, card.scenes), /serial_tone_humor_forbidden/u);
+assert.throws(() => normalizeTonePlan({ ...humorousTonePlan, humorBeats: [{ ...humorousTonePlan.humorBeats[0], sceneNo: 99 }] }, playfulDirection, card.scenes), /serial_tone_scene_invalid/u);
+const tonePayload = { ...developmentBibleOptions.payload, narrativeDirection: revengeDirection };
+const directionBible = normalizeStoryHeavenSerialWorkerResult("build_bible", bible, { payload: tonePayload });
+assert.equal(directionBible.voiceProfile.narrativeDirection.resolvedId, "revenge");
+const directionCard = normalizeStoryHeavenSerialWorkerResult("build_episode_card", { ...card, tonePlan: seriousTonePlan }, {
+  payload: { episodeNo: 1, bible: { ...directionBible, concept: { ...concept, narrativeDirection: revengeDirection } } }
+});
+assert.equal(directionCard.tonePlan.register, "serious");
+const toneAssessment = { fitsDirection: true, humorEffect: "not_applicable", evidence: [body.slice(0, 40)], summary: "웃음 없이 주인공의 의지와 회차의 긴장을 유지한다." };
+assert.equal(normalizeToneAssessment(toneAssessment, revengeDirection, body).fitsDirection, true);
+assert.throws(() => normalizeToneAssessment({ ...toneAssessment, evidence: ["이 문장은 원고에 존재하지 않는 검수 인용입니다."] }, revengeDirection, body), /serial_tone_evidence_not_in_draft/u);
+const directionReview = normalizeStoryHeavenSerialWorkerResult("editorial_review", { ...review, toneAssessment }, {
+  payload: { ...developmentReviewOptions.payload, narrativeDirection: revengeDirection, draft: { body } }
+});
+assert.equal(decideStoryHeavenSerialReview({ qa, review: directionReview }).state, "approved");
+assert.equal(decideStoryHeavenSerialReview({ qa, review: { ...directionReview, toneAssessment: { ...toneAssessment, fitsDirection: false } } }).state, "rewrite_required");
+const forcedToneReview = normalizeStoryHeavenSerialWorkerResult("editorial_review", { ...review, toneAssessment: { ...toneAssessment, humorEffect: "forced" } }, {
+  payload: { ...developmentReviewOptions.payload, narrativeDirection: revengeDirection, draft: { body } }
+});
+assert.equal(forcedToneReview.toneAssessment.fitsDirection, false);
+assert.ok(forcedToneReview.issues.some((entry) => entry.code === "narrative_direction_mismatch"));
+assert.deepEqual(editorialCriticRolesForPass({ rewritten: true, quality: { editorial: { scores: strongScores, criticPanels: strongCriticPanels, toneAssessment: forcedToneReview.toneAssessment } } }), ["relationship", "sceneExpression", "skepticalReader"]);
+assert.equal(serialRevisionJobType({ decision: { failedMetrics: [{ name: "style.toneConsistency" }] }, qa, review: forcedToneReview }), "rewrite_draft");
+for (const direction of [revengeDirection, playfulDirection]) {
+  for (const type of ["concept_candidates", "concept_selection", "voice_sample", "voice_review", "build_bible", "build_arc", "replan_arc", "build_episode_card", "revise_episode_card", "write_draft", "rewrite_draft", "line_polish", "editorial_critique", "editorial_review"]) {
+    const directionPrompt = buildSerialPrompt({ id: "direction-test", inputHash: "direction-hash", type, payload: { concept: { narrativeDirection: direction }, draft: { body }, criticRole: "relationship" } });
+    assert.ok(directionPrompt.includes(`(${direction.resolvedId})`), `${type} retains direction`);
+    if (direction.humorMode === "none") assert.match(directionPrompt, /Humor is OFF/u, `${type} forbids injected comic relief`);
+    else assert.match(directionPrompt, /Humor is optional and situational/u, `${type} has optional character-based humor`);
+  }
+}
 
 console.log("StoryHeaven serial engine checks passed");

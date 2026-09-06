@@ -13,7 +13,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
   <script defer src="../../common.js?v=20260810-rate1"></script>
   <script defer src="./genre-catalog.js?v=20260731-genre2"></script>
-  <script defer src="./serial.js?v=20260809-bible3"></script>
+  <script defer src="./serial.js?v=20260907-direction"></script>
 </head>
 <body>
   <header class="site-header">
@@ -80,7 +80,6 @@
             <fieldset class="genre-fieldset wide" data-manual-genre-fieldset><legend><span class="help-topic"><span>세부장르 <small data-subgenre-count>1 / 10</small></span><button class="help-button" type="button" data-help data-help-title="세부장르" data-help-body="직접 장르 설정을 선택했을 때 기본 장르 안에서 어떤 맛을 강하게 낼지 정합니다. 기본 장르마다 최소 한 개, 전체 최대 10개입니다.">?</button></span></legend><p class="field-help" data-subgenre-help>직접 장르 설정을 선택하면 기본 장르마다 한 개 이상 고르세요.</p><div class="subgenres" data-subgenres></div></fieldset>
 
             <fieldset class="prose-style-fieldset wide" data-prose-style><legend><span class="help-topic"><span>문체</span><button class="help-button" type="button" data-help data-help-title="문체" data-help-body="문체는 문장의 목소리와 정보 배열을 정하며 웃음·속도·묘사 강도와 별개입니다. 선택한 문체는 작품별로 한 번 확정되어 프롤로그부터 후속 회차까지 유지됩니다.&#10;&#10;특정 작품이나 작가를 흉내 내지 않고 서술 거리, 문장 호흡, 어휘, 대화 비율, 유머 원천과 금지 습관으로 정의합니다.">?</button></span></legend>
-              <p class="field-help">기본은 쉽게 읽히면서 인물의 허점과 관계에서 웃음이 나오는 문체입니다.</p>
               <div class="prose-style-presets" role="radiogroup" aria-label="소설 문체">
                 <label><input type="radio" name="proseStyleId" value="light-witty-v1" checked><span><strong>가볍고 유쾌한 몰입형</strong><small>쉬운 문장·인물 중심 유머</small></span></label>
                 <label><input type="radio" name="proseStyleId" value="serious-grand-v1"><span><strong>진지하고 웅장한 서사형</strong><small>절제된 문장·선택과 세계의 무게</small></span></label>
@@ -89,6 +88,7 @@
                 <label><input type="radio" name="proseStyleId" value="random"><span><strong>작품별 랜덤</strong><small>네 문체 중 하나를 한 번만 확정</small></span></label>
               </div>
             </fieldset>
+            <label class="field wide"><span class="help-topic"><span>작품 방향</span><button class="help-button" type="button" data-help data-help-title="작품 방향과 웃음" data-help-body="문체에 맞춤은 진지하거나 어두운 문체에서 웃음을 끄고, 그 외 문체에서는 선택한 웃음 강도를 사용합니다.&#10;&#10;진중한 서사와 처절한 성장과 복수는 웃음 없이 긴장·성취·카타르시스로 평가합니다. 성장과 복수에서는 단서가 있는 기연, 급성장, 압도적인 복수의 완결을 허용합니다. 이 방향은 문체의 유머 권고보다 우선합니다.&#10;&#10;유쾌한 모험도 웃음 개수를 강요하지 않으며, 상실이나 생존 위기는 진지하게 유지할 수 있습니다. 방향은 새 작품의 설정집에 고정됩니다.">?</button></span><select name="narrativeDirectionId"><option value="auto">문체에 맞춤</option><option value="playful">유쾌한 모험</option><option value="serious">진중한 서사 · 웃음 없음</option><option value="revenge">처절한 성장과 복수 · 웃음 없음</option></select></label>
 
             <fieldset class="creative-fieldset wide" data-creative-controls><legend><span class="help-topic"><span>창작 강도</span><button class="help-button" type="button" data-help data-help-title="창작 강도" data-help-body="작품이 독자에게 어떤 감각으로 읽히길 원하는지 정하는 조절값입니다. 숫자가 높을수록 항상 좋은 것이 아니라, 핵심 재미 2~3개만 높이고 나머지는 받쳐주는 편이 안정적입니다.&#10;&#10;참신성 기본값 2는 익숙한 장르 문법을 중심으로 한 가지 차별점만 더합니다. 4~5는 낯선 소재와 실험적인 규칙을 의도할 때만 선택하세요.">?</button></span></legend>
               <p class="field-help">먼저 작품의 호흡을 고르세요. 숫자가 높다고 항상 좋은 것은 아니며, 장면마다 고조와 휴식을 만들도록 적용됩니다.</p>
@@ -108,7 +108,7 @@
                   <label><span><strong>관계·로맨스</strong><small>사건 중심 ↔ 관계 변화 중심</small></span><input name="creativeRomance" type="range" min="1" max="5" value="2"><output>2</output></label>
                   <label><span><strong>액션</strong><small>대화·추리 ↔ 물리적 충돌</small></span><input name="creativeAction" type="range" min="1" max="5" value="3"><output>3</output></label>
                   <label><span><strong>묘사 밀도</strong><small>간결함 ↔ 구체적인 장면</small></span><input name="creativeDescription" type="range" min="1" max="5" value="3"><output>3</output></label>
-                  <label><span><strong>웃음</strong><small>진지함 ↔ 웃음 보상</small></span><input name="creativeHumor" type="range" min="1" max="5" value="2"><output>2</output></label>
+                  <label><span><strong>웃음</strong><small>0 없음 · 5 풍부함</small></span><input name="creativeHumor" type="range" min="0" max="5" value="2"><output>2</output></label>
                   <label><span><strong>참신성</strong><small>익숙한 장르 문법 ↔ 실험적 조합</small></span><input name="creativeNovelty" type="range" min="1" max="5" value="2"><output title="절제된 차별화">2</output></label>
                 </div>
                 <p class="creative-warning" data-creative-warning hidden>강도 5가 너무 많으면 작품의 고저가 사라질 수 있습니다. 핵심 세 항목만 높이는 편이 안정적입니다.</p>

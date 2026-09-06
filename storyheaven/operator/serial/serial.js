@@ -19,6 +19,7 @@
     "dark-tense-v1": "어둡고 긴장감 있는 몰입형",
     random: "작품별 문체 랜덤"
   });
+  const narrativeDirectionLabels = Object.freeze({ auto: "문체에 맞춤", playful: "유쾌한 모험", serious: "진중한 서사", revenge: "처절한 성장과 복수" });
   let selectedGenrePresetId = "curated-long-fantasy-random";
   const primaryGenreLimit = 3;
   const subgenreLimit = 10;
@@ -164,8 +165,9 @@
       });
     }
     for (const input of selectors.scheduleForm.querySelectorAll("input[name='proseStyleId']")) {
-      input.addEventListener("change", queueDraftSave);
+      input.addEventListener("change", () => { renderCreativeControls(); queueDraftSave(); });
     }
+    selectors.scheduleForm.elements.narrativeDirectionId.addEventListener("change", () => { renderCreativeControls(); queueDraftSave(); });
     document.addEventListener("visibilitychange", handleQueueVisibilityChange);
     for (const input of selectors.scheduleForm.querySelectorAll("input[name='creativePreset']")) {
       input.addEventListener("change", () => {
@@ -436,10 +438,20 @@
   function readCreativeControls() {
     const values = {};
     for (const [key, fieldName] of Object.entries(creativeFields)) {
-      values[key] = Math.max(1, Math.min(5, Math.round(Number(selectors.scheduleForm.elements[fieldName].value) || 3)));
+      const minimum = key === "humor" ? 0 : 1;
+      const value = Number(selectors.scheduleForm.elements[fieldName].value);
+      values[key] = Math.max(minimum, Math.min(5, Number.isFinite(value) ? Math.round(value) : 3));
     }
+    if (directionDisablesHumor()) values.humor = 0;
     values.preset = String(new FormData(selectors.scheduleForm).get("creativePreset") || "custom");
     return values;
+  }
+
+  function directionDisablesHumor() {
+    const form = new FormData(selectors.scheduleForm);
+    const direction = form.get("narrativeDirectionId");
+    return ["serious", "revenge"].includes(direction)
+      || (direction === "auto" && ["serious-grand-v1", "dark-tense-v1"].includes(form.get("proseStyleId")));
   }
 
   function renderCreativeControls() {
@@ -449,12 +461,17 @@
       const input = selectors.scheduleForm.elements[fieldName];
       const output = input.closest("label")?.querySelector("output");
       if (output) output.value = String(values[key]);
+      if (key === "humor") {
+        input.disabled = directionDisablesHumor();
+        input.value = String(values.humor);
+        input.setAttribute("aria-valuetext", values.humor === 0 ? "웃음 없음" : `웃음 ${values.humor}`);
+      }
       if (key === "novelty") {
         const label = noveltyLevelLabel(values[key]);
         input.setAttribute("aria-valuetext", `${values[key]} · ${label}`);
         if (output) output.title = label;
       }
-      input.style.setProperty("--range-value", `${(values[key] - 1) * 25}%`);
+      input.style.setProperty("--range-value", `${key === "humor" ? values[key] * 20 : (values[key] - 1) * 25}%`);
     }
     const presetLabels = { balanced: "균형 설정", fast: "빠른 몰입 설정", emotional: "감정 중심 설정", custom: "직접 조정" };
     selectors.creativeSummary.textContent = presetLabels[values.preset] || "직접 조정";
@@ -478,6 +495,7 @@
   }
 
   function humorIntensityFromControls(values) {
+    if (Number(values?.humor) === 0) return "none";
     if (Number(values?.humor) >= 4) return "comedy-first";
     if (Number(values?.humor) >= 3) return "balanced";
     return "light";
@@ -518,7 +536,7 @@
     const mode = badge(schedule.publicationMode === "auto_public" ? "자동 공개" : "테스트 비공개", schedule.publicationMode);
     heading.append(title, status, mode);
     const detail = document.createElement("p");
-    detail.textContent = `${schedule.genrePreset?.label || subgenreLabels(schedule).join(" · ")} · ${schedule.proseStyle?.label || "기존 작품별 문체"} · ${openingPilotLabel(schedule.openingPilotMode, schedule.openingPilotApprovalMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
+    detail.textContent = `${schedule.genrePreset?.label || subgenreLabels(schedule).join(" · ")} · ${schedule.proseStyle?.label || "기존 작품별 문체"}${schedule.narrativeDirection ? ` · ${schedule.narrativeDirection.label} · 웃음 ${schedule.narrativeDirection.effectiveHumorLevel}` : ""} · ${openingPilotLabel(schedule.openingPilotMode, schedule.openingPilotApprovalMode)} · ${seriesPlanLabel(schedule.seriesPlan)} · ${formatCadence(schedule.cadenceMinutes)}마다 새 작품`;
     const next = document.createElement("small");
     next.textContent = schedule.status === "active" ? `다음 예약 확인 ${formatDate(schedule.nextRunAt)}` : "이 설정과 연결된 새 제작·공개만 멈춰 있습니다.";
     copy.append(heading, detail, next);
@@ -587,6 +605,7 @@
           subgenresByGenre,
           genrePresetId: selectedGenrePresetId,
           proseStyleId: String(form.get("proseStyleId") || "light-witty-v1"),
+          narrativeDirectionId: String(form.get("narrativeDirectionId") || "auto"),
           publicationMode: form.get("publicationMode"),
           openingPilotMode: form.get("openingPilotMode"),
           openingPilotApprovalMode: form.get("openingPilotApprovalMode"),
@@ -631,6 +650,7 @@
           resolvedGenrePresetId: schedule.genrePreset?.resolvedId || "manual",
           proseStyleId: schedule.proseStyle?.requestedId || undefined,
           resolvedProseStyleId: schedule.proseStyle?.resolvedId || undefined,
+          narrativeDirectionId: schedule.narrativeDirection?.requestedId || undefined,
           publicationMode: schedule.publicationMode,
           openingPilotMode: schedule.openingPilotMode || "single_episode",
           openingPilotApprovalMode: schedule.openingPilotApprovalMode || "operator_review",
@@ -1837,6 +1857,22 @@
 
     const latestReview = payload.reviews?.at(-1);
     if (latestReview) wrapper.append(renderScoreBoard(latestReview, payload.run.quality?.decision?.readerExperienceScore, payload.metrics || []));
+    const toneAssessment = payload.run.quality?.editorial?.toneAssessment;
+    if (toneAssessment) {
+      const detail = document.createElement("details");
+      detail.className = "review-summary";
+      const heading = document.createElement("summary");
+      heading.textContent = `작품 방향 · ${narrativeDirectionLabels[toneAssessment.directionId] || "설정한 방향"} · ${toneAssessment.fitsDirection ? "적합" : "보완 필요"}`;
+      const copy = document.createElement("p");
+      copy.textContent = toneAssessment.summary;
+      detail.append(heading, copy);
+      for (const excerpt of toneAssessment.evidence || []) {
+        const quote = document.createElement("blockquote");
+        quote.textContent = excerpt;
+        detail.append(quote);
+      }
+      wrapper.append(detail);
+    }
 
     const latestDraft = payload.drafts?.at(-1);
     if (latestDraft) {
@@ -2391,10 +2427,11 @@
     const form = new FormData(selectors.scheduleForm);
     const primaryGenres = [...selectedPrimaryGenres];
     const payload = {
-      version: 12,
+      version: 13,
       savedAt: new Date().toISOString(),
       genrePresetId: selectedGenrePresetId,
       proseStyleId: String(form.get("proseStyleId") || "light-witty-v1"),
+      narrativeDirectionId: String(form.get("narrativeDirectionId") || "auto"),
       primaryGenres,
       subgenresByGenre: Object.fromEntries(primaryGenres.map((genreId) => [
         genreId,
@@ -2431,7 +2468,8 @@
     } catch {
       return;
     }
-    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(draft.version)) return;
+    if (!draft || ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].includes(draft.version)) return;
+    setFormValue("narrativeDirectionId", narrativeDirectionLabels[draft.narrativeDirectionId] ? draft.narrativeDirectionId : "auto");
     applyGenreSelection(draft.primaryGenres, draft.subgenresByGenre);
     selectedGenrePresetId = draft.version >= 12 && genrePresetDefinitions[draft.genrePresetId]
       ? draft.genrePresetId
@@ -2521,6 +2559,7 @@
 
   function loadScheduleIntoForm(schedule) {
     selectors.createPanel.open = true;
+    setFormValue("narrativeDirectionId", schedule.narrativeDirection?.requestedId || "auto");
     applyGenreSelection(schedulePrimaryGenres(schedule), scheduleSubgenresByGenre(schedule));
     selectedGenrePresetId = genrePresetDefinitions[schedule.genrePreset?.requestedId]
       ? schedule.genrePreset.requestedId
@@ -2650,7 +2689,7 @@
   }
 
   function humorLabel(value) {
-    return ({ light: "미소 중심", balanced: "균형", "comedy-first": "웃음 우선" })[value] || "미소 중심";
+    return ({ none: "웃음 없음", light: "미소 중심", balanced: "균형", "comedy-first": "웃음 우선" })[value] || "미소 중심";
   }
 
   function stageLabel(value) {

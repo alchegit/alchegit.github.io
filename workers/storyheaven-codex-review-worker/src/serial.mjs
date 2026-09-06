@@ -1,4 +1,5 @@
 import { buildSerialGenreEditorialGuidance } from "./serial-editorial-guidance.mjs";
+import { narrativeDirectionInstruction, narrativeDirection, tonePlanContract, toneAssessmentContract } from "./serial-direction.mjs";
 import { jsonrepair } from "jsonrepair";
 
 export const SERIAL_JOB_TYPES = Object.freeze([
@@ -20,7 +21,7 @@ export const SERIAL_JOB_TYPES = Object.freeze([
 ]);
 const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-08-30-genre-voice-quality-v30";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-07-direction-quality-v31";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -58,6 +59,7 @@ export function buildSerialPrompt(job) {
     !["voice_sample", "voice_review"].includes(type) ? "For every newly generated story, a long-running foundation is mandatory even when the schedule requests only a prologue. Its new bible and arc must contain enough independent conflict sources, character agendas, world constraints, volume-level turns, and delayed consequences to sustain later episodes without inventing a new premise each week. Legacy continuation stages must preserve the supplied foundation instead of rebuilding it." : "",
     buildSerialGenreEditorialGuidance(job.payload),
     stageInstruction(type, job.payload),
+    narrativeDirectionInstruction(type, job.payload),
     `Return exactly one JSON object with jobId, inputHash, jobType, and resultJson. jobType must be '${type}'. Preserve jobId and inputHash exactly.`,
     "resultJson must be a JSON-encoded string whose decoded object follows this contract:",
     JSON.stringify(resultContract(type, job.payload)),
@@ -76,6 +78,7 @@ function buildVoiceAuditionPrompt(job, type) {
     "Prefer natural Korean subject-predicate agreement, concrete action, clear spatial continuity, and distinguishable character purposes.",
     genreExperienceAndStyleInstruction(type, job.payload),
     stageInstruction(type, job.payload),
+    narrativeDirectionInstruction(type, job.payload),
     serialRetryInstruction(job),
     `Return exactly one JSON object with jobId, inputHash, jobType, and resultJson. jobType must be '${type}'. Preserve jobId and inputHash exactly.`,
     "resultJson must be a JSON-encoded string whose decoded object follows this contract:",
@@ -795,6 +798,7 @@ function resultContract(type, payload = {}) {
   }
   if (["build_episode_card", "revise_episode_card"].includes(type)) return {
     episodeNo: 1,
+    ...(narrativeDirection(payload) ? { tonePlan: tonePlanContract() } : {}),
     ...(developmentV2 ? {
       episodeMode: "propulsion|bonding|discovery|aftermath|humor|dread|wonder|training",
       dramaticCore: { desire: "이번 회차의 인간적 욕망", obstacle: "욕망을 막는 인물·상황", choice: "주인공이 실제로 내릴 선택", cost: "선택으로 치를 대가", stateChange: "되돌릴 수 없이 달라지는 상태", emotionalTurn: "감정의 방향이 달라지는 순간", imageAnchor: "회차를 기억하게 할 구체적 이미지", subtextQuestion: "인물이 말로 설명하지 않을 하위 질문" },
@@ -851,6 +855,7 @@ function resultContract(type, payload = {}) {
   };
   return {
     decision: "approved|rewrite_required|blocked",
+    ...(narrativeDirection(payload) ? { toneAssessment: toneAssessmentContract() } : {}),
     scores: { koreanReadability: 0, canonConsistency: 0, causality: 0, readerOrientation: 0, sceneVisualization: 0, openingGrip: 0, narrativeMomentum: 0, emotionalPayoff: 0, genrePromise: 0, curiosityAndHook: 0, characterAgency: 0, characterAttachment: 0, relationshipMomentum: 0, readerReward: 0, premiseAccessibility: 0, novelty: 0 },
     scoreEvidence: { koreanReadability: ["원고 근거"], canonConsistency: ["원고 근거"], causality: ["원고 근거"], readerOrientation: ["인물·장소·평소 상태·목표·변화·손실의 원고 근거"], sceneVisualization: ["공간·동작·감각의 원고 근거"], openingGrip: ["원고 근거"], narrativeMomentum: ["원고 근거"], emotionalPayoff: ["원고 근거"], genrePromise: ["원고 근거"], curiosityAndHook: ["원고 근거"], characterAgency: ["원고 근거"], characterAttachment: ["개인적 욕구·취약점·잘못된 선택의 원고 근거"], relationshipMomentum: ["상호 행동으로 달라진 관계의 원고 근거"], readerReward: ["원고에서 실제 일어난 두 가지 이상 보상"], premiseAccessibility: ["고유 용어 없이 이해되는 인간적 갈등 근거"], novelty: ["원고 근거"] },
     ...(proseStyle ? { styleAssessment: {

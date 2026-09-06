@@ -1,4 +1,5 @@
 import { validateSerialGenreSelection } from "./serial-genres.mjs";
+import { resolveNarrativeDirection, narrativeDirectionFromPayload, normalizeTonePlan, normalizeToneAssessment } from "./serial-direction.mjs";
 
 const JOB_TYPES = new Set([
   "concept_candidates",
@@ -167,6 +168,12 @@ export const STORYHEAVEN_PROSE_STYLE_QUALITY = Object.freeze({
 });
 
 export const STORYHEAVEN_HUMOR_PROFILES = Object.freeze({
+  none: Object.freeze({
+    label: "웃음 없음",
+    storyShare: 100,
+    humorShare: 0,
+    guidance: "농담과 희화화를 넣지 않는다. 긴장·성취·존엄·복수의 카타르시스와 여운으로 재미를 만든다."
+  }),
   light: Object.freeze({
     label: "미소 중심",
     storyShare: 80,
@@ -436,7 +443,10 @@ export function validateStoryHeavenSerialSchedule(input = {}, { random = Math.ra
     : Number(input.continuationBatchCount);
   const humorIntensity = String(input.humorIntensity || "light").trim();
   const creativeControls = normalizeStoryHeavenCreativeControls(input.creativeControls, humorIntensity);
-  const normalizedHumorIntensity = humorIntensityForLevel(creativeControls.values.humor);
+  const narrativeDirection = resolveNarrativeDirection(input, proseStyle.value, creativeControls.values.humor);
+  const effectiveHumor = narrativeDirection.value?.effectiveHumorLevel ?? creativeControls.values.humor;
+  const effectiveControls = { ...creativeControls.values, humor: effectiveHumor };
+  const normalizedHumorIntensity = humorIntensityForLevel(effectiveHumor);
   const humorProfile = STORYHEAVEN_HUMOR_PROFILES[normalizedHumorIntensity];
   const targetAge = ["all", "teen"].includes(input.targetAge) ? input.targetAge : "teen";
   const publicationMode = ["test_private", "auto_public"].includes(input.publicationMode)
@@ -445,6 +455,7 @@ export function validateStoryHeavenSerialSchedule(input = {}, { random = Math.ra
   const conceptPolicy = normalizeStoryHeavenConceptPolicy(input.conceptPolicy);
   if (!genrePreset.ok) errors.push(fieldError("genrePresetId", genrePreset.error));
   if (!proseStyle.ok) errors.push(fieldError("proseStyleId", proseStyle.error));
+  if (!narrativeDirection.ok) errors.push(fieldError("narrativeDirectionId", narrativeDirection.error));
   if (!genre.ok) errors.push(fieldError("subgenres", genre.error));
   if (!Number.isInteger(rawTargetEpisodeCount)
     || rawTargetEpisodeCount < STORYHEAVEN_SERIAL_LIMITS.targetEpisodeCountMin
@@ -496,15 +507,16 @@ export function validateStoryHeavenSerialSchedule(input = {}, { random = Math.ra
       conceptPolicy,
       genrePreset: genrePreset.ok ? genrePreset.value : null,
       proseStyle: proseStyle.ok ? proseStyle.value : null,
+      narrativeDirection: narrativeDirection.value || null,
       creativeControls: {
-        ...creativeControls.values,
+        ...effectiveControls,
         preset: creativeControls.preset,
         humorIntensity: humorProfile ? normalizedHumorIntensity : "light",
         humorLabel: humorProfile?.label || STORYHEAVEN_HUMOR_PROFILES.light.label,
         humorGuidance: humorProfile?.guidance || STORYHEAVEN_HUMOR_PROFILES.light.guidance,
         storyShare: humorProfile?.storyShare || STORYHEAVEN_HUMOR_PROFILES.light.storyShare,
-        humorShare: humorProfile?.humorShare || STORYHEAVEN_HUMOR_PROFILES.light.humorShare,
-        guidance: storyHeavenCreativeControlGuidance(creativeControls.values)
+        humorShare: humorProfile?.humorShare ?? STORYHEAVEN_HUMOR_PROFILES.light.humorShare,
+        guidance: storyHeavenCreativeControlGuidance(effectiveControls)
       },
       randomized: {
         ...(genre.randomized || { primaryGenre: false, subgenres: false }),
@@ -565,8 +577,9 @@ export function normalizeStoryHeavenCreativeControls(input, legacyHumorIntensity
     const raw = source[key] === undefined || source[key] === null || source[key] === ""
       ? fallback
       : Number(source[key]);
-    if (!Number.isInteger(raw) || raw < 1 || raw > 5) valid = false;
-    values[key] = Math.max(1, Math.min(5, Number.isFinite(raw) ? Math.round(raw) : fallback));
+    const minimum = key === "humor" ? 0 : 1;
+    if (!Number.isInteger(raw) || raw < minimum || raw > 5) valid = false;
+    values[key] = Math.max(minimum, Math.min(5, Number.isFinite(raw) ? Math.round(raw) : fallback));
   }
   const preset = STORYHEAVEN_CREATIVE_PRESETS.has(String(source.preset || ""))
     ? String(source.preset)
@@ -575,12 +588,14 @@ export function normalizeStoryHeavenCreativeControls(input, legacyHumorIntensity
 }
 
 function humorLevelForIntensity(value) {
+  if (value === "none") return 0;
   if (value === "comedy-first") return 5;
   if (value === "balanced") return 3;
   return 2;
 }
 
 function humorIntensityForLevel(value) {
+  if (value === 0) return "none";
   if (value >= 4) return "comedy-first";
   if (value >= 3) return "balanced";
   return "light";
@@ -596,7 +611,8 @@ export function storyHeavenCreativeControlGuidance(values) {
     romance: `관계·로맨스 ${values.romance}/5: 관계 변화가 차지하는 장면 비중을 조절하며 선택 장르의 약속을 침범하지 않는다.`,
     action: `액션 ${values.action}/5: 물리적 충돌과 즉각적 행동 보상의 빈도를 조절하고 공간 인과를 유지한다.`,
     description: `묘사 밀도 ${values.description}/5: 독자가 장면을 그릴 구체물과 감각의 양을 조절하되 장식적 나열을 피한다.`,
-    humor: `웃음 ${values.humor}/5: 인물과 상황에서 나오는 웃음의 빈도와 보상 크기를 조절한다.`,
+    humor: values.humor === 0 ? STORYHEAVEN_HUMOR_PROFILES.none.guidance
+      : `웃음 ${values.humor}/5: 작품 방향과 장면의 감정을 지키는 범위에서 인물과 상황의 웃음을 조절한다. 웃음 개수나 분량 비율을 채우지 않는다.`,
     novelty: noveltyGuidance(values.novelty)
   };
 }
@@ -898,6 +914,7 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
   const nextReadFailure = review?.comparativeVerdict
     && review.comparativeVerdict.wouldReadNext !== true;
   const mandatoryFailure = !qa?.passed || Number(qa?.score || 0) < thresholds.koreanReadability
+    || review?.toneAssessment?.fitsDirection === false
     || review?.safetyPassed !== true
     || nextReadFailure
     || review?.decision === "blocked";
@@ -934,7 +951,9 @@ export function calculateStoryHeavenReaderExperienceScore(scores = {}) {
 function normalizeConcept(source, options = {}) {
   const legacyConceptCopy = options.allowLegacyConceptCopy === true;
   const genrePreset = expectedGenrePreset(options);
+  const direction = narrativeDirectionFromPayload(options.payload);
   const concept = {
+    ...(direction ? { narrativeDirection: direction } : {}),
     title: requiredText(source.title, 80, 2, "serial_concept_title_invalid"),
     logline: requiredText(source.logline, 220, 20, "serial_concept_logline_invalid"),
     synopsis: legacyConceptCopy
@@ -1398,6 +1417,7 @@ function normalizeBible(source, options = {}) {
   const worldRules = requiredList(source.worldRules, { min: 5, max: 24, itemMax: 500 }, "serial_world_rules_invalid");
   const forbiddenContradictions = requiredList(source.forbiddenContradictions, { min: 3, max: 20, itemMax: 500 }, "serial_forbidden_rules_invalid");
   const voice = object(source.voiceProfile);
+  const direction = narrativeDirectionFromPayload(options.payload);
   const proseStyle = expectedProseStyle(options);
   const voiceCalibration = normalizeVoiceCalibration(object(options.payload).voiceCalibration, proseStyle);
   const dialogueRange = array(proseStyle?.lockedStyle?.dialogueRange);
@@ -1420,6 +1440,7 @@ function normalizeBible(source, options = {}) {
     glossary: stringList(source.glossary, { max: 40, itemMax: 300 }),
     forbiddenContradictions,
     voiceProfile: {
+      ...(direction ? { narrativeDirection: direction } : {}),
       ...(proseStyle ? {
         proseStyle,
         styleContractId: `${proseStyle.version}:${proseStyle.resolvedId}`,
@@ -1428,7 +1449,7 @@ function normalizeBible(source, options = {}) {
       narratorDistance: requiredText(voice.narratorDistance, 120, 2, "serial_voice_distance_invalid"),
       sentenceRhythm: requiredText(voice.sentenceRhythm, 200, 2, "serial_voice_rhythm_invalid"),
       dialogueRatio,
-      humorStyle: text(voice.humorStyle, 200),
+      humorStyle: direction?.humorMode === "none" ? STORYHEAVEN_HUMOR_PROFILES.none.guidance : text(voice.humorStyle, 200),
       descriptionDensity: integer(voice.descriptionDensity, 0, 100, 50),
       emotionStyle: requiredText(voice.emotionStyle, 200, 2, "serial_voice_emotion_invalid"),
       sensoryPalette: requiredText(voice.sensoryPalette, 240, 10, "serial_voice_sensory_palette_invalid"),
@@ -1816,6 +1837,9 @@ function normalizeEpisodeCard(source, options = {}) {
   }
   const episodeNo = integer(source.episodeNo, 1, STORYHEAVEN_SERIAL_LIMITS.internalEpisodeNoMax, null);
   const payload = object(options.payload);
+  const direction = narrativeDirectionFromPayload(payload);
+  const tonePlan = normalizeTonePlan(source.tonePlan, direction, scenes);
+  if (direction?.humorMode === "none" && source.episodeMode === "humor") throw new Error("serial_tone_humor_forbidden");
   const developmentV2 = Object.keys(object(payload.bible?.concept?.storyCore)).length > 0;
   const ruleApplicationProofs = developmentV2
     ? normalizeRuleApplicationProofs(source.ruleApplicationProofs, payload.bible?.worldRules, scenes)
@@ -1825,6 +1849,7 @@ function normalizeEpisodeCard(source, options = {}) {
   }
   return {
     episodeNo,
+    ...(tonePlan ? { tonePlan } : {}),
     ...(developmentV2 ? {
       episodeMode: requiredEnum(source.episodeMode, ["propulsion", "bonding", "discovery", "aftermath", "humor", "dread", "wonder", "training"], "serial_episode_mode_invalid")
     } : {}),
@@ -2039,6 +2064,7 @@ function normalizeLinePolish(source, options = {}) {
 function normalizeEditorialReview(source, options = {}) {
   const scoresSource = object(source.scores);
   const reviewDraftBody = String(object(object(options.payload).draft).body || "");
+  const toneAssessment = normalizeToneAssessment(source.toneAssessment, narrativeDirectionFromPayload(options.payload), reviewDraftBody);
   const scores = {};
   for (const key of Object.keys(STORYHEAVEN_SERIAL_LIMITS.quality)) {
     const score = integer(scoresSource[key], 0, 100, null);
@@ -2102,10 +2128,14 @@ function normalizeEditorialReview(source, options = {}) {
   }
   return {
     decision,
+    ...(toneAssessment ? { toneAssessment } : {}),
     scores,
     safetyPassed: source.safetyPassed === true,
     summary: requiredText(source.summary, 1_000, 10, "serial_review_summary_invalid"),
-    issues,
+    issues: toneAssessment?.fitsDirection === false ? [...issues, {
+      code: "narrative_direction_mismatch", severity: "critical", sceneNo: null,
+      evidence: toneAssessment.evidence.join(" / "), suggestion: toneAssessment.summary
+    }] : issues,
     rewriteScenes,
     scoreEvidence,
     audienceLenses,
