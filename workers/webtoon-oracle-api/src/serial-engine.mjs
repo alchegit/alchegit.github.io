@@ -2002,6 +2002,14 @@ function normalizeDraft(source, rewritten, options = {}) {
   if (draft.sceneRanges.length < STORYHEAVEN_SERIAL_LIMITS.scenesMin) throw new Error("serial_scene_ranges_invalid");
   const sceneRangeNumbers = draft.sceneRanges.map((item) => item.sceneNo);
   const paragraphCount = draft.body.split(/\n{2,}/u).map((item) => item.trim()).filter(Boolean).length;
+  const finalRange = draft.sceneRanges.at(-1);
+  const validStarts = draft.sceneRanges.every((item, index) => (
+    item.sceneNo === index + 1 && item.startParagraph !== null && item.endParagraph !== null
+    && item.endParagraph >= item.startParagraph && item.startParagraph <= paragraphCount
+    && item.startParagraph === (index === 0 ? 1 : draft.sceneRanges[index - 1].endParagraph + 1)
+  ));
+  // The last scene owns the remaining paragraphs; counting its end needs no model call.
+  if (validStarts) finalRange.endParagraph = paragraphCount;
   const sceneRangesCoverBody = draft.sceneRanges.every((item, index) => (
     item.sceneNo === index + 1
     && item.startParagraph === (index === 0 ? 1 : draft.sceneRanges[index - 1].endParagraph + 1)
@@ -2040,6 +2048,10 @@ function normalizeDraft(source, rewritten, options = {}) {
 function normalizeLinePolish(source, options = {}) {
   const originalSource = object(object(options.payload).draft);
   if (!originalSource.body) throw new Error("serial_line_polish_original_missing");
+  if (String(source.body || "").split(/\n{2,}/u).filter((item) => item.trim()).length
+    !== String(originalSource.body).split(/\n{2,}/u).filter((item) => item.trim()).length) {
+    throw new Error("serial_line_polish_paragraph_structure_mutated");
+  }
   const original = normalizeDraft(originalSource, false, options);
   const polished = normalizeDraft(source, true, options);
   if (polished.title !== original.title || polished.summary !== original.summary) {
@@ -2447,25 +2459,13 @@ function normalizeArchitectureReferences(value, arcScope, architecture) {
   return { volumeNo, conflictSourceKeys, characterMilestoneIds, longRevealKeys };
 }
 
-function normalizePrologueDisclosurePlan(value, episodeNo, architectureValue) {
+function normalizePrologueDisclosurePlan(_value, episodeNo, architectureValue) {
   const emptyPlan = { mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: [] };
   if (Number(episodeNo) !== 1) return emptyPlan;
   const architecture = object(architectureValue);
   const expected = object(architecture.prologueDisclosure);
   if (!array(expected.mustShow).length) return emptyPlan;
-  const source = object(value);
-  const submittedMustShow = stringList(source.mustShow, { max: 8, itemMax: 400 });
-  const submittedHints = stringList(source.mayHintRevealKeys, { max: 6, itemMax: 80 });
-  const submittedProtected = stringList(source.mustNotAnswerRevealKeys, { max: 24, itemMax: 80 });
-  const submittedResolved = stringList(source.resolvedNow, { max: 3, itemMax: 400 });
-  const submittedQuestions = stringList(source.openQuestions, { max: 3, itemMax: 400 });
-  if (submittedMustShow.length < array(expected.mustShow).length
-    || submittedResolved.length < array(expected.resolvedNow).length
-    || submittedQuestions.length < array(expected.openQuestions).length
-    || array(expected.mayHintRevealKeys).some((key) => !submittedHints.includes(key))
-    || array(expected.mustNotAnswerRevealKeys).some((key) => !submittedProtected.includes(key))) {
-    throw new Error("serial_prologue_disclosure_plan_incomplete");
-  }
+  // Disclosure boundaries are owned by the bible, never by a model's echoed copy.
   return {
     mustShow: array(expected.mustShow),
     mayHintRevealKeys: array(expected.mayHintRevealKeys),

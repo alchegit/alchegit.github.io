@@ -1508,6 +1508,10 @@ assert.equal(card.continuityMemoryPlan.newReaderPromises[0].expectedWindow, "nex
 assert.equal(card.techniquePlan.readerOrientation.newTerms.length, 1);
 assert.equal(card.techniquePlan.readerRewardPlan.concretePayoffs.length, 2);
 assert.equal(card.prologueDisclosurePlan.mustNotAnswerRevealKeys.length, 4);
+const canonicalDisclosureCard = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
+  ...card, prologueDisclosurePlan: { mustShow: [], resolvedNow: ["모델이 임의로 공개하려는 비밀"], mustNotAnswerRevealKeys: [] }
+}, { payload: { episodeNo: 1, bible: { worldRules: bible.worldRules, narrativeBlueprint: bible.narrativeBlueprint } } });
+assert.deepEqual(canonicalDisclosureCard.prologueDisclosurePlan, card.prologueDisclosurePlan);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
   ...card,
   techniquePlan: {
@@ -1556,11 +1560,17 @@ const originalDraft = normalizeStoryHeavenSerialWorkerResult("write_draft", {
   newCanonFacts: [{ key: "first-drive", category: "event", value: "도윤이 첫 심야 운행을 시작했다." }],
   revealUpdates: [{ key: "series-terminal-truth", status: "seeded" }]
 }, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } });
-assert.throws(() => normalizeStoryHeavenSerialWorkerResult("write_draft", {
+const countedFinalScene = normalizeStoryHeavenSerialWorkerResult("write_draft", {
   ...originalDraft,
   sceneRanges: originalDraft.sceneRanges.map((range, index) => (
     index === originalDraft.sceneRanges.length - 1 ? { ...range, endParagraph: 35 } : range
   ))
+}, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } });
+assert.equal(countedFinalScene.sceneRanges.at(-1).endParagraph, 36);
+assert.equal(countedFinalScene.body, originalDraft.body);
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("write_draft", {
+  ...originalDraft,
+  sceneRanges: originalDraft.sceneRanges.map((range, index) => index === 1 ? { ...range, startParagraph: 14 } : range)
 }, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } }), /serial_scene_ranges_invalid/u);
 const polishedDraft = normalizeStoryHeavenSerialWorkerResult("line_polish", {
   ...originalDraft,
@@ -1919,6 +1929,12 @@ const humorousTonePlan = {
   humorBeats: [{ sceneNo: 1, patternKey: "pride-and-fees", characterFriction: "체면을 지키려는 기사와 밀린 요금을 받으려는 주인", setup: "기사는 보상금이 필요 없다고 말한다.", turn: "주인이 숙박비를 요구한다.", payoff: "기사가 먼저 정산 장소를 묻는다." }]
 };
 assert.equal(normalizeTonePlan(humorousTonePlan, playfulDirection, card.scenes).humorBeats[0].patternKey, "pride-and-fees");
+const toneContractPrompt = buildSerialPrompt({ id: "tone-contract", inputHash: "tone-contract", type: "build_episode_card", payload: { narrativeDirection: playfulDirection } });
+const toneContractStart = toneContractPrompt.indexOf(bibleContractMarker) + bibleContractMarker.length;
+const toneContractEnd = toneContractPrompt.indexOf("\n\nUNTRUSTED_SERIAL_INPUT_JSON_START", toneContractStart);
+const toneContract = JSON.parse(toneContractPrompt.slice(toneContractStart, toneContractEnd)).tonePlan;
+assert.equal(normalizeTonePlan({ ...toneContract, register: "playful" }, playfulDirection, card.scenes).humorBeats.length, 1);
+assert.throws(() => normalizeTonePlan({ ...humorousTonePlan, humorBeats: [{ ...humorousTonePlan.humorBeats[0], characterFriction: undefined }] }, playfulDirection, card.scenes), /serial_tone_character_friction_invalid/u);
 assert.throws(() => normalizeTonePlan(humorousTonePlan, revengeDirection, card.scenes), /serial_tone_humor_forbidden/u);
 assert.throws(() => normalizeTonePlan({ ...humorousTonePlan, humorBeats: [{ ...humorousTonePlan.humorBeats[0], sceneNo: 99 }] }, playfulDirection, card.scenes), /serial_tone_scene_invalid/u);
 const tonePayload = { ...developmentBibleOptions.payload, narrativeDirection: revengeDirection };
@@ -1930,6 +1946,8 @@ const directionCard = normalizeStoryHeavenSerialWorkerResult("build_episode_card
 assert.equal(directionCard.tonePlan.register, "serious");
 const toneAssessment = { fitsDirection: true, humorEffect: "not_applicable", evidence: [body.slice(0, 40)], summary: "웃음 없이 주인공의 의지와 회차의 긴장을 유지한다." };
 assert.equal(normalizeToneAssessment(toneAssessment, revengeDirection, body).fitsDirection, true);
+assert.deepEqual(normalizeToneAssessment({ ...toneAssessment, evidence: [body.slice(0, 40), "원고에 존재하지 않는 잘못된 인용입니다."] }, revengeDirection, body).evidence, [body.slice(0, 40)]);
+assert.deepEqual(normalizeToneAssessment({ ...toneAssessment, evidence: ["‘그는 고개를 들었다.’"] }, revengeDirection, "그는 고개를 들었다.").evidence, ["그는 고개를 들었다."]);
 assert.throws(() => normalizeToneAssessment({ ...toneAssessment, evidence: ["이 문장은 원고에 존재하지 않는 검수 인용입니다."] }, revengeDirection, body), /serial_tone_evidence_not_in_draft/u);
 const directionReview = normalizeStoryHeavenSerialWorkerResult("editorial_review", { ...review, toneAssessment }, {
   payload: { ...developmentReviewOptions.payload, narrativeDirection: revengeDirection, draft: { body } }

@@ -53,6 +53,9 @@ export function buildSerialPrompt(job) {
     genreExperienceAndStyleInstruction(type, job.payload),
     causalIntegrityInstruction(type),
     naturalKoreanInstruction(type),
+    ["write_draft", "rewrite_draft"].includes(type)
+      ? "Manuscript length is counted after removing ALL whitespace, including spaces and line breaks. The minimum is 2500 non-whitespace characters and the maximum is 12000. Aim for at least 3200 non-whitespace characters to avoid an accidental undershoot. If deterministicQa reports body_too_short, expand the existing planned scenes with concrete action, dialogue, and necessary context until the minimum is met; the surgical-edit rule does not require preserving an undersized draft. Do not pad with repeated explanation or introduce a new premise."
+      : "",
     serialRetryInstruction(job),
     !["voice_sample", "voice_review"].includes(type) ? "The first generated installment is always a prologue. Internal episodeNo 1 is the prologue and must be titled or clearly labeled 프롤로그. The first main chapter starts after that as 본편 1화, even though the storage number may be the next internal episode number." : "",
     !["voice_sample", "voice_review"].includes(type) ? "The prologue is a retention gate. It must demonstrate the premise through an irreversible event or choice, not explain it from a distance. Each scene must answer one immediate question while opening a sharper causal question, and the prologue must deliver at least one concrete genre payoff before its final hook." : "",
@@ -798,7 +801,7 @@ function resultContract(type, payload = {}) {
   }
   if (["build_episode_card", "revise_episode_card"].includes(type)) return {
     episodeNo: 1,
-    ...(narrativeDirection(payload) ? { tonePlan: tonePlanContract() } : {}),
+    ...(narrativeDirection(payload) ? { tonePlan: tonePlanContract(narrativeDirection(payload)) } : {}),
     ...(developmentV2 ? {
       episodeMode: "propulsion|bonding|discovery|aftermath|humor|dread|wonder|training",
       dramaticCore: { desire: "이번 회차의 인간적 욕망", obstacle: "욕망을 막는 인물·상황", choice: "주인공이 실제로 내릴 선택", cost: "선택으로 치를 대가", stateChange: "되돌릴 수 없이 달라지는 상태", emotionalTurn: "감정의 방향이 달라지는 순간", imageAnchor: "회차를 기억하게 할 구체적 이미지", subtextQuestion: "인물이 말로 설명하지 않을 하위 질문" },
@@ -1039,7 +1042,7 @@ function clampInteger(value, min, max, fallback) {
 
 function draftContract(rewritten) {
   const value = {
-    title: "회차 제목", summary: "20-1000자 공개 소개", body: "2500-12000자 한국어 원고",
+    title: "회차 제목", summary: "20-1000자 공개 소개", body: "공백·줄바꿈을 제외한 2500-12000자 한국어 원고, 보통 3200자 이상을 목표로 작성",
     sceneRanges: [{ sceneNo: 1, startParagraph: 1, endParagraph: 5 }],
     newCanonFacts: [{ key: "stable-key", category: "character|world|event|item", value: "이번 화에서 확정된 사실" }],
     revealUpdates: [{ key: "existing-reveal-key", status: "planned|seeded|revealed|retired" }]

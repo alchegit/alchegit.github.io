@@ -64,17 +64,17 @@ export function normalizeTonePlan(value, direction, scenes) {
   const sceneNumbers = new Set(scenes.map((scene) => scene.sceneNo));
   return {
     register: value.register,
-    mainReward: requiredText(value.mainReward),
-    protectedEmotion: requiredText(value.protectedEmotion),
+    mainReward: requiredText(value.mainReward, 300, "main_reward"),
+    protectedEmotion: requiredText(value.protectedEmotion, 300, "protected_emotion"),
     humorBeats: value.humorBeats.map((beat) => {
       if (!beat || !sceneNumbers.has(beat.sceneNo)) throw new Error("serial_tone_scene_invalid");
       return {
         sceneNo: beat.sceneNo,
-        patternKey: requiredText(beat.patternKey, 80),
-        characterFriction: requiredText(beat.characterFriction),
-        setup: requiredText(beat.setup),
-        turn: requiredText(beat.turn),
-        payoff: requiredText(beat.payoff)
+        patternKey: requiredText(beat.patternKey, 80, "pattern_key"),
+        characterFriction: requiredText(beat.characterFriction, 300, "character_friction"),
+        setup: requiredText(beat.setup, 300, "setup"),
+        turn: requiredText(beat.turn, 300, "turn"),
+        payoff: requiredText(beat.payoff, 300, "payoff")
       };
     })
   };
@@ -87,28 +87,41 @@ export function normalizeToneAssessment(value, direction, body) {
     || !Array.isArray(value.evidence) || value.evidence.length < 1 || value.evidence.length > 3) {
     throw new Error("serial_tone_assessment_invalid");
   }
-  const normalizedBody = normalizeWhitespace(body);
-  const evidence = value.evidence.map((entry) => requiredText(entry, 240));
-  if (evidence.some((entry) => !normalizedBody.includes(normalizeWhitespace(entry)))) {
-    throw new Error("serial_tone_evidence_not_in_draft");
-  }
+  const suppliedEvidence = value.evidence.map((entry) => requiredText(entry, 240));
+  const evidence = suppliedEvidence.map((entry) => groundedExcerpt(entry, body)).filter(Boolean);
+  if (!evidence.length) throw new Error("serial_tone_evidence_not_in_draft");
   return {
     directionId: direction.resolvedId,
     fitsDirection: value.fitsDirection && !["forced", "missing_setup"].includes(value.humorEffect)
       && (direction.humorMode !== "none" || value.humorEffect === "not_applicable"),
     humorEffect: value.humorEffect,
     evidence,
+    unmatchedEvidenceCount: suppliedEvidence.length - evidence.length,
     summary: requiredText(value.summary, 500)
   };
 }
 
-function requiredText(value, max = 300) {
+function requiredText(value, max = 300, field = "text") {
   if (typeof value !== "string" || value.trim().length < 2 || value.trim().length > max) {
-    throw new Error("serial_tone_text_invalid");
+    throw new Error(`serial_tone_${field}_invalid`);
   }
   return value.trim();
 }
 
-function normalizeWhitespace(value) {
-  return String(value || "").normalize("NFC").replace(/\s+/gu, " ").trim();
+function groundedExcerpt(value, body) {
+  const candidates = [value];
+  const quotePairs = { "‘": "’", "“": "”", "'": "'", '"': '"' };
+  if (quotePairs[value[0]] === value.at(-1)) candidates.push(value.slice(1, -1).trim());
+  for (const candidate of candidates) {
+    const pattern = candidate.normalize("NFC").split(/\s+/u).map((word) => (
+      [...word].map((character) => {
+        if ("‘’'".includes(character)) return "[‘’']";
+        if ('“”"'.includes(character)) return '[“”"]';
+        return character.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+      }).join("")
+    )).join("\\s+");
+    const match = String(body || "").normalize("NFC").match(new RegExp(pattern, "u"));
+    if (match?.[0]?.trim().length >= 2) return match[0];
+  }
+  return null;
 }

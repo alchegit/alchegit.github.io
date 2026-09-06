@@ -42,12 +42,19 @@ export function narrativeDirectionInstruction(type, payload = {}) {
   return lines.join("\n");
 }
 
-export function tonePlanContract() {
+export function tonePlanContract(direction) {
   return {
     register: "serious|warm|playful|comic",
     mainReward: "이번 화의 중심 재미 2-300자: 성장·긴장·복수·교감·웃음 등 작품 방향에 맞는 보상",
     protectedEmotion: "농담이나 보완으로 훼손하지 않을 감정과 장면 2-300자",
-    humorBeats: []
+    humorBeats: direction?.humorMode === "none" ? [] : [{
+      sceneNo: 1,
+      patternKey: "stable-pattern-key",
+      characterFriction: "이 장면 인물들의 목적·체면·허점이 충돌하는 방식 2-300자",
+      setup: "독자가 먼저 알게 되는 기대와 상황 2-300자",
+      turn: "인물의 선택으로 기대가 어긋나는 순간 2-300자",
+      payoff: "웃음을 설명하지 않고 끝맺는 반응이나 행동 2-300자"
+    }]
   };
 }
 

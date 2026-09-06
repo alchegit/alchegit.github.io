@@ -22,6 +22,8 @@ const job = {
 };
 
 const prompt = buildSerialPrompt(job);
+assert.match(buildSerialPrompt({ ...job, type: "rewrite_draft" }), /counted after removing ALL whitespace/u);
+assert.match(buildSerialPrompt({ ...job, type: "rewrite_draft" }), /surgical-edit rule does not require preserving an undersized draft/u);
 assert.match(prompt, /blind senior Korean serialized-fiction editor/u);
 assert.match(prompt, /UNTRUSTED_SERIAL_INPUT_JSON_START/u);
 assert.match(prompt, /opening grip, narrative momentum, emotional payoff/u);

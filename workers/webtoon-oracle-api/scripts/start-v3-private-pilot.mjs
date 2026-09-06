@@ -12,24 +12,30 @@ const report = process.argv.includes("--report");
 const resumeBlocked = process.argv.includes("--resume-blocked");
 const repairCard = process.argv.includes("--repair-card");
 const pauseSchedule = process.argv.includes("--pause-schedule");
+const exportDrafts = process.argv.includes("--export");
+const compact = process.argv.includes("--compact");
+const retryError = process.argv.includes("--retry-error");
 const slot = Math.max(1, Math.min(9, Number(argumentValue("--slot=") || 1)));
 const requestedGenrePreset = argumentValue("--genre=") || "curated-long-fantasy-random";
 const stateDir = path.resolve(process.env.STORYHEAVEN_REVIEW_STATE_DIR || "./runtime");
 const statePath = path.join(stateDir, slot === 1 ? "v3-private-pilot.json" : `v3-private-pilot-${slot}.json`);
 const previous = await readJson(statePath);
-if (previous?.scheduleId && previous?.runId && !report && !resumeBlocked && !repairCard && !pauseSchedule) {
+if (previous?.scheduleId && previous?.runId && !report && !resumeBlocked && !repairCard && !pauseSchedule && !exportDrafts && !retryError) {
   console.log(JSON.stringify({ reused: true, ...previous }, null, 2));
   process.exit(0);
 }
 
+const episodeCount = Number(argumentValue("--episodes=") || 3);
+if (![1, 3].includes(episodeCount)) throw new Error("pilot_episode_count_invalid");
 const request = {
   genrePresetId: requestedGenrePreset,
-  proseStyleId: "light-witty-v1",
+  proseStyleId: argumentValue("--style=") || "light-witty-v1",
+  narrativeDirectionId: argumentValue("--direction=") || undefined,
   publicationMode: "test_private",
-  openingPilotMode: "three_episode_incubation",
+  openingPilotMode: episodeCount === 1 ? "single_episode" : "three_episode_incubation",
   openingPilotApprovalMode: "system_auto",
   cadenceMinutes: 10_080,
-  targetEpisodeCount: 3,
+  targetEpisodeCount: episodeCount,
   totalVolumes: 10,
   episodesPerVolume: 25,
   continuationBatchCount: 1,
@@ -43,7 +49,7 @@ const request = {
     romance: 2,
     action: 3,
     description: 3,
-    humor: 2,
+    humor: Number(argumentValue("--humor=") || 2),
     novelty: 2
   },
   targetAge: "teen",
@@ -51,7 +57,7 @@ const request = {
   conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
 };
 
-if (!execute && !report && !resumeBlocked && !repairCard && !pauseSchedule) {
+if (!execute && !report && !resumeBlocked && !repairCard && !pauseSchedule && !exportDrafts && !retryError) {
   console.log(JSON.stringify({ dryRun: true, statePath, request }, null, 2));
   process.exit(0);
 }
@@ -127,7 +133,10 @@ try {
       };
     });
     console.log(JSON.stringify({ paused: true, ...result }, null, 2));
-  } else if (report) {
+  } else if (retryError) {
+    if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
+    console.log(JSON.stringify(await service.retryQueueGroup(previous.queueGroupId)));
+  } else if (report || exportDrafts) {
     if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
     const runRows = await withConnection(async (connection) => {
       const result = await connection.execute(
@@ -143,7 +152,7 @@ try {
     for (const row of runRows) reports.push(await service.getRun(row.ID));
     const story = await withConnection(async (connection) => {
       const result = await connection.execute(
-        `select id, title
+        `select id, title, public_synopsis
            from storyheaven_stories
           where id = (
             select max(story_id) keep (dense_rank last order by created_at)
@@ -158,11 +167,12 @@ try {
     const managedStory = story
       ? (await service.listManagedStories()).find((item) => item.id === story.ID) || null
       : null;
-    console.log(JSON.stringify({
+    const result = {
       checkedAt: new Date().toISOString(),
       scheduleId: previous.scheduleId,
       queueGroupId: previous.queueGroupId,
-      story: story ? { id: story.ID, title: story.TITLE } : null,
+      story: story ? { id: story.ID, title: story.TITLE, synopsis: story.PUBLIC_SYNOPSIS } : null,
+      narrativeDirection: previous.narrativeDirection || null,
       operation: managedStory ? {
         storyStatus: managedStory.storyStatus,
         visibility: managedStory.visibility,
@@ -174,7 +184,39 @@ try {
       voiceAudition: reports.find((item) => item.voiceAudition)?.voiceAudition || null,
       runs: reports.map(summarizeRun),
       totals: summarizeTotals(reports)
-    }, null, 2));
+    };
+    if (exportDrafts) {
+      const manuscripts = reports.filter((item) => item.drafts.length).map((item) => {
+        const latestReview = item.reviews.at(-1);
+        const approved = ["ready", "published"].includes(item.run.status) && latestReview?.decision === "approved";
+        const draft = approved ? item.drafts.find((entry) => entry.id === latestReview.draftId) : item.drafts.at(-1);
+        if (!draft) throw new Error("pilot_approved_draft_missing");
+        return {
+          runId: item.run.id,
+          episodeNo: item.run.episodeNo,
+          status: item.run.status,
+          draft,
+          review: item.reviews.filter((entry) => entry.draftId === draft.id).at(-1) || null,
+          toneAssessment: item.run.quality?.editorial?.toneAssessment || null
+        };
+      });
+      if (!manuscripts.length) throw new Error("pilot_manuscript_not_ready");
+      const exportPath = path.join(stateDir, `v3-private-pilot-${slot}-export.json`);
+      await writeFile(exportPath, `${JSON.stringify({ ...result, manuscripts }, null, 2)}\n`, "utf8");
+      console.log(JSON.stringify({ exportPath, manuscriptCount: manuscripts.length, title: story?.TITLE }));
+    } else if (compact) {
+      console.log(JSON.stringify({
+        slot, title: result.story?.title, direction: result.narrativeDirection?.label,
+        scheduleStatus: result.operation?.schedule?.status,
+        runs: result.runs.map((run) => ({
+          id: run.id, episodeNo: run.episodeNo, status: run.status, stage: run.stage,
+          draftCharacters: run.draftCharacters, rewriteCount: run.rewriteCount,
+          failureCode: run.failureCode,
+          score: run.review?.readerExperienceScore,
+          jobs: run.jobs.slice(-3)
+        })), totals: result.totals
+      }));
+    } else console.log(JSON.stringify(result, null, 2));
   } else if (resumeBlocked || repairCard) {
     if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
     const operatorId = await latestOperatorId();
@@ -205,6 +247,7 @@ try {
       queueGroupId: run.queueGroupId,
       genrePreset: schedule.genrePreset,
       proseStyle: schedule.proseStyle,
+      narrativeDirection: schedule.narrativeDirection,
       targetEpisodeCount: schedule.targetEpisodeCount,
       publicationMode: schedule.publicationMode,
       cadenceMinutes: schedule.cadenceMinutes
@@ -240,6 +283,7 @@ function summarizeRun(report) {
     status: report.run.status,
     stage: report.run.stage,
     rewriteCount: report.run.rewriteCount,
+    failureCode: report.run.failureCode,
     durationSeconds: report.run.durationSeconds,
     draftCharacters: Number(latestDraft?.qa?.characterCount || 0),
     review: latestReview ? {
@@ -257,6 +301,7 @@ function summarizeRun(report) {
       type: job.type,
       criticRole: job.criticRole,
       status: job.status,
+      errorCode: job.errorCode,
       attempts: job.attemptCount,
       model: job.model,
       durationSeconds: job.durationSeconds,
