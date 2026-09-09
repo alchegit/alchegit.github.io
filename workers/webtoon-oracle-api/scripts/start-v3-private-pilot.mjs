@@ -15,12 +15,14 @@ const pauseSchedule = process.argv.includes("--pause-schedule");
 const exportDrafts = process.argv.includes("--export");
 const compact = process.argv.includes("--compact");
 const retryError = process.argv.includes("--retry-error");
+const publishDraft = process.argv.includes("--publish");
+const rewritePublished = process.argv.includes("--rewrite-published");
 const slot = Math.max(1, Math.min(9, Number(argumentValue("--slot=") || 1)));
 const requestedGenrePreset = argumentValue("--genre=") || "curated-long-fantasy-random";
 const stateDir = path.resolve(process.env.STORYHEAVEN_REVIEW_STATE_DIR || "./runtime");
 const statePath = path.join(stateDir, slot === 1 ? "v3-private-pilot.json" : `v3-private-pilot-${slot}.json`);
 const previous = await readJson(statePath);
-if (previous?.scheduleId && previous?.runId && !report && !resumeBlocked && !repairCard && !pauseSchedule && !exportDrafts && !retryError) {
+if (previous?.scheduleId && previous?.runId && !report && !resumeBlocked && !repairCard && !pauseSchedule && !exportDrafts && !retryError && !publishDraft && !rewritePublished) {
   console.log(JSON.stringify({ reused: true, ...previous }, null, 2));
   process.exit(0);
 }
@@ -57,7 +59,7 @@ const request = {
   conceptPolicy: STORYHEAVEN_DEFAULT_CONCEPT_POLICY
 };
 
-if (!execute && !report && !resumeBlocked && !repairCard && !pauseSchedule && !exportDrafts && !retryError) {
+if (!execute && !report && !resumeBlocked && !repairCard && !pauseSchedule && !exportDrafts && !retryError && !publishDraft && !rewritePublished) {
   console.log(JSON.stringify({ dryRun: true, statePath, request }, null, 2));
   process.exit(0);
 }
@@ -107,7 +109,76 @@ const service = createStoryHeavenSerialService({
 });
 
 try {
-  if (pauseSchedule) {
+  if (rewritePublished) {
+    if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
+    const operatorId = await latestOperatorId();
+    let replacedRepair = null;
+    if (previous.publishedRepairQueueGroupId) {
+      try {
+        replacedRepair = await service.cancelQueueGroup(previous.publishedRepairQueueGroupId, operatorId);
+      } catch (error) {
+        if (!new Set(["serial_queue_not_cancelable", "serial_queue_not_found"]).has(error?.message)) throw error;
+      }
+    }
+    const storyId = await withConnection(async (connection) => {
+      const result = await connection.execute(
+        `select max(story_id) keep (dense_rank last order by created_at) as story_id
+           from storyheaven_serial_runs where queue_group_id = :queue_group_id`,
+        { queue_group_id: previous.queueGroupId });
+      return result.rows[0]?.STORY_ID || "";
+    });
+    if (!storyId) throw new Error("v3_pilot_story_missing");
+    const run = await service.rewriteEpisode(storyId, 1, operatorId, {
+      notes: "최종 검수에 남은 치명적 장면 동선 문제를 해결한다. 세드릭이 외문 감시를 맡고 로안이 브람과 창고로 이동하는 순서, 협곡 확인 담당자와 감시 공백이 없다는 사실을 명시한다. 이미 승인된 사건·인물·유머·설정은 보존한다."
+    });
+    const state = { ...previous, publishedRepairRunId: run.id, publishedRepairQueueGroupId: run.queueGroupId };
+    await writeFile(statePath, `${JSON.stringify(state, null, 2)}\n`, "utf8");
+    console.log(JSON.stringify({ rewritePublished: true, replacedRepair, storyId, run }));
+  } else if (publishDraft) {
+    if (!previous?.scheduleId || !previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
+    const operatorId = await latestOperatorId();
+    const target = await withConnection(async (connection) => {
+      const result = await connection.execute(
+        `select id, story_id, schedule_id from storyheaven_serial_runs
+          where ((:repair_run_id is not null and id = :repair_run_id)
+             or (:repair_run_id is null and queue_group_id = :queue_group_id))
+            and run_type = 'episode' and run_status = 'ready'
+          order by episode_no fetch first 1 row only`,
+        { queue_group_id: previous.queueGroupId, repair_run_id: previous.publishedRepairRunId || null });
+      return result.rows[0] || null;
+    });
+    if (!target) throw new Error("v3_pilot_ready_run_missing");
+    if (target.SCHEDULE_ID) {
+      await withTransaction((connection) => connection.execute(
+        `update storyheaven_serial_schedules
+            set schedule_status = 'active', publication_mode = 'auto_public', updated_at = systimestamp
+          where id = :schedule_id and schedule_status <> 'archived'`,
+        { schedule_id: target.SCHEDULE_ID }
+      ));
+    }
+    let published = [];
+    try {
+      published = await service.publishReady(1, target.ID);
+      if (published.length !== 1 || published[0].storyId !== target.STORY_ID) {
+        throw new Error("v3_pilot_target_publish_failed");
+      }
+      await service.updateStoryControl(target.STORY_ID, {
+        visibility: "public",
+        continuationMode: "manual",
+        operatorNote: "신규 원고 시험 후 검수 보완을 통과해 운영자가 공개했습니다."
+      }, operatorId);
+    } finally {
+      await withTransaction((connection) => connection.execute(
+        `update storyheaven_serial_schedules
+            set schedule_status = 'paused', publication_mode = 'test_private',
+                next_run_at = null, updated_at = systimestamp
+          where id = :schedule_id`,
+        { schedule_id: previous.scheduleId }
+      ));
+    }
+    const managed = (await service.listManagedStories()).find((item) => item.id === target.STORY_ID);
+    console.log(JSON.stringify({ published: true, item: published[0], story: managed }));
+  } else if (pauseSchedule) {
     if (!previous?.scheduleId) throw new Error("v3_pilot_state_missing");
     const result = await withTransaction(async (connection) => {
       const schedule = await connection.execute(
@@ -135,7 +206,7 @@ try {
     console.log(JSON.stringify({ paused: true, ...result }, null, 2));
   } else if (retryError) {
     if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
-    console.log(JSON.stringify(await service.retryQueueGroup(previous.queueGroupId)));
+    console.log(JSON.stringify(await service.retryQueueGroup(previous.publishedRepairQueueGroupId || previous.queueGroupId)));
   } else if (report || exportDrafts) {
     if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
     const runRows = await withConnection(async (connection) => {
@@ -143,8 +214,9 @@ try {
         `select id
            from storyheaven_serial_runs
           where queue_group_id = :queue_group_id
+             or (:repair_run_id is not null and id = :repair_run_id)
           order by created_at`,
-        { queue_group_id: previous.queueGroupId }
+        { queue_group_id: previous.queueGroupId, repair_run_id: previous.publishedRepairRunId || null }
       );
       return result.rows;
     });
@@ -186,20 +258,26 @@ try {
       totals: summarizeTotals(reports)
     };
     if (exportDrafts) {
-      const manuscripts = reports.filter((item) => item.drafts.length).map((item) => {
-        const latestReview = item.reviews.at(-1);
-        const approved = ["ready", "published"].includes(item.run.status) && latestReview?.decision === "approved";
-        const draft = approved ? item.drafts.find((entry) => entry.id === latestReview.draftId) : item.drafts.at(-1);
-        if (!draft) throw new Error("pilot_approved_draft_missing");
-        return {
-          runId: item.run.id,
-          episodeNo: item.run.episodeNo,
-          status: item.run.status,
-          draft,
-          review: item.reviews.filter((entry) => entry.draftId === draft.id).at(-1) || null,
-          toneAssessment: item.run.quality?.editorial?.toneAssessment || null
-        };
-      });
+      const latestReportByEpisode = new Map();
+      for (const item of reports.filter((entry) => entry.drafts.length)) {
+        latestReportByEpisode.set(Number(item.run.episodeNo), item);
+      }
+      const manuscripts = [...latestReportByEpisode.values()]
+        .sort((left, right) => Number(left.run.episodeNo) - Number(right.run.episodeNo))
+        .map((item) => {
+          const latestReview = item.reviews.at(-1);
+          const approved = ["ready", "published"].includes(item.run.status) && latestReview?.decision === "approved";
+          const draft = approved ? item.drafts.find((entry) => entry.id === latestReview.draftId) : item.drafts.at(-1);
+          if (!draft) throw new Error("pilot_approved_draft_missing");
+          return {
+            runId: item.run.id,
+            episodeNo: item.run.episodeNo,
+            status: item.run.status,
+            draft,
+            review: item.reviews.filter((entry) => entry.draftId === draft.id).at(-1) || null,
+            toneAssessment: item.run.quality?.editorial?.toneAssessment || null
+          };
+        });
       if (!manuscripts.length) throw new Error("pilot_manuscript_not_ready");
       const exportPath = path.join(stateDir, `v3-private-pilot-${slot}-export.json`);
       await writeFile(exportPath, `${JSON.stringify({ ...result, manuscripts }, null, 2)}\n`, "utf8");
@@ -220,6 +298,7 @@ try {
   } else if (resumeBlocked || repairCard) {
     if (!previous?.queueGroupId) throw new Error("v3_pilot_state_missing");
     const operatorId = await latestOperatorId();
+    const targetQueueGroupId = previous.publishedRepairQueueGroupId || previous.queueGroupId;
     const blockedRunId = await withConnection(async (connection) => {
       const result = await connection.execute(
         `select id
@@ -228,7 +307,7 @@ try {
             and run_status = 'blocked'
             and current_stage = 'editorial_blocked'
           order by episode_no, created_at fetch first 1 row only`,
-        { queue_group_id: previous.queueGroupId }
+        { queue_group_id: targetQueueGroupId }
       );
       return result.rows[0]?.ID || "";
     });

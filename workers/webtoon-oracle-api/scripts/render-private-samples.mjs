@@ -28,7 +28,7 @@ const markdown = ["# 신규 작품 비공개 원고 모음"];
 
 for (const [index, sample] of samples.entries()) {
   const filename = `sample-${index + 1}`;
-  const manuscript = sample.manuscripts[0];
+  const manuscript = sample.manuscripts.at(-1);
   const draft = manuscript.draft;
   const approved = ["ready", "published"].includes(manuscript.status) && manuscript.review?.decision === "approved";
   const status = approved ? "검수 통과 · 비공개"

@@ -1328,8 +1328,9 @@ export function createStoryHeavenSerialService({
         { story_id: storyId, episode_no: episodeNo, excluded_run_id: pilotSource?.RUN_ID || null });
       if (Number(active.RUN_COUNT || 0) > 0) throw failure("serial_episode_already_queued", 409);
       const context = await loadSerialContext(connection, storyId);
+      const existingCard = context.cards.find((item) => Number(item.episodeNo) === episodeNo);
       const planItem = context.arc.episodePlan.find((item) => Number(item.episodeNo) === episodeNo)
-        || context.cards.find((item) => Number(item.episodeNo) === episodeNo);
+        || existingCard;
       if (!planItem) throw failure("serial_arc_episode_not_planned", 409);
       if (pilotSource) {
         await connection.execute(
@@ -1378,6 +1379,7 @@ export function createStoryHeavenSerialService({
             episodeNo,
             title: existing.TITLE,
             summary: existing.PUBLIC_SUMMARY || "",
+            continuityMemoryPlan: existingCard?.continuityMemoryPlan || null,
             instruction: pilotSource
               ? "운영자가 3화 파일럿 평가를 보고 이 미공개 회차만 다시 쓰라고 요청했다. 다른 두 파일럿 회차와 설정 연속성을 지키면서 약한 독자 보상과 리듬을 보완한다."
               : "운영자가 이 회차를 다시 쓰라고 요청했다. 기존 회차의 핵심 기능은 살리되 더 명확하고 이어 읽기 좋은 새 원고로 교체할 준비를 한다."
@@ -1754,6 +1756,24 @@ export function createStoryHeavenSerialService({
       if (!draft || !review) throw failure("serial_quality_hold_evidence_missing", 409);
 
       const quality = parseJson(run.QUALITY_JSON, {});
+      let scheduleActivated = false;
+      if ((action === "rewrite" || action === "repair_card") && run.SCHEDULE_ID) {
+        const schedule = await selectOne(connection,
+          `select schedule_status from storyheaven_serial_schedules
+            where id = :schedule_id for update`,
+          { schedule_id: run.SCHEDULE_ID });
+        if (!schedule || schedule.SCHEDULE_STATUS === "archived") {
+          throw failure("serial_queue_schedule_unavailable", 409);
+        }
+        if (schedule.SCHEDULE_STATUS === "paused") {
+          const activated = await connection.execute(
+            `update storyheaven_serial_schedules
+                set schedule_status = 'active', updated_at = systimestamp
+              where id = :schedule_id and schedule_status = 'paused'`,
+            { schedule_id: run.SCHEDULE_ID });
+          scheduleActivated = Number(activated.rowsAffected || 0) === 1;
+        }
+      }
       let recoveredCandidate = null;
       if (action === "approve_best") {
         recoveredCandidate = await findBestApprovedDraft(connection, run);
@@ -1800,7 +1820,7 @@ export function createStoryHeavenSerialService({
         const updated = await selectOne(connection,
           `select * from storyheaven_serial_runs where id = :run_id`,
           { run_id: runId });
-        return { action, run: mapRun(updated) };
+        return { action, scheduleActivated, run: mapRun(updated) };
       }
 
       if (action === "approve" || action === "approve_best") {
@@ -1845,14 +1865,15 @@ export function createStoryHeavenSerialService({
             deterministicQa: qa,
             editor,
             rewriteNumber,
-            instruction: "운영자가 검수 보류 사유를 확인하고 추가 보완을 요청했다. 지적된 장면과 문장만 우선 고치고, 이미 잘 작동하는 사건 구조와 문체는 유지한다."
+            instruction: cleanText(input.instruction, 1_000)
+              || "운영자가 검수 보류 사유를 확인하고 추가 보완을 요청했다. 지적된 장면과 문장만 우선 고치고, 이미 잘 작동하는 사건 구조와 문체는 유지한다."
           }
         });
       }
       const updated = await selectOne(connection,
         `select * from storyheaven_serial_runs where id = :run_id`,
         { run_id: runId });
-      return { action, run: mapRun(updated) };
+      return { action, scheduleActivated, run: mapRun(updated) };
     });
   }
 
@@ -2129,11 +2150,11 @@ export function createStoryHeavenSerialService({
     return { scheduled, published, continuations };
   }
 
-  async function publishReady(limitValue = 3) {
+  async function publishReady(limitValue = 3, runIdValue = null) {
     const limit = Math.max(1, Math.min(10, Math.round(Number(limitValue) || 3)));
     const published = [];
     for (let index = 0; index < limit; index += 1) {
-      const item = await publishNextDue();
+      const item = await publishNextDue(runIdValue);
       if (!item) break;
       published.push(item);
     }
@@ -3529,7 +3550,8 @@ export function createStoryHeavenSerialService({
     );
   }
 
-  async function publishNextDue() {
+  async function publishNextDue(runIdValue = null) {
+    const targetRunId = runIdValue ? requireId(runIdValue, "run_id") : null;
     return withTransaction(async (connection) => {
       const queue = await selectOne(connection,
         `select * from (
@@ -3540,6 +3562,7 @@ export function createStoryHeavenSerialService({
              left join storyheaven_serial_bibles bible on bible.story_id = publication.story_id
              left join storyheaven_serial_story_controls control on control.story_id = publication.story_id
             where publication.queue_status = 'ready'
+              and (:target_run_id is null or publication.run_id = :target_run_id)
               and publication.release_at <= systimestamp
               and nvl(control.visibility, 'public') = 'public'
               and nvl(control.continuation_mode, 'auto') in ('auto', 'manual')
@@ -3573,7 +3596,8 @@ export function createStoryHeavenSerialService({
                 )
               )
             order by publication.release_at, publication.created_at
-         ) where rownum = 1`
+         ) where rownum = 1`,
+        { target_run_id: targetRunId }
       );
       if (!queue) return null;
       const story = await selectOne(connection,
@@ -3629,7 +3653,7 @@ export function createStoryHeavenSerialService({
                   current_revision_no = :revision_no, submitted_at = systimestamp,
                   reviewed_at = systimestamp, reviewed_by = 'storyheaven-serial-editor',
                   published_at = systimestamp, updated_at = systimestamp where id = :id`,
-          { ...episodeBinds(episodeId, queue, draft, qa), revision_no: Number(existing.CURRENT_REVISION_NO || 0) + 1 }
+          { ...episodeUpdateBinds(episodeId, draft, qa), revision_no: Number(existing.CURRENT_REVISION_NO || 0) + 1 }
         );
       }
       const revisionNo = existing ? Number(existing.CURRENT_REVISION_NO || 0) + (existing.EPISODE_STATUS === "published" && !rewriteExisting ? 0 : 1) : 1;
@@ -4222,6 +4246,19 @@ export function createStoryHeavenSerialService({
       id: episodeId, story_id: queue.STORY_ID, episode_no: queue.EPISODE_NO,
       title: draft.TITLE, public_summary: draft.PUBLIC_SUMMARY, body_text: clob(draft.BODY_TEXT),
       character_count: Number(qa.characterCount || 0), paragraph_count: Number(qa.paragraphCount || 0),
+      estimated_read_minutes: Number(qa.estimatedReadMinutes || 1),
+      preview_character_count: Math.min(Number(qa.characterCount || 0), 2500)
+    };
+  }
+
+  function episodeUpdateBinds(episodeId, draft, qa) {
+    return {
+      id: episodeId,
+      title: draft.TITLE,
+      public_summary: draft.PUBLIC_SUMMARY,
+      body_text: clob(draft.BODY_TEXT),
+      character_count: Number(qa.characterCount || 0),
+      paragraph_count: Number(qa.paragraphCount || 0),
       estimated_read_minutes: Number(qa.estimatedReadMinutes || 1),
       preview_character_count: Math.min(Number(qa.characterCount || 0), 2500)
     };

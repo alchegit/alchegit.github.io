@@ -103,6 +103,7 @@ const cardRepairPrompt = buildSerialPrompt({
   payload: { currentCard: {}, editor: { issues: [] }, bible: { concept: { storyCore: {} } } }
 });
 assert.match(cardRepairPrompt, /senior structural editor after prose rewrites failed/u);
+assert.match(cardRepairPrompt, /Copy payload\.currentCard\.continuityMemoryPlan exactly/u);
 assert.match(cardRepairPrompt, /opponent, witness, enforcer, or nearby person is not automatically/u);
 assert.match(cardRepairPrompt, /server supersedes the prior card and writes a fresh draft/u);
 

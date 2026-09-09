@@ -105,6 +105,8 @@ assert.equal(shouldRepairEpisodeCard({
 }), false);
 assert.match(serialServiceSource, /type: "revise_episode_card"/u, "structural quality failures must queue a card repair stage");
 assert.match(serialServiceSource, /cardRepairCount: Number\(runInput\.cardRepairCount/u, "card repair must be bounded in durable run input");
+assert.match(serialServiceSource, /episodeUpdateBinds\(episodeId, draft, qa\)/u, "published episode replacement must use update-only Oracle binds");
+assert.doesNotMatch(serialServiceSource, /\{ \.\.\.episodeBinds\(episodeId, queue, draft, qa\), revision_no:/u, "published episode replacement must not pass insert-only binds");
 const strongPilot = buildStoryHeavenOpeningPilotAssessment([
   { episodeNo: 1, episodeMode: "discovery", wouldReadNext: true, readerRewardScore: 92 },
   { episodeNo: 2, episodeMode: "bonding", wouldReadNext: true, readerRewardScore: 90 },
@@ -1512,6 +1514,32 @@ const canonicalDisclosureCard = normalizeStoryHeavenSerialWorkerResult("build_ep
   ...card, prologueDisclosurePlan: { mustShow: [], resolvedNow: ["모델이 임의로 공개하려는 비밀"], mustNotAnswerRevealKeys: [] }
 }, { payload: { episodeNo: 1, bible: { worldRules: bible.worldRules, narrativeBlueprint: bible.narrativeBlueprint } } });
 assert.deepEqual(canonicalDisclosureCard.prologueDisclosurePlan, card.prologueDisclosurePlan);
+const publishedRewriteCard = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
+  ...card,
+  continuityMemoryPlan: { addressedPromiseKeys: [], newReaderPromises: [], paidDebtKeys: [], emotionalDebtsCreated: [] }
+}, {
+  payload: {
+    episodeNo: 1,
+    bible: { worldRules: bible.worldRules, concept: { storyCore }, narrativeBlueprint: bible.narrativeBlueprint },
+    rewriteTarget: { continuityMemoryPlan: card.continuityMemoryPlan }
+  }
+});
+assert.deepEqual(publishedRewriteCard.continuityMemoryPlan, card.continuityMemoryPlan);
+const repairedPublishedCard = normalizeStoryHeavenSerialWorkerResult("revise_episode_card", {
+  ...card,
+  continuityMemoryPlan: { addressedPromiseKeys: [], newReaderPromises: [], paidDebtKeys: [], emotionalDebtsCreated: [] }
+}, {
+  payload: {
+    episodeNo: 1,
+    bible: { worldRules: bible.worldRules, concept: { storyCore }, narrativeBlueprint: bible.narrativeBlueprint },
+    currentCard: card
+  }
+});
+assert.deepEqual(repairedPublishedCard.continuityMemoryPlan, card.continuityMemoryPlan);
+assert.match(buildSerialPrompt({
+  id: "published-rewrite-card", inputHash: "published-rewrite-card", type: "build_episode_card",
+  payload: { rewriteTarget: { continuityMemoryPlan: card.continuityMemoryPlan } }
+}), /server-owned history/u);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
   ...card,
   techniquePlan: {
@@ -1855,7 +1883,8 @@ const criticalReview = {
   ...advisoryReview,
   issues: [{ code: "canon_break", severity: "critical" }]
 };
-assert.equal(decideStoryHeavenSerialReview({ qa, review: criticalReview, rewriteCount: 0, episodeNo: 1 }).state, "approved");
+assert.equal(decideStoryHeavenSerialReview({ qa, review: criticalReview, rewriteCount: 0, episodeNo: 1 }).state, "rewrite_required");
+assert.equal(decideStoryHeavenSerialReview({ qa, review: criticalReview, rewriteCount: 2, episodeNo: 1 }).state, "blocked");
 const weakFirstEpisode = decideStoryHeavenSerialReview({
   qa,
   review: { ...review, scores: { ...scores, openingGrip: 85 } },

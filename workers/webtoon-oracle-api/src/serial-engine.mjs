@@ -913,10 +913,13 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
   }
   const nextReadFailure = review?.comparativeVerdict
     && review.comparativeVerdict.wouldReadNext !== true;
+  const criticalIssueFailure = Array.isArray(review?.issues)
+    && review.issues.some((editorialIssue) => editorialIssue?.severity === "critical");
   const mandatoryFailure = !qa?.passed || Number(qa?.score || 0) < thresholds.koreanReadability
     || review?.toneAssessment?.fitsDirection === false
     || review?.safetyPassed !== true
     || nextReadFailure
+    || criticalIssueFailure
     || review?.decision === "blocked";
   const approved = !mandatoryFailure
     && new Set(["approved", "rewrite_required"]).has(review?.decision)
@@ -1839,6 +1842,11 @@ function normalizeEpisodeCard(source, options = {}) {
   const payload = object(options.payload);
   const direction = narrativeDirectionFromPayload(payload);
   const tonePlan = normalizeTonePlan(source.tonePlan, direction, scenes);
+  const rewriteMemoryPlan = object(payload.rewriteTarget?.continuityMemoryPlan);
+  const currentCardMemoryPlan = object(payload.currentCard?.continuityMemoryPlan);
+  const preservedMemoryPlan = Object.keys(rewriteMemoryPlan).length
+    ? rewriteMemoryPlan
+    : currentCardMemoryPlan;
   if (direction?.humorMode === "none" && source.episodeMode === "humor") throw new Error("serial_tone_humor_forbidden");
   const developmentV2 = Object.keys(object(payload.bible?.concept?.storyCore)).length > 0;
   const ruleApplicationProofs = developmentV2
@@ -1857,10 +1865,12 @@ function normalizeEpisodeCard(source, options = {}) {
     openingDisturbance: requiredText(source.openingDisturbance, 500, 10, "serial_episode_opening_invalid"),
     ...(developmentV2 ? {
       dramaticCore: normalizeDramaticCore(source.dramaticCore),
-      continuityMemoryPlan: normalizeContinuityMemoryPlan(
-        source.continuityMemoryPlan,
-        payload.bible?.narrativeBlueprint?.serialMemory
-      ),
+      continuityMemoryPlan: Object.keys(preservedMemoryPlan).length
+        ? structuredClone(preservedMemoryPlan)
+        : normalizeContinuityMemoryPlan(
+            source.continuityMemoryPlan,
+            payload.bible?.narrativeBlueprint?.serialMemory
+          ),
       ruleApplicationProofs
     } : {}),
     scenes,
