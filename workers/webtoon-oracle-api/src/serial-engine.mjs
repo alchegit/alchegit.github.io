@@ -915,18 +915,50 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
     && review.comparativeVerdict.wouldReadNext !== true;
   const criticalIssueFailure = Array.isArray(review?.issues)
     && review.issues.some((editorialIssue) => editorialIssue?.severity === "critical");
+  const advisoryIssueFailure = Array.isArray(review?.issues)
+    && review.issues.some((editorialIssue) => editorialIssue?.severity === "warning");
+  const severeMetricFailure = failedMetrics.some(({ score, threshold }) => score < threshold - 8);
   const mandatoryFailure = !qa?.passed || Number(qa?.score || 0) < thresholds.koreanReadability
     || review?.toneAssessment?.fitsDirection === false
     || review?.safetyPassed !== true
     || nextReadFailure
     || criticalIssueFailure
+    || severeMetricFailure
     || review?.decision === "blocked";
-  const approved = !mandatoryFailure
-    && new Set(["approved", "rewrite_required"]).has(review?.decision)
+  const strictApproval = !mandatoryFailure
+    && review?.decision === "approved"
+    && !advisoryIssueFailure
     && failedMetrics.length === 0;
-  if (approved) return { state: "approved", failedMetrics, rewriteAllowed: false, readerExperienceScore };
+  if (strictApproval) {
+    return {
+      state: "approved",
+      failedMetrics,
+      rewriteAllowed: false,
+      readerExperienceScore,
+      approvalReason: "strict_quality_pass"
+    };
+  }
+  const boundedAdvisoryApproval = !mandatoryFailure
+    && rewriteCount >= STORYHEAVEN_SERIAL_LIMITS.rewriteMax
+    && new Set(["approved", "rewrite_required"]).has(review?.decision);
+  if (boundedAdvisoryApproval) {
+    return {
+      state: "approved",
+      failedMetrics,
+      rewriteAllowed: false,
+      readerExperienceScore,
+      advisoryApproval: true,
+      approvalReason: "bounded_rewrite_advisory_only"
+    };
+  }
   const rewriteAllowed = rewriteCount < STORYHEAVEN_SERIAL_LIMITS.rewriteMax && review?.decision !== "blocked";
-  return { state: rewriteAllowed ? "rewrite_required" : "blocked", failedMetrics, rewriteAllowed, readerExperienceScore };
+  return {
+    state: rewriteAllowed ? "rewrite_required" : "blocked",
+    failedMetrics,
+    rewriteAllowed,
+    readerExperienceScore,
+    approvalReason: mandatoryFailure ? "mandatory_gate_not_met" : "advisory_rewrite_pending"
+  };
 }
 
 export function calculateStoryHeavenReaderExperienceScore(scores = {}) {
@@ -1056,11 +1088,13 @@ function normalizeVoiceReview(value, options = {}) {
 function normalizePremiseAudit(value) {
   const source = object(value);
   const entryTypes = new Set(["native", "summoned", "transported", "reincarnated", "possessed", "regressed", "other"]);
-  const entryType = entryTypes.has(source.entryType) ? source.entryType : null;
+  const entryTypeValue = String(source.entryType || "").trim().toLowerCase();
+  const entryType = entryTypes.has(entryTypeValue) ? entryTypeValue : null;
   if (!entryType) throw new Error("serial_premise_entry_type_invalid");
 
-  const priorLifeSkillRelation = ["none", "indirect"].includes(source.priorLifeSkillRelation)
-    ? source.priorLifeSkillRelation
+  const priorLifeSkillRelationValue = String(source.priorLifeSkillRelation || "").trim().toLowerCase();
+  const priorLifeSkillRelation = ["none", "indirect"].includes(priorLifeSkillRelationValue)
+    ? priorLifeSkillRelationValue
     : null;
   if (!priorLifeSkillRelation) throw new Error("serial_premise_prior_skill_relation_invalid");
 
@@ -1086,8 +1120,9 @@ function normalizePremiseAudit(value) {
   }
 
   const abilitySource = object(source.abilityPlan);
-  const abilityMode = ["none", "familiar", "single_twist"].includes(abilitySource.mode)
-    ? abilitySource.mode
+  const abilityModeValue = String(abilitySource.mode || "").trim().toLowerCase();
+  const abilityMode = ["none", "familiar", "single_twist"].includes(abilityModeValue)
+    ? abilityModeValue
     : null;
   if (!abilityMode) throw new Error("serial_ability_mode_invalid");
   const extraRuleCount = integer(abilitySource.extraRuleCount, 0, 1, null);
@@ -1098,7 +1133,7 @@ function normalizePremiseAudit(value) {
   );
   if (hasMultiStepTrigger) throw new Error("serial_ability_trigger_too_complex");
   const targetType = requiredEnum(
-    abilitySource.targetType,
+    String(abilitySource.targetType || "").trim().toLowerCase(),
     ["none", "self", "person", "object", "place", "contract_party", "promise_party", "other"],
     "serial_ability_target_type_invalid"
   );
@@ -1145,8 +1180,9 @@ function normalizeReaderAppealPlan(value, options = {}) {
     "growth", "problem_solving", "relationship", "mystery", "survival",
     "wonder", "humor", "healing", "revenge", "adventure", "other"
   ]);
-  const dominantPleasure = dominantPleasures.has(source.dominantPleasure)
-    ? source.dominantPleasure
+  const dominantPleasureValue = String(source.dominantPleasure || "").trim().toLowerCase();
+  const dominantPleasure = dominantPleasures.has(dominantPleasureValue)
+    ? dominantPleasureValue
     : null;
   if (!dominantPleasure) throw new Error("serial_reader_appeal_dominant_pleasure_invalid");
 

@@ -958,7 +958,7 @@
       const detail = document.createElement("p");
       title.textContent = workDisplayTitle(item);
       detail.textContent = item.attentionType === "quality_hold"
-        ? `원고 작성은 완료됐으며 일부 품질 기준이 남아 회차 등록만 보류했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
+        ? `자동 보완 뒤에도 반드시 해결할 품질 문제가 남아 회차 등록만 보류했습니다. · ${formatDate(item.completedAt || item.requestedAt)}`
         : `${stageLabel(item.stage)}에서 멈춤 · ${formatDate(item.completedAt || item.requestedAt)} · ${failureLabel(item.failureCode)}`;
       copy.append(title, detail);
       const actions = document.createElement("div");
@@ -979,7 +979,7 @@
     selectors.stalledList.replaceChildren();
     const qualityCount = items.filter((story) => stalledPrologueState(story) === "quality").length;
     const errorCount = items.filter((story) => stalledPrologueState(story) === "error").length;
-    selectors.stalledCaption.textContent = `${items.length}건 · 보완 ${qualityCount} · 오류 ${errorCount}`;
+    selectors.stalledCaption.textContent = `${items.length}건 · 치명적 확인 ${qualityCount} · 오류 ${errorCount}`;
     if (!items.length) return;
     for (const story of items) {
       const row = document.createElement("article");
@@ -1034,7 +1034,7 @@
 
   function stalledPrologueStateLabel(state) {
     return ({
-      quality: "원고 완성 · 보완 필요",
+      quality: "원고 완성 · 치명적 확인",
       error: "원고 완성 · 시스템 오류",
       ready: "검수 통과 · 공개 대기",
       draft: "원고 완성 · 등록 대기",
@@ -1045,7 +1045,7 @@
   function stalledPrologueDetail(story, state, time) {
     const characters = Number(story.draft?.characterCount || 0);
     const manuscript = characters ? `원고 ${characters.toLocaleString("ko-KR")}자 작성 완료` : "프롤로그 회차 미등록";
-    if (state === "quality") return `${manuscript} · 자동 보완 ${Number(story.rewriteCount || 0)}회 · ${formatDate(time)}`;
+    if (state === "quality") return `${manuscript} · 자동 보완 ${Number(story.rewriteCount || 0)}회 · 반드시 수정 ${qualityCriticalCount(story.review)}건 · ${formatDate(time)}`;
     if (state === "error") return `${manuscript} · ${failureLabel(story.latestFailureCode)} · ${formatDate(time)}`;
     if (state === "ready") return `${manuscript} · 자동 검수 통과 · ${formatDate(time)}`;
     if (state === "draft") return `${manuscript} · 회차 등록 전 확인 필요 · ${formatDate(time)}`;
@@ -1053,7 +1053,13 @@
   }
 
   function stalledPrologueReason(story, state) {
-    if (state === "quality") return story.review?.summary || "자동 편집 검수의 공개 기준을 충족하지 못해 원고를 보존한 채 회차 등록을 멈췄습니다.";
+    if (state === "quality") {
+      const criticalCount = qualityCriticalCount(story.review);
+      const prefix = criticalCount
+        ? `안전성·설정 인과·독자 이해와 관련된 반드시 수정 항목 ${criticalCount}건이 남았습니다.`
+        : "큰 폭의 품질 미달 또는 검수 차단 판단이 남았습니다.";
+      return `${prefix} ${story.review?.summary || "원고를 보존한 채 회차 등록만 멈췄습니다."}`;
+    }
     if (state === "error") return `원고는 보존돼 있습니다. ${failureLabel(story.latestFailureCode)} 때문에 검수 또는 등록 단계가 끝나지 않았습니다.`;
     if (state === "ready") return readyPublicationReason(story);
     if (state === "draft") return "원고는 있지만 검수 통과 또는 회차 등록 기록이 없어 운영자 확인이 필요합니다.";
@@ -1062,13 +1068,20 @@
 
   function stalledPrologueResolution(story, state) {
     if (state === "quality") {
-      const issue = (story.review?.issues || []).find((item) => ["critical", "warning"].includes(item.severity)) || story.review?.issues?.[0];
-      return `해결 방법 · ${issue?.suggestion || "검수 결과를 열어 지적 부분만 다시 보완하거나, 안전성 문제가 없다면 현재 원고를 운영자 승인합니다."}`;
+      const issue = (story.review?.issues || []).find((item) => item.severity === "critical")
+        || (story.review?.issues || []).find((item) => item.severity === "warning")
+        || story.review?.issues?.[0];
+      return `해결 방법 · ${issue?.suggestion || "검수 결과를 열어 반드시 수정할 부분만 다시 보완하거나, 내용을 직접 확인한 뒤 현재 원고를 운영자 승인합니다."}`;
     }
     if (state === "error") return "해결 방법 · 오류 단계 재개를 누르면 완성 원고를 유지하고 멈춘 검수부터 다시 시작합니다.";
     if (state === "ready") return "해결 방법 · 연결된 자동연재 설정의 상태와 공개 방식을 확인하세요. 조건이 충족되면 다음 자동 처리에서 회차로 등록됩니다.";
     if (state === "draft") return "해결 방법 · 원고·로그에서 마지막 상태를 확인한 뒤 필요하면 프롤로그 제작을 다시 요청하세요.";
     return "해결 방법 · 프롤로그 제작 시작을 누르면 기존 설정집을 이용해 같은 대기열에 추가합니다.";
+  }
+
+  function qualityCriticalCount(review = {}) {
+    return (Array.isArray(review?.issues) ? review.issues : [])
+      .filter((issue) => issue?.severity === "critical").length;
   }
 
   function readyPublicationReason(story) {
@@ -2214,9 +2227,12 @@
     section.className = "quality-hold-actions";
     const copy = document.createElement("div");
     const title = document.createElement("strong");
-    title.textContent = "원고 작성은 끝났고, 회차 등록만 보류된 상태입니다.";
+    const criticalCount = qualityCriticalCount(review);
+    title.textContent = criticalCount
+      ? `원고 작성은 끝났지만 반드시 수정할 항목 ${criticalCount}건이 남았습니다.`
+      : "원고 작성은 끝났지만 큰 폭의 품질 미달이 남았습니다.";
     const detail = document.createElement("p");
-    detail.textContent = `자동 보완 ${Number(run.rewriteCount || 0)}회, 운영자 표적 보완 ${Number(run.operatorRewriteCount || 0)}회를 거쳤지만 위 기준이 남았습니다. 지적 부분만 다시 보완하거나 현재 원고를 운영자 판단으로 승인할 수 있습니다.`;
+    detail.textContent = `작은 감점과 수정 권장은 자동 보완 2회 뒤 시스템이 승인합니다. 이 원고는 자동 보완 ${Number(run.rewriteCount || 0)}회, 운영자 표적 보완 ${Number(run.operatorRewriteCount || 0)}회를 거친 뒤에도 공개 전 확인이 필요한 항목이 남았습니다. 지적 부분만 다시 보완하거나 원고를 직접 확인한 뒤 승인할 수 있습니다.`;
     copy.append(title, detail);
     const actions = document.createElement("div");
     if (Number(review.scores?.canonConsistency || 0) < 95 || Number(review.scores?.causality || 0) < 90) {

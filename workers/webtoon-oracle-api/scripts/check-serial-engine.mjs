@@ -59,6 +59,10 @@ const writingPayloadSource = serialServiceSource.slice(
   serialServiceSource.indexOf("function writingPayload"),
   serialServiceSource.indexOf("function editorialBible")
 );
+const acceptEditorialReviewSource = serialServiceSource.slice(
+  serialServiceSource.indexOf("async function acceptEditorialReview"),
+  serialServiceSource.indexOf("async function queueEpisodeCardRepair")
+);
 const retryQueueRouteSource = serverSource.slice(
   serverSource.indexOf('app.post("/api/storyheaven/operator/serial-engine/queue/:id/retry"'),
   serverSource.indexOf('app.post("/api/storyheaven/operator/serial-engine/process"')
@@ -105,6 +109,10 @@ assert.equal(shouldRepairEpisodeCard({
 }), false);
 assert.match(serialServiceSource, /type: "revise_episode_card"/u, "structural quality failures must queue a card repair stage");
 assert.match(serialServiceSource, /cardRepairCount: Number\(runInput\.cardRepairCount/u, "card repair must be bounded in durable run input");
+assert.ok(
+  acceptEditorialReviewSource.indexOf("shouldRepairEpisodeCard") < acceptEditorialReviewSource.indexOf("if (!decision.rewriteAllowed)"),
+  "structural failures must repair the episode card before spending ordinary prose rewrites"
+);
 assert.match(serialServiceSource, /episodeUpdateBinds\(episodeId, draft, qa\)/u, "published episode replacement must use update-only Oracle binds");
 assert.doesNotMatch(serialServiceSource, /\{ \.\.\.episodeBinds\(episodeId, queue, draft, qa\), revision_no:/u, "published episode replacement must not pass insert-only binds");
 const strongPilot = buildStoryHeavenOpeningPilotAssessment([
@@ -816,6 +824,19 @@ assert.equal(concept.readerAppealPlan.recentConceptComparison.fingerprint.episod
 assert.equal(concept.developmentRoom.candidates.length, 4);
 assert.equal(concept.developmentRoom.selectionReport.selectedCandidateId, "candidate-bus");
 assert.equal(concept.storyCore.longTailSources.length, 4);
+const normalizedConceptEnums = normalizeStoryHeavenSerialWorkerResult("concept_gate", {
+  ...concept,
+  premiseAudit: {
+    ...concept.premiseAudit,
+    entryType: " NATIVE ",
+    priorLifeSkillRelation: " NONE ",
+    abilityPlan: { ...concept.premiseAudit.abilityPlan, mode: " SINGLE_TWIST ", targetType: " PERSON " }
+  },
+  readerAppealPlan: { ...concept.readerAppealPlan, dominantPleasure: " MYSTERY " }
+});
+assert.equal(normalizedConceptEnums.premiseAudit.entryType, "native");
+assert.equal(normalizedConceptEnums.premiseAudit.abilityPlan.mode, "single_twist");
+assert.equal(normalizedConceptEnums.readerAppealPlan.dominantPleasure, "mystery");
 const genreExperiencePlan = {
   corePromise: "위험한 세계를 이동하며 임무와 동료와 강적을 만나고 선택의 대가로 책임과 해결 방식이 달라진다.",
   progressionLoop: "승객 사건의 해결이 도윤의 운전 능력뿐 아니라 해진과의 신뢰, 회사의 권한, 다음 노선의 선택지를 누적해서 바꾼다.",
@@ -1878,7 +1899,27 @@ const advisoryReview = {
   issues: [{ code: "minor_clarity", severity: "warning" }],
   rewriteScenes: [4]
 };
+assert.equal(decideStoryHeavenSerialReview({ qa, review: advisoryReview, rewriteCount: 0, episodeNo: 1 }).state, "rewrite_required");
 assert.equal(decideStoryHeavenSerialReview({ qa, review: advisoryReview, rewriteCount: 2, episodeNo: 1 }).state, "approved");
+assert.equal(
+  decideStoryHeavenSerialReview({ qa, review: advisoryReview, rewriteCount: 2, episodeNo: 1 }).approvalReason,
+  "bounded_rewrite_advisory_only"
+);
+const minorScoreMiss = decideStoryHeavenSerialReview({
+  qa,
+  review: { ...review, decision: "rewrite_required", scores: { ...scores, openingGrip: 86 }, rewriteScenes: [1] },
+  rewriteCount: 2,
+  episodeNo: 1
+});
+assert.equal(minorScoreMiss.state, "approved");
+assert.equal(minorScoreMiss.advisoryApproval, true);
+const severeScoreMiss = decideStoryHeavenSerialReview({
+  qa,
+  review: { ...review, decision: "rewrite_required", scores: { ...scores, openingGrip: 60 }, rewriteScenes: [1] },
+  rewriteCount: 2,
+  episodeNo: 1
+});
+assert.equal(severeScoreMiss.state, "blocked");
 const criticalReview = {
   ...advisoryReview,
   issues: [{ code: "canon_break", severity: "critical" }]

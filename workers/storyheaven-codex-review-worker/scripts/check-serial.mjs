@@ -173,7 +173,7 @@ assert.match(conceptPrompt, /diligent student, a matching otherworldly administr
 assert.match(conceptPrompt, /humanPremise without invented nouns or rules/u);
 assert.match(conceptPrompt, /recentConceptComparison/u);
 assert.match(conceptPrompt, /주인공의 공감 가능한 결핍/u);
-assert.match(conceptPrompt, /growth\|problem_solving\|relationship\|mystery/u);
+assert.match(conceptPrompt, /growth, problem_solving, relationship, mystery/u);
 assert.match(conceptPrompt, /real-world task directly into the matching fantasy job/u);
 assert.match(conceptPrompt, /usesMatchingTaskTransfer must be false/u);
 assert.match(conceptPrompt, /nameKnownBeforeIntroduction/u);
@@ -279,6 +279,23 @@ assert.match(selectionPrompt, /immutable candidates/u);
 assert.match(selectionPrompt, /Do not invent a fifth candidate/u);
 assert.match(selectionPrompt, /Do not reproduce developmentRoom\.candidates/u);
 assert.match(selectionPrompt, /server attaches the authoritative slate/u);
+assert.match(selectionPrompt, /never copy a pipe-delimited list/u);
+assert.match(selectionPrompt, /"entryType":"native"/u);
+assert.match(selectionPrompt, /"dominantPleasure":"adventure"/u);
+
+const entryTypeRetryPrompt = buildSerialPrompt({
+  ...job,
+  type: "concept_selection",
+  attemptCount: 2,
+  previousErrorCode: "review_api_422_serial_premise_entry_type_invalid",
+  payload: {
+    schedule: { policy: { creativeControls: { novelty: 2 } } },
+    developmentCandidates: [{ candidateId: "candidate-1" }],
+    recentConcepts: []
+  }
+});
+assert.match(entryTypeRetryPrompt, /premiseAudit\.entryType must be exactly one lowercase value/u);
+assert.match(entryTypeRetryPrompt, /Never return the pipe-delimited list/u);
 
 const recentConceptPrompt = buildSerialPrompt({
   ...job,

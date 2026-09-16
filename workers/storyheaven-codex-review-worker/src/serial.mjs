@@ -21,7 +21,7 @@ export const SERIAL_JOB_TYPES = Object.freeze([
 ]);
 const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-07-direction-quality-v31";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-16-bounded-auto-review-v32";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -107,6 +107,18 @@ function serialRetryInstruction(job = {}) {
   }
   if (code === "review_api_422_serial_character_competence_invalid") {
     return `${prefix} Every characters[].competence value must be a concrete 10-300 character description of something the character can demonstrably do well in scenes. Do not return a short category label.`;
+  }
+  if (code === "review_api_422_serial_premise_entry_type_invalid") {
+    return `${prefix} premiseAudit.entryType must be exactly one lowercase value: native, summoned, transported, reincarnated, possessed, regressed, or other. Never return the pipe-delimited list from the contract. Use native when the selected protagonist already belongs to the story world and does not cross worlds, lives, bodies, or time.`;
+  }
+  if (code === "review_api_422_serial_reader_appeal_dominant_pleasure_invalid") {
+    return `${prefix} readerAppealPlan.dominantPleasure must be exactly one lowercase value: growth, problem_solving, relationship, mystery, survival, wonder, humor, healing, revenge, adventure, or other. Never return the pipe-delimited list from the contract.`;
+  }
+  if (code === "review_api_422_serial_recent_concept_nearest_invalid") {
+    return `${prefix} readerAppealPlan.recentConceptComparison.nearestTitle must exactly copy one title from payload.recentConcepts. Do not paraphrase, shorten, decorate, or invent the title.`;
+  }
+  if (code === "review_api_422_serial_recent_structure_too_similar") {
+    return `${prefix} The selected concept overlaps too many recent structural fingerprint axes. Select a genuinely different candidate or revise the selection without changing candidate identity so overlapAxisCount is at most 2, and make the stated structural differences true in the fingerprint and story plan.`;
   }
   if (code.startsWith("review_api_422_serial_")) {
     return `${prefix} Inspect the field named by the validation code against the result contract before returning.`;
@@ -273,7 +285,7 @@ function premiseCoherenceInstruction(type, payload = {}) {
     return "Reject candidates that depend on an unexplained transition, instant trust for an outsider, knowledge of an unintroduced name, a mundane task copied into a matching fantasy job, or a multi-step novelty trigger. Candidate simplicity must not hide a causality gap.";
   }
   if (isConceptDecisionStage(type)) {
-    return "A premiseAudit is mandatory for every new concept and is a server-enforced coherence gate. Choose one entryType and explain the transition cause, outsider reception, name-information source, language rule, first acceptance condition, familiar genre foundation, one differentiator, and the complete ability plan. Do not transfer a protagonist from a real-world task directly into the matching fantasy job, title, tool, or magic. Prior-life experience may affect a later choice only indirectly. For summoned, transported, reincarnated, possessed, or regressed protagonists, immediateAcceptance and nameKnownBeforeIntroduction must both be false: locals must react to an unknown outsider with understandable caution, confusion, verification, pressure, sponsorship, or exchange, and no one may use the protagonist's true name before hearing or discovering it through an established rule. Keep a power easy to repeat in one sentence: one core effect, one activation condition, one cost or limit, and at most one extra rule. hasMultiStepTrigger must be false; never chain unrelated chores, gestures, household objects, words, or coincidences into an activation ritual. For every non-none power, targetType, eligibilityRule, requiredEvidence, and forbiddenInference are mandatory. Define exactly who or what qualifies as the target and what observable proof must appear before activation. An enemy, witness, enforcer, nearby person, or convenient object never becomes a target merely because the scene needs their ability or information.";
+    return "A premiseAudit is mandatory for every new concept and is a server-enforced coherence gate. Every contract value written with pipes shows allowed alternatives, not a literal value: always return exactly one lowercase option and never copy a pipe-delimited list. premiseAudit.entryType must be one of native, summoned, transported, reincarnated, possessed, regressed, or other; use native when the protagonist already belongs to the story world. readerAppealPlan.dominantPleasure must be one of growth, problem_solving, relationship, mystery, survival, wonder, humor, healing, revenge, adventure, or other. Choose one entryType and explain the transition cause, outsider reception, name-information source, language rule, first acceptance condition, familiar genre foundation, one differentiator, and the complete ability plan. Do not transfer a protagonist from a real-world task directly into the matching fantasy job, title, tool, or magic. Prior-life experience may affect a later choice only indirectly. For summoned, transported, reincarnated, possessed, or regressed protagonists, immediateAcceptance and nameKnownBeforeIntroduction must both be false: locals must react to an unknown outsider with understandable caution, confusion, verification, pressure, sponsorship, or exchange, and no one may use the protagonist's true name before hearing or discovering it through an established rule. Keep a power easy to repeat in one sentence: one core effect, one activation condition, one cost or limit, and at most one extra rule. hasMultiStepTrigger must be false; never chain unrelated chores, gestures, household objects, words, or coincidences into an activation ritual. For every non-none power, targetType, eligibilityRule, requiredEvidence, and forbiddenInference are mandatory. Define exactly who or what qualifies as the target and what observable proof must appear before activation. An enemy, witness, enforcer, nearby person, or convenient object never becomes a target merely because the scene needs their ability or information.";
   }
   const audit = payload?.premiseAudit
     || payload?.concept?.premiseAudit
@@ -649,9 +661,9 @@ function resultContract(type, payload = {}) {
       longTailSources: ["3-7개 독립적인 장기 확장 원천"]
     },
     premiseAudit: {
-      entryType: "native|summoned|transported|reincarnated|possessed|regressed|other",
+      entryType: "native",
       usesMatchingTaskTransfer: false,
-      priorLifeSkillRelation: "none|indirect",
+      priorLifeSkillRelation: "none",
       transitionCause: "진입 또는 사건 전환의 인과 20-400자",
       localReception: "낯선 주인공을 대하는 현지 반응과 검증 과정 30-500자",
       immediateAcceptance: false,
@@ -662,14 +674,14 @@ function resultContract(type, payload = {}) {
       familiarGenreFoundation: "독자가 바로 알아볼 장르 기반 20-300자",
       differentiator: "한 가지 절제된 차별점 10-240자",
       abilityPlan: {
-        mode: "none|familiar|single_twist",
+        mode: "familiar",
         coreAbility: "핵심 효과 하나 5-180자",
         activation: "발동 조건 하나 5-140자",
         costOrLimit: "대가나 한계 하나 5-180자",
         extraRuleCount: 0,
         hasMultiStepTrigger: false,
         readerExplanation: "중학생도 한 번에 이해할 한 문장 10-180자",
-        targetType: "none|self|person|object|place|contract_party|promise_party|other",
+        targetType: "person",
         eligibilityRule: "누가 또는 무엇이 효과 대상 자격을 얻는지 예외 없이 판정하는 규칙 20-400자",
         requiredEvidence: "발동 전에 원고에서 독자가 직접 확인해야 하는 서명·행동·물증·관계 20-400자",
         forbiddenInference: "적대자·목격자·집행자·근처 사람이라는 이유만으로 대상이라 추론할 수 없다는 금지 조건 20-400자"
@@ -682,7 +694,7 @@ function resultContract(type, payload = {}) {
       personalStake: "실패가 주인공 개인에게 아픈 이유 20-300자",
       flawedChoicePattern: "문제를 키울 수 있는 반복 선택 20-300자",
       firstRelationshipFriction: "각자 목적 때문에 생기는 첫 관계 마찰 30-400자",
-      dominantPleasure: "growth|problem_solving|relationship|mystery|survival|wonder|humor|healing|revenge|adventure|other",
+      dominantPleasure: "adventure",
       familiarGenreRewards: ["2-4개 익숙한 장르 보상"],
       prologueRewards: ["2-3개 프롤로그에서 실제 일어날 보상"],
       earlyEpisodePlan: [

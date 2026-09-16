@@ -3167,11 +3167,11 @@ export function createStoryHeavenSerialService({
       { run_id: job.RUN_ID, quality_json: clobJson({ deterministic: qa, editorial: review, decision }) }
     );
     if (decision.state === "approved") return approveDraft(connection, run, draft);
+    if (shouldRepairEpisodeCard({ decision, runInput: parseJson(run.INPUT_JSON, {}), review })) {
+      await queueEpisodeCardRepair(connection, run, review, { requestedBy: "system" });
+      return;
+    }
     if (!decision.rewriteAllowed) {
-      if (shouldRepairEpisodeCard({ decision, runInput: parseJson(run.INPUT_JSON, {}), review })) {
-        await queueEpisodeCardRepair(connection, run, review, { requestedBy: "system" });
-        return;
-      }
       const recoveredCandidate = await findBestApprovedDraft(connection, run, draft.ID);
       if (recoveredCandidate) {
         await recordRecoveredApproval(connection, run, recoveredCandidate, "later_rewrite_regressed");
