@@ -1427,6 +1427,7 @@ export function createStoryHeavenSerialService({
         ? serialMemory.pilotAssessment
         : {};
       if (assessment.operatorDecision === "promoted") {
+        await releaseOpeningPilotTogether(connection, storyId);
         return {
           action,
           alreadyPromoted: true,
@@ -1469,6 +1470,7 @@ export function createStoryHeavenSerialService({
           })
         }
       );
+      await releaseOpeningPilotTogether(connection, storyId);
       return {
         action,
         alreadyPromoted: false,
@@ -3392,7 +3394,7 @@ export function createStoryHeavenSerialService({
         { story_id: run.STORY_ID, reveal_key: reveal.key, reveal_status: reveal.status, source_episode_no: run.EPISODE_NO }
       );
     }
-    await updateSerialMemory(connection, run);
+    const pilotAssessment = await updateSerialMemory(connection, run);
     const releaseAt = dateOrNull(run.RELEASE_AT) || new Date();
     await connection.execute(
       `insert into storyheaven_publication_queue (
@@ -3407,6 +3409,9 @@ export function createStoryHeavenSerialService({
               failure_code = null, completed_at = systimestamp, updated_at = systimestamp where id = :run_id`,
       { run_id: run.ID }
     );
+    if (Number(run.EPISODE_NO) === 3 && pilotAssessment?.operatorDecision === "promoted") {
+      await releaseOpeningPilotTogether(connection, run.STORY_ID);
+    }
     if (run.SCHEDULE_ID && Number(run.EPISODE_NO) === 1) {
       const timing = await selectOne(connection,
         `select round((cast(systimestamp as date) - cast(min(nvl(started_at, created_at)) as date)) * 86400, 2) as duration_seconds
@@ -3454,12 +3459,12 @@ export function createStoryHeavenSerialService({
       { story_id: run.STORY_ID, episode_no: run.EPISODE_NO });
     const techniquePlan = parseJson(card?.TECHNIQUE_PLAN_JSON, {});
     const plan = techniquePlan.continuityMemoryPlan;
-    if (!plan || typeof plan !== "object") return;
+    if (!plan || typeof plan !== "object") return null;
 
     const bible = await selectOne(connection,
       `select narrative_blueprint_json from storyheaven_serial_bibles where story_id = :story_id for update`,
       { story_id: run.STORY_ID });
-    if (!bible) return;
+    if (!bible) return null;
     const blueprint = parseJson(bible.NARRATIVE_BLUEPRINT_JSON, {});
     const previous = blueprint.serialMemory && typeof blueprint.serialMemory === "object"
       ? blueprint.serialMemory
@@ -3547,6 +3552,27 @@ export function createStoryHeavenSerialService({
               updated_at = systimestamp
         where story_id = :story_id`,
       { story_id: run.STORY_ID, narrative_blueprint_json: clobJson({ ...blueprint, serialMemory }) }
+    );
+    return pilotAssessment;
+  }
+
+  async function releaseOpeningPilotTogether(connection, storyId) {
+    const releaseAt = new Date();
+    await connection.execute(
+      `update storyheaven_serial_runs
+          set release_at = :release_at, updated_at = systimestamp
+        where story_id = :story_id
+          and episode_no between 1 and 3
+          and run_status = 'ready'`,
+      { story_id: storyId, release_at: releaseAt }
+    );
+    await connection.execute(
+      `update storyheaven_publication_queue
+          set release_at = :release_at, updated_at = systimestamp
+        where story_id = :story_id
+          and episode_no between 1 and 3
+          and queue_status = 'ready'`,
+      { story_id: storyId, release_at: releaseAt }
     );
   }
 

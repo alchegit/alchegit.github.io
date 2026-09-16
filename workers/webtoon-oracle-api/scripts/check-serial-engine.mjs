@@ -166,6 +166,13 @@ assert.equal(validateStoryHeavenSerialSchedule({
 assert.match(serialServiceSource, /statusCounts/u, "queue API must expose status counts");
 assert.match(serialServiceSource, /pilotAssessment\.operatorDecision'[^]*= 'promoted'/u, "incubated opening episodes must stay held until a durable system or operator promotion");
 assert.match(serialServiceSource, /promotionMode: "system_auto"/u, "a strong three-installment pilot must support automatic promotion");
+assert.match(serialServiceSource, /async function releaseOpeningPilotTogether/u, "promoted opening pilots must have a simultaneous release operation");
+assert.match(serialServiceSource, /episode_no between 1 and 3[\s\S]*queue_status = 'ready'/u, "all three ready pilot installments must share the promotion release time");
+assert.match(
+  serialServiceSource,
+  /const pilotAssessment = await updateSerialMemory[\s\S]*insert into storyheaven_publication_queue[\s\S]*await releaseOpeningPilotTogether\(connection, run\.STORY_ID\)/u,
+  "automatic promotion must release the pilot only after its third publication row exists"
+);
 assert.match(serialServiceSource, /serial_pilot_override_required/u, "a weak pilot must require an explicit operator override");
 assert.match(serialServiceSource, /async function resolveOpeningPilot/u, "opening pilots must expose a durable promotion operation");
 assert.match(serialServiceSource, /operator_pilot_rewrite/u, "an unpublished pilot installment must be replaceable without deleting its audit history");
@@ -271,6 +278,7 @@ assert.match(serialOperatorSource, /proseStyleId:/u, "operator requests must sub
 assert.match(serialOperatorSource, /"style\.voiceAdherence": "문체 적합도"/u, "operator reviews must label prose-style evidence clearly");
 assert.match(serialOperatorHtml, /name="openingPilotMode" value="three_episode_incubation" checked/u, "new serials must default to a three-installment pilot");
 assert.match(serialOperatorHtml, /name="openingPilotApprovalMode" value="system_auto" checked/u, "strong pilots must default to automatic promotion");
+assert.match(serialOperatorHtml, /통과 시 세 편을 동시에 공개/u, "the operator must see that a promoted opening pilot releases together");
 assert.match(serialOperatorHtml, /네 개의 기획 후보를 점수로 비교해 가장 나은 기획 하나/u, "operators must know concept selection already happens before the three-installment pilot");
 assert.match(serialOperatorSource, /function renderDevelopmentComparison/u, "operator run details must render all concept candidates and the selection rationale");
 assert.match(managedStoriesHtml, /value="managed" selected>운영 중/u, "managed stories must hide archived works by default");

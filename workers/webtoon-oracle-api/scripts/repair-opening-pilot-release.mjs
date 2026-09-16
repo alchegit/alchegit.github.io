@@ -37,16 +37,9 @@ const repaired = await withTransaction(async (connection) => {
   if (result.rows.length !== 3) throw new Error("opening_pilot_publications_incomplete");
   const assessment = parseJson(result.rows[0].NARRATIVE_BLUEPRINT_JSON, {})?.serialMemory?.pilotAssessment || {};
   if (assessment.operatorDecision !== "promoted") throw new Error("opening_pilot_not_promoted");
-  const cadenceMinutes = Number(result.rows[0].CADENCE_MINUTES
-    ?? Number(result.rows[0].CADENCE_DAYS || 1) * 1_440);
-  const first = result.rows[0];
-  const releaseBase = dateValue(first.PUBLICATION_RELEASE_AT)
-    || dateValue(first.RUN_RELEASE_AT)
-    || dateValue(first.CREATED_AT)
-    || new Date();
+  const releaseAt = new Date();
   const releases = [];
   for (const row of result.rows) {
-    const releaseAt = new Date(releaseBase.getTime() + (Number(row.EPISODE_NO) - 1) * cadenceMinutes * 60_000);
     if (row.QUEUE_STATUS === "ready") {
       await connection.execute(
         `update storyheaven_serial_runs set release_at = :release_at, updated_at = systimestamp where id = :run_id`,
@@ -57,11 +50,17 @@ const repaired = await withTransaction(async (connection) => {
         { publication_id: row.PUBLICATION_ID, release_at: releaseAt }
       );
     }
-    releases.push({ episodeNo: Number(row.EPISODE_NO), status: row.QUEUE_STATUS, releaseAt: releaseAt.toISOString() });
+    releases.push({
+      episodeNo: Number(row.EPISODE_NO),
+      status: row.QUEUE_STATUS,
+      releaseAt: row.QUEUE_STATUS === "ready"
+        ? releaseAt.toISOString()
+        : (dateValue(row.PUBLICATION_RELEASE_AT) || dateValue(row.RUN_RELEASE_AT) || dateValue(row.CREATED_AT))?.toISOString() || null
+    });
   }
   return {
     storyId,
-    cadenceMinutes,
+    releaseMode: "opening_pilot_simultaneous",
     publicationMode: result.rows[0].PUBLICATION_MODE,
     pilotAssessment: assessment,
     releases
