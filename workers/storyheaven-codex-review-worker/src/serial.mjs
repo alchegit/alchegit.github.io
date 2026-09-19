@@ -21,7 +21,7 @@ export const SERIAL_JOB_TYPES = Object.freeze([
 ]);
 const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-19-causal-repair-ledger-v33";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-20-continuity-reader-v34";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -53,6 +53,8 @@ export function buildSerialPrompt(job) {
     genreExperienceAndStyleInstruction(type, job.payload),
     causalIntegrityInstruction(type),
     repairLedgerInstruction(type, job.payload),
+    "When continuityContext is present, its numbered ending excerpts come only from previously approved or published installments. Carry forward the last physical location, held objects, wounds, known information, emotional cost, and unresolved choice. A planned future event is not an accomplished fact. Bridge any change through a visible action. Do not repeat a previous episode's resolution or explanatory dialogue as a new payoff. Reviewers must compare the opening against these same excerpts.",
+    "Create pleasure through a legible desire, difficult choice, and concrete consequence. Rules support that experience: do not repeatedly replace action, discovery, training, personal conflict, or earned progress with signatures, permits, declarations, and procedural explanations. When a rule is already understood, show its next consequence rather than explaining it again. Preserve the selected narrative direction; serious growth, revenge, loss, or dread must not be interrupted by forced jokes. In playful stories, humor may arise from conflicting motives and recognizable behavior without cancelling real stakes.",
     naturalKoreanInstruction(type),
     ["write_draft", "rewrite_draft"].includes(type)
       ? "Manuscript length is counted after removing ALL whitespace, including spaces and line breaks. The minimum is 2500 non-whitespace characters and the maximum is 12000. Aim for at least 3200 non-whitespace characters to avoid an accidental undershoot. If deterministicQa reports body_too_short, expand the existing planned scenes with concrete action, dialogue, and necessary context until the minimum is met; the surgical-edit rule does not require preserving an undersized draft. Do not pad with repeated explanation or introduce a new premise."

@@ -4,10 +4,24 @@
   const API_BASE = (document.querySelector("meta[name='storyheaven-api-base']")?.content || "").replace(/\/+$/u, "");
   const id = new URLSearchParams(location.search).get("id");
   const state = { story: null, episodes: [], current: null, editorial: null, remoteEpisodeNumbers: new Set(), local: false, serverBacked: false, progressTimer: 0, localProgressTimer: 0, storyViewRecorded: false, lastProgressAt: 0, lastProgressRatio: 0, commentParents: { story: null, episode: null } };
+  let episodeRequest = 0;
+  let openingEpisode = false;
+  let reportTarget = null;
+  const commentRequests = { story: 0, episode: 0 };
+  const commentPages = { story: [], episode: [] };
+  const commentDrafts = new Map();
 
   document.addEventListener("DOMContentLoaded", init);
 
   async function init() {
+    StoryHeavenReaderControls.init({ move: moveEpisode, select: (number) => openEpisode(number, true), exit: exitReader });
+    document.querySelector('[data-close-comment-report]').addEventListener('click', () => document.querySelector('[data-comment-report-dialog]').close());
+    document.querySelector('[data-comment-report-form]').addEventListener('submit', submitCommentReport);
+    addEventListener('popstate', () => {
+      const number = Number(new URLSearchParams(location.search).get('episode'));
+      if (number) openEpisode(number, true, false, false);
+      else exitReader(false);
+    });
     document.querySelector("[data-report-form]").addEventListener("submit", submitReport);
     document.querySelector("[data-read-first]").addEventListener("click", () => {
       const episodeNo = resumeEpisodeNo() || state.episodes[0]?.episodeNo;
@@ -167,8 +181,14 @@
     }
   }
 
-  async function openEpisode(episodeNo, scrollToReader, restoreSavedPosition = false) {
+  async function openEpisode(episodeNo, scrollToReader, restoreSavedPosition = false, updateHistory = true) {
     if (!episodeNo) return;
+    if (!openingEpisode) saveLocalReadingProgress();
+    clearTimeout(state.progressTimer);
+    clearTimeout(state.localProgressTimer);
+    const request = ++episodeRequest;
+    openingEpisode = true;
+    document.querySelector('[data-reader]').setAttribute('aria-busy', 'true');
     try {
       let episode;
       if (state.editorial) {
@@ -192,20 +212,49 @@
           { auth: Boolean(StoryHeavenCommon.state.session) }
         ));
       }
+      if (request !== episodeRequest) return;
+      if (state.current) commentDrafts.set(state.current.episodeNo, document.querySelector('[data-comment-input=episode]').value);
       state.current = episode;
-      renderReader();
+      state.lastProgressAt = 0;
+      state.lastProgressRatio = 0;
+      clearReply('episode');
+      const commentInput = document.querySelector('[data-comment-input=episode]');
+      commentInput.value = commentDrafts.get(episode.episodeNo) || '';
+      updateCommentLength({ currentTarget: commentInput });
       rememberCurrentEpisode();
+      renderReader();
       renderEpisodeList();
       updateReadButton();
       loadComments("episode");
       recordEpisodeView(episode);
       const url = new URL(location.href);
       url.searchParams.set("episode", String(episode.episodeNo));
-      history.replaceState(null, "", url);
+      if (updateHistory && url.href !== location.href) history.pushState(null, "", url);
       if (scrollToReader) scrollToEpisode(restoreSavedPosition);
     } catch (error) {
-      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+      if (request === episodeRequest) StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    } finally {
+      if (request === episodeRequest) {
+        openingEpisode = false;
+        document.querySelector('[data-reader]').removeAttribute('aria-busy');
+      }
     }
+  }
+
+  function exitReader(updateHistory = true) {
+    saveLocalReadingProgress();
+    episodeRequest += 1;
+    openingEpisode = false;
+    clearTimeout(state.progressTimer);
+    clearTimeout(state.localProgressTimer);
+    document.querySelector('[data-reader]').hidden = true;
+    StoryHeavenReaderControls.hide();
+    if (updateHistory) {
+      const url = new URL(location.href);
+      url.searchParams.delete('episode');
+      history.pushState(null, '', url);
+    }
+    document.querySelector('.episode-library').scrollIntoView({ block: 'start' });
   }
 
   function localEpisodeForViewer(source) {
@@ -248,7 +297,8 @@
     const episode = state.current;
     const reader = document.querySelector("[data-reader]");
     reader.hidden = false;
-    document.querySelector("[data-reader-number]").textContent = `EPISODE ${String(episode.episodeNo).padStart(2, "0")}`;
+    StoryHeavenReaderControls.show(state.story, state.episodes, episode);
+    document.querySelector("[data-reader-number]").textContent = isEditorialStory(state.story) ? installmentLabel(episode.episodeNo) : `${episode.episodeNo}화`;
     document.querySelector("[data-reader-title]").textContent = episode.title;
     document.querySelector("[data-reader-length]").textContent = `${Number(episode.totalCharacters || episode.characterCount || 0).toLocaleString()}자`;
     document.querySelector("[data-reader-time]").textContent = `약 ${episode.estimatedReadMinutes || 1}분`;
@@ -319,7 +369,7 @@
   }
 
   function saveLocalReadingProgress() {
-    if (!state.current) return;
+    if (!state.current || openingEpisode || document.querySelector('[data-reader]').hidden) return;
     window.StoryHeavenReading?.updateProgress(id, state.current.episodeNo, readerRatio());
   }
 
@@ -349,29 +399,37 @@
         : "첫 화 읽기";
   }
 
-  async function loadComments(scope) {
+  async function loadComments(scope, offset = 0) {
+    const token = ++commentRequests[scope];
     const requestedEpisodeNo = scope === "episode" ? Number(state.current?.episodeNo) : null;
     if (!state.serverBacked || (scope === "episode" && !canSyncEpisode(state.current?.episodeNo))) {
       renderComments(scope, { comments: [], count: 0 });
       return;
     }
     const list = document.querySelector(`[data-comment-list='${scope}']`);
-    if (list) {
+    if (list && !offset) {
       const loading = document.createElement("p");
       loading.className = "comment-loading";
       loading.textContent = "댓글을 불러오고 있습니다.";
       list.replaceChildren(loading);
     }
     try {
-      const payload = await StoryHeavenCommon.api(commentEndpoint(scope), { auth: Boolean(StoryHeavenCommon.state.session) });
-      if (scope === "episode" && requestedEpisodeNo !== Number(state.current?.episodeNo)) return;
-      renderComments(scope, payload);
+      const payload = await StoryHeavenCommon.api(`${commentEndpoint(scope)}?offset=${offset}`, { auth: Boolean(StoryHeavenCommon.state.session) });
+      if (token !== commentRequests[scope] || (scope === "episode" && requestedEpisodeNo !== Number(state.current?.episodeNo))) return;
+      const previous = offset ? commentPages[scope] : [];
+      commentPages[scope] = [...new Map([...previous, ...(payload.comments || [])].map((item) => [item.id, item])).values()];
+      renderComments(scope, { ...payload, comments: commentPages[scope] });
     } catch (error) {
+      if (token !== commentRequests[scope] || (scope === "episode" && requestedEpisodeNo !== Number(state.current?.episodeNo))) return;
       if (list) {
         const message = document.createElement("p");
         message.className = "comment-loading";
         message.textContent = "댓글을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.";
-        list.replaceChildren(message);
+        const retry = document.createElement('button');
+        retry.type = 'button'; retry.className = 'button secondary'; retry.textContent = '댓글 다시 불러오기';
+        retry.onclick = () => loadComments(scope, offset);
+        if (offset) list.append(message, retry);
+        else list.replaceChildren(message, retry);
       }
     }
   }
@@ -396,6 +454,12 @@
       }
       return thread;
     }));
+    if (payload.nextOffset != null) {
+      const more = document.createElement('button');
+      more.type = 'button'; more.className = 'button secondary comment-more'; more.textContent = '댓글 더 보기';
+      more.onclick = () => { more.disabled = true; loadComments(scope, payload.nextOffset); };
+      list.append(more);
+    }
     if (scope === "story") state.story.commentCount = count;
     if (scope === "episode" && state.current) {
       state.current.commentCount = count;
@@ -418,15 +482,56 @@
     const body = document.createElement("p");
     body.textContent = comment.bodyText;
     item.append(header, body);
-    if (!reply) {
+    if (comment.removed) body.classList.add('comment-removed');
+    const actions = document.createElement('div');
+    actions.className = 'comment-actions';
+    if (!reply && comment.canReply !== false) {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "comment-reply-button";
       button.textContent = "답글";
       button.addEventListener("click", () => setReply(scope, comment));
-      item.append(button);
+      actions.append(button);
     }
+    if (comment.isMine && !comment.removed) {
+      const button = document.createElement('button'); button.type = 'button'; button.textContent = '삭제';
+      button.onclick = async () => {
+        button.disabled = true;
+        try {
+          await StoryHeavenCommon.api(`/api/storyheaven/comments/${encodeURIComponent(comment.id)}`, { method: 'DELETE' });
+          await loadComments(scope);
+        } catch (error) { StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error)); button.disabled = false; }
+      };
+      actions.append(button);
+    }
+    if (comment.canReport !== false && !comment.isMine) {
+      const button = document.createElement('button'); button.type = 'button'; button.textContent = '신고';
+      button.onclick = () => {
+        if (!StoryHeavenCommon.state.session) return StoryHeavenCommon.login();
+        reportTarget = comment.id;
+        document.querySelector('[data-comment-report-status]').textContent = '';
+        document.querySelector('[data-comment-report-dialog]').showModal();
+      };
+      actions.append(button);
+    }
+    item.append(actions);
     return item;
+  }
+
+  async function submitCommentReport(event) {
+    event.preventDefault();
+    if (!reportTarget) return;
+    const form = event.currentTarget;
+    const button = form.querySelector('[type=submit]');
+    button.disabled = true;
+    try {
+      await StoryHeavenCommon.api(`/api/storyheaven/comments/${encodeURIComponent(reportTarget)}/report`, {
+        method: 'POST', body: { reason: form.elements.reason.value }
+      });
+      document.querySelector('[data-comment-report-dialog]').close();
+      StoryHeavenCommon.toast('신고를 접수했습니다. 운영자가 확인합니다.');
+    } catch (error) { document.querySelector('[data-comment-report-status]').textContent = StoryHeavenCommon.readableError(error); }
+    finally { button.disabled = false; }
   }
 
   function setReply(scope, comment) {
@@ -463,19 +568,33 @@
       return;
     }
     const button = form.querySelector("[data-comment-submit]");
+    const targetEpisode = state.current?.episodeNo;
+    const endpoint = commentEndpoint(scope);
+    let errorNode = form.querySelector('[data-comment-error]');
+    if (!errorNode) {
+      errorNode = document.createElement('p'); errorNode.className = 'comment-error';
+      errorNode.setAttribute('data-comment-error', ''); errorNode.setAttribute('role', 'alert'); form.append(errorNode);
+    }
+    errorNode.textContent = '';
     button.disabled = true;
     button.textContent = "등록 중";
     try {
-      await StoryHeavenCommon.api(commentEndpoint(scope), {
+      await StoryHeavenCommon.api(endpoint, {
         method: "POST",
         body: { bodyText, parentCommentId: state.commentParents[scope]?.id || null }
       });
+      if (scope === 'episode' && targetEpisode !== state.current?.episodeNo) {
+        commentDrafts.delete(targetEpisode);
+        StoryHeavenCommon.toast('이전 회차에 댓글을 등록했습니다.');
+        return;
+      }
       input.value = "";
       updateCommentLength({ currentTarget: input });
       clearReply(scope);
       await loadComments(scope);
       StoryHeavenCommon.toast("댓글을 등록했습니다.");
     } catch (error) {
+      if (scope === 'story' || targetEpisode === state.current?.episodeNo) errorNode.textContent = StoryHeavenCommon.readableError(error);
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
       button.disabled = false;
@@ -517,7 +636,7 @@
   }
 
   function onReaderScroll() {
-    if (!state.current || document.querySelector("[data-reader]").hidden) return;
+    if (!state.current || openingEpisode || document.querySelector("[data-reader]").hidden) return;
     updateReadingProgress();
     clearTimeout(state.localProgressTimer);
     state.localProgressTimer = setTimeout(saveLocalReadingProgress, 500);
@@ -538,6 +657,8 @@
   }
 
   async function saveReadingProgress() {
+    if (!state.current || openingEpisode || document.querySelector('[data-reader]').hidden) return;
+    const current = state.current;
     const total = Number(state.current.totalCharacters || state.current.characterCount || 0);
     const ratio = readerRatio();
     const now = Date.now();
@@ -548,8 +669,10 @@
         method: "PUT",
         body: { episodeNo: state.current.episodeNo, lastCharacterOffset: offset }
       });
-      state.lastProgressAt = now;
-      state.lastProgressRatio = ratio;
+      if (current === state.current) {
+        state.lastProgressAt = now;
+        state.lastProgressRatio = ratio;
+      }
     } catch {
       // Reading must remain uninterrupted when progress sync is temporarily unavailable.
     }
@@ -566,6 +689,7 @@
       return;
     }
     const type = button.dataset.reaction;
+    const current = state.current;
     const selected = button.getAttribute("aria-pressed") !== "true";
     button.disabled = true;
     try {
@@ -573,8 +697,8 @@
         method: "POST",
         body: { reactionType: type, selected }
       });
-      state.current.reactions = reactions;
-      renderReactions(reactions);
+      current.reactions = reactions;
+      if (state.current === current) renderReactions(reactions);
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
@@ -674,16 +798,17 @@
       return;
     }
     document.querySelectorAll("[data-episode-vote]").forEach((item) => { item.disabled = true; });
+    const current = state.current;
     try {
       const { recommendation } = await StoryHeavenCommon.api(
         `/api/storyheaven/stories/${encodeURIComponent(id)}/episodes/${state.current.episodeNo}/recommendation`,
         { method: "POST", body: { voteType: button.dataset.episodeVote } }
       );
-      state.current.recommendation = recommendation;
-      const summary = state.episodes.find((episode) => episode.episodeNo === state.current.episodeNo);
+      current.recommendation = recommendation;
+      const summary = state.episodes.find((episode) => episode.episodeNo === current.episodeNo);
       if (summary) summary.recommendationCount = Number(recommendation.recommend?.count || 0);
       renderEpisodeList();
-      renderRecommendation(recommendation);
+      if (current === state.current) renderRecommendation(recommendation);
     } catch (error) {
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
       renderRecommendation(state.current.recommendation || emptyRecommendation());

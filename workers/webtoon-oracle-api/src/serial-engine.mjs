@@ -903,8 +903,8 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
   const thresholds = storyHeavenSerialQualityThresholds(episodeNo);
   const readerExperienceScore = calculateStoryHeavenReaderExperienceScore(scores);
   const failedMetrics = Object.entries(thresholds)
-    .filter(([name, threshold]) => Number(scores[name]) < threshold)
-    .map(([name, threshold]) => ({ name, score: Number(scores[name] || 0), threshold }));
+    .filter(([name, threshold]) => !Number.isFinite(Number(scores[name])) || scores[name] == null || Number(scores[name]) < threshold)
+    .map(([name, threshold]) => ({ name, score: Number.isFinite(Number(scores[name])) ? Number(scores[name] || 0) : 0, threshold }));
   if (review?.styleAssessment) {
     for (const [name, threshold] of Object.entries(STORYHEAVEN_PROSE_STYLE_QUALITY)) {
       const score = Number(review.styleAssessment.scores?.[name] || 0);
@@ -918,11 +918,14 @@ export function decideStoryHeavenSerialReview({ review, qa, rewriteCount = 0, ep
   const advisoryIssueFailure = Array.isArray(review?.issues)
     && review.issues.some((editorialIssue) => editorialIssue?.severity === "warning");
   const severeMetricFailure = failedMetrics.some(({ score, threshold }) => score < threshold - 8);
+  const unresolvedRepair = Array.isArray(review?.repairVerification)
+    && review.repairVerification.some((item) => item?.status !== "resolved");
   const mandatoryFailure = !qa?.passed || Number(qa?.score || 0) < thresholds.koreanReadability
     || review?.toneAssessment?.fitsDirection === false
     || review?.safetyPassed !== true
     || nextReadFailure
     || criticalIssueFailure
+    || unresolvedRepair
     || severeMetricFailure
     || review?.decision === "blocked";
   const strictApproval = !mandatoryFailure

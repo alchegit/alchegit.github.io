@@ -21,6 +21,7 @@
       renderSubmissions(submissions.submissions || []);
       renderReports(reports.reports || []);
       renderEpisodeSubmissions(episodes.episodes || []);
+      window.StoryHeavenCommentReports?.load();
       await refreshRound();
     } catch (error) {
       showAccess();

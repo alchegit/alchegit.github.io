@@ -59,6 +59,8 @@
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   const queueActionFeedback = new Map();
   const selectedQualityHoldRunIds = new Set();
+  const pendingQualityHoldRunIds = new Set();
+  let bulkQualityHoldPending = false;
   let visibleQualityHoldRunIds = [];
   let draftReady = false;
   let draftSaveTimer = 0;
@@ -118,6 +120,10 @@
     selectors.stalledSelectAll = document.querySelector("[data-stalled-select-all]");
     selectors.stalledSelectedCount = document.querySelector("[data-stalled-selected-count]");
     selectors.stalledBulkRewrite = document.querySelector("[data-stalled-bulk-rewrite]");
+    const qualitySummary = document.createElement("p");
+    qualitySummary.className = "quality-summary";
+    qualitySummary.setAttribute("data-quality-summary", "");
+    document.querySelector("[data-queue-live]").before(qualitySummary);
     selectors.waitingCaption = document.querySelector("[data-waiting-caption]");
     selectors.historySummary = document.querySelector("[data-history-summary]");
     selectors.statusRunning = document.querySelector("[data-status-running]");
@@ -983,6 +989,10 @@
   }
 
   function renderStalledFirstEpisodes(items) {
+    const qualitySummary = latestSerialSnapshot.queue?.qualitySummary;
+    document.querySelector("[data-quality-summary]").textContent = qualitySummary
+      ? `최근 ${qualitySummary.days}일 갱신 회차 · 통과 ${qualitySummary.approved} · 보완 대기 ${qualitySummary.held} · 오류 ${qualitySummary.errors} · 진행 ${qualitySummary.inProgress}`
+      : "";
     selectors.stalledGroup.hidden = !items.length;
     selectors.stalledList.replaceChildren();
     const qualityCount = items.filter((story) => stalledPrologueState(story) === "quality").length;
@@ -1054,6 +1064,7 @@
       }
       row.append(copy, actions);
       selectors.stalledList.append(row);
+      if (pendingQualityHoldRunIds.has(story.latestRunId)) markQualityHoldSubmitting(story.latestRunId);
     }
   }
 
@@ -1073,18 +1084,23 @@
     const selectedCount = visibleQualityHoldRunIds.filter((runId) => selectedQualityHoldRunIds.has(runId)).length;
     selectors.stalledBulk.hidden = visibleQualityHoldRunIds.length === 0;
     selectors.stalledSelectedCount.textContent = `${selectedCount}건 선택`;
-    selectors.stalledBulkRewrite.disabled = selectedCount === 0;
+    selectors.stalledBulkRewrite.disabled = selectedCount === 0 || bulkQualityHoldPending;
+    selectors.stalledSelectAll.disabled = bulkQualityHoldPending;
     selectors.stalledSelectAll.checked = visibleQualityHoldRunIds.length > 0 && selectedCount === visibleQualityHoldRunIds.length;
     selectors.stalledSelectAll.indeterminate = selectedCount > 0 && selectedCount < visibleQualityHoldRunIds.length;
   }
 
   async function bulkRewriteQualityHolds() {
+    if (bulkQualityHoldPending) return;
     const runIds = visibleQualityHoldRunIds.filter((runId) => selectedQualityHoldRunIds.has(runId));
     if (!runIds.length) return;
+    if (runIds.length > 50) return StoryHeavenCommon.toast("한 번에 50건까지 선택해주세요.");
+    bulkQualityHoldPending = true;
+    runIds.forEach((runId) => pendingQualityHoldRunIds.add(runId));
     setButtonBusy(selectors.stalledBulkRewrite, true, `${runIds.length}건 접수 중...`);
     selectors.stalledSelectAll.disabled = true;
     for (const runId of runIds) markQualityHoldSubmitting(runId);
-    StoryHeavenCommon.toast(`${runIds.length}건의 보완 요청을 접수했습니다. 화면을 떠나도 대기열에서 순서대로 처리합니다.`);
+    StoryHeavenCommon.toast(`${runIds.length}건을 서버에 접수 중입니다. 등록 완료 후에는 화면을 닫아도 작업이 계속됩니다.`);
     try {
       const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/runs/resolve-quality-holds", {
         method: "POST",
@@ -1102,9 +1118,12 @@
       await refreshSchedules().catch(() => {});
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     } finally {
+      bulkQualityHoldPending = false;
+      runIds.forEach((runId) => pendingQualityHoldRunIds.delete(runId));
       selectors.stalledSelectAll.disabled = false;
       setButtonBusy(selectors.stalledBulkRewrite, false);
       syncQualityHoldBulkControls();
+      renderStalledFirstEpisodes(latestSerialSnapshot.queue?.stalledFirstEpisodeStories || []);
     }
   }
 
@@ -1189,6 +1208,7 @@
 
   async function resolveQualityHold(story, action, control = null) {
     if (!story?.latestRunId) return;
+    if (pendingQualityHoldRunIds.has(story.latestRunId)) return;
     if (action === "approve") {
       const autoPublic = story.schedule?.publicationMode === "auto_public";
       const warning = autoPublic
@@ -1197,6 +1217,7 @@
       if (!window.confirm(warning)) return;
     }
     if (action === "rewrite") {
+      pendingQualityHoldRunIds.add(story.latestRunId);
       markQualityHoldSubmitting(story.latestRunId);
       StoryHeavenCommon.toast("보완 요청을 접수하고 있습니다. 접수되면 작업은 백그라운드 대기열에서 계속됩니다.");
     }
@@ -1215,6 +1236,9 @@
       if (control) setButtonBusy(control, false);
       await refreshSchedules().catch(() => {});
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    } finally {
+      pendingQualityHoldRunIds.delete(story.latestRunId);
+      renderStalledFirstEpisodes(latestSerialSnapshot.queue?.stalledFirstEpisodeStories || []);
     }
   }
 

@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { buildContinuityContext } from "./serial-continuity.mjs";
 import {
   STORYHEAVEN_CREATIVE_CONTROL_DEFAULTS,
   STORYHEAVEN_OPENING_PILOT_APPROVAL_MODES,
@@ -233,7 +234,12 @@ export function createStoryHeavenSerialService({
         `select serial_run.queue_group_id, serial_run.id as run_id,
                 serial_run.episode_no, job.job_type, job.job_status,
                 job.attempt_count, job.error_code,
-                job.input_json, job.output_json,
+                json_object('criticRole' value json_value(job.input_json, '$.criticRole'
+                  returning varchar2(40) null on error) returning clob) as input_json,
+                json_object('model' value json_value(job.output_json, '$.model'
+                  returning varchar2(160) null on error),
+                  'usage' value json_query(job.output_json, '$.usage'
+                    returning varchar2(4000) null on error) format json returning clob) as output_json,
                 job.started_at, job.completed_at, job.created_at
            from storyheaven_serial_jobs job
           join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
@@ -250,6 +256,16 @@ export function createStoryHeavenSerialService({
       );
       const queue = summarizeQueue(result.rows, timing.rows);
       queue.stalledFirstEpisodeStories = await listStalledFirstEpisodeStories(connection);
+      const quality = await connection.execute(
+        `select run_status, count(*) as run_count from storyheaven_serial_runs
+          where run_type = 'episode' and queue_canceled_at is null
+            and updated_at >= systimestamp - numtodsinterval(7, 'DAY') group by run_status`);
+      const counts = Object.fromEntries(quality.rows.map((row) => [row.RUN_STATUS, Number(row.RUN_COUNT)]));
+      queue.qualitySummary = {
+        days: 7, approved: (counts.ready || 0) + (counts.published || 0),
+        held: counts.blocked || 0, errors: counts.error || 0,
+        inProgress: (counts.running || 0) + (counts.queued || 0) + (counts.rewrite || 0)
+      };
       return queue;
     });
   }
@@ -1736,6 +1752,9 @@ export function createStoryHeavenSerialService({
         `select * from storyheaven_serial_runs where id = :run_id for update`,
         { run_id: runId });
       if (!run) throw failure("serial_run_not_found", 404);
+      if (action === "rewrite" && !run.QUEUE_CANCELED_AT && ["queued", "running", "rewrite"].includes(run.RUN_STATUS)) {
+        return { action, reused: true, run: mapRun(run) };
+      }
       if (run.RUN_STATUS !== "blocked" || run.CURRENT_STAGE !== "editorial_blocked" || run.QUEUE_CANCELED_AT) {
         throw failure("serial_quality_hold_not_active", 409);
       }
@@ -1903,12 +1922,14 @@ export function createStoryHeavenSerialService({
       throw failure("serial_quality_hold_bulk_action_invalid", 400);
     }
     const runIds = [...new Set((Array.isArray(runIdValues) ? runIdValues : [])
-      .map((value) => requireId(value, "run_id")))].slice(0, 50);
+      .map((value) => requireId(value, "run_id")))];
     if (!runIds.length) throw failure("serial_quality_hold_bulk_empty", 400);
+    if (runIds.length > 50) throw failure("serial_quality_hold_bulk_limit", 400);
     const results = await mapWithConcurrency(runIds, 3, async (runId) => {
       try {
         const result = await resolveQualityHold(runId, userId, { ...input, action });
-        return { runId, queued: true, result };
+        return { runId, queued: true, reused: result.reused === true,
+          status: result.run?.status, stage: result.run?.stage };
       } catch (error) {
         return { runId, queued: false, error: cleanCode(error?.message || "serial_quality_hold_bulk_failed") };
       }
@@ -3296,7 +3317,9 @@ export function createStoryHeavenSerialService({
       return;
     }
     if (!decision.rewriteAllowed) {
-      const recoveredCandidate = await findBestApprovedDraft(connection, run, draft.ID);
+      const recoveredCandidate = await findBestApprovedDraft(connection, {
+        ...run, INPUT_JSON: JSON.stringify(effectiveRunInput)
+      }, draft.ID);
       if (recoveredCandidate) {
         await recordRecoveredApproval(connection, run, recoveredCandidate, "later_rewrite_regressed");
         return approveDraft(connection, run, recoveredCandidate.draft);
@@ -3414,6 +3437,8 @@ export function createStoryHeavenSerialService({
       const stored = parseJson(row.OUTPUT_JSON, {});
       const editorial = stored?.result && typeof stored.result === "object" ? stored.result : stored;
       if (!editorial?.scores || !Array.isArray(editorial?.issues)) continue;
+      const obligations = parseJson(run.INPUT_JSON, {}).repairLedger?.obligations || [];
+      if (obligations.some((item) => !editorial.repairVerification?.some((check) => check.key === item.key && check.status === "resolved"))) continue;
       const qa = parseJson(row.DETERMINISTIC_JSON, {});
       const candidateDecision = decideStoryHeavenSerialReview({
         review: editorial,
@@ -4190,6 +4215,29 @@ export function createStoryHeavenSerialService({
   }
 
   async function queueJob(connection, { runId, storyId = null, type, input, priority = 100, maxAttempts: jobMaxAttempts = maxAttempts }) {
+    const episodeNo = Number(input?.episodeNo || input?.episodeCard?.episodeNo || input?.currentCard?.episodeNo);
+    if (storyId && episodeNo > 1 && ["build_episode_card", "revise_episode_card", "write_draft", "rewrite_draft", "line_polish", "editorial_critique", "editorial_review"].includes(type)) {
+      const published = await connection.execute(
+        `select episode_no, title, public_summary, body_text from storyheaven_episodes
+          where story_id = :story_id and episode_no < :episode_no and episode_status = 'published'
+          order by episode_no desc fetch first 2 rows only`,
+        { story_id: storyId, episode_no: episodeNo });
+      const approved = await connection.execute(
+        `select episode_no, title, public_summary, body_text from (
+           select p.episode_no, d.title, d.public_summary, d.body_text,
+                  row_number() over (partition by p.episode_no order by p.created_at desc) as revision_rank
+             from storyheaven_publication_queue p join storyheaven_serial_drafts d on d.id = p.draft_id
+            where p.story_id = :story_id and p.episode_no < :episode_no
+              and p.queue_status in ('ready', 'published')
+         ) where revision_rank = 1 order by episode_no desc fetch first 2 rows only`,
+        { story_id: storyId, episode_no: episodeNo });
+      const rows = [...approved.rows.map((row) => ({ ...row, status: "ready" })),
+        ...published.rows.map((row) => ({ ...row, status: "published" }))];
+      input = { ...input, continuityContext: buildContinuityContext(rows.map((row) => ({
+        episodeNo: Number(row.EPISODE_NO), title: row.TITLE, summary: row.PUBLIC_SUMMARY,
+        body: row.BODY_TEXT, status: row.status
+      })), episodeNo) };
+    }
     const json = JSON.stringify(input ?? {});
     if (Buffer.byteLength(json, "utf8") > STORYHEAVEN_SERIAL_LIMITS.jobPayloadBytes) {
       throw failure("serial_job_payload_too_large", 413);

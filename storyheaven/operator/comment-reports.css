@@ -1,0 +1,10 @@
+.comment-report-panel { margin-bottom:32px; padding:22px 0; border-block:2px solid #313943; }
+.comment-report-panel > header { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.comment-report-panel h2 { font-size:24px; margin:0; }
+.comment-report-row { border-top:1px solid #acb5bc; padding:18px 0; }
+.comment-report-row a,.comment-report-row strong { display:block; margin-bottom:8px; }
+.comment-report-row a { color:#08694e; text-decoration:underline; }
+.comment-report-row p { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.7; }
+.comment-report-row small { color:#46535e; }
+.comment-report-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; }
+@media(max-width:400px) { .comment-report-panel > header { align-items:start; flex-direction:column; } }

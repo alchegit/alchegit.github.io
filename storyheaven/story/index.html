@@ -9,12 +9,14 @@
     <meta name="storyheaven-api-base" content="https://harvard-museum-nails-mission.trycloudflare.com">
     <title>연재 읽기 | StoryHeaven</title>
     <link rel="stylesheet" href="../workspace.css?v=20260809-nav1">
+    <link rel="stylesheet" href="./reader.css?v=20260920">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.7"></script>
-    <script defer src="../common.js?v=20260810-rate1"></script>
+    <script defer src="../common.js?v=20260920"></script>
     <script defer src="../seed-library.js?v=20260730-editorial1"></script>
     <script defer src="../editorial-episodes.js?v=20260730-continuations1"></script>
     <script defer src="../reading-history.js?v=20260731-smartreader1"></script>
-    <script defer src="./story.js?v=20260804-covers1"></script>
+    <script defer src="./reader-controls.js?v=20260920"></script>
+    <script defer src="./story.js?v=20260920"></script>
   </head>
   <body>
     <header class="site-header">
@@ -59,6 +61,7 @@
         </section>
 
         <section class="novel-reader" data-reader hidden aria-labelledby="readerTitle">
+          <div class="reader-topline"><a href="/storyheaven/">StoryHeaven</a><span data-reading-story-title></span><button type="button" data-reader-exit title="작품 소개로" aria-label="작품 소개로"><img src="../assets/icons/x.svg" alt=""></button></div>
           <header class="reader-heading">
             <div><p class="eyebrow" data-reader-number></p><h2 id="readerTitle" data-reader-title></h2></div>
             <div class="reader-stats"><span data-reader-length></span><span data-reader-time></span><span data-reader-views></span></div>
@@ -125,6 +128,22 @@
       </article>
       <section class="gate" data-error hidden><h2>연재를 찾을 수 없습니다.</h2><p>아직 공개 전이거나 주소가 올바르지 않습니다.</p><a class="button" href="/storyheaven/">연재 둘러보기</a></section>
     </main>
+    <nav class="reader-dock" data-reader-dock hidden aria-label="독서 도구">
+      <button type="button" data-dock-prev title="이전 화" aria-label="이전 화"><img src="../assets/icons/arrow-left.svg" alt=""><span>이전</span></button>
+      <button type="button" data-reader-toc title="목차" aria-label="목차"><img src="../assets/icons/list.svg" alt=""><span>목차</span></button>
+      <button type="button" data-reader-settings title="독서 설정" aria-label="독서 설정"><img src="../assets/icons/type.svg" alt=""><span>설정</span></button>
+      <button type="button" data-reader-comments title="회차 댓글" aria-label="회차 댓글"><img src="../assets/icons/message-square.svg" alt=""><span>댓글</span></button>
+      <button type="button" data-dock-next title="다음 화" aria-label="다음 화"><img src="../assets/icons/arrow-right.svg" alt=""><span>다음</span></button>
+    </nav>
+    <dialog class="reader-dialog" data-reader-settings-dialog aria-labelledby="readerSettingsTitle">
+      <form method="dialog"><header><h2 id="readerSettingsTitle">독서 설정</h2><button class="reader-close" aria-label="설정 닫기"><img src="../assets/icons/x.svg" alt=""></button></header></form>
+      <fieldset><legend>글꼴</legend><label><input type="radio" name="readingFont" value="serif" checked>명조</label><label><input type="radio" name="readingFont" value="sans">고딕</label></fieldset>
+      <label class="reader-range">글자 크기 <output data-font-size-value>20</output><input type="range" data-reading-size min="16" max="28" step="1" value="20"></label>
+      <label class="reader-range">줄 간격 <output data-line-height-value>1.9</output><input type="range" data-reading-line min="1.5" max="2.5" step="0.1" value="1.9"></label>
+      <fieldset class="reader-themes"><legend>배경</legend><button type="button" data-reading-theme="paper" title="밝은 종이" aria-label="밝은 종이" aria-pressed="true"></button><button type="button" data-reading-theme="mist" title="부드러운 회색" aria-label="부드러운 회색" aria-pressed="false"></button><button type="button" data-reading-theme="night" title="야간" aria-label="야간" aria-pressed="false"></button></fieldset>
+    </dialog>
+    <dialog class="reader-dialog" data-reader-toc-dialog aria-labelledby="readerTocTitle"><form method="dialog"><header><h2 id="readerTocTitle">목차</h2><button class="reader-close" aria-label="목차 닫기"><img src="../assets/icons/x.svg" alt=""></button></header></form><div data-reader-toc-list></div></dialog>
+    <dialog class="reader-dialog" data-comment-report-dialog aria-labelledby="commentReportTitle"><form method="dialog" data-comment-report-form><header><h2 id="commentReportTitle">댓글 신고</h2><button class="reader-close" type="button" data-close-comment-report aria-label="신고 닫기"><img src="../assets/icons/x.svg" alt=""></button></header><label class="field"><span>사유</span><select name="reason"><option value="abuse">욕설·비방</option><option value="spam">스팸·도배</option><option value="spoiler">스포일러</option><option value="other">기타</option></select></label><button class="button" type="submit">신고 접수</button><p data-comment-report-status role="status"></p></form></dialog>
     <div class="toast" data-common-toast hidden></div>
   </body>
 </html>

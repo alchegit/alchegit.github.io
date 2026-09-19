@@ -30,6 +30,9 @@ import {
   createStoryHeavenSerialService
 } from "./serial-service.mjs";
 import { createStoryHeavenCoverService } from "./story-cover.mjs";
+import { hasCommentProfanity, publicCommentBody, createCommentModerationService } from "./comment-moderation.mjs";
+
+const commentModeration = createCommentModerationService({ withConnection, withTransaction, randomId });
 
 await loadDotEnv();
 
@@ -453,8 +456,9 @@ app.post("/api/storyheaven/stories/:id/view", optionalUser, async (req, res, nex
 
 app.get("/api/storyheaven/stories/:id/comments", optionalUser, async (req, res, next) => {
   try {
-    res.json(await listStoryHeavenComments({
+    res.set("Cache-Control", "no-store").json(await listStoryHeavenComments({
       storyIdValue: req.params.id,
+      offsetValue: req.query.offset,
       user: req.user || null
     }));
   } catch (error) {
@@ -497,9 +501,10 @@ app.get("/api/storyheaven/stories/:id/episodes/:episodeNo", optionalUser, async 
 
 app.get("/api/storyheaven/stories/:id/episodes/:episodeNo/comments", optionalUser, async (req, res, next) => {
   try {
-    res.json(await listStoryHeavenComments({
+    res.set("Cache-Control", "no-store").json(await listStoryHeavenComments({
       storyIdValue: req.params.id,
       episodeNoValue: req.params.episodeNo,
+      offsetValue: req.query.offset,
       user: req.user || null
     }));
   } catch (error) {
@@ -530,6 +535,28 @@ app.post("/api/storyheaven/stories/:id/episodes/:episodeNo/view", optionalUser, 
   } catch (error) {
     next(error);
   }
+});
+
+app.delete("/api/storyheaven/comments/:id", requireUser, commentRateLimiter, async (req, res, next) => {
+  try { res.json(await commentModeration.remove(req.params.id, req.user.id)); }
+  catch (error) { next(error); }
+});
+
+app.post("/api/storyheaven/comments/:id/report", requireUser, commentRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    await ensureUserProfile(req.user, req);
+    res.status(202).json(await commentModeration.report(req.params.id, req.user.id, req.body?.reason));
+  } catch (error) { next(error); }
+});
+
+app.get("/api/storyheaven/operator/comment-reports", requireUser, requireAdminAccount, adminRateLimiter, async (_req, res, next) => {
+  try { res.set("Cache-Control", "no-store").json(await commentModeration.listReports()); }
+  catch (error) { next(error); }
+});
+
+app.post("/api/storyheaven/operator/comment-reports/:id", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try { res.json(await commentModeration.resolve(req.params.id, req.user.id, req.body?.action)); }
+  catch (error) { next(error); }
 });
 
 app.post("/api/storyheaven/stories", requireUser, creationRateLimiter, requireJsonBody, async (req, res, next) => {
@@ -3145,7 +3172,8 @@ async function getStoryHeavenEpisode(storyIdValue, episodeNoValue, user) {
   });
 }
 
-async function listStoryHeavenComments({ storyIdValue, episodeNoValue = null, user = null }) {
+async function listStoryHeavenComments({ storyIdValue, episodeNoValue = null, offsetValue = 0, user = null }) {
+  const offset = Math.max(0, Math.min(10000, Math.trunc(Number(offsetValue) || 0)));
   const storyId = boundedString(storyIdValue, "storyId", 36, { required: true });
   const episodeNo = episodeNoValue === null || episodeNoValue === undefined
     ? null
@@ -3171,23 +3199,25 @@ async function listStoryHeavenComments({ storyIdValue, episodeNoValue = null, us
               where c.story_id = :story_id
                 and ((:episode_id is null and c.episode_id is null) or c.episode_id = :episode_id)
                 and c.parent_comment_id is null
-                and c.comment_status = 'active'
-              order by c.created_at desc
+                and (c.comment_status = 'active' or exists (
+                  select 1 from storyheaven_comments reply
+                   where reply.parent_comment_id = c.id and reply.comment_status = 'active'))
+              order by c.created_at desc, c.id desc
+              offset :root_offset rows fetch next :root_limit rows only
            )
-          where rownum <= :root_limit
        )
        select c.id, c.parent_comment_id, c.user_id, c.body_text,
-              c.created_at, c.updated_at, p.nickname, p.display_name,
+              c.created_at, c.updated_at, c.comment_status, p.nickname, p.display_name,
               root.created_at as root_created_at
          from ranked_roots root
          join storyheaven_comments c
            on c.id = root.id or c.parent_comment_id = root.id
          join webtoon_profiles p on p.user_id = c.user_id
-        where c.comment_status = 'active'
-        order by root.created_at desc,
+        where (c.id = root.id or c.comment_status = 'active')
+        order by root.created_at desc, root.id desc,
                  case when c.parent_comment_id is null then 0 else 1 end,
                  c.created_at asc`,
-      { ...scopeBinds, root_limit: STORYHEAVEN_COMMENT_LIMITS.rootPageSize }
+      { ...scopeBinds, root_offset: offset, root_limit: STORYHEAVEN_COMMENT_LIMITS.rootPageSize + 1 }
     );
 
     const roots = [];
@@ -3205,7 +3235,8 @@ async function listStoryHeavenComments({ storyIdValue, episodeNoValue = null, us
     });
 
     return {
-      comments: roots,
+      comments: roots.slice(0, STORYHEAVEN_COMMENT_LIMITS.rootPageSize),
+      nextOffset: roots.length > STORYHEAVEN_COMMENT_LIMITS.rootPageSize ? offset + STORYHEAVEN_COMMENT_LIMITS.rootPageSize : null,
       count: Number(countResult.rows[0]?.COMMENT_COUNT || 0),
       limits: STORYHEAVEN_COMMENT_LIMITS
     };
@@ -3226,6 +3257,7 @@ async function createStoryHeavenComment({ storyIdValue, episodeNoValue = null, u
   if (detectStoryHeavenTextThreat(bodyText)) {
     throw httpError("comment_unsafe_content", 400);
   }
+  if (hasCommentProfanity(bodyText)) throw httpError("comment_profanity", 400);
   if ((bodyText.match(/https?:\/\/[^\s]+/giu) || []).length > STORYHEAVEN_COMMENT_LIMITS.maxUrls) {
     throw httpError("comment_too_many_urls", 400);
   }
@@ -3300,11 +3332,15 @@ async function resolveStoryHeavenCommentScope(connection, storyId, episodeNo) {
 }
 
 function mapStoryHeavenComment(row, user) {
+  const visible = (!row.COMMENT_STATUS || row.COMMENT_STATUS === "active") && !hasCommentProfanity(row.BODY_TEXT);
   return {
     id: row.ID,
     parentCommentId: row.PARENT_COMMENT_ID || null,
-    bodyText: String(row.BODY_TEXT || ""),
-    author: row.NICKNAME || row.DISPLAY_NAME || "이야기 독자",
+    bodyText: publicCommentBody(row),
+    author: visible ? (row.NICKNAME || row.DISPLAY_NAME || "이야기 독자") : "독자",
+    canReply: visible,
+    canReport: row.COMMENT_STATUS === "active" || !row.COMMENT_STATUS,
+    removed: !visible,
     isMine: Boolean(user?.id && row.USER_ID === user.id),
     createdAt: row.CREATED_AT,
     updatedAt: row.UPDATED_AT

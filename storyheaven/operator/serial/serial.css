@@ -1068,6 +1068,8 @@
   color: #2c2514;
 }
 
+.quality-summary { color: #354354; font-size: 0.88rem; line-height: 1.7; margin: 12px 0; }
+
 .stalled-bulk[hidden] {
   display: none;
 }
