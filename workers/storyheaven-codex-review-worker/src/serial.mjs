@@ -121,6 +121,9 @@ function serialRetryInstruction(job = {}) {
   if (code === "review_api_422_serial_recent_structure_too_similar") {
     return `${prefix} The selected concept overlaps too many recent structural fingerprint axes. Select a genuinely different candidate or revise the selection without changing candidate identity so overlapAxisCount is at most 2, and make the stated structural differences true in the fingerprint and story plan.`;
   }
+  if (code === "review_api_422_serial_review_repair_evidence_missing") {
+    return `${prefix} For every resolved repairVerification item, copy evidence exactly from payload.draft.body. Prefer the exact quote already stored for the same key in payload.repairEvidence. Do not paraphrase, shorten, normalize punctuation, or add quotation marks.`;
+  }
   if (code.startsWith("review_api_422_serial_")) {
     return `${prefix} Inspect the field named by the validation code against the result contract before returning.`;
   }

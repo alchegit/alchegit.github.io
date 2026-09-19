@@ -1872,6 +1872,24 @@ const repairVerifiedReview = normalizeStoryHeavenSerialWorkerResult("editorial_r
   }
 });
 assert.equal(repairVerifiedReview.repairVerification[0].status, "resolved");
+const repairParaphraseReview = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  repairVerification: [{
+    key: "repair-document-chain",
+    status: "resolved",
+    evidence: "승객이 표를 직접 건네 문서 이동이 분명해졌다.",
+    note: "편집 판단은 해결됐으며 서버가 확인한 작성 단계 인용문으로 근거를 고정한다."
+  }]
+}, {
+  payload: {
+    bible: { concept: { storyCore } },
+    draft: { body },
+    criticPacket: review.criticPanels,
+    repairLedger,
+    repairEvidence: repairedDraft.repairEvidence
+  }
+});
+assert.equal(repairParaphraseReview.repairVerification[0].evidence, repairedDraft.repairEvidence[0].quote);
 assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", {
   ...review,
   repairVerification: [{

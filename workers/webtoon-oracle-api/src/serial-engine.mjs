@@ -2242,7 +2242,12 @@ function normalizeEditorialReview(source, options = {}) {
   }
   const repairObligations = array(object(object(options.payload).repairLedger).obligations);
   const repairVerification = repairObligations.length
-    ? normalizeRepairVerification(source.repairVerification, repairObligations, reviewDraftBody)
+    ? normalizeRepairVerification(
+        source.repairVerification,
+        repairObligations,
+        reviewDraftBody,
+        array(object(options.payload).repairEvidence)
+      )
     : [];
   if (decision === "approved" && repairVerification.some((item) => item.status !== "resolved")) {
     throw new Error("serial_review_repair_unresolved_approval_invalid");
@@ -2276,15 +2281,20 @@ function normalizeEditorialReview(source, options = {}) {
   };
 }
 
-function normalizeRepairVerification(value, obligations, draftBody) {
+function normalizeRepairVerification(value, obligations, draftBody, suppliedEvidence = []) {
   const expectedKeys = obligations.map((item) => requiredText(object(item).key, 80, 8, "serial_repair_key_invalid"));
+  const evidenceByKey = new Map(suppliedEvidence.map((item) => [String(object(item).key || ""), object(item)]));
   const verification = array(value).slice(0, 30).map((item) => {
     const source = object(item);
     const key = requiredText(source.key, 80, 8, "serial_review_repair_key_invalid");
     const status = requiredEnum(source.status, ["resolved", "unresolved"], "serial_review_repair_status_invalid");
-    const evidence = requiredText(source.evidence, 500, 8, "serial_review_repair_evidence_invalid");
+    let evidence = requiredText(source.evidence, 500, 8, "serial_review_repair_evidence_invalid");
     if (status === "resolved" && !normalizedTextIncludes(draftBody, evidence)) {
-      throw new Error("serial_review_repair_evidence_missing");
+      const writerQuote = text(evidenceByKey.get(key)?.quote, 500);
+      if (!writerQuote || !normalizedTextIncludes(draftBody, writerQuote)) {
+        throw new Error("serial_review_repair_evidence_missing");
+      }
+      evidence = writerQuote;
     }
     return {
       key,
