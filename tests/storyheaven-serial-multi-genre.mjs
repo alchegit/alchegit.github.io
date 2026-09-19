@@ -435,7 +435,7 @@ try {
     cooldownMode = true;
     await page.reload({ waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
-    await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("쿨타임 대기"));
+    await page.waitForFunction(() => document.querySelector("[data-system-state-title]")?.textContent.includes("다음 제작 대기"));
     const clockText = await page.locator("[data-seoul-clock]").textContent();
     assert.match(clockText, /현재 .*오[전후] \d{2}:\d{2}:\d{2}.*서울/u, `${viewport.name} cooldown state shows a live Seoul clock with seconds`);
     assert.equal(await page.locator("[data-seoul-clock]").getAttribute("data-clock-source"), "server-aligned", `${viewport.name} trusts a healthy server clock`);

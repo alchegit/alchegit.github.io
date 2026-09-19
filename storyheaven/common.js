@@ -289,20 +289,33 @@
     if (options.auth !== false && state.session?.access_token) {
       headers.set("Authorization", "Bearer " + state.session.access_token);
     }
-    const response = await fetch(API_BASE + path, {
-      method: options.method || "GET",
-      headers,
-      body: options.body === undefined ? undefined : JSON.stringify(options.body)
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const error = new Error(payload.error || "request_failed");
-      error.status = response.status;
-      error.details = payload.details || [];
-      error.retryAfterSeconds = Number(payload.retryAfterSeconds || response.headers.get("Retry-After")) || 0;
+    const timeoutMs = Number(options.timeoutMs) || (path.startsWith("/api/storyheaven/operator/serial-engine/")
+      ? (options.method && options.method !== "GET" ? 60000 : 20000) : 0);
+    const controller = timeoutMs > 0 ? new AbortController() : null;
+    const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+    try {
+      const response = await fetch(API_BASE + path, {
+        method: options.method || "GET",
+        headers,
+        ...(controller ? { signal: controller.signal } : {}),
+        body: options.body === undefined ? undefined : JSON.stringify(options.body)
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (controller?.signal.aborted) throw new Error("request_timed_out");
+      if (!response.ok) {
+        const error = new Error(payload.error || "request_failed");
+        error.status = response.status;
+        error.details = payload.details || [];
+        error.retryAfterSeconds = Number(payload.retryAfterSeconds || response.headers.get("Retry-After")) || 0;
+        throw error;
+      }
+      return payload;
+    } catch (error) {
+      if (controller?.signal.aborted) throw new Error("request_timed_out");
       throw error;
+    } finally {
+      if (timer) clearTimeout(timer);
     }
-    return payload;
   }
 
   function readableError(error) {
@@ -346,6 +359,12 @@
       comment_report_reason_invalid: "댓글 신고 사유를 선택해주세요.",
       comment_report_action_invalid: "처리 방법을 선택해주세요.",
       comment_report_not_found: "해당 댓글 신고를 찾을 수 없습니다.",
+      serial_queue_already_running: "이미 처리 중인 작업입니다. 현재 단계가 끝날 때까지 기다려주세요.",
+      serial_runtime_missing: "작업 서버의 운영 상태를 읽지 못했습니다. 서버 점검이 필요합니다.",
+      serial_quality_hold_bulk_limit: "한 번에 50건까지 접수할 수 있습니다.",
+      serial_quality_hold_bulk_empty: "보완할 원고를 선택해주세요.",
+      serial_quality_hold_limit: "이 원고는 추가 보완 요청 20회에 도달했습니다. 원고와 검수 내용을 직접 확인해주세요.",
+      request_timed_out: "서버 응답이 늦습니다. 요청이 접수됐을 수 있으니 현재 상태를 다시 불러와 확인해주세요.",
       comment_too_many_urls: "댓글에는 웹 주소를 하나까지만 넣을 수 있습니다.",
       comment_parent_not_found: "답글을 달 댓글을 찾을 수 없습니다.",
       comment_reply_depth_exceeded: "답글에는 다시 답글을 달 수 없습니다.",

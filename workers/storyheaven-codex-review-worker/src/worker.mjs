@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { hostname } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { maintainSerialLease } from "./serial-lease.mjs";
 import { mkdir, readFile, unlink } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import {
@@ -76,16 +77,19 @@ console.log(
 if (args.has("--once")) {
   await tick();
 } else {
-  let idlePollMs = config.pollMs;
+  const idleBaseMs = config.serialEnabled ? Math.min(config.pollMs, 10000) : config.pollMs;
+  let idlePollMs = idleBaseMs;
   while (!runtime.stopping) {
     try {
       const worked = await tick();
       if (worked) {
-        idlePollMs = config.pollMs;
+        idlePollMs = idleBaseMs;
         continue;
       }
       await interruptibleSleep(withJitter(idlePollMs));
-      idlePollMs = Math.min(config.pollMaxMs, Math.round(idlePollMs * 1.6));
+      idlePollMs = config.serialEnabled
+        ? idleBaseMs
+        : Math.min(config.pollMaxMs, Math.round(idlePollMs * 1.6));
     } catch (error) {
       console.error(`[storyheaven-review-worker] tick failed: ${safeErrorCode(error)}`);
       await interruptibleSleep(withJitter(idlePollMs));
@@ -170,9 +174,18 @@ async function tickSerial() {
     editorModel: config.serialEditorModel,
     escalationModel: config.serialEscalationModel
   });
+  const heartbeat = maintainSerialLease({
+    leaseSeconds: Number(lease.leaseSeconds || 900),
+    renew: () => apiRequest("/api/storyheaven/worker/serial-engine/heartbeat", {
+      workerId: config.workerId, leaseId: lease.leaseId, jobId: job.id
+    }),
+    onError: (error) => console.warn(`[storyheaven-review-worker] heartbeat retry: ${safeErrorCode(error)}`)
+  });
   try {
-    const parsed = await runCodexSerial(job, model);
-    await apiRequest("/api/storyheaven/worker/serial-engine/complete", {
+    const parsed = await runCodexSerial(job, model, heartbeat.signal);
+    await heartbeat.stop();
+    if (heartbeat.signal.aborted) return false;
+    const completion = {
       workerId: config.workerId,
       leaseId: lease.leaseId,
       jobId: job.id,
@@ -180,13 +193,26 @@ async function tickSerial() {
       result: parsed.result,
       model: parsed.model,
       usage: parsed.usage
-    });
+    };
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        await apiRequest("/api/storyheaven/worker/serial-engine/complete", completion);
+        break;
+      } catch (error) {
+        if (attempt >= 1 || !/^(fetch_failed|review_api_5)/u.test(safeErrorCode(error))) throw error;
+        await interruptibleSleep(500);
+      }
+    }
     if (parsed.identityCorrected) {
       console.warn(`[storyheaven-review-worker] serial envelope identity corrected job=${job.id} run=${job.runId}`);
     }
     console.log(`[storyheaven-review-worker] serial ${job.type} completed run=${job.runId} model=${model}`);
     return true;
   } catch (error) {
+    if (heartbeat.signal.aborted || /^review_api_409_serial_(system_paused|job_lease_mismatch)$/u.test(safeErrorCode(error))) {
+      console.log(`[storyheaven-review-worker] serial stopped by operator or expired lease job=${job.id}`);
+      return false;
+    }
     const errorCode = safeErrorCode(error);
     console.error(
       `[storyheaven-review-worker] serial failed job=${job.id} run=${job.runId} ` +
@@ -201,6 +227,8 @@ async function tickSerial() {
       console.error(`[storyheaven-review-worker] serial failure callback failed: ${safeErrorCode(reportError)}`);
     });
     throw error;
+  } finally {
+    await heartbeat.stop();
   }
 }
 
@@ -231,7 +259,7 @@ async function runCodexReview(jobs, model, tier) {
   }
 }
 
-async function runCodexSerial(job, model) {
+async function runCodexSerial(job, model, signal) {
   const outputPath = path.join(config.stateDir, `serial-${crypto.randomUUID()}.json`);
   const prompt = buildSerialPrompt(job);
   const childArgs = [
@@ -250,7 +278,7 @@ async function runCodexSerial(job, model) {
     "-"
   ];
   try {
-    const processResult = await runProcess(config.codexBinary, childArgs, prompt, config.serialTimeoutMs);
+    const processResult = await runProcess(config.codexBinary, childArgs, prompt, config.serialTimeoutMs, signal);
     const usage = parseCodexJsonlUsage(processResult.stdout);
     const output = await readFile(outputPath, "utf8");
     try {
@@ -258,7 +286,7 @@ async function runCodexSerial(job, model) {
     } catch (error) {
       if (!(error instanceof SyntaxError)) throw error;
       console.warn(`[storyheaven-review-worker] repairing malformed serial JSON job=${job.id}`);
-      const repaired = await repairSerialOutput(output, job, model);
+      const repaired = await repairSerialOutput(output, job, model, signal);
       return { ...repaired, usage: mergeCodexUsage(usage, repaired.usage) };
     }
   } finally {
@@ -266,7 +294,7 @@ async function runCodexSerial(job, model) {
   }
 }
 
-async function repairSerialOutput(output, job, model) {
+async function repairSerialOutput(output, job, model, signal) {
   const outputPath = path.join(config.stateDir, `serial-repair-${crypto.randomUUID()}.json`);
   const childArgs = [
     "exec",
@@ -288,7 +316,8 @@ async function repairSerialOutput(output, job, model) {
       config.codexBinary,
       childArgs,
       buildSerialJsonRepairPrompt(output, job),
-      config.serialTimeoutMs
+      config.serialTimeoutMs,
+      signal
     );
     const repaired = await readFile(outputPath, "utf8");
     return {
@@ -300,8 +329,9 @@ async function repairSerialOutput(output, job, model) {
   }
 }
 
-async function runProcess(command, childArgs, stdin, timeoutMs) {
+async function runProcess(command, childArgs, stdin, timeoutMs, signal) {
   return new Promise((resolve, reject) => {
+    if (signal?.aborted) { reject(new Error("serial_job_interrupted")); return; }
     const child = spawn(command, childArgs, {
       cwd: config.workspace,
       env: process.env,
@@ -309,6 +339,11 @@ async function runProcess(command, childArgs, stdin, timeoutMs) {
     });
     let stdout = "";
     let stderr = "";
+    const abort = () => {
+      child.kill("SIGTERM");
+      setTimeout(() => child.kill("SIGKILL"), 5000).unref();
+    };
+    signal?.addEventListener("abort", abort, { once: true });
     const timeout = setTimeout(() => {
       child.kill("SIGTERM");
       setTimeout(() => child.kill("SIGKILL"), 5_000).unref();
@@ -322,12 +357,15 @@ async function runProcess(command, childArgs, stdin, timeoutMs) {
     });
     child.on("error", (error) => {
       clearTimeout(timeout);
+      signal?.removeEventListener("abort", abort);
       reject(error);
     });
-    child.on("close", (code, signal) => {
+    child.on("close", (code, exitSignal) => {
       clearTimeout(timeout);
-      if (code === 0) resolve({ stdout, stderr });
-      else reject(new Error(signal ? "codex_review_timeout" : classifyCodexError(stderr, code)));
+      signal?.removeEventListener("abort", abort);
+      if (signal?.aborted) reject(new Error("serial_job_interrupted"));
+      else if (code === 0) resolve({ stdout, stderr });
+      else reject(new Error(exitSignal ? "codex_review_timeout" : classifyCodexError(stderr, code)));
     });
     child.stdin.end(stdin);
   });

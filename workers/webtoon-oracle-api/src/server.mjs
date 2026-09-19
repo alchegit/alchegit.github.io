@@ -213,7 +213,7 @@ const storyHeavenSerialService = createStoryHeavenSerialService({
   retryMinutes: config.storyHeavenSerialRetryMinutes,
   maxAttempts: config.storyHeavenSerialMaxAttempts
 });
-let storyHeavenSerialEmergencyPaused = false;
+let storyHeavenSerialEmergencyPaused = (await storyHeavenSerialService.getSystemState()).paused;
 let storyHeavenSerialPauseRetryTimer = null;
 
 async function processStoryHeavenSerialDue() {
@@ -1394,6 +1394,17 @@ app.post("/api/storyheaven/worker/serial-engine/complete", requireWorker, requir
   } catch (error) {
     next(error);
   }
+});
+
+app.post("/api/storyheaven/worker/serial-engine/heartbeat", requireWorker, requireJsonBody, async (req, res, next) => {
+  try {
+    if (storyHeavenSerialEmergencyPaused || !config.storyHeavenSerialEngineEnabled) return res.json({ renewed: false });
+    res.json(await storyHeavenSerialService.renewJobLease({
+      workerId: boundedString(req.body?.workerId, "workerId", 80, { required: true }),
+      leaseId: boundedString(req.body?.leaseId, "leaseId", 36, { required: true }),
+      jobId: boundedString(req.body?.jobId, "jobId", 36, { required: true })
+    }));
+  } catch (error) { next(error); }
 });
 
 app.post("/api/storyheaven/worker/serial-engine/fail", requireWorker, requireJsonBody, async (req, res, next) => {

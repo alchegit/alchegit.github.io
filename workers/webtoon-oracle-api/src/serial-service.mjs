@@ -123,6 +123,7 @@ export function createStoryHeavenSerialService({
 }) {
   return Object.freeze({
     listSchedules,
+    getSystemState,
     getQueueState,
     cancelQueueGroup,
     hideQueueHistory,
@@ -146,6 +147,7 @@ export function createStoryHeavenSerialService({
     resolveQualityHolds,
     extendOpeningPilot,
     claimJob,
+    renewJobLease,
     completeJob,
     failJob,
     publishReady,
@@ -178,6 +180,26 @@ export function createStoryHeavenSerialService({
     });
   }
 
+  async function getSystemState() {
+    return withConnection(async (connection) => {
+      const row = await selectOne(connection, `select paused, active_queue_group_id from storyheaven_serial_runtime where id = 1`);
+      if (!row) throw failure("serial_runtime_missing", 503);
+      return { paused: row.PAUSED === "Y", activeQueueGroupId: row.ACTIVE_QUEUE_GROUP_ID || null };
+    });
+  }
+
+  async function lockRuntime(connection) {
+    const row = await selectOne(connection, `select paused, active_queue_group_id from storyheaven_serial_runtime where id = 1 for update`);
+    if (!row) throw failure("serial_runtime_missing", 503);
+    return row;
+  }
+
+  async function requeueAtTail(connection, groupId) {
+    await connection.execute(
+      `update storyheaven_serial_runs set queue_requested_at = systimestamp
+        where queue_group_id = :group_id`, { group_id: groupId });
+  }
+
   async function getQueueState() {
     return withConnection(async (connection) => {
       const result = await connection.execute(
@@ -185,7 +207,7 @@ export function createStoryHeavenSerialService({
            select serial_run.id, serial_run.queue_group_id, serial_run.schedule_id,
                   serial_run.story_id, serial_run.episode_no, serial_run.run_type,
                   serial_run.run_status, serial_run.current_stage,
-                  serial_run.started_at, serial_run.completed_at, serial_run.created_at,
+                  serial_run.started_at, serial_run.completed_at, serial_run.created_at, serial_run.queue_requested_at,
                   serial_run.queue_canceled_at, serial_run.history_hidden_at, serial_run.failure_code,
                   json_value(serial_run.input_json, '$.targetEpisodeCount' returning number null on error) as run_target_episode_count,
                   story.title as story_title,
@@ -197,6 +219,8 @@ export function createStoryHeavenSerialService({
                     where job.run_id = serial_run.id) as total_job_count,
                   (select count(*) from storyheaven_serial_jobs job
                     where job.run_id = serial_run.id and job.job_status = 'complete') as completed_job_count,
+                  (select count(*) from storyheaven_serial_jobs job
+                    where job.run_id = serial_run.id and job.job_status = 'canceled') as canceled_job_count,
                   (select count(*) from storyheaven_serial_jobs job
                     where job.run_id = serial_run.id
                       and job.job_status in ('queued', 'running', 'retry_wait')) as active_job_count,
@@ -240,7 +264,7 @@ export function createStoryHeavenSerialService({
                   returning varchar2(160) null on error),
                   'usage' value json_query(job.output_json, '$.usage'
                     returning varchar2(4000) null on error) format json returning clob) as output_json,
-                job.started_at, job.completed_at, job.created_at
+                job.started_at, job.completed_at, job.created_at, job.next_attempt_at
            from storyheaven_serial_jobs job
           join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
           where serial_run.created_at >= systimestamp - numtodsinterval(30, 'DAY')
@@ -254,8 +278,12 @@ export function createStoryHeavenSerialService({
              )
           order by job.created_at`
       );
-      const queue = summarizeQueue(result.rows, timing.rows);
+      const runtime = await selectOne(connection, `select paused, active_queue_group_id from storyheaven_serial_runtime where id = 1`);
+      const queue = summarizeQueue(result.rows, timing.rows, {
+        paused: runtime?.PAUSED === "Y", activeGroupId: runtime?.ACTIVE_QUEUE_GROUP_ID || null
+      });
       queue.stalledFirstEpisodeStories = await listStalledFirstEpisodeStories(connection);
+      queue.actionRequiredTotal = queue.stalledFirstEpisodeStories[0]?.totalCount || 0;
       const quality = await connection.execute(
         `select run_status, count(*) as run_count from storyheaven_serial_runs
           where run_type = 'episode' and queue_canceled_at is null
@@ -351,20 +379,24 @@ export function createStoryHeavenSerialService({
     const queueGroupId = requireId(queueGroupIdValue, "queue_group_id");
     const force = options.force === true;
     return withTransaction(async (connection) => {
+      const runtime = await lockRuntime(connection);
+      if (runtime.PAUSED === "Y") throw failure("serial_system_paused", 409);
+      await recoverExpiredJobs(connection);
       const state = await selectOne(connection,
         `select
             count(distinct serial_run.id) as run_count,
             sum(case when job.job_status in ('queued', 'running', 'retry_wait') then 1 else 0 end) as active_count,
             sum(case when job.job_status in ('queued', 'retry_wait') then 1 else 0 end) as waiting_count,
             sum(case when job.job_status = 'running' then 1 else 0 end) as running_count,
-            sum(case when job.job_status = 'error' then 1 else 0 end) as error_count,
+            sum(case when job.job_status = 'error' and serial_run.run_status = 'error' then 1 else 0 end) as error_count,
             max(serial_run.schedule_id) as schedule_id,
             max(schedule.schedule_status) as schedule_status
            from storyheaven_serial_runs serial_run
            left join storyheaven_serial_jobs job on job.run_id = serial_run.id
            left join storyheaven_serial_schedules schedule on schedule.id = serial_run.schedule_id
           where serial_run.queue_group_id = :queue_group_id
-            and serial_run.queue_canceled_at is null`,
+            and serial_run.queue_canceled_at is null
+            and serial_run.run_status in ('queued', 'running', 'rewrite', 'error')`,
         { queue_group_id: queueGroupId });
       if (!state || Number(state.RUN_COUNT || 0) < 1) throw failure("serial_queue_not_found", 404);
       const activeCount = Number(state.ACTIVE_COUNT || 0);
@@ -388,22 +420,29 @@ export function createStoryHeavenSerialService({
         scheduleActivated = Number(activated.rowsAffected || 0) > 0;
         if (!scheduleActivated) throw failure("serial_queue_schedule_unavailable", 409);
       }
+      if (errorCount > 0) {
+        await connection.execute(
+          `update storyheaven_serial_jobs
+              set job_status = 'queued', attempt_count = 0, next_attempt_at = systimestamp,
+                  lease_id = null, lease_expires_at = null, worker_id = null,
+                  error_code = null, started_at = null, completed_at = null, updated_at = systimestamp
+            where run_id in (select id from storyheaven_serial_runs
+              where queue_group_id = :queue_group_id and queue_canceled_at is null and run_status = 'error')
+              and job_status = 'error'`, { queue_group_id: queueGroupId });
+        await connection.execute(
+          `update storyheaven_serial_runs set run_status = 'queued', failure_code = null,
+                  completed_at = null, updated_at = systimestamp
+            where queue_group_id = :queue_group_id and queue_canceled_at is null and run_status = 'error'`,
+          { queue_group_id: queueGroupId });
+        await requeueAtTail(connection, queueGroupId);
+        return { resumed: true, reused: false, scheduleActivated, scheduleId,
+          waitingCount: errorCount + Number(state.WAITING_COUNT || 0), nextCheckSeconds: 10, queueGroupId };
+      }
       if (activeCount > 0) {
-        let forceReleased = 0;
-        if (force && Number(state.RUNNING_COUNT || 0) > 0) {
-          const released = await connection.execute(
-            `update storyheaven_serial_jobs
-                set job_status = 'queued',
-                    next_attempt_at = systimestamp,
-                    lease_id = null, lease_expires_at = null, worker_id = null,
-                    error_code = 'operator_forced_resume',
-                    started_at = null, completed_at = null, updated_at = systimestamp
-              where run_id in (
-                select id from storyheaven_serial_runs where queue_group_id = :queue_group_id
-              ) and job_status = 'running'`,
-            { queue_group_id: queueGroupId }
-          );
-          forceReleased = Number(released.rowsAffected || 0);
+        if (Number(state.RUNNING_COUNT || 0) > 0) {
+          if (force) throw failure("serial_queue_already_running", 409);
+          return { resumed: false, reused: true, alreadyRunning: true, scheduleActivated,
+            scheduleId, waitingCount: Number(state.WAITING_COUNT || 0), nextCheckSeconds: 10, queueGroupId };
         }
         await connection.execute(
           `update storyheaven_serial_jobs
@@ -437,7 +476,7 @@ export function createStoryHeavenSerialService({
         return {
           resumed: true,
           reused: true,
-          forceReleased: forceReleased > 0,
+          forceReleased: false,
           scheduleActivated,
           scheduleId,
           waitingCount: Number(state.WAITING_COUNT || 0),
@@ -446,41 +485,16 @@ export function createStoryHeavenSerialService({
         };
       }
 
-      await connection.execute(
-        `update storyheaven_serial_jobs
-            set job_status = 'queued', attempt_count = 0,
-                next_attempt_at = systimestamp, lease_id = null, lease_expires_at = null,
-                worker_id = null, error_code = null, started_at = null,
-                completed_at = null, updated_at = systimestamp
-          where run_id in (
-            select id from storyheaven_serial_runs where queue_group_id = :queue_group_id
-          ) and job_status = 'error'`,
-        { queue_group_id: queueGroupId }
-      );
-      await connection.execute(
-        `update storyheaven_serial_runs
-            set run_status = 'queued', failure_code = null,
-                started_at = null, completed_at = null, updated_at = systimestamp
-          where queue_group_id = :queue_group_id
-            and queue_canceled_at is null
-            and run_status = 'error'`,
-        { queue_group_id: queueGroupId }
-      );
-      return {
-        resumed: true,
-        reused: false,
-        scheduleActivated,
-        scheduleId,
-        waitingCount: errorCount,
-        nextCheckSeconds: 10,
-        queueGroupId
-      };
+      throw failure("serial_queue_not_retryable", 409);
     });
   }
 
   async function setSystemPaused(paused) {
-    const targetStatus = paused ? "paused" : "active";
     return withTransaction(async (connection) => {
+      await lockRuntime(connection);
+      await connection.execute(
+        `update storyheaven_serial_runtime set paused = :paused, updated_at = systimestamp where id = 1`,
+        { paused: paused ? "Y" : "N" });
       const state = await selectOne(connection,
         `select count(*) as total_count,
                 sum(case when schedule_status = 'active' then 1 else 0 end) as active_count,
@@ -499,20 +513,13 @@ export function createStoryHeavenSerialService({
                where serial_run.id = job.run_id
                  and serial_run.queue_canceled_at is null
             )`) : null;
-      const schedules = await connection.execute(
-        `update storyheaven_serial_schedules
-            set schedule_status = :target_status,
-                updated_at = systimestamp
-          where schedule_status <> 'archived'
-            and schedule_status <> :target_status`,
-        { target_status: targetStatus }
-      );
       let heldJobs = 0;
       let interruptedRuns = 0;
       if (paused) {
         const held = await connection.execute(
           `update storyheaven_serial_jobs job
               set job_status = 'retry_wait',
+                  attempt_count = case when job_status = 'running' then greatest(0, attempt_count - 1) else attempt_count end,
                   next_attempt_at = systimestamp + numtodsinterval(365, 'DAY'),
                   lease_id = null,
                   lease_expires_at = null,
@@ -550,7 +557,7 @@ export function createStoryHeavenSerialService({
       return {
         paused,
         persisted: true,
-        schedulesAffected: Number(schedules.rowsAffected || 0),
+        schedulesAffected: 0,
         schedulesTotal: Number(state?.TOTAL_COUNT || 0),
         activeBefore: Number(state?.ACTIVE_COUNT || 0),
         pausedBefore: Number(state?.PAUSED_COUNT || 0),
@@ -564,71 +571,18 @@ export function createStoryHeavenSerialService({
 
   async function resumeInterruptedQueues() {
     return withTransaction(async (connection) => {
-      const expired = await connection.execute(
-        `update storyheaven_serial_jobs
-            set job_status = case when attempt_count < max_attempts then 'retry_wait' else 'error' end,
-                next_attempt_at = systimestamp,
-                lease_id = null,
-                lease_expires_at = null,
-                worker_id = null,
-                error_code = 'lease_expired',
-                updated_at = systimestamp
-          where job_status = 'running'
-            and lease_expires_at < systimestamp`
-      );
+      const runtime = await lockRuntime(connection);
+      if (runtime.PAUSED === "Y") throw failure("serial_system_paused", 409);
+      const expiredReleased = await recoverExpiredJobs(connection);
       const waiting = await connection.execute(
         `update storyheaven_serial_jobs job
-            set next_attempt_at = systimestamp,
-                lease_id = null,
-                lease_expires_at = null,
-                worker_id = null,
-                error_code = case when error_code = 'operator_system_paused' then null else error_code end,
+            set job_status = 'queued', next_attempt_at = systimestamp, error_code = null,
                 updated_at = systimestamp
-          where job.job_status in ('queued', 'retry_wait')
-            and exists (
-              select 1
-                from storyheaven_serial_runs serial_run
-               where serial_run.id = job.run_id
-                 and serial_run.queue_canceled_at is null
-            )`
-      );
-      const retryableGroups = retryableAttentionGroupsSql();
-      const errorJobs = await connection.execute(
-        `update storyheaven_serial_jobs
-            set job_status = 'queued',
-                attempt_count = 0,
-                next_attempt_at = systimestamp,
-                lease_id = null,
-                lease_expires_at = null,
-                worker_id = null,
-                error_code = null,
-                started_at = null,
-                completed_at = null,
-                updated_at = systimestamp
-          where job_status = 'error'
-            and run_id in (
-              select id
-                from storyheaven_serial_runs
-               where queue_group_id in (${retryableGroups})
-            )`
-      );
-      const errorRuns = await connection.execute(
-        `update storyheaven_serial_runs
-            set run_status = 'queued',
-                failure_code = null,
-                started_at = null,
-                completed_at = null,
-                updated_at = systimestamp
-          where run_status = 'error'
-            and queue_canceled_at is null
-            and queue_group_id in (${retryableGroups})`
-      );
-      return {
-        expiredReleased: Number(expired.rowsAffected || 0),
-        waitingReleased: Number(waiting.rowsAffected || 0),
-        errorJobsReleased: Number(errorJobs.rowsAffected || 0),
-        errorRunsReleased: Number(errorRuns.rowsAffected || 0)
-      };
+          where job.job_status = 'retry_wait' and job.error_code = 'operator_system_paused'
+            and exists (select 1 from storyheaven_serial_runs r where r.id = job.run_id
+              and r.queue_canceled_at is null and r.run_status in ('queued', 'running', 'rewrite'))`);
+      return { expiredReleased, waitingReleased: Number(waiting.rowsAffected || 0),
+        errorJobsReleased: 0, errorRunsReleased: 0 };
     });
   }
 
@@ -1758,6 +1712,9 @@ export function createStoryHeavenSerialService({
       if (run.RUN_STATUS !== "blocked" || run.CURRENT_STAGE !== "editorial_blocked" || run.QUEUE_CANCELED_AT) {
         throw failure("serial_quality_hold_not_active", 409);
       }
+      if (action === "rewrite" && Number(run.OPERATOR_REWRITE_COUNT || 0) >= 20) {
+        throw failure("serial_quality_hold_limit", 409);
+      }
       const active = await selectOne(connection,
         `select count(*) as active_count
            from storyheaven_serial_jobs
@@ -1867,6 +1824,7 @@ export function createStoryHeavenSerialService({
       } else {
         const qa = parseJson(draft.DETERMINISTIC_JSON, {});
         const rewriteNumber = Number(run.REWRITE_COUNT || 0) + Number(run.OPERATOR_REWRITE_COUNT || 0) + 1;
+        await requeueAtTail(connection, run.QUEUE_GROUP_ID || run.ID);
         await connection.execute(
           `update storyheaven_serial_runs
               set run_status = 'rewrite', current_stage = 'rewrite_draft',
@@ -2009,62 +1967,48 @@ export function createStoryHeavenSerialService({
   }
 
   async function claimJob({ workerId }) {
-    await withTransaction((connection) => connection.execute(
-      `update storyheaven_serial_jobs
-          set job_status = case when attempt_count < max_attempts then 'retry_wait' else 'error' end,
-              next_attempt_at = systimestamp, lease_id = null, lease_expires_at = null,
-              worker_id = null, error_code = 'lease_expired', updated_at = systimestamp
-        where job_status = 'running' and lease_expires_at < systimestamp`
-    ));
     return withTransaction(async (connection) => {
+      const runtime = await lockRuntime(connection);
+      if (runtime.PAUSED === "Y") return { leaseId: null, job: null, paused: true };
+      await recoverExpiredJobs(connection);
       const result = await connection.execute(
         `select * from (
            select job.id, job.run_id, job.story_id, job.job_type,
-                  job.input_hash, job.input_json, job.attempt_count, job.error_code
+                  job.input_hash, job.input_json, job.attempt_count, job.error_code,
+                  serial_run.queue_group_id
              from storyheaven_serial_jobs job
              join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
             where job.job_status in ('queued', 'retry_wait')
               and job.next_attempt_at <= systimestamp
               and serial_run.queue_canceled_at is null
+              and serial_run.run_status in ('queued', 'running', 'rewrite')
               and (
                 serial_run.schedule_id is null
                 or exists (
-                  select 1
-                    from storyheaven_serial_schedules schedule_gate
-                   where schedule_gate.id = serial_run.schedule_id
-                     and schedule_gate.schedule_status = 'active'
+                  select 1 from storyheaven_serial_schedules schedule_gate
+                   where schedule_gate.id = serial_run.schedule_id and schedule_gate.schedule_status = 'active'
                 )
               )
-              and not exists (
-                select 1 from storyheaven_serial_jobs running_job
-                  join storyheaven_serial_runs running_run on running_run.id = running_job.run_id
-                 where running_job.job_status = 'running'
-                   and running_run.queue_canceled_at is null
-              )
+              and not exists (select 1 from storyheaven_serial_jobs running_job where running_job.job_status = 'running')
               and serial_run.queue_group_id = (
                 select queue_group_id from (
-                  select candidate_run.queue_group_id,
-                         min(queue_origin.created_at) as queued_at
-                   from storyheaven_serial_jobs candidate_job
+                  select candidate_run.queue_group_id
+                    from storyheaven_serial_jobs candidate_job
                     join storyheaven_serial_runs candidate_run on candidate_run.id = candidate_job.run_id
-                    join storyheaven_serial_runs queue_origin on queue_origin.queue_group_id = candidate_run.queue_group_id
-                   where candidate_job.job_status in ('queued', 'running', 'retry_wait')
+                   where candidate_job.job_status in ('queued', 'retry_wait')
                      and candidate_run.queue_canceled_at is null
-                     and (
-                       candidate_run.schedule_id is null
-                       or exists (
-                         select 1
-                           from storyheaven_serial_schedules candidate_schedule
-                          where candidate_schedule.id = candidate_run.schedule_id
-                            and candidate_schedule.schedule_status = 'active'
-                       )
-                   )
+                     and candidate_run.run_status in ('queued', 'running', 'rewrite')
+                     and (candidate_run.schedule_id is null or exists (
+                       select 1 from storyheaven_serial_schedules candidate_schedule
+                        where candidate_schedule.id = candidate_run.schedule_id and candidate_schedule.schedule_status = 'active'))
                    group by candidate_run.queue_group_id
-                   order by min(queue_origin.created_at), candidate_run.queue_group_id
+                   order by case when candidate_run.queue_group_id = :active_group then 0 else 1 end,
+                            min(candidate_run.queue_requested_at), candidate_run.queue_group_id
                 ) where rownum = 1
               )
-            order by job.priority asc, job.created_at asc
-         ) where rownum = 1`
+            order by job.priority asc, job.created_at asc, job.id
+         ) where rownum = 1`,
+        { active_group: runtime.ACTIVE_QUEUE_GROUP_ID || null }
       );
       if (!result.rows.length) return { leaseId: null, job: null };
       const row = result.rows[0];
@@ -2074,34 +2018,58 @@ export function createStoryHeavenSerialService({
             set job_status = 'running', attempt_count = attempt_count + 1,
                 worker_id = :worker_id, lease_id = :lease_id,
                 lease_expires_at = systimestamp + numtodsinterval(:lease_seconds, 'SECOND'),
-                started_at = coalesce(started_at, systimestamp), error_code = null,
-                updated_at = systimestamp
+                started_at = systimestamp, error_code = null, updated_at = systimestamp
           where id = :id and job_status in ('queued', 'retry_wait')`,
         { id: row.ID, worker_id: workerId, lease_id: leaseId, lease_seconds: leaseSeconds }
       );
       if (Number(updated.rowsAffected || 0) !== 1) return { leaseId: null, job: null };
       await connection.execute(
+        `update storyheaven_serial_runtime set active_queue_group_id = :group_id, updated_at = systimestamp where id = 1`,
+        { group_id: row.QUEUE_GROUP_ID });
+      await connection.execute(
         `update storyheaven_serial_runs set run_status = 'running', current_stage = :stage,
                 started_at = coalesce(started_at, systimestamp), updated_at = systimestamp
-          where id = :run_id and run_status not in ('blocked', 'published', 'error')`,
-        { run_id: row.RUN_ID, stage: row.JOB_TYPE }
-      );
-      return {
-        leaseId,
-        leaseSeconds,
-        job: {
-          id: row.ID,
-          runId: row.RUN_ID,
-          storyId: row.STORY_ID,
-          type: row.JOB_TYPE,
-          inputHash: row.INPUT_HASH,
-          attemptCount: Number(row.ATTEMPT_COUNT || 0) + 1,
-          previousErrorCode: row.ERROR_CODE || null,
-          payload: parseJson(row.INPUT_JSON, {})
-        }
-      };
+          where id = :run_id`, { run_id: row.RUN_ID, stage: row.JOB_TYPE });
+      return { leaseId, leaseSeconds, job: {
+        id: row.ID, runId: row.RUN_ID, storyId: row.STORY_ID, type: row.JOB_TYPE,
+        inputHash: row.INPUT_HASH, attemptCount: Number(row.ATTEMPT_COUNT || 0) + 1,
+        previousErrorCode: row.ERROR_CODE || null, payload: parseJson(row.INPUT_JSON, {})
+      } };
     });
   }
+
+  async function recoverExpiredJobs(connection) {
+    const expired = await connection.execute(
+      `update storyheaven_serial_jobs
+          set job_status = case when attempt_count < max_attempts then 'retry_wait' else 'error' end,
+              next_attempt_at = systimestamp, lease_id = null, lease_expires_at = null,
+              worker_id = null, error_code = 'lease_expired',
+              completed_at = case when attempt_count >= max_attempts then systimestamp else null end,
+              updated_at = systimestamp
+        where job_status = 'running' and lease_expires_at < systimestamp`
+    );
+    await connection.execute(
+      `update storyheaven_serial_runs r set run_status = 'error',
+              failure_code = 'lease_expired', completed_at = systimestamp, updated_at = systimestamp
+        where r.run_status in ('queued', 'running', 'rewrite') and r.queue_canceled_at is null
+          and exists (select 1 from storyheaven_serial_jobs j where j.run_id = r.id
+            and j.job_status = 'error' and j.error_code = 'lease_expired')`);
+    return Number(expired.rowsAffected || 0);
+  }
+
+  async function renewJobLease({ workerId, leaseId, jobId }) {
+    return withTransaction(async (connection) => {
+      const result = await connection.execute(
+        `update storyheaven_serial_jobs j
+            set lease_expires_at = systimestamp + numtodsinterval(:lease_seconds, 'SECOND'), updated_at = systimestamp
+          where j.id = :id and j.worker_id = :worker_id and j.lease_id = :lease_id
+            and j.job_status = 'running' and j.lease_expires_at > systimestamp
+            and exists (select 1 from storyheaven_serial_runtime where id = 1 and paused = 'N')`,
+        { id: jobId, worker_id: workerId, lease_id: leaseId, lease_seconds: leaseSeconds });
+      return { renewed: Number(result.rowsAffected || 0) === 1, leaseSeconds };
+    });
+  }
+
 
   async function completeJob({ workerId, leaseId, jobId, inputHash, result, model, usage = null }) {
     return withTransaction(async (connection) => {
@@ -2111,7 +2079,14 @@ export function createStoryHeavenSerialService({
           where id = :id and lease_id = :lease_id and worker_id = :worker_id
             and job_status = 'running' for update`,
         { id: jobId, lease_id: leaseId, worker_id: workerId });
-      if (!job) throw failure("serial_job_lease_mismatch", 409);
+      if (!job) {
+        const existing = await selectOne(connection,
+          `select job_status, input_hash from storyheaven_serial_jobs where id = :id`, { id: jobId });
+        if (existing?.JOB_STATUS === "complete" && existing.INPUT_HASH === inputHash) {
+          return { accepted: true, alreadyAccepted: true, jobId };
+        }
+        throw failure("serial_job_lease_mismatch", 409);
+      }
       if (job.INPUT_HASH !== inputHash) throw failure("serial_job_revision_mismatch", 409);
       const type = job.JOB_TYPE;
       const payload = parseJson(job.INPUT_JSON, {});
@@ -2176,13 +2151,17 @@ export function createStoryHeavenSerialService({
   }
 
   async function processDue() {
+    if ((await getSystemState()).paused) return { scheduled: [], published: [], continuations: [], paused: true };
     const scheduled = await withTransaction(async (connection) => {
+      const runtime = await lockRuntime(connection);
+      if (runtime.PAUSED === "Y") return [];
       const activeQueue = await selectOne(connection,
         `select count(*) as active_count
           from storyheaven_serial_jobs job
            join storyheaven_serial_runs serial_run on serial_run.id = job.run_id
           where job.job_status in ('queued', 'running', 'retry_wait')
             and serial_run.queue_canceled_at is null
+            and serial_run.run_status in ('queued', 'running', 'rewrite')
             and exists (
               select 1
                 from storyheaven_serial_schedules active_schedule
@@ -3718,6 +3697,12 @@ export function createStoryHeavenSerialService({
   async function releaseOpeningPilotTogether(connection, storyId) {
     const releaseAt = new Date();
     await connection.execute(
+      `merge into storyheaven_serial_story_controls target
+       using (select :story_id as story_id from dual) source on (target.story_id = source.story_id)
+       when not matched then insert (story_id, visibility, continuation_mode, created_by, updated_by)
+       values (:story_id, 'public', 'manual', :actor, :actor)`,
+      { story_id: storyId, actor: SYSTEM_AUTHOR_ID });
+    await connection.execute(
       `update storyheaven_serial_runs
           set release_at = :release_at, updated_at = systimestamp
         where story_id = :story_id
@@ -3747,6 +3732,7 @@ export function createStoryHeavenSerialService({
              left join storyheaven_serial_bibles bible on bible.story_id = publication.story_id
              left join storyheaven_serial_story_controls control on control.story_id = publication.story_id
             where publication.queue_status = 'ready'
+              and exists (select 1 from storyheaven_serial_runtime where id = 1 and paused = 'N')
               and (:target_run_id is null or publication.run_id = :target_run_id)
               and publication.release_at <= systimestamp
               and nvl(control.visibility, 'public') = 'public'
@@ -4021,7 +4007,6 @@ export function createStoryHeavenSerialService({
     const control = await selectOne(connection,
       `select continuation_mode from storyheaven_serial_story_controls where story_id = :story_id`,
       { story_id: run.STORY_ID });
-    if (control && control.CONTINUATION_MODE !== "auto") return;
     const schedule = await selectOne(connection,
       `select cadence_days, cadence_minutes, target_episode_count, created_by, publication_mode
          from storyheaven_serial_schedules where id = :id and schedule_status = 'active'`,
@@ -4071,6 +4056,7 @@ export function createStoryHeavenSerialService({
       );
       return;
     }
+    if (control && control.CONTINUATION_MODE !== "auto") return;
     if (Number(pipeline.BUFFER_COUNT || 0) >= bufferTarget) return;
     return queueNextEpisode(connection, run, schedule, { queueGroupId: run.QUEUE_GROUP_ID });
   }
@@ -4200,10 +4186,11 @@ export function createStoryHeavenSerialService({
     await connection.execute(
       `insert into storyheaven_serial_runs (
         id, queue_group_id, schedule_id, story_id, arc_id, episode_no, run_type,
-        run_status, current_stage, requested_by, release_at, input_json
+        run_status, current_stage, requested_by, release_at, input_json, queue_requested_at
       ) values (
         :id, :queue_group_id, :schedule_id, :story_id, :arc_id, :episode_no, :run_type,
-        'queued', :current_stage, :requested_by, :release_at, :input_json
+        'queued', :current_stage, :requested_by, :release_at, :input_json,
+        coalesce((select min(queue_requested_at) from storyheaven_serial_runs where queue_group_id = :queue_group_id), systimestamp)
       )`,
       {
         id, queue_group_id: effectiveQueueGroupId, schedule_id: scheduleId, story_id: storyId, arc_id: arcId,
@@ -4514,33 +4501,6 @@ export function createStoryHeavenSerialService({
   }
 }
 
-function retryableAttentionGroupsSql() {
-  return `
-    select queue_group_id from (
-      select grouped.queue_group_id,
-             grouped.has_error,
-             grouped.has_blocked,
-             row_number() over (
-               partition by grouped.group_key
-               order by grouped.group_time desc, grouped.queue_group_id desc
-             ) as rank_no
-        from (
-          select serial_run.queue_group_id,
-                 nvl(serial_run.schedule_id, serial_run.queue_group_id) as group_key,
-                 max(coalesce(serial_run.completed_at, serial_run.started_at, serial_run.created_at)) as group_time,
-                 max(case when serial_run.run_status = 'error' then 1 else 0 end) as has_error,
-                 max(case when serial_run.run_status = 'blocked' then 1 else 0 end) as has_blocked,
-                 max(case when serial_run.queue_canceled_at is not null then 1 else 0 end) as has_canceled
-            from storyheaven_serial_runs serial_run
-           where serial_run.created_at >= systimestamp - numtodsinterval(30, 'DAY')
-           group by serial_run.queue_group_id, nvl(serial_run.schedule_id, serial_run.queue_group_id)
-        ) grouped
-       where grouped.has_canceled = 0
-    )
-    where rank_no = 1
-      and has_error = 1
-      and has_blocked = 0`;
-}
 
 function mapSchedule(row) {
   const policy = normalizeStoredConceptPolicy(parseJson(row.CONCEPT_POLICY_JSON, {}));
@@ -4694,11 +4654,12 @@ function positiveInteger(value) {
   return Number.isInteger(number) && number > 0 ? number : null;
 }
 
-export function summarizeQueue(rows = [], timingRows = []) {
+export function summarizeQueue(rows = [], timingRows = [], runtime = {}) {
   const groups = new Map();
   for (const row of rows) {
     const id = row.QUEUE_GROUP_ID || row.ID;
     const requestedAt = timeValue(row.CREATED_AT);
+    const queueRequestedAt = timeValue(row.QUEUE_REQUESTED_AT) || requestedAt;
     const startedAt = timeValue(row.STARTED_AT);
     const completedAt = timeValue(row.COMPLETED_AT);
     const group = groups.get(id) || {
@@ -4710,6 +4671,7 @@ export function summarizeQueue(rows = [], timingRows = []) {
       primaryGenres: [],
       subgenresByGenre: {},
       requestedAt: null,
+      queueRequestedAt: null,
       startedAt: null,
       completedAt: null,
       canceledAt: null,
@@ -4739,14 +4701,16 @@ export function summarizeQueue(rows = [], timingRows = []) {
       group.subgenresByGenre = parseJson(row.SUBGENRES_BY_GENRE_JSON, {});
     }
     group.requestedAt = earlierTime(group.requestedAt, requestedAt);
+    group.queueRequestedAt = earlierTime(group.queueRequestedAt, queueRequestedAt);
     group.startedAt = earlierTime(group.startedAt, startedAt);
     group.completedAt = laterTime(group.completedAt, completedAt);
     group.canceledAt = laterTime(group.canceledAt, timeValue(row.QUEUE_CANCELED_AT));
     group.hiddenAt = laterTime(group.hiddenAt, timeValue(row.HISTORY_HIDDEN_AT));
-    group.totalJobs += Number(row.TOTAL_JOB_COUNT || 0);
+    group.totalJobs += Math.max(0, Number(row.TOTAL_JOB_COUNT || 0) - Number(row.CANCELED_JOB_COUNT || 0));
     group.completedJobs += Number(row.COMPLETED_JOB_COUNT || 0);
-    group.activeJobs += Number(row.ACTIVE_JOB_COUNT || 0);
-    group.runningJobs += Number(row.RUNNING_JOB_COUNT || 0);
+    const canExecute = !["blocked", "error", "published", "ready"].includes(row.RUN_STATUS);
+    group.activeJobs += canExecute ? Number(row.ACTIVE_JOB_COUNT || 0) : 0;
+    group.runningJobs += canExecute ? Number(row.RUNNING_JOB_COUNT || 0) : 0;
     group.maxEpisodeNo = Math.max(group.maxEpisodeNo, Number(row.EPISODE_NO || 0));
     if (Number(row.RUN_TARGET_EPISODE_COUNT) > 0) {
       group.targetEpisodeCount = Math.max(1, Number(row.RUN_TARGET_EPISODE_COUNT));
@@ -4754,7 +4718,8 @@ export function summarizeQueue(rows = [], timingRows = []) {
     group.hasConcept ||= row.RUN_TYPE === "concept";
     group.hasPlanning ||= row.RUN_TYPE === "planning";
     group.hasError ||= row.RUN_STATUS === "error";
-    group.hasBlocked ||= row.RUN_STATUS === "blocked" && !row.QUEUE_CANCELED_AT;
+    group.hasBlocked ||= row.RUN_STATUS === "blocked" && !row.QUEUE_CANCELED_AT
+      && row.FAILURE_CODE !== "operator_pilot_rewrite";
     if (row.FAILURE_CODE) group.failureCode = row.FAILURE_CODE;
     if (Number(row.ACTIVE_JOB_COUNT || 0) > 0) group.stage = row.CURRENT_STAGE || group.stage;
     groups.set(id, group);
@@ -4780,6 +4745,7 @@ export function summarizeQueue(rows = [], timingRows = []) {
       startedAt: isoTime(startedAt),
       completedAt: isoTime(completedAt),
       durationSeconds: elapsedSeconds(startedAt, completedAt),
+      nextAttemptAt: isoTime(timeValue(row.NEXT_ATTEMPT_AT)),
       createdAt: isoTime(timeValue(row.CREATED_AT))
     });
     if (["retry_wait", "error"].includes(row.JOB_STATUS) && row.ERROR_CODE) {
@@ -4790,15 +4756,29 @@ export function summarizeQueue(rows = [], timingRows = []) {
   const all = [...groups.values()];
   const active = all
     .filter((group) => group.activeJobs > 0 && !group.canceledAt)
-    .sort((left, right) => (left.requestedAt || 0) - (right.requestedAt || 0));
+    .sort((left, right) => {
+      const rank = (item) => item.scheduleStatus === "paused" ? 2 : item.id === runtime.activeGroupId ? 0 : 1;
+      return rank(left) - rank(right) || (left.queueRequestedAt || 0) - (right.queueRequestedAt || 0) || left.id.localeCompare(right.id);
+    });
   const hasRunning = active.some((group) => group.runningJobs > 0);
   let waitingPosition = 0;
   const items = active.map((group) => {
     const running = group.runningJobs > 0;
-    if (!running) waitingPosition += 1;
+    const held = group.scheduleStatus === "paused" || group.scheduleStatus === "archived";
+    if (!running && !held) waitingPosition += 1;
+    const current = group.stageTimings.find((item) => item.status === "running")
+      || group.stageTimings.find((item) => ["queued", "retry_wait"].includes(item.status));
+    const retryAt = current?.status === "retry_wait" ? current.nextAttemptAt : null;
     return queueGroupView(group, {
       status: running ? "running" : "waiting",
-      queuePosition: running ? 0 : waitingPosition,
+      queuePosition: running ? 0 : held ? null : waitingPosition,
+      waitReason: runtime.paused ? "system_paused" : held ? "schedule_paused"
+        : retryAt && Date.parse(retryAt) > Date.now() ? "retry_delay" : "queue_order",
+      nextAttemptAt: retryAt,
+      stage: current?.type || group.stage,
+      latestRunId: current?.runId || group.latestRunId,
+      stageElapsedSeconds: running && current?.startedAt ? elapsedSeconds(timeValue(current.startedAt), Date.now()) : null,
+      requestedAt: isoTime(group.queueRequestedAt),
       cancelable: !running,
       elapsedSeconds: elapsedSeconds(group.startedAt || group.requestedAt, Date.now())
     });
@@ -4817,28 +4797,33 @@ export function summarizeQueue(rows = [], timingRows = []) {
       })
     : null;
   const failed = all
-    .filter((group) => !group.canceledAt && !group.hiddenAt && (group.hasError || group.hasBlocked))
+    .filter((group) => !group.canceledAt && !group.hiddenAt && group.activeJobs === 0 && (group.hasError || group.hasBlocked))
     .sort((left, right) => (right.completedAt || right.requestedAt || 0) - (left.completedAt || left.requestedAt || 0));
   const latestHealthyTimeBySchedule = new Map();
   for (const group of [...active, ...completed]) {
-    if (!group.scheduleId) continue;
-    const time = group.completedAt || group.startedAt || group.requestedAt || 0;
+    const key = group.storyId || group.scheduleId;
+    if (!key) continue;
+    const time = Math.max(group.completedAt || 0, group.startedAt || 0, group.queueRequestedAt || 0, group.requestedAt || 0);
     latestHealthyTimeBySchedule.set(
-      group.scheduleId,
-      Math.max(latestHealthyTimeBySchedule.get(group.scheduleId) || 0, time)
+      key,
+      Math.max(latestHealthyTimeBySchedule.get(key) || 0, time)
     );
+    if (group.scheduleId) {
+      latestHealthyTimeBySchedule.set(group.scheduleId,
+        Math.max(latestHealthyTimeBySchedule.get(group.scheduleId) || 0, time));
+    }
   }
   const attentionGroups = [];
   const seenFailedSchedules = new Set();
   for (const group of failed) {
-    const key = group.scheduleId || group.id;
+    const key = group.storyId || group.scheduleId || group.id;
     if (seenFailedSchedules.has(key)) continue;
     seenFailedSchedules.add(key);
     const failedAt = group.completedAt || group.requestedAt || 0;
-    if (group.scheduleId && (latestHealthyTimeBySchedule.get(group.scheduleId) || 0) > failedAt) continue;
+    if ((latestHealthyTimeBySchedule.get(key) || 0) > failedAt) continue;
     attentionGroups.push(group);
   }
-  const attention = attentionGroups.slice(0, 5).map((group) => queueGroupView(group, {
+  const attention = attentionGroups.slice(0, 100).map((group) => queueGroupView(group, {
     status: "error",
     queuePosition: null,
     cancelable: false,
@@ -4853,7 +4838,7 @@ export function summarizeQueue(rows = [], timingRows = []) {
       })
     : null;
   const history = all
-    .filter((group) => !group.canceledAt && !group.hiddenAt && group.totalJobs > 0)
+    .filter((group) => !group.canceledAt && !group.hiddenAt && group.totalJobs > 0 && group.activeJobs === 0)
     .sort((left, right) => (right.requestedAt || 0) - (left.requestedAt || 0))
     .slice(0, 30)
     .map((group) => {
@@ -4954,7 +4939,7 @@ function queueGroupView(group, overrides) {
     retryable: group.hasError,
     ...overrides
   };
-  view.progress = queueProgressView(group, view.status);
+  view.progress = queueProgressView({ ...group, stage: view.stage }, view.status);
   return view;
 }
 
@@ -5163,6 +5148,7 @@ async function listStalledFirstEpisodeStories(connection) {
   const result = await connection.execute(
     `select * from (
        select story.id, story.title, story.logline, story.genres_json,
+              count(*) over () as total_count,
               story.story_status, story.created_at, story.updated_at,
               latest.id as latest_run_id,
               latest.queue_group_id as latest_queue_group_id,
@@ -5170,10 +5156,13 @@ async function listStalledFirstEpisodeStories(connection) {
               latest.run_status as latest_run_status,
               latest.current_stage as latest_stage,
               latest.rewrite_count,
+              latest.episode_no as latest_episode_no, latest.operator_rewrite_count,
               latest.failure_code as latest_failure_code,
               latest.completed_at as latest_completed_at,
               latest.created_at as latest_run_created_at,
               schedule.schedule_name, schedule.schedule_status, schedule.publication_mode,
+              json_value(schedule.concept_policy_json, '$.openingPilotMode' returning varchar2(40) null on error) as opening_pilot_mode,
+              json_query(bible.narrative_blueprint_json, '$.serialMemory.pilotAssessment' returning clob null on error) as pilot_assessment_json,
               control.visibility,
               draft.id as latest_draft_id, draft.title as latest_draft_title,
               dbms_lob.getlength(draft.body_text) as latest_draft_characters,
@@ -5189,7 +5178,7 @@ async function listStalledFirstEpisodeStories(connection) {
            select * from (
              select serial_run.id, serial_run.queue_group_id, serial_run.story_id,
                     serial_run.schedule_id, serial_run.run_status, serial_run.current_stage,
-                    serial_run.rewrite_count, serial_run.failure_code,
+                    serial_run.rewrite_count, serial_run.operator_rewrite_count, serial_run.episode_no, serial_run.failure_code,
                     serial_run.queue_canceled_at, serial_run.completed_at, serial_run.created_at,
                     row_number() over (partition by serial_run.story_id order by serial_run.created_at desc) as rank_no
                from storyheaven_serial_runs serial_run
@@ -5198,6 +5187,7 @@ async function listStalledFirstEpisodeStories(connection) {
          ) latest on latest.story_id = story.id
          left join storyheaven_serial_schedules schedule on schedule.id = latest.schedule_id
          left join storyheaven_serial_story_controls control on control.story_id = story.id
+         left join storyheaven_serial_bibles bible on bible.story_id = story.id
          left join storyheaven_serial_drafts draft on draft.id = (
            select max(serial_draft.id) keep (dense_rank last order by serial_draft.version_no)
              from storyheaven_serial_drafts serial_draft
@@ -5212,20 +5202,22 @@ async function listStalledFirstEpisodeStories(connection) {
         where story.author_user_id = :author_user_id
           and story.content_origin = 'admin_seed'
           and story.story_status <> 'archived'
+          and nvl(control.visibility, 'public') <> 'archived'
           and latest.queue_canceled_at is null
-          and not exists (
+          and (latest.run_status in ('blocked', 'error') or not exists (
             select 1 from storyheaven_episodes episode where episode.story_id = story.id
-          )
+          ))
           and not exists (
             select 1
               from storyheaven_serial_runs active_run
               join storyheaven_serial_jobs active_job on active_job.run_id = active_run.id
              where active_run.story_id = story.id
                and active_run.queue_canceled_at is null
+               and active_run.run_status in ('queued', 'running', 'rewrite')
                and active_job.job_status in ('queued', 'running', 'retry_wait')
           )
         order by nvl(latest.completed_at, latest.created_at) desc, story.updated_at desc
-     ) where rownum <= 12`,
+     ) where rownum <= 100`,
     { author_user_id: SYSTEM_AUTHOR_ID }
   );
   return result.rows.map(mapStalledFirstEpisodeStory);
@@ -5233,6 +5225,10 @@ async function listStalledFirstEpisodeStories(connection) {
 
 function mapStalledFirstEpisodeStory(row) {
   return {
+    totalCount: Number(row.TOTAL_COUNT || 0),
+    episodeNo: Number(row.LATEST_EPISODE_NO || 1),
+    openingPilot: row.OPENING_PILOT_MODE === STORYHEAVEN_OPENING_PILOT_MODES.incubation
+      ? parseJson(row.PILOT_ASSESSMENT_JSON, {}) : null,
     id: row.ID,
     title: row.TITLE,
     logline: row.LOGLINE || "",
@@ -5636,7 +5632,7 @@ export function applyStoryHeavenOpeningPilotPromotion(assessment, {
     promotionMode: "system_auto",
     promotedBy: "system",
     promotedAt,
-    recommendation: "세 편이 엄격한 파일럿 기준을 모두 통과해 시스템이 정식 연재로 자동 승격했다."
+    recommendation: "프롤로그와 본편 1·2화가 공개 기준을 통과했습니다. 이후 연재는 운영자가 결정합니다."
   };
 }
 

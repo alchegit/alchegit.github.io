@@ -244,8 +244,8 @@ assert.match(serverSource, /requireAdminAccount, serialSystemRateLimiter/u, "eme
 assert.match(serverSource, /if \(storyHeavenSerialEmergencyPaused\) throw httpError\("serial_system_paused", 409\)/u, "late worker results must be rejected during emergency pause");
 assert.match(serverSource, /scheduleSerialPausePersistenceRetry/u, "emergency pause must retry database persistence without reopening the queue");
 assert.match(serialServiceSource, /not exists \(\s*select 1 from storyheaven_serial_jobs running_job/u, "all automatic and operator work must share one running slot");
-assert.match(serialServiceSource, /join storyheaven_serial_runs queue_origin on queue_origin\.queue_group_id = candidate_run\.queue_group_id/u, "all stages in one work must keep their original queue position");
-assert.match(serialServiceSource, /order by min\(queue_origin\.created_at\), candidate_run\.queue_group_id/u, "queue groups must be claimed in stable request order");
+assert.match(serialServiceSource, /candidate_run\.queue_group_id = :active_group/u, "started work must keep its slot until the group finishes");
+assert.match(serialServiceSource, /min\(candidate_run\.queue_requested_at\), candidate_run\.queue_group_id/u, "waiting work must use its current enqueue time");
 assert.match(serialServiceSource, /error_code = 'operator_story_hidden'/u, "hiding a story must revoke linked jobs");
 assert.match(serialServiceSource, /queue_status in \('ready', 'publishing'\)/u, "hiding a story must cancel linked publication work");
 assert.match(serialServiceSource, /and serial_run\.queue_canceled_at is null\) as active_run_count/u, "hidden runs must not block a restored story");
@@ -256,7 +256,7 @@ assert.match(serialServiceSource, /rawStoryIds\.length > 100/u, "bulk story cont
 assert.match(serialServiceSource, /current\.visibility === "archived"/u, "bulk private restore must return hidden stories to operator control");
 assert.match(serverSource, /createdFrom: req\.query\.createdFrom/u, "managed story dates must reach the database query");
 assert.match(serverSource, /stories\/bulk-control/u, "managed stories must expose the bulk control route");
-assert.match(serialOperatorHtml, /프롤로그 등록 전 확인/u, "pre-publication prologues must use an accurate operator label");
+assert.match(serialOperatorHtml, /조치가 필요한 작품/u, "the action list must include both prologues and main installments");
 assert.match(serialOperatorSource, /hideIncompleteStory/u, "incomplete prologues must be independently hideable");
 assert.match(serialOperatorSource, /서버에 재개 요청을 보내는 중입니다/u, "queue retry must show immediate persistent feedback");
 assert.match(serialOperatorSource, /가동 설정에서 이 설정만 시작/u, "paused queue work must point to the scoped schedule control");
@@ -310,8 +310,8 @@ assert.match(managedStoriesSource, /selectedStoryIds: new Set\(\)/u, "managed st
 assert.match(managedStoriesSource, /offset \+= 100/u, "large bulk changes must be split into safe API batches");
 assert.match(managedStoriesSource, /목록에 복원/u, "hidden stories must be restorable");
 assert.match(managedStoriesSource, /function openingPilotPanel/u, "managed stories must explain opening pilot status and actions");
-assert.match(managedStoriesSource, /정식 연재로 승격/u, "ready pilots must provide an explicit operator promotion command");
-assert.match(managedStoriesSource, /검토 후 예외 승격/u, "weak pilots must allow a deliberate operator override");
+assert.match(managedStoriesSource, /첫 3편 공개 승인/u, "ready pilots must provide an explicit operator promotion command");
+assert.match(managedStoriesSource, /검토 후 직접 공개/u, "weak pilots must allow a deliberate operator override");
 assert.match(managedStoriesSource, /function pilotNeedsOperator/u, "operator-required pilots must be grouped ahead of unattended stories");
 assert.match(managedStoriesSource, /이 회차 재작성/u, "operators must be able to rewrite a selected unpublished pilot installment");
 assert.match(managedStoriesCss, /\.opening-pilot-metrics/u, "opening pilot evidence must have a stable responsive layout");
@@ -373,6 +373,7 @@ const retryService = createStoryHeavenSerialService({
   withTransaction: async (callback) => callback({
     execute: async (sql) => {
       retryStatements.push(sql);
+      if (sql.includes("from storyheaven_serial_runtime")) return { rows: [{ PAUSED: "N" }] };
       if (/count\(distinct serial_run\.id\) as run_count/u.test(sql)) {
         return { rows: [{
           RUN_COUNT: 1,
@@ -401,6 +402,7 @@ const claimService = createStoryHeavenSerialService({
   withTransaction: async (callback) => callback({
     execute: async (sql) => {
       claimStatements.push(sql);
+      if (sql.includes("from storyheaven_serial_runtime")) return { rows: [{ PAUSED: "N" }] };
       return { rows: [], rowsAffected: 0 };
     }
   }),

@@ -57,7 +57,7 @@ const stories = [
       averageReaderReward: 88.7,
       distinctEpisodeModes: 3,
       variedRhythm: true,
-      recommendation: "세 편이 엄격한 파일럿 기준을 모두 통과해 시스템이 정식 연재로 자동 승격했다.",
+      recommendation: "세 편이 엄격한 파일럿 기준을 모두 통과해 시스템이 첫 3편을 자동 공개 승인했다.",
       installments: [
         { episodeNo: 1, wouldReadNext: true, readerRewardScore: 89 },
         { episodeNo: 2, wouldReadNext: true, readerRewardScore: 88 },
@@ -113,7 +113,7 @@ const stories = [
       averageReaderReward: 89.3,
       distinctEpisodeModes: 3,
       variedRhythm: true,
-      recommendation: "세 편이 기준을 통과해 운영자 승격 검토가 가능합니다.",
+      recommendation: "세 편이 기준을 통과해 운영자 공개 승인 검토가 가능합니다.",
       installments: [
         { episodeNo: 1, wouldReadNext: true, readerRewardScore: 91 },
         { episodeNo: 2, wouldReadNext: true, readerRewardScore: 89 },
@@ -275,12 +275,12 @@ try {
     assert.equal(await legacyStory.getByRole("button", { name: /장편 설계/u }).count(), 0, `${viewport.name} legacy story has no strengthening action`);
     assert.equal(await legacyStory.locator('[data-metric="architecture"] strong').textContent(), "기존 설정 유지", `${viewport.name} legacy architecture stays unchanged`);
     assert.match(await legacyStory.locator(".schedule-note").textContent(), /작품 설정부터 자동 준비/u, `${viewport.name} explains automatic bootstrap`);
-    assert.match(await legacyStory.locator(".opening-pilot").textContent(), /승격 가능/u, `${viewport.name} opening pilot status is visible`);
-    assert.equal(await legacyStory.getByRole("button", { name: "정식 연재로 승격" }).count(), 1, `${viewport.name} opening pilot promotion action is visible`);
+    assert.match(await legacyStory.locator(".opening-pilot").textContent(), /공개 승인 가능/u, `${viewport.name} opening pilot status is visible`);
+    assert.equal(await legacyStory.getByRole("button", { name: "첫 3편 공개 승인" }).count(), 1, `${viewport.name} opening pilot promotion action is visible`);
     assert.equal(await legacyStory.getByRole("button", { name: "이 회차 재작성" }).count(), 3, `${viewport.name} each pilot installment can be rewritten independently`);
     const automaticPilot = automaticStory.locator(".opening-pilot");
-    assert.match(await automaticPilot.textContent(), /자동 승격 완료.*시스템 자동 승격/u, `${viewport.name} automatic pilot decision is visible`);
-    assert.equal(await automaticPilot.getByRole("button", { name: "정식 연재로 승격" }).count(), 0, `${viewport.name} automatic pilot does not ask for redundant promotion`);
+    assert.match(await automaticPilot.textContent(), /자동 공개 승인 완료.*시스템 자동 공개 승인/u, `${viewport.name} automatic pilot decision is visible`);
+    assert.equal(await automaticPilot.getByRole("button", { name: "첫 3편 공개 승인" }).count(), 0, `${viewport.name} automatic pilot does not ask for redundant promotion`);
     assert.match(await automaticStory.locator(".story-state-line").textContent(), /대기 2번/u, `${viewport.name} queue position`);
     const firstManagement = automaticStory.locator(".story-management");
     assert.equal(await firstManagement.evaluate((element) => element.open), viewport.name === "desktop", `${viewport.name} management disclosure default`);
