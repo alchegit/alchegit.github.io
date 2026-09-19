@@ -1226,7 +1226,13 @@
   }
 
   function actionExcerpt(value, limit) {
-    const text = String(value || "").replace(/\s+/gu, " ").trim();
+    const text = String(value || "").replace(/\s+/gu, " ")
+      .replace(/\bepisodeCard\b/gu, "회차 설계")
+      .replace(/\barc\.episodePlan\b/gu, "장기 회차 계획")
+      .replace(/\bruleApplicationProofs\b/gu, "규칙 적용 근거")
+      .replace(/\bcausalCheckpoints\b/gu, "장면별 인과 점검")
+      .replace(/\bnarrativeBlueprint\b/gu, "설정집")
+      .trim();
     return text.length > limit ? `${text.slice(0, limit)}…` : text;
   }
 

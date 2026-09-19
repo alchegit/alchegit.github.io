@@ -1134,6 +1134,7 @@
 .stalled-copy {
   min-width: 0;
   grid-column:2;
+  overflow-wrap:anywhere;
 }
 
 .stalled-heading {

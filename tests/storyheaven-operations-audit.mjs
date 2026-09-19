@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 const root = process.env.STORYHEAVEN_TEST_ROOT || 'http://127.0.0.1:4178';
 const browser = await chromium.launch();
 try {
-  for (const width of [390, 1440]) {
+  for (const width of [320, 390, 1440]) {
     const page = await browser.newPage({ viewport: { width, height: 960 } });
     const errors = [];
     const requests = [];
@@ -13,7 +13,7 @@ try {
       rewriteCount: 2, operatorRewriteCount: 1, draft: { characterCount: 3700 },
       latestCompletedAt: new Date().toISOString(), schedule: { id: 'schedule-1', status: 'active' },
       review: { decision: 'blocked', safetyPassed: true, summary: '고칠 장면이 한 곳 남아 있습니다.',
-        issues: [{ severity: 'critical', sceneNo: 2, evidence: '도구가 준비 과정 없이 등장합니다.', suggestion: '도구를 챙기는 행동을 앞 장면에서 보여 주세요.' }] }
+        issues: [{ severity: 'critical', sceneNo: 2, evidence: '도구가 준비 과정 없이 등장합니다. missing_document_ownership_and_transition_evidence', suggestion: '도구를 챙기는 행동을 앞 장면에서 보여 주세요.' }] }
     }));
     page.on('pageerror', (error) => errors.push(error.message));
     await page.addInitScript(() => {
