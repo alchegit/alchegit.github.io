@@ -14,7 +14,7 @@ body.is-reading { background:var(--reading-bg); }
 .reader-topline button,.reader-close { border:0; background:transparent; width:44px; height:44px; cursor:pointer; }
 .reader-topline img,.reader-close img { width:22px; height:22px; }
 .novel-reader .reader-heading { padding:38px 24px 28px; background:transparent; color:var(--reading-ink); align-items:start; flex-direction:column; gap:12px; }
-.novel-reader .reader-heading h2 { font-size:26px; line-height:1.45; overflow-wrap:anywhere; }
+.novel-reader .reader-heading h2 { font-size:26px; line-height:1.45; word-break:keep-all; overflow-wrap:anywhere; text-wrap:balance; }
 .novel-reader .reader-heading .eyebrow,.novel-reader .reader-stats { color:var(--reading-muted); font-size:12px; }
 .novel-reader .reading-progress { top:0; background:var(--reading-rule); }
 .novel-reader .novel-body { padding:28px 24px 48px; max-width:720px; margin:auto; background:var(--reading-bg); color:var(--reading-ink); }
