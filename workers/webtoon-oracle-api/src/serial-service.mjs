@@ -2901,6 +2901,9 @@ export function createStoryHeavenSerialService({
         source_job_id: job.ID
       }
     );
+    if (job.JOB_TYPE === "revise_episode_card") {
+      await synchronizeArcEpisodePlan(connection, run, card);
+    }
     const context = await loadSerialContext(connection, job.STORY_ID);
     await connection.execute(
       `update storyheaven_serial_runs set current_stage = 'write_draft', updated_at = systimestamp where id = :run_id`,
@@ -2915,6 +2918,32 @@ export function createStoryHeavenSerialService({
         repairLedger: parseJson(run.INPUT_JSON, {}).repairLedger || null
       }
     });
+  }
+
+  async function synchronizeArcEpisodePlan(connection, run, card) {
+    const arc = await selectOne(connection,
+      `select episode_plan_json from storyheaven_serial_arcs where id = :arc_id for update`,
+      { arc_id: run.ARC_ID });
+    if (!arc) throw failure("serial_arc_required", 409);
+    const episodePlan = parseJson(arc.EPISODE_PLAN_JSON, []);
+    let matched = false;
+    const synchronized = episodePlan.map((item) => {
+      if (Number(item?.episodeNo) !== Number(run.EPISODE_NO)) return item;
+      matched = true;
+      return {
+        ...item,
+        promise: card.promise,
+        turn: card.payoff,
+        hook: card.hook
+      };
+    });
+    if (!matched) throw failure("serial_arc_episode_not_planned", 409);
+    await connection.execute(
+      `update storyheaven_serial_arcs
+          set episode_plan_json = :episode_plan_json, updated_at = systimestamp
+        where id = :arc_id`,
+      { arc_id: run.ARC_ID, episode_plan_json: clobJson(synchronized) }
+    );
   }
 
   async function acceptDraft(connection, job, draft, rewritten) {
@@ -3168,6 +3197,26 @@ export function createStoryHeavenSerialService({
       rewriteCount: Number(run.REWRITE_COUNT || 0),
       episodeNo: run.EPISODE_NO
     });
+    const criticalIssues = Array.isArray(review.issues)
+      ? review.issues.filter((issue) => issue?.severity === "critical")
+      : [];
+    const effectiveRunInput = criticalIssues.length
+      ? {
+          ...runInput,
+          repairLedger: mergeRepairLedger(runInput.repairLedger, criticalIssues, {
+            draftVersion: Number(draft.VERSION_NO || 0),
+            cycle: Math.max(1, Number(runInput.operatorRepairCycle || 0))
+          })
+        }
+      : runInput;
+    if (effectiveRunInput !== runInput) {
+      await connection.execute(
+        `update storyheaven_serial_runs
+            set input_json = :input_json, updated_at = systimestamp
+          where id = :run_id`,
+        { run_id: job.RUN_ID, input_json: clobJson(effectiveRunInput) }
+      );
+    }
     const reviewVersion = await selectOne(connection,
       `select nvl(max(review_version), 0) + 1 as next_version from storyheaven_editorial_reviews where run_id = :run_id`,
       { run_id: job.RUN_ID });
@@ -3239,8 +3288,11 @@ export function createStoryHeavenSerialService({
       { run_id: job.RUN_ID, quality_json: clobJson({ deterministic: qa, editorial: review, decision }) }
     );
     if (decision.state === "approved") return approveDraft(connection, run, draft);
-    if (shouldRepairEpisodeCard({ decision, runInput, review })) {
-      await queueEpisodeCardRepair(connection, run, review, { requestedBy: "system" });
+    if (shouldRepairEpisodeCard({ decision, runInput: effectiveRunInput, review })) {
+      await queueEpisodeCardRepair(connection, run, review, {
+        requestedBy: "system",
+        runInputOverride: effectiveRunInput
+      });
       return;
     }
     if (!decision.rewriteAllowed) {
@@ -3259,8 +3311,14 @@ export function createStoryHeavenSerialService({
     const revisionJobType = serialRevisionJobType({ decision, qa, review });
     await connection.execute(
       `update storyheaven_serial_runs set run_status = 'rewrite', current_stage = :current_stage,
-              rewrite_count = :rewrite_count, updated_at = systimestamp where id = :run_id`,
-      { run_id: job.RUN_ID, current_stage: revisionJobType, rewrite_count: nextRewrite }
+              rewrite_count = :rewrite_count, input_json = :input_json,
+              updated_at = systimestamp where id = :run_id`,
+      {
+        run_id: job.RUN_ID,
+        current_stage: revisionJobType,
+        rewrite_count: nextRewrite,
+        input_json: clobJson(effectiveRunInput)
+      }
     );
     const context = await loadSerialContext(connection, job.STORY_ID);
     const activeCard = context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO));
@@ -3288,7 +3346,7 @@ export function createStoryHeavenSerialService({
         },
         deterministicQa: qa,
         editor: review,
-        repairLedger: runInput.repairLedger || null,
+        repairLedger: effectiveRunInput.repairLedger || null,
         rewriteNumber: nextRewrite,
         instruction: "지적된 장면만 우선 고치되 수정 때문에 앞뒤 인과나 설정이 깨지는 부분은 함께 정리한다."
       }

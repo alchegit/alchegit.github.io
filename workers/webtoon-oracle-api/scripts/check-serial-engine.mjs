@@ -121,6 +121,9 @@ assert.match(serialServiceSource, /type: "revise_episode_card"/u, "structural qu
 assert.match(serialServiceSource, /cardRepairCount: Number\(runInput\.cardRepairCount/u, "card repair must be bounded in durable run input");
 assert.match(serialServiceSource, /repairLedger: runInput\.repairLedger/u, "repair obligations must survive card repair and later review stages");
 assert.match(serialServiceSource, /rewrite_count = 0, operator_rewrite_count = operator_rewrite_count \+ 1/u, "an operator repair request must receive a fresh bounded automatic rewrite cycle");
+assert.match(serialServiceSource, /async function synchronizeArcEpisodePlan/u, "a repaired episode card must synchronize its directional arc entry");
+assert.match(serialServiceSource, /promise: card\.promise,[\s\S]*turn: card\.payoff,[\s\S]*hook: card\.hook/u, "arc synchronization must remove stale episode promises, turns, and hooks");
+assert.match(serialServiceSource, /criticalIssues[\s\S]*mergeRepairLedger\(runInput\.repairLedger/u, "new critical findings during automatic review must join the cumulative repair ledger");
 assert.match(serverSource, /runs\/resolve-quality-holds/u, "quality holds must support one bulk enqueue request");
 assert.match(serialOperatorHtml, /data-stalled-select-all/u, "the operator must be able to select all visible quality holds");
 assert.match(serialOperatorSource, /bulkRewriteQualityHolds/u, "the operator must be able to enqueue selected quality holds together");
