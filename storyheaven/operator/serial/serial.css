@@ -3,20 +3,21 @@
   align-items: end;
   justify-content: space-between;
   gap: 24px;
-  padding-top: clamp(34px, 4vw, 58px);
-  padding-bottom: 30px;
+  padding-top: 28px;
+  padding-bottom: 22px;
 }
 
 .serial-hero h1 {
   max-width: 900px;
-  font-size: clamp(2.4rem, 4vw, 4rem);
-  line-height: 1.05;
+  font-size: 34px;
+  line-height: 1.2;
 }
 
 .serial-hero > div:first-child > p:last-child {
   max-width: 720px;
   margin: 12px 0 0;
-  color: #d6dbe5;
+  color: #4c5868;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -91,7 +92,7 @@
   flex-wrap: wrap;
   gap: 10px;
   margin: 0;
-  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-size: 24px;
 }
 
 .system-clock {
