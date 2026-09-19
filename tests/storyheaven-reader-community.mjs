@@ -18,7 +18,7 @@ try {
         onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }), signOut: async () => ({})
       } }) };
     });
-    const story = { id: 'reader-test', title: '먼 길을 걷는 두 사람', contentOrigin: 'admin_seed', contentRating: 'teen', genre: 'fantasy', genres: ['fantasy'], author: { nickname: '스토리천국 편집부' }, episodeCount: 3, synopsis: '산을 넘어 집으로 돌아가려는 두 사람이 낯선 길에서 서로의 약속을 알아 간다.', coverPath: '/storyheaven/assets/covers/last-platform.webp' };
+    const story = { id: 'reader-test', title: '마도 학교의 퇴학 통지서는 괴물을 부른다', contentOrigin: 'admin_seed', contentRating: 'teen', genre: 'fantasy', genres: ['fantasy'], author: { nickname: '스토리천국 편집부' }, episodeCount: 3, synopsis: '산을 넘어 집으로 돌아가려는 두 사람이 낯선 길에서 서로의 약속을 알아 간다.', coverPath: '/storyheaven/assets/covers/last-platform.webp' };
     const episodes = [1, 2, 3].map((episodeNo) => ({ episodeNo, title: episodeNo === 1 ? '프롤로그: 남겨 둔 약속' : `본편 ${episodeNo - 1}화: 다시 길을 나서다`, summary: '길을 떠나는 두 사람의 이야기', estimatedReadMinutes: 5 }));
     const body = Array.from({ length: 45 }, (_, i) => `${i + 1}. 지윤은 문 앞에서 가방을 내려놓았다. 어제 함께 걸었던 길은 창밖의 숲 너머로 이어져 있었다. "먼저 쉬었다 가자." 동료가 물병을 건넸다. 지윤은 남은 물을 확인하고 고개를 끄덕였다.`).join('\n\n');
     await page.route('https://cdn.jsdelivr.net/**', (route) => route.abort());
