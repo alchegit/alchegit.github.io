@@ -1888,6 +1888,9 @@ function normalizeEpisodeCard(source, options = {}) {
   const ruleApplicationProofs = developmentV2
     ? normalizeRuleApplicationProofs(source.ruleApplicationProofs, payload.bible?.worldRules, scenes)
     : [];
+  const causalCheckpoints = developmentV2
+    ? normalizeCausalCheckpoints(source.causalCheckpoints, scenes)
+    : [];
   if (payload.episodeNo && episodeNo !== Number(payload.episodeNo)) {
     throw new Error("serial_episode_card_number_mismatch");
   }
@@ -1907,7 +1910,8 @@ function normalizeEpisodeCard(source, options = {}) {
             source.continuityMemoryPlan,
             payload.bible?.narrativeBlueprint?.serialMemory
           ),
-      ruleApplicationProofs
+      ruleApplicationProofs,
+      causalCheckpoints
     } : {}),
     scenes,
     payoff: requiredText(source.payoff, 500, 10, "serial_episode_payoff_invalid"),
@@ -1921,6 +1925,33 @@ function normalizeEpisodeCard(source, options = {}) {
       payload.bible?.narrativeBlueprint?.seriesArchitecture
     )
   };
+}
+
+function normalizeCausalCheckpoints(value, scenes) {
+  const sceneNumbers = new Set(scenes.map((scene) => scene.sceneNo));
+  const checkpoints = array(value).slice(0, STORYHEAVEN_SERIAL_LIMITS.scenesMax).map((item) => {
+    const source = object(item);
+    const sceneNo = integer(source.sceneNo, 1, STORYHEAVEN_SERIAL_LIMITS.scenesMax, null);
+    if (!sceneNumbers.has(sceneNo)) throw new Error("serial_causal_checkpoint_scene_invalid");
+    return {
+      sceneNo,
+      outcome: requiredText(source.outcome, 400, 10, "serial_causal_checkpoint_outcome_invalid"),
+      setupEvidence: requiredText(source.setupEvidence, 500, 10, "serial_causal_checkpoint_setup_invalid"),
+      setupPlacement: requiredText(source.setupPlacement, 300, 10, "serial_causal_checkpoint_placement_invalid"),
+      actor: requiredText(source.actor, 120, 1, "serial_causal_checkpoint_actor_invalid"),
+      action: requiredText(source.action, 400, 10, "serial_causal_checkpoint_action_invalid"),
+      result: requiredText(source.result, 400, 10, "serial_causal_checkpoint_result_invalid"),
+      remainingConsequence: requiredText(source.remainingConsequence, 400, 10, "serial_causal_checkpoint_consequence_invalid"),
+      forbiddenShortcut: requiredText(source.forbiddenShortcut, 400, 10, "serial_causal_checkpoint_shortcut_invalid")
+    };
+  });
+  const checkpointScenes = checkpoints.map((item) => item.sceneNo);
+  if (checkpoints.length !== scenes.length
+    || new Set(checkpointScenes).size !== checkpointScenes.length
+    || scenes.some((scene) => !checkpointScenes.includes(scene.sceneNo))) {
+    throw new Error("serial_causal_checkpoints_incomplete");
+  }
+  return checkpoints.sort((left, right) => left.sceneNo - right.sceneNo);
 }
 
 function normalizeRuleApplicationProofs(value, worldRulesValue, scenes) {
@@ -2088,6 +2119,28 @@ function normalizeDraft(source, rewritten, options = {}) {
     });
     if (!draft.changes.length) throw new Error("serial_rewrite_changes_required");
   }
+  const obligations = array(object(payload.repairLedger).obligations);
+  if (obligations.length) {
+    const expectedKeys = obligations.map((item) => requiredText(object(item).key, 80, 8, "serial_repair_key_invalid"));
+    draft.repairEvidence = array(source.repairEvidence).slice(0, 30).map((item) => {
+      const evidence = object(item);
+      const key = requiredText(evidence.key, 80, 8, "serial_repair_evidence_key_invalid");
+      const quote = requiredText(evidence.quote, 500, 8, "serial_repair_evidence_quote_invalid");
+      if (!normalizedTextIncludes(draft.body, quote)) throw new Error("serial_repair_evidence_missing_from_draft");
+      return {
+        key,
+        sceneNo: integer(evidence.sceneNo, 1, STORYHEAVEN_SERIAL_LIMITS.scenesMax, null),
+        quote,
+        explanation: requiredText(evidence.explanation, 500, 10, "serial_repair_evidence_explanation_invalid")
+      };
+    });
+    const suppliedKeys = draft.repairEvidence.map((item) => item.key);
+    if (new Set(suppliedKeys).size !== suppliedKeys.length
+      || expectedKeys.some((key) => !suppliedKeys.includes(key))
+      || suppliedKeys.some((key) => !expectedKeys.includes(key))) {
+      throw new Error("serial_repair_evidence_incomplete");
+    }
+  }
   return draft;
 }
 
@@ -2098,7 +2151,10 @@ function normalizeLinePolish(source, options = {}) {
     !== String(originalSource.body).split(/\n{2,}/u).filter((item) => item.trim()).length) {
     throw new Error("serial_line_polish_paragraph_structure_mutated");
   }
-  const original = normalizeDraft(originalSource, false, options);
+  const original = normalizeDraft(originalSource, false, {
+    ...options,
+    payload: { ...object(options.payload), repairLedger: null }
+  });
   const polished = normalizeDraft(source, true, options);
   if (polished.title !== original.title || polished.summary !== original.summary) {
     throw new Error("serial_line_polish_metadata_mutated");
@@ -2184,6 +2240,13 @@ function normalizeEditorialReview(source, options = {}) {
   if (developmentV2 && !wouldReadNext && decision === "rewrite_required" && !rewriteScenes.length) {
     throw new Error("serial_review_next_read_rewrite_scenes_required");
   }
+  const repairObligations = array(object(object(options.payload).repairLedger).obligations);
+  const repairVerification = repairObligations.length
+    ? normalizeRepairVerification(source.repairVerification, repairObligations, reviewDraftBody)
+    : [];
+  if (decision === "approved" && repairVerification.some((item) => item.status !== "resolved")) {
+    throw new Error("serial_review_repair_unresolved_approval_invalid");
+  }
   return {
     decision,
     ...(toneAssessment ? { toneAssessment } : {}),
@@ -2195,6 +2258,7 @@ function normalizeEditorialReview(source, options = {}) {
       evidence: toneAssessment.evidence.join(" / "), suggestion: toneAssessment.summary
     }] : issues,
     rewriteScenes,
+    ...(repairVerification.length ? { repairVerification } : {}),
     scoreEvidence,
     audienceLenses,
     ...(styleAssessment ? { styleAssessment } : {}),
@@ -2210,6 +2274,37 @@ function normalizeEditorialReview(source, options = {}) {
       }
     } : {})
   };
+}
+
+function normalizeRepairVerification(value, obligations, draftBody) {
+  const expectedKeys = obligations.map((item) => requiredText(object(item).key, 80, 8, "serial_repair_key_invalid"));
+  const verification = array(value).slice(0, 30).map((item) => {
+    const source = object(item);
+    const key = requiredText(source.key, 80, 8, "serial_review_repair_key_invalid");
+    const status = requiredEnum(source.status, ["resolved", "unresolved"], "serial_review_repair_status_invalid");
+    const evidence = requiredText(source.evidence, 500, 8, "serial_review_repair_evidence_invalid");
+    if (status === "resolved" && !normalizedTextIncludes(draftBody, evidence)) {
+      throw new Error("serial_review_repair_evidence_missing");
+    }
+    return {
+      key,
+      status,
+      evidence,
+      note: requiredText(source.note, 500, 10, "serial_review_repair_note_invalid")
+    };
+  });
+  const suppliedKeys = verification.map((item) => item.key);
+  if (new Set(suppliedKeys).size !== suppliedKeys.length
+    || expectedKeys.some((key) => !suppliedKeys.includes(key))
+    || suppliedKeys.some((key) => !expectedKeys.includes(key))) {
+    throw new Error("serial_review_repair_verification_incomplete");
+  }
+  return verification;
+}
+
+function normalizedTextIncludes(body, quote) {
+  const normalize = (value) => String(value || "").normalize("NFC").replace(/\s+/gu, " ").trim();
+  return normalize(body).includes(normalize(quote));
 }
 
 function normalizeStyleAssessment(value, proseStyle) {

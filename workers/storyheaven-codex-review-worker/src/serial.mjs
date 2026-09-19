@@ -21,7 +21,7 @@ export const SERIAL_JOB_TYPES = Object.freeze([
 ]);
 const JOB_TYPES = new Set(SERIAL_JOB_TYPES);
 
-export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-16-bounded-auto-review-v32";
+export const SERIAL_EDITORIAL_POLICY_VERSION = "2026-09-19-causal-repair-ledger-v33";
 
 export function buildSerialPrompt(job) {
   const type = String(job?.type || "");
@@ -52,6 +52,7 @@ export function buildSerialPrompt(job) {
     storyDevelopmentInstruction(type, job.payload),
     genreExperienceAndStyleInstruction(type, job.payload),
     causalIntegrityInstruction(type),
+    repairLedgerInstruction(type, job.payload),
     naturalKoreanInstruction(type),
     ["write_draft", "rewrite_draft"].includes(type)
       ? "Manuscript length is counted after removing ALL whitespace, including spaces and line breaks. The minimum is 2500 non-whitespace characters and the maximum is 12000. Aim for at least 3200 non-whitespace characters to avoid an accidental undershoot. If deterministicQa reports body_too_short, expand the existing planned scenes with concrete action, dialogue, and necessary context until the minimum is met; the surgical-edit rule does not require preserving an undersized draft. Do not pad with repeated explanation or introduce a new premise."
@@ -478,10 +479,10 @@ function naturalKoreanInstruction(type) {
 
 function causalIntegrityInstruction(type) {
   if (["build_episode_card", "revise_episode_card"].includes(type)) {
-    return "Before accepting a scene solution, trace the exact obligation or danger, current actor, target or recipient, quantity or deadline when relevant, on-page action, binding world rule that authorizes the effect, and remaining consequence. Return at least one ruleApplicationProof. ruleText must copy one complete payload.bible.worldRules string exactly. eligibilityEvidence must be an observable existing fact placed before the effect, never a retrospective explanation. Paperwork, a declaration, or starting an action may not count as completed physical performance unless the copied world rule explicitly says so. An opponent, witness, pursuer, official, enforcer, or nearby object is not an eligible target unless the copied rule and visible evidence establish it. Never invent a new authority, signature, contract clause, exception, or procedure to rescue a planned payoff; change or remove the effect when existing worldRules and canon do not support it.";
+    return "Before accepting a scene solution, trace the exact obligation or danger, current actor, target or recipient, quantity or deadline when relevant, on-page action, binding world rule that authorizes the effect, and remaining consequence. Return at least one ruleApplicationProof and exactly one causalCheckpoint for every scene. A causalCheckpoint must put visible setup before action and distinguish ownership or authority, target eligibility, action, result, and what remains unresolved. It applies not only to powers but also to documents, contracts, clues, payments, food safety, tools, transport, rescue resources, official authority, and physical solutions. ruleText must copy one complete payload.bible.worldRules string exactly. eligibilityEvidence must be an observable existing fact placed before the effect, never a retrospective explanation. Paperwork, a declaration, or starting an action may not count as completed physical performance unless the copied world rule explicitly says so. An opponent, witness, pursuer, official, enforcer, or nearby object is not an eligible target unless the copied rule and visible evidence establish it. Never invent a new authority, signature, contract clause, exception, prepared vehicle, payment, safe resource, or procedure to rescue a planned payoff; change or remove the effect when existing worldRules and canon do not support it.";
   }
   if (type === "write_draft") {
-    return "For every ruleApplicationProof, put eligibilityEvidence on the page at evidencePlacement before triggerAction, then limit the outcome to allowedEffect and preserve remainingCost. Never state or imply that evidence appeared earlier unless the actual manuscript contains it. Keep the actor, recipient or target, promised amount or deadline, performed action, authorizing world rule, and remaining consequence consistent. Do not let a document, declaration, partial action, opposition, proximity, enforcement, or reassigned responsibility create target eligibility, erase a debt, or produce a physical or supernatural result beyond the copied world rule. If the episode card overpromises such a result, preserve its human choice and payoff but reduce or remove the result to what the existing rule actually permits.";
+    return "For every ruleApplicationProof, put eligibilityEvidence on the page at evidencePlacement before triggerAction, then limit the outcome to allowedEffect and preserve remainingCost. Realize every causalCheckpoint in order: setup evidence first, named actor action second, visible result third, remaining consequence last. Never state or imply that evidence appeared earlier unless the actual manuscript contains it. Keep the actor, recipient or target, promised amount or deadline, performed action, authorizing world rule, ownership or authority, resource origin, and remaining consequence consistent. Do not let a document, declaration, partial action, opposition, proximity, enforcement, or reassigned responsibility create target eligibility, erase a debt, summon an unprepared resource, prove food safe, or produce a physical or supernatural result beyond the copied world rule. If the episode card overpromises such a result, preserve its human choice and payoff but reduce or remove the result to what the existing rule actually permits.";
   }
   if (type === "rewrite_draft") {
     return "For a causality or world-rule failure, quote no new lore into existence. Compare the manuscript to episodeCard.ruleApplicationProofs. Put the already planned eligibilityEvidence before activation, or remove the unsupported target or effect; never invent a new authority, signature, contract clause, or claim that evidence appeared earlier. Identify the exact existing worldRule or canon fact, then make the actor perform the concrete action it requires. Keep actor, recipient or target, amount or deadline, legal effect, supernatural effect, and remaining debt distinct. A document or partial action cannot count as completion unless an existing rule explicitly grants that result.";
@@ -490,7 +491,25 @@ function causalIntegrityInstruction(type) {
     return "Perform a prose-only local polish for the scenes named by the editor's failed style metrics. Preserve title, summary, paragraph count and boundaries, sceneRanges, event order, actions, dialogue facts, character decisions, payoffs, hook, newCanonFacts, and revealUpdates exactly. You may change sentence wording, sentence boundaries inside a paragraph, dialogue phrasing without changing intent or information, connective rhythm, and selective descriptive wording. Do not add or remove a paragraph, event, fact, action, speaker turn, object, rule, clue, joke beat, or emotional outcome. Keep every unaffected paragraph verbatim. Return the complete manuscript and list each changed scene and style reason in changes.";
   }
   if (["editorial_critique", "editorial_review"].includes(type)) {
-    return "For every claimed solution, compare the result to the exact supplied worldRules, canon, and episodeCard.ruleApplicationProofs. Verify that each eligibilityEvidence is literally present before triggerAction and that the target satisfies abilityPlan.targetType and eligibilityRule without relying on opposition, proximity, witnessing, enforcement, pursuit, or convenience. Treat missing evidence or an unsupported effect as a causality failure, but recommend removing the target/effect or using existing evidence instead of demanding a newly invented authority, signature, contract clause, exception, or procedure.";
+    return "For every claimed solution, compare the result to the exact supplied worldRules, canon, episodeCard.ruleApplicationProofs, and every episodeCard.causalCheckpoint. Verify that setup evidence is literally present before action, the actor owns the stated authority or resource, the action can produce the stated result, and the remaining consequence is not silently erased. Verify that each eligibilityEvidence is literally present before triggerAction and that the target satisfies abilityPlan.targetType and eligibilityRule without relying on opposition, proximity, witnessing, enforcement, pursuit, or convenience. Treat missing evidence, unexplained document or resource movement, unearned authority, or an unsupported effect as a causality failure, but recommend removing or reducing the effect or using existing evidence instead of demanding newly invented lore.";
+  }
+  return "";
+}
+
+function repairLedgerInstruction(type, payload = {}) {
+  const obligations = repairObligations(payload);
+  if (!obligations.length) return "";
+  if (type === "revise_episode_card") {
+    return "payload.repairLedger.obligations are cumulative mandatory corrections from prior failed reviews. Redesign the relevant scene checkpoints so every obligation has existing setup evidence before action and no unsupported authority, target, resource, or result. Preserve earlier repairs and do not move the same defect to another scene.";
+  }
+  if (type === "rewrite_draft") {
+    return "payload.repairLedger.obligations are cumulative mandatory corrections from prior failed reviews. Preserve fixes for every obligation, not only the newest one. Use each exact key once in resultJson.repairEvidence, quote a sentence that actually exists in the final revised manuscript, and explain how that sentence supplies the missing setup, action, authority, eligibility, result, or consequence. Do not claim an issue is fixed by adding retrospective lore or by moving the same unsupported outcome to another scene.";
+  }
+  if (type === "write_draft") {
+    return "This fresh draft follows a repaired episode card. Satisfy every payload.repairLedger obligation and return one repairEvidence entry for each exact key, quoting the final manuscript sentence that proves the repair. Previously repaired evidence may not disappear.";
+  }
+  if (["editorial_critique", "editorial_review"].includes(type)) {
+    return "Independently verify every payload.repairLedger obligation against the current manuscript and payload.repairEvidence. The final editorial_review must return exactly one repairVerification entry for every key. Mark resolved only when its evidence is literally present and fixes the causal defect without inventing lore; otherwise mark unresolved and require another rewrite. Never approve with an unresolved repair obligation.";
   }
   return "";
 }
@@ -838,6 +857,17 @@ function resultContract(type, payload = {}) {
         triggerAction: "규칙이 요구하는 실제 발동 행동",
         allowedEffect: "해당 규칙이 허용하는 범위 안의 결과",
         remainingCost: "효과 뒤에도 남는 대가·부채·제약"
+      }],
+      causalCheckpoints: [{
+        sceneNo: 1,
+        outcome: "이 장면 끝에 성립해야 하는 핵심 결과",
+        setupEvidence: "그 결과에 필요한 기존 물증·권한·소유·준비·대상 자격",
+        setupPlacement: "행동보다 먼저 근거를 보여 줄 정확한 위치",
+        actor: "결과를 만들기 위해 행동하는 인물",
+        action: "근거가 갖춰진 뒤 실제로 수행하는 행동",
+        result: "그 행동이 기존 규칙 안에서 직접 만드는 결과",
+        remainingConsequence: "결과 뒤에도 남는 위험·부채·제약",
+        forbiddenShortcut: "사후 설명·새 권한·갑작스러운 도구처럼 사용하면 안 되는 편법"
       }]
     } : {}),
     promise: "회차 약속", openingDisturbance: "도입 사건",
@@ -864,9 +894,9 @@ function resultContract(type, payload = {}) {
       ? { mustShow: ["설정집의 mustShow 항목"], mayHintRevealKeys: ["암시 허용 key"], mustNotAnswerRevealKeys: ["답을 밝히면 안 되는 key"], resolvedNow: ["이번 프롤로그에서만 해결할 문제"], openQuestions: ["본편으로 넘길 질문"] }
       : { mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: [] }
   };
-  if (type === "write_draft") return draftContract(false);
-  if (type === "rewrite_draft") return draftContract(true);
-  if (type === "line_polish") return draftContract(true);
+  if (type === "write_draft") return draftContract(false, payload);
+  if (type === "rewrite_draft") return draftContract(true, payload);
+  if (type === "line_polish") return draftContract(true, payload);
   if (type === "editorial_critique") return {
     criticRole: String(payload?.criticRole || "character"),
     panel: criticPanelContract()
@@ -889,7 +919,15 @@ function resultContract(type, payload = {}) {
     safetyPassed: true,
     summary: "10-1000자 편집 판단",
     issues: [{ code: "metric-or-issue-code", severity: "info|warning|critical", sceneNo: 1, evidence: "원고 근거", suggestion: "최소 수정 지시" }],
-    rewriteScenes: [1]
+    rewriteScenes: [1],
+    ...(repairObligations(payload).length ? {
+      repairVerification: repairObligations(payload).map((item) => ({
+        key: item.key,
+        status: "resolved",
+        evidence: "현재 원고에서 그대로 인용한 해결 근거",
+        note: "이전 결함이 해결됐는지와 남은 위험"
+      }))
+    } : {})
   };
 }
 
@@ -1055,7 +1093,7 @@ function clampInteger(value, min, max, fallback) {
   return Number.isInteger(number) ? Math.max(min, Math.min(max, number)) : fallback;
 }
 
-function draftContract(rewritten) {
+function draftContract(rewritten, payload = {}) {
   const value = {
     title: "회차 제목", summary: "20-1000자 공개 소개", body: "공백·줄바꿈을 제외한 2500-12000자 한국어 원고, 보통 3200자 이상을 목표로 작성",
     sceneRanges: [{ sceneNo: 1, startParagraph: 1, endParagraph: 5 }],
@@ -1063,5 +1101,20 @@ function draftContract(rewritten) {
     revealUpdates: [{ key: "existing-reveal-key", status: "planned|seeded|revealed|retired" }]
   };
   if (rewritten) value.changes = [{ sceneNo: 1, reason: "편집 지시에 따라 바꾼 내용" }];
+  const obligations = repairObligations(payload);
+  if (obligations.length) {
+    value.repairEvidence = obligations.map((item) => ({
+      key: item.key,
+      sceneNo: item.sceneNo || 1,
+      quote: "최종 원고에 실제로 존재하는 해결 문장",
+      explanation: "이 문장이 지적된 인과·설정 결함을 해결하는 방식"
+    }));
+  }
   return value;
+}
+
+function repairObligations(payload = {}) {
+  return Array.isArray(payload?.repairLedger?.obligations)
+    ? payload.repairLedger.obligations.slice(0, 30)
+    : [];
 }

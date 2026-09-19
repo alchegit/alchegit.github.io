@@ -1105,6 +1105,22 @@ app.post("/api/storyheaven/operator/serial-engine/runs/:id/resolve-quality-hold"
   }
 });
 
+app.post("/api/storyheaven/operator/serial-engine/runs/resolve-quality-holds", requireUser, requireAdminAccount, adminRateLimiter, requireJsonBody, async (req, res, next) => {
+  try {
+    if (req.body?.action === "rewrite" && !config.storyHeavenSerialEngineEnabled) {
+      throw httpError("serial_engine_disabled", 409);
+    }
+    await ensureUserProfile(req.user, req);
+    res.status(202).json(await storyHeavenSerialService.resolveQualityHolds(
+      req.body?.runIds,
+      req.user.id,
+      req.body || {}
+    ));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/webtoon/acorns/claim", requireUser, async (req, res, next) => {
   try {
     const result = await claimDailyAcorns(req.user, req);

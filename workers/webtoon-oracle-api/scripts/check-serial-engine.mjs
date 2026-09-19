@@ -107,8 +107,25 @@ assert.equal(shouldRepairEpisodeCard({
   runInput: { cardRepairCount: 1 },
   review: { safetyPassed: true, decision: "rewrite_required" }
 }), false);
+assert.equal(shouldRepairEpisodeCard({
+  decision: { failedMetrics: [{ name: "causality" }] },
+  runInput: { cardRepairCount: 1, operatorRepairCycle: 1 },
+  review: { safetyPassed: true, decision: "rewrite_required" }
+}), true);
+assert.equal(shouldRepairEpisodeCard({
+  decision: { failedMetrics: [{ name: "causality" }] },
+  runInput: { cardRepairCount: 2, operatorRepairCycle: 1 },
+  review: { safetyPassed: true, decision: "rewrite_required" }
+}), false);
 assert.match(serialServiceSource, /type: "revise_episode_card"/u, "structural quality failures must queue a card repair stage");
 assert.match(serialServiceSource, /cardRepairCount: Number\(runInput\.cardRepairCount/u, "card repair must be bounded in durable run input");
+assert.match(serialServiceSource, /repairLedger: runInput\.repairLedger/u, "repair obligations must survive card repair and later review stages");
+assert.match(serialServiceSource, /rewrite_count = 0, operator_rewrite_count = operator_rewrite_count \+ 1/u, "an operator repair request must receive a fresh bounded automatic rewrite cycle");
+assert.match(serverSource, /runs\/resolve-quality-holds/u, "quality holds must support one bulk enqueue request");
+assert.match(serialOperatorHtml, /data-stalled-select-all/u, "the operator must be able to select all visible quality holds");
+assert.match(serialOperatorSource, /bulkRewriteQualityHolds/u, "the operator must be able to enqueue selected quality holds together");
+assert.match(serialWorkerSource, /repairLedger\.obligations are cumulative mandatory corrections/u, "rewrites must preserve cumulative repair obligations");
+assert.match(serialWorkerSource, /exactly one causalCheckpoint for every scene/u, "episode cards must plan a causal checkpoint for every scene");
 assert.ok(
   acceptEditorialReviewSource.indexOf("shouldRepairEpisodeCard") < acceptEditorialReviewSource.indexOf("if (!decision.rewriteAllowed)"),
   "structural failures must repair the episode card before spending ordinary prose rewrites"
@@ -1473,6 +1490,17 @@ const card = normalizeStoryHeavenSerialWorkerResult("build_episode_card", {
     allowedEffect: "노선도에 해당 승객이 말한 마지막 목적지만 표시된다.",
     remainingCost: "승객을 내려 주려면 도윤이 자신의 기억 하나를 요금으로 내야 한다."
   }],
+  causalCheckpoints: Array.from({ length: 3 }, (_, index) => ({
+    sceneNo: index + 1,
+    outcome: `장면 ${index + 1}의 선택 결과가 다음 장면의 조건을 바꾼다.`,
+    setupEvidence: `장면 ${index + 1}의 행동에 필요한 승차권과 인물 위치를 행동 전에 보여 준다.`,
+    setupPlacement: `장면 ${index + 1} 첫 문단에서 승차권의 소유자와 인물 위치를 확인한다.`,
+    actor: "도윤",
+    action: `도윤이 장면 ${index + 1}의 승차권을 직접 확인하고 선택한다.`,
+    result: `선택 결과로 장면 ${index + 1}의 목적지 정보와 관계 상태가 달라진다.`,
+    remainingConsequence: "누나의 기록과 기억을 잃을 위험은 해결되지 않고 다음 선택을 압박한다.",
+    forbiddenShortcut: "확인하지 않은 승차권이나 사후 설명으로 목적지와 권한을 만들어 내지 않는다."
+  })),
   scenes: Array.from({ length: 3 }, (_, index) => ({
     sceneNo: index + 1,
     goal: "승객의 목적지를 확인한다.",
@@ -1617,6 +1645,30 @@ const originalDraft = normalizeStoryHeavenSerialWorkerResult("write_draft", {
   newCanonFacts: [{ key: "first-drive", category: "event", value: "도윤이 첫 심야 운행을 시작했다." }],
   revealUpdates: [{ key: "series-terminal-truth", status: "seeded" }]
 }, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint } } });
+const repairLedger = {
+  obligations: [{
+    key: "repair-document-chain",
+    code: "document-chain",
+    sceneNo: 1,
+    evidence: "승차권의 소유와 이동이 불명확하다.",
+    instruction: "승객이 승차권을 도윤에게 직접 건네는 행동을 보여 준다."
+  }]
+};
+const repairedDraft = normalizeStoryHeavenSerialWorkerResult("rewrite_draft", {
+  ...originalDraft,
+  changes: [{ sceneNo: 1, reason: "승차권의 소유자와 전달 행동을 원고에 명시했다." }],
+  repairEvidence: [{
+    key: "repair-document-chain",
+    sceneNo: 1,
+    quote: "그는 승객의 낡은 표를 받아 운행 기록과 대조했고",
+    explanation: "승객이 가진 표를 도윤이 직접 받아 같은 문서의 소유와 이동을 확정한다."
+  }]
+}, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint }, repairLedger } });
+assert.equal(repairedDraft.repairEvidence[0].key, "repair-document-chain");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("rewrite_draft", {
+  ...repairedDraft,
+  repairEvidence: [{ ...repairedDraft.repairEvidence[0], quote: "원고에 존재하지 않는 해결 문장" }]
+}, { payload: { episodeNo: 1, episodeCard: card, bible: { narrativeBlueprint: bible.narrativeBlueprint }, repairLedger } }), /serial_repair_evidence_missing_from_draft/u);
 const countedFinalScene = normalizeStoryHeavenSerialWorkerResult("write_draft", {
   ...originalDraft,
   sceneRanges: originalDraft.sceneRanges.map((range, index) => (
@@ -1803,6 +1855,39 @@ const review = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
     rewritePriority: "승객 구조의 반복을 피하면서 도윤과 해진의 정보 교환이 어떤 새 빚을 만드는지 가장 먼저 전개한다."
   }
 }, developmentReviewOptions);
+const repairVerifiedReview = normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  repairVerification: [{
+    key: "repair-document-chain",
+    status: "resolved",
+    evidence: "그는 승객의 낡은 표를 받아 운행 기록과 대조했고",
+    note: "승차권 소유자와 전달 행동이 결과보다 먼저 원고에 제시됐다."
+  }]
+}, {
+  payload: {
+    bible: { concept: { storyCore } },
+    draft: { body },
+    criticPacket: review.criticPanels,
+    repairLedger
+  }
+});
+assert.equal(repairVerifiedReview.repairVerification[0].status, "resolved");
+assert.throws(() => normalizeStoryHeavenSerialWorkerResult("editorial_review", {
+  ...review,
+  repairVerification: [{
+    key: "repair-document-chain",
+    status: "unresolved",
+    evidence: "승차권 전달이 여전히 불명확하다.",
+    note: "행동 전에 문서의 소유와 이동을 확인할 수 없다."
+  }]
+}, {
+  payload: {
+    bible: { concept: { storyCore } },
+    draft: { body },
+    criticPacket: review.criticPanels,
+    repairLedger
+  }
+}), /serial_review_repair_unresolved_approval_invalid/u);
 const relationshipCritique = normalizeStoryHeavenSerialWorkerResult("editorial_critique", {
   criticRole: "relationship",
   panel: review.criticPanels.relationship

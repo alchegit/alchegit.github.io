@@ -98,7 +98,8 @@ export function serialRevisionJobType({ decision = {}, qa = {}, review = {} } = 
 export function shouldRepairEpisodeCard({ decision = {}, runInput = {}, review = {} } = {}) {
   const failedNames = new Set((Array.isArray(decision.failedMetrics) ? decision.failedMetrics : [])
     .map((item) => String(item?.name || "")));
-  return Number(runInput.cardRepairCount || 0) < 1
+  const repairLimit = Number(runInput.operatorRepairCycle || 0) > 0 ? 2 : 1;
+  return Number(runInput.cardRepairCount || 0) < repairLimit
     && review?.safetyPassed === true
     && review?.decision !== "blocked"
     && (failedNames.has("canonConsistency") || failedNames.has("causality"));
@@ -141,6 +142,7 @@ export function createStoryHeavenSerialService({
     getStoryState,
     getRun,
     resolveQualityHold,
+    resolveQualityHolds,
     extendOpeningPilot,
     claimJob,
     completeJob,
@@ -1758,6 +1760,19 @@ export function createStoryHeavenSerialService({
       if (!draft || !review) throw failure("serial_quality_hold_evidence_missing", 409);
 
       const quality = parseJson(run.QUALITY_JSON, {});
+      const editor = storedEditorialReview(quality, review);
+      const runInput = parseJson(run.INPUT_JSON, {});
+      const repairLedger = (action === "rewrite" || action === "repair_card")
+        ? mergeRepairLedger(runInput.repairLedger, editor.issues, {
+            draftVersion: Number(draft.VERSION_NO || 0),
+            cycle: Number(runInput.operatorRepairCycle || 0) + 1
+          })
+        : runInput.repairLedger || null;
+      const operatorRepairInput = {
+        ...runInput,
+        ...(repairLedger ? { repairLedger } : {}),
+        operatorRepairCycle: Number(runInput.operatorRepairCycle || 0) + 1
+      };
       let scheduleActivated = false;
       if ((action === "rewrite" || action === "repair_card") && run.SCHEDULE_ID) {
         const schedule = await selectOne(connection,
@@ -1813,12 +1828,14 @@ export function createStoryHeavenSerialService({
       );
 
       if (action === "repair_card") {
-        const editor = storedEditorialReview(quality, review);
         const decision = quality.decision && typeof quality.decision === "object" ? quality.decision : {};
-        if (!shouldRepairEpisodeCard({ decision, runInput: parseJson(run.INPUT_JSON, {}), review: editor })) {
+        if (!shouldRepairEpisodeCard({ decision, runInput: operatorRepairInput, review: editor })) {
           throw failure("serial_episode_card_repair_unavailable", 409);
         }
-        await queueEpisodeCardRepair(connection, run, editor, { requestedBy: "operator" });
+        await queueEpisodeCardRepair(connection, run, editor, {
+          requestedBy: "operator",
+          runInputOverride: operatorRepairInput
+        });
         const updated = await selectOne(connection,
           `select * from storyheaven_serial_runs where id = :run_id`,
           { run_id: runId });
@@ -1829,16 +1846,16 @@ export function createStoryHeavenSerialService({
         if (review.SAFETY_PASSED !== "Y") throw failure("serial_quality_hold_safety_failed", 409);
         await approveDraft(connection, run, draft);
       } else {
-        const editor = storedEditorialReview(quality, review);
         const qa = parseJson(draft.DETERMINISTIC_JSON, {});
         const rewriteNumber = Number(run.REWRITE_COUNT || 0) + Number(run.OPERATOR_REWRITE_COUNT || 0) + 1;
         await connection.execute(
           `update storyheaven_serial_runs
               set run_status = 'rewrite', current_stage = 'rewrite_draft',
-                  operator_rewrite_count = operator_rewrite_count + 1, failure_code = null,
-                  completed_at = null, updated_at = systimestamp
+                  rewrite_count = 0, operator_rewrite_count = operator_rewrite_count + 1,
+                  failure_code = null, completed_at = null,
+                  input_json = :input_json, updated_at = systimestamp
             where id = :run_id`,
-          { run_id: runId }
+          { run_id: runId, input_json: clobJson(operatorRepairInput) }
         );
         const context = await loadSerialContext(connection, run.STORY_ID);
         const activeCard = context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO));
@@ -1866,6 +1883,7 @@ export function createStoryHeavenSerialService({
             },
             deterministicQa: qa,
             editor,
+            repairLedger,
             rewriteNumber,
             instruction: cleanText(input.instruction, 1_000)
               || "운영자가 검수 보류 사유를 확인하고 추가 보완을 요청했다. 지적된 장면과 문장만 우선 고치고, 이미 잘 작동하는 사건 구조와 문체는 유지한다."
@@ -1877,6 +1895,31 @@ export function createStoryHeavenSerialService({
         { run_id: runId });
       return { action, scheduleActivated, run: mapRun(updated) };
     });
+  }
+
+  async function resolveQualityHolds(runIdValues, userId, input = {}) {
+    const action = String(input.action || "").trim();
+    if (!new Set(["rewrite", "repair_card"]).has(action)) {
+      throw failure("serial_quality_hold_bulk_action_invalid", 400);
+    }
+    const runIds = [...new Set((Array.isArray(runIdValues) ? runIdValues : [])
+      .map((value) => requireId(value, "run_id")))].slice(0, 50);
+    if (!runIds.length) throw failure("serial_quality_hold_bulk_empty", 400);
+    const results = await mapWithConcurrency(runIds, 3, async (runId) => {
+      try {
+        const result = await resolveQualityHold(runId, userId, { ...input, action });
+        return { runId, queued: true, result };
+      } catch (error) {
+        return { runId, queued: false, error: cleanCode(error?.message || "serial_quality_hold_bulk_failed") };
+      }
+    });
+    return {
+      action,
+      requestedCount: runIds.length,
+      queuedCount: results.filter((item) => item.queued).length,
+      failedCount: results.filter((item) => !item.queued).length,
+      results
+    };
   }
 
   function storedEditorialReview(quality, review) {
@@ -2852,6 +2895,7 @@ export function createStoryHeavenSerialService({
           ...(card.dramaticCore ? { dramaticCore: card.dramaticCore } : {}),
           ...(card.continuityMemoryPlan ? { continuityMemoryPlan: card.continuityMemoryPlan } : {}),
           ...(card.ruleApplicationProofs ? { ruleApplicationProofs: card.ruleApplicationProofs } : {}),
+          ...(card.causalCheckpoints ? { causalCheckpoints: card.causalCheckpoints } : {}),
           prologueDisclosurePlan: card.prologueDisclosurePlan
         }),
         source_job_id: job.ID
@@ -2866,12 +2910,16 @@ export function createStoryHeavenSerialService({
       runId: job.RUN_ID,
       storyId: job.STORY_ID,
       type: "write_draft",
-      input: writingPayload(context, { ...card, id: cardId }, Number(run.EPISODE_NO))
+      input: {
+        ...writingPayload(context, { ...card, id: cardId }, Number(run.EPISODE_NO)),
+        repairLedger: parseJson(run.INPUT_JSON, {}).repairLedger || null
+      }
     });
   }
 
   async function acceptDraft(connection, job, draft, rewritten) {
     const run = await selectOne(connection, `select * from storyheaven_serial_runs where id = :run_id for update`, { run_id: job.RUN_ID });
+    const runInput = parseJson(run.INPUT_JSON, {});
     const card = await selectOne(connection,
       `select id from storyheaven_episode_cards
         where story_id = :story_id and episode_no = :episode_no and card_status = 'active'`,
@@ -2904,6 +2952,20 @@ export function createStoryHeavenSerialService({
         content_hash: sha256({ title: draft.title, summary: draft.summary, body: draft.body }), source_job_id: job.ID
       }
     );
+    if (runInput.repairLedger) {
+      await connection.execute(
+        `update storyheaven_serial_runs
+            set input_json = :input_json, updated_at = systimestamp
+          where id = :run_id`,
+        {
+          run_id: job.RUN_ID,
+          input_json: clobJson({
+            ...runInput,
+            latestRepairEvidence: Array.isArray(draft.repairEvidence) ? draft.repairEvidence : []
+          })
+        }
+      );
+    }
     const context = await loadSerialContext(connection, job.STORY_ID);
     const reviewThresholds = storyHeavenSerialQualityThresholds(run.EPISODE_NO);
     const previousQuality = parseJson(run.QUALITY_JSON, null);
@@ -2932,7 +2994,9 @@ export function createStoryHeavenSerialService({
         verificationPass: rewritten
       },
       critiqueRoles,
-      carriedCriticPacket
+      carriedCriticPacket,
+      repairLedger: runInput.repairLedger || null,
+      repairEvidence: Array.isArray(draft.repairEvidence) ? draft.repairEvidence : []
     };
     const developmentV2 = Boolean(context.bible?.concept?.storyCore);
     if (developmentV2) {
@@ -3044,7 +3108,9 @@ export function createStoryHeavenSerialService({
       deterministicQa: payload.deterministicQa,
       reviewPolicy: payload.reviewPolicy,
       critiqueRoles: payload.critiqueRoles,
-      carriedCriticPacket: payload.carriedCriticPacket
+      carriedCriticPacket: payload.carriedCriticPacket,
+      repairLedger: payload.repairLedger || null,
+      repairEvidence: payload.repairEvidence || []
     };
   }
 
@@ -3056,6 +3122,7 @@ export function createStoryHeavenSerialService({
       `select * from storyheaven_serial_drafts where run_id = :run_id order by version_no desc fetch first 1 row only`,
       { run_id: job.RUN_ID });
     if (!run || !draft) throw failure("serial_critique_source_missing", 409);
+    const runInput = parseJson(run.INPUT_JSON, {});
     const context = await loadSerialContext(connection, job.STORY_ID);
     return {
       story: context.story,
@@ -3079,6 +3146,8 @@ export function createStoryHeavenSerialService({
       reviewPolicy: payload.reviewPolicy,
       critiqueRoles: payload.critiqueRoles,
       carriedCriticPacket: payload.carriedCriticPacket,
+      repairLedger: runInput.repairLedger || payload.repairLedger || null,
+      repairEvidence: runInput.latestRepairEvidence || payload.repairEvidence || [],
       critiqueBatchId
     };
   }
@@ -3086,6 +3155,7 @@ export function createStoryHeavenSerialService({
   async function acceptEditorialReview(connection, job, review) {
     const run = await selectOne(connection, `select * from storyheaven_serial_runs where id = :run_id for update`, { run_id: job.RUN_ID });
     if (!run || RUN_STATES_DONE.has(run.RUN_STATUS)) throw failure("serial_run_not_reviewable", 409);
+    const runInput = parseJson(run.INPUT_JSON, {});
     const draft = await selectOne(connection,
       `select * from storyheaven_serial_drafts where run_id = :run_id order by version_no desc fetch first 1 row only`,
       { run_id: job.RUN_ID });
@@ -3169,7 +3239,7 @@ export function createStoryHeavenSerialService({
       { run_id: job.RUN_ID, quality_json: clobJson({ deterministic: qa, editorial: review, decision }) }
     );
     if (decision.state === "approved") return approveDraft(connection, run, draft);
-    if (shouldRepairEpisodeCard({ decision, runInput: parseJson(run.INPUT_JSON, {}), review })) {
+    if (shouldRepairEpisodeCard({ decision, runInput, review })) {
       await queueEpisodeCardRepair(connection, run, review, { requestedBy: "system" });
       return;
     }
@@ -3218,15 +3288,20 @@ export function createStoryHeavenSerialService({
         },
         deterministicQa: qa,
         editor: review,
+        repairLedger: runInput.repairLedger || null,
         rewriteNumber: nextRewrite,
         instruction: "지적된 장면만 우선 고치되 수정 때문에 앞뒤 인과나 설정이 깨지는 부분은 함께 정리한다."
       }
     });
   }
 
-  async function queueEpisodeCardRepair(connection, run, review, { requestedBy = "operator" } = {}) {
-    const runInput = parseJson(run.INPUT_JSON, {});
-    if (Number(runInput.cardRepairCount || 0) >= 1) throw failure("serial_episode_card_repair_limit", 409);
+  async function queueEpisodeCardRepair(connection, run, review, {
+    requestedBy = "operator",
+    runInputOverride = null
+  } = {}) {
+    const runInput = runInputOverride || parseJson(run.INPUT_JSON, {});
+    const repairLimit = Number(runInput.operatorRepairCycle || 0) > 0 ? 2 : 1;
+    if (Number(runInput.cardRepairCount || 0) >= repairLimit) throw failure("serial_episode_card_repair_limit", 409);
     const context = await loadSerialContext(connection, run.STORY_ID);
     const currentCard = context.cards.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO));
     const arcPlan = context.arc?.episodePlan?.find((item) => Number(item.episodeNo) === Number(run.EPISODE_NO));
@@ -3249,6 +3324,7 @@ export function createStoryHeavenSerialService({
         ...episodePlanningPayload(context, Number(run.EPISODE_NO), arcPlan, ""),
         currentCard,
         editor: review,
+        repairLedger: nextInput.repairLedger || null,
         cardRepairNumber: nextInput.cardRepairCount,
         requestedBy,
         repairPolicy: {
@@ -4197,6 +4273,7 @@ export function createStoryHeavenSerialService({
         memoryPlan: card?.continuityMemoryPlan || technique.continuityMemoryPlan || null
       },
       ruleApplicationProofs: card?.ruleApplicationProofs || technique.ruleApplicationProofs || [],
+      causalCheckpoints: card?.causalCheckpoints || technique.causalCheckpoints || [],
       disclosureBoundary: card?.prologueDisclosurePlan || technique.prologueDisclosurePlan || null
     };
   }
@@ -5170,6 +5247,7 @@ function mapCard(row) {
     ...(techniquePlan.dramaticCore ? { dramaticCore: techniquePlan.dramaticCore } : {}),
     ...(techniquePlan.continuityMemoryPlan ? { continuityMemoryPlan: techniquePlan.continuityMemoryPlan } : {}),
     ...(techniquePlan.ruleApplicationProofs ? { ruleApplicationProofs: techniquePlan.ruleApplicationProofs } : {}),
+    ...(techniquePlan.causalCheckpoints ? { causalCheckpoints: techniquePlan.causalCheckpoints } : {}),
     techniquePlan,
     prologueDisclosurePlan: techniquePlan.prologueDisclosurePlan || {
       mustShow: [], mayHintRevealKeys: [], mustNotAnswerRevealKeys: [], resolvedNow: [], openQuestions: []
@@ -5454,6 +5532,50 @@ export function applyStoryHeavenOpeningPilotPromotion(assessment, {
     promotedAt,
     recommendation: "세 편이 엄격한 파일럿 기준을 모두 통과해 시스템이 정식 연재로 자동 승격했다."
   };
+}
+
+function mergeRepairLedger(existingValue, issuesValue, { draftVersion = 0, cycle = 1 } = {}) {
+  const existing = existingValue && typeof existingValue === "object" ? existingValue : {};
+  const previous = Array.isArray(existing.obligations) ? existing.obligations : [];
+  const additions = (Array.isArray(issuesValue) ? issuesValue : [])
+    .filter((issue) => issue?.severity === "critical")
+    .map((issue) => {
+      const code = cleanCode(issue.code || "editorial_issue");
+      const sceneNo = positiveInteger(issue.sceneNo);
+      const suggestion = cleanText(issue.suggestion, 500);
+      const evidence = cleanText(issue.evidence, 500);
+      return {
+        key: `repair-${sha256({ code, sceneNo, suggestion }).slice(0, 16)}`,
+        code,
+        sceneNo,
+        evidence,
+        instruction: suggestion || "검수에서 확인된 치명적 결함을 기존 설정 안에서 바로잡는다.",
+        sourceDraftVersion: Math.max(0, Number(draftVersion || 0)),
+        firstSeenCycle: Math.max(1, Number(cycle || 1))
+      };
+    });
+  const byKey = new Map(previous.map((item) => [String(item?.key || ""), item]).filter(([key]) => key));
+  for (const item of additions) byKey.set(item.key, item);
+  return {
+    version: "2026-09-19-v1",
+    cycle: Math.max(1, Number(cycle || 1)),
+    updatedAt: new Date().toISOString(),
+    obligations: [...byKey.values()].slice(-30)
+  };
+}
+
+async function mapWithConcurrency(items, limit, mapper) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+  const workers = Array.from({ length: Math.min(Math.max(1, limit), items.length) }, async () => {
+    while (nextIndex < items.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await mapper(items[index], index);
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 function cleanText(value, max) {

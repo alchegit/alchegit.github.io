@@ -20,6 +20,7 @@ try {
     const queueRetries = [];
     const systemRequests = [];
     const firstEpisodeResumes = [];
+    const bulkQualityRepairs = [];
     const runningSchedule = {
       id: "schedule-running",
       status: "active",
@@ -48,6 +49,7 @@ try {
     let manualSchedulesPaused = false;
     let pauseRequestCount = 0;
     let stalledVisible = true;
+    let qualityHoldsVisible = true;
     let titlelessLogVisible = true;
     const titlelessHistoryLog = { id: "titleless-stopped", title: "새 작품 기획", titlePending: true, status: "stopped", initialBatch: true, targetEpisodeCount: 1, primaryGenres: ["fantasy"], workLabel: "새 작품 · 1화까지", stage: "concept_gate", elapsedSeconds: null, completedJobs: 0, totalJobs: 1, requestedAt: "2026-07-31T03:00:00.000Z", stageTimings: [{ type: "concept_gate", status: "error", durationSeconds: null, attemptCount: 1, createdAt: "2026-07-31T03:00:00.000Z" }] };
     page.on("pageerror", (error) => errors.push(error.message));
@@ -85,7 +87,25 @@ try {
             ...(titlelessLogVisible ? [titlelessHistoryLog] : [])
           ],
           hiddenHistory: titlelessLogVisible ? [] : [{ ...titlelessHistoryLog, status: "hidden", canceledAt: "2026-08-02T00:10:00.000Z" }],
-          stalledFirstEpisodeStories: stalledVisible ? [{ id: "stalled-story", title: "0화에서 멈춘 마법사", logline: "프롤로그 회차 등록 전에 멈춘 작품", latestRunStatus: "draft", latestStage: "editorial_review", draft: { characterCount: 0 }, latestCompletedAt: "2026-07-31T04:30:00.000Z" }] : [],
+          stalledFirstEpisodeStories: [
+            ...(stalledVisible ? [{ id: "stalled-story", title: "0화에서 멈춘 마법사", logline: "프롤로그 회차 등록 전에 멈춘 작품", latestRunStatus: "draft", latestStage: "editorial_review", draft: { characterCount: 0 }, latestCompletedAt: "2026-07-31T04:30:00.000Z" }] : []),
+            ...(qualityHoldsVisible ? [1, 2].map((index) => ({
+              id: `quality-story-${index}`,
+              title: `인과 보완 작품 ${index}`,
+              latestRunId: `quality-run-${index}`,
+              latestRunStatus: "blocked",
+              latestStage: "editorial_blocked",
+              rewriteCount: 2,
+              draft: { characterCount: 3650 },
+              latestCompletedAt: "2026-07-31T04:40:00.000Z",
+              review: {
+                decision: "blocked",
+                safetyPassed: true,
+                summary: "행동 전에 필요한 근거가 원고에 없습니다.",
+                issues: [{ severity: "critical", sceneNo: 2, suggestion: "기존 물증을 행동 전에 보여 주세요." }]
+              }
+            })) : [])
+          ],
           quotaNote: "실제 AI 작업 수와 소요 시간을 기록합니다."
         } });
       }
@@ -137,6 +157,19 @@ try {
         firstEpisodeResumes.push(request.postDataJSON());
         stalledVisible = false;
         return json({ run: { id: "stalled-plan", queueGroupId: "stalled-plan" } }, 202);
+      }
+      if (path === "/api/storyheaven/operator/serial-engine/runs/resolve-quality-holds" && request.method() === "POST") {
+        const body = request.postDataJSON();
+        bulkQualityRepairs.push(body);
+        await new Promise((resolve) => setTimeout(resolve, 700));
+        qualityHoldsVisible = false;
+        return json({
+          action: body.action,
+          requestedCount: body.runIds.length,
+          queuedCount: body.runIds.length,
+          failedCount: 0,
+          results: body.runIds.map((runId) => ({ runId, queued: true }))
+        }, 202);
       }
       if (path === "/api/storyheaven/operator/serial-engine/runs/development-run" && request.method() === "GET") {
         const candidates = ["마지막 시간버스", "국경의 빈 지도", "퇴학 전 마지막 합주", "마녀의 빚 장부"].map((title, index) => ({
@@ -207,6 +240,15 @@ try {
 
     await page.goto(`${root}/storyheaven/operator/serial/`, { waitUntil: "networkidle" });
     await page.locator("[data-serial-dashboard]").waitFor({ state: "visible" });
+    assert.equal(await page.locator("[data-stalled-bulk]").isVisible(), true, `${viewport.name} quality holds expose bulk controls`);
+    await page.locator("[data-stalled-select-all]").check();
+    assert.equal(await page.locator("[data-stalled-selected-count]").textContent(), "2건 선택", `${viewport.name} selects all visible quality holds`);
+    const bulkButton = page.locator("[data-stalled-bulk-rewrite]");
+    await bulkButton.click();
+    assert.equal(await bulkButton.getAttribute("aria-busy"), "true", `${viewport.name} bulk repair reacts immediately while the API queues work`);
+    assert.equal(await page.locator(".stalled-row.is-submitting").count(), 2, `${viewport.name} selected rows show immediate enqueue feedback`);
+    await page.waitForFunction(() => !document.querySelector("[data-stalled-list]")?.textContent.includes("인과 보완 작품"));
+    assert.deepEqual(bulkQualityRepairs.at(-1), { action: "rewrite", runIds: ["quality-run-1", "quality-run-2"] }, `${viewport.name} sends one bulk repair request`);
     assert.equal(await page.locator("[data-create-panel]").evaluate((node) => node.open), false, `${viewport.name} new serial settings are collapsed by default`);
     assert.equal(await page.locator("[data-inspection-band]").isHidden(), true, `${viewport.name} manuscript inspection stays hidden until selected`);
     assert.equal(await page.locator(".completed-group").evaluate((node) => node.open), false, `${viewport.name} recent completed production is collapsed by default`);

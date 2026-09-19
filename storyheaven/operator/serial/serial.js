@@ -58,6 +58,8 @@
   const legacyDraftStorageKeys = ["storyheaven.operator.serial-draft.v11", "storyheaven.operator.serial-draft.v10", "storyheaven.operator.serial-draft.v9", "storyheaven.operator.serial-draft.v8", "storyheaven.operator.serial-draft.v7", "storyheaven.operator.serial-draft.v6", "storyheaven.operator.serial-draft.v5", "storyheaven.operator.serial-draft.v4", "storyheaven.operator.serial-draft.v3", "storyheaven.operator.serial-draft.v2"];
   const hiddenHistoryStorageKey = "storyheaven.operator.serial-hidden-history.v1";
   const queueActionFeedback = new Map();
+  const selectedQualityHoldRunIds = new Set();
+  let visibleQualityHoldRunIds = [];
   let draftReady = false;
   let draftSaveTimer = 0;
   let restoredDraftAt = "";
@@ -112,6 +114,10 @@
     selectors.stalledList = document.querySelector("[data-stalled-list]");
     selectors.stalledGroup = document.querySelector("[data-stalled-group]");
     selectors.stalledCaption = document.querySelector("[data-stalled-caption]");
+    selectors.stalledBulk = document.querySelector("[data-stalled-bulk]");
+    selectors.stalledSelectAll = document.querySelector("[data-stalled-select-all]");
+    selectors.stalledSelectedCount = document.querySelector("[data-stalled-selected-count]");
+    selectors.stalledBulkRewrite = document.querySelector("[data-stalled-bulk-rewrite]");
     selectors.waitingCaption = document.querySelector("[data-waiting-caption]");
     selectors.historySummary = document.querySelector("[data-history-summary]");
     selectors.statusRunning = document.querySelector("[data-status-running]");
@@ -146,6 +152,8 @@
     selectors.systemPrimary.addEventListener("click", () => guardedSystemButton(selectors.systemPrimary, handleSystemPrimary));
     selectors.systemPause.addEventListener("click", () => guardedSystemButton(selectors.systemPause, () => controlSerialSystem("pause")));
     selectors.historyHiddenToggle.addEventListener("click", toggleHiddenHistory);
+    selectors.stalledSelectAll.addEventListener("change", toggleAllQualityHolds);
+    selectors.stalledBulkRewrite.addEventListener("click", bulkRewriteQualityHolds);
     document.querySelector("[data-process-due]").addEventListener("click", processDue);
     document.querySelector("[data-refresh-status]").addEventListener("click", refreshStatus);
     document.querySelector("[data-reset-draft]").addEventListener("click", resetDraft);
@@ -979,6 +987,13 @@
     selectors.stalledList.replaceChildren();
     const qualityCount = items.filter((story) => stalledPrologueState(story) === "quality").length;
     const errorCount = items.filter((story) => stalledPrologueState(story) === "error").length;
+    visibleQualityHoldRunIds = items
+      .filter((story) => stalledPrologueState(story) === "quality" && story.latestRunId)
+      .map((story) => story.latestRunId);
+    for (const runId of [...selectedQualityHoldRunIds]) {
+      if (!visibleQualityHoldRunIds.includes(runId)) selectedQualityHoldRunIds.delete(runId);
+    }
+    syncQualityHoldBulkControls();
     selectors.stalledCaption.textContent = `${items.length}건 · 치명적 확인 ${qualityCount} · 오류 ${errorCount}`;
     if (!items.length) return;
     for (const story of items) {
@@ -991,6 +1006,7 @@
       const title = document.createElement("strong");
       title.textContent = story.title || "제목 없는 작품";
       const state = stalledPrologueState(story);
+      row.dataset.runId = story.latestRunId || "";
       const stateBadge = document.createElement("span");
       stateBadge.className = `stalled-state is-${state}`;
       stateBadge.textContent = stalledPrologueStateLabel(state);
@@ -1009,7 +1025,7 @@
       actions.className = "stalled-actions";
       if (story.latestRunId) actions.append(actionButton(state === "quality" ? "원고·검수 사유 보기" : "원고·로그 보기", "secondary", () => loadRun(story.latestRunId)));
       if (state === "quality") {
-        actions.append(actionButton("지적 부분 다시 보완", "queue-retry", () => resolveQualityHold(story, "rewrite")));
+        actions.append(actionButton("지적 부분 다시 보완", "queue-retry", (button) => resolveQualityHold(story, "rewrite", button)));
         if (story.review?.safetyPassed !== false) {
           actions.append(actionButton("현재 원고 승인", "warning", () => resolveQualityHold(story, "approve")));
         }
@@ -1020,9 +1036,86 @@
       }
       if (story.schedule?.id) actions.append(actionButton("연결 설정 보기", "secondary", () => focusSchedule(story.schedule.id)));
       actions.append(actionButton("목록에서 숨기기", "secondary", () => hideIncompleteStory(story)));
+      if (state === "quality" && story.latestRunId) {
+        const selection = document.createElement("label");
+        selection.className = "stalled-select";
+        selection.title = `${story.title || "제목 없는 작품"} 선택`;
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = selectedQualityHoldRunIds.has(story.latestRunId);
+        checkbox.setAttribute("aria-label", `${story.title || "제목 없는 작품"} 보완 대상으로 선택`);
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) selectedQualityHoldRunIds.add(story.latestRunId);
+          else selectedQualityHoldRunIds.delete(story.latestRunId);
+          syncQualityHoldBulkControls();
+        });
+        selection.append(checkbox);
+        row.append(selection);
+      }
       row.append(copy, actions);
       selectors.stalledList.append(row);
     }
+  }
+
+  function toggleAllQualityHolds() {
+    const selectAll = selectors.stalledSelectAll.checked;
+    for (const runId of visibleQualityHoldRunIds) {
+      if (selectAll) selectedQualityHoldRunIds.add(runId);
+      else selectedQualityHoldRunIds.delete(runId);
+    }
+    for (const checkbox of selectors.stalledList.querySelectorAll(".stalled-select input")) {
+      checkbox.checked = selectAll;
+    }
+    syncQualityHoldBulkControls();
+  }
+
+  function syncQualityHoldBulkControls() {
+    const selectedCount = visibleQualityHoldRunIds.filter((runId) => selectedQualityHoldRunIds.has(runId)).length;
+    selectors.stalledBulk.hidden = visibleQualityHoldRunIds.length === 0;
+    selectors.stalledSelectedCount.textContent = `${selectedCount}건 선택`;
+    selectors.stalledBulkRewrite.disabled = selectedCount === 0;
+    selectors.stalledSelectAll.checked = visibleQualityHoldRunIds.length > 0 && selectedCount === visibleQualityHoldRunIds.length;
+    selectors.stalledSelectAll.indeterminate = selectedCount > 0 && selectedCount < visibleQualityHoldRunIds.length;
+  }
+
+  async function bulkRewriteQualityHolds() {
+    const runIds = visibleQualityHoldRunIds.filter((runId) => selectedQualityHoldRunIds.has(runId));
+    if (!runIds.length) return;
+    setButtonBusy(selectors.stalledBulkRewrite, true, `${runIds.length}건 접수 중...`);
+    selectors.stalledSelectAll.disabled = true;
+    for (const runId of runIds) markQualityHoldSubmitting(runId);
+    StoryHeavenCommon.toast(`${runIds.length}건의 보완 요청을 접수했습니다. 화면을 떠나도 대기열에서 순서대로 처리합니다.`);
+    try {
+      const payload = await StoryHeavenCommon.api("/api/storyheaven/operator/serial-engine/runs/resolve-quality-holds", {
+        method: "POST",
+        body: { action: "rewrite", runIds }
+      });
+      for (const result of payload.results || []) {
+        if (result.queued) selectedQualityHoldRunIds.delete(result.runId);
+      }
+      await refreshSchedules();
+      const failed = Number(payload.failedCount || 0);
+      StoryHeavenCommon.toast(failed
+        ? `${payload.queuedCount}건은 대기열에 넣었고 ${failed}건은 상태가 달라 접수하지 못했습니다.`
+        : `${payload.queuedCount}건을 보완 대기열에 넣었습니다. 이전 지적을 누적해 자동 재검수합니다.`);
+    } catch (error) {
+      await refreshSchedules().catch(() => {});
+      StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
+    } finally {
+      selectors.stalledSelectAll.disabled = false;
+      setButtonBusy(selectors.stalledBulkRewrite, false);
+      syncQualityHoldBulkControls();
+    }
+  }
+
+  function markQualityHoldSubmitting(runId) {
+    const row = [...selectors.stalledList.querySelectorAll(".stalled-row")]
+      .find((item) => item.dataset.runId === runId);
+    if (!row) return;
+    row.classList.add("is-submitting");
+    const badge = row.querySelector(".stalled-state");
+    if (badge) badge.textContent = "보완 대기열 접수 중";
+    for (const control of row.querySelectorAll("button, input")) control.disabled = true;
   }
 
   function stalledPrologueState(story) {
@@ -1094,7 +1187,7 @@
     return "검수는 통과했으며 공개 처리 순서를 기다리고 있습니다.";
   }
 
-  async function resolveQualityHold(story, action) {
+  async function resolveQualityHold(story, action, control = null) {
     if (!story?.latestRunId) return;
     if (action === "approve") {
       const autoPublic = story.schedule?.publicationMode === "auto_public";
@@ -1102,6 +1195,10 @@
         ? "현재 원고를 운영자 승인할까요? 연결 설정이 자동 공개 상태이면 프롤로그가 공개 처리 대기열로 넘어갑니다."
         : "현재 원고를 운영자 승인할까요? 테스트 비공개 설정이면 원고는 공개되지 않고 승인 상태로 보관됩니다.";
       if (!window.confirm(warning)) return;
+    }
+    if (action === "rewrite") {
+      markQualityHoldSubmitting(story.latestRunId);
+      StoryHeavenCommon.toast("보완 요청을 접수하고 있습니다. 접수되면 작업은 백그라운드 대기열에서 계속됩니다.");
     }
     try {
       await StoryHeavenCommon.api(`/api/storyheaven/operator/serial-engine/runs/${encodeURIComponent(story.latestRunId)}/resolve-quality-hold`, {
@@ -1115,6 +1212,8 @@
           ? "검수 지적 부분만 다시 보완하도록 대기열에 넣었습니다."
           : "현재 원고를 승인했습니다. 연결 설정의 공개 방식에 따라 처리됩니다.");
     } catch (error) {
+      if (control) setButtonBusy(control, false);
+      await refreshSchedules().catch(() => {});
       StoryHeavenCommon.toast(StoryHeavenCommon.readableError(error));
     }
   }
@@ -2282,6 +2381,7 @@
     if (label.includes("중지") || label.includes("멈춤") || label.includes("멈추")) return "중지 요청 중...";
     if (label.includes("삭제")) return "삭제 중...";
     if (label.includes("숨기")) return "숨김 처리 중...";
+    if (label.includes("보완")) return "보완 대기열 접수 중...";
     if (label.includes("취소")) return "취소 중...";
     if (label.includes("저장") || label.includes("등록")) return "저장 중...";
     return "처리 중...";
